@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import TalerWallet
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,8 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let num = Amount.init(currency: "EUR", value: 1, fraction: 99)
-        print(num)
+        var iono = Iono();
+        print(iono.evalJS(source: "1 + 1"))
+        iono.evalJS(source: "console.log(\"test!\");");
         return true
     }
 

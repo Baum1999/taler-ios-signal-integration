@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D110857525B134420047F1B6 /* NodeWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D110857425B134420047F1B6 /* NodeWrapper.swift */; };
+		D110857A25B13DF90047F1B6 /* NodeWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
 		D14AFD2524D232B300C51073 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2424D232B300C51073 /* ContentView.swift */; };
@@ -15,8 +17,27 @@
 		D14AFD2D24D232B500C51073 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */; };
 		D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD3724D232B500C51073 /* TalerTests.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
-		D1CC111B24DA0AF300998692 /* TalerWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B019924D2B0F700ADBE8C /* TalerWallet.framework */; };
-		D1CC111C24DA0AF300998692 /* TalerWallet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D13B019924D2B0F700ADBE8C /* TalerWallet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D17D8B7225ADB29A001BD43D /* libbrotli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4F25ADB12D001BD43D /* libbrotli.a */; };
+		D17D8B7325ADB29A001BD43D /* libzlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4725ADB12B001BD43D /* libzlib.a */; };
+		D17D8B7425ADB29A001BD43D /* libv8_zlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5425ADB12D001BD43D /* libv8_zlib.a */; };
+		D17D8B7525ADB29A001BD43D /* libv8_snapshot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5125ADB12D001BD43D /* libv8_snapshot.a */; };
+		D17D8B7625ADB29A001BD43D /* libv8_libsampler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4625ADB12B001BD43D /* libv8_libsampler.a */; };
+		D17D8B7725ADB29A001BD43D /* libv8_libplatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5025ADB12D001BD43D /* libv8_libplatform.a */; };
+		D17D8B7825ADB29B001BD43D /* libv8_libbase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4425ADB12B001BD43D /* libv8_libbase.a */; };
+		D17D8B7925ADB29B001BD43D /* libv8_initializers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4C25ADB12C001BD43D /* libv8_initializers.a */; };
+		D17D8B7A25ADB29B001BD43D /* libv8_init.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5225ADB12D001BD43D /* libv8_init.a */; };
+		D17D8B7B25ADB29B001BD43D /* libv8_compiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4A25ADB12C001BD43D /* libv8_compiler.a */; };
+		D17D8B7C25ADB29B001BD43D /* libv8_base_without_compiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4925ADB12B001BD43D /* libv8_base_without_compiler.a */; };
+		D17D8B7D25ADB29B001BD43D /* libuvwasi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5525ADB12E001BD43D /* libuvwasi.a */; };
+		D17D8B7E25ADB29B001BD43D /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4B25ADB12C001BD43D /* libuv.a */; };
+		D17D8B7F25ADB29B001BD43D /* libtorque_base.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5725ADB130001BD43D /* libtorque_base.a */; };
+		D17D8B8025ADB29B001BD43D /* libopenssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4E25ADB12D001BD43D /* libopenssl.a */; };
+		D17D8B8125ADB29B001BD43D /* libnode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4525ADB12B001BD43D /* libnode.a */; };
+		D17D8B8225ADB29B001BD43D /* libnghttp2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5325ADB12D001BD43D /* libnghttp2.a */; };
+		D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4D25ADB12C001BD43D /* libllhttp.a */; };
+		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
+		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
+		D1AB9647259EB24100DEAB23 /* node_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,22 +57,51 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		D1CC111D24DA0AF300998692 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				D1CC111C24DA0AF300998692 /* TalerWallet.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		D13B019924D2B0F700ADBE8C /* TalerWallet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TalerWallet.framework; path = "wallet-kotlin/build/bin/iosX64/debugFramework/TalerWallet.framework"; sourceTree = "<group>"; };
+		D110857425B134420047F1B6 /* NodeWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWrapper.swift; sourceTree = "<group>"; };
+		D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWrapperTests.swift; sourceTree = "<group>"; };
+		D11DB44E25A5C487009CF0BC /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "nodejs-mobile/out/Release/libnode.a"; sourceTree = "<group>"; };
+		D11DB45625A5C5C7009CF0BC /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "nodejs-mobile/out/Release/libv8_initializers.a"; sourceTree = "<group>"; };
+		D11DB45725A5C5C7009CF0BC /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "nodejs-mobile/out/Release/libv8_compiler.a"; sourceTree = "<group>"; };
+		D11DB45825A5C5C7009CF0BC /* libbrotli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbrotli.a; path = "nodejs-mobile/out/Release/libbrotli.a"; sourceTree = "<group>"; };
+		D11DB45925A5C5C7009CF0BC /* libcares.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcares.a; path = "nodejs-mobile/out/Release/libcares.a"; sourceTree = "<group>"; };
+		D11DB45A25A5C5C7009CF0BC /* libv8_base_without_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base_without_compiler.a; path = "nodejs-mobile/out/Release/libv8_base_without_compiler.a"; sourceTree = "<group>"; };
+		D11DB45B25A5C5C7009CF0BC /* libv8_libsampler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libsampler.a; path = "nodejs-mobile/out/Release/libv8_libsampler.a"; sourceTree = "<group>"; };
+		D11DB45C25A5C5C7009CF0BC /* libopenssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenssl.a; path = "nodejs-mobile/out/Release/libopenssl.a"; sourceTree = "<group>"; };
+		D11DB45D25A5C5C7009CF0BC /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "nodejs-mobile/out/Release/libllhttp.a"; sourceTree = "<group>"; };
+		D11DB45E25A5C5C7009CF0BC /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "nodejs-mobile/out/Release/libuv.a"; sourceTree = "<group>"; };
+		D11DB45F25A5C5C8009CF0BC /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "nodejs-mobile/out/Release/libv8_libbase.a"; sourceTree = "<group>"; };
+		D11DB46025A5C5C8009CF0BC /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "nodejs-mobile/out/Release/libtorque_base.a"; sourceTree = "<group>"; };
+		D11DB46125A5C5C8009CF0BC /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "nodejs-mobile/out/Release/libuvwasi.a"; sourceTree = "<group>"; };
+		D11DB46225A5C5C8009CF0BC /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = "nodejs-mobile/out/Release/libnghttp2.a"; sourceTree = "<group>"; };
+		D11DB46325A5C5C8009CF0BC /* libv8_init.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_init.a; path = "nodejs-mobile/out/Release/libv8_init.a"; sourceTree = "<group>"; };
+		D11DB46425A5C5C8009CF0BC /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "nodejs-mobile/out/Release/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D11DB46525A5C5C8009CF0BC /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = "nodejs-mobile/out/Release/libzlib.a"; sourceTree = "<group>"; };
+		D11DB46625A5C5C8009CF0BC /* libhttp_parser.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhttp_parser.a; path = "nodejs-mobile/out/Release/libhttp_parser.a"; sourceTree = "<group>"; };
+		D11DB46725A5C5C8009CF0BC /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "nodejs-mobile/out/Release/libhistogram.a"; sourceTree = "<group>"; };
+		D11DB46825A5C5C8009CF0BC /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = "nodejs-mobile/out/Release/libv8_snapshot.a"; sourceTree = "<group>"; };
+		D11DB46925A5C5C8009CF0BC /* Release */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Release; path = "nodejs-mobile/out/Release"; sourceTree = "<group>"; };
+		D11DB48625A5C708009CF0BC /* libv8_nosnapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_nosnapshot.a; path = "nodejs-mobile/out/Release/libv8_nosnapshot.a"; sourceTree = "<group>"; };
+		D145D1DE25AC416400CDD61B /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D145D1DF25AC416400CDD61B /* libv8_libsampler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libsampler.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_libsampler.a"; sourceTree = "<group>"; };
+		D145D1E025AC416500CDD61B /* libv8_zlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_zlib.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_zlib.a"; sourceTree = "<group>"; };
+		D145D1E125AC416500CDD61B /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libnghttp2.a"; sourceTree = "<group>"; };
+		D145D1E225AC416500CDD61B /* libv8_init.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_init.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_init.a"; sourceTree = "<group>"; };
+		D145D1E325AC416500CDD61B /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_compiler.a"; sourceTree = "<group>"; };
+		D145D1E425AC416500CDD61B /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libuvwasi.a"; sourceTree = "<group>"; };
+		D145D1E525AC416600CDD61B /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libnode.a"; sourceTree = "<group>"; };
+		D145D1E625AC416600CDD61B /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_initializers.a"; sourceTree = "<group>"; };
+		D145D1E725AC416600CDD61B /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libtorque_base.a"; sourceTree = "<group>"; };
+		D145D1E825AC416700CDD61B /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libzlib.a"; sourceTree = "<group>"; };
+		D145D1E925AC416700CDD61B /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libuv.a"; sourceTree = "<group>"; };
+		D145D1EA25AC416700CDD61B /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_snapshot.a"; sourceTree = "<group>"; };
+		D145D1EB25AC416A00CDD61B /* libopenssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenssl.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libopenssl.a"; sourceTree = "<group>"; };
+		D145D1EC25AC416A00CDD61B /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libllhttp.a"; sourceTree = "<group>"; };
+		D145D1ED25AC416A00CDD61B /* libcares.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcares.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libcares.a"; sourceTree = "<group>"; };
+		D145D1EE25AC416B00CDD61B /* libbrotli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbrotli.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libbrotli.a"; sourceTree = "<group>"; };
+		D145D1EF25AC416B00CDD61B /* libv8_base_without_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base_without_compiler.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_base_without_compiler.a"; sourceTree = "<group>"; };
+		D145D1F025AC416B00CDD61B /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libhistogram.a"; sourceTree = "<group>"; };
+		D145D1F125AC416B00CDD61B /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/taler-ios-build/compiled/node-x64/libv8_libbase.a"; sourceTree = "<group>"; };
 		D14AFD1D24D232B300C51073 /* Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD2024D232B300C51073 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D14AFD2224D232B300C51073 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +116,73 @@
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD4224D232B500C51073 /* TalerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
 		D14AFD4424D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D1CC111724DA093200998692 /* TalerWallet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TalerWallet.framework; path = "wallet-kotlin/build/bin/iosX64/releaseFramework/TalerWallet.framework"; sourceTree = "<group>"; };
+		D1595BBD25A550750049971F /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/out/Debug/libnode.89.dylib"; sourceTree = "<group>"; };
+		D1595BC625A5527C0049971F /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = "nodejs-mobile-v0.3.2-ios/Release-universal/NodeMobile.framework"; sourceTree = "<group>"; };
+		D17D8B4425ADB12B001BD43D /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_libbase.a"; sourceTree = "<group>"; };
+		D17D8B4525ADB12B001BD43D /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libnode.a"; sourceTree = "<group>"; };
+		D17D8B4625ADB12B001BD43D /* libv8_libsampler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libsampler.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_libsampler.a"; sourceTree = "<group>"; };
+		D17D8B4725ADB12B001BD43D /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libzlib.a"; sourceTree = "<group>"; };
+		D17D8B4825ADB12B001BD43D /* libcares.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcares.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libcares.a"; sourceTree = "<group>"; };
+		D17D8B4925ADB12B001BD43D /* libv8_base_without_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base_without_compiler.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_base_without_compiler.a"; sourceTree = "<group>"; };
+		D17D8B4A25ADB12C001BD43D /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_compiler.a"; sourceTree = "<group>"; };
+		D17D8B4B25ADB12C001BD43D /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libuv.a"; sourceTree = "<group>"; };
+		D17D8B4C25ADB12C001BD43D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_initializers.a"; sourceTree = "<group>"; };
+		D17D8B4D25ADB12C001BD43D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libllhttp.a"; sourceTree = "<group>"; };
+		D17D8B4E25ADB12D001BD43D /* libopenssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenssl.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libopenssl.a"; sourceTree = "<group>"; };
+		D17D8B4F25ADB12D001BD43D /* libbrotli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbrotli.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libbrotli.a"; sourceTree = "<group>"; };
+		D17D8B5025ADB12D001BD43D /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D17D8B5125ADB12D001BD43D /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_snapshot.a"; sourceTree = "<group>"; };
+		D17D8B5225ADB12D001BD43D /* libv8_init.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_init.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_init.a"; sourceTree = "<group>"; };
+		D17D8B5325ADB12D001BD43D /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libnghttp2.a"; sourceTree = "<group>"; };
+		D17D8B5425ADB12D001BD43D /* libv8_zlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_zlib.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_zlib.a"; sourceTree = "<group>"; };
+		D17D8B5525ADB12E001BD43D /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libuvwasi.a"; sourceTree = "<group>"; };
+		D17D8B5625ADB130001BD43D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libhistogram.a"; sourceTree = "<group>"; };
+		D17D8B5725ADB130001BD43D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libtorque_base.a"; sourceTree = "<group>"; };
+		D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libnode.89.dylib"; sourceTree = "<group>"; };
+		D1AB9644259EB22900DEAB23 /* node_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node_wrapper.h; sourceTree = "<group>"; };
+		D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Taler-Bridging-Header.h"; sourceTree = "<group>"; };
+		D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node_wrapper.cpp; sourceTree = "<group>"; };
+		D1F0C22F25A958AE00C3179D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libllhttp.a"; sourceTree = "<group>"; };
+		D1F0C23025A958AE00C3179D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_initializers.a"; sourceTree = "<group>"; };
+		D1F0C23125A958AE00C3179D /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libuv.a"; sourceTree = "<group>"; };
+		D1F0C23225A958AE00C3179D /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libnode.a"; sourceTree = "<group>"; };
+		D1F0C23325A958AE00C3179D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libhistogram.a"; sourceTree = "<group>"; };
+		D1F0C23425A958AE00C3179D /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libzlib.a"; sourceTree = "<group>"; };
+		D1F0C23525A958AE00C3179D /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libnghttp2.a"; sourceTree = "<group>"; };
+		D1F0C23625A958AE00C3179D /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_snapshot.a"; sourceTree = "<group>"; };
+		D1F0C23725A958AE00C3179D /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libuvwasi.a"; sourceTree = "<group>"; };
+		D1F0C23825A958AE00C3179D /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_compiler.a"; sourceTree = "<group>"; };
+		D1F0C23925A958AE00C3179D /* libv8_base_without_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base_without_compiler.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_base_without_compiler.a"; sourceTree = "<group>"; };
+		D1F0C23A25A958AE00C3179D /* libopenssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenssl.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libopenssl.a"; sourceTree = "<group>"; };
+		D1F0C23B25A958AF00C3179D /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_libbase.a"; sourceTree = "<group>"; };
+		D1F0C23C25A958AF00C3179D /* libcares.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcares.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libcares.a"; sourceTree = "<group>"; };
+		D1F0C23D25A958AF00C3179D /* libbrotli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbrotli.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libbrotli.a"; sourceTree = "<group>"; };
+		D1F0C23E25A958AF00C3179D /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D1F0C23F25A958AF00C3179D /* libv8_libsampler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libsampler.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_libsampler.a"; sourceTree = "<group>"; };
+		D1F0C25425A9597500C3179D /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/out/Release/libv8_libbase.a"; sourceTree = "<group>"; };
+		D1F0C25525A9597500C3179D /* libopenssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopenssl.a; path = "ios-node-v8/out/Release/libopenssl.a"; sourceTree = "<group>"; };
+		D1F0C25625A9597500C3179D /* libcares.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcares.a; path = "ios-node-v8/out/Release/libcares.a"; sourceTree = "<group>"; };
+		D1F0C25725A9597500C3179D /* libv8_libsampler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libsampler.a; path = "ios-node-v8/out/Release/libv8_libsampler.a"; sourceTree = "<group>"; };
+		D1F0C25825A9597500C3179D /* libv8_base_without_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base_without_compiler.a; path = "ios-node-v8/out/Release/libv8_base_without_compiler.a"; sourceTree = "<group>"; };
+		D1F0C25925A9597500C3179D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/out/Release/libv8_initializers.a"; sourceTree = "<group>"; };
+		D1F0C25A25A9597500C3179D /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = "ios-node-v8/out/Release/libv8_snapshot.a"; sourceTree = "<group>"; };
+		D1F0C25B25A9597500C3179D /* libv8_zlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_zlib.a; path = "ios-node-v8/out/Release/libv8_zlib.a"; sourceTree = "<group>"; };
+		D1F0C25C25A9597500C3179D /* out */ = {isa = PBXFileReference; lastKnownFileType = folder; name = out; path = "ios-node-v8/out"; sourceTree = "<group>"; };
+		D1F0C25D25A9597500C3179D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/out/Release/libhistogram.a"; sourceTree = "<group>"; };
+		D1F0C25E25A9597500C3179D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/out/Release/libllhttp.a"; sourceTree = "<group>"; };
+		D1F0C25F25A9597600C3179D /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "ios-node-v8/out/Release/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D1F0C26025A9597600C3179D /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "ios-node-v8/out/Release/libv8_compiler.a"; sourceTree = "<group>"; };
+		D1F0C26125A9597600C3179D /* libv8_init.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_init.a; path = "ios-node-v8/out/Release/libv8_init.a"; sourceTree = "<group>"; };
+		D1F0C26225A9597600C3179D /* libzlib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzlib.a; path = "ios-node-v8/out/Release/libzlib.a"; sourceTree = "<group>"; };
+		D1F0C26325A9597600C3179D /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/out/Release/libuvwasi.a"; sourceTree = "<group>"; };
+		D1F0C26425A9597600C3179D /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "ios-node-v8/out/Release/libnode.a"; sourceTree = "<group>"; };
+		D1F0C26525A9597700C3179D /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/out/Release/libuv.a"; sourceTree = "<group>"; };
+		D1F0C26625A9597700C3179D /* libbrotli.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbrotli.a; path = "ios-node-v8/out/Release/libbrotli.a"; sourceTree = "<group>"; };
+		D1F0C26725A9597700C3179D /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = "ios-node-v8/out/Release/libnghttp2.a"; sourceTree = "<group>"; };
+		D1F0C26825A9597800C3179D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/out/Release/libtorque_base.a"; sourceTree = "<group>"; };
+		D1FD32E725A5CEE500A2CF3C /* libv8_monolith.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_monolith.a; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libv8_monolith.a"; sourceTree = "<group>"; };
+		D1FD32E825A5CEE500A2CF3C /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libv8_libplatform.a"; sourceTree = "<group>"; };
+		D1FD32E925A5CEE500A2CF3C /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libv8_libbase.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +190,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1CC111B24DA0AF300998692 /* TalerWallet.framework in Frameworks */,
+				D17D8B8025ADB29B001BD43D /* libopenssl.a in Frameworks */,
+				D17D8B7E25ADB29B001BD43D /* libuv.a in Frameworks */,
+				D17D8B7D25ADB29B001BD43D /* libuvwasi.a in Frameworks */,
+				D17D8B7325ADB29A001BD43D /* libzlib.a in Frameworks */,
+				D17D8B8225ADB29B001BD43D /* libnghttp2.a in Frameworks */,
+				D17D8B7425ADB29A001BD43D /* libv8_zlib.a in Frameworks */,
+				D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */,
+				D17D8B8125ADB29B001BD43D /* libnode.a in Frameworks */,
+				D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */,
+				D17D8B7B25ADB29B001BD43D /* libv8_compiler.a in Frameworks */,
+				D17D8B7225ADB29A001BD43D /* libbrotli.a in Frameworks */,
+				D17D8B7625ADB29A001BD43D /* libv8_libsampler.a in Frameworks */,
+				D17D8B7825ADB29B001BD43D /* libv8_libbase.a in Frameworks */,
+				D17D8B7C25ADB29B001BD43D /* libv8_base_without_compiler.a in Frameworks */,
+				D17D8B7725ADB29A001BD43D /* libv8_libplatform.a in Frameworks */,
+				D17D8B7925ADB29B001BD43D /* libv8_initializers.a in Frameworks */,
+				D17D8B7A25ADB29B001BD43D /* libv8_init.a in Frameworks */,
+				D17D8B7F25ADB29B001BD43D /* libtorque_base.a in Frameworks */,
+				D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */,
+				D17D8B7525ADB29A001BD43D /* libv8_snapshot.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +261,10 @@
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
 				D14AFD2824D232B500C51073 /* Preview Content */,
+				D1AB9644259EB22900DEAB23 /* node_wrapper.h */,
+				D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */,
+				D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */,
+				D110857425B134420047F1B6 /* NodeWrapper.swift */,
 			);
 			path = Taler;
 			sourceTree = "<group>";
@@ -143,6 +282,7 @@
 			children = (
 				D14AFD3724D232B500C51073 /* TalerTests.swift */,
 				D14AFD3924D232B500C51073 /* Info.plist */,
+				D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */,
 			);
 			path = TalerTests;
 			sourceTree = "<group>";
@@ -159,8 +299,112 @@
 		D1EFA41824D2619B0008B97F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D1CC111724DA093200998692 /* TalerWallet.framework */,
-				D13B019924D2B0F700ADBE8C /* TalerWallet.framework */,
+				D1F0C26625A9597700C3179D /* libbrotli.a */,
+				D145D1EE25AC416B00CDD61B /* libbrotli.a */,
+				D17D8B4F25ADB12D001BD43D /* libbrotli.a */,
+				D1F0C25625A9597500C3179D /* libcares.a */,
+				D1F0C25D25A9597500C3179D /* libhistogram.a */,
+				D145D1ED25AC416A00CDD61B /* libcares.a */,
+				D145D1F025AC416B00CDD61B /* libhistogram.a */,
+				D17D8B5625ADB130001BD43D /* libhistogram.a */,
+				D1F0C25E25A9597500C3179D /* libllhttp.a */,
+				D145D1EC25AC416A00CDD61B /* libllhttp.a */,
+				D1F0C26725A9597700C3179D /* libnghttp2.a */,
+				D17D8B4825ADB12B001BD43D /* libcares.a */,
+				D17D8B4D25ADB12C001BD43D /* libllhttp.a */,
+				D17D8B5325ADB12D001BD43D /* libnghttp2.a */,
+				D1F0C26425A9597600C3179D /* libnode.a */,
+				D1F0C25525A9597500C3179D /* libopenssl.a */,
+				D145D1EB25AC416A00CDD61B /* libopenssl.a */,
+				D1F0C26825A9597800C3179D /* libtorque_base.a */,
+				D17D8B4E25ADB12D001BD43D /* libopenssl.a */,
+				D17D8B5725ADB130001BD43D /* libtorque_base.a */,
+				D1F0C26525A9597700C3179D /* libuv.a */,
+				D145D1E525AC416600CDD61B /* libnode.a */,
+				D145D1E725AC416600CDD61B /* libtorque_base.a */,
+				D145D1E925AC416700CDD61B /* libuv.a */,
+				D1F0C26325A9597600C3179D /* libuvwasi.a */,
+				D17D8B4B25ADB12C001BD43D /* libuv.a */,
+				D17D8B5525ADB12E001BD43D /* libuvwasi.a */,
+				D1F0C25825A9597500C3179D /* libv8_base_without_compiler.a */,
+				D145D1E425AC416500CDD61B /* libuvwasi.a */,
+				D145D1EF25AC416B00CDD61B /* libv8_base_without_compiler.a */,
+				D1F0C26025A9597600C3179D /* libv8_compiler.a */,
+				D145D1E325AC416500CDD61B /* libv8_compiler.a */,
+				D1F0C26125A9597600C3179D /* libv8_init.a */,
+				D17D8B5225ADB12D001BD43D /* libv8_init.a */,
+				D1F0C25925A9597500C3179D /* libv8_initializers.a */,
+				D17D8B4525ADB12B001BD43D /* libnode.a */,
+				D17D8B4925ADB12B001BD43D /* libv8_base_without_compiler.a */,
+				D17D8B4A25ADB12C001BD43D /* libv8_compiler.a */,
+				D17D8B4C25ADB12C001BD43D /* libv8_initializers.a */,
+				D1FD32E925A5CEE500A2CF3C /* libv8_libbase.a */,
+				D145D1E125AC416500CDD61B /* libnghttp2.a */,
+				D145D1E225AC416500CDD61B /* libv8_init.a */,
+				D145D1E625AC416600CDD61B /* libv8_initializers.a */,
+				D145D1F125AC416B00CDD61B /* libv8_libbase.a */,
+				D1FD32E825A5CEE500A2CF3C /* libv8_libplatform.a */,
+				D1F0C23D25A958AF00C3179D /* libbrotli.a */,
+				D1F0C23C25A958AF00C3179D /* libcares.a */,
+				D1F0C23325A958AE00C3179D /* libhistogram.a */,
+				D1F0C22F25A958AE00C3179D /* libllhttp.a */,
+				D1F0C23525A958AE00C3179D /* libnghttp2.a */,
+				D1F0C23225A958AE00C3179D /* libnode.a */,
+				D1F0C23A25A958AE00C3179D /* libopenssl.a */,
+				D1F0C23125A958AE00C3179D /* libuv.a */,
+				D1F0C23725A958AE00C3179D /* libuvwasi.a */,
+				D1F0C23925A958AE00C3179D /* libv8_base_without_compiler.a */,
+				D1F0C23825A958AE00C3179D /* libv8_compiler.a */,
+				D1F0C23025A958AE00C3179D /* libv8_initializers.a */,
+				D1F0C23B25A958AF00C3179D /* libv8_libbase.a */,
+				D1F0C23E25A958AF00C3179D /* libv8_libplatform.a */,
+				D1F0C25F25A9597600C3179D /* libv8_libplatform.a */,
+				D17D8B5025ADB12D001BD43D /* libv8_libplatform.a */,
+				D1F0C23F25A958AF00C3179D /* libv8_libsampler.a */,
+				D1F0C23625A958AE00C3179D /* libv8_snapshot.a */,
+				D17D8B5125ADB12D001BD43D /* libv8_snapshot.a */,
+				D17D8B5425ADB12D001BD43D /* libv8_zlib.a */,
+				D1F0C23425A958AE00C3179D /* libzlib.a */,
+				D1F0C25425A9597500C3179D /* libv8_libbase.a */,
+				D1F0C25725A9597500C3179D /* libv8_libsampler.a */,
+				D1F0C25A25A9597500C3179D /* libv8_snapshot.a */,
+				D145D1EA25AC416700CDD61B /* libv8_snapshot.a */,
+				D1F0C25B25A9597500C3179D /* libv8_zlib.a */,
+				D1F0C26225A9597600C3179D /* libzlib.a */,
+				D145D1DE25AC416400CDD61B /* libv8_libplatform.a */,
+				D145D1DF25AC416400CDD61B /* libv8_libsampler.a */,
+				D145D1E025AC416500CDD61B /* libv8_zlib.a */,
+				D145D1E825AC416700CDD61B /* libzlib.a */,
+				D17D8B4425ADB12B001BD43D /* libv8_libbase.a */,
+				D17D8B4625ADB12B001BD43D /* libv8_libsampler.a */,
+				D17D8B4725ADB12B001BD43D /* libzlib.a */,
+				D1F0C25C25A9597500C3179D /* out */,
+				D1FD32E725A5CEE500A2CF3C /* libv8_monolith.a */,
+				D11DB48625A5C708009CF0BC /* libv8_nosnapshot.a */,
+				D11DB45825A5C5C7009CF0BC /* libbrotli.a */,
+				D11DB45925A5C5C7009CF0BC /* libcares.a */,
+				D11DB46725A5C5C8009CF0BC /* libhistogram.a */,
+				D11DB46625A5C5C8009CF0BC /* libhttp_parser.a */,
+				D11DB45D25A5C5C7009CF0BC /* libllhttp.a */,
+				D11DB46225A5C5C8009CF0BC /* libnghttp2.a */,
+				D11DB45C25A5C5C7009CF0BC /* libopenssl.a */,
+				D11DB46025A5C5C8009CF0BC /* libtorque_base.a */,
+				D11DB45E25A5C5C7009CF0BC /* libuv.a */,
+				D11DB46125A5C5C8009CF0BC /* libuvwasi.a */,
+				D11DB45A25A5C5C7009CF0BC /* libv8_base_without_compiler.a */,
+				D11DB45725A5C5C7009CF0BC /* libv8_compiler.a */,
+				D11DB46325A5C5C8009CF0BC /* libv8_init.a */,
+				D11DB45625A5C5C7009CF0BC /* libv8_initializers.a */,
+				D11DB45F25A5C5C8009CF0BC /* libv8_libbase.a */,
+				D11DB46425A5C5C8009CF0BC /* libv8_libplatform.a */,
+				D11DB45B25A5C5C7009CF0BC /* libv8_libsampler.a */,
+				D11DB46825A5C5C8009CF0BC /* libv8_snapshot.a */,
+				D11DB46525A5C5C8009CF0BC /* libzlib.a */,
+				D11DB46925A5C5C8009CF0BC /* Release */,
+				D11DB44E25A5C487009CF0BC /* libnode.a */,
+				D1595BC625A5527C0049971F /* NodeMobile.framework */,
+				D1595BBD25A550750049971F /* libnode.89.dylib */,
+				D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -172,11 +416,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D14AFD4724D232B500C51073 /* Build configuration list for PBXNativeTarget "Taler" */;
 			buildPhases = (
-				D10ADA7824DD231700D8863C /* ShellScript */,
 				D14AFD1924D232B300C51073 /* Sources */,
 				D14AFD1A24D232B300C51073 /* Frameworks */,
 				D14AFD1B24D232B300C51073 /* Resources */,
-				D1CC111D24DA0AF300998692 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -230,11 +472,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = Taler;
 				TargetAttributes = {
 					D14AFD1C24D232B300C51073 = {
 						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1230;
 					};
 					D14AFD3224D232B500C51073 = {
 						CreatedOnToolsVersion = 11.6;
@@ -293,26 +536,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		D10ADA7824DD231700D8863C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/wallet-kotlin\"\n./gradlew publishIosX64PublicationToMavenLocal\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		D14AFD1924D232B300C51073 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -321,6 +544,8 @@
 				D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */,
 				D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */,
 				D14AFD2524D232B300C51073 /* ContentView.swift in Sources */,
+				D1AB9647259EB24100DEAB23 /* node_wrapper.cpp in Sources */,
+				D110857525B134420047F1B6 /* NodeWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +554,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */,
+				D110857A25B13DF90047F1B6 /* NodeWrapperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +619,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -453,6 +680,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -485,25 +713,38 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
+				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosX64/debugFramework",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosArm64/debugFramework",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosX64/releaseFramework",
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/ios-node-v8/src",
+					"$(PROJECT_DIR)/ios-node-v8/deps/v8/include",
+					"$(PROJECT_DIR)/ios-node-v8/deps/uv/include",
 				);
 				INFOPLIST_FILE = Taler/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-arm64";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-x64";
+				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.taler.Taler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Taler/Taler-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -511,25 +752,37 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
+				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosX64/debugFramework",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosArm64/debugFramework",
-					"$(PROJECT_DIR)/wallet-kotlin/build/bin/iosX64/releaseFramework",
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/ios-node-v8/src",
+					"$(PROJECT_DIR)/ios-node-v8/deps/v8/include",
+					"$(PROJECT_DIR)/ios-node-v8/deps/uv/include",
 				);
 				INFOPLIST_FILE = Taler/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-arm64";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-x64";
+				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.taler.Taler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Taler/Taler-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};
