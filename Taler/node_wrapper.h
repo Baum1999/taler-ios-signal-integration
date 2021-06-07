@@ -1,11 +1,18 @@
-//
-//  node_wrapper.h
-//  Taler
-//
-//  Created by Jonathan Buchanan on 12/31/20.
-//  Copyright © 2020 Taler. All rights reserved.
-//
-
+/*
+ * This file is part of GNU Taler
+ * (C) 2021 Taler Systems S.A.
+ *
+ * GNU Taler is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3, or (at your option) any later version.
+ *
+ * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ */
 #ifndef node_wrapper_h
 #define node_wrapper_h
 
@@ -16,26 +23,31 @@ extern "C" {
 struct __IonoInstance;
 
 struct __IonoInstance *
-__new_instance();
+__initNative();
 
 void
-__free_instance(struct __IonoInstance *instance);
+__destroyNative(struct __IonoInstance *instance);
 
-// result must be freed!
 char *
-__eval_js(const char *js, struct __IonoInstance *instance);
+__evalJs(struct __IonoInstance *instance, const char *source);
 
 void
-__notify_instance(struct __IonoInstance *instance);
+__putModuleCodeNative(struct __IonoInstance *instance,
+    const char *modName, const char *modCode);
 
 void
-__run_node(struct __IonoInstance *instance);
+__notifyNative(struct __IonoInstance *instance);
 
 void
-__make_callback(const char *callback, struct __IonoInstance *instance);
+__runNode(struct __IonoInstance *instance);
 
 void
-__put_module_code(const char *module_name, const char *module_code, struct IonoInstance *instance);
+__makeCallbackNative(struct __IonoInstance *instance, const char *source);
+
+typedef void (* __NotifyHandler)(const char *payload, void *userdata);
+
+void
+__setNotifyHandler(struct __IonoInstance *instance, __NotifyHandler handler, void *userdata);
 
 #ifdef __cplusplus
 }

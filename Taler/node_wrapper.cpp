@@ -1,10 +1,19 @@
-//
-//  node_wrapper.cpp
-//  Taler
-//
-//  Created by Jonathan Buchanan on 12/31/20.
-//  Copyright © 2020 Taler. All rights reserved.
-//
+/*
+ * This file is part of GNU Taler
+ * (C) 2021 Taler Systems S.A.
+ *
+ * GNU Taler is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3, or (at your option) any later version.
+ *
+ * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ */
+#include "node_wrapper.h"
 
 #include <map>
 #include <string>
@@ -14,24 +23,30 @@
 
 struct __IonoInstance
 {
+    /* Node/V8 */
     static std::unique_ptr<node::MultiIsolatePlatform> platform;
     std::unique_ptr<node::CommonEnvironmentSetup> setup;
     v8::Isolate *isolate;
     node::Environment *env;
     uv_async_t async_notify;
+    
     bool break_requested;
     std::map<std::string, std::string> modmap;
+    
+    /* Notifications to swift */
+    __NotifyHandler notification_handler;
+    void *notification_userdata;
     
     __IonoInstance();
     
     char *
-    eval_js(const char *js);
+    evalJs(const char *js);
     
     void
-    run_node();
+    runNode();
     
     void
-    make_callback(const char *callback);
+    makeCallback(const char *callback);
 };
 
 #ifdef __cplusplus
@@ -39,46 +54,54 @@ extern "C" {
 #endif
 
 struct __IonoInstance *
-__new_instance()
+__initNative()
 {
     __IonoInstance *instance = new __IonoInstance();
     return instance;
 }
 
 void
-__free_instance(struct __IonoInstance *instance)
+__destroyNative(struct __IonoInstance *instance)
 {
     delete instance;
 }
 
 char *
-__eval_js(const char *js, struct __IonoInstance *instance)
+__evalJs(struct __IonoInstance *instance, const char *js)
 {
-    return instance->eval_js(js);
+    return instance->evalJs(js);
 }
 
 void
-__notify_instance(struct __IonoInstance *instance)
+__putModuleCodeNative(struct __IonoInstance *instance,
+    const char *modName, const char *modCode)
+{
+    instance->modmap[std::string(modName)] = std::string(modCode);
+}
+
+void
+__notifyNative(struct __IonoInstance *instance)
 {
     uv_async_send(&instance->async_notify);
 }
 
 void
-__run_node(struct __IonoInstance *instance)
+__runNode(struct __IonoInstance *instance)
 {
-    instance->run_node();
+    instance->runNode();
 }
 
 void
-__make_callback(const char *callback, struct __IonoInstance *instance)
+__makeCallbackNative(struct __IonoInstance *instance, const char *source)
 {
-    instance->make_callback(callback);
+    instance->makeCallback(source);
 }
 
 void
-__put_module_code(const char *module_name, const char *module_code, struct __IonoInstance *instance)
+__setNotifyHandler(struct __IonoInstance *instance, __NotifyHandler handler, void *userdata)
 {
-    instance->modmap[std::string(module_name)] = std::string(module_code);
+    instance->notification_handler = handler;
+    instance->notification_userdata = userdata;
 }
 
 #ifdef __cplusplus
@@ -88,18 +111,28 @@ __put_module_code(const char *module_name, const char *module_code, struct __Ion
 std::unique_ptr<node::MultiIsolatePlatform> __IonoInstance::platform = nullptr;
 
 static void
-notify_callback(uv_async_t *async);
+notifyCallback(uv_async_t *async);
 
 static void
-send_message_callback(const v8::FunctionCallbackInfo<v8::Value> &args);
+sendMessageCallback(const v8::FunctionCallbackInfo<v8::Value> &args);
+
+static const std::string main_code = "global.__node_run = (x) => {"
+                                   "  0 && console.log('running code', x);"
+                                   "  global.eval(x);"
+                                   "};"
+                                   ""
+                                   "global.__iono_onMessage = (x) => {"
+                                   "  0 && console.log('got __iono_onMessage', x);"
+                                   "};";
 
 __IonoInstance::__IonoInstance() :
     break_requested(false),
-    modmap()
+    modmap(),
+    notification_handler(nullptr)
 {
     {
         uv_loop_t *loop = uv_default_loop();
-        uv_async_init(loop, &async_notify, &notify_callback);
+        uv_async_init(loop, &async_notify, &notifyCallback);
         async_notify.data = this;
     }
     
@@ -138,15 +171,7 @@ __IonoInstance::__IonoInstance() :
         v8::HandleScope handle_scope(isolate);
         v8::Context::Scope context_scope(setup->context());
 
-        v8::MaybeLocal<v8::Value> loadenv_ret = node::LoadEnvironment(
-            env,
-            "const publicRequire ="
-            "  require('module').createRequire(process.cwd() + '/');"
-            "globalThis.require = publicRequire;"
-            "global.__node_run = (x) => {"
-            "  0 && console.log('running code', x);"
-            "  global.eval(x);"
-            "};");
+        node::LoadEnvironment(env, main_code.c_str());
         
         v8::Local<v8::ObjectTemplate> data_template = v8::ObjectTemplate::New(isolate);
         data_template->SetInternalFieldCount(1);
@@ -154,7 +179,7 @@ __IonoInstance::__IonoInstance() :
         data_object->SetAlignedPointerInInternalField(0, this);
 
         v8::Local<v8::Function> sendMessageFunction = v8::Function::New(setup->context(),
-            send_message_callback,
+            sendMessageCallback,
             data_object).ToLocalChecked();
 
         v8::Local<v8::Object> global = setup->context()->Global();
@@ -166,40 +191,36 @@ __IonoInstance::__IonoInstance() :
 }
 
 char *
-__IonoInstance::eval_js(const char *js)
+__IonoInstance::evalJs(const char *js)
 {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
     v8::HandleScope handle_scope(isolate);
     v8::Context::Scope context_scope(setup->context());
 
-    {
-        // Create a string containing the JavaScript source code.
-        v8::Local<v8::String> source =
-            v8::String::NewFromUtf8(isolate, js, v8::NewStringType::kNormal).ToLocalChecked();
+    // Create a string containing the JavaScript source code.
+    v8::Local<v8::String> source =
+        v8::String::NewFromUtf8(isolate, js, v8::NewStringType::kNormal).ToLocalChecked();
 
-        // Compile the source code.
-        v8::Local<v8::Script> script;
-
-        if (!v8::Script::Compile(setup->context(), source).ToLocal(&script)) {
-            return nullptr;
-        }
-
-        // Run the script to get the result.
-        v8::Local<v8::Value> result;
-        if (!script->Run(setup->context()).ToLocal(&result)) {
-            return nullptr;
-        }
-
-        // Convert the result to an UTF8 string and print it.
-        v8::String::Utf8Value utf8(isolate, result);
-
-        return strdup(*utf8);
+    // Compile the source code.
+    v8::Local<v8::Script> script;
+    if (!v8::Script::Compile(setup->context(), source).ToLocal(&script)) {
+        return nullptr;
     }
+
+    // Run the script to get the result.
+    v8::Local<v8::Value> result;
+    if (!script->Run(setup->context()).ToLocal(&result)) {
+        return nullptr;
+    }
+
+    // Convert the result to an UTF8 string and print it.
+    v8::String::Utf8Value utf8(isolate, result);
+    return strdup(*utf8);
 }
 
 void
-__IonoInstance::run_node() {
+__IonoInstance::runNode() {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
     v8::HandleScope handle_scope(isolate);
@@ -214,7 +235,7 @@ __IonoInstance::run_node() {
 }
 
 void
-__IonoInstance::make_callback(const char *callback)
+__IonoInstance::makeCallback(const char *callback)
 {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
@@ -229,16 +250,17 @@ __IonoInstance::make_callback(const char *callback)
 }
 
 static void
-notify_callback(uv_async_t *async) {
+notifyCallback(uv_async_t *async) {
     __IonoInstance *instance = (__IonoInstance *)async->data;
     instance->break_requested = true;
 }
 
 static void
-send_message_callback(const v8::FunctionCallbackInfo<v8::Value> &args) {
+sendMessageCallback(const v8::FunctionCallbackInfo<v8::Value> &args) {
     v8::Isolate *isolate = args.GetIsolate();
     v8::Locker locker(isolate);
-    if (args.Length() < 1) return;
+    if (args.Length() < 1)
+        return;
     v8::HandleScope scope(isolate);
     v8::Local<v8::Value> arg = args[0];
     v8::String::Utf8Value value(isolate, arg);
@@ -246,29 +268,5 @@ send_message_callback(const v8::FunctionCallbackInfo<v8::Value> &args) {
     v8::Local<v8::Object> data = v8::Local<v8::Object>::Cast(args.Data());
 
     __IonoInstance *instance = (__IonoInstance *)data->GetAlignedPointerFromInternalField(0);
-
-    /*JNIEnv *env = myInstance->currentJniEnv;
-
-    if (env == nullptr) {
-        mylog("FATAL: JNI env is nullptr");
-        return;
-    }
-
-    jclass clazz = env->FindClass("akono/AkonoJni");
-
-    if (clazz == nullptr) {
-        mylog("FATAL: class not found");
-        return;
-    }
-
-    jstring payloadStr = env->NewStringUTF(*value);
-
-    jmethodID meth = env->GetMethodID(clazz, "internalOnNotify", "(Ljava/lang/String;)V");
-
-    if (meth == nullptr) {
-        mylog("FATAL: method not found");
-        return;
-    }
-
-    env->CallVoidMethod(myInstance->currentJniThiz, meth, payloadStr);*/
+    instance->notification_handler(*value, instance->notification_userdata);
 }
