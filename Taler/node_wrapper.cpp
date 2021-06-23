@@ -18,8 +18,15 @@
 #include <map>
 #include <string>
 
-#include "node.h"
-#include "uv.h"
+#include <node.h>
+#include <uv.h>
+
+#define NODE_WANT_INTERNALS 1
+#include <node_binding.h>
+
+#include <iostream>
+
+std::map<std::string, std::string> modmap = std::map<std::string, std::string>();
 
 struct __IonoInstance
 {
@@ -31,7 +38,6 @@ struct __IonoInstance
     uv_async_t async_notify;
     
     bool break_requested;
-    std::map<std::string, std::string> modmap;
     
     /* Notifications to swift */
     __NotifyHandler notification_handler;
@@ -76,7 +82,7 @@ void
 __putModuleCodeNative(struct __IonoInstance *instance,
     const char *modName, const char *modCode)
 {
-    instance->modmap[std::string(modName)] = std::string(modCode);
+    modmap[std::string(modName)] = std::string(modCode);
 }
 
 void
@@ -116,18 +122,26 @@ notifyCallback(uv_async_t *async);
 static void
 sendMessageCallback(const v8::FunctionCallbackInfo<v8::Value> &args);
 
-static const std::string main_code = "global.__node_run = (x) => {"
-                                   "  0 && console.log('running code', x);"
-                                   "  global.eval(x);"
-                                   "};"
-                                   ""
-                                   "global.__iono_onMessage = (x) => {"
-                                   "  0 && console.log('got __iono_onMessage', x);"
-                                   "};";
+static void
+getModuleCode(const v8::FunctionCallbackInfo<v8::Value> &args);
+
+static const std::string main_code = "const publicRequire ="
+                                    "  require('module').createRequire(process.cwd() + '/');"
+                                    "  globalThis.require = publicRequire;"
+                                    "  require('vm').runInThisContext(process.argv[1]);global.__node_run = (x) => {"
+                                    "  0 && console.log('running code', x);"
+                                    "  global.eval(x);"
+                                    "};"
+                                    ""
+                                    "global.__iono_onMessage = (x) => {"
+                                    "  0 && console.log('got __iono_onMessage', x);"
+                                    "};";
+
+static void
+_register_iono();
 
 __IonoInstance::__IonoInstance() :
     break_requested(false),
-    modmap(),
     notification_handler(nullptr)
 {
     {
@@ -187,6 +201,7 @@ __IonoInstance::__IonoInstance() :
         global->Set(setup->context(), v8::String::NewFromUtf8(isolate, "__iono_sendMessage",
             v8::NewStringType::kNormal).ToLocalChecked(),
             sendMessageFunction).Check();
+        _register_iono();
     }
 }
 
@@ -270,3 +285,28 @@ sendMessageCallback(const v8::FunctionCallbackInfo<v8::Value> &args) {
     __IonoInstance *instance = (__IonoInstance *)data->GetAlignedPointerFromInternalField(0);
     instance->notification_handler(*value, instance->notification_userdata);
 }
+
+static void
+getModuleCode(const v8::FunctionCallbackInfo<v8::Value> &args) {
+    v8::Isolate *isolate = args.GetIsolate();
+    v8::Locker locker(isolate);
+    if (args.Length() < 1)
+        return;
+    v8::HandleScope scope(isolate);
+    v8::Local<v8::Value> arg = args[0];
+    v8::String::Utf8Value value(isolate, arg);
+
+    v8::Local<v8::Object> data = v8::Local<v8::Object>::Cast(args.Data());
+    args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate,
+                                                      modmap[*value].c_str()).ToLocalChecked());
+}
+
+static void
+initializeIonoInternal(v8::Local<v8::Object> target,
+                       v8::Local<v8::Value> unused,
+                       v8::Local<v8::Context> context,
+                       void *priv) {
+    NODE_SET_METHOD(target, "getModuleCode", getModuleCode);
+}
+
+NODE_MODULE_CONTEXT_AWARE_INTERNAL(iono, initializeIonoInternal)

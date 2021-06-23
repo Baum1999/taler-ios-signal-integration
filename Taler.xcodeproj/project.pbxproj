@@ -13,7 +13,6 @@
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
 		D14AFD2524D232B300C51073 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2424D232B300C51073 /* ContentView.swift */; };
 		D14AFD2724D232B500C51073 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2624D232B500C51073 /* Assets.xcassets */; };
-		D14AFD2A24D232B500C51073 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2924D232B500C51073 /* Preview Assets.xcassets */; };
 		D14AFD2D24D232B500C51073 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */; };
 		D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD3724D232B500C51073 /* TalerTests.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
@@ -38,6 +37,7 @@
 		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
 		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
 		D1AB9647259EB24100DEAB23 /* node_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */; };
+		D1D6435F2681290200A22334 /* taler-wallet-ios.js in Resources */ = {isa = PBXBuildFile; fileRef = D1D6435E2681290200A22334 /* taler-wallet-ios.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,7 +107,6 @@
 		D14AFD2224D232B300C51073 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D14AFD2424D232B300C51073 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D14AFD2624D232B500C51073 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D14AFD2924D232B500C51073 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D14AFD2C24D232B500C51073 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D14AFD2E24D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +141,7 @@
 		D1AB9644259EB22900DEAB23 /* node_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node_wrapper.h; sourceTree = "<group>"; };
 		D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Taler-Bridging-Header.h"; sourceTree = "<group>"; };
 		D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node_wrapper.cpp; sourceTree = "<group>"; };
+		D1D6435E2681290200A22334 /* taler-wallet-ios.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-ios.js"; sourceTree = "<group>"; };
 		D1F0C22F25A958AE00C3179D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libllhttp.a"; sourceTree = "<group>"; };
 		D1F0C23025A958AE00C3179D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_initializers.a"; sourceTree = "<group>"; };
 		D1F0C23125A958AE00C3179D /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libuv.a"; sourceTree = "<group>"; };
@@ -254,27 +254,19 @@
 		D14AFD1F24D232B300C51073 /* Taler */ = {
 			isa = PBXGroup;
 			children = (
+				D1D6435E2681290200A22334 /* taler-wallet-ios.js */,
 				D14AFD2024D232B300C51073 /* AppDelegate.swift */,
 				D14AFD2224D232B300C51073 /* SceneDelegate.swift */,
 				D14AFD2424D232B300C51073 /* ContentView.swift */,
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
-				D14AFD2824D232B500C51073 /* Preview Content */,
 				D1AB9644259EB22900DEAB23 /* node_wrapper.h */,
 				D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */,
 				D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */,
 				D110857425B134420047F1B6 /* NodeWrapper.swift */,
 			);
 			path = Taler;
-			sourceTree = "<group>";
-		};
-		D14AFD2824D232B500C51073 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				D14AFD2924D232B500C51073 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		D14AFD3624D232B500C51073 /* TalerTests */ = {
@@ -515,7 +507,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D14AFD2D24D232B500C51073 /* LaunchScreen.storyboard in Resources */,
-				D14AFD2A24D232B500C51073 /* Preview Assets.xcassets in Resources */,
+				D1D6435F2681290200A22334 /* taler-wallet-ios.js in Resources */,
 				D14AFD2724D232B500C51073 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

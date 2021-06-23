@@ -105,7 +105,9 @@ class Iono {
     }
     
     func putModuleCode(modName: String, code: String) {
-        __putModuleCodeNative(instance, modName.cString(using: .utf8),
-                              code.cString(using: .utf8))
+        scheduleNodeThreadSync {
+            __putModuleCodeNative(self.instance, modName.cString(using: .utf8),
+                                  code.cString(using: .utf8))
+        }
     }
 }
