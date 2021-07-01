@@ -13,7 +13,8 @@ fi
 git submodule sync --recursive
 git submodule update --init --recursive
 
-cd ios-node-v8
-./taler-ios-build/x64
-./taler-ios-build/arm64
+./iono/ios-node-v8/taler-ios-build/x64
+./iono/ios-node-v8/taler-ios-build/arm64
+cd iono
+./bootstrap
 cd ..

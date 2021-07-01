@@ -15,6 +15,7 @@
  */
 
 import UIKit
+import iono
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,13 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         // TODO: generate 'taler-wallet-ios.js' from wallet-core instead of pasting it in.
         let js_path = URL(fileURLWithPath: Bundle.main.path(forResource: "taler-wallet-ios", ofType: "js")!)
-        let iono = Iono()
+        let nodeInstance = Iono()
         do {
             let js = try String(contentsOf: js_path, encoding: .utf8)
-            iono.putModuleCode(modName: "@gnu-taler/taler-wallet-ios", code: js)
-            iono.evalNodeCode(source: "require('iono');")
-            iono.evalNodeCode(source: "tw = require('@gnu-taler/taler-wallet-ios');")
-            iono.evalNodeCode(source: "tw.installIosWalletListener();")
+            nodeInstance.putModuleCode(modName: "@gnu-taler/taler-wallet-ios", code: js)
+            nodeInstance.evalNodeCode(source: "require('iono');")
+            nodeInstance.evalNodeCode(source: "tw = require('@gnu-taler/taler-wallet-ios');")
+            nodeInstance.evalNodeCode(source: "tw.installIosWalletListener();")
         } catch {
 
         }

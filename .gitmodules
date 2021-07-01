@@ -1,6 +1,3 @@
-[submodule "wallet-kotlin"]
-	path = wallet-kotlin
-	url = https://git.taler.net/wallet-kotlin.git
-[submodule "ios-node-v8"]
-	path = ios-node-v8
-	url = git://git.taler.net/ios-node-v8.git
+[submodule "iono"]
+	path = iono
+	url = ssh://git@git.taler.net/iono.git

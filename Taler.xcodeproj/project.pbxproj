@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D110857525B134420047F1B6 /* NodeWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D110857425B134420047F1B6 /* NodeWrapper.swift */; };
-		D110857A25B13DF90047F1B6 /* NodeWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
 		D14AFD2524D232B300C51073 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2424D232B300C51073 /* ContentView.swift */; };
@@ -36,7 +34,7 @@
 		D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4D25ADB12C001BD43D /* libllhttp.a */; };
 		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
 		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
-		D1AB9647259EB24100DEAB23 /* node_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */; };
+		D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFF0F2268D59A500FBB744 /* libiono.a */; };
 		D1D6435F2681290200A22334 /* taler-wallet-ios.js in Resources */ = {isa = PBXBuildFile; fileRef = D1D6435E2681290200A22334 /* taler-wallet-ios.js */; };
 /* End PBXBuildFile section */
 
@@ -58,8 +56,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D110857425B134420047F1B6 /* NodeWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWrapper.swift; sourceTree = "<group>"; };
-		D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeWrapperTests.swift; sourceTree = "<group>"; };
 		D11DB44E25A5C487009CF0BC /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "nodejs-mobile/out/Release/libnode.a"; sourceTree = "<group>"; };
 		D11DB45625A5C5C7009CF0BC /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "nodejs-mobile/out/Release/libv8_initializers.a"; sourceTree = "<group>"; };
 		D11DB45725A5C5C7009CF0BC /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "nodejs-mobile/out/Release/libv8_compiler.a"; sourceTree = "<group>"; };
@@ -138,9 +134,7 @@
 		D17D8B5625ADB130001BD43D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libhistogram.a"; sourceTree = "<group>"; };
 		D17D8B5725ADB130001BD43D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libtorque_base.a"; sourceTree = "<group>"; };
 		D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libnode.89.dylib"; sourceTree = "<group>"; };
-		D1AB9644259EB22900DEAB23 /* node_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node_wrapper.h; sourceTree = "<group>"; };
-		D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Taler-Bridging-Header.h"; sourceTree = "<group>"; };
-		D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node_wrapper.cpp; sourceTree = "<group>"; };
+		D1AFF0F2268D59A500FBB744 /* libiono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiono.a; path = iono/compiled/x64/libiono.a; sourceTree = "<group>"; };
 		D1D6435E2681290200A22334 /* taler-wallet-ios.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-ios.js"; sourceTree = "<group>"; };
 		D1F0C22F25A958AE00C3179D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libllhttp.a"; sourceTree = "<group>"; };
 		D1F0C23025A958AE00C3179D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_initializers.a"; sourceTree = "<group>"; };
@@ -198,6 +192,7 @@
 				D17D8B7425ADB29A001BD43D /* libv8_zlib.a in Frameworks */,
 				D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */,
 				D17D8B8125ADB29B001BD43D /* libnode.a in Frameworks */,
+				D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */,
 				D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */,
 				D17D8B7B25ADB29B001BD43D /* libv8_compiler.a in Frameworks */,
 				D17D8B7225ADB29A001BD43D /* libbrotli.a in Frameworks */,
@@ -261,10 +256,6 @@
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
-				D1AB9644259EB22900DEAB23 /* node_wrapper.h */,
-				D1AB9646259EB24100DEAB23 /* node_wrapper.cpp */,
-				D1AB9645259EB24000DEAB23 /* Taler-Bridging-Header.h */,
-				D110857425B134420047F1B6 /* NodeWrapper.swift */,
 			);
 			path = Taler;
 			sourceTree = "<group>";
@@ -274,7 +265,6 @@
 			children = (
 				D14AFD3724D232B500C51073 /* TalerTests.swift */,
 				D14AFD3924D232B500C51073 /* Info.plist */,
-				D110857925B13DF90047F1B6 /* NodeWrapperTests.swift */,
 			);
 			path = TalerTests;
 			sourceTree = "<group>";
@@ -291,6 +281,7 @@
 		D1EFA41824D2619B0008B97F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1AFF0F2268D59A500FBB744 /* libiono.a */,
 				D1F0C26625A9597700C3179D /* libbrotli.a */,
 				D145D1EE25AC416B00CDD61B /* libbrotli.a */,
 				D17D8B4F25ADB12D001BD43D /* libbrotli.a */,
@@ -536,8 +527,6 @@
 				D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */,
 				D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */,
 				D14AFD2524D232B300C51073 /* ContentView.swift in Sources */,
-				D1AB9647259EB24100DEAB23 /* node_wrapper.cpp in Sources */,
-				D110857525B134420047F1B6 /* NodeWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,7 +535,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */,
-				D110857A25B13DF90047F1B6 /* NodeWrapperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,10 +624,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lc++";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -691,9 +680,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-lc++";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -713,9 +703,9 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/ios-node-v8/src",
-					"$(PROJECT_DIR)/ios-node-v8/deps/v8/include",
-					"$(PROJECT_DIR)/ios-node-v8/deps/uv/include",
+					"$(PROJECT_DIR)/iono/ios-node-v8/src",
+					"$(PROJECT_DIR)/iono/ios-node-v8/deps/v8/include",
+					"$(PROJECT_DIR)/iono/ios-node-v8/deps/uv/include",
 				);
 				INFOPLIST_FILE = Taler/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -725,14 +715,24 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/iono/compiled/x64",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-arm64";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-x64";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(PROJECT_DIR)/iono/ios-node-v8/taler-ios-build/compiled/node-arm64",
+					"$(PROJECT_DIR)/iono/compiled/arm64",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(PROJECT_DIR)/iono/ios-node-v8/taler-ios-build/compiled/node-x64",
+					"$(PROJECT_DIR)/iono/compiled/x64",
+				);
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.taler.Taler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Taler/Taler-Bridging-Header.h";
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/iono/iono";
+				"SWIFT_INCLUDE_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/iono/compiled/arm64";
+				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/iono/compiled/x64";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -752,9 +752,9 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/ios-node-v8/src",
-					"$(PROJECT_DIR)/ios-node-v8/deps/v8/include",
-					"$(PROJECT_DIR)/ios-node-v8/deps/uv/include",
+					"$(PROJECT_DIR)/iono/ios-node-v8/src",
+					"$(PROJECT_DIR)/iono/ios-node-v8/deps/v8/include",
+					"$(PROJECT_DIR)/iono/ios-node-v8/deps/uv/include",
 				);
 				INFOPLIST_FILE = Taler/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -764,14 +764,24 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/iono/compiled/x64",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-arm64";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/ios-node-v8/taler-ios-build/compiled/node-x64";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(PROJECT_DIR)/iono/ios-node-v8/taler-ios-build/compiled/node-arm64",
+					"$(PROJECT_DIR)/iono/compiled/arm64",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(PROJECT_DIR)/iono/ios-node-v8/taler-ios-build/compiled/node-x64",
+					"$(PROJECT_DIR)/iono/compiled/x64",
+				);
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.taler.Taler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Taler/Taler-Bridging-Header.h";
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/iono/iono";
+				"SWIFT_INCLUDE_PATHS[sdk=iphoneos*]" = "$(PROJECT_DIR)/iono/compiled/arm64";
+				"SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]" = "$(PROJECT_DIR)/iono/compiled/x64";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
@@ -787,7 +797,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TalerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -810,7 +820,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TalerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
