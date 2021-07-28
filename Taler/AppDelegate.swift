@@ -24,19 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        // TODO: generate 'taler-wallet-ios.js' from wallet-core instead of pasting it in.
-        let js_path = URL(fileURLWithPath: Bundle.main.path(forResource: "taler-wallet-ios", ofType: "js")!)
-        let nodeInstance = Iono()
-        do {
-            let js = try String(contentsOf: js_path, encoding: .utf8)
-            nodeInstance.putModuleCode(modName: "@gnu-taler/taler-wallet-ios", code: js)
-            nodeInstance.evalNodeCode(source: "require('iono');")
-            nodeInstance.evalNodeCode(source: "tw = require('@gnu-taler/taler-wallet-ios');")
-            nodeInstance.evalNodeCode(source: "tw.installIosWalletListener();")
-        } catch {
-
-        }
-        
+        let backend = WalletBackend()
         return true
     }
 

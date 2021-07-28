@@ -3,15 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
 		D14AFD2524D232B300C51073 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2424D232B300C51073 /* ContentView.swift */; };
-		D14AFD2724D232B500C51073 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2624D232B500C51073 /* Assets.xcassets */; };
-		D14AFD2D24D232B500C51073 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */; };
 		D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD3724D232B500C51073 /* TalerTests.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
 		D17D8B7225ADB29A001BD43D /* libbrotli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4F25ADB12D001BD43D /* libbrotli.a */; };
@@ -35,7 +34,7 @@
 		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
 		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
 		D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFF0F2268D59A500FBB744 /* libiono.a */; };
-		D1D6435F2681290200A22334 /* taler-wallet-ios.js in Resources */ = {isa = PBXBuildFile; fileRef = D1D6435E2681290200A22334 /* taler-wallet-ios.js */; };
+		D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D65B9726992E4600C1012A /* WalletBackend.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +54,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D11250FA26B12D4400D02E00 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-embedded.js"; sourceTree = "<group>"; };
 		D11DB44E25A5C487009CF0BC /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "nodejs-mobile/out/Release/libnode.a"; sourceTree = "<group>"; };
 		D11DB45625A5C5C7009CF0BC /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "nodejs-mobile/out/Release/libv8_initializers.a"; sourceTree = "<group>"; };
 		D11DB45725A5C5C7009CF0BC /* libv8_compiler.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_compiler.a; path = "nodejs-mobile/out/Release/libv8_compiler.a"; sourceTree = "<group>"; };
@@ -135,7 +148,7 @@
 		D17D8B5725ADB130001BD43D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libtorque_base.a"; sourceTree = "<group>"; };
 		D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libnode.89.dylib"; sourceTree = "<group>"; };
 		D1AFF0F2268D59A500FBB744 /* libiono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiono.a; path = iono/compiled/x64/libiono.a; sourceTree = "<group>"; };
-		D1D6435E2681290200A22334 /* taler-wallet-ios.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-ios.js"; sourceTree = "<group>"; };
+		D1D65B9726992E4600C1012A /* WalletBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackend.swift; sourceTree = "<group>"; };
 		D1F0C22F25A958AE00C3179D /* libllhttp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libllhttp.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libllhttp.a"; sourceTree = "<group>"; };
 		D1F0C23025A958AE00C3179D /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libv8_initializers.a"; sourceTree = "<group>"; };
 		D1F0C23125A958AE00C3179D /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = "ios-node-v8/tools/ios-framework/bin/x64/libuv.a"; sourceTree = "<group>"; };
@@ -228,6 +241,7 @@
 		D14AFD1424D232B300C51073 = {
 			isa = PBXGroup;
 			children = (
+				D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */,
 				D14AFD1F24D232B300C51073 /* Taler */,
 				D14AFD3624D232B500C51073 /* TalerTests */,
 				D14AFD4124D232B500C51073 /* TalerUITests */,
@@ -249,9 +263,9 @@
 		D14AFD1F24D232B300C51073 /* Taler */ = {
 			isa = PBXGroup;
 			children = (
-				D1D6435E2681290200A22334 /* taler-wallet-ios.js */,
 				D14AFD2024D232B300C51073 /* AppDelegate.swift */,
 				D14AFD2224D232B300C51073 /* SceneDelegate.swift */,
+				D1D65B9726992E4600C1012A /* WalletBackend.swift */,
 				D14AFD2424D232B300C51073 /* ContentView.swift */,
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
@@ -401,6 +415,8 @@
 			buildPhases = (
 				D14AFD1924D232B300C51073 /* Sources */,
 				D14AFD1A24D232B300C51073 /* Frameworks */,
+				D11250F726B12A3500D02E00 /* ShellScript */,
+				D11250FA26B12D4400D02E00 /* CopyFiles */,
 				D14AFD1B24D232B300C51073 /* Resources */,
 			);
 			buildRules = (
@@ -419,6 +435,7 @@
 				D14AFD2F24D232B500C51073 /* Sources */,
 				D14AFD3024D232B500C51073 /* Frameworks */,
 				D14AFD3124D232B500C51073 /* Resources */,
+				D11250F626B1278700D02E00 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -497,9 +514,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D14AFD2D24D232B500C51073 /* LaunchScreen.storyboard in Resources */,
-				D1D6435F2681290200A22334 /* taler-wallet-ios.js in Resources */,
-				D14AFD2724D232B500C51073 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +533,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D11250F626B1278700D02E00 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
+		D11250F726B12A3500D02E00 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/taler-wallet-embedded.js",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "WALLET_CORE_VERSION=\"v0.8.1\"\nWALLET_CORE_HASH=\"23bf89b663f0fd0e84a3d7e54a19766766c7306e5704e43a25df57da72056fa7\"\nWALLET_SRC=\"https://git.taler.net/wallet-core.git/plain/${WALLET_CORE_VERSION}/taler-wallet-embedded.js?h=prebuilt\"\nWALLET_DST=\"${SRCROOT}/taler-wallet-embedded.js\"\n\n[ ! -e $WALLET_DST ] || rm $WALLET_DST\ncurl $WALLET_SRC --output $WALLET_DST\n\nRECEIVED_HASH=$(openssl sha256 -r $WALLET_DST)\nRECEIVED_HASH_SPLIT=($RECEIVED_HASH)\nif [ $WALLET_CORE_HASH != ${RECEIVED_HASH_SPLIT[0]} ]\nthen\n    exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D14AFD1924D232B300C51073 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -527,6 +582,7 @@
 				D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */,
 				D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */,
 				D14AFD2524D232B300C51073 /* ContentView.swift in Sources */,
+				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,6 +754,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
 				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
@@ -747,6 +804,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
 				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
