@@ -57,6 +57,11 @@ class AmountTests: XCTestCase {
         XCTAssertThrowsError(try amount > amount3)
         XCTAssertThrowsError(try amount + amount3)
         XCTAssertThrowsError(try amount - amount3)
+        
+        XCTAssertThrowsError(try amount3 / 0)
+        XCTAssert(try (amount3 / 1) == amount3)
+        XCTAssert(try (amount3 / 3) == Amount(fromString: "USD:4.11333333"))
+        XCTAssert(try (amount3 * 5) == Amount(fromString: "USD:61.7"))
     }
 
 }
