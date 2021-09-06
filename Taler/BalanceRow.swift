@@ -16,14 +16,22 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct BalanceRow: View {
+    var balance: Balance
+    
     var body: some View {
-        Text("Hello, World!")
+        VStack(alignment: .leading, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, content: {
+            Text("Available: \(balance.available.description)")
+            Text("Pending Incoming: \(balance.pendingIncoming.description)")
+            Text("Pending Outgoing: \(balance.pendingOutgoing.description)")
+            Text("Requires User Input: \(balance.requiresUserInput.description)")
+        })
+        .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct BalanceRow_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        try! BalanceRow(balance: Balance(available: Amount(fromString: "USD:0.01"), pendingIncoming: Amount(fromString: "USD:0.02"), pendingOutgoing: Amount(fromString: "USD:0.03"), requiresUserInput: true))
     }
 }

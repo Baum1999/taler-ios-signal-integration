@@ -11,9 +11,10 @@
 		D1472E5526B9206800896566 /* AmountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1472E5426B9206800896566 /* AmountTests.swift */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
-		D14AFD2524D232B300C51073 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2424D232B300C51073 /* ContentView.swift */; };
 		D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD3724D232B500C51073 /* TalerTests.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
+		D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B126C39E5D00612DBE /* BalanceRow.swift */; };
+		D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B326C3A2D400612DBE /* BalanceList.swift */; };
 		D17D8B7225ADB29A001BD43D /* libbrotli.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4F25ADB12D001BD43D /* libbrotli.a */; };
 		D17D8B7325ADB29A001BD43D /* libzlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4725ADB12B001BD43D /* libzlib.a */; };
 		D17D8B7425ADB29A001BD43D /* libv8_zlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5425ADB12D001BD43D /* libv8_zlib.a */; };
@@ -34,6 +35,7 @@
 		D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4D25ADB12C001BD43D /* libllhttp.a */; };
 		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
 		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
+		D18DBB5E26DF160D00A4480D /* TimestampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18DBB5D26DF160D00A4480D /* TimestampTests.swift */; };
 		D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFF0F2268D59A500FBB744 /* libiono.a */; };
 		D1BA3F9226B8889600A5848B /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BA3F9126B8889600A5848B /* Amount.swift */; };
 		D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D65B9726992E4600C1012A /* WalletBackend.swift */; };
@@ -117,7 +119,6 @@
 		D14AFD1D24D232B300C51073 /* Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD2024D232B300C51073 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D14AFD2224D232B300C51073 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D14AFD2424D232B300C51073 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D14AFD2624D232B500C51073 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D14AFD2C24D232B500C51073 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D14AFD2E24D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -127,6 +128,8 @@
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD4224D232B500C51073 /* TalerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
 		D14AFD4424D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D14CE1B126C39E5D00612DBE /* BalanceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceRow.swift; sourceTree = "<group>"; };
+		D14CE1B326C3A2D400612DBE /* BalanceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceList.swift; sourceTree = "<group>"; };
 		D1595BBD25A550750049971F /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/out/Debug/libnode.89.dylib"; sourceTree = "<group>"; };
 		D1595BC625A5527C0049971F /* NodeMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NodeMobile.framework; path = "nodejs-mobile-v0.3.2-ios/Release-universal/NodeMobile.framework"; sourceTree = "<group>"; };
 		D17D8B4425ADB12B001BD43D /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libv8_libbase.a"; sourceTree = "<group>"; };
@@ -149,6 +152,7 @@
 		D17D8B5525ADB12E001BD43D /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libuvwasi.a"; sourceTree = "<group>"; };
 		D17D8B5625ADB130001BD43D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libhistogram.a"; sourceTree = "<group>"; };
 		D17D8B5725ADB130001BD43D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libtorque_base.a"; sourceTree = "<group>"; };
+		D18DBB5D26DF160D00A4480D /* TimestampTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampTests.swift; sourceTree = "<group>"; };
 		D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libnode.89.dylib"; sourceTree = "<group>"; };
 		D1AFF0F2268D59A500FBB744 /* libiono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiono.a; path = iono/compiled/x64/libiono.a; sourceTree = "<group>"; };
 		D1BA3F9126B8889600A5848B /* Amount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
@@ -271,7 +275,8 @@
 				D14AFD2224D232B300C51073 /* SceneDelegate.swift */,
 				D1D65B9726992E4600C1012A /* WalletBackend.swift */,
 				D1BA3F9126B8889600A5848B /* Amount.swift */,
-				D14AFD2424D232B300C51073 /* ContentView.swift */,
+				D14CE1B126C39E5D00612DBE /* BalanceRow.swift */,
+				D14CE1B326C3A2D400612DBE /* BalanceList.swift */,
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
@@ -285,6 +290,7 @@
 				D14AFD3724D232B500C51073 /* TalerTests.swift */,
 				D14AFD3924D232B500C51073 /* Info.plist */,
 				D1472E5426B9206800896566 /* AmountTests.swift */,
+				D18DBB5D26DF160D00A4480D /* TimestampTests.swift */,
 			);
 			path = TalerTests;
 			sourceTree = "<group>";
@@ -588,8 +594,9 @@
 				D1BA3F9226B8889600A5848B /* Amount.swift in Sources */,
 				D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */,
 				D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */,
-				D14AFD2524D232B300C51073 /* ContentView.swift in Sources */,
 				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
+				D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */,
+				D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +606,7 @@
 			files = (
 				D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */,
 				D1472E5526B9206800896566 /* AmountTests.swift in Sources */,
+				D18DBB5E26DF160D00A4480D /* TimestampTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
