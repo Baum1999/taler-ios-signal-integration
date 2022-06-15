@@ -11,7 +11,6 @@
 		D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
-		D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD3724D232B500C51073 /* TalerTests.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
 		D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B126C39E5D00612DBE /* BalanceRow.swift */; };
 		D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B326C3A2D400612DBE /* BalanceList.swift */; };
@@ -122,7 +121,6 @@
 		D14AFD2C24D232B500C51073 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D14AFD2E24D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D14AFD3724D232B500C51073 /* TalerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerTests.swift; sourceTree = "<group>"; };
 		D14AFD3924D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD4224D232B500C51073 /* TalerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
@@ -286,7 +284,6 @@
 		D14AFD3624D232B500C51073 /* TalerTests */ = {
 			isa = PBXGroup;
 			children = (
-				D14AFD3724D232B500C51073 /* TalerTests.swift */,
 				D14AFD3924D232B500C51073 /* Info.plist */,
 				D18DBB5D26DF160D00A4480D /* TimestampTests.swift */,
 			);
@@ -604,7 +601,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D14AFD3824D232B500C51073 /* TalerTests.swift in Sources */,
 				D18DBB5E26DF160D00A4480D /* TimestampTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
