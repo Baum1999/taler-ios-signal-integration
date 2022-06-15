@@ -1,9 +1,8 @@
 #!/bin/sh
 
-# Bootstrap the repository.  Used when the repository is checked out from git.
-# When using the source tarball, running this script is not necessary.
-
 set -eu
+
+curl https://git.taler.net/wallet-core.git/plain/v0.9.0-dev.12/taler-wallet-embedded.js?h=prebuilt --output taler-wallet-embedded.js
 
 if ! git --version >/dev/null; then
   echo "git not installed"

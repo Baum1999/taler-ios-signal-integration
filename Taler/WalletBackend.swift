@@ -16,6 +16,7 @@
 
 import Foundation
 import iono
+import taler_swift
 
 enum WalletBackendResponseError: Error {
     case malformedResponse
@@ -1304,6 +1305,7 @@ class WalletBackendSuspendCoinRequest: WalletBackendRequest {
 }
 
 enum WalletBackendError: Error {
+    case initializationError
     case serializationError
     case deserializationError
 }
@@ -1319,7 +1321,7 @@ class WalletBackend: IonoMessageHandler {
     }
     private var requests: [UInt : RequestDetail] = [:]
     
-    init() {
+    init() throws {
         iono = Iono()
         requestsMade = 0
         self.backendReady = false
@@ -1335,7 +1337,7 @@ class WalletBackend: IonoMessageHandler {
             iono.evalNodeCode(source: "tw = require('@gnu-taler/taler-wallet-embedded');")
             iono.evalNodeCode(source: "tw.installNativeWalletListener();")
         } catch {
-
+            throw WalletBackendError.initializationError
         }
         
         // Send the init message
@@ -1351,12 +1353,6 @@ class WalletBackend: IonoMessageHandler {
         }
         
         waitUntilReady()
-        //try! sendRequest(request: WalletBackendWithdrawTestBalance(amount: "TESTKUDOS:10", bankBaseUrl: "https://bank.test.taler.net/", exchangeBaseUrl: "https://exchange.test.taler.net/"))
-        try! sendRequest(request: WalletBackendGetBalancesRequest(onSuccess: { ([Balance]) -> Void in
-            
-        }, onFailure: { () -> Void in
-            
-        }))
     }
     
     func waitUntilReady() {

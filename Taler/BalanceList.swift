@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct IdentifiedArray<T>: RandomAccessCollection {
+/*struct IdentifiedArray<T>: RandomAccessCollection {
     struct Item {
         var id: Int
         var item: T
@@ -73,4 +73,4 @@ struct BalanceList_Previews: PreviewProvider {
             Balance(available: Amount(fromString: "EUR:0.02"), pendingIncoming: Amount(fromString: "EUR:0.01"), pendingOutgoing: Amount(fromString: "EUR:0.03"), requiresUserInput: false)
         ]))
     }
-}
+}*/

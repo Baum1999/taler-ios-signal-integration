@@ -15,6 +15,7 @@
  */
 
 import SwiftUI
+import taler_swift
 
 struct BalanceRow: View {
     var balance: Balance

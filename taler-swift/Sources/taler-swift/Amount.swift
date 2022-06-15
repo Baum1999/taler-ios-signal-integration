@@ -49,7 +49,7 @@ enum AmountError: Error {
 /**
     A value of a currency.
  */
-class Amount: Codable, CustomStringConvertible {
+public class Amount: Codable, CustomStringConvertible {
     /**
         The largest possible value that can be represented.
      */
@@ -83,7 +83,7 @@ class Amount: Codable, CustomStringConvertible {
     /**
         The string representation of the amount, formatted as "`currency`:`value`.`fraction`".
      */
-    var description: String {
+    public var description: String {
         if fraction == 0 {
             return "\(currency):\(value)"
         } else {
@@ -114,7 +114,7 @@ class Amount: Codable, CustomStringConvertible {
             - `AmountError.invalidStringRepresentation` if the string cannot be parsed.
             - `AmountError.invalidAmount` if the string can be parsed, but the resulting amount is not valid.
      */
-    init(fromString string: String) throws {
+    public init(fromString string: String) throws {
         guard let separatorIndex = string.firstIndex(of: ":") else { throw AmountError.invalidStringRepresentation }
         self.currency = String(string[..<separatorIndex])
         let amountStr = String(string[string.index(separatorIndex, offsetBy: 1)...])
@@ -215,7 +215,7 @@ class Amount: Codable, CustomStringConvertible {
         - Parameters:
             - to: The encoder to encode the amount with.
      */
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(self.description)
     }
