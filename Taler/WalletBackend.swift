@@ -134,46 +134,6 @@ class WalletBackendGetBalancesRequest: WalletBackendRequest {
 }
 
 /**
-    A timestamp, measured in milliseconds elapsed from an epoch.
- */
-enum TimestampError: Error {
-    case invalidString
-}
-
-enum Timestamp: Codable, Equatable {
-    case millisecondsSinceEpoch(Int)
-    case never
-    
-    enum CodingKeys: String, CodingKey {
-        case t_ms = "t_ms"
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        do {
-            self = Timestamp.millisecondsSinceEpoch(try container.decode(Int.self, forKey: .t_ms))
-        } catch {
-            let stringValue = try container.decode(String.self, forKey: .t_ms)
-            if stringValue == "never" {
-                self = Timestamp.never
-            } else {
-                throw TimestampError.invalidString
-            }
-        }
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var value = encoder.singleValueContainer()
-        switch self {
-        case .millisecondsSinceEpoch(let t_ms):
-            try value.encode(t_ms)
-        case .never:
-            try value.encode("never")
-        }
-    }
-}
-
-/**
     A billing or mailing location.
  */
 struct Location: Codable {

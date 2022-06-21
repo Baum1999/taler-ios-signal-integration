@@ -1,6 +1,6 @@
 /*
  * This file is part of GNU Taler
- * (C) 2021 Taler Systems S.A.
+ * (C) 2022 Taler Systems S.A.
  *
  * GNU Taler is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -18,14 +18,6 @@ import XCTest
 @testable import taler_swift
 
 class AmountTests: XCTestCase {
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testParsing() {
         var str = "TESTKUDOS:23.42"
         var amt = try! Amount(fromString: str)

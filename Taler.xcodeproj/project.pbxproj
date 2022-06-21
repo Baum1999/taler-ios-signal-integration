@@ -34,7 +34,6 @@
 		D17D8B8325ADB29B001BD43D /* libllhttp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4D25ADB12C001BD43D /* libllhttp.a */; };
 		D17D8B8425ADB29B001BD43D /* libhistogram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B5625ADB130001BD43D /* libhistogram.a */; };
 		D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D17D8B4825ADB12B001BD43D /* libcares.a */; };
-		D18DBB5E26DF160D00A4480D /* TimestampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18DBB5D26DF160D00A4480D /* TimestampTests.swift */; };
 		D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFF0F2268D59A500FBB744 /* libiono.a */; };
 		D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D65B9726992E4600C1012A /* WalletBackend.swift */; };
 /* End PBXBuildFile section */
@@ -149,7 +148,6 @@
 		D17D8B5525ADB12E001BD43D /* libuvwasi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuvwasi.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libuvwasi.a"; sourceTree = "<group>"; };
 		D17D8B5625ADB130001BD43D /* libhistogram.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhistogram.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libhistogram.a"; sourceTree = "<group>"; };
 		D17D8B5725ADB130001BD43D /* libtorque_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtorque_base.a; path = "ios-node-v8/taler-ios-build/compiled/node-arm64/libtorque_base.a"; sourceTree = "<group>"; };
-		D18DBB5D26DF160D00A4480D /* TimestampTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampTests.swift; sourceTree = "<group>"; };
 		D1AB963B259EB13D00DEAB23 /* libnode.89.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnode.89.dylib; path = "ios-node-v8/taler-ios-build/compiled/x64-v8a/libnode.89.dylib"; sourceTree = "<group>"; };
 		D1AFF0F2268D59A500FBB744 /* libiono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiono.a; path = iono/compiled/x64/libiono.a; sourceTree = "<group>"; };
 		D1D65B9726992E4600C1012A /* WalletBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackend.swift; sourceTree = "<group>"; };
@@ -285,7 +283,6 @@
 			isa = PBXGroup;
 			children = (
 				D14AFD3924D232B500C51073 /* Info.plist */,
-				D18DBB5D26DF160D00A4480D /* TimestampTests.swift */,
 			);
 			path = TalerTests;
 			sourceTree = "<group>";
@@ -601,7 +598,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D18DBB5E26DF160D00A4480D /* TimestampTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
