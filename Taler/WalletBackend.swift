@@ -1,6 +1,6 @@
 /*
  * This file is part of GNU Taler
- * (C) 2021 Taler Systems S.A.
+ * (C) 2022 Taler Systems S.A.
  *
  * GNU Taler is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -13,13 +13,15 @@
  * You should have received a copy of the GNU General Public License along with
  * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
  */
-
 import Foundation
 import iono
 import taler_swift
 
-enum WalletBackendResponseError: Error {
-    case malformedResponse
+struct WalletBackendResponseError: Decodable {
+    var talerErrorCode: Int
+    var talerErrorHint: String
+    var message: String
+    var details: Data?
 }
 
 protocol WalletBackendRequest {
@@ -1264,12 +1266,20 @@ class WalletBackendSuspendCoinRequest: WalletBackendRequest {
     }
 }
 
+/// Errors for `WalletBackend`.
 enum WalletBackendError: Error {
+    /// An error that prevented the wallet from being initialized occurred.
     case initializationError
     case serializationError
     case deserializationError
 }
 
+/// Delegate for the wallet backend.
+protocol WalletBackendDelegate {
+    func walletBackendReceivedUnknownMessage(_ walletBackend: WalletBackend, message: String)
+}
+
+/// An interface to the wallet backend.
 class WalletBackend: IonoMessageHandler {
     private var iono: Iono
     private var requestsMade: UInt
@@ -1277,9 +1287,10 @@ class WalletBackend: IonoMessageHandler {
     private var backendReadyCondition: NSCondition
     private struct RequestDetail {
         let decodeSuccess: (Data) -> Void
-        //let handleError: (Data) -> Void
+        let handleError: (Data) -> Void
     }
     private var requests: [UInt : RequestDetail] = [:]
+    var delegate: WalletBackendDelegate?
     
     init() throws {
         iono = Iono()
@@ -1306,7 +1317,7 @@ class WalletBackend: IonoMessageHandler {
             var storageDir = documentUrls[0]
             storageDir.appendPathComponent("talerwalletdb-v30", isDirectory: false)
             storageDir.appendPathExtension("json")
-            try! sendRequest(request: WalletBackendInitRequest(persistentStoragePath: storageDir.path, onSuccess: {
+            try sendRequest(request: WalletBackendInitRequest(persistentStoragePath: storageDir.path, onSuccess: {
                 self.backendReady = true
                 self.backendReadyCondition.broadcast()
             }))
@@ -1324,15 +1335,20 @@ class WalletBackend: IonoMessageHandler {
     }
     
     func handleMessage(message: String) {
-        print(message)
         do {
             guard let messageData = message.data(using: .utf8) else { throw WalletBackendError.deserializationError }
             let data = try JSONSerialization.jsonObject(with: messageData, options: .allowFragments) as? [String : Any]
             if let responseData = data {
                 let type = (responseData["type"] as? String) ?? ""
                 if type == "response" {
-                    guard let id = responseData["id"] as? UInt else { /* TODO: error. */ return }
-                    guard let request = requests[id] else { /* TODO: error. */ return }
+                    guard let id = responseData["id"] as? UInt else {
+                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
+                        return
+                    }
+                    guard let request = requests[id] else {
+                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
+                        return
+                    }
                     request.decodeSuccess(messageData)
                     requests[id] = nil
                 } else if type == "tunnelHttp" {
@@ -1340,16 +1356,22 @@ class WalletBackend: IonoMessageHandler {
                 } else if type == "notification" {
                     
                 } else if type == "error" {
-                    guard let id = responseData["id"] as? UInt else { /* TODO: error. */ return }
-                    guard let request = requests[id] else { /* TODO: error. */ return }
-                    //request.handleError(messageData)
+                    guard let id = responseData["id"] as? UInt else {
+                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
+                        return
+                    }
+                    guard let request = requests[id] else {
+                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
+                        return
+                    }
+                    request.handleError(messageData)
                     requests[id] = nil
                 } else {
-                    /* TODO: unknown response type. */
+                    self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
                 }
             }
         } catch {
-            
+            self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
         }
     }
     
@@ -1360,22 +1382,34 @@ class WalletBackend: IonoMessageHandler {
         let result: T.Response
     }
     
-    /*private struct FullError: Decodable {
+    private struct FullError: Decodable {
         let type: String
         let operation: String
         let id: UInt
-        let error: WalletErrorDetail
-    }*/
+        let error: WalletBackendResponseError
+    }
     
     func sendRequest<T: WalletBackendRequest>(request: T) throws {
         let data = WalletBackendRequestData<T>(request: request, id: requestsMade)
         requestsMade += 1
+        
         let decodeSuccess = { (data: Data) -> Void in
             do {
                 let decoded = try JSONDecoder().decode(FullResponse<T>.self, from: data)
                 request.success(result: decoded.result)
             } catch {
-                
+                let err = WalletBackendResponseError(talerErrorCode: -1, talerErrorHint: "Could not parse response.", message: "")
+                request.error(err)
+            }
+        }
+        
+        let handleError = { (data: Data) -> Void in
+            do {
+                let decoded = try JSONDecoder().decode(FullError.self, from: data)
+                request.error(decoded.error)
+            } catch {
+                let err = WalletBackendResponseError(talerErrorCode: -2, talerErrorHint: "Could not parse error detail.", message: "")
+                request.error(err)
             }
         }
         
@@ -1383,7 +1417,7 @@ class WalletBackend: IonoMessageHandler {
         do {
             let encoded = try JSONEncoder().encode(data)
             guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
-            let detail = RequestDetail(decodeSuccess: decodeSuccess)
+            let detail = RequestDetail(decodeSuccess: decodeSuccess, handleError: handleError)
             requests[data.id] = detail
             iono.sendMessage(message: jsonString)
         } catch {
