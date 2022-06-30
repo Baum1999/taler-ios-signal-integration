@@ -16,41 +16,47 @@
 import Foundation
 import iono
 import taler_swift
+import AnyCodable
 
+/// Information supplied by the backend describing an error.
 struct WalletBackendResponseError: Decodable {
+    /// Numeric error code defined defined in the GANA gnu-taler-error-codes registry.
     var talerErrorCode: Int
+    
+    /// English description of the error code.
     var talerErrorHint: String
+    
+    /// English diagnostic message that can give details for the instance of the error.
     var message: String
+    
+    /// Error details, type depends on `talerErrorCode`.
     var details: Data?
 }
 
-protocol WalletBackendRequest {
+/// A request sent to the wallet backend.
+struct WalletBackendRequest: Encodable {
+    /// The operation name of the request.
+    var operation: String
+    
+    /// The body of the request as JSON.
+    var args: AnyEncodable
+}
+
+protocol WalletBackendFormattedRequest {
     associatedtype Args: Encodable
     associatedtype Response: Decodable
     
     func operation() -> String
     func args() -> Args
-    func success(result: Response)
-    func error(_ err: WalletBackendResponseError)
 }
 
-fileprivate struct WalletBackendRequestData<T: WalletBackendRequest>: Encodable {
-    var operation: String
-    var id: UInt
-    var args: T.Args
+fileprivate struct WalletBackendInitRequest: WalletBackendFormattedRequest {
+    var persistentStoragePath: String
     
-    init(request: T, id: UInt) {
-        operation = request.operation()
-        self.id = id
-        args = request.args()
-    }
-}
-
-fileprivate struct WalletBackendInitRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+    struct Args: Encodable {
         var persistentStoragePath: String
     }
-    typealias Args = RequestArgs
+    
     struct Response: Codable {
         struct SupportedProtocolVersions: Codable {
             var exchange: String
@@ -61,34 +67,17 @@ fileprivate struct WalletBackendInitRequest: WalletBackendRequest {
             case supportedProtocolVersions = "supported_protocol_versions"
         }
     }
-    private var requestArgs: RequestArgs
-    private let success: () -> Void
-    
-    init(persistentStoragePath: String, onSuccess: @escaping () -> Void) {
-        requestArgs = RequestArgs(persistentStoragePath: persistentStoragePath)
-        self.success = onSuccess
-    }
     
     func operation() -> String {
         return "init"
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        
+        return Args(persistentStoragePath: persistentStoragePath)
     }
 }
 
-/**
-    An balance on a wallet.
- */
+/// An balance on a wallet.
 struct Balance: Decodable {
     var available: Amount
     var pendingIncoming: Amount
@@ -96,26 +85,14 @@ struct Balance: Decodable {
     var requiresUserInput: Bool
 }
 
-/**
-    A request to get the balances held in the wallet.
- */
-class WalletBackendGetBalancesRequest: WalletBackendRequest {
-    struct BalancesResponse: Decodable {
-        var balances: [Balance]
-    }
-    struct RequestArgs: Encodable {
+/// A request to get the balances held in the wallet.
+struct WalletBackendGetBalancesRequest: WalletBackendFormattedRequest {
+    struct Args: Encodable {
         
     }
-    typealias Args = RequestArgs
-    typealias Response = BalancesResponse
-    private var requestArgs: RequestArgs
-    private let success: ([Balance]) -> Void
-    private let failure: () -> Void
     
-    init(onSuccess: @escaping ([Balance]) -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs()
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var balances: [Balance]
     }
     
     func operation() -> String {
@@ -123,21 +100,11 @@ class WalletBackendGetBalancesRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success(result.balances)
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args()
     }
 }
 
-/**
-    A billing or mailing location.
- */
+/// A billing or mailing location.
 struct Location: Codable {
     var country: String?
     var country_subdivision: String?
@@ -151,26 +118,20 @@ struct Location: Codable {
     var address_lines: [String]?
 }
 
-/**
-    Information identifying a merchant.
- */
+/// Information identifying a merchant.
 struct Merchant: Codable {
     var name: String
     var address: Location?
     var jurisdiction: Location?
 }
 
-/**
-    A tax made on a payment.
- */
+/// A tax made on a payment.
 struct Tax: Codable {
     var name: String
     var tax: Amount
 }
 
-/**
-    A product being purchased from a merchant.
- */
+/// A product being purchased from a merchant.
 struct Product: Codable {
     var product_id: String?
     var description: String
@@ -183,9 +144,7 @@ struct Product: Codable {
     var delivery_date: Timestamp?
 }
 
-/**
-    Brief information about an order.
- */
+/// Brief information about an order.
 struct OrderShortInfo: Codable {
     var orderId: String
     var merchant: Merchant
@@ -201,9 +160,7 @@ enum TransactionTypeError: Error {
     case unknownTypeError
 }
 
-/**
-    Different types of transactions.
- */
+/// Different types of transactions.
 enum TransactionType: Codable {
     case withdrawal
     case payment
@@ -245,18 +202,14 @@ enum TransactionType: Codable {
     }
 }
 
-/**
-    An error associated with a transaction.
- */
+/// An error associated with a transaction.
 struct TransactionError: Codable {
     var ec: Int
     var hint: String?
     //var details: Any?
 }
 
-/**
-    A wallet transaction.
- */
+/// A wallet transaction.
 struct Transaction: Codable {
     var transactionId: String
     var type: TransactionType
@@ -267,45 +220,18 @@ struct Transaction: Codable {
     var amountEffective: Amount
 }
 
-/**
-    A request to get the transactions in the wallet's history.
- */
-class WalletBackendGetTransactionsRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to get the transactions in the wallet's history.
+struct WalletBackendGetTransactionsRequest: WalletBackendFormattedRequest {
+    var currency: String?
+    var search: String?
+    
+    struct Args: Encodable {
         var currency: String?
         var search: String?
     }
-    struct TransactionsResponse: Decodable {
+    
+    struct Response: Decodable {
         
-    }
-    typealias Args = RequestArgs
-    typealias Response = TransactionsResponse
-    private var requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
-    
-    init(onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(currency: nil, search: nil)
-        self.success = onSuccess
-        self.failure = onFailure
-    }
-    
-    init(filterCurrency: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(currency: filterCurrency, search: nil)
-        self.success = onSuccess
-        self.failure = onFailure
-    }
-    
-    init(searchString: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(currency: nil, search: searchString)
-        self.success = onSuccess
-        self.failure = onFailure
-    }
-    
-    init(filterCurrency: String, searchString: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(currency: filterCurrency, search: searchString)
-        self.success = onSuccess
-        self.failure = onFailure
     }
     
     func operation() -> String {
@@ -313,38 +239,20 @@ class WalletBackendGetTransactionsRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args(currency: currency, search: search)
     }
 }
 
-/**
-    A request to delete a wallet transaction by ID.
- */
-class WalletBackendDeleteTransactionRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to delete a wallet transaction by ID.
+struct WalletBackendDeleteTransactionRequest: WalletBackendFormattedRequest {
+    var transactionId: String
+    
+    struct Args: Encodable {
         var transactionId: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private var requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(transactionID: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(transactionId: transactionID)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
@@ -352,26 +260,19 @@ class WalletBackendDeleteTransactionRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args(transactionId: transactionId)
     }
 }
 
-/**
-    A request to process a refund.
- */
-class WalletBackendApplyRefundRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to process a refund.
+struct WalletBackendApplyRefundRequest: WalletBackendFormattedRequest {
+    var talerRefundUri: String
+    
+    struct Args: Encodable {
         var talerRefundUri: String
     }
-    struct RequestResponse: Decodable {
+    
+    struct Response: Decodable {
         var contractTermsHash: String
         var amountEffectivePaid: Amount
         var amountRefundGranted: Amount
@@ -379,233 +280,126 @@ class WalletBackendApplyRefundRequest: WalletBackendRequest {
         var pendingAtExchange: Bool
         var info: OrderShortInfo
     }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: (RequestResponse) -> Void
-    private let failure: () -> Void
-    
-    init(refundURI: String, onSuccess: @escaping (RequestResponse) -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(talerRefundUri: refundURI)
-        self.success = onSuccess
-        self.failure = onFailure
-    }
     
     func operation() -> String {
         return "applyRefund"
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success(result)
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args(talerRefundUri: talerRefundUri)
     }
 }
 
-/**
-    A request to list exchanges.
- */
-class WalletBackendListExchanges: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to list exchanges.
+struct WalletBackendListExchanges: WalletBackendFormattedRequest {
+    struct Args: Encodable {
         
     }
+    
     struct ExchangeListItem: Decodable {
         var exchangeBaseUrl: String
         var currency: String
         var paytoUris: [String]
     }
-    struct RequestResponse: Decodable {
-        var exchanges: [ExchangeListItem]
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let success: ([ExchangeListItem]) -> Void
-    private let failure: () -> Void
     
-    init(onSuccess: @escaping ([ExchangeListItem]) -> Void, onFailure: @escaping () -> Void) {
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var exchanges: [ExchangeListItem]
     }
     
     func operation() -> String {
         return "listExchanges"
     }
     
-    func args() -> RequestArgs {
-        return RequestArgs()
-    }
-    
-    func success(result: RequestResponse) {
-        self.success(result.exchanges)
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args()
     }
 }
 
-/**
-    A request to add an exchange.
- */
-class WalletBackendAddRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to add an exchange.
+struct WalletBackendAddRequest: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(exchangeBaseURL: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "addRequest"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl)
     }
 }
 
-/**
-    A request to force update an exchange.
- */
-class WalletBackendForceUpdateRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to force update an exchange.
+struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(exchangeBaseURL: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "addRequest"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl)
     }
 }
 
-/**
-    A request to query an exchange's terms of service.
- */
-class WalletBackendGetExchangeTermsOfService: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to query an exchange's terms of service.
+struct WalletBackendGetExchangeTermsOfService: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
     }
-    struct RequestResponse: Decodable {
+    
+    struct Response: Decodable {
         var tos: String
         var currentEtag: String
         var acceptedEtag: String
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
-    
-    init(exchangeBaseURL: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL)
-        self.success = onSuccess
-        self.failure = onFailure
     }
     
     func operation() -> String {
         return "getExchangeTos"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl)
     }
 }
 
-/**
-    A request to mark an exchange's terms of service as accepted.
- */
-class WalletBackendSetExchangeTermsOfServiceAccepted: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to mark an exchange's terms of service as accepted.
+struct WalletBackendSetExchangeTermsOfServiceAccepted: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    var acceptedEtag: String
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
         var acceptedEtag: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(exchangeBaseURL: String, acceptedEtag: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL, acceptedEtag: acceptedEtag)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "setExchangeTosAccepted"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl, acceptedEtag: acceptedEtag)
     }
 }
 
@@ -615,295 +409,174 @@ struct ExchangeListItem: Codable {
     var paytoUris: [String]
 }
 
-/**
-    A request to get an exchange's withdrawal details.
- */
-class WalletBackendGetWithdrawalDetailsForURIRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to get an exchange's withdrawal details.
+struct WalletBackendGetWithdrawalDetailsForURIRequest: WalletBackendFormattedRequest {
+    var talerWithdrawUri: String
+    
+    struct Args: Encodable {
         var talerWithdrawUri: String
     }
-    struct RequestResponse: Decodable {
+    
+    struct Response: Decodable {
         var amount: Amount
         var defaultExchangeBaseUrl: String?
         var possibleExchanges: [ExchangeListItem]
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
-    
-    init(talerWithdrawUri: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(talerWithdrawUri: talerWithdrawUri)
-        self.success = onSuccess
-        self.failure = onFailure
     }
     
     func operation() -> String {
         return "getWithdrawalDetailsForUri"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(talerWithdrawUri: talerWithdrawUri)
     }
 }
 
-/**
-    A request to get an exchange's withdrawal details.
- */
-class WalletBackendGetWithdrawalDetailsForAmountRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to get an exchange's withdrawal details.
+struct WalletBackendGetWithdrawalDetailsForAmountRequest: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    var amount: Amount
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
         var amount: Amount
     }
-    struct RequestResponse: Decodable {
+    
+    struct Response: Decodable {
         var tosAccepted: Bool
         var amountRaw: Amount
         var amountEffective: Amount
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
-    
-    init(exchangeBaseURL: String, amount: Amount, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL, amount: amount)
-        self.success = onSuccess
-        self.failure = onFailure
     }
     
     func operation() -> String {
         return "getWithdrawalDetailsForAmount"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
     }
 }
 
-/**
-    A request to accept a bank-integrated withdrawl.
- */
-class WalletBackendAcceptBankIntegratedWithdrawalRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to accept a bank-integrated withdrawl.
+struct WalletBackendAcceptBankIntegratedWithdrawalRequest: WalletBackendFormattedRequest {
+    var talerWithdrawUri: String
+    var exchangeBaseUrl: String
+    
+    struct Args: Encodable {
         var talerWithdrawUri: String
         var exchangeBaseUrl: String
     }
-    struct RequestResponse: Decodable {
-        var bankConfirmationUrl: String?
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(talerWithdrawURI: String, exchangeBaseURL: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(talerWithdrawUri: talerWithdrawURI, exchangeBaseUrl: exchangeBaseURL)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var bankConfirmationUrl: String?
     }
     
     func operation() -> String {
         return "acceptWithdrawal"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl)
     }
 }
 
-/**
-    A request to accept a manual withdrawl.
- */
-class WalletBackendAcceptManualWithdrawalRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to accept a manual withdrawl.
+struct WalletBackendAcceptManualWithdrawalRequest: WalletBackendFormattedRequest {
+    var exchangeBaseUrl: String
+    var amount: Amount
+    
+    struct Args: Encodable {
         var exchangeBaseUrl: String
         var amount: Amount
     }
-    struct RequestResponse: Decodable {
-        var exchangePaytoUris: [String]
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(exchangeBaseURL: String, amount: Amount, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(exchangeBaseUrl: exchangeBaseURL, amount: amount)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var exchangePaytoUris: [String]
     }
     
     func operation() -> String {
         return "acceptManualWithdrawal"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
     }
 }
 
-/**
-    A request to deposit funds.
- */
-class WalletBackendCreateDepositGroupRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to deposit funds.
+struct WalletBackendCreateDepositGroupRequest: WalletBackendFormattedRequest {
+    var depositePayToUri: String
+    var amount: Amount
+    
+    struct Args: Encodable {
         var depositPayToUri: String
         var amount: Amount
     }
-    struct RequestResponse: Decodable {
-        var depositGroupId: String
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(depositPayToUri: String, amount: Amount, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(depositPayToUri: depositPayToUri, amount: amount)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var depositGroupId: String
     }
     
     func operation() -> String {
         return "createDepositGroup"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(depositPayToUri: depositePayToUri, amount: amount)
     }
 }
 
-/**
-    A request to get information about a payment request.
- */
-class WalletBackendPreparePayRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to get information about a payment request.
+struct WalletBackendPreparePayRequest: WalletBackendFormattedRequest {
+    var talerPayUri: String
+    
+    struct Args: Encodable {
         var talerPayUri: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(talerPayUri: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(talerPayUri: talerPayUri)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "preparePay"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(talerPayUri: talerPayUri)
     }
 }
 
-/**
-    A request to confirm a payment.
- */
-class WalletBackendConfirmPayRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to confirm a payment.
+struct WalletBackendConfirmPayRequest: WalletBackendFormattedRequest {
+    var proposalId: String
+    
+    struct Args: Encodable {
         var proposalId: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(proposalId: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(proposalId: proposalId)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "abortFailedPayWithRefund"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(proposalId: proposalId)
     }
 }
 
-/**
-    A request to prepare a tip.
- */
-class WalletBackendPrepareTipRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to prepare a tip.
+struct WalletBackendPrepareTipRequest: WalletBackendFormattedRequest {
+    var talerTipUri: String
+    
+    struct Args: Encodable {
         var talerTipUri: String
     }
-    struct RequestResponse: Decodable {
+    
+    struct Response: Decodable {
         var walletTipId: String
         var accepted: Bool
         var tipAmountRaw: Amount
@@ -911,131 +584,66 @@ class WalletBackendPrepareTipRequest: WalletBackendRequest {
         var exchangeBaseUrl: String
         var expirationTimestamp: Timestamp
     }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
-    
-    init(talerTipURI: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(talerTipUri: talerTipURI)
-        self.success = onSuccess
-        self.failure = onFailure
-    }
     
     func operation() -> String {
         return "prepareTip"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(talerTipUri: talerTipUri)
     }
 }
 
-/**
-    A request to accept a tip.
- */
-class WalletBackendAcceptTipRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to accept a tip.
+struct WalletBackendAcceptTipRequest: WalletBackendFormattedRequest {
+    var walletTipId: String
+    
+    struct Args: Encodable {
         var walletTipId: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(walletTipId: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(walletTipId: walletTipId)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "acceptTip"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(walletTipId: walletTipId)
     }
 }
 
-/**
-    A request to abort a failed payment.
- */
-class WalletBackendAbortFailedPaymentRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to abort a failed payment.
+struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {
+    var proposalId: String
+    
+    struct Args: Encodable {
         var proposalId: String
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(proposalId: String, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(proposalId: proposalId)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
         return "confirmPay"
     }
     
-    func args() -> RequestArgs {
-        return requestArgs
-    }
-    
-    func success(result: RequestResponse) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+    func args() -> Args {
+        return Args(proposalId: proposalId)
     }
 }
 
-/**
-    A request to withdraw a balance from the TESTKUDOS environment.
- */
-class WalletBackendWithdrawTestkudosRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to withdraw a balance from the TESTKUDOS environment.
+struct WalletBackendWithdrawTestkudosRequest: WalletBackendFormattedRequest {
+    struct Args: Encodable {
         
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
@@ -1043,49 +651,29 @@ class WalletBackendWithdrawTestkudosRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return RequestArgs()
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args()
     }
 }
 
-/**
-    A request to add a test balance to the wallet.
- */
-class WalletBackendWithdrawTestBalance: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to add a test balance to the wallet.
+struct WalletBackendWithdrawTestBalance: WalletBackendFormattedRequest {
+    var amount: Amount
+    var bankBaseUrl: String
+    var exchangeBaseUrl: String
+    
+    struct Args: Encodable {
         var amount: Amount
         var bankBaseUrl: String
         var exchangeBaseUrl: String
     }
-    typealias Args = RequestArgs
     typealias Response = String
-    private var requestArgs: RequestArgs
-    
-    init(amount: Amount, bankBaseUrl: String, exchangeBaseUrl: String) {
-        requestArgs = RequestArgs(amount: amount, bankBaseUrl: bankBaseUrl, exchangeBaseUrl: exchangeBaseUrl)
-    }
     
     func operation() -> String {
         return "withdrawTestBalance"
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        
+        return Args(amount: amount, bankBaseUrl: bankBaseUrl, exchangeBaseUrl: exchangeBaseUrl)
     }
 }
 
@@ -1098,23 +686,14 @@ struct IntegrationTestArgs: Codable {
     var amountToSpend: String
 }
 
-/**
-    A request to run a basic integration test.
- */
-class WalletBackendRunIntegrationTestRequest: WalletBackendRequest {
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = IntegrationTestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: IntegrationTestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
+/// A request to run a basic integration test.
+struct WalletBackendRunIntegrationTestRequest: WalletBackendFormattedRequest {
+    var integrationTestArgs: IntegrationTestArgs
     
-    init(args: IntegrationTestArgs, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = args
-        self.success = onSuccess
-        self.failure = onFailure
+    typealias Args = IntegrationTestArgs
+    
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
@@ -1122,15 +701,7 @@ class WalletBackendRunIntegrationTestRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return integrationTestArgs
     }
 }
 
@@ -1141,23 +712,14 @@ struct TestPayArgs: Codable {
     var summary: String
 }
 
-/**
-    A request to make a test payment.
- */
-class WalletBackendTestPayRequest: WalletBackendRequest {
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = TestPayArgs
-    typealias Response = RequestResponse
-    private let requestArgs: TestPayArgs
-    private let success: () -> Void
-    private let failure: () -> Void
+/// A request to make a test payment.
+struct WalletBackendTestPayRequest: WalletBackendFormattedRequest {
+    var testPayArgs: TestPayArgs
     
-    init(args: TestPayArgs, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = args
-        self.success = onSuccess
-        self.failure = onFailure
+    typealias Args = TestPayArgs
+    
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
@@ -1165,15 +727,7 @@ class WalletBackendTestPayRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return testPayArgs
     }
 }
 
@@ -1189,24 +743,14 @@ struct Coin: Codable {
     var coin_suspended: Bool
 }
 
-/**
-    A request to dump all coins to JSON.
- */
-class WalletBackendDumpCoinsRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to dump all coins to JSON.
+struct WalletBackendDumpCoinsRequest: WalletBackendFormattedRequest {
+    struct Args: Encodable {
         
     }
-    struct RequestResponse: Decodable {
-        var coins: [Coin]
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        var coins: [Coin]
     }
     
     func operation() -> String {
@@ -1214,39 +758,22 @@ class WalletBackendDumpCoinsRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return RequestArgs()
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args()
     }
 }
 
-/**
-    A request to suspend or unsuspend a coin.
- */
-class WalletBackendSuspendCoinRequest: WalletBackendRequest {
-    struct RequestArgs: Encodable {
+/// A request to suspend or unsuspend a coin.
+struct WalletBackendSuspendCoinRequest: WalletBackendFormattedRequest {
+    var coinPub: String
+    var suspended: Bool
+    
+    struct Args: Encodable {
         var coinPub: String
         var suspended: Bool
     }
-    struct RequestResponse: Decodable {
-        
-    }
-    typealias Args = RequestArgs
-    typealias Response = RequestResponse
-    private let requestArgs: RequestArgs
-    private let success: () -> Void
-    private let failure: () -> Void
     
-    init(coinPub: String, suspended: Bool, onSuccess: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        self.requestArgs = RequestArgs(coinPub: coinPub, suspended: suspended)
-        self.success = onSuccess
-        self.failure = onFailure
+    struct Response: Decodable {
+        
     }
     
     func operation() -> String {
@@ -1254,15 +781,7 @@ class WalletBackendSuspendCoinRequest: WalletBackendRequest {
     }
     
     func args() -> Args {
-        return requestArgs
-    }
-    
-    func success(result: Response) {
-        self.success()
-    }
-    
-    func error(_ err: WalletBackendResponseError) {
-        self.failure()
+        return Args(coinPub: coinPub, suspended: suspended)
     }
 }
 
@@ -1276,6 +795,7 @@ enum WalletBackendError: Error {
 
 /// Delegate for the wallet backend.
 protocol WalletBackendDelegate {
+    /// Called when the backend interface receives a message it does not know how to handle.
     func walletBackendReceivedUnknownMessage(_ walletBackend: WalletBackend, message: String)
 }
 
@@ -1285,12 +805,28 @@ class WalletBackend: IonoMessageHandler {
     private var requestsMade: UInt
     private var backendReady: Bool
     private var backendReadyCondition: NSCondition
-    private struct RequestDetail {
-        let decodeSuccess: (Data) -> Void
-        let handleError: (Data) -> Void
-    }
-    private var requests: [UInt : RequestDetail] = [:]
+    private var requests: [UInt : (AnyCodable?, WalletBackendResponseError?) -> Void] = [:]
     var delegate: WalletBackendDelegate?
+    
+    private struct FullRequest: Encodable {
+        let operation: String
+        let id: UInt
+        let args: AnyEncodable
+    }
+    
+    private struct FullResponse: Decodable {
+        let type: String
+        let operation: String
+        let id: UInt
+        let result: AnyCodable
+    }
+    
+    private struct FullError: Decodable {
+        let type: String
+        let operation: String
+        let id: UInt
+        let error: WalletBackendResponseError
+    }
     
     init() throws {
         iono = Iono()
@@ -1317,10 +853,10 @@ class WalletBackend: IonoMessageHandler {
             var storageDir = documentUrls[0]
             storageDir.appendPathComponent("talerwalletdb-v30", isDirectory: false)
             storageDir.appendPathExtension("json")
-            try sendRequest(request: WalletBackendInitRequest(persistentStoragePath: storageDir.path, onSuccess: {
+            sendFormattedRequest(request: WalletBackendInitRequest(persistentStoragePath: storageDir.path), completionHandler: { (resp: WalletBackendInitRequest.Response?, err: WalletBackendResponseError?) in
                 self.backendReady = true
                 self.backendReadyCondition.broadcast()
-            }))
+            })
         }
         
         waitUntilReady()
@@ -1341,33 +877,31 @@ class WalletBackend: IonoMessageHandler {
             if let responseData = data {
                 let type = (responseData["type"] as? String) ?? ""
                 if type == "response" {
-                    guard let id = responseData["id"] as? UInt else {
-                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
-                        return
+                    guard let id = responseData["id"] as? UInt else { throw WalletBackendError.deserializationError }
+                    guard let request = requests[id] else { throw WalletBackendError.deserializationError }
+                    do {
+                        let decoded = try JSONDecoder().decode(FullResponse.self, from: messageData)
+                        request(decoded.result, nil)
+                    } catch {
+                        request(nil, WalletBackend.parseResponseError())
                     }
-                    guard let request = requests[id] else {
-                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
-                        return
-                    }
-                    request.decodeSuccess(messageData)
                     requests[id] = nil
                 } else if type == "tunnelHttp" {
-                    
+                    // TODO: Handle
                 } else if type == "notification" {
-                    
+                    // TODO: Handle
                 } else if type == "error" {
-                    guard let id = responseData["id"] as? UInt else {
-                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
-                        return
+                    guard let id = responseData["id"] as? UInt else { throw WalletBackendError.deserializationError }
+                    guard let request = requests[id] else { throw WalletBackendError.deserializationError }
+                    do {
+                        let decoded = try JSONDecoder().decode(FullError.self, from: messageData)
+                        request(nil, decoded.error)
+                    } catch {
+                        request(nil, WalletBackend.parseFailureError())
                     }
-                    guard let request = requests[id] else {
-                        self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
-                        return
-                    }
-                    request.handleError(messageData)
                     requests[id] = nil
                 } else {
-                    self.delegate?.walletBackendReceivedUnknownMessage(self, message: message)
+                    throw WalletBackendError.deserializationError
                 }
             }
         } catch {
@@ -1375,53 +909,47 @@ class WalletBackend: IonoMessageHandler {
         }
     }
     
-    private struct FullResponse<T: WalletBackendRequest>: Decodable {
-        let type: String
-        let operation: String
-        let id: UInt
-        let result: T.Response
-    }
-    
-    private struct FullError: Decodable {
-        let type: String
-        let operation: String
-        let id: UInt
-        let error: WalletBackendResponseError
-    }
-    
-    func sendRequest<T: WalletBackendRequest>(request: T) throws {
-        let data = WalletBackendRequestData<T>(request: request, id: requestsMade)
-        requestsMade += 1
-        
-        let decodeSuccess = { (data: Data) -> Void in
-            do {
-                let decoded = try JSONDecoder().decode(FullResponse<T>.self, from: data)
-                request.success(result: decoded.result)
-            } catch {
-                let err = WalletBackendResponseError(talerErrorCode: -1, talerErrorHint: "Could not parse response.", message: "")
-                request.error(err)
-            }
-        }
-        
-        let handleError = { (data: Data) -> Void in
-            do {
-                let decoded = try JSONDecoder().decode(FullError.self, from: data)
-                request.error(decoded.error)
-            } catch {
-                let err = WalletBackendResponseError(talerErrorCode: -2, talerErrorHint: "Could not parse error detail.", message: "")
-                request.error(err)
-            }
-        }
-        
+    func sendRequest(request: WalletBackendRequest, completionHandler: @escaping (AnyCodable?, WalletBackendResponseError?) -> Void) {
         /* Encode the request and send it to the backend. */
         do {
-            let encoded = try JSONEncoder().encode(data)
+            let full = FullRequest(operation: request.operation, id: requestsMade, args: request.args)
+            let encoded = try JSONEncoder().encode(full)
             guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
-            let detail = RequestDetail(decodeSuccess: decodeSuccess, handleError: handleError)
-            requests[data.id] = detail
+            requests[full.id] = completionHandler
+            requestsMade += 1
             iono.sendMessage(message: jsonString)
         } catch {
-            throw WalletBackendError.serializationError
+            completionHandler(nil, WalletBackend.serializeRequestError());
         }
+    }
+    
+    func sendFormattedRequest<T: WalletBackendFormattedRequest>(request: T, completionHandler: @escaping (T.Response?, WalletBackendResponseError?) -> Void) {
+        let reqData = WalletBackendRequest(operation: request.operation(), args: AnyEncodable(request.args()))
+        sendRequest(request: reqData) { (result: AnyCodable?, err: WalletBackendResponseError?) in
+            if let res = result {
+                do {
+                    /* TODO: Don't use a hack (there is no reason to pass to JSON): */
+                    let jsonStr = try JSONEncoder().encode(res)
+                    let decoded = try JSONDecoder().decode(T.Response.self, from: jsonStr)
+                    completionHandler(decoded, err)
+                } catch {
+                    completionHandler(nil, WalletBackend.parseResponseError())
+                }
+            } else {
+                completionHandler(nil, err)
+            }
+        }
+    }
+    
+    static func serializeRequestError() -> WalletBackendResponseError {
+        return WalletBackendResponseError(talerErrorCode: -1, talerErrorHint: "Could not serialize request.", message: "")
+    }
+    
+    static func parseResponseError() -> WalletBackendResponseError {
+        return WalletBackendResponseError(talerErrorCode: -2, talerErrorHint: "Could not parse response.", message: "")
+    }
+    
+    static func parseFailureError() -> WalletBackendResponseError {
+        return WalletBackendResponseError(talerErrorCode: -3, talerErrorHint: "Could not parse error detail.", message: "")
     }
 }

@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB8C3807286A88A600E0A1DD /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
+		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 		D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */; };
 		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
 		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
@@ -70,6 +72,7 @@
 
 /* Begin PBXFileReference section */
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
+		AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-embedded.js"; sourceTree = "<group>"; };
 		D11DB44E25A5C487009CF0BC /* libnode.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnode.a; path = "nodejs-mobile/out/Release/libnode.a"; sourceTree = "<group>"; };
 		D11DB45625A5C5C7009CF0BC /* libv8_initializers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_initializers.a; path = "nodejs-mobile/out/Release/libv8_initializers.a"; sourceTree = "<group>"; };
@@ -203,6 +206,7 @@
 				D17D8B7E25ADB29B001BD43D /* libuv.a in Frameworks */,
 				D17D8B7D25ADB29B001BD43D /* libuvwasi.a in Frameworks */,
 				D17D8B7325ADB29A001BD43D /* libzlib.a in Frameworks */,
+				ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */,
 				D17D8B8225ADB29B001BD43D /* libnghttp2.a in Frameworks */,
 				D17D8B7425ADB29A001BD43D /* libv8_zlib.a in Frameworks */,
 				D17D8B8525ADB29B001BD43D /* libcares.a in Frameworks */,
@@ -283,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				D14AFD3924D232B500C51073 /* Info.plist */,
+				AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */,
 			);
 			path = TalerTests;
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 			name = Taler;
 			packageProductDependencies = (
 				ABC13AA22859962800D23185 /* taler-swift */,
+				ABE97B1C286D82BF00580772 /* AnyCodable */,
 			);
 			productName = Taler;
 			productReference = D14AFD1D24D232B300C51073 /* Taler.app */;
@@ -488,6 +494,7 @@
 					};
 					D14AFD3224D232B500C51073 = {
 						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1340;
 						TestTargetID = D14AFD1C24D232B300C51073;
 					};
 					D14AFD3D24D232B500C51073 = {
@@ -505,6 +512,9 @@
 				Base,
 			);
 			mainGroup = D14AFD1424D232B300C51073;
+			packageReferences = (
+				ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */,
+			);
 			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -598,6 +608,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB8C3807286A88A600E0A1DD /* WalletBackendTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,6 +869,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -870,6 +882,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Taler.app/Taler";
@@ -881,6 +894,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -978,10 +992,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flight-School/AnyCodable";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		ABC13AA22859962800D23185 /* taler-swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "taler-swift";
+		};
+		ABE97B1C286D82BF00580772 /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

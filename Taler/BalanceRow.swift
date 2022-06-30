@@ -17,7 +17,7 @@
 import SwiftUI
 import taler_swift
 
-struct BalanceRow: View {
+/*struct BalanceRow: View {
     var balance: Balance
     
     var body: some View {
@@ -35,4 +35,4 @@ struct BalanceRow_Previews: PreviewProvider {
     static var previews: some View {
         try! BalanceRow(balance: Balance(available: Amount(fromString: "USD:0.01"), pendingIncoming: Amount(fromString: "USD:0.02"), pendingOutgoing: Amount(fromString: "USD:0.03"), requiresUserInput: true))
     }
-}
+}*/

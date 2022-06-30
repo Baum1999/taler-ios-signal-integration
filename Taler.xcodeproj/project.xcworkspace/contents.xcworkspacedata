@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:../wallet-kotlin/build/bin/iosX64/debugFramework/TalerWallet.framework">
+      location = "self:">
    </FileRef>
 </Workspace>
