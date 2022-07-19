@@ -21,5 +21,6 @@ class WalletBackendTests: XCTestCase {
     
     func testX() {
         let _ = try! WalletBackend()
+        //let _ = try! WalletBackend()
     }
 }

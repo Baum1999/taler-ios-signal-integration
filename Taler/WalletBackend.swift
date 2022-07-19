@@ -862,6 +862,10 @@ class WalletBackend: IonoMessageHandler {
         waitUntilReady()
     }
     
+    deinit {
+        iono.waitStopped()
+    }
+    
     func waitUntilReady() {
         backendReadyCondition.lock()
         while (!self.backendReady) {
