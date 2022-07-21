@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C72887C94700AB82A0 /* TalerApp.swift */; };
+		AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C92887D2F400AB82A0 /* ContentView.swift */; };
 		AB8C3807286A88A600E0A1DD /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
 		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 		D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */; };
-		D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2024D232B300C51073 /* AppDelegate.swift */; };
-		D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD2224D232B300C51073 /* SceneDelegate.swift */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
 		D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B126C39E5D00612DBE /* BalanceRow.swift */; };
 		D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B326C3A2D400612DBE /* BalanceList.swift */; };
@@ -51,12 +51,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB1F87C72887C94700AB82A0 /* TalerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerApp.swift; sourceTree = "<group>"; };
+		AB1F87C92887D2F400AB82A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
 		AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-embedded.js"; sourceTree = "<group>"; };
 		D14AFD1D24D232B300C51073 /* Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D14AFD2024D232B300C51073 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D14AFD2224D232B300C51073 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D14AFD2624D232B500C51073 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D14AFD2C24D232B500C51073 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D14AFD2E24D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,14 +125,14 @@
 		D14AFD1F24D232B300C51073 /* Taler */ = {
 			isa = PBXGroup;
 			children = (
-				D14AFD2024D232B300C51073 /* AppDelegate.swift */,
-				D14AFD2224D232B300C51073 /* SceneDelegate.swift */,
 				D1D65B9726992E4600C1012A /* WalletBackend.swift */,
 				D14CE1B126C39E5D00612DBE /* BalanceRow.swift */,
 				D14CE1B326C3A2D400612DBE /* BalanceList.swift */,
+				AB1F87C92887D2F400AB82A0 /* ContentView.swift */,
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
+				AB1F87C72887C94700AB82A0 /* TalerApp.swift */,
 			);
 			path = Taler;
 			sourceTree = "<group>";
@@ -344,8 +344,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D14AFD2124D232B300C51073 /* AppDelegate.swift in Sources */,
-				D14AFD2324D232B300C51073 /* SceneDelegate.swift in Sources */,
+				AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */,
+				AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */,
 				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
 				D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */,
 				D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */,
@@ -521,7 +521,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -594,7 +594,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_ASSET_PATHS = "\"Taler/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = AY2R7MK22Y;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
