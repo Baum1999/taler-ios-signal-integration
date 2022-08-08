@@ -296,7 +296,7 @@ struct WalletBackendListExchanges: WalletBackendFormattedRequest {
         
     }
     
-    struct ExchangeListItem: Decodable {
+    struct ExchangeListItem: Decodable, Hashable {
         var exchangeBaseUrl: String
         var currency: String
         var paytoUris: [String]
@@ -316,7 +316,7 @@ struct WalletBackendListExchanges: WalletBackendFormattedRequest {
 }
 
 /// A request to add an exchange.
-struct WalletBackendAddRequest: WalletBackendFormattedRequest {
+struct WalletBackendAddExchangeRequest: WalletBackendFormattedRequest {
     var exchangeBaseUrl: String
     
     struct Args: Encodable {
@@ -328,7 +328,7 @@ struct WalletBackendAddRequest: WalletBackendFormattedRequest {
     }
     
     func operation() -> String {
-        return "addRequest"
+        return "addExchange"
     }
     
     func args() -> Args {
@@ -875,6 +875,7 @@ class WalletBackend: IonoMessageHandler {
     }
     
     func handleMessage(message: String) {
+        //print("got message: \(message)")
         do {
             guard let messageData = message.data(using: .utf8) else { throw WalletBackendError.deserializationError }
             let data = try JSONSerialization.jsonObject(with: messageData, options: .allowFragments) as? [String : Any]

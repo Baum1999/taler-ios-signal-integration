@@ -22,6 +22,8 @@ struct SidebarItem {
 }
 
 struct ContentView: View {
+    @StateObject var backend: BackendManager = BackendManager()
+    
     @State var sidebarVisible: Bool = false
     var views: [SidebarItem] {[
         SidebarItem(name: "Main",
@@ -33,7 +35,7 @@ struct ContentView: View {
         SidebarItem(name: "Settings",
             view: AnyView(SettingsView {
                 self.sidebarVisible = true
-            }))
+            }.environmentObject(backend)))
     ]}
     @State var currentView: Int = 0
     
