@@ -64,13 +64,28 @@ extension View {
     }
 }
 
-struct ExchangeItemView: View {
-    var exchange: ExchangeItem
+struct WithdrawView: View {
+    let exchange: ExchangeItem
+    @State var amount: String = ""
+    
     var body: some View {
         VStack {
-            Text(exchange.exchangeBaseUrl)
-            Text("Currency: " + exchange.currency)
+            Button {
+                
+            } label: {
+                Text("Scan Taler QR Code")
+            }
+            Text("Or transfer manually:")
+            HStack {
+                TextField(exchange.currency, text: $amount)
+            }
+            Button {
+                
+            } label: {
+                Text("Check Fees")
+            }
         }
+            .navigationTitle("Withdraw")
     }
 }
 
@@ -79,7 +94,17 @@ struct ExchangeListView: View {
     @State var showPopup: Bool = false
     
     var body: some View {
-        if let exchanges = exchangeManager.exchanges {
+        if exchangeManager.exchanges == nil {
+            ProgressView()
+                .navigationTitle("Exchanges")
+                .onAppear {
+                    exchangeManager.updateList()
+                }
+        } else if exchangeManager.loading {
+            ProgressView()
+                .navigationTitle("Exchanges")
+        } else {
+            let exchanges = exchangeManager.exchanges!
             if exchanges.count == 0 {
                 Text("No Exchanges")
                     .navigationTitle("Exchanges")
@@ -99,7 +124,17 @@ struct ExchangeListView: View {
                     }, showing: showPopup)
             } else {
                 List(exchanges, id: \.self) { exchange in
-                    ExchangeItemView(exchange: exchange)
+                    VStack {
+                        Text(exchange.exchangeBaseUrl)
+                            .frame(maxWidth: .infinity)
+                        Text("Currency: " + exchange.currency)
+                            .frame(maxWidth: .infinity)
+                        NavigationLink {
+                            WithdrawView(exchange: exchange)
+                        } label: {
+                            Text("Withdraw")
+                        }
+                    }
                 }
                     .navigationTitle("Exchanges")
                     .navigationBarItems(trailing: Button(action: {
@@ -117,12 +152,6 @@ struct ExchangeListView: View {
                         print(exchangeUrl)
                     }, showing: showPopup)
             }
-        } else {
-            ProgressView()
-                .navigationTitle("Exchanges")
-                .onAppear {
-                    exchangeManager.updateList()
-                }
         }
     }
 }

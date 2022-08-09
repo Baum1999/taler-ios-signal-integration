@@ -21,7 +21,7 @@ typealias ExchangeItem = WalletBackendListExchanges.ExchangeListItem
 class ExchangeManager: ObservableObject {
     var backend: WalletBackend
     
-    var loading: Bool
+    @Published var loading: Bool
     @Published var exchanges: [ExchangeItem]?
     
     init(_backend: WalletBackend) {
@@ -33,14 +33,14 @@ class ExchangeManager: ObservableObject {
     func updateList() {
         let listRequest = WalletBackendListExchanges()
         backend.sendFormattedRequest(request: listRequest) { response, err in
-            self.loading = false
-            if let result = response {
-                // TODO: Use Combine instead.
-                DispatchQueue.main.async {
+            // TODO: Use Combine instead.
+            DispatchQueue.main.async {
+                self.loading = false
+                if let result = response {
                     self.exchanges = result.exchanges
+                } else {
+                    // TODO: Show error.
                 }
-            } else {
-                // TODO: Show error.
             }
         }
         self.loading = true
@@ -49,7 +49,16 @@ class ExchangeManager: ObservableObject {
     func add(url: String) {
         let addRequest = WalletBackendAddExchangeRequest(exchangeBaseUrl: url)
         backend.sendFormattedRequest(request: addRequest) { response, err in
-            // TODO: Show error.
+            // TODO: Use Combine instead.
+            DispatchQueue.main.async {
+                self.loading = false
+                if let _ = response {
+                    self.updateList()
+                } else {
+                    // TODO: Show error.
+                }
+            }
         }
+        self.loading = true
     }
 }
