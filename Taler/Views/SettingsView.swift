@@ -15,6 +15,7 @@
  */
 
 import SwiftUI
+import taler_swift
 
 struct TextInputPopup: ViewModifier {
     @State var exchangeUrl: String = "https://"
@@ -64,6 +65,18 @@ extension View {
     }
 }
 
+struct PromptWithdrawView: View {
+    let exchange: ExchangeItem
+    let amount: Amount
+    
+    var body: some View {
+        VStack {
+            Text("Fees or something")
+        }
+            .navigationTitle("Withdraw Digital Cash")
+    }
+}
+
 struct WithdrawView: View {
     let exchange: ExchangeItem
     @State var amount: String = ""
@@ -79,8 +92,14 @@ struct WithdrawView: View {
             HStack {
                 TextField(exchange.currency, text: $amount)
             }
-            Button {
-                
+            NavigationLink {
+                // TODO: Handle when the user inputs a non-valid amount
+                /*do {
+                    let am = try Amount.init(fromString: exchange.currency + ":" + amount)
+                    PromptWithdrawView(exchange: exchange, amount: am)
+                } catch {
+                    
+                }*/
             } label: {
                 Text("Check Fees")
             }

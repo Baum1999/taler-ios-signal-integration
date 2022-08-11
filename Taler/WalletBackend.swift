@@ -785,6 +785,27 @@ struct WalletBackendSuspendCoinRequest: WalletBackendFormattedRequest {
     }
 }
 
+typealias PendingOperation = AnyCodable
+
+/// A request to list the backend's currently pending operations.
+struct WalletBackendPendingRequest: WalletBackendFormattedRequest {
+    struct Args: Encodable {
+        
+    }
+    
+    struct Response: Decodable {
+        var pendingOperations: [PendingOperation]
+    }
+    
+    func operation() -> String {
+        return "getPendingOperations"
+    }
+    
+    func args() -> Args {
+        Args()
+    }
+}
+
 /// Errors for `WalletBackend`.
 enum WalletBackendError: Error {
     /// An error that prevented the wallet from being initialized occurred.

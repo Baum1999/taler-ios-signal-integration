@@ -35,7 +35,11 @@ struct ContentView: View {
         SidebarItem(name: "Settings",
             view: AnyView(SettingsView {
                 self.sidebarVisible = true
-            }.environmentObject(backend)))
+            }.environmentObject(backend))),
+        SidebarItem(name: "Pending Operations",
+                    view: AnyView(PendingView(_showSidebar: {
+                        self.sidebarVisible = true
+                    }, pending: backend.pendingManager).environmentObject(backend)))
     ]}
     @State var currentView: Int = 0
     

@@ -20,9 +20,11 @@ class BackendManager: ObservableObject {
     var backend: WalletBackend
     
     @Published var exchangeManager: ExchangeManager
+    @Published var pendingManager: PendingManager
     
     init() {
         self.backend = try! WalletBackend()
         self.exchangeManager = ExchangeManager(_backend: self.backend)
+        self.pendingManager = PendingManager(_backend: self.backend)
     }
 }
