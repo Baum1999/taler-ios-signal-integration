@@ -71,6 +71,21 @@ public class Amount: Codable, CustomStringConvertible {
         }
     }
     
+    /// The string representation of the amount, formatted as "`value`.`fraction` `currency`".
+    public var readableDescription: String {
+        if fraction == 0 {
+            return "\(value) \(currency)"
+        } else {
+            var frac = fraction
+            var fracStr = ""
+            while (frac > 0) {
+                fracStr += "\(frac / (Amount.fractionalBase / 10))"
+                frac = (frac * 10) % Amount.fractionalBase
+            }
+            return "\(value).\(fracStr) \(currency)"
+        }
+    }
+    
     /// Whether the value is valid. An amount is valid if and only if the currency is not empty and the value is less than the maximum allowed value.
     var valid: Bool {
         if currency.range(of: Amount.currencyRegex, options: .regularExpression) == nil {
@@ -188,7 +203,7 @@ public class Amount: Codable, CustomStringConvertible {
     /// - Throws:
     ///   - `AmountError.incompatibleCurrency` if `left` and `right` do not share the same currency.
     /// - Returns: The sum of `left` and `right`, normalized.
-    static func + (left: Amount, right: Amount) throws -> Amount {
+    public static func + (left: Amount, right: Amount) throws -> Amount {
         if left.currency != right.currency {
             throw AmountError.incompatibleCurrency
         }
@@ -208,7 +223,7 @@ public class Amount: Codable, CustomStringConvertible {
     /// - Throws:
     ///   - `AmountError.incompatibleCurrency` if `left` and `right` do not share the same currency.
     /// - Returns: The difference of `left` and `right`, normalized.
-    static func - (left: Amount, right: Amount) throws -> Amount {
+    public static func - (left: Amount, right: Amount) throws -> Amount {
         if left.currency != right.currency {
             throw AmountError.incompatibleCurrency
         }
@@ -232,7 +247,7 @@ public class Amount: Codable, CustomStringConvertible {
     ///   - dividend: The amount to divide.
     ///   - divisor: The scalar dividing `dividend`.
     /// - Returns: The quotient of `dividend` and `divisor`, normalized.
-    static func / (dividend: Amount, divisor: UInt32) throws -> Amount {
+    public static func / (dividend: Amount, divisor: UInt32) throws -> Amount {
         guard divisor != 0 else { throw AmountError.divideByZero }
         let result = try dividend.normalizedCopy()
         if (divisor == 1) {
@@ -251,7 +266,7 @@ public class Amount: Codable, CustomStringConvertible {
     ///   - amount: The amount to multiply.
     ///   - factor: The scalar multiplying `amount`.
     /// - Returns: The product of `amount` and `factor`, normalized.
-    static func * (amount: Amount, factor: UInt32) throws -> Amount {
+    public static func * (amount: Amount, factor: UInt32) throws -> Amount {
         let result = try amount.normalizedCopy()
         result.value = result.value * UInt64(factor)
         let fraction_tmp = UInt64(result.fraction) * UInt64(factor)
@@ -333,7 +348,7 @@ public class Amount: Codable, CustomStringConvertible {
     /// - Parameters:
     ///   - currency: The currency to use.
     /// - Returns: The zero amount for `currency`.
-    static func zero(currency: String) -> Amount {
+    public static func zero(currency: String) -> Amount {
         return Amount(currency: currency, value: 0, fraction: 0)
     }
 }

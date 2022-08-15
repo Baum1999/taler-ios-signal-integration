@@ -15,6 +15,7 @@
  */
 
 import Foundation
+import taler_swift
 
 typealias ExchangeItem = WalletBackendListExchanges.ExchangeListItem
 
@@ -60,5 +61,9 @@ class ExchangeManager: ObservableObject {
             }
         }
         self.loading = true
+    }
+    
+    func withdraw(exchange: ExchangeItem) -> WithdrawModel {
+        return WithdrawModel(backend: self.backend, exchange: exchange)
     }
 }

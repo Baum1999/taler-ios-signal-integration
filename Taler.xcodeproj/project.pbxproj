@@ -9,16 +9,17 @@
 /* Begin PBXBuildFile section */
 		AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C72887C94700AB82A0 /* TalerApp.swift */; };
 		AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C92887D2F400AB82A0 /* ContentView.swift */; };
+		AB69F9FA28AAED53005CCC2E /* WithdrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */; };
 		AB8C3807286A88A600E0A1DD /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */; };
 		ABB33065289C5BBB00668B42 /* ExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB33064289C5BBB00668B42 /* ExchangeManager.swift */; };
 		ABB33067289C658900668B42 /* BackendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB33066289C658900668B42 /* BackendManager.swift */; };
 		ABB762AD2891059600E88634 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB762AC2891059600E88634 /* SettingsView.swift */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
+		ABC4AC3B28A4619C0047A56F /* PendingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC4AC3A28A4619C0047A56F /* PendingView.swift */; };
+		ABC4AC3F28A473070047A56F /* PendingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC4AC3E28A473070047A56F /* PendingManager.swift */; };
 		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 		D112510026B12E3200D02E00 /* taler-wallet-embedded.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */; };
 		D14AFD4324D232B500C51073 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14AFD4224D232B500C51073 /* TalerUITests.swift */; };
-		D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B126C39E5D00612DBE /* BalanceRow.swift */; };
-		D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14CE1B326C3A2D400612DBE /* BalanceList.swift */; };
 		D1AFF0F3268D59C200FBB744 /* libiono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFF0F2268D59A500FBB744 /* libiono.a */; };
 		D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D65B9726992E4600C1012A /* WalletBackend.swift */; };
 /* End PBXBuildFile section */
@@ -56,11 +57,14 @@
 /* Begin PBXFileReference section */
 		AB1F87C72887C94700AB82A0 /* TalerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerApp.swift; sourceTree = "<group>"; };
 		AB1F87C92887D2F400AB82A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawModel.swift; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
 		AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		ABB33064289C5BBB00668B42 /* ExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeManager.swift; sourceTree = "<group>"; };
 		ABB33066289C658900668B42 /* BackendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendManager.swift; sourceTree = "<group>"; };
 		ABB762AC2891059600E88634 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		ABC4AC3A28A4619C0047A56F /* PendingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingView.swift; sourceTree = "<group>"; };
+		ABC4AC3E28A473070047A56F /* PendingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingManager.swift; sourceTree = "<group>"; };
 		D11250FF26B12E3200D02E00 /* taler-wallet-embedded.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "taler-wallet-embedded.js"; sourceTree = "<group>"; };
 		D14AFD1D24D232B300C51073 /* Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD2624D232B500C51073 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,8 +75,6 @@
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD4224D232B500C51073 /* TalerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
 		D14AFD4424D232B500C51073 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D14CE1B126C39E5D00612DBE /* BalanceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceRow.swift; sourceTree = "<group>"; };
-		D14CE1B326C3A2D400612DBE /* BalanceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceList.swift; sourceTree = "<group>"; };
 		D1AFF0F2268D59A500FBB744 /* libiono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiono.a; path = iono/compiled/x64/libiono.a; sourceTree = "<group>"; };
 		D1D65B9726992E4600C1012A /* WalletBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackend.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +107,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ABC4AC3C28A470C40047A56F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AB1F87C92887D2F400AB82A0 /* ContentView.swift */,
+				ABB762AC2891059600E88634 /* SettingsView.swift */,
+				ABC4AC3A28A4619C0047A56F /* PendingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		ABC4AC3D28A4729E0047A56F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ABB33066289C658900668B42 /* BackendManager.swift */,
+				ABB33064289C5BBB00668B42 /* ExchangeManager.swift */,
+				ABC4AC3E28A473070047A56F /* PendingManager.swift */,
+				AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D14AFD1424D232B300C51073 = {
 			isa = PBXGroup;
 			children = (
@@ -131,17 +154,13 @@
 		D14AFD1F24D232B300C51073 /* Taler */ = {
 			isa = PBXGroup;
 			children = (
+				ABC4AC3D28A4729E0047A56F /* Model */,
+				ABC4AC3C28A470C40047A56F /* Views */,
 				D1D65B9726992E4600C1012A /* WalletBackend.swift */,
-				D14CE1B126C39E5D00612DBE /* BalanceRow.swift */,
-				D14CE1B326C3A2D400612DBE /* BalanceList.swift */,
-				AB1F87C92887D2F400AB82A0 /* ContentView.swift */,
 				D14AFD2624D232B500C51073 /* Assets.xcassets */,
 				D14AFD2B24D232B500C51073 /* LaunchScreen.storyboard */,
 				D14AFD2E24D232B500C51073 /* Info.plist */,
 				AB1F87C72887C94700AB82A0 /* TalerApp.swift */,
-				ABB762AC2891059600E88634 /* SettingsView.swift */,
-				ABB33064289C5BBB00668B42 /* ExchangeManager.swift */,
-				ABB33066289C658900668B42 /* BackendManager.swift */,
 			);
 			path = Taler;
 			sourceTree = "<group>";
@@ -356,11 +375,12 @@
 				AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */,
 				AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */,
 				ABB33067289C658900668B42 /* BackendManager.swift in Sources */,
+				AB69F9FA28AAED53005CCC2E /* WithdrawModel.swift in Sources */,
 				ABB33065289C5BBB00668B42 /* ExchangeManager.swift in Sources */,
 				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
 				ABB762AD2891059600E88634 /* SettingsView.swift in Sources */,
-				D14CE1B426C3A2D400612DBE /* BalanceList.swift in Sources */,
-				D14CE1B226C39E5D00612DBE /* BalanceRow.swift in Sources */,
+				ABC4AC3B28A4619C0047A56F /* PendingView.swift in Sources */,
+				ABC4AC3F28A473070047A56F /* PendingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

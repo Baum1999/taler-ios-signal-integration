@@ -65,46 +65,80 @@ extension View {
     }
 }
 
-struct PromptWithdrawView: View {
-    let exchange: ExchangeItem
-    let amount: Amount
-    
-    var body: some View {
-        VStack {
-            Text("Fees or something")
-        }
-            .navigationTitle("Withdraw Digital Cash")
-    }
-}
-
 struct WithdrawView: View {
-    let exchange: ExchangeItem
+    @ObservedObject var model: WithdrawModel
     @State var amount: String = ""
     
     var body: some View {
-        VStack {
-            Button {
-                
-            } label: {
-                Text("Scan Taler QR Code")
-            }
-            Text("Or transfer manually:")
-            HStack {
-                TextField(exchange.currency, text: $amount)
-            }
-            NavigationLink {
-                // TODO: Handle when the user inputs a non-valid amount
-                /*do {
-                    let am = try Amount.init(fromString: exchange.currency + ":" + amount)
-                    PromptWithdrawView(exchange: exchange, amount: am)
-                } catch {
+        switch model.state {
+        case .begin:
+            VStack {
+                Button {
                     
-                }*/
-            } label: {
-                Text("Check Fees")
+                } label: {
+                    Text("Scan Taler QR Code")
+                }
+                Text("Or transfer manually:")
+                HStack {
+                    TextField(model.exchange.currency, text: $amount)
+                }
+                Button {
+                    // TODO: Handle when the user inputs a non-valid amount
+                    model.getWithdrawDetails(amountStr: model.exchange.currency + ":" + amount)
+                } label: {
+                    Text("Check Fees")
+                }
             }
+                .navigationTitle("Withdraw")
+        case .loading:
+            ProgressView()
+                .navigationTitle("Withdraw")
+        case .prompt(let rawAmount, let effectiveAmount):
+            VStack {
+                Text("Withdraw")
+                Text(effectiveAmount.readableDescription)
+                Text("Chosen Amount")
+                Text(rawAmount.readableDescription)
+                Text("Fee")
+                Text("- \((try! rawAmount - effectiveAmount).readableDescription)")
+                Text("Exchange")
+                Text(model.exchange.name)
+                Button {
+                    // TODO
+                } label: {
+                    Text("Confirm Withdraw")
+                }
+            }
+                .navigationTitle("Withdraw")
+        case .promptTOS(let rawAmount, let effectiveAmount, let tos, let etag):
+            VStack {
+                Text("Withdraw")
+                Text(effectiveAmount.readableDescription)
+                Text("Chosen Amount")
+                Text(rawAmount.readableDescription)
+                Text("Fee")
+                Text("- \((try! rawAmount - effectiveAmount).readableDescription)")
+                Text("Exchange")
+                Text(model.exchange.name)
+                NavigationLink {
+                    VStack {
+                        ScrollView {
+                            Text(tos)
+                        }
+                        Button {
+                            model.acceptTos()
+                        } label: {
+                            Text("Accept Terms of Service")
+                        }
+
+                    }
+                        .navigationTitle("Review Terms of Service")
+                } label: {
+                    Text("Review Terms")
+                }
+            }
+                .navigationTitle("Withdraw")
         }
-            .navigationTitle("Withdraw")
     }
 }
 
@@ -149,7 +183,7 @@ struct ExchangeListView: View {
                         Text("Currency: " + exchange.currency)
                             .frame(maxWidth: .infinity)
                         NavigationLink {
-                            WithdrawView(exchange: exchange)
+                            WithdrawView(model: exchangeManager.withdraw(exchange: exchange))
                         } label: {
                             Text("Withdraw")
                         }
