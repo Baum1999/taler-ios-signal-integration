@@ -17,6 +17,18 @@
 import Foundation
 import taler_swift
 
+func paytoUriGetIban(uri: String) -> String {
+    let url = URL(string: uri)!
+    return url.lastPathComponent
+}
+
+func paytoUriGetSubject(uri: String) -> String {
+    let url = URLComponents(string: uri)!
+    return url.queryItems!.first(where: { item in
+        item.name == "message"
+    })!.value!.removingPercentEncoding!.replacingOccurrences(of: "+", with: " ")
+}
+
 class WithdrawModel: ObservableObject {
     enum State {
         case begin
@@ -27,6 +39,9 @@ class WithdrawModel: ObservableObject {
                        effectiveAmount: Amount,
                        tos: String,
                        etag: String)
+        case manualTransfer(rawAmount: Amount,
+                            effectiveAmount: Amount,
+                            paytoUri: String)
     }
     
     var backend: WalletBackend
@@ -73,6 +88,7 @@ class WithdrawModel: ObservableObject {
             // TODO: Use Combine instead
             DispatchQueue.main.async {
                 if let res = response {
+                    print(res)
                     self.state = .promptTOS(rawAmount: rawAmount,
                                             effectiveAmount: effectiveAmount,
                                             tos: res.content,
@@ -89,14 +105,42 @@ class WithdrawModel: ObservableObject {
         let oldState = self.state
         self.state = .loading
         switch oldState {
-        case .promptTOS(let rawAmount, let effectiveAmount, let tos, let etag):
+        case .promptTOS(_, _, _, let etag):
             let req = WalletBackendSetExchangeTermsOfServiceAccepted(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                                     acceptedEtag: etag)
+                                                                     etag: etag)
             backend.sendFormattedRequest(request: req) { response, err in
                 // TODO: Use Combine instead
                 DispatchQueue.main.async {
                     self.state = oldState
                     // TODO: Handle error.
+                }
+            }
+        default:
+            self.state = oldState
+            // TODO: Show error.
+        }
+    }
+    
+    func acceptWithdraw() {
+        // TODO: Include an option for a withdraw payto uri.
+        let oldState = self.state
+        self.state = .loading
+        switch oldState {
+        case .prompt(let rawAmount, let effectiveAmount):
+            let req = WalletBackendAcceptManualWithdrawalRequest(exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                                 amount: rawAmount)
+            backend.sendFormattedRequest(request: req) { response, err in
+                // TODO: Use Combine instead
+                DispatchQueue.main.async {
+                    if let res = response {
+                        // TODO: Error if there are no URIs.
+                        self.state = .manualTransfer(rawAmount: rawAmount,
+                                                     effectiveAmount: effectiveAmount,
+                                                     paytoUri: res.exchangePaytoUris[0])
+                    } else {
+                        // TODO: Handle error.
+                        self.state = oldState
+                    }
                 }
             }
         default:

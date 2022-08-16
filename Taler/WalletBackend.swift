@@ -388,11 +388,11 @@ struct WalletBackendGetExchangeTermsOfService: WalletBackendFormattedRequest {
 /// A request to mark an exchange's terms of service as accepted.
 struct WalletBackendSetExchangeTermsOfServiceAccepted: WalletBackendFormattedRequest {
     var exchangeBaseUrl: String
-    var acceptedEtag: String
+    var etag: String
     
     struct Args: Encodable {
         var exchangeBaseUrl: String
-        var acceptedEtag: String
+        var etag: String
     }
     
     struct Response: Decodable {
@@ -404,7 +404,7 @@ struct WalletBackendSetExchangeTermsOfServiceAccepted: WalletBackendFormattedReq
     }
     
     func args() -> Args {
-        return Args(exchangeBaseUrl: exchangeBaseUrl, acceptedEtag: acceptedEtag)
+        return Args(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
     }
 }
 

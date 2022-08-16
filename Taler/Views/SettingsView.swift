@@ -104,13 +104,13 @@ struct WithdrawView: View {
                 Text("Exchange")
                 Text(model.exchange.name)
                 Button {
-                    // TODO
+                    model.acceptWithdraw()
                 } label: {
                     Text("Confirm Withdraw")
                 }
             }
                 .navigationTitle("Withdraw")
-        case .promptTOS(let rawAmount, let effectiveAmount, let tos, let etag):
+        case .promptTOS(let rawAmount, let effectiveAmount, let tos, _):
             VStack {
                 Text("Withdraw")
                 Text(effectiveAmount.readableDescription)
@@ -136,6 +136,29 @@ struct WithdrawView: View {
                 } label: {
                     Text("Review Terms")
                 }
+            }
+                .navigationTitle("Withdraw")
+        case .manualTransfer(let rawAmount, _, let paytoUri):
+            VStack {
+                Text("Exchange is ready for withdrawal!")
+                Text("To complete the process you need to wire \(rawAmount.readableDescription) to the exchange bank account.")
+                HStack {
+                    Text("IBAN: ")
+                    Text(paytoUriGetIban(uri: paytoUri))
+                }
+                HStack {
+                    Text("Subject: ")
+                    Text(paytoUriGetSubject(uri: paytoUri))
+                }
+                HStack {
+                    Text("Chosen Amount: ")
+                    Text(rawAmount.readableDescription)
+                }
+                HStack {
+                    Text("Exchange: ")
+                    Text(model.exchange.exchangeBaseUrl)
+                }
+                Text("Make sure to use the correct subject, otherwise the money will not arrive in this wallet.")
             }
                 .navigationTitle("Withdraw")
         }
