@@ -26,16 +26,14 @@ struct ContentView: View {
     
     @State var sidebarVisible: Bool = false
     var views: [SidebarItem] {[
-        SidebarItem(name: "Main",
-            view: AnyView(Button { [self] in
-                self.sidebarVisible = true
-            } label: {
-                Text("Open Sidebar")
-            })),
+        SidebarItem(name: "Balances",
+                    view: AnyView(BalancesView(balancesModel: BalancesModel(backend: self.backend.backend)) {
+                        self.sidebarVisible = true
+                    }.environmentObject(backend))),
         SidebarItem(name: "Settings",
-            view: AnyView(SettingsView {
-                self.sidebarVisible = true
-            }.environmentObject(backend))),
+                    view: AnyView(SettingsView {
+                        self.sidebarVisible = true
+                    }.environmentObject(backend))),
         SidebarItem(name: "Pending Operations",
                     view: AnyView(PendingView(_showSidebar: {
                         self.sidebarVisible = true

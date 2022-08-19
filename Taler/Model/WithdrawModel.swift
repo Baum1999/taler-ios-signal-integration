@@ -29,33 +29,107 @@ func paytoUriGetSubject(uri: String) -> String {
     })!.value!.removingPercentEncoding!.replacingOccurrences(of: "+", with: " ")
 }
 
-class WithdrawModel: ObservableObject {
-    enum State {
-        case begin
-        case loading
-        case prompt(rawAmount: Amount,
-                    effectiveAmount: Amount)
-        case promptTOS(rawAmount: Amount,
-                       effectiveAmount: Amount,
-                       tos: String,
-                       etag: String)
-        case manualTransfer(rawAmount: Amount,
-                            effectiveAmount: Amount,
-                            paytoUri: String)
+typealias WithdrawDetails = WalletBackendGetWithdrawalDetailsForAmountRequest.Response
+typealias TOSDetails = WalletBackendGetExchangeTermsOfService.Response
+
+class ManualTransferModel: ObservableObject {
+    let backend: WalletBackend
+    let exchange: ExchangeItem
+    var details: WithdrawDetails!
+    var paytoUri: String!
+    @Published var loading: Bool = false
+    @Published var nav: Bool = false
+
+    init(backend: WalletBackend, exchange: ExchangeItem) {
+        self.backend = backend
+        self.exchange = exchange
     }
     
-    var backend: WalletBackend
+    func loadDetails(_ newDetails: WithdrawDetails, _ newPaytoUri: String) {
+        self.details = newDetails
+        self.paytoUri = newPaytoUri
+    }
+}
+
+class PromptWithdrawModel: ObservableObject {
+    let backend: WalletBackend
     let exchange: ExchangeItem
-    @Published var state: State
+    var details: WithdrawDetails!
+    var tosDetails: TOSDetails?
+    @Published var tosAccepted: Bool!
+    @Published var loading: Bool = false
+    @Published var navTos: Bool = false
+    @Published var nav: Bool = false
+    
+    var manualTransferModel: ManualTransferModel
     
     init(backend: WalletBackend, exchange: ExchangeItem) {
         self.backend = backend
         self.exchange = exchange
-        self.state = .begin
+        self.manualTransferModel = ManualTransferModel(backend: backend, exchange: exchange)
+    }
+    
+    func loadDetails(_ newDetails: WithdrawDetails) {
+        self.details = newDetails
+        self.tosAccepted = details.tosAccepted
+    }
+    
+    func acceptTos() {
+        self.loading = true
+        let req = WalletBackendSetExchangeTermsOfServiceAccepted(exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                                 etag: tosDetails!.currentEtag)
+        backend.sendFormattedRequest(request: req) { response, err in
+            // TODO: Use Combine instead
+            DispatchQueue.main.async {
+                self.loading = false
+                if let _ = response {
+                    self.tosAccepted = true
+                    self.navTos = false
+                } else {
+                    // TODO: Handle error.
+                }
+            }
+        }
+    }
+    
+    func acceptWithdraw() {
+        // TODO: Include an option for a withdraw payto uri.
+        self.loading = true
+        let req = WalletBackendAcceptManualWithdrawalRequest(exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                             amount: details.amountRaw)
+        backend.sendFormattedRequest(request: req) { response, err in
+            // TODO: Use Combine instead
+            DispatchQueue.main.async {
+                self.loading = false
+                if let res = response {
+                    self.manualTransferModel.loadDetails(self.details, res.exchangePaytoUris[0])
+                    self.nav = true
+                } else {
+                    // TODO: Show error.
+                    self.loading = false
+                }
+            }
+        }
+    }
+}
+
+class WithdrawModel: ObservableObject {
+    let backend: WalletBackend
+    let exchange: ExchangeItem
+    var details: WithdrawDetails?
+    @Published var loading: Bool = false
+    @Published var nav: Bool = false
+    
+    var promptModel: PromptWithdrawModel
+    
+    init(backend: WalletBackend, exchange: ExchangeItem) {
+        self.backend = backend
+        self.exchange = exchange
+        self.promptModel = PromptWithdrawModel(backend: backend, exchange: exchange)
     }
     
     func getWithdrawDetails(amountStr: String) {
-        self.state = .loading
+        self.loading = true
         do {
             let amount = try Amount(fromString: amountStr)
             let req = WalletBackendGetWithdrawalDetailsForAmountRequest(exchangeBaseUrl: exchange.exchangeBaseUrl,
@@ -64,88 +138,42 @@ class WithdrawModel: ObservableObject {
                 // TODO: Use Combine instead.
                 DispatchQueue.main.async {
                     if let res = response {
+                        self.details = res
+                        self.promptModel.loadDetails(res)
                         if res.tosAccepted {
-                            self.state = .prompt(rawAmount: res.amountRaw, effectiveAmount: res.amountEffective)
+                            self.loading = false
+                            self.nav = true
                         } else {
-                            self.getTos(rawAmount: res.amountRaw, effectiveAmount: res.amountEffective)
+                            self.getTos()
                         }
                     } else {
-                        self.state = .begin
                         // TODO: Show error.
+                        self.loading = false
                     }
                 }
             }
         } catch {
-            self.state = .begin
             // TODO: Show error.
+            self.loading = false
         }
     }
     
-    private func getTos(rawAmount: Amount, effectiveAmount: Amount) {
-        self.state = .loading
+    private func getTos() {
+        self.loading = true
         let req = WalletBackendGetExchangeTermsOfService(exchangeBaseUrl: exchange.exchangeBaseUrl)
         backend.sendFormattedRequest(request: req) { response, err in
             // TODO: Use Combine instead
             DispatchQueue.main.async {
+                self.loading = false
                 if let res = response {
-                    print(res)
-                    self.state = .promptTOS(rawAmount: rawAmount,
-                                            effectiveAmount: effectiveAmount,
-                                            tos: res.content,
-                                            etag: res.currentEtag)
+                    self.promptModel.tosDetails = res
+                    self.loading = false
+                    self.nav = true
                 } else {
-                    self.state = .begin
                     // TODO: Show error.
+                    self.loading = false
                 }
             }
-        }
-    }
-    
-    func acceptTos() {
-        let oldState = self.state
-        self.state = .loading
-        switch oldState {
-        case .promptTOS(_, _, _, let etag):
-            let req = WalletBackendSetExchangeTermsOfServiceAccepted(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                                     etag: etag)
-            backend.sendFormattedRequest(request: req) { response, err in
-                // TODO: Use Combine instead
-                DispatchQueue.main.async {
-                    self.state = oldState
-                    // TODO: Handle error.
-                }
-            }
-        default:
-            self.state = oldState
-            // TODO: Show error.
-        }
-    }
-    
-    func acceptWithdraw() {
-        // TODO: Include an option for a withdraw payto uri.
-        let oldState = self.state
-        self.state = .loading
-        switch oldState {
-        case .prompt(let rawAmount, let effectiveAmount):
-            let req = WalletBackendAcceptManualWithdrawalRequest(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                                 amount: rawAmount)
-            backend.sendFormattedRequest(request: req) { response, err in
-                // TODO: Use Combine instead
-                DispatchQueue.main.async {
-                    if let res = response {
-                        // TODO: Error if there are no URIs.
-                        self.state = .manualTransfer(rawAmount: rawAmount,
-                                                     effectiveAmount: effectiveAmount,
-                                                     paytoUri: res.exchangePaytoUris[0])
-                    } else {
-                        // TODO: Handle error.
-                        self.state = oldState
-                    }
-                }
-            }
-        default:
-            self.state = oldState
-            // TODO: Show error.
         }
     }
 }

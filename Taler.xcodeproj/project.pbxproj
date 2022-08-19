@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C72887C94700AB82A0 /* TalerApp.swift */; };
 		AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C92887D2F400AB82A0 /* ContentView.swift */; };
+		AB4C534A28AC21C9003004F7 /* BalancesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4C534928AC21C9003004F7 /* BalancesView.swift */; };
+		AB4C534C28AC25FC003004F7 /* BalancesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4C534B28AC25FC003004F7 /* BalancesModel.swift */; };
 		AB69F9FA28AAED53005CCC2E /* WithdrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */; };
+		AB7356F928B0203B009C5D8C /* WithdrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7356F828B0203B009C5D8C /* WithdrawView.swift */; };
 		AB8C3807286A88A600E0A1DD /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */; };
 		ABB33065289C5BBB00668B42 /* ExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB33064289C5BBB00668B42 /* ExchangeManager.swift */; };
 		ABB33067289C658900668B42 /* BackendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB33066289C658900668B42 /* BackendManager.swift */; };
@@ -57,8 +60,11 @@
 /* Begin PBXFileReference section */
 		AB1F87C72887C94700AB82A0 /* TalerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerApp.swift; sourceTree = "<group>"; };
 		AB1F87C92887D2F400AB82A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB4C534928AC21C9003004F7 /* BalancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancesView.swift; sourceTree = "<group>"; };
+		AB4C534B28AC25FC003004F7 /* BalancesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancesModel.swift; sourceTree = "<group>"; };
 		AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawModel.swift; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
+		AB7356F828B0203B009C5D8C /* WithdrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawView.swift; sourceTree = "<group>"; };
 		AB8C3806286A88A500E0A1DD /* WalletBackendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		ABB33064289C5BBB00668B42 /* ExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeManager.swift; sourceTree = "<group>"; };
 		ABB33066289C658900668B42 /* BackendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendManager.swift; sourceTree = "<group>"; };
@@ -113,6 +119,8 @@
 				AB1F87C92887D2F400AB82A0 /* ContentView.swift */,
 				ABB762AC2891059600E88634 /* SettingsView.swift */,
 				ABC4AC3A28A4619C0047A56F /* PendingView.swift */,
+				AB4C534928AC21C9003004F7 /* BalancesView.swift */,
+				AB7356F828B0203B009C5D8C /* WithdrawView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -124,6 +132,7 @@
 				ABB33064289C5BBB00668B42 /* ExchangeManager.swift */,
 				ABC4AC3E28A473070047A56F /* PendingManager.swift */,
 				AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */,
+				AB4C534B28AC25FC003004F7 /* BalancesModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -374,9 +383,12 @@
 			files = (
 				AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */,
 				AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */,
+				AB7356F928B0203B009C5D8C /* WithdrawView.swift in Sources */,
 				ABB33067289C658900668B42 /* BackendManager.swift in Sources */,
 				AB69F9FA28AAED53005CCC2E /* WithdrawModel.swift in Sources */,
+				AB4C534C28AC25FC003004F7 /* BalancesModel.swift in Sources */,
 				ABB33065289C5BBB00668B42 /* ExchangeManager.swift in Sources */,
+				AB4C534A28AC21C9003004F7 /* BalancesView.swift in Sources */,
 				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
 				ABB762AD2891059600E88634 /* SettingsView.swift in Sources */,
 				ABC4AC3B28A4619C0047A56F /* PendingView.swift in Sources */,
