@@ -11,4 +11,4 @@ Before building anything, you should initialize and update the submodules by run
     
     $ ./bootstrap
     
-To build the app, open `Taler.xcodeproj` with Xcode. The minimum version of iOS supported is 13.0. This iOS version is compatible on all iPhone models at least as new as the iPhone 6S.
+To build the app, open `Taler.xcodeproj` with Xcode. The minimum version of iOS supported is 14.0. This iOS version is compatible on all iPhone models at least as new as the iPhone 6S.

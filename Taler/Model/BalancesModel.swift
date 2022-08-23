@@ -17,33 +17,32 @@
 import Foundation
 
 class BalancesModel: ObservableObject {
-    enum State {
-        case begin
-        case loading
-        case loaded([Balance])
-    }
-    
     var backend: WalletBackend
-    @Published var state: State
+    
+    @Published var loading: Bool = false
+    @Published var balances: [Balance]?
     
     init(backend: WalletBackend) {
         self.backend = backend
-        self.state = .begin
     }
     
     func getBalances() {
-        self.state = .loading
+        self.loading = true
         let req = WalletBackendGetBalancesRequest()
         backend.sendFormattedRequest(request: req) { response, err in
             // TODO: Use Combine instead
             DispatchQueue.main.async {
+                self.loading = false
                 if let res = response {
-                    self.state = .loaded(res.balances)
+                    self.balances = res.balances
                 } else {
                     // TODO: Handle error.
-                    self.state = .begin
                 }
             }
         }
+    }
+    
+    func getTransactionsModel() -> TransactionsModel {
+        return TransactionsModel(backend: self.backend, currency: nil)
     }
 }

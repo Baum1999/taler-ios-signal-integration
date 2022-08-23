@@ -202,22 +202,203 @@ enum TransactionType: Codable {
     }
 }
 
-/// An error associated with a transaction.
-struct TransactionError: Codable {
-    var ec: Int
-    var hint: String?
-    //var details: Any?
+enum TransactionDecodingError: Error {
+    case invalidStringValue
+}
+
+/// Details for a manual withdrawal.
+struct ManualWithdrawalDetails: Codable {
+    /// The payto URIs that the exchange supports.
+    var exchangePaytoUris: [String]
+    
+    /// The public key of the newly created reserve.
+    var reservePub: String
+}
+
+/// Details for a bank-integrated withdrawal.
+struct BankIntegratedWithdrawalDetails: Codable {
+    /// Whether the bank has confirmed the withdrawal.
+    var confirmed: Bool
+    
+    /// URL for user-initiated confirmation
+    var bankConfirmationUrl: String?
+}
+
+/// A withdrawal transaction.
+struct TransactionWithdrawal: Decodable {
+    enum WithdrawalDetails {
+        case manual(ManualWithdrawalDetails)
+        case bankIntegrated(BankIntegratedWithdrawalDetails)
+    }
+    
+    /// The exchange that was withdrawn from.
+    var exchangeBaseUrl: String
+    
+    /// The amount of the withdrawal, including fees.
+    var amountRaw: Amount
+    
+    /// The amount that will be added to the withdrawer's account.
+    var amountEffective: Amount
+    
+    /// The details of the withdrawal.
+    var withdrawalDetails: WithdrawalDetails
+    
+    init(from decoder: Decoder) throws {
+        enum CodingKeys: String, CodingKey {
+            case exchangeBaseUrl
+            case amountRaw
+            case amountEffective
+            case withdrawalDetails
+            case type
+            case exchangePaytoUris
+            case reservePub
+            case confirmed
+            case bankConfirmationUrl
+        }
+        
+        let value = try decoder.container(keyedBy: CodingKeys.self)
+        self.exchangeBaseUrl = try value.decode(String.self, forKey: .exchangeBaseUrl)
+        self.amountRaw = try value.decode(Amount.self, forKey: .amountRaw)
+        self.amountEffective = try value.decode(Amount.self, forKey: .amountEffective)
+        
+        let detail = try value.nestedContainer(keyedBy: CodingKeys.self, forKey: .withdrawalDetails)
+        let detailType = try detail.decode(String.self, forKey: .type)
+        if detailType == "manual-transfer" {
+            let paytoUris = try detail.decode([String].self, forKey: .exchangePaytoUris)
+            let reservePub = try detail.decode(String.self, forKey: .reservePub)
+            let manual = ManualWithdrawalDetails(exchangePaytoUris: paytoUris, reservePub: reservePub)
+            self.withdrawalDetails = .manual(manual)
+        } else if detailType == "taler-bank-integration-api" {
+            let confirmed = try detail.decode(Bool.self, forKey: .confirmed)
+            var bankConfirmationUrl: String? = nil
+            if detail.contains(.bankConfirmationUrl) {
+                bankConfirmationUrl = try detail.decode(String.self, forKey: .bankConfirmationUrl)
+            }
+            let bankDetails = BankIntegratedWithdrawalDetails(confirmed: confirmed, bankConfirmationUrl: bankConfirmationUrl)
+            self.withdrawalDetails = .bankIntegrated(bankDetails)
+        } else {
+            throw TransactionDecodingError.invalidStringValue
+        }
+    }
+}
+
+/// A payment transaction.
+struct TransactionPayment: Codable {
+    /// Additional information about the payment.
+    // TODO
+    
+    /// An identifier for the payment.
+    var proposalId: String
+    
+    /// The current status of the payment.
+    // TODO
+    
+    /// The amount that must be paid.
+    var amountRaw: Amount
+    
+    /// The amount that was paid.
+    var amountEffective: Amount
+}
+
+/// A refund transaction.
+struct TransactionRefund: Codable {
+    /// Identifier for the refund.
+    var refundedTransactionId: String
+    
+    /// Additional information about the refund
+    // TODO
+    
+    /// The amount that couldn't be applied because refund permissions expired.
+    var amountInvalid: Amount
+    
+    /// The amount refunded by the merchant.
+    var amountRaw: Amount
+    
+    /// The amount paid to the wallet after fees.
+    var amountEffective: Amount
+}
+
+/// A tip transaction.
+struct TransactionTip: Codable {
+    /// The current status of the tip.
+    // TODO
+    
+    /// The exchange that the tip will be withdrawn from
+    var exchangeBaseUrl: String
+    
+    /// More information about the merchant sending the tip.
+    // TODO
+    
+    /// The raw amount of the tip without fees.
+    var amountRaw: Amount
+    
+    /// The amount added to the recipient's wallet.
+    var amountEffective: Amount
+}
+
+/// A refresh transaction.
+struct TransactionRefresh: Codable {
+    /// The exchange that the coins are refreshed with.
+    var exchangeBaseUrl: String
+    
+    /// The raw amount to refresh.
+    var amountRaw: Amount
+    
+    /// The amount to be paid as fees for the refresh.
+    var amountEffective: Amount
 }
 
 /// A wallet transaction.
-struct Transaction: Codable {
+struct Transaction: Decodable, Hashable {
+    enum TransactionDetail {
+        case withdrawal(TransactionWithdrawal)
+    }
+    
     var transactionId: String
-    var type: TransactionType
     var timestamp: Timestamp
     var pending: Bool
-    var error: TransactionError?
+    var error: AnyCodable?
     var amountRaw: Amount
     var amountEffective: Amount
+    var detail: TransactionDetail
+    
+    init(from decoder: Decoder) throws {
+        enum CodingKeys: String, CodingKey {
+            case transactionId
+            case timestamp
+            case pending
+            case error
+            case amountRaw
+            case amountEffective
+            case type
+        }
+        
+        let value = try decoder.container(keyedBy: CodingKeys.self)
+        self.transactionId = try value.decode(String.self, forKey: .transactionId)
+        self.timestamp = try value.decode(Timestamp.self, forKey: .timestamp)
+        self.pending = try value.decode(Bool.self, forKey: .pending)
+        if value.contains(.error) {
+            self.error = try value.decode(AnyCodable.self, forKey: .error)
+        }
+        self.amountRaw = try value.decode(Amount.self, forKey: .amountRaw)
+        self.amountEffective = try value.decode(Amount.self, forKey: .amountEffective)
+        
+        let type = try value.decode(String.self, forKey: .type)
+        if type == "withdrawal" {
+            let withdrawDetail = try TransactionWithdrawal.init(from: decoder)
+            self.detail = .withdrawal(withdrawDetail)
+        } else {
+            throw TransactionDecodingError.invalidStringValue
+        }
+    }
+    
+    static func == (lhs: Transaction, rhs: Transaction) -> Bool {
+        return lhs.transactionId == rhs.transactionId
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        transactionId.hash(into: &hasher)
+    }
 }
 
 /// A request to get the transactions in the wallet's history.
@@ -231,7 +412,7 @@ struct WalletBackendGetTransactionsRequest: WalletBackendFormattedRequest {
     }
     
     struct Response: Decodable {
-        
+        var transactions: [Transaction]
     }
     
     func operation() -> String {
@@ -901,6 +1082,7 @@ class WalletBackend: IonoMessageHandler {
     }
     
     func handleMessage(message: String) {
+        print(message)
         do {
             guard let messageData = message.data(using: .utf8) else { throw WalletBackendError.deserializationError }
             let data = try JSONSerialization.jsonObject(with: messageData, options: .allowFragments) as? [String : Any]

@@ -16,6 +16,47 @@
 
 import SwiftUI
 
+struct TransactionsView: View {
+    @ObservedObject var model: TransactionsModel
+    
+    var body: some View {
+        VStack {
+            if model.transactions == nil {
+                ProgressView()
+                    .onAppear {
+                        model.loadTransactions()
+                    }
+            } else if model.loading {
+                ProgressView()
+            } else {
+                List(model.transactions!, id: \.self) { tx in
+                    VStack {
+                        Text("Transaction: \(tx.transactionId)")
+                    }
+                }
+                Text("Loaded")
+                /*VStack {
+                    Text("Balances")
+                    NavigationLink {
+                        TransactionsView(model: self.balancesModel.getTransactionsModel())
+                    } label: {
+                        Text("Transactions")
+                    }
+
+                }
+                    .padding(16)
+                    .navigationTitle("Balances")
+                    .navigationBarItems(
+                        leading: Button(action: self.showSidebar, label: {
+                            Image(systemName: "line.3.horizontal")
+                        })
+                    )*/
+            }
+        }
+            .navigationTitle("Transactions")
+    }
+}
+
 struct BalancesView: View {
     @ObservedObject var balancesModel: BalancesModel
     @EnvironmentObject var backend: BackendManager
@@ -23,19 +64,7 @@ struct BalancesView: View {
     
     var body: some View {
         NavigationView {
-            switch balancesModel.state {
-            case .begin:
-                EmptyView()
-                    .onAppear(perform: {
-                        balancesModel.getBalances()
-                    })
-                    .navigationTitle("Balances")
-                    .navigationBarItems(
-                        leading: Button(action: self.showSidebar, label: {
-                            Image(systemName: "line.3.horizontal")
-                        })
-                    )
-            case .loading:
+            if balancesModel.balances == nil {
                 ProgressView()
                     .navigationTitle("Balances")
                     .navigationBarItems(
@@ -43,9 +72,26 @@ struct BalancesView: View {
                             Image(systemName: "line.3.horizontal")
                         })
                     )
-            case .loaded(let balances):
+                    .onAppear {
+                        balancesModel.getBalances()
+                    }
+            } else if balancesModel.loading {
+                ProgressView()
+                    .navigationTitle("Balances")
+                    .navigationBarItems(
+                        leading: Button(action: self.showSidebar, label: {
+                            Image(systemName: "line.3.horizontal")
+                        })
+                    )
+            } else {
                 VStack {
                     Text("Balances")
+                    NavigationLink {
+                        TransactionsView(model: self.balancesModel.getTransactionsModel())
+                    } label: {
+                        Text("Transactions")
+                    }
+
                 }
                     .padding(16)
                     .navigationTitle("Balances")
@@ -57,8 +103,4 @@ struct BalancesView: View {
             }
         }
     }
-    
-    /*init(showSidebar: @escaping () -> Void) {
-        self.showSidebar = showSidebar
-    }*/
 }

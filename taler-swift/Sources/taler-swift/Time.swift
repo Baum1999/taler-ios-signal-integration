@@ -30,15 +30,15 @@ public enum Timestamp: Codable, Equatable {
     case never
     
     enum CodingKeys: String, CodingKey {
-        case t_ms = "t_ms"
+        case t_s = "t_s"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_ms))
+            self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_s) * 1000)
         } catch {
-            let stringValue = try container.decode(String.self, forKey: .t_ms)
+            let stringValue = try container.decode(String.self, forKey: .t_s)
             if stringValue == "never" {
                 self = Timestamp.never
             } else {
@@ -55,9 +55,9 @@ public enum Timestamp: Codable, Equatable {
         var value = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .milliseconds(let t_ms):
-            try value.encode(t_ms, forKey: .t_ms)
+            try value.encode(t_ms / 1000, forKey: .t_s)
         case .never:
-            try value.encode("never", forKey: .t_ms)
+            try value.encode("never", forKey: .t_s)
         }
     }
 }

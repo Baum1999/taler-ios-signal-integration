@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AB1F87C82887C94700AB82A0 /* TalerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C72887C94700AB82A0 /* TalerApp.swift */; };
 		AB1F87CA2887D2F400AB82A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1F87C92887D2F400AB82A0 /* ContentView.swift */; };
+		AB32199128B18859008AAC75 /* TransactionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB32199028B18859008AAC75 /* TransactionsModel.swift */; };
 		AB4C534A28AC21C9003004F7 /* BalancesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4C534928AC21C9003004F7 /* BalancesView.swift */; };
 		AB4C534C28AC25FC003004F7 /* BalancesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4C534B28AC25FC003004F7 /* BalancesModel.swift */; };
 		AB69F9FA28AAED53005CCC2E /* WithdrawModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */; };
@@ -60,6 +61,7 @@
 /* Begin PBXFileReference section */
 		AB1F87C72887C94700AB82A0 /* TalerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerApp.swift; sourceTree = "<group>"; };
 		AB1F87C92887D2F400AB82A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB32199028B18859008AAC75 /* TransactionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsModel.swift; sourceTree = "<group>"; };
 		AB4C534928AC21C9003004F7 /* BalancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancesView.swift; sourceTree = "<group>"; };
 		AB4C534B28AC25FC003004F7 /* BalancesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancesModel.swift; sourceTree = "<group>"; };
 		AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawModel.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				ABB33066289C658900668B42 /* BackendManager.swift */,
+				AB32199028B18859008AAC75 /* TransactionsModel.swift */,
 				ABB33064289C5BBB00668B42 /* ExchangeManager.swift */,
 				ABC4AC3E28A473070047A56F /* PendingManager.swift */,
 				AB69F9F928AAED53005CCC2E /* WithdrawModel.swift */,
@@ -390,6 +393,7 @@
 				ABB33065289C5BBB00668B42 /* ExchangeManager.swift in Sources */,
 				AB4C534A28AC21C9003004F7 /* BalancesView.swift in Sources */,
 				D1D65B9826992E4600C1012A /* WalletBackend.swift in Sources */,
+				AB32199128B18859008AAC75 /* TransactionsModel.swift in Sources */,
 				ABB762AD2891059600E88634 /* SettingsView.swift in Sources */,
 				ABC4AC3B28A4619C0047A56F /* PendingView.swift in Sources */,
 				ABC4AC3F28A473070047A56F /* PendingManager.swift in Sources */,
