@@ -22,21 +22,29 @@ enum TimestampError: Error {
     
     /// Invalid arguments were supplied to an arithmetic operation.
     case invalidArithmeticArguments
+
+    /// The value `never` cannot be returned as UInt64.
+    case invalidUInt64Value
 }
 
-/// A point in time, represented by milliseconds from Jaunuary 1, 1970..
-public enum Timestamp: Codable, Equatable {
+/// A point in time, represented by milliseconds from January 1, 1970..
+public enum Timestamp: Codable, Hashable {
     case milliseconds(UInt64)
     case never
     
     enum CodingKeys: String, CodingKey {
         case t_s = "t_s"
+        case t_ms = "t_ms"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_s) * 1000)
+            if let seconds: UInt64 = try? container.decode(UInt64.self, forKey: .t_s) {
+                self = Timestamp.milliseconds(seconds * 1000)
+            } else {
+                self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_ms))
+            }
         } catch {
             let stringValue = try container.decode(String.self, forKey: .t_s)
             if stringValue == "never" {
@@ -46,11 +54,14 @@ public enum Timestamp: Codable, Equatable {
             }
         }
     }
-    
-    static func now() -> Timestamp {
-        return Timestamp.milliseconds(UInt64(Date().timeIntervalSince1970 * 1000.0))
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+            case .milliseconds(let t_ms):
+                hasher.combine(t_ms)
+            case .never:
+                hasher.combine("never")
+        }
     }
-    
     public func encode(to encoder: Encoder) throws {
         var value = encoder.container(keyedBy: CodingKeys.self)
         switch self {
@@ -59,6 +70,39 @@ public enum Timestamp: Codable, Equatable {
         case .never:
             try value.encode("never", forKey: .t_s)
         }
+    }
+}
+
+extension Timestamp {
+    /// make a Timestamp for  `now`
+    public static func now() -> Timestamp {
+        return Timestamp.milliseconds(Date().millisecondsSince1970)
+    }
+
+    /// convenience initializer from UInt64 (milliseconds from January 1, 1970)
+    public init(from: UInt64) {
+        self = Timestamp.milliseconds(from)
+    }
+
+    /// switch-case the enum here so the caller function doesn't have to
+    public func milliseconds() throws -> UInt64 {
+        switch self {
+            case .milliseconds(let t_ms):
+                return t_ms
+            case .never:
+                throw TimestampError.invalidUInt64Value
+        }
+    }
+}
+
+/// extend iOS Date to work with milliseconds since 1970
+extension Date {
+    public var millisecondsSince1970: UInt64 {
+        UInt64((timeIntervalSince1970 * 1000.0).rounded())
+    }
+
+    public init(milliseconds: UInt64) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }
 
