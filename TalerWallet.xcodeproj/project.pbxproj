@@ -1,0 +1,1010 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
+		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
+		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
+		4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DA29896D030043A8A1 /* TalerUITests.swift */; };
+		4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */; };
+		4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094EC298979620043A8A1 /* TalerWallet1App.swift */; };
+		4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094EF298979D30043A8A1 /* Assets.xcassets */; };
+		4EB094F429897A510043A8A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094F329897A510043A8A1 /* Preview Assets.xcassets */; };
+		4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */; };
+		4EB094FD29897D280043A8A1 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4EB094FC29897D280043A8A1 /* SymLog */; };
+		4EB095032989C9BC0043A8A1 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095012989C9BC0043A8A1 /* Controller.swift */; };
+		4EB095092989CB7C0043A8A1 /* TalerDater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095062989CB7C0043A8A1 /* TalerDater.swift */; };
+		4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095072989CB7C0043A8A1 /* TalerStrings.swift */; };
+		4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */; };
+		4EB0950E2989CB9A0043A8A1 /* quickjs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0950D2989CB9A0043A8A1 /* quickjs.swift */; };
+		4EB095152989CBB00043A8A1 /* ExchangeTestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095102989CBB00043A8A1 /* ExchangeTestModel.swift */; };
+		4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095112989CBB00043A8A1 /* WalletModel.swift */; };
+		4EB095192989CBB00043A8A1 /* WalletInitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095142989CBB00043A8A1 /* WalletInitModel.swift */; };
+		4EB0951F2989CBCB0043A8A1 /* WalletBackendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951B2989CBCB0043A8A1 /* WalletBackendRequest.swift */; };
+		4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */; };
+		4EB095212989CBCB0043A8A1 /* WalletBackendError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951D2989CBCB0043A8A1 /* WalletBackendError.swift */; };
+		4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951E2989CBCB0043A8A1 /* Transaction.swift */; };
+		4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095252989CBFE0043A8A1 /* SettingsView.swift */; };
+		4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095262989CBFE0043A8A1 /* SettingsItem.swift */; };
+		4EB095512989CBFE0043A8A1 /* ExchangeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095282989CBFE0043A8A1 /* ExchangeModel.swift */; };
+		4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */; };
+		4EB095532989CBFE0043A8A1 /* PaymentAcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952B2989CBFE0043A8A1 /* PaymentAcceptView.swift */; };
+		4EB095542989CBFE0043A8A1 /* PaymentURIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952C2989CBFE0043A8A1 /* PaymentURIModel.swift */; };
+		4EB095552989CBFE0043A8A1 /* PaymentURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */; };
+		4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */; };
+		4EB095572989CBFE0043A8A1 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095302989CBFE0043A8A1 /* TransactionRow.swift */; };
+		4EB095582989CBFE0043A8A1 /* TransactionDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095312989CBFE0043A8A1 /* TransactionDetail.swift */; };
+		4EB095592989CBFE0043A8A1 /* TransactionsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095322989CBFE0043A8A1 /* TransactionsModel.swift */; };
+		4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095332989CBFE0043A8A1 /* URLSheet.swift */; };
+		4EB0955B2989CBFE0043A8A1 /* BalancesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095352989CBFE0043A8A1 /* BalancesModel.swift */; };
+		4EB0955C2989CBFE0043A8A1 /* BalanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095362989CBFE0043A8A1 /* BalanceRow.swift */; };
+		4EB0955D2989CBFE0043A8A1 /* CurrenciesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095372989CBFE0043A8A1 /* CurrenciesListView.swift */; };
+		4EB0955E2989CBFE0043A8A1 /* PendingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095382989CBFE0043A8A1 /* PendingRow.swift */; };
+		4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */; };
+		4EB095602989CBFE0043A8A1 /* CurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953A2989CBFE0043A8A1 /* CurrencyView.swift */; };
+		4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */; };
+		4EB095622989CBFE0043A8A1 /* WithdrawURIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953D2989CBFE0043A8A1 /* WithdrawURIModel.swift */; };
+		4EB095632989CBFE0043A8A1 /* WithdrawAcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953E2989CBFE0043A8A1 /* WithdrawAcceptView.swift */; };
+		4EB095642989CBFE0043A8A1 /* WithdrawProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */; };
+		4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */; };
+		4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095422989CBFE0043A8A1 /* SideBarView.swift */; };
+		4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
+		4EB095682989CBFE0043A8A1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095442989CBFE0043A8A1 /* ContentView.swift */; };
+		4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095452989CBFE0043A8A1 /* ErrorView.swift */; };
+		4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095472989CBFE0043A8A1 /* Buttons.swift */; };
+		4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */; };
+		4EB0956C2989CBFE0043A8A1 /* AmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095492989CBFE0043A8A1 /* AmountView.swift */; };
+		4EB0956D2989CBFE0043A8A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */; };
+		4EB0956E2989CBFE0043A8A1 /* PendingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* PendingModel.swift */; };
+		4EB0956F2989CBFE0043A8A1 /* PendingOpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */; };
+		4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
+		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
+		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D14AFD3424D232B500C51073 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D14AFD1524D232B300C51073 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D14AFD1C24D232B300C51073;
+			remoteInfo = Taler;
+		};
+		D14AFD3F24D232B500C51073 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D14AFD1524D232B300C51073 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D14AFD1C24D232B300C51073;
+			remoteInfo = Taler;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D11250FA26B12D4400D02E00 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletTests.swift; sourceTree = "<group>"; };
+		4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
+		4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4EB094DA29896D030043A8A1 /* TalerUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
+		4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITests.swift; sourceTree = "<group>"; };
+		4EB094E129896FED0043A8A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4EB094EC298979620043A8A1 /* TalerWallet1App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWallet1App.swift; sourceTree = "<group>"; };
+		4EB094EF298979D30043A8A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4EB094F329897A510043A8A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FTalerWalletcore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EB095012989C9BC0043A8A1 /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
+		4EB095062989CB7C0043A8A1 /* TalerDater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerDater.swift; sourceTree = "<group>"; };
+		4EB095072989CB7C0043A8A1 /* TalerStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerStrings.swift; sourceTree = "<group>"; };
+		4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+dismissTop.swift"; sourceTree = "<group>"; };
+		4EB0950D2989CB9A0043A8A1 /* quickjs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = quickjs.swift; sourceTree = "<group>"; };
+		4EB095102989CBB00043A8A1 /* ExchangeTestModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeTestModel.swift; sourceTree = "<group>"; };
+		4EB095112989CBB00043A8A1 /* WalletModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletModel.swift; sourceTree = "<group>"; };
+		4EB095142989CBB00043A8A1 /* WalletInitModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletInitModel.swift; sourceTree = "<group>"; };
+		4EB0951B2989CBCB0043A8A1 /* WalletBackendRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendRequest.swift; sourceTree = "<group>"; };
+		4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletCore.swift; sourceTree = "<group>"; };
+		4EB0951D2989CBCB0043A8A1 /* WalletBackendError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendError.swift; sourceTree = "<group>"; };
+		4EB0951E2989CBCB0043A8A1 /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		4EB095252989CBFE0043A8A1 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4EB095262989CBFE0043A8A1 /* SettingsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsItem.swift; sourceTree = "<group>"; };
+		4EB095282989CBFE0043A8A1 /* ExchangeModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeModel.swift; sourceTree = "<group>"; };
+		4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeListView.swift; sourceTree = "<group>"; };
+		4EB0952B2989CBFE0043A8A1 /* PaymentAcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentAcceptView.swift; sourceTree = "<group>"; };
+		4EB0952C2989CBFE0043A8A1 /* PaymentURIModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentURIModel.swift; sourceTree = "<group>"; };
+		4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentURIView.swift; sourceTree = "<group>"; };
+		4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
+		4EB095302989CBFE0043A8A1 /* TransactionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		4EB095312989CBFE0043A8A1 /* TransactionDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionDetail.swift; sourceTree = "<group>"; };
+		4EB095322989CBFE0043A8A1 /* TransactionsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsModel.swift; sourceTree = "<group>"; };
+		4EB095332989CBFE0043A8A1 /* URLSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSheet.swift; sourceTree = "<group>"; };
+		4EB095352989CBFE0043A8A1 /* BalancesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesModel.swift; sourceTree = "<group>"; };
+		4EB095362989CBFE0043A8A1 /* BalanceRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceRow.swift; sourceTree = "<group>"; };
+		4EB095372989CBFE0043A8A1 /* CurrenciesListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrenciesListView.swift; sourceTree = "<group>"; };
+		4EB095382989CBFE0043A8A1 /* PendingRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingRow.swift; sourceTree = "<group>"; };
+		4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletEmptyView.swift; sourceTree = "<group>"; };
+		4EB0953A2989CBFE0043A8A1 /* CurrencyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyView.swift; sourceTree = "<group>"; };
+		4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawURIView.swift; sourceTree = "<group>"; };
+		4EB0953D2989CBFE0043A8A1 /* WithdrawURIModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawURIModel.swift; sourceTree = "<group>"; };
+		4EB0953E2989CBFE0043A8A1 /* WithdrawAcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptView.swift; sourceTree = "<group>"; };
+		4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawProgressView.swift; sourceTree = "<group>"; };
+		4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawTOSView.swift; sourceTree = "<group>"; };
+		4EB095422989CBFE0043A8A1 /* SideBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
+		4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchAnimationView.swift; sourceTree = "<group>"; };
+		4EB095442989CBFE0043A8A1 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4EB095452989CBFE0043A8A1 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		4EB095472989CBFE0043A8A1 /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		4EB095492989CBFE0043A8A1 /* AmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountView.swift; sourceTree = "<group>"; };
+		4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		4EB0954C2989CBFE0043A8A1 /* PendingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingModel.swift; sourceTree = "<group>"; };
+		4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpView.swift; sourceTree = "<group>"; };
+		4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpsListView.swift; sourceTree = "<group>"; };
+		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
+		D14AFD1D24D232B300C51073 /* TalerWalletT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalerWalletT.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D14AFD1A24D232B300C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */,
+				4EB094FD29897D280043A8A1 /* SymLog in Frameworks */,
+				4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */,
+				ABC13AA32859962800D23185 /* taler-swift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3024D232B500C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3B24D232B500C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4EB094EE298979840043A8A1 /* TalerWallet1 */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095002989C9BC0043A8A1 /* Controllers */,
+				4EB095232989CBFE0043A8A1 /* Views */,
+				4EB0950F2989CBB00043A8A1 /* Model */,
+				4EB0951A2989CBCB0043A8A1 /* Backend */,
+				4EB0950C2989CB9A0043A8A1 /* Quickjs */,
+				4EB095052989CB7C0043A8A1 /* Helper */,
+				4EB094EF298979D30043A8A1 /* Assets.xcassets */,
+				4EB094F529897A9A0043A8A1 /* Preview Content */,
+			);
+			path = TalerWallet1;
+			sourceTree = "<group>";
+		};
+		4EB094F529897A9A0043A8A1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094F329897A510043A8A1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4EB094F629897CA20043A8A1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4EB095002989C9BC0043A8A1 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094EC298979620043A8A1 /* TalerWallet1App.swift */,
+				4EB095012989C9BC0043A8A1 /* Controller.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		4EB095052989CB7C0043A8A1 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
+				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
+				4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		4EB0950C2989CB9A0043A8A1 /* Quickjs */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0950D2989CB9A0043A8A1 /* quickjs.swift */,
+			);
+			path = Quickjs;
+			sourceTree = "<group>";
+		};
+		4EB0950F2989CBB00043A8A1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095102989CBB00043A8A1 /* ExchangeTestModel.swift */,
+				4EB095112989CBB00043A8A1 /* WalletModel.swift */,
+				4EB095142989CBB00043A8A1 /* WalletInitModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4EB0951A2989CBCB0043A8A1 /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0951B2989CBCB0043A8A1 /* WalletBackendRequest.swift */,
+				4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */,
+				4EB0951D2989CBCB0043A8A1 /* WalletBackendError.swift */,
+				4EB0951E2989CBCB0043A8A1 /* Transaction.swift */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
+		4EB095232989CBFE0043A8A1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095412989CBFE0043A8A1 /* Main */,
+				4EB095242989CBFE0043A8A1 /* Settings */,
+				4EB095272989CBFE0043A8A1 /* Exchange */,
+				4EB0952A2989CBFE0043A8A1 /* Payment */,
+				4EB0952E2989CBFE0043A8A1 /* Transactions */,
+				4EB095332989CBFE0043A8A1 /* URLSheet.swift */,
+				4EB095342989CBFE0043A8A1 /* Balances */,
+				4EB0953B2989CBFE0043A8A1 /* Withdraw */,
+				4EB095462989CBFE0043A8A1 /* HelperViews */,
+				4EB0954B2989CBFE0043A8A1 /* Pending */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4EB095242989CBFE0043A8A1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095252989CBFE0043A8A1 /* SettingsView.swift */,
+				4EB095262989CBFE0043A8A1 /* SettingsItem.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4EB095272989CBFE0043A8A1 /* Exchange */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095282989CBFE0043A8A1 /* ExchangeModel.swift */,
+				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
+			);
+			path = Exchange;
+			sourceTree = "<group>";
+		};
+		4EB0952A2989CBFE0043A8A1 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0952B2989CBFE0043A8A1 /* PaymentAcceptView.swift */,
+				4EB0952C2989CBFE0043A8A1 /* PaymentURIModel.swift */,
+				4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		4EB0952E2989CBFE0043A8A1 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */,
+				4EB095302989CBFE0043A8A1 /* TransactionRow.swift */,
+				4EB095312989CBFE0043A8A1 /* TransactionDetail.swift */,
+				4EB095322989CBFE0043A8A1 /* TransactionsModel.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		4EB095342989CBFE0043A8A1 /* Balances */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095352989CBFE0043A8A1 /* BalancesModel.swift */,
+				4EB095362989CBFE0043A8A1 /* BalanceRow.swift */,
+				4EB095372989CBFE0043A8A1 /* CurrenciesListView.swift */,
+				4EB095382989CBFE0043A8A1 /* PendingRow.swift */,
+				4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */,
+				4EB0953A2989CBFE0043A8A1 /* CurrencyView.swift */,
+			);
+			path = Balances;
+			sourceTree = "<group>";
+		};
+		4EB0953B2989CBFE0043A8A1 /* Withdraw */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */,
+				4EB0953D2989CBFE0043A8A1 /* WithdrawURIModel.swift */,
+				4EB0953E2989CBFE0043A8A1 /* WithdrawAcceptView.swift */,
+				4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */,
+				4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */,
+			);
+			path = Withdraw;
+			sourceTree = "<group>";
+		};
+		4EB095412989CBFE0043A8A1 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095442989CBFE0043A8A1 /* ContentView.swift */,
+				4EB095422989CBFE0043A8A1 /* SideBarView.swift */,
+				4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */,
+				4EB095452989CBFE0043A8A1 /* ErrorView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		4EB095462989CBFE0043A8A1 /* HelperViews */ = {
+			isa = PBXGroup;
+			children = (
+				4EB095472989CBFE0043A8A1 /* Buttons.swift */,
+				4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */,
+				4EB095492989CBFE0043A8A1 /* AmountView.swift */,
+				4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */,
+			);
+			path = HelperViews;
+			sourceTree = "<group>";
+		};
+		4EB0954B2989CBFE0043A8A1 /* Pending */ = {
+			isa = PBXGroup;
+			children = (
+				4EB0954C2989CBFE0043A8A1 /* PendingModel.swift */,
+				4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */,
+				4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */,
+			);
+			path = Pending;
+			sourceTree = "<group>";
+		};
+		D14AFD1424D232B300C51073 = {
+			isa = PBXGroup;
+			children = (
+				4EB094EE298979840043A8A1 /* TalerWallet1 */,
+				4EB094E129896FED0043A8A1 /* Info.plist */,
+				AB710490285995B6008B04F0 /* taler-swift */,
+				D14AFD3624D232B500C51073 /* TalerTests */,
+				D14AFD4124D232B500C51073 /* TalerUITests */,
+				D14AFD1E24D232B300C51073 /* Products */,
+				4EB094F629897CA20043A8A1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D14AFD1E24D232B300C51073 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D14AFD1D24D232B300C51073 /* TalerWalletT.app */,
+				D14AFD3324D232B500C51073 /* TalerTests.xctest */,
+				D14AFD3E24D232B500C51073 /* TalerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D14AFD3624D232B500C51073 /* TalerTests */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */,
+				4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */,
+			);
+			path = TalerTests;
+			sourceTree = "<group>";
+		};
+		D14AFD4124D232B500C51073 /* TalerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094DA29896D030043A8A1 /* TalerUITests.swift */,
+				4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */,
+				4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */,
+			);
+			path = TalerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D14AFD1C24D232B300C51073 /* TalerWalletT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4724D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerWalletT" */;
+			buildPhases = (
+				D14AFD1924D232B300C51073 /* Sources */,
+				D14AFD1A24D232B300C51073 /* Frameworks */,
+				D11250FA26B12D4400D02E00 /* CopyFiles */,
+				D14AFD1B24D232B300C51073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TalerWalletT;
+			packageProductDependencies = (
+				ABC13AA22859962800D23185 /* taler-swift */,
+				ABE97B1C286D82BF00580772 /* AnyCodable */,
+				4EB094FC29897D280043A8A1 /* SymLog */,
+			);
+			productName = Taler;
+			productReference = D14AFD1D24D232B300C51073 /* TalerWalletT.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D14AFD3224D232B500C51073 /* TalerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4A24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerTests" */;
+			buildPhases = (
+				D14AFD2F24D232B500C51073 /* Sources */,
+				D14AFD3024D232B500C51073 /* Frameworks */,
+				D14AFD3124D232B500C51073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D14AFD3524D232B500C51073 /* PBXTargetDependency */,
+			);
+			name = TalerTests;
+			productName = TalerTests;
+			productReference = D14AFD3324D232B500C51073 /* TalerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D14AFD3D24D232B500C51073 /* TalerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4D24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerUITests" */;
+			buildPhases = (
+				D14AFD3A24D232B500C51073 /* Sources */,
+				D14AFD3B24D232B500C51073 /* Frameworks */,
+				D14AFD3C24D232B500C51073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D14AFD4024D232B500C51073 /* PBXTargetDependency */,
+			);
+			name = TalerUITests;
+			productName = TalerUITests;
+			productReference = D14AFD3E24D232B500C51073 /* TalerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D14AFD1524D232B300C51073 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1160;
+				LastUpgradeCheck = 1230;
+				ORGANIZATIONNAME = Taler;
+				TargetAttributes = {
+					D14AFD1C24D232B300C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+					};
+					D14AFD3224D232B500C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+						TestTargetID = D14AFD1C24D232B300C51073;
+					};
+					D14AFD3D24D232B500C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+						TestTargetID = D14AFD1C24D232B300C51073;
+					};
+				};
+			};
+			buildConfigurationList = D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWallet" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D14AFD1424D232B300C51073;
+			packageReferences = (
+				ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */,
+				4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */,
+			);
+			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D14AFD1C24D232B300C51073 /* TalerWalletT */,
+				D14AFD3224D232B500C51073 /* TalerTests */,
+				D14AFD3D24D232B500C51073 /* TalerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D14AFD1B24D232B300C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB094F429897A510043A8A1 /* Preview Assets.xcassets in Resources */,
+				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3124D232B500C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3C24D232B500C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D14AFD1924D232B300C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB095512989CBFE0043A8A1 /* ExchangeModel.swift in Sources */,
+				4EB095032989C9BC0043A8A1 /* Controller.swift in Sources */,
+				4EB095682989CBFE0043A8A1 /* ContentView.swift in Sources */,
+				4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */,
+				4EB095602989CBFE0043A8A1 /* CurrencyView.swift in Sources */,
+				4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */,
+				4EB0955D2989CBFE0043A8A1 /* CurrenciesListView.swift in Sources */,
+				4EB095532989CBFE0043A8A1 /* PaymentAcceptView.swift in Sources */,
+				4EB095212989CBCB0043A8A1 /* WalletBackendError.swift in Sources */,
+				4EB0955E2989CBFE0043A8A1 /* PendingRow.swift in Sources */,
+				4EB0955B2989CBFE0043A8A1 /* BalancesModel.swift in Sources */,
+				4EB095632989CBFE0043A8A1 /* WithdrawAcceptView.swift in Sources */,
+				4EB0956D2989CBFE0043A8A1 /* LoadingView.swift in Sources */,
+				4EB095542989CBFE0043A8A1 /* PaymentURIModel.swift in Sources */,
+				4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */,
+				4EB095552989CBFE0043A8A1 /* PaymentURIView.swift in Sources */,
+				4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */,
+				4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */,
+				4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */,
+				4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */,
+				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
+				4EB0951F2989CBCB0043A8A1 /* WalletBackendRequest.swift in Sources */,
+				4EB095572989CBFE0043A8A1 /* TransactionRow.swift in Sources */,
+				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
+				4EB0956C2989CBFE0043A8A1 /* AmountView.swift in Sources */,
+				4EB095592989CBFE0043A8A1 /* TransactionsModel.swift in Sources */,
+				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
+				4EB095192989CBB00043A8A1 /* WalletInitModel.swift in Sources */,
+				4EB095092989CB7C0043A8A1 /* TalerDater.swift in Sources */,
+				4EB0950E2989CB9A0043A8A1 /* quickjs.swift in Sources */,
+				4EB095152989CBB00043A8A1 /* ExchangeTestModel.swift in Sources */,
+				4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */,
+				4EB0956E2989CBFE0043A8A1 /* PendingModel.swift in Sources */,
+				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,
+				4EB095642989CBFE0043A8A1 /* WithdrawProgressView.swift in Sources */,
+				4EB095582989CBFE0043A8A1 /* TransactionDetail.swift in Sources */,
+				4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */,
+				4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */,
+				4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */,
+				4EB0956F2989CBFE0043A8A1 /* PendingOpView.swift in Sources */,
+				4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */,
+				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
+				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
+				4EB095622989CBFE0043A8A1 /* WithdrawURIModel.swift in Sources */,
+				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
+				4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */,
+				4EB0955C2989CBFE0043A8A1 /* BalanceRow.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD2F24D232B500C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */,
+				4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3A24D232B500C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */,
+				4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */,
+				4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D14AFD3524D232B500C51073 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D14AFD1C24D232B300C51073 /* TalerWalletT */;
+			targetProxy = D14AFD3424D232B500C51073 /* PBXContainerItemProxy */;
+		};
+		D14AFD4024D232B500C51073 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D14AFD1C24D232B300C51073 /* TalerWalletT */;
+			targetProxy = D14AFD3F24D232B500C51073 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D14AFD4524D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lc++";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D14AFD4624D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-lc++";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D14AFD4824D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler.net";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.9.1;
+				PRODUCT_BUNDLE_IDENTIFIER = net.taler.talerwallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Debug;
+		};
+		D14AFD4924D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler.net";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.9.1;
+				PRODUCT_BUNDLE_IDENTIFIER = net.taler.talerwallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Release;
+		};
+		D14AFD4B24D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerTests/TalerTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerWallet.app/TalerWallet";
+			};
+			name = Debug;
+		};
+		D14AFD4C24D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerTests/TalerTests-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerWallet.app/TalerWallet";
+			};
+			name = Release;
+		};
+		D14AFD4E24D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerUITests/TalerUITests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Taler;
+			};
+			name = Debug;
+		};
+		D14AFD4F24D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerUITests/TalerUITests-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Taler;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4524D232B500C51073 /* Debug */,
+				D14AFD4624D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4724D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerWalletT" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4824D232B500C51073 /* Debug */,
+				D14AFD4924D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4A24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4B24D232B500C51073 /* Debug */,
+				D14AFD4C24D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4D24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4E24D232B500C51073 /* Debug */,
+				D14AFD4F24D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/SymLog";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+		ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flight-School/AnyCodable";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4EB094FC29897D280043A8A1 /* SymLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */;
+			productName = SymLog;
+		};
+		ABC13AA22859962800D23185 /* taler-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "taler-swift";
+		};
+		ABE97B1C286D82BF00580772 /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D14AFD1524D232B300C51073 /* Project object */;
+}
