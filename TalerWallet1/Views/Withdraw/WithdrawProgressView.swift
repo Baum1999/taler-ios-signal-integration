@@ -13,18 +13,33 @@
  * You should have received a copy of the GNU General Public License along with
  * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
  */
+import SwiftUI
 
-import Foundation
+struct WithdrawProgressView: View {
+    let message: String
+    let action: () -> Void
 
-class BackendManager: ObservableObject {
-    var backend: WalletBackend
-    
-    @Published var exchangeManager: ExchangeManager
-    @Published var pendingManager: PendingManager
-    
-    init() {
-        self.backend = try! WalletBackend()
-        self.exchangeManager = ExchangeManager(_backend: self.backend)
-        self.pendingManager = PendingManager(_backend: self.backend)
+    var cancelButton: some View {
+        Button("Cancel2") {
+            action()
+        }           // dismiss the sheet
+    }
+
+    var body: some View {                       // show Message with cancelButton
+        VStack {
+            Spacer()
+            ProgressView()
+            Spacer()
+            Text(message)
+                .font(.title)
+            Spacer()
+            Spacer()
+        }.navigationBarItems(leading: cancelButton)
+    }
+}
+
+struct WithdrawProgressView_Previews: PreviewProvider {
+    static var previews: some View {
+        WithdrawProgressView(message: "message") {}
     }
 }
