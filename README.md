@@ -1,14 +1,31 @@
-# GNU Taler iOS Code Repository
+# GNU Taler Wallet iOS Code Repository
 
 This git repository contains code for GNU Taler iOS apps and libraries.
 The official location is: 
-
     https://git.taler.net/taler-ios.git
+
+
+## Compatibility
+
+The minimum version of iOS supported is 15.0.
+This app runs on all iPhone models at least as new as the iPhone 6S.
+
 
 ## Building
 
-Before building anything, you should initialize and update the submodules by running
-    
-    $ ./bootstrap
-    
-To build the app, open `Taler.xcodeproj` with Xcode. The minimum version of iOS supported is 14.0. This iOS version is compatible on all iPhone models at least as new as the iPhone 6S.
+Before building the iOS wallet, you must first checkout the quickjs-tart repo:
+    https://git.taler.net/quickjs-tart.git
+and the wallet-core repo:
+    https://git.taler.net/wallet-core.git
+Build wallet-core first, then copy/move its product "taler-wallet-core-qjs.mjs"
+into your quickjs-tart folder.
+
+Open Taler.xcworkspace, and set scheme / target to TalerWalletT. Build&run...
+
+Don't open QuickJS-rt.xcodeproj or TalerWallet.xcodeproj and build anything
+there - all needed libraries and frameworks will be built automatically from
+Taler.xcworkspace.
+
+Have all 3 local repos adjacent at the same level (e.g. in a "GNU Taler" folder)
+- Taler.xcworkspace expects the QuickJS framework sub-project to be at
+  ../quickjs-tart/QuickJS-rt.xcodeproj
