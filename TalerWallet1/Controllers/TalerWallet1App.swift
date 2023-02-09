@@ -43,7 +43,7 @@ struct TalerWallet1App: App {
                     .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                     .task {
                         symLog.log("task -> initWalletCore")
-                        try? await controller.initWalletCore()
+                        try! await controller.initWalletCore()      // will (and should) crash on failure
                         symLog.log("task done")
                     }
             }

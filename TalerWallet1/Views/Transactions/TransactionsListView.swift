@@ -53,12 +53,12 @@ extension TransactionsListView {
 
         var body: some View {
             let transactions = viewModel.transactions!
-                List(transactions, id: \.transactionId) { transaction in
-                    NavigationLink {
-                        TransactionDetail(transaction: transaction)
-                    } label: {
-                        TransactionRow(transaction: transaction)
-                    }
+            List(transactions, id: \.transactionId) { transaction in
+                NavigationLink {
+                    TransactionDetail(transaction: transaction)
+                } label: {
+                    TransactionRow(transaction: transaction)
+                }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         Button {
                             symLog?.log("bookmarked \(transaction.transactionId)")
@@ -75,12 +75,17 @@ extension TransactionsListView {
                             Label("Delete", systemImage: "trash")
                         }
                     }
-                }
-                    .navigationBarTitleDisplayMode(.large)      // .inline
-                    .refreshable {
+            }
+                .navigationBarTitleDisplayMode(.large)      // .inline
+                .refreshable {
+                    do {
                         symLog?.log("refreshing")
-                        try? await reloadAction()       // TODO: catch error
+                        try await reloadAction()
+                    } catch {
+                        // TODO: error
+                        symLog?.log(error.localizedDescription)
                     }
+                }
         }
     }
 }

@@ -37,7 +37,12 @@ struct PendingOpsListView: View {
             }
         }.task {
             symLog.log(".task")
-            try? await reloadAction()       // TODO: catch error
+            do {
+                try await reloadAction()
+            } catch {
+                // TODO: show error
+                symLog.log(error.localizedDescription)
+            }
         }
     }
 }
@@ -56,8 +61,13 @@ extension PendingOpsListView {
                 }
                 .navigationBarTitleDisplayMode(.large)      // .inline
                 .refreshable {
-                    symLog?.log("refreshing")
-                    try? await reloadAction()       // TODO: catch error
+                    do {
+                        symLog?.log("refreshing")
+                        try await reloadAction()
+                    } catch {
+                        // TODO: error
+                        symLog?.log(error.localizedDescription)
+                    }
                 }
             }
         }

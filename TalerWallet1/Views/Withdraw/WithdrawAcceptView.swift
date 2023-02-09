@@ -37,7 +37,7 @@ struct WithdrawAcceptView: View {
                 case .receivedAmountDetails, .receivedTOS, .receivedTOSAck:
                     let raw = detailsForAmount.amountRaw
                     let effective = detailsForAmount.amountEffective
-                    let fee = try! raw - effective
+                    let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     Form {
                         AmountView(title: "Chosen amount to withdraw:",
                                    value: raw.readableDescription, color: Color(UIColor.label))

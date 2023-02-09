@@ -85,11 +85,11 @@ extension ExchangeListView {
                     }
                         .navigationBarTitleDisplayMode(.large)      // .inline
                         .refreshable {
-                            symLog.log("refreshing")
                             do {
+                                symLog.log("refreshing")
                                 try await reloadAction()
                             } catch {
-                                // TODO: catch error
+                                // TODO: error
                                 symLog.log(error.localizedDescription)
                             }
                         }

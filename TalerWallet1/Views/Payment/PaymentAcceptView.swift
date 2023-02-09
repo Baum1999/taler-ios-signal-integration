@@ -35,7 +35,7 @@ struct PaymentAcceptView: View {
         symLog { Group {
             let raw = detailsForAmount.amountRaw
             let effective = detailsForAmount.amountEffective
-            let fee = try! effective - raw
+            let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
             Form {
                 AmountView(title: "Amount to pay:",
                            value: raw.readableDescription, color: Color(UIColor.label))

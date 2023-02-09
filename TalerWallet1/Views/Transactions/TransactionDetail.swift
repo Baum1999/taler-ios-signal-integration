@@ -22,7 +22,7 @@ struct TransactionDetail: View {
     var body: some View {
         let raw = transaction.amountRaw
         let effective = transaction.amountEffective
-        let fee = try! Amount.diff(raw, effective)
+        let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
         let dateString = TalerDater.dateString(from: transaction.timestamp)
 
         VStack() {

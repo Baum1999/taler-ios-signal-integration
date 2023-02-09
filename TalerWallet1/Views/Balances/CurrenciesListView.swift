@@ -69,8 +69,13 @@ extension CurrenciesListView {
                 }
                     .navigationBarTitleDisplayMode(.large)      // .inline
                     .refreshable {
-                        symLog?.log("refreshing")
-                        try? await reloadAction()       // TODO: catch error
+                        do {
+                            symLog?.log("refreshing")
+                            try await reloadAction()
+                        } catch {
+                            // TODO: error
+                            symLog?.log(error.localizedDescription)
+                        }
                     }
             }
         }
