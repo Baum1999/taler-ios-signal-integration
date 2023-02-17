@@ -16,6 +16,7 @@
 import Foundation
 import taler_swift
 import SymLog
+fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 fileprivate let EXCHANGEBASEURL = "https://exchange.demo.taler.net/"
 fileprivate let BANKBASEURL = "https://bank.demo.taler.net/"
@@ -24,62 +25,38 @@ fileprivate let MERCHANTBASEURL = "https://backend.demo.taler.net/"
 fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
-class ExchangeTestModel: ObservableObject {
-    private let symLog = SymLogC(0)
-
-    var walletCore: WalletCore
-    
-    @Published var loading: Bool = false
-    
-    init(walletCore: WalletCore) {
-        self.walletCore = walletCore
-    }
+class ExchangeTestModel: WalletModel {
 }
 // MARK: -
 extension ExchangeTestModel {
-    func loadTestKudos() {
-        loading = true
-        
-        let amount = Amount(currency: "KUDOS", integer: 11, fraction: 0)
-        let req = WalletBackendWithdrawTestBalance(amount: amount, bankBaseUrl: BANKBASEURL,
-                        exchangeBaseUrl: EXCHANGEBASEURL, bankAccessApiBaseUrl: BANKACCESSAPIBASEURL)
-        symLog.log("sending: \(req)")
-        walletCore.sendFormattedRequest(request: req) { response, err in
-            DispatchQueue.main.async {
-                self.loading = false
-                if let res = response {
-                    // TODO: ?
-                    self.symLog.log("received: \(res)")
-                } else {
-                    // TODO: Handle error
-                }
-            }
+    @MainActor func loadTestKudos() async throws {
+        do {
+            let amount = Amount(currency: "KUDOS", integer: 11, fraction: 0)
+            let request = WalletBackendWithdrawTestBalance(amount: amount,
+                                                      bankBaseUrl: BANKBASEURL,
+                                                  exchangeBaseUrl: EXCHANGEBASEURL,
+                                             bankAccessApiBaseUrl: BANKACCESSAPIBASEURL)
+            let response = try await sendRequest(request, ASYNCDELAY)
+            symLog?.log("received: \(response)")
+        } catch {
+            throw error
         }
     }
 
-    func runIntegrationTest() {
-        loading = true
-
-        let amountW = Amount(currency: "KUDOS", integer: 3, fraction: 0)
-        let amountS = Amount(currency: "KUDOS", integer: 1, fraction: 0)
-        let req = WalletBackendRunIntegration(amountToWithdraw: amountW,
-                                              amountToSpend: amountS,
-                                              bankBaseUrl: BANKACCESSAPIBASEURL,
-                                              exchangeBaseUrl: EXCHANGEBASEURL,
-                                              merchantBaseUrl: MERCHANTBASEURL,
-                                              merchantAuthToken: MERCHANTAUTHTOKEN
-        )
-        symLog.log("sending: \(req)")
-        walletCore.sendFormattedRequest(request: req) { response, err in
-            DispatchQueue.main.async {
-                self.loading = false
-                if let res = response {
-                    // TODO: ?
-                    self.symLog.log("received: \(res)")
-                } else {
-                    // TODO: Handle error
-                }
-            }
+    @MainActor func runIntegrationTest() async throws {
+        do {
+            let amountW = Amount(currency: "KUDOS", integer: 3, fraction: 0)
+            let amountS = Amount(currency: "KUDOS", integer: 1, fraction: 0)
+            let request = WalletBackendRunIntegration(amountToWithdraw: amountW,
+                                                         amountToSpend: amountS,
+                                                           bankBaseUrl: BANKACCESSAPIBASEURL,
+                                                       exchangeBaseUrl: EXCHANGEBASEURL,
+                                                       merchantBaseUrl: MERCHANTBASEURL,
+                                                     merchantAuthToken: MERCHANTAUTHTOKEN)
+            let response = try await sendRequest(request, ASYNCDELAY)
+            symLog?.log("received: \(response)")
+        } catch {
+            throw error
         }
     }
 }

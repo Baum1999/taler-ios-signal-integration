@@ -116,6 +116,7 @@ extension WalletCore {
                     symLog.log(payload)
                     Task {
                         do {
+                            // automatically fetch balances after receiving these notifications
                             try await Controller.shared.balancesModel.fetchBalances()
                         } catch {
                             // TODO: show error
@@ -208,23 +209,6 @@ extension WalletCore {
             quickjs.sendMessage(message: jsonString)
         } catch {
             completionHandler(id, nil, WalletCore.serializeRequestError());
-        }
-    }
-
-    /// call this to send requests to wallet-core
-    func sendFormattedRequest<T: WalletBackendFormattedRequest>
-            (request: T, completionHandler: @escaping (T.Response?, WalletBackendResponseError?) -> Void)
-    {
-        let reqData = WalletBackendRequest(operation: request.operation(),
-                                                args: AnyEncodable(request.args()))
-        sendRequest(request: reqData) { (id: UInt, result: Data?, err: WalletBackendResponseError?) in
-            guard let json = result else { completionHandler(nil, err); return }
-            do {
-                let decoded = try JSONDecoder().decode(T.Response.self, from: json)
-                completionHandler(decoded, err)
-            } catch {
-                completionHandler(nil, WalletCore.parseResponseError())
-            }
         }
     }
 }

@@ -66,9 +66,16 @@ struct SettingsView: View {
                     SettingsItem(name: "Withdraw KUDOS", description: "Get money for testing") {
                         Button("Withdraw") {
                             withDrawDisabled = true    // don't run twice
-                            let testModel: ExchangeTestModel = ExchangeTestModel(walletCore: walletCore)
-                            symLog.log("Withdrawing ")
-                            testModel.loadTestKudos()
+                            Task {
+                                let testModel: ExchangeTestModel = ExchangeTestModel(walletCore: walletCore)
+                                symLog.log("Withdrawing")
+                                do {
+                                    try await testModel.loadTestKudos()
+                                } catch {
+                                    // TODO: show error
+                                    symLog.log(error.localizedDescription)
+                                }
+                            }
                         }
                         .buttonStyle(.bordered)
                         .disabled(withDrawDisabled)
@@ -76,9 +83,16 @@ struct SettingsView: View {
                     SettingsItem(name: "Run Integration Test", description: "Check if wallet-core works") {
                         Button("Check") {
                             checkDisabled = true    // don't run twice
-                            let testModel: ExchangeTestModel = ExchangeTestModel(walletCore: walletCore)
-                            symLog.log("running integration test ")
-                            testModel.runIntegrationTest()
+                            Task {
+                                let testModel: ExchangeTestModel = ExchangeTestModel(walletCore: walletCore)
+                                symLog.log("running integration test")
+                                do {
+                                    try await testModel.runIntegrationTest()
+                                } catch {
+                                    // TODO: show error
+                                    symLog.log(error.localizedDescription)
+                                }
+                            }
                         }
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
