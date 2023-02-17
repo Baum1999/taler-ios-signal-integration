@@ -89,7 +89,7 @@ extension Controller {
             case "taler+http":
                 uncrypted = true
                 fallthrough
-            case "taler":
+            case "taler", "ext+taler", "web+taler":
                 return talerScheme(url, uncrypted)
             case "payto":
                 messageForSheet = url.absoluteString

@@ -12,6 +12,8 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>taler</string>
+				<string>ext+taler</string>
+				<string>web+taler</string>
 				<string>payto</string>
 			</array>
 		</dict>

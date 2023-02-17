@@ -16,11 +16,6 @@
 import BackgroundTasks
 import SwiftUI
 import SymLog
-#if DEBUG
-let schemes: Set = ["taler", "payto", "taler+http"]
-#else
-let schemes: Set = ["taler", "payto"]
-#endif
 
 @main
 struct TalerWallet1App: App {
@@ -40,6 +35,8 @@ struct TalerWallet1App: App {
         WindowGroup {
             symLog { ContentView()
                     .environmentObject(controller)
+                        /// external events are taler:// or payto:// URLs passed to this app
+                        /// we handle them in .onOpenURL in ContentView.swift
                     .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                     .task {
                         symLog.log("task -> initWalletCore")
