@@ -66,7 +66,7 @@ struct WithdrawURIView: View {
                 symLog.log(".task")
                 detailsForUri = try await viewModel.loadWithdrawalDetailsForURI(url.absoluteString)
                 let baseURL = detailsForUri!.defaultExchangeBaseUrl
-                symLog.log("amount: \(detailsForUri!.amount), baseURL: \(baseURL)")
+                symLog.log("amount: \(detailsForUri!.amount), baseURL: \(String(describing: baseURL))")
                 // TODO: let user choose exchange from array
                 detailsForAmount = try await viewModel.loadWithdrawalDetailsForAmount(detailsForUri!)
                 symLog.log("raw: \(detailsForAmount!.amountRaw), effective: \(detailsForAmount!.amountEffective)")

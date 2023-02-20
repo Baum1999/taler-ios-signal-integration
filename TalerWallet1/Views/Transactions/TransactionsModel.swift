@@ -22,14 +22,6 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 class TransactionsModel: WalletModel {
     @Published var transactions: [Transaction]?             // update view
 }
-//extension Transaction {
-//    func exchangeBaseUrl() -> String {
-//        switch detail {
-//            case .withdrawal(let transactionWithdrawal):
-//                return transactionWithdrawal.exchangeBaseUrl
-//        }
-//    }
-//}
 
 // MARK: -
 /// A request to get the transactions in the wallet's history.

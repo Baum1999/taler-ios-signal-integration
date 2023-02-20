@@ -56,7 +56,7 @@ struct PendingOperation: Codable, Hashable {
 
 }
 //let pending1 = ["type": "exchange-update",
-//                "exchangeBaseUrl": "https://exchange.demo.taler.net/",
+//                EXCHANGEBASEURL: "https://exchange.demo.taler.net/",
 //                "id": "exchange-update:https://exchange.demo.taler.net/",
 //                "timestampDue": ["t_ms": 1669931055000],
 //                "isDue": false,
@@ -64,7 +64,7 @@ struct PendingOperation: Codable, Hashable {
 //                "givesLifeness": false] as [String : Any]
 //
 //let pending2 = ["type": "exchange-check-refresh",
-//                "exchangeBaseUrl": "https://exchange.demo.taler.net/",
+//                EXCHANGEBASEURL: "https://exchange.demo.taler.net/",
 //                "id": "exchange-update:https://exchange.demo.taler.net/",
 //                "timestampDue": ["t_ms": 1670013862000],
 //                "isDue": false,

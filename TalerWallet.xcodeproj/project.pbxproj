@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
 		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
 		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
 		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
@@ -97,6 +98,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletTests.swift; sourceTree = "<group>"; };
 		4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
 				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
 				4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */,
+				4EA1ABBD29A3833A008821EA /* PublicConstants.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
 				4EB0951F2989CBCB0043A8A1 /* WalletBackendRequest.swift in Sources */,
 				4EB095572989CBFE0043A8A1 /* TransactionRow.swift in Sources */,
+				4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */,
 				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
 				4EB0956C2989CBFE0043A8A1 /* AmountView.swift in Sources */,
 				4EB095592989CBFE0043A8A1 /* TransactionsModel.swift in Sources */,

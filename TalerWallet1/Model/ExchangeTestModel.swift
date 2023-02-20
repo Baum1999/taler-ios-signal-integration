@@ -18,11 +18,11 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-fileprivate let EXCHANGEBASEURL = "https://exchange.demo.taler.net/"
-fileprivate let BANKBASEURL = "https://bank.demo.taler.net/"
-fileprivate let BANKACCESSAPIBASEURL = "https://bank.demo.taler.net/demobanks/default/access-api/"
-fileprivate let MERCHANTBASEURL = "https://backend.demo.taler.net/"
-fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
+fileprivate let DEMO_EXCHANGEBASEURL = "https://exchange.demo.taler.net/"
+fileprivate let DEMO_BANKBASEURL = "https://bank.demo.taler.net/"
+fileprivate let DEMO_BANKAPIBASEURL = "https://bank.demo.taler.net/demobanks/default/access-api/"
+fileprivate let DEMO_MERCHANTBASEURL = "https://backend.demo.taler.net/"
+fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
 class ExchangeTestModel: WalletModel {
@@ -33,9 +33,9 @@ extension ExchangeTestModel {
         do {
             let amount = Amount(currency: "KUDOS", integer: 11, fraction: 0)
             let request = WalletBackendWithdrawTestBalance(amount: amount,
-                                                      bankBaseUrl: BANKBASEURL,
-                                                  exchangeBaseUrl: EXCHANGEBASEURL,
-                                             bankAccessApiBaseUrl: BANKACCESSAPIBASEURL)
+                                                      bankBaseUrl: DEMO_BANKBASEURL,
+                                                  exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                             bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
             let response = try await sendRequest(request, ASYNCDELAY)
             symLog?.log("received: \(response)")
         } catch {
@@ -49,10 +49,10 @@ extension ExchangeTestModel {
             let amountS = Amount(currency: "KUDOS", integer: 1, fraction: 0)
             let request = WalletBackendRunIntegration(amountToWithdraw: amountW,
                                                          amountToSpend: amountS,
-                                                           bankBaseUrl: BANKACCESSAPIBASEURL,
-                                                       exchangeBaseUrl: EXCHANGEBASEURL,
-                                                       merchantBaseUrl: MERCHANTBASEURL,
-                                                     merchantAuthToken: MERCHANTAUTHTOKEN)
+                                                           bankBaseUrl: DEMO_BANKAPIBASEURL,
+                                                       exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                                       merchantBaseUrl: DEMO_MERCHANTBASEURL,
+                                                     merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
             let response = try await sendRequest(request, ASYNCDELAY)
             symLog?.log("received: \(response)")
         } catch {
