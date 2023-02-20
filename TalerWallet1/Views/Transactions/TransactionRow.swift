@@ -36,13 +36,16 @@ struct TransactionRow: View {
     var transaction : Transaction
 
     var body: some View {
-        let amount = transaction.amountEffective
-        let withdraw: Bool = transaction.type == "withdrawal"
-        let payment: Bool = transaction.type == "payment"
-        let refund: Bool = transaction.type == "refund"
+        let common = transaction.common()
+        let details = transaction.detailsToShow()
+        let keys = details.keys
+        let amount = common.amountEffective
+        let withdraw: Bool = common.type == WITHDRAWAL
+        let payment: Bool = common.type == PAYMENT
+        let refund: Bool = common.type == REFUND
         let incoming = withdraw || refund
-        let counterparty = transaction.exchangeBaseUrl
-        let dateString = TalerDater.dateString(from: transaction.timestamp, relative: true)
+//        let counterparty = transaction.exchangeBaseUrl
+        let dateString = TalerDater.dateString(from: common.timestamp, relative: true)
 
         HStack {
             Image(systemName: incoming ? "text.badge.plus" : "text.badge.minus")
@@ -50,8 +53,8 @@ struct TransactionRow: View {
                 .padding(.trailing)
                 .font(.largeTitle)
 
-            if withdraw {
-                if let baseURL = counterparty {
+            if keys.contains(EXCHANGEBASEURL) {
+                if let baseURL = details[EXCHANGEBASEURL] {
                     TransactionRowCenter(centerTop: baseURL.trimURL(), centerBottom: dateString)
                 }
             } else if payment {
@@ -73,7 +76,8 @@ struct TransactionRow: View {
 
 #if DEBUG
 struct TransactionRow_Previews: PreviewProvider {
-    static var transaction = Transaction(id:"some transActionID", time: Timestamp(from: 1_666_000_000_000))
+    static var transaction = Transaction(id: "some transActionID",
+                                       time: Timestamp(from: 1_666_000_000_000))
     static var previews: some View {
         TransactionRow(transaction: transaction)
     }

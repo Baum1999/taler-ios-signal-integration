@@ -20,10 +20,11 @@ struct TransactionDetail: View {
     var transaction : Transaction
 
     var body: some View {
-        let raw = transaction.amountRaw
-        let effective = transaction.amountEffective
+        let common = transaction.common()
+        let raw = common.amountRaw
+        let effective = common.amountEffective
         let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-        let dateString = TalerDater.dateString(from: transaction.timestamp)
+        let dateString = TalerDater.dateString(from: common.timestamp)
 
         VStack() {
             Spacer()
@@ -40,20 +41,20 @@ struct TransactionDetail: View {
             AmountView(title: "Obtained coins:",
                        value: effective.readableDescription, color: Color("Incoming"))
                 .padding(.bottom)
-            if let baseURL = transaction.exchangeBaseUrl {
-                VStack {
-                    Text("From exchange:")
-                        .font(.title3)
-                    Text("\(baseURL.trimURL())")
-                        .font(.title)
-                        .fontWeight(.medium)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-            }
+//            if let baseURL = transaction.exchangeBaseUrl {
+//                VStack {
+//                    Text("From exchange:")
+//                        .font(.title3)
+//                    Text("\(baseURL.trimURL())")
+//                        .font(.title)
+//                        .fontWeight(.medium)
+//                }
+//                .frame(maxWidth: .infinity, alignment: .center)
+//            }
             Spacer()
             Button(role: .destructive, action: {
                 // TODO: delete from wallet-core
-                print("Should delete \(transaction.transactionId)")
+                print("Should delete \(common.transactionId)")
             }, label: {
                 HStack {
                     Text("Delete from list" + "        ")

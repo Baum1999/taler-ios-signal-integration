@@ -53,7 +53,8 @@ extension TransactionsListView {
 
         var body: some View {
             let transactions = viewModel.transactions!
-            List(transactions, id: \.transactionId) { transaction in
+            List(transactions) { transaction in
+                let common = transaction.common()
                 NavigationLink {
                     TransactionDetail(transaction: transaction)
                 } label: {
@@ -61,7 +62,7 @@ extension TransactionsListView {
                 }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         Button {
-                            symLog?.log("bookmarked \(transaction.transactionId)")
+                            symLog?.log("bookmarked \(common.transactionId)")
                             // TODO: Bookmark
                         } label: {
                             Label("Bookmark", systemImage: "bookmark")
@@ -69,7 +70,7 @@ extension TransactionsListView {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
-                            symLog?.log("deleted \(transaction.transactionId)")
+                            symLog?.log("deleted \(common.transactionId)")
                             // TODO: delete from Model. SwiftUI deletes this row from view already :-)
                         } label: {
                             Label("Delete", systemImage: "trash")
