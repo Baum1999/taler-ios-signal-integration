@@ -21,26 +21,32 @@ struct TransactionDetail: View {
 
     var body: some View {
         let common = transaction.common()
-        let raw = common.amountRaw
-        let effective = common.amountEffective
-        let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
+        let details = transaction.detailsToShow()
         let dateString = TalerDater.dateString(from: common.timestamp)
 
         VStack() {
             Spacer()
-            Text("\(dateString)")
+            Text("\(common.type)")      // TODO: translation
                 .font(.title)
                 .fontWeight(.medium)
                 .padding(.bottom)
-            AmountView(title: "Chosen amount to withdraw:",
-                       value:  raw.readableDescription, color: Color(UIColor.label))
-                .padding(.bottom)
-            AmountView(title: "Exchange fee:",
-                       value: fee.readableDescription, color: Color("Outgoing"))
-                .padding(.bottom)
-            AmountView(title: "Obtained coins:",
-                       value: effective.readableDescription, color: Color("Incoming"))
-                .padding(.bottom)
+            Text("\(dateString)")
+                .font(.title)
+                .fontWeight(.medium)
+                .padding(.vertical)
+            switch transaction {
+                case .withdrawal(let withdrawalTransaction):
+                    threeAmounts(common: common, topTitle: "Chosen amount to withdraw:", bottomTitle: "Obtained coins:", incoming: true)
+                case .payment(let paymentTransaction):
+                    threeAmounts(common: common, topTitle: "Sum to be paid:", bottomTitle: "Paid coins:", incoming: false)
+                case .refund(let refundTransaction):
+                    threeAmounts(common: common, topTitle: "Refunded amount:", bottomTitle: "Obtained coins:", incoming: true)
+                case .tip(let tipTransaction):
+                    threeAmounts(common: common, topTitle: "Tip to be paid:", bottomTitle: "Paid coins:", incoming: false)
+                case .refresh(let refreshTransaction):
+                    threeAmounts(common: common, topTitle: "Refreshed amount:", bottomTitle: "Paid coins:", incoming: false)
+            }
+
 //            if let baseURL = transaction.exchangeBaseUrl {
 //                VStack {
 //                    Text("From exchange:")
@@ -70,11 +76,47 @@ struct TransactionDetail: View {
     }
 }
 
+extension TransactionDetail {
+    struct threeAmounts: View {
+        var common: TransactionCommon
+        var topTitle: String
+        var bottomTitle: String
+        var incoming: Bool
+
+        var body: some View {
+            let raw = common.amountRaw
+            let effective = common.amountEffective
+            let fee = common.fee()
+            let labelColor = Color(UIColor.label)
+            let outColor = Color("Outgoing")
+            let inColor = Color("Incoming")
+
+            AmountView(title: topTitle,
+                       value:  raw.readableDescription, color: labelColor)
+            .padding(.bottom)
+            AmountView(title: "Exchange fee:",
+                       value: fee.readableDescription, color: fee.isZero ? labelColor : outColor)
+            .padding(.bottom)
+            AmountView(title: bottomTitle,
+                       value: effective.readableDescription, color: incoming ? inColor : outColor)
+            .padding(.bottom)
+        }
+    }
+}
+
 #if DEBUG
 struct TransactionDetail_Previews: PreviewProvider {
-    static var transaction = Transaction(id:"some transActionID", time: Timestamp(from: 1_666_000_000_000))
+    static var withdrawal = Transaction(incoming: true,
+                                        id: "some withdrawal ID",
+                                        time: Timestamp(from: 1_666_000_000_000))
+    static var payment = Transaction(incoming: false,
+                                     id: "some payment ID",
+                                     time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
-        TransactionDetail(transaction: transaction)
+        Group {
+            TransactionDetail(transaction: withdrawal)
+            TransactionDetail(transaction: payment)
+        }
     }
 }
 #endif

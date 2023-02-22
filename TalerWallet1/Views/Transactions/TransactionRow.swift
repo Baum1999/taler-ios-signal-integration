@@ -76,10 +76,17 @@ struct TransactionRow: View {
 
 #if DEBUG
 struct TransactionRow_Previews: PreviewProvider {
-    static var transaction = Transaction(id: "some transActionID",
-                                       time: Timestamp(from: 1_666_000_000_000))
+    static var withdrawal = Transaction(incoming: true,
+                                              id: "some withdrawal ID",
+                                            time: Timestamp(from: 1_666_000_000_000))
+    static var payment = Transaction(incoming: false,
+                                        id: "some payment ID",
+                                        time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
-        TransactionRow(transaction: transaction)
+        VStack {
+            TransactionRow(transaction: withdrawal)
+            TransactionRow(transaction: payment)
+        }
     }
 }
 #endif

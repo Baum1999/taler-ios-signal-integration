@@ -35,6 +35,14 @@ struct TransactionCommon: Decodable {
     var extendedStatus: String      // TODO: enum with some fixed values?
     var pending: Bool
     var frozen: Bool
+
+    func fee() -> Amount {
+        do {
+            return try Amount.diff(amountRaw, amountEffective)
+        } catch {
+            return Amount(currency: amountRaw.currencyStr, integer: 0, fraction: 0)
+        }
+    }
 }
 
 struct WithdrawalDetails: Decodable {
@@ -197,18 +205,31 @@ enum Transaction: Decodable, Hashable, Identifiable {
 
 #if DEBUG
 extension Transaction {             // for PreViews
-    init(id: String, time: Timestamp) {
-        let common = TransactionCommon(type: WITHDRAWAL,
-                            amountEffective: try! Amount(fromString: "Taler:4.8"),
+    init(incoming: Bool, id: String, time: Timestamp) {
+        let effective = incoming ? "Taler:4.8" : "Taler:5.2"
+        let common = TransactionCommon(type: incoming ? WITHDRAWAL : PAYMENT,
+                            amountEffective: try! Amount(fromString: effective),
                                   amountRaw: try! Amount(fromString: "Taler:5"),
                               transactionId: id, timestamp: time,
                              extendedStatus: "done", pending: false, frozen: false)
-        let withdrawalDetails = WithdrawalDetails(type: WithdrawalDetails.WithdrawalType.bankIntegrated,
-                                            reservePub: "Public Key of the Exchange",
-                                             confirmed: true)
-        let details = WithdrawalTransactionDetails(exchangeBaseUrl: "Exchange.Demo.Taler.net",
-                                                   withdrawalDetails: withdrawalDetails)
-        self = .withdrawal(WithdrawalTransaction(common: common, details: details))
+        if incoming {
+            let withdrawalDetails = WithdrawalDetails(type: WithdrawalDetails.WithdrawalType.bankIntegrated,
+                                                      reservePub: "Public Key of the Exchange",
+                                                      confirmed: true)
+            let wDetails = WithdrawalTransactionDetails(exchangeBaseUrl: "Exchange.Demo.Taler.net",
+                                                        withdrawalDetails: withdrawalDetails)
+            self = .withdrawal(WithdrawalTransaction(common: common, details: wDetails))
+        } else {
+            let merchant = Merchant(name: "some random shop")
+            let info = OrderShortInfo(orderId: "some order ID",
+                                      merchant: merchant, summary: "some product summary", products: [])
+            let pDetails = PaymentTransactionDetails(proposalId: "some proposal ID",
+                                                     status: "paid",
+                                                     totalRefundRaw: try! Amount(fromString: "Taler:3.2"),
+                                                     totalRefundEffective: try! Amount(fromString: "Taler:3"),
+                                                     info: info)
+            self = .payment(PaymentTransaction(common: common, details: pDetails))
+        }
     }
 }
 #endif
