@@ -8,7 +8,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>net.taler.talerwallet</string>
+			<string>com.taler-systems.talerwallet</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>taler</string>
@@ -20,5 +20,12 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
 </dict>
 </plist>
