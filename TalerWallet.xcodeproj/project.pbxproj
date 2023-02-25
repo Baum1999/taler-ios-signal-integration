@@ -98,6 +98,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4E3AE7EF29A7E8F40070BEC4 /* TalerWalletT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TalerWalletT.entitlements; sourceTree = "<group>"; };
 		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletTests.swift; sourceTree = "<group>"; };
 		4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
@@ -386,6 +387,7 @@
 		D14AFD1424D232B300C51073 = {
 			isa = PBXGroup;
 			children = (
+				4E3AE7EF29A7E8F40070BEC4 /* TalerWalletT.entitlements */,
 				4EB094EE298979840043A8A1 /* TalerWallet1 */,
 				4EB094E129896FED0043A8A1 /* Info.plist */,
 				AB710490285995B6008B04F0 /* taler-swift */,
@@ -774,6 +776,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TalerWalletT.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -809,6 +812,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TalerWalletT.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
