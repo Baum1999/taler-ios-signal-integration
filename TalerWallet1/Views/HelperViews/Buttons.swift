@@ -37,6 +37,28 @@ struct PlusButton : View  {
     }
 }
 
+struct ArrowUpButton : View  {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "arrow.up.to.line")
+        }
+        .font(.title3)
+    }
+}
+
+struct ArrowDownButton : View  {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "arrow.down.to.line")
+        }
+        .font(.title3)
+    }
+}
+
 struct ReloadButton : View  {
     let disabled: Bool
     let action: () -> Void

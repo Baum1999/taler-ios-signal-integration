@@ -28,8 +28,10 @@ struct TransactionsListView: View {
             if viewModel.transactions == nil {
                 symLog { LoadingView(backButtonHidden: false) }
             } else {
+                let count = viewModel.transactions!.count
+                let title: String = "\(count) \(navTitle)"
                 symLog { Content(symLog: symLog, viewModel: viewModel, reloadAction: reloadAction)
-                        .navigationTitle(navTitle)
+                        .navigationTitle(title)
                 }
             }
         }.task {
@@ -51,33 +53,46 @@ extension TransactionsListView {
 
         var reloadAction: () async throws -> ()
 
+        @State private var upAction: () -> Void = {}
+        @State private var downAction: () -> Void = {}
+
         var body: some View {
             let transactions = viewModel.transactions!
-            List(transactions) { transaction in
-                let common = transaction.common()
-                NavigationLink {
-                    TransactionDetail(transaction: transaction)
-                } label: {
-                    TransactionRow(transaction: transaction)
-                }
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button {
-                            symLog?.log("bookmarked \(common.transactionId)")
-                            // TODO: Bookmark
+
+            ScrollViewReader { scrollView in
+                List {
+                    ForEach (transactions.indices) { index in
+                        let transaction = transactions[index]
+                        let common = transaction.common()
+                        NavigationLink {
+                            TransactionDetail(transaction: transaction)
                         } label: {
-                            Label("Bookmark", systemImage: "bookmark")
-                        }.tint(.indigo)
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            symLog?.log("deleted \(common.transactionId)")
-                            // TODO: delete from Model. SwiftUI deletes this row from view already :-)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                            TransactionRow(transaction: transaction)
+                        }
+                        .id(index)
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            Button {
+                                symLog?.log("bookmarked \(common.transactionId)")
+                                // TODO: Bookmark
+                            } label: {
+                                Label("Bookmark", systemImage: "bookmark")
+                            }.tint(.indigo)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                symLog?.log("deleted \(common.transactionId)")
+                                // TODO: delete from Model. SwiftUI deletes this row from view already :-)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
                     }
-            }
-                .navigationBarTitleDisplayMode(.large)      // .inline
+                    .onAppear {
+                        upAction = { withAnimation { scrollView.scrollTo(0) }}
+                        downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
+                        downAction()
+                    }
+                }
                 .refreshable {
                     do {
                         symLog?.log("refreshing")
@@ -87,6 +102,12 @@ extension TransactionsListView {
                         symLog?.log(error.localizedDescription)
                     }
                 }
+            }
+            .navigationBarItems(trailing: HStack {
+                ArrowUpButton(action: upAction)
+                ArrowDownButton(action: downAction)
+            })
+            .navigationBarTitleDisplayMode(.large)      // .inline
         }
     }
 }

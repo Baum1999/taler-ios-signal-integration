@@ -21,7 +21,6 @@ struct TransactionDetail: View {
 
     var body: some View {
         let common = transaction.common()
-        let details = transaction.detailsToShow()
         let dateString = TalerDater.dateString(from: common.timestamp)
 
         VStack() {
@@ -30,14 +29,24 @@ struct TransactionDetail: View {
                 .font(.title)
                 .fontWeight(.medium)
                 .padding(.bottom)
+            Spacer()
             Text("\(dateString)")
-                .font(.title)
-                .fontWeight(.medium)
+                .font(.title2)
                 .padding(.vertical)
             switch transaction {
                 case .withdrawal(let withdrawalTransaction):
+                    details(transaction: transaction)
                     threeAmounts(common: common, topTitle: "Chosen amount to withdraw:", bottomTitle: "Obtained coins:", incoming: true)
                 case .payment(let paymentTransaction):
+                    let details = paymentTransaction.details
+                    let info = details.info
+                    Text("Status: \(details.status)")
+                        .font(.title2)
+                        .padding(.bottom)
+                    Text(info.summary)
+                        .font(.title)
+                        .lineLimit(4)
+                        .padding(.bottom)
                     threeAmounts(common: common, topTitle: "Sum to be paid:", bottomTitle: "Paid coins:", incoming: false)
                 case .refund(let refundTransaction):
                     threeAmounts(common: common, topTitle: "Refunded amount:", bottomTitle: "Obtained coins:", incoming: true)
@@ -46,17 +55,6 @@ struct TransactionDetail: View {
                 case .refresh(let refreshTransaction):
                     threeAmounts(common: common, topTitle: "Refreshed amount:", bottomTitle: "Paid coins:", incoming: false)
             }
-
-//            if let baseURL = transaction.exchangeBaseUrl {
-//                VStack {
-//                    Text("From exchange:")
-//                        .font(.title3)
-//                    Text("\(baseURL.trimURL())")
-//                        .font(.title)
-//                        .fontWeight(.medium)
-//                }
-//                .frame(maxWidth: .infinity, alignment: .center)
-//            }
             Spacer()
             Button(role: .destructive, action: {
                 // TODO: delete from wallet-core
@@ -71,7 +69,6 @@ struct TransactionDetail: View {
             })
                 .buttonStyle(.bordered)
                 .controlSize(.large)
-//            Spacer()
         }
     }
 }
@@ -92,14 +89,31 @@ extension TransactionDetail {
             let inColor = Color("Incoming")
 
             AmountView(title: topTitle,
-                       value:  raw.readableDescription, color: labelColor)
-            .padding(.bottom)
+                       value: raw.readableDescription,
+                       color: labelColor)
+                .padding(.bottom)
             AmountView(title: "Exchange fee:",
-                       value: fee.readableDescription, color: fee.isZero ? labelColor : outColor)
-            .padding(.bottom)
+                       value: fee.readableDescription,
+                       color: fee.isZero ? labelColor : outColor)
+                .padding(.bottom)
             AmountView(title: bottomTitle,
-                       value: effective.readableDescription, color: incoming ? inColor : outColor)
-            .padding(.bottom)
+                       value: effective.readableDescription,
+                       color: incoming ? inColor : outColor)
+                .padding(.bottom)
+        }
+    }
+    struct details: View {
+        var transaction : Transaction
+        var body: some View {
+            let details = transaction.detailsToShow()
+            let keys = details.keys
+            if keys.contains(EXCHANGEBASEURL) {
+                if let baseURL = details[EXCHANGEBASEURL] {
+                    Text("from \(baseURL.trimURL())")
+                        .font(.title2)
+                        .padding(.bottom)
+                }
+            }
         }
     }
 }
