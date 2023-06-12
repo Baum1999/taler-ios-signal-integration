@@ -100,7 +100,8 @@ struct ThreeAmounts_Previews: PreviewProvider {
             List {
                 ThreeAmounts(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==1)
                     .safeAreaInset(edge: .bottom) {
-                        ProminentButton(title: "Accept", action: {})
+                        Button(String(localized: "Accept"), action: {})
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
                     }
             }

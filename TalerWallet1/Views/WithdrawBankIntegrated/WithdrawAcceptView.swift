@@ -47,7 +47,8 @@ struct WithdrawAcceptView: View {
                                      large: false, pending: false, incoming: true,
                                      baseURL: baseURL)
                     .safeAreaInset(edge: .bottom) {
-                        ProminentButton(title: String(localized: "Accept"), action: acceptAction)
+                        Button(String(localized: "Accept"), action: acceptAction)
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
                     }
                 case .waitingForWithdrAck, .receivedWithdrAck:

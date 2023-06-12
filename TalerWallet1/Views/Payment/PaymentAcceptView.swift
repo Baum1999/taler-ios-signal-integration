@@ -58,7 +58,8 @@ struct PaymentAcceptView: View {
                              baseURL: detailsForAmount.contractTerms.exchanges.first?.url)
                 // TODO: payment: popup with all possible exchanges, check fees
             .safeAreaInset(edge: .bottom) {
-                ProminentButton(title: "Accept", action: acceptAction)
+                Button(String(localized: "Accept"), action: acceptAction)
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
             }
         }

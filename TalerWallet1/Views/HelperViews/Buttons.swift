@@ -93,59 +93,6 @@ struct ReloadButton : View  {
     }
 }
 
-struct BigBlueButton: View {
-    let title: String
-    var font: Font?
-    let disabled: Bool
-    let action: () -> Void
-    var body: some View {
-        Button(action: action) {
-            let colors: [Color] = disabled ? [Color.gray, Color.blue]
-                                           : [Color.red, Color.blue]
-            let back = LinearGradient(gradient: Gradient(colors: colors),
-                                      startPoint: .leading, endPoint: .trailing)
-            Text(title)
-                .frame(minWidth: 50, maxWidth: 500)
-                .padding()
-                .foregroundColor(.white)
-                .background(disabled ? .gray : .blue)   // back
-                .cornerRadius(20)
-                .font(font ?? .title)
-        }
-            .disabled(disabled)
-    }
-}
-struct BorderedButton: View {
-    let title: String
-    var font: Font?
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .frame(minWidth: 50, maxWidth: 500)
-                .padding()
-                .font(font ?? .title)
-        }
-        .buttonStyle(.bordered)
-    }
-}
-struct ProminentButton: View {
-    let title: String
-    var font: Font?
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .frame(minWidth: 50, maxWidth: 500)
-                .padding()
-                .font(font ?? .title)
-        }
-        .buttonStyle(.borderedProminent)
-    }
-}
-
 struct TalerButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled: Bool
     func disabled() -> Bool { !isEnabled }
@@ -233,19 +180,6 @@ struct TalerButtonStyle: ButtonStyle {
 }
 
 
-
-struct GrowingButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(.blue)
-            .foregroundColor(.white)
-            .clipShape(Capsule())
-            .scaleEffect(configuration.isPressed ? 1.2 : 1)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
-    }
-}
-
 struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
@@ -256,15 +190,18 @@ struct Buttons_Previews: PreviewProvider {
             PlusButton() {}
                 .padding()
             HStack {
-                ReloadButton(disabled: false) {}
+                ReloadButton(disabled: false) {
+                    AudioServicesPlaySystemSound(1000)
+                }
                     .padding()
                 ReloadButton(disabled: true) {}
                     .padding()
             }
-            BigBlueButton(title: "DisabledButton", disabled: true) { AudioServicesPlaySystemSound(1015) }
-                .padding()
-            BigBlueButton(title: "BigBlueButton", disabled: false) { AudioServicesPlaySystemSound(1000) }
-                .padding()
+            Button(String(localized: "Accept"), action: {
+                AudioServicesPlaySystemSound(1015)
+            })
+                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .padding(.horizontal)
         }
     }
 }
@@ -285,7 +222,7 @@ struct ContentView: View {
                 animate = false
                 // Because .opacity is animated, we need to switch it
                 // back so the button shows.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     animate = true
                 }
             }

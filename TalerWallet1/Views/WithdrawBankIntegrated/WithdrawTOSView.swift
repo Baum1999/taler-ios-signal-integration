@@ -77,7 +77,8 @@ extension WithdrawTOSView {
                 List (components, id: \.self) { term in
                     Text(term)
                 }.safeAreaInset(edge: .bottom) {
-                    ProminentButton(title: String(localized: "Accept"), action: acceptAction)
+                    Button(String(localized: "Accept"), action: acceptAction)
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }
                 .listStyle(myListStyle.style)
