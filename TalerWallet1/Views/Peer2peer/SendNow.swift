@@ -49,7 +49,7 @@ struct SendNow: View {
                         .padding(.vertical, 20)
 
                     Button("Done") {
-                        dismissTop()
+                        ViewState.shared.popToRootView()
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.vertical)
