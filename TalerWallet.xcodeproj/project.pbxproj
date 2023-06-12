@@ -26,6 +26,7 @@
 		4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320422A14F6EA00A87B0E /* WalletColors.swift */; };
 		4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
 		4E9320472A164BC700A87B0E /* ReceivePurpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320462A164BC700A87B0E /* ReceivePurpose.swift */; };
+		4E9796902A3765ED006F73BC /* AgePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E97968F2A3765ED006F73BC /* AgePicker.swift */; };
 		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
 		4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */; };
 		4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */; };
@@ -151,6 +152,7 @@
 		4E9320422A14F6EA00A87B0E /* WalletColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletColors.swift; sourceTree = "<group>"; };
 		4E9320442A1645B600A87B0E /* RequestPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPayment.swift; sourceTree = "<group>"; };
 		4E9320462A164BC700A87B0E /* ReceivePurpose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceivePurpose.swift; sourceTree = "<group>"; };
+		4E97968F2A3765ED006F73BC /* AgePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgePicker.swift; sourceTree = "<group>"; };
 		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 		4EB095052989CB7C0043A8A1 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				4E97968F2A3765ED006F73BC /* AgePicker.swift */,
 				4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */,
 				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
@@ -688,6 +691,7 @@
 			files = (
 				4ECB62822A0BB01D004ABBB7 /* SelectDays.swift in Sources */,
 				4EB095512989CBFE0043A8A1 /* ExchangeModel.swift in Sources */,
+				4E9796902A3765ED006F73BC /* AgePicker.swift in Sources */,
 				4EB095032989C9BC0043A8A1 /* Controller.swift in Sources */,
 				4EB095682989CBFE0043A8A1 /* MainView.swift in Sources */,
 				4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */,
@@ -923,7 +927,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "GNU Taler.entitlements";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = "";
@@ -948,7 +952,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-1";
 				PRODUCT_NAME = "GNU Taler";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = iOS_Distribution_230606;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Dev230612a;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

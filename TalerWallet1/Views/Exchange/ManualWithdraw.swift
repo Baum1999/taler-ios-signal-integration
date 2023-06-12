@@ -41,6 +41,7 @@ struct ManualWithdraw: View {
 #endif
         let currency = exchange.currency!
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency) // becomeFirstResponder
+        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
         ScrollView {
             Text("from \(exchange.exchangeBaseUrl.trimURL())")
@@ -87,21 +88,8 @@ struct ManualWithdraw: View {
                         .foregroundColor(quiteSome ? .red : .primary)
                     } // warnings
 
-                    if ageMenuList.count > 1 {
-                        HStack {
-                            Text("If this wallet belongs to a child or teenager, the generated coins should be age-restricted:")
-                                .multilineTextAlignment(.leading)
-                                .font(.footnote)
-                            Spacer()
-                        }.padding(.top)
-                        Picker("Select age", selection: $selectedAge) {
-                            ForEach($ageMenuList, id: \.self) { item in
-                                let index = item.wrappedValue
-                                Text((index == 0) ? "unlimited"
-                                                  : "\(index) years").tag(index)
-                            }
-                        }
-                    }
+                    agePicker
+
                     if let tosAcc = manualWithdrawalDetails?.tosAccepted {
                         if tosAcc {
                             let restrictAge: Int? = (selectedAge == 0) ? nil
@@ -141,22 +129,7 @@ let _ = print(selectedAge, restrictAge)
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
                 manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
-                if let ageRestrictions = manualWithdrawalDetails?.ageRestrictionOptions {
-                    var ages = ageRestrictions
-                    let nonzero = ages.count > 0        // need at least 1 value from exchange which is not 0
-                    if nonzero {
-                        if ages[0] != 0 {               // ensure that the first age is "0"
-                            ages.insert(0, at: 0)       // if not, insert "0" at position 0
-                        }
-                        if selectedAge >= ages.count {  // check for out of bounds
-                            selectedAge = 0
-                        }
-                    } else {
-                        selectedAge = 0             // first ensure that selected is not out of bounds
-                    }
-print(ages)
-                    ageMenuList = ages              // set State (will update view)
-                }
+                agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 manualWithdrawalDetails = nil
