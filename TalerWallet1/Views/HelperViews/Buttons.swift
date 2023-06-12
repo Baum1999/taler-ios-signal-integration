@@ -1,90 +1,248 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import SwiftUI
+import Foundation
+import AVFoundation
+
+
+
+
+extension ShapeStyle where Self == Color {
+    static var random: Color {
+        Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1)
+        )
+    }
+}
 
 struct HamburgerButton : View  {
+    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "line.3.horizontal")
         }
-            .font(.title)
+            .font(font ?? .title)
+    }
+}
+
+struct QRButton : View  {
+    var font: Font?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "qrcode.viewfinder")
+        }
+        .font(font ?? .title)
     }
 }
 
 struct PlusButton : View  {
+    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "plus")
         }
-            .font(.title)
+            .font(font ?? .title)
     }
 }
 
 struct ArrowUpButton : View  {
+    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.up.to.line")
         }
-        .font(.title3)
+            .font(font ?? .title3)
     }
 }
 
 struct ArrowDownButton : View  {
+    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.down.to.line")
         }
-        .font(.title3)
+            .font(font ?? .title3)
     }
 }
 
 struct ReloadButton : View  {
     let disabled: Bool
+    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.clockwise")
         }
-            .font(.title)
+            .font(font ?? .title)
             .disabled(disabled)
     }
 }
 
-struct AwesomeButton: View {
+struct BigBlueButton: View {
     let title: String
+    var font: Font?
+    let disabled: Bool
     let action: () -> Void
     var body: some View {
         Button(action: action) {
+            let colors: [Color] = disabled ? [Color.gray, Color.blue]
+                                           : [Color.red, Color.blue]
+            let back = LinearGradient(gradient: Gradient(colors: colors),
+                                      startPoint: .leading, endPoint: .trailing)
             Text(title)
-                .frame(minWidth: 0, maxWidth: 300)
+                .frame(minWidth: 50, maxWidth: 500)
                 .padding()
                 .foregroundColor(.white)
-                .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.blue]), startPoint: .leading, endPoint: .trailing))
-                .cornerRadius(40)
-                .font(.title)
+                .background(disabled ? .gray : .blue)   // back
+                .cornerRadius(20)
+                .font(font ?? .title)
         }
+            .disabled(disabled)
+    }
+}
+struct BorderedButton: View {
+    let title: String
+    var font: Font?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .frame(minWidth: 50, maxWidth: 500)
+                .padding()
+                .font(font ?? .title)
+        }
+        .buttonStyle(.bordered)
+    }
+}
+struct ProminentButton: View {
+    let title: String
+    var font: Font?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .frame(minWidth: 50, maxWidth: 500)
+                .padding()
+                .font(font ?? .title)
+        }
+        .buttonStyle(.borderedProminent)
+    }
+}
+
+struct TalerButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    func disabled() -> Bool { !isEnabled }
+
+    enum TalerButtonStyleType {
+        case plain
+        case bordered
+        case prominent
+    }
+    var type: TalerButtonStyleType = .plain
+    var dimmed: Bool = false
+    var narrow: Bool = false
+    var aligned: TextAlignment = .center
+
+    public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
+            MyBigButton(type: type,
+                   foreColor: foreColor(type: type, pressed: configuration.isPressed),
+                   backColor: backColor(type: type, pressed: configuration.isPressed),
+                      dimmed: dimmed,
+               configuration: configuration,
+                    disabled: disabled(),
+                      narrow: narrow,
+                     aligned: aligned)
+    }
+
+    func foreColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
+        return if type == .plain {
+            WalletColors().fieldForeground
+        } else {
+            WalletColors().buttonForeColor(pressed: pressed,
+                                          disabled: disabled(),
+                                         prominent: type == .prominent)
+        }
+    }
+    func backColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
+        return if type == .plain {
+            Color.clear
+        } else {
+            WalletColors().buttonBackColor(pressed: pressed,
+                                           disabled: disabled(),
+                                           prominent: type == .prominent)
+        }
+    }
+    struct BackgroundView: View {
+        let color: Color
+        let dimmed: Bool
+        var body: some View {
+            RoundedRectangle(
+                cornerRadius: 15,
+                style: .continuous
+            )
+            .fill(color)
+            .opacity(dimmed ? 0.6 : 1.0)
+        }
+    }
+
+    struct MyBigButton: View {
+        var type: TalerButtonStyleType
+        let foreColor: Color
+        let backColor: Color
+        let dimmed: Bool
+        let configuration: ButtonStyle.Configuration
+        let disabled: Bool
+        let narrow: Bool
+        let aligned: TextAlignment
+
+        var body: some View {
+            let aligned2: Alignment = (aligned == .center) ? Alignment.center
+                                    : (aligned == .leading) ? Alignment.leading
+                                    : Alignment.trailing
+            configuration.label
+                .multilineTextAlignment(aligned)
+                .font(.title2)
+                .frame(minWidth: 0, maxWidth: narrow ? nil : .infinity, alignment: aligned2)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 6)
+                .foregroundColor(foreColor)
+                .background(BackgroundView(color: backColor, dimmed: dimmed))
+                .contentShape(Rectangle())      // make sure the button can be pressed even if backgroundColor == clear
+                .scaleEffect(configuration.isPressed ? 0.95 : 1)
+                .animation(.spring(response: 0.1), value: configuration.isPressed)
+                .disabled(disabled)
+        }
+    }
+}
+
+
+
+struct GrowingButton: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(.blue)
+            .foregroundColor(.white)
+            .clipShape(Capsule())
+            .scaleEffect(configuration.isPressed ? 1.2 : 1)
+            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }
 
@@ -92,6 +250,8 @@ struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             HamburgerButton() {}
+                .padding()
+            QRButton() {}
                 .padding()
             PlusButton() {}
                 .padding()
@@ -101,8 +261,46 @@ struct Buttons_Previews: PreviewProvider {
                 ReloadButton(disabled: true) {}
                     .padding()
             }
-            AwesomeButton(title: "AwesomeButton") {}
+            BigBlueButton(title: "DisabledButton", disabled: true) { AudioServicesPlaySystemSound(1015) }
+                .padding()
+            BigBlueButton(title: "BigBlueButton", disabled: false) { AudioServicesPlaySystemSound(1000) }
                 .padding()
         }
     }
 }
+
+#if DEBUG
+struct ContentView: View {
+    @State var isOn = false
+    //The better route is to have a separate variable to control the animations
+    // This prevents unpleasant side-effects.
+    @State private var animate = false
+
+    var body: some View {
+        VStack {
+            Text("I don't change.")
+                .padding()
+            Button("Press me, I do change") {
+                isOn.toggle()
+                animate = false
+                // Because .opacity is animated, we need to switch it
+                // back so the button shows.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    animate = true
+                }
+            }
+            // In this case I chose to animate .opacity
+            .opacity(animate ? 1 : 0)
+            .animation(.easeIn, value: animate)
+            .frame(width: 300, height: 400)
+            // If you want the button to animate when the view appears, you need to change the value
+            .onAppear { animate = true }
+        }
+    }
+}
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+#endif

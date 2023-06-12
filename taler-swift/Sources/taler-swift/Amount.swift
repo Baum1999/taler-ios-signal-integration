@@ -1,17 +1,6 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
 
@@ -169,7 +158,12 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
         self.integer = integer
         self.fraction = fraction
     }
-    
+    public init(currency: String, value: UInt64) {
+        self.currency = currency
+        self.integer = value / 100          // TODO: fractional digits can be 0, 2 or 3
+        self.fraction = UInt32(value - (self.integer * 100))
+    }
+
     /// Initializes an amount from a decoder.
     /// - Parameters:
     ///   - from: The decoder to extract the amount from.
@@ -282,8 +276,10 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
         }
         var remainder = result.integer % UInt64(divisor)
         result.integer = result.integer / UInt64(divisor)
-        remainder = (remainder * UInt64(Amount.fractionalBase)) + UInt64(result.fraction)
-        result.fraction = UInt32(remainder) / divisor
+
+        let fractionalBase = UInt64(Amount.fractionalBase)
+        remainder = (remainder * fractionalBase) + UInt64(result.fraction)
+        result.fraction = UInt32(remainder / UInt64(divisor))
         try result.normalize()
         return result
     }
@@ -392,4 +388,19 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
     public static func zero(currency: String) -> Amount {
         return Amount(currency: currency, integer: 0, fraction: 0)
     }
+
+    public static func amountFromCents(_ currency: String, _ cents: UInt64) -> Amount {
+        let amount100 = Amount(currency: currency, integer: cents, fraction: 0)
+        do {
+            let amount = try amount100 / 100
+            return amount
+        } catch {       // shouldn't happen, but if it does then truncate
+            return Amount(currency: currency, integer: cents / 100, fraction: 0)
+        }
+    }
+}
+// MARK: -
+extension Amount: Identifiable {
+    // needed to be passed as value for .sheet
+    public var id: Amount {self}
 }

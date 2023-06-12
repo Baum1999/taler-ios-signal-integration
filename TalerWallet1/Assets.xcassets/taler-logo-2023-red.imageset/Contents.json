@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "taler-logo-2023-red.svg",
+      "idiom" : "universal"
+    },
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

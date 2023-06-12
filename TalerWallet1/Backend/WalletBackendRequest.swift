@@ -1,17 +1,6 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
 import AnyCodable
@@ -34,8 +23,37 @@ protocol WalletBackendFormattedRequest {
     func args() -> Args
 }
 // MARK: -
+/// The scope of a currency: either global or a dedicated exchange
+struct ScopeInfo: Codable, Hashable {
+    enum ScopeInfoType: String, Codable {
+        case global
+        case exchange
+    }
+    var type: ScopeInfoType
+    var exchangeBaseUrl: String?    // only for "exchange"
+    var currency: String
 
-
+    public static func == (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
+        if let lhsBaseURL = lhs.exchangeBaseUrl {
+            if let rhsBaseURL = rhs.exchangeBaseUrl {
+                if lhsBaseURL != rhsBaseURL { return false }    // different exchanges
+                                                                // else fall thru and check type & currency
+            } else { return false }                             // left but not right
+        } else if rhs.exchangeBaseUrl != nil {
+            return false                                        // right but not left
+        }
+        return lhs.type == rhs.type &&
+        lhs.currency == rhs.currency
+    }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+        if let baseURL = exchangeBaseUrl {
+            hasher.combine(baseURL)
+        }
+        hasher.combine(currency)
+    }
+}
+// MARK: -
 /// A billing or mailing location.
 struct Location: Codable {
     var country: String?
@@ -64,14 +82,15 @@ struct Tax: Codable {
 }
 
 /// A product being purchased from a merchant.
+/// https://docs.taler.net/core/api-merchant.html#the-contract-terms
 struct Product: Codable {
     var product_id: String?
     var description: String
-    // description_i18n?
-    var quantity: Int
-    var unit: String
+//    var description_i18n:   ?
+    var quantity: Int?
+    var unit: String?
     var price: Amount?
-    var image: String // URL to a product image
+    var image: String? // URL to a product image
     var taxes: [Tax]?
     var delivery_date: Timestamp?
 }
@@ -81,33 +100,14 @@ struct OrderShortInfo: Codable {
     var orderId: String
     var merchant: Merchant
     var summary: String
-    // summary_i18n?
+//    var summary_i18n:   ?
     var products: [Product]
     var fulfillmentUrl: String?
     var fulfillmentMessage: String?
-    // fulfillmentMessage_i18n?
+//    var fulfillmentMessage_i18n:    ?
+    var contractTermsHash: String?
 }
-
-
-/// A request to delete a wallet transaction by ID.
-struct WalletBackendDeleteTransactionRequest: WalletBackendFormattedRequest {
-    var transactionId: String
-    
-    struct Args: Encodable {
-        var transactionId: String
-    }
-    
-    struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "deleteTransaction"
-    }
-    
-    func args() -> Args {
-        return Args(transactionId: transactionId)
-    }
-}
-
+// MARK: -
 /// A request to process a refund.
 struct WalletBackendApplyRefundRequest: WalletBackendFormattedRequest {
     var talerRefundUri: String
@@ -151,55 +151,6 @@ struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
     
     func args() -> Args {
         return Args(exchangeBaseUrl: exchangeBaseUrl)
-    }
-}
-
-
-
-
-/// A request to accept a bank-integrated withdrawl.
-struct WalletBackendAcceptBankIntegratedWithdrawalRequest: WalletBackendFormattedRequest {
-    var talerWithdrawUri: String
-    var exchangeBaseUrl: String
-    
-    struct Args: Encodable {
-        var talerWithdrawUri: String
-        var exchangeBaseUrl: String
-    }
-    
-    struct Response: Decodable {
-        var bankConfirmationUrl: String?
-    }
-    
-    func operation() -> String {
-        return "acceptWithdrawal"
-    }
-    
-    func args() -> Args {
-        return Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl)
-    }
-}
-
-/// A request to accept a manual withdrawl.
-struct WalletBackendAcceptManualWithdrawalRequest: WalletBackendFormattedRequest {
-    var exchangeBaseUrl: String
-    var amount: Amount
-    
-    struct Args: Encodable {
-        var exchangeBaseUrl: String
-        var amount: Amount
-    }
-    
-    struct Response: Decodable {
-        var exchangePaytoUris: [String]
-    }
-    
-    func operation() -> String {
-        return "acceptManualWithdrawal"
-    }
-    
-    func args() -> Args {
-        return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
     }
 }
 
@@ -264,51 +215,40 @@ struct WalletBackendConfirmPayRequest: WalletBackendFormattedRequest {
     }
 }
 
-/// A request to prepare a tip.
-struct WalletBackendPrepareTipRequest: WalletBackendFormattedRequest {
-    var talerTipUri: String
-    
+// MARK: -
+/// The result from PrepareReward
+struct PrepareRewardResponse: Decodable {
+    var walletRewardId: String
+    var accepted: Bool
+    var rewardAmountRaw: Amount
+    var rewardAmountEffective: Amount
+    var exchangeBaseUrl: String
+    var expirationTimestamp: Timestamp
+}
+/// A request to prepare a reward.
+struct PrepareRewardRequest: WalletBackendFormattedRequest {
+    typealias Response = PrepareRewardResponse
+    func operation() -> String { return "prepareReward" }
+    func args() -> Args { return Args(talerRewardUri: talerRewardUri) }
+
+    var talerRewardUri: String
     struct Args: Encodable {
-        var talerTipUri: String
-    }
-    
-    struct Response: Decodable {
-        var walletTipId: String
-        var accepted: Bool
-        var tipAmountRaw: Amount
-        var tipAmountEffective: Amount
-        var exchangeBaseUrl: String
-        var expirationTimestamp: Timestamp
-    }
-    
-    func operation() -> String {
-        return "prepareTip"
-    }
-    
-    func args() -> Args {
-        return Args(talerTipUri: talerTipUri)
+        var talerRewardUri: String
     }
 }
-
-/// A request to accept a tip.
-struct WalletBackendAcceptTipRequest: WalletBackendFormattedRequest {
-    var walletTipId: String
-    
-    struct Args: Encodable {
-        var walletTipId: String
-    }
-    
+// MARK: -
+/// A request to accept a reward.
+struct AcceptRewardRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "acceptTip"
-    }
-    
-    func args() -> Args {
-        return Args(walletTipId: walletTipId)
+    func operation() -> String { return "acceptReward" }
+    func args() -> Args { return Args(walletRewardId: walletRewardId) }
+
+    var walletRewardId: String
+    struct Args: Encodable {
+        var walletRewardId: String
     }
 }
-
+// MARK: -
 /// A request to abort a failed payment.
 struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {
     var proposalId: String
@@ -327,8 +267,7 @@ struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {
         return Args(proposalId: proposalId)
     }
 }
-
-
+// MARK: -
 struct IntegrationTestArgs: Codable {
     var exchangeBaseUrl: String
     var bankBaseUrl: String

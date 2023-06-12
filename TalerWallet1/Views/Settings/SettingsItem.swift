@@ -1,19 +1,7 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
-
 import SwiftUI
 
 struct SettingsItem<Content: View>: View {
@@ -44,16 +32,21 @@ struct SettingsItem<Content: View>: View {
         }.padding([.bottom], 4)
     }
 }
-
+// MARK: -
 struct SettingsToggle: View {
     var name: String
     @Binding var value: Bool
     var description: String?
+    var action: () -> Void = {}
 
     var body: some View {
         VStack {
-            Toggle(name, isOn: $value.animation(.spring()))
+            Toggle(name, isOn: $value.animation())
                 .font(.title2)
+                .onChange(of: value) { value in
+                    action()
+                }
+
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -62,9 +55,8 @@ struct SettingsToggle: View {
         }.padding([.bottom], 4)
     }
 }
-
-
-
+// MARK: -
+#if DEBUG
 struct SettingsItemPreview : View {
     @State var developerMode: Bool = false
 
@@ -78,9 +70,7 @@ struct SettingsItemPreview : View {
 struct SettingsItem_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            NavigationLink { } label: {
-                SettingsItem (name: "Exchanges", description: "Manage list of exchanges known to this wallet") {}
-            }
+            SettingsItem (name: "Exchanges", description: "Manage list of exchanges known to this wallet") {}
             SettingsItemPreview()
             SettingsItem(name: "Save Logfile", description: "Help debugging wallet-core") {
                 Button("Save") {
@@ -91,3 +81,4 @@ struct SettingsItem_Previews: PreviewProvider {
         }
     }
 }
+#endif

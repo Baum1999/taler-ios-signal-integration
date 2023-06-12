@@ -1,17 +1,6 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
 
@@ -45,7 +34,7 @@ public enum Timestamp: Codable, Hashable {
             } else {
                 self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_ms))
             }
-        } catch {
+        } catch {       // rethrows or never
             let stringValue = try container.decode(String.self, forKey: .t_s)
             if stringValue == "never" {
                 self = Timestamp.never
@@ -78,6 +67,17 @@ extension Timestamp {
     public static func now() -> Timestamp {
         return Timestamp.milliseconds(Date().millisecondsSince1970)
     }
+
+    public static func tomorrow() -> Timestamp {
+        return Timestamp.inSomeDays(1)
+    }
+
+    public static func inSomeDays(_ days: UInt) -> Timestamp {
+        let now = Date().millisecondsSince1970
+        let seconds: UInt64 = 60 * 60 * 24
+        return Timestamp.milliseconds(now + (UInt64(days) * seconds * 1000))
+    }
+
 
     /// convenience initializer from UInt64 (milliseconds from January 1, 1970)
     public init(from: UInt64) {

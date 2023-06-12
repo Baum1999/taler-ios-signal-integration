@@ -1,19 +1,9 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
+import SwiftUI
 import SymLog
 
 enum BackendState {
@@ -30,52 +20,35 @@ enum UrlCommand {
     case pay
 }
 
+// MARK: -
 class Controller: ObservableObject {
-    public static var shared = Controller()
+    public static let shared = Controller()
     private let symLog = SymLogC()
 
-    @Published var backendState: BackendState = .none
-
-    var walletCore: WalletCore
-    var exchangeModel: ExchangeModel
-    var balancesModel: BalancesModel
-    var transactionsModel: TransactionsModel
-    var pendingModel: PendingModel
-    var withdrawURIModel: WithdrawURIModel
-    var paymentURIModel: PaymentURIModel
-//    @Published var withdrawTestModel: WithdrawTestModel
+    @Published var backendState: BackendState = .none       // only used for launch animation
 
     var messageForSheet: String? = nil
 
     init() {
-        symLog.log("init wallet-core")
-        walletCore = try! WalletCore()          // will (and should) crash on failure
-        symLog.log("wallet-core done")
-        exchangeModel = ExchangeModel(walletCore: walletCore)
-        balancesModel = BalancesModel(walletCore: walletCore)
-        transactionsModel = TransactionsModel(walletCore: walletCore)
-        pendingModel = PendingModel(walletCore: walletCore)
-        withdrawURIModel = WithdrawURIModel(walletCore: walletCore)
-        paymentURIModel = PaymentURIModel(walletCore: walletCore)
-//      withdrawTestModel = WithdrawTestModel(walletCore: walletCore)
-        symLog.log("models inited")
         backendState = .instantiated
     }
 
-    @MainActor func initWalletCore() async throws {
+    @MainActor func initWalletCoreM()
+      async throws {           // M for MainActor
         if backendState == .instantiated {
             backendState = .initing
             do {
-                let walletInitModel = WalletInitModel(walletCore: walletCore)
-                let versionInfo = try await walletInitModel.initWallet()
-                walletCore.versionInfo = versionInfo
-                backendState = .ready               // dismiss the launch animation
-            } catch {
-                backendState = .error
+                let walletInitModel = WalletInitModel()
+                let versionInfo = try await walletInitModel.initWalletT()
+                WalletCore.shared.versionInfo = versionInfo
+                backendState = .ready                       // dismiss the launch animation
+            } catch {       // rethrows
+                symLog.log(error.localizedDescription)
+                backendState = .error                       // TODO: ❗️Yikes app cannot continue
                 throw error
             }
         } else {
-            symLog.log("Yikes\(logSymbol(-1)) wallet-core already initialized")     // TODO: .warning
+            symLog.log("Yikes❗️ wallet-core already initialized")     // TODO: .warning
         }
     }
 }
@@ -112,7 +85,7 @@ extension Controller {
     func talerScheme(_ url:URL,_ uncrypted: Bool = false) -> UrlCommand {
         guard let command = url.host else {return UrlCommand.unknown}
         if uncrypted {
-            print("uncrypted")
+            symLog.log("uncrypted: taler://\(command)")
             // TODO: uncrypted
         }
         switch command {

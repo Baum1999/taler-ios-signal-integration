@@ -1,0 +1,300 @@
+{
+    "transactions":[
+        {   "type": "withdrawal",
+            "amountEffective": "KUDOS:2.9",
+            "amountRaw": "KUDOS:3",
+            "transactionId": "txn:withdrawal:QQWXZ908YYWFPH9QV2GB72Z29C83FFK612WJARXBX6YSNRGPP660",
+            "timestamp": ["t_s": 1683531967]
+            "txState": {
+                "major": "done"
+            },
+            "pending": false,
+
+            "exchangeBaseUrl": "https://exchange.demo.taler.net/",
+            "withdrawalDetails": {
+                "type": "taler-bank-integration-api",
+                "reservePub": "R4G8E58Q97M6HQP69V3J3Q6XX1DXQ06FARWNSNRAWYX446WB2R8G"
+                "bankConfirmationUrl": "https://bank.demo.taler.net/",
+                "confirmed": true,
+                "reserveIsReady": true,
+            },
+        },
+        {   "type": "payment",
+            "amountEffective": "KUDOS:1.1",
+            "amountRaw": "KUDOS:1",
+            "transactionId": "txn:payment:43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
+            "timestamp": ["t_s": 1683531978],,
+            "txState": {
+                "major": "done"
+            },
+
+            "proposalId": "43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
+            "status": "paid",
+            "totalRefundRaw": "KUDOS:0",
+            "totalRefundEffective": "KUDOS:0"
+            "refundQueryActive": false
+            "refunds": [],
+            "info": {
+                "orderId": "2023.128-03A25VEED68QC",
+                "merchant": {
+                    "name": "GNU Taler",
+                    "jurisdiction": [:],
+                    "address": [:]
+                },
+                "summary": "hello world",
+                "products": []
+                "fulfillmentUrl": "taler://fulfillment-success/thx",
+                "contractTermsHash": "X0QJGEPSDKARFPBNTSF5HMXJYDGQ4WRX789PAB2G3EER9J7B5Z8WHHJ0W8KX3Z175A2FGVBKPZ85H8X0Y6H4MNHARJCA9ACW43QS10R",
+            },
+        },
+        {   "type": "withdrawal",
+            "amountEffective": "KUDOS:17.8",
+            "amountRaw": "KUDOS:18",
+            "transactionId": "txn:withdrawal:N9CR5EH8BSPB2NVEDW1HAXX94C9DCKSAWF097M4S9AHJ5KW5R01G",
+            "timestamp": ["t_s": 1683531980],
+            "txState": {
+                "major": "done"
+            },
+            "pending": false,
+
+            "exchangeBaseUrl": "https://exchange.demo.taler.net/",
+            "withdrawalDetails": {
+                "type": "taler-bank-integration-api",
+                "reservePub": "6P2Y5N7H1NY8938H60S9WJ1HFS11F90P0RR1H51WCV7MHYYFNS80",
+                "reserveIsReady": true,
+                "confirmed": true,
+                "bankConfirmationUrl": "https://bank.demo.taler.net/",
+            },
+        },
+        {   "type": "payment",
+            "amountEffective": "KUDOS:7.2",
+            "amountRaw": "KUDOS:7",
+            "transactionId": "txn:payment:3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+            "timestamp": ["t_s": 1683531996],
+            "txState": {
+                "major": "done"
+            },
+
+            "proposalId": "3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+            "status": "paid",
+            "totalRefundRaw": "KUDOS:0",
+            "totalRefundEffective": "KUDOS:0",
+              "refundPending": "KUDOS:6",
+            "refundQueryActive": false,
+            "refunds": [],
+            "info": {
+                "orderId": "2023.128-0388C075CX1R0",
+                "merchant": {
+                    "name": "GNU Taler",
+                    "jurisdiction": [:],
+                    "address": [:]
+                },
+                "summary": "order that will be refunded",
+                "products": [],
+                "fulfillmentUrl": "taler://fulfillment-success/thx",
+                "contractTermsHash": "SPD5XJTFE8N73FXQT0JRVZ2ABSGKWVHFWV1GAZGDAWZT7CK0WSHCJSWV1FMCFEGTHT786ZPFVFHJWWB3V0ADCNPBT0YFS78Z2P3KYH0",
+            },
+        },
+        {   "type": "refund",
+            "amountEffective": "KUDOS:5.8",
+            "amountRaw": "KUDOS:6",
+            "transactionId": "txn:refund:PFW6JNX6QVKMF5HHER8KHPS9ADJTPXBQ1JK6C7W55F4X6CK59Q20",
+            "timestamp": {"t_s": 1683531997},
+            "txState": {
+                "major": "done"
+            },
+
+            "refundedTransactionId": "txn:payment:3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+        },
+        {   "type": "payment",
+            "amountEffective": "KUDOS:3.2",
+            "amountRaw": "KUDOS:3",
+            "transactionId": "txn:payment:8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0",
+            "timestamp": ["t_s": 1683531998],
+            "txState": {
+                "major": "done"
+            },
+
+            "proposalId": "8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0"
+            "status": "paid",
+            "totalRefundRaw": "KUDOS:0",
+            "totalRefundEffective": "KUDOS:0",
+            "refundQueryActive": false,
+            "refunds": [],
+            "info": {
+                "orderId": "2023.128-00G672RZHTRWA",
+                "merchant": [
+                    "name": "GNU Taler",
+                    "address": [:],
+                    "jurisdiction": [:]
+                ],
+                "summary": "payment after refund",
+                "products": []
+                "fulfillmentUrl": "taler://fulfillment-success/thx",
+                "contractTermsHash": "GZZ75P8G5H7PEV93E6M7TNNT1RNCSP0MJT7K7K4VXJAZGK5FAFC2YJYDGX3CT077VPQFZJR3QV5M9ZNH2T86ZWBA8BDDREM12RZYWN0",
+            },
+        }
+    ]
+}
+
+
+"transactions":[
+    {
+        "type":"withdrawal",
+        "txState":{
+            "major":"done"
+        },
+        "amountEffective":"KUDOS:2.9",
+        "amountRaw":"KUDOS:3",
+        "withdrawalDetails":{
+            "type":"taler-bank-integration-api",
+            "confirmed":true,
+            "reservePub":"R4G8E58Q97M6HQP69V3J3Q6XX1DXQ06FARWNSNRAWYX446WB2R8G",
+            "bankConfirmationUrl":"https://bank.demo.taler.net/",
+            "reserveIsReady":true
+        },
+        "exchangeBaseUrl":"https://exchange.demo.taler.net/",
+        "pending":false,
+        "timestamp":{ "t_s":1683531967 },
+        "transactionId":"txn:withdrawal:QQWXZ908YYWFPH9QV2GB72Z29C83FFK612WJARXBX6YSNRGPP660",
+    },
+    {
+        "type":"payment",
+        "txState":{
+            "major":"done"
+        },
+        "amountRaw":"KUDOS:1",
+        "amountEffective":"KUDOS:1.1",
+        "totalRefundRaw":"KUDOS:0",
+        "totalRefundEffective":"KUDOS:0",
+        "status":"paid",
+        "extendedStatus":"done",
+        "pending":false,
+        "refunds":[],
+        "timestamp":{
+            "t_s":1683531978
+        },
+        "transactionId":"txn:payment:43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
+        "proposalId":"43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
+        "info":{
+            "merchant":{
+                "name":"GNU Taler",
+                "address":{
+
+                },
+                "jurisdiction":{
+                }
+            },
+            "orderId":"2023.128-03A25VEED68QC",
+            "products":[],
+            "summary":"hello world",
+            "contractTermsHash":"X0QJGEPSDKARFPBNTSF5HMXJYDGQ4WRX789PAB2G3EER9J7B5Z8WHHJ0W8KX3Z175A2FGVBKPZ85H8X0Y6H4MNHARJCA9ACW43QS10R",
+            "fulfillmentUrl":"taler://fulfillment-success/thx"
+        },
+        "refundQueryActive":false,
+    },
+    {
+        "type":"withdrawal",
+        "txState":{
+            "major":"done"
+        },
+        "amountEffective":"KUDOS:17.8",
+        "amountRaw":"KUDOS:18",
+        "withdrawalDetails":{
+            "type":"taler-bank-integration-api",
+            "confirmed":true,
+            "reservePub":"6P2Y5N7H1NY8938H60S9WJ1HFS11F90P0RR1H51WCV7MHYYFNS80",
+            "bankConfirmationUrl":"https://bank.demo.taler.net/",
+            "reserveIsReady":true
+        },
+        "exchangeBaseUrl":"https://exchange.demo.taler.net/",
+        "extendedStatus":"done",
+        "pending":false,
+        "timestamp":{ "t_s":1683531980 },
+        "transactionId":"txn:withdrawal:N9CR5EH8BSPB2NVEDW1HAXX94C9DCKSAWF097M4S9AHJ5KW5R01G",
+    },
+    {
+        "type":"payment",
+        "txState":{
+            "major":"done"
+        },
+        "amountRaw":"KUDOS:7",
+        "amountEffective":"KUDOS:7.2",
+        "totalRefundRaw":"KUDOS:0",
+        "totalRefundEffective":"KUDOS:0",
+        "refundPending":"KUDOS:6",
+        "status":"paid",
+        "extendedStatus":"done",
+        "pending":false,
+        "refunds":[],
+        "timestamp":{ "t_s":1683531996 },
+        "transactionId":"txn:payment:3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+        "proposalId":"3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+        "info":{
+            "merchant":{
+                "name":"GNU Taler",
+                "address":{
+
+                },
+                "jurisdiction":{
+                }
+            },
+            "orderId":"2023.128-0388C075CX1R0",
+            "products":[],
+            "summary":"order that will be refunded",
+            "contractTermsHash":"SPD5XJTFE8N73FXQT0JRVZ2ABSGKWVHFWV1GAZGDAWZT7CK0WSHCJSWV1FMCFEGTHT786ZPFVFHJWWB3V0ADCNPBT0YFS78Z2P3KYH0",
+            "fulfillmentUrl":"taler://fulfillment-success/thx"
+        },
+        "refundQueryActive":false,
+    },
+    {
+        "type":"refund",
+        "amountEffective":"KUDOS:5.8",
+        "amountRaw":"KUDOS:6",
+        "refundedTransactionId":"txn:payment:3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
+        "timestamp":{
+            "t_s":1683531997
+        },
+        "transactionId":"txn:refund:PFW6JNX6QVKMF5HHER8KHPS9ADJTPXBQ1JK6C7W55F4X6CK59Q20",
+        "txState":{
+            "major":"done"
+        },
+        "extendedStatus":"done",
+        "pending":false
+    },
+    {
+        "type":"payment",
+        "txState":{
+            "major":"done"
+        },
+        "amountRaw":"KUDOS:3",
+        "amountEffective":"KUDOS:3.2",
+        "totalRefundRaw":"KUDOS:0",
+        "totalRefundEffective":"KUDOS:0",
+        "status":"paid",
+        "extendedStatus":"done",
+        "pending":false,
+        "refunds":[],
+        "timestamp":{
+            "t_s":1683531998
+        },
+        "transactionId":"txn:payment:8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0",
+        "proposalId":"8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0",
+        "info":{
+            "merchant":{
+                "name":"GNU Taler",
+                "address":{
+
+                },
+                "jurisdiction":{
+                }
+            },
+            "orderId":"2023.128-00G672RZHTRWA",
+            "products":[],
+            "summary":"payment after refund",
+            "contractTermsHash":"GZZ75P8G5H7PEV93E6M7TNNT1RNCSP0MJT7K7K4VXJAZGK5FAFC2YJYDGX3CT077VPQFZJR3QV5M9ZNH2T86ZWBA8BDDREM12RZYWN0",
+            "fulfillmentUrl":"taler://fulfillment-success/thx"
+        },
+        "refundQueryActive":false,
+    }
+]

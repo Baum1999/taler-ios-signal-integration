@@ -1,105 +1,112 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import SwiftUI
 import SymLog
 
 struct TransactionsListView: View {
     private let symLog = SymLogV()
-    let navTitle = "Transactions"
+    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    let navTitle: String
 
-    @ObservedObject var viewModel: TransactionsModel
-    
+    let currency: String
+    let transactions: [Transaction]
+    var reloadAction: () async -> ()
+    let deleteAction: (_ transactionId: String) async throws -> ()
+    let abortAction: (_ transactionId: String) async throws -> ()
+
     var body: some View {
-        let reloadAction = viewModel.fetchTransactions
-        VStack {
-            if viewModel.transactions == nil {
-                symLog { LoadingView(backButtonHidden: false) }
-            } else {
-                let count = viewModel.transactions!.count
-                let title: String = "\(count) \(navTitle)"
-                symLog { Content(symLog: symLog, viewModel: viewModel, reloadAction: reloadAction)
-                        .navigationTitle(title)
-                }
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let count = transactions.count
+//        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
+        let title: String = "\(count) \(navTitle)"
+        Content(symLog: symLog, currency: currency, transactions: transactions, myListStyle: $myListStyle,
+                reloadAction: reloadAction, deleteAction: deleteAction, abortAction: abortAction)
+            .navigationTitle(title)
+            .onAppear {
+                DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST)
             }
-        }.task {
-            symLog.log(".task")
-            do {
-                try await reloadAction()
-            } catch {
-                // TODO: show error
-                symLog.log(error.localizedDescription)
+            .task {
+                symLog.log(".task ")
+                await reloadAction()
             }
-        }
     }
 }
 // MARK: -
 extension TransactionsListView {
     struct Content: View {
         let symLog: SymLogV?
-        @ObservedObject var viewModel: TransactionsModel
-
-        var reloadAction: () async throws -> ()
+        let currency: String
+        let transactions: [Transaction]
+        @Binding var myListStyle: MyListStyle
+        let reloadAction: () async -> ()
+        let deleteAction: (_ transactionId: String) async throws -> ()
+        let abortAction: (_ transactionId: String) async throws -> ()
 
         @State private var upAction: () -> Void = {}
         @State private var downAction: () -> Void = {}
 
+//        func removeItems(at offsets: IndexSet) {
+//            let transactions = model.transactions
+//            var idsToDelete: [String] = []
+//            for n in offsets {  // save IDs of transactions
+//                let common = transactions[n].common
+//                idsToDelete.append(common.transactionId)
+//            }
+//            // then remove items from the list model (and the view)
+//            model.transactions.remove(atOffsets: offsets)
+//            // finally tell wallet-core to delete the saved IDs
+//            Task {  // delete this transaction from wallet-core
+//                for transactionId in idsToDelete {
+//                    do {
+//                        try await deleteAction(transactionId)
+//                        symLog?.log("deleted \(transactionId)")
+//                    } catch {    // TODO: error
+//                        symLog?.log(error.localizedDescription)
+//                    }
+//                }
+//            }
+//        }
+
         var body: some View {
-            let transactions = viewModel.transactions!
+#if DEBUG
+            let _ = Self._printChanges()
+            let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
 
             ScrollViewReader { scrollView in
                 List {
-                    ForEach (transactions.indices) { index in
-                        let transaction = transactions[index]
-                        let common = transaction.common()
-                        NavigationLink {
-                            TransactionDetail(transaction: transaction)
-                        } label: {
-                            TransactionRow(transaction: transaction)
-                        }
-                        .id(index)
-                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                            Button {
-                                symLog?.log("bookmarked \(common.transactionId)")
-                                // TODO: Bookmark
-                            } label: {
-                                Label("Bookmark", systemImage: "bookmark")
-                            }.tint(.indigo)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                symLog?.log("deleted \(common.transactionId)")
-                                // TODO: delete from Model. SwiftUI deletes this row from view already :-)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
+                    ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
+//                        let common = transaction.common
+                        NavigationLink { LazyView {        // whole row like in a tableView
+                            // pending may not be deleted, but only aborted
+                            TransactionDetailView(transaction: transaction,
+                                                 deleteAction: deleteAction,
+                                                  abortAction: abortAction)
+                        }} label: {
+                            TransactionRowView(transaction: transaction)
                         }
                     }
-                    .onAppear {
-                        upAction = { withAnimation { scrollView.scrollTo(0) }}
-                        downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
-                        downAction()
-                    }
+//                    .onDelete(perform: removeItems)     // delete this row from the list
                 }
                 .refreshable {
-                    do {
-                        symLog?.log("refreshing")
-                        try await reloadAction()
-                    } catch {
-                        // TODO: error
-                        symLog?.log(error.localizedDescription)
+                    await reloadAction()
+                }
+                .listStyle(myListStyle.style)
+                .anyView
+                .onAppear {
+                    upAction = { withAnimation { scrollView.scrollTo(0) }}
+                    downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
+                    downAction()
+                }
+                .overlay {
+                    if transactions.isEmpty {
+                        TransactionsEmptyView(currency: currency)
+                            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
                     }
                 }
             }

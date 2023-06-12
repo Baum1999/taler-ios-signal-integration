@@ -1,17 +1,6 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import SwiftUI              // FOUNDATION has no AppStorage
 import AnyCodable
@@ -24,13 +13,18 @@ protocol WalletBackendDelegate {
     func walletBackendReceivedUnknownMessage(_ walletCore: WalletCore, message: String)
 }
 
+// MARK: -
 /// An interface to the wallet backend.
 class WalletCore: QuickjsMessageHandler {
+    public static let shared = try! WalletCore()          // will (and should) crash on failure
     private let symLog = SymLogC()
+
+    private var queue: DispatchQueue
+    private var semaphore: DispatchSemaphore
 
     private var quickjs: Quickjs
     private var requestsMade: UInt          // counter for array of completion closures
-    private var completions: [UInt : (UInt, Data?, WalletBackendResponseError?) -> Void] = [:]
+    private var completions: [UInt : (Date, (UInt, Date, Data?, WalletBackendResponseError?) -> Void)] = [:]
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
@@ -41,7 +35,7 @@ class WalletCore: QuickjsMessageHandler {
         let id: UInt
         let args: AnyEncodable
     }
-    
+
     private struct FullResponse: Decodable {
         let type: String
         let operation: String
@@ -58,6 +52,21 @@ class WalletCore: QuickjsMessageHandler {
 
     var lastError: FullError?
 
+    struct ResponseOrNotification: Decodable {
+        let type: String
+        let operation: String?
+        let id: UInt?
+        let result: AnyCodable?
+        let error: AnyCodable?  // should be WalletBackendResponseError?
+        let payload: AnyCodable?
+    }
+
+    struct Payload: Decodable {
+        let type: String
+        let id: String?
+        let reservePub: String?
+    }
+
     deinit {
         symLog.log()
     // TODO: send shutdown message to talerWalletInstance
@@ -65,95 +74,157 @@ class WalletCore: QuickjsMessageHandler {
     }
 
     init() throws {
+        symLog.log("alloc.init wallet-core")
         requestsMade = 0
+        queue = DispatchQueue(label: "net.taler.myQueue", attributes: .concurrent)
+        semaphore = DispatchSemaphore(value: 1)
         quickjs = Quickjs()
         quickjs.messageHandler = self
+        symLog.log("wallet-core done")
     }
 }
 // MARK: -  completionHandler functions
 extension WalletCore {
-
-    private func handleResponse(dict responseDict: [String : Any], data messageData: Data, isError: Bool = false) throws {
-        guard let id = responseDict["id"] as? UInt else { throw WalletBackendError.deserializationError }
-        guard let completion = completions[id] else { throw WalletBackendError.deserializationError }
-        completions[id] = nil
-        if isError {
+    private func handleError(_ decoded: ResponseOrNotification) throws {
+        guard let requestId = decoded.id else {
+            symLog.log(decoded)                 // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+        guard let (timeSent, completion) = completions[requestId] else {
+            symLog.log("requestId \(requestId) not in list")       // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+        completions[requestId] = nil
+        if let walletError = decoded.error {            // wallet-core sent an error message
             do {
-                let decoded = try JSONDecoder().decode(FullError.self, from: messageData)
-                symLog.log(decoded)
-                completion(id, nil, decoded.error)
-            } catch {
-                symLog.log(responseDict)        // TODO: error
-                completion(id, nil, WalletCore.parseFailureError())
+                let jsonData = try JSONEncoder().encode(walletError)
+            } catch {        // JSON encoding of response.result failed / should never happen
+                symLog.log(walletError)                 // TODO: .error
+                completion(requestId, timeSent, nil, WalletCore.parseFailureError())
             }
-        } else {
-            do {    // pass response.result
-                let decoded = try JSONDecoder().decode(FullResponse.self, from: messageData)
-                symLog.log(decoded)
-                let jsonData = try JSONEncoder().encode(decoded.result)
-                completion(id, jsonData, nil)
-            } catch {
-                symLog.log(responseDict)        // TODO: error
-                completion(id, nil, WalletCore.parseResponseError())
-            }
+
+            // TODO: decode jsonData to WalletBackendResponseError - or HTTPError
+//            completion(requestId, timeSent, nil, walletError)
+            completion(requestId, timeSent, nil, WalletCore.parseFailureError())
+        } else {                                        // JSON decoding of error message failed
+            completion(requestId, timeSent, nil, WalletCore.parseFailureError())
+        }
+    }
+    private func handleResponse(_ decoded: ResponseOrNotification) throws {
+        guard let requestId = decoded.id else {
+            symLog.log(decoded)                 // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+        guard let (timeSent, completion) = completions[requestId] else {
+            symLog.log("requestId \(requestId) not in list")       // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+        completions[requestId] = nil
+        guard let result = decoded.result else {
+            symLog.log("requestId \(requestId) got no result")       // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+        do {
+            let jsonData = try JSONEncoder().encode(result)
+            symLog.log(result)                 // TODO: .info
+            completion(requestId, timeSent, jsonData, nil)
+        } catch {        // JSON encoding of response.result failed / should never happen
+            symLog.log(result)                 // TODO: .error
+            completion(requestId, timeSent, nil, WalletCore.parseResponseError())
         }
     }
 
-    private func handleNotification(dict responseDict: [String : Any]) throws {
+    @MainActor
+    private func postNotificationM(_ aName: NSNotification.Name,
+                           object anObject: Any? = nil,
+                                  userInfo: [AnyHashable: Any]? = nil) async {
+        symLog.log(aName.rawValue)
+        NotificationCenter.default.post(name: aName, object: anObject, userInfo: userInfo)
+    }
+    private func postNotification(_ aName: NSNotification.Name,
+                          object anObject: Any? = nil,
+                                 userInfo: [AnyHashable: Any]? = nil) {
+        Task {
+            await postNotificationM(aName, object: anObject, userInfo: userInfo)
+        }
+        if let userInfo { symLog.log(userInfo) } else { symLog.log(aName) }
+    }
+
+    private func handlePendingProcessed(_ payload: Payload) throws {
+        guard let id = payload.id else { throw WalletBackendError.deserializationError }
+        let pendingOp = Notification.Name.PendingOperationProcessed.rawValue
+        if id.hasPrefix("exchange-update:") {
+            // Bla Bla Bla
+        } else if id.hasPrefix("refresh:") {
+            // Bla Bla Bla
+        } else if id.hasPrefix("purchase:") {
+            // TODO: handle purchase
+//            symLog.log("\(pendingOp): \(id)")
+        } else if id.hasPrefix("withdraw:") {
+            // TODO: handle withdraw
+//            symLog.log("\(pendingOp): \(id)")
+        } else {
+            // TODO: handle other pending-operation-processed
+print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I haven't seen before
+            print("\n")
+        }
+    }
+    private func handleStateTransition(_ jsonData: Data) throws {
         do {
-            guard let payload = (responseDict["payload"] as? [String : Any]) else { throw WalletBackendError.deserializationError }
-            guard let type = (payload["type"] as? String) else { throw WalletBackendError.deserializationError }
-            switch type {
-                case "pending-operation-processed":
-                    guard let id = (payload["id"] as? String) else { throw WalletBackendError.deserializationError }
-                    if id.hasPrefix("exchange-update:") {
-                        // TODO: handle exchange-update
-                    } else {
-                        symLog.log(id)
-                        // TODO: handle other pending-operation-processed
-                    }
-                case "coin-withdrawn", "withdraw-group-finished", "pay-operation-success":
-                    symLog.log(payload)
-                    Task {
-                        do {
-                            // automatically fetch balances after receiving these notifications
-                            try await Controller.shared.balancesModel.fetchBalances()
-                        } catch {
-                            // TODO: show error
-                            symLog.log(error.localizedDescription)
-                        }
-                    }
-                    break
-                case "proposal-accepted":
-                    symLog.log(payload)
-                    break
-                case "proposal-downloaded":
-                    symLog.log(payload)
-                    break
-                case "waiting-for-retry":
-                    // Bla Bla Bla
-                    break
-                case "exchange-added":
-                    symLog.log(payload)
-                    break
-                case "refresh-started":
-                    symLog.log(payload)
-                    break
-                case "refresh-melted":
-                    symLog.log(payload)
-                    break
-                case "refresh-revealed":
-                    symLog.log(payload)
-                    break
+            let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
+            postNotification(.TransactionStateTransition,
+                             userInfo: [TRANSACTIONTRANSITION: decoded])
+        } catch {       // rethrows
+            symLog.log(jsonData)       // TODO: .error
+            throw WalletBackendError.deserializationError
+        }
+    }
+
+    private func handleNotification(_ anyCodable: AnyCodable?) throws {
+        guard let anyPayload = anyCodable else { throw WalletBackendError.deserializationError }
+        do {
+            let jsonData = try JSONEncoder().encode(anyPayload)
+            let payload = try JSONDecoder().decode(Payload.self, from: jsonData)
+
+            switch payload.type {
+                case Notification.Name.TransactionStateTransition.rawValue:
+                    try handleStateTransition(jsonData)
+                case Notification.Name.PendingOperationProcessed.rawValue:
+                    try handlePendingProcessed(payload)
+                case Notification.Name.ExchangeAdded.rawValue:
+                    postNotification(.ExchangeAdded)
+                case Notification.Name.ReserveNotYetFound.rawValue:
+                    if let reservePub = payload.reservePub {
+                        let userInfo = ["reservePub" : reservePub]
+//                        postNotification(.ReserveNotYetFound, userInfo: userInfo)   // TODO: remind User to confirm withdrawal
+                    } // else { throw WalletBackendError.deserializationError }   shouldn't happen, but if it does just ignore it
+
+                case Notification.Name.ProposalAccepted.rawValue:               // "proposal-accepted":
+                    symLog.log(anyPayload)
+                    postNotification(.ProposalAccepted, userInfo: nil)
+                case Notification.Name.ProposalDownloaded.rawValue:             // "proposal-downloaded":
+                    symLog.log(anyPayload)
+                    postNotification(.ProposalDownloaded, userInfo: nil)
+
                 case "reserve-registered-with-bank":
-                    symLog.log(payload)
+                    symLog.log(anyPayload)
+
+                // TODO: remove these once wallet-core doesn't send them anymore
+                case "withdraw-group-finished",
+                     "pay-operation-success",
+                     "withdrawal-group-bank-confirmed",          // replaced by transaction-state-transition
+                     "withdrawal-group-reserve-ready",
+                     "coin-withdrawn",                           // totally useless since wallet-core handles coins in bulk
+                     "waiting-for-retry",                        // Bla Bla Bla
+                     "refresh-started", "refresh-melted",
+                     "refresh-revealed", "refresh-unwarranted":
                     break
                 default:
-                    symLog.log(payload)
+print("\n❗️ ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {
-            symLog.log("Error \(error) parsing notification: \(responseDict)")    // TODO: .error
+            symLog.log("Error \(error) parsing notification: \(anyPayload)")    // TODO: .error
         // TODO: if DevMode then should log into file for user
         }
     }
@@ -162,7 +233,7 @@ extension WalletCore {
     func handleMessage(message: String) {
         do {
             var asyncDelay = 0
-            if let delay = developDelay {
+            if let delay: Bool = developDelay {   // Settings: 2 seconds delay
                 if delay {
                     asyncDelay = 2
                 }
@@ -173,42 +244,61 @@ extension WalletCore {
                 sleep(UInt32(asyncDelay))
                 symLog.log("waking up again after \(asyncDelay) seconds, will deliver message")
             }
-            guard let messageData = message.data(using: .utf8) else { throw WalletBackendError.deserializationError }
-            let jsonDict = try JSONSerialization.jsonObject(with: messageData, options: .allowFragments) as? [String : Any]
-            guard let responseDict = jsonDict else { throw WalletBackendError.deserializationError }
-            guard let responseType = (responseDict["type"] as? String) else { throw WalletBackendError.deserializationError }
-            switch responseType {
+            guard let messageData = message.data(using: .utf8) else {
+                throw WalletBackendError.deserializationError
+            }
+            let decoded = try JSONDecoder().decode(ResponseOrNotification.self, from: messageData)
+            switch decoded.type {
                 case "error":
-                    try handleResponse(dict: responseDict, data: messageData, isError: true)
+                    symLog.log(decoded)                 // TODO: .error
+                    try handleError(decoded)
                 case "response":
-                    try handleResponse(dict: responseDict, data: messageData)
+                    try handleResponse(decoded)
                 case "notification":
-                    try handleNotification(dict: responseDict)
+                    try handleNotification(decoded.payload)
                 case "tunnelHttp":          // TODO: Handle tunnelHttp
-                    break
+                    symLog.log("Can't handle tunnelHttp: \(decoded)")    // TODO: .error
+                    throw WalletBackendError.deserializationError
                 default:
-                    symLog.log("Unknown response type: \(responseDict)")    // TODO: .error
+                    symLog.log("Unknown response type: \(decoded)")    // TODO: .error
                     throw WalletBackendError.deserializationError
             }
-        } catch {
+        } catch DecodingError.dataCorrupted(let context) {
+            print(context)
+        } catch DecodingError.keyNotFound(let key, let context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch DecodingError.valueNotFound(let value, let context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch DecodingError.typeMismatch(let type, let context) {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch { // TODO: ?
             delegate?.walletBackendReceivedUnknownMessage(self, message: message)
         }
     }
     
-    private func sendRequest(request: WalletBackendRequest, completionHandler: @escaping (UInt, Data?, WalletBackendResponseError?) -> Void) {
+    private func sendRequest(request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, Data?, WalletBackendResponseError?) -> Void) {
         // Encode the request and send it to the backend.
-        let id = requestsMade
-        do {
-            let full = FullRequest(operation: request.operation, id: id, args: request.args)
-//            symLog.log(full)
-            let encoded = try JSONEncoder().encode(full)
-            guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
-            completions[id] = completionHandler
-            requestsMade += 1
-            symLog.log(jsonString)
-            quickjs.sendMessage(message: jsonString)
-        } catch {
-            completionHandler(id, nil, WalletCore.serializeRequestError());
+        queue.async {
+            self.semaphore.wait()               // guard access to requestsMade
+            let requestId = self.requestsMade
+            let now = Date.now
+            do {
+                let full = FullRequest(operation: request.operation, id: requestId, args: request.args)
+                //            symLog.log(full)
+                let encoded = try JSONEncoder().encode(full)
+                guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
+                self.completions[requestId] = (now, completionHandler)
+                self.requestsMade += 1
+                self.semaphore.signal()         // free requestsMade
+                self.symLog.log(jsonString)
+                self.quickjs.sendMessage(message: jsonString)
+            } catch {       // call completion
+                self.semaphore.signal()
+                completionHandler(requestId, now, nil, WalletCore.serializeRequestError());
+            }
         }
     }
 }
@@ -219,27 +309,44 @@ extension WalletCore {
         let reqData = WalletBackendRequest(operation: request.operation(),
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
-            sendRequest(request: reqData) { id, result, error in
+            sendRequest(request: reqData) { requestId, timeSent, result, error in
+                let timeUsed = Date.now - timeSent
+                let millisecs = timeUsed.milliseconds
+print("Request \(requestId) took \(millisecs) ms")
+                var err: Error? = nil
                 if let json = result {
                     do {
                         let decoded = try JSONDecoder().decode(T.Response.self, from: json)
-                        continuation.resume(returning: (decoded, id))
-                    } catch {
+                        continuation.resume(returning: (decoded, requestId))
+                        return
+                    } catch DecodingError.dataCorrupted(let context) {
+                        print(context)
+                    } catch DecodingError.keyNotFound(let key, let context) {
+                        print("Key '\(key)' not found:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch DecodingError.valueNotFound(let value, let context) {
+                        print("Value '\(value)' not found:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch DecodingError.typeMismatch(let type, let context) {
+                        print("Type '\(type)' mismatch:", context.debugDescription)
+                        print("codingPath:", context.codingPath)
+                    } catch {       // rethrows
                         if let jsonString = String(data: json, encoding: .utf8) {
                             self.symLog.log(jsonString)       // TODO: .error
                         } else {
                             self.symLog.log(json)       // TODO: .error
                         }
-                        continuation.resume(throwing: error)
+                        err = error     // this will be thrown
                     }
                 } else {
                     if let error = error {
-                        self.lastError = FullError(type: "error", operation: request.operation(), id: id, error: error)
+                        self.lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
                     } else {
                         self.lastError = nil
                     }
-                    continuation.resume(throwing: WalletBackendError.walletCoreError)
+                    err = WalletBackendError.walletCoreError
                 }
+                continuation.resume(throwing: err ?? TransactionDecodingError.invalidStringValue)
             }
         }
     }

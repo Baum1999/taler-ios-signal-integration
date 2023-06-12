@@ -1,71 +1,74 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import SwiftUI
 import taler_swift
+import AVFoundation
 import SymLog
 
 struct PaymentAcceptView: View {
     private let symLog = SymLogV()
-    @ObservedObject var viewModel: PaymentURIModel
+    @ObservedObject var model: PaymentURIModel
 
-    var detailsForAmount: PaymentDetailsForUri
+    let detailsForAmount: PaymentDetailsForUri
 
-//    @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
-    let navTitle = "Accept Payment"
-    var cancelButton: some View {
-        Button("Cancel6") { dismissTop() }
+    let navTitle = String(localized: "Accept Payment")
+    @State private var confirmPayResult: ConfirmPayResult?
+
+    func playSound(success: Bool) {
+//        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/PaymentReceived.caf")
+        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_" + (success ? "success.caf"
+                                                                                            : "failure.caf"))
+        var soundID: SystemSoundID = 0
+        AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+        print(soundID)
+        AudioServicesPlaySystemSound(soundID);
+    }
+    func acceptAction() {
+        Task {
+            do {
+                confirmPayResult = try await model.confirmPayM(detailsForAmount.proposalId)
+                symLog.log(confirmPayResult as Any)
+                if confirmPayResult?.type == "done" {
+                    // TODO: Show Hints that Payment was successfull
+                    playSound(success: true)
+                } else {
+                    // TODO: show error
+                    playSound(success: false)
+                }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+            }
+            dismissTop()
+        }
     }
 
-    @State var confirmPayResult: ConfirmPayResult?
-
+    @State private var disabled = false
     var body: some View {
-        symLog { Group {
+        Group {
             let raw = detailsForAmount.amountRaw
             let effective = detailsForAmount.amountEffective
             let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-            Form {
-                AmountView(title: "Amount to pay:",
-                           value: raw.readableDescription, color: Color(UIColor.label))
-                .padding(.bottom)
-                AmountView(title: "Exchange fee:",
-                           value: fee.readableDescription, color: Color("Outgoing"))
-                .padding(.bottom)
-                AmountView(title: "Coins to be spent:",
-                           value: effective.readableDescription, color: Color("Outgoing"))
-            }
-            AwesomeButton(title: "Accept") {
-                Task {
-                    do {
-                        confirmPayResult = try await viewModel.confirmPay(detailsForAmount.proposalId)
-                        symLog.log(confirmPayResult as Any)
-                        if confirmPayResult?.type == "done" {
-                            // TODO: Show Hints that Payment was successfull
-                            // success
-                        } else {
-                            // TODO: show error
-                        }
-                    } catch {
-                        symLog.log(error.localizedDescription)                // TODO: error
-                    }
-                    dismissTop()
-                }
+            ThreeAmountsView(topTitle: "Amount to pay:",
+                             topAmount: raw, fee: fee,
+                             bottomTitle: "Coins to be spent:",
+                             bottomAmount: effective,
+                             large: true, pending: false, incoming: false,
+                             baseURL: detailsForAmount.contractTerms.exchanges.first?.url)
+                // TODO: payment: popup with all possible exchanges, check fees
+            .safeAreaInset(edge: .bottom) {
+                ProminentButton(title: "Accept", action: acceptAction)
+                    .padding(.horizontal)
             }
         }
-            .navigationBarItems(leading: cancelButton)
             .navigationTitle(navTitle)
-        }
     }
 }
+
+//struct PaymentAccept_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let model: PaymentURIModel =
+//        PaymentAcceptView(model: <#PaymentURIModel#>, detailsForAmount: <#PaymentDetailsForUri#>)
+//    }
+//}

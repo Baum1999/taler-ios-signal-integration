@@ -1,25 +1,16 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
 import SymLog
 
-let DATABASE = "talerwalletdb-v30"
+private let DATABASE = "talerwalletdb-v30"
 
 class WalletInitModel: WalletModel {
-
+    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
+        super.init(symbol)
+    }
 }
 // MARK: -
 ///  A request to initialize Wallet-core
@@ -39,11 +30,8 @@ fileprivate struct WalletBackendInitRequest: WalletBackendFormattedRequest {
 
     var persistentStoragePath: String
 
-    struct Response: Decodable {        // versioninfo
+    struct Response: Decodable {
         var versionInfo: VersionInfo
-        enum CodingKeys: String, CodingKey {
-            case versionInfo = "versionInfo"
-        }
     }
 }
 // MARK: -
@@ -59,14 +47,15 @@ struct VersionInfo: Decodable {
 // MARK: -
 extension WalletInitModel {
     /// initalize Wallet-Core. Will do networking
-    func initWallet() async throws -> VersionInfo? {
+    func initWalletT()              // T for any Thread
+      async throws -> VersionInfo? {
         do {
             let docPath = try docPath()
             let request = WalletBackendInitRequest(persistentStoragePath: docPath)
             symLog?.log("info: not main thread")
-            let response = try await sendRequest(request, 0)    // no Delay
+            let response = try await sendRequestT(request, 0)    // no Delay
             return response.versionInfo
-        } catch {
+        } catch {       // rethrows
             symLog?.log("error: \(error)")
             throw error
         }
@@ -80,7 +69,7 @@ extension WalletInitModel {
             storageDir.appendPathExtension("json")
             return storageDir.path
         } else {    // should never happen
-            symLog?.log("Yikes! documentURLs empty")     // TODO: symLog.error
+            symLog?.log("Yikes❗️ documentURLs empty")     // TODO: symLog.error
             throw WalletBackendError.initializationError
         }
     }

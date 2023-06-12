@@ -1,22 +1,11 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import SwiftUI
 import SymLog
 
-fileprivate let sidebarWidth = 250.0
+fileprivate let sidebarWidth = 220.0
 
 struct SidebarItem {
     var name: String
@@ -31,15 +20,21 @@ struct SideBarView: View {
     @Binding var sidebarVisible: Bool
 
     var body: some View {
-        symLog {
-            HStack {
+        HStack {    // sideView left, clear dismiss target right
+            EqualIconWidthDomain {
                 VStack {
                     Spacer()
+                    Image("taler-logo-2023-red")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .padding(.top, 30)
                     ForEach(0..<views.count, id: \.self) { i in
                         Button {
                             symLog.log("sidebar item \"\(views[i].name)\" selected")
                             sidebarVisible = false      // slide sidebar to the left
-                            currentView = i             // switch to the view the user selected
+                            withAnimation(.easeInOut) {currentView = i}                     // switch to the view the user selected
+//                            withAnimation(.easeInOut(duration: 0.5)) {currentView = i}      // switch to the view the user selected
                         } label: {
                             if let sysImage = views[i].sysImage {
                                 Label(views[i].name, systemImage: sysImage)
@@ -51,14 +46,24 @@ struct SideBarView: View {
                         }
                         .buttonStyle(.bordered)
                         .font(.title)
-//                        .padding(.vertical)
-
-//                        Divider()
+                        //                        .padding(.vertical)
                     }
                     Spacer()
                     Spacer()
+                    Spacer()
+//                    Button {
+//                        symLog.log("Scan QR selected")
+//                        sidebarVisible = false      // slide sidebar to the left
+                        // TODO: show scan sheet
+//                    } label: {
+//                        Label("Scan QR", systemImage: "qrcode.viewfinder")
+//                            .frame(maxWidth: sidebarWidth, alignment: .leading)
+//                    }
+//                    .buttonStyle(.bordered)
+//                    .font(.title)
+//                    .padding(.bottom, 26.0)
                 }
-                .background(Color(.systemGray5))
+                .background(WalletColors().sideBackground)
                 .frame(width: sidebarWidth, alignment: .center)
                 // TODO: use leading instead of sidebarWidth for right-to-left
                 .offset(x: sidebarVisible ? 0 : -sidebarWidth)
@@ -67,23 +72,23 @@ struct SideBarView: View {
                 //  .onAppear can NOT be used here, because we don't show or dismiss this view,
                 //   but only slide it left or right - so it is always there.
                 //   .onAppear {}    would be called once even before LaunchScreen is dismissed and then never again
-
+                
                 // this is just a target for a tap gesture outside the sidebar to dismiss it
-                Color.clear
-                    .frame(maxWidth: sidebarVisible ? .infinity : 0, maxHeight: .infinity, alignment: .leading)
-                    // TODO: right-to-left ?
-                    .offset(x: sidebarVisible ? sidebarWidth : 0)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        sidebarVisible = false
-                    }
             }
+            Color.clear
+                .frame(maxWidth: sidebarVisible ? .infinity : 0, maxHeight: .infinity, alignment: .leading)
+                // TODO: right-to-left ?
+                .offset(x: sidebarVisible ? sidebarWidth : 0)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    sidebarVisible = false
+                }
         }
     }
 }
-
+// MARK: -
 #if DEBUG
-struct BindingViewContainer : View {
+fileprivate struct BindingViewContainer : View {
     @State var currentView: Int = 0
     @State var sidebarVisible: Bool = true
     var views: [SidebarItem]
@@ -99,8 +104,10 @@ struct BindingViewContainer : View {
 struct SideBarView_Previews: PreviewProvider {
     static var views: [SidebarItem] {[
         SidebarItem(name: "Balances",
+                sysImage: "creditcard.fill",        // TODO: Wallet Icon
                     view: AnyView(WalletEmptyView())),
         SidebarItem(name: "Settings",
+                sysImage: "gearshape.fill",
                     view: AnyView(WalletEmptyView()))
     ]}
     static var previews: some View {

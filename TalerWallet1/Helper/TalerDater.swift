@@ -1,23 +1,12 @@
 /*
- * This file is part of GNU Taler
- * (C) 2022 Taler Systems S.A.
- *
- * GNU Taler is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3, or (at your option) any later version.
- *
- * GNU Taler is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * GNU Taler; see the file COPYING.  If not, see <http://www.gnu.org/licenses/>
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
  */
 import Foundation
 import taler_swift
 
 public class TalerDater: DateFormatter {
-    public static var shared = TalerDater()
+    public static let shared = TalerDater()
 
     static func relativeDate(from: TimeInterval) -> String? {
         if from > 0 {       // transactions should always be in the past
@@ -42,7 +31,7 @@ public class TalerDater: DateFormatter {
             if day < 14 { return "More than a week ago" }
             // will fall thru...
             return nil
-        } else {            // Yikes! transaction date is in the future
+        } else {            // Yikes❗️ transaction date is in the future
             return nil
         }
     }
@@ -78,7 +67,7 @@ public class TalerDater: DateFormatter {
                 }
             }
             return shared.string(from: date)
-        } catch {
+        } catch {       // Never
             return "Never"
         }
     }
@@ -98,5 +87,21 @@ public class TalerDater: DateFormatter {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension Date {
+    static func - (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+}
+extension TimeInterval {
+
+    var seconds: Int {
+        return Int(self.rounded())
+    }
+
+    var milliseconds: Int {
+        return Int(self * 1000)
     }
 }
