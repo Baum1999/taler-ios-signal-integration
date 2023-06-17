@@ -20,7 +20,7 @@ struct MainView: View {
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
 
-    func sheetDismiss() -> Void {
+    func sheetDismissed() -> Void {
         symLog.log("sheet dismiss")
     }
     var body: some View {
@@ -51,7 +51,7 @@ struct MainView: View {
                 DebugViewV()
                     .id("ViewID")
             }
-            .sheet(item: $urlToOpen, onDismiss: sheetDismiss) { url in
+            .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
                 let sheet = AnyView(URLSheet(urlToOpen: url))
                 Sheet(sheetView: sheet)
             }
@@ -63,25 +63,34 @@ extension MainView {
         let symLog: SymLogV?
 
         @State var sidebarVisible: Bool = false
-        @State var currentView: Int = 0
+        func hamburgerAction() {
+            sidebarVisible = !sidebarVisible
+        }
 
+        let balances = String(localized: "Balances")
+        let exchanges = String(localized: "Exchanges")
+        let settings = String(localized: "Settings")
         var views: [SidebarItem] {[
-            SidebarItem(name: String(localized: "Balances"),
+            SidebarItem(name: balances,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
-                        view: AnyView(BalancesListView(model: BalancesModel.model(currency: "*"))
-                                      { sidebarVisible = !sidebarVisible }     // hamburgerAction
+                        view: AnyView(BalancesListView(navTitle: balances,
+                                                          model: BalancesModel.model(currency: "*"),
+                                                hamburgerAction: hamburgerAction)
                                      )),
-            SidebarItem(name: String(localized: "Exchanges"),
+            SidebarItem(name: exchanges,
                     sysImage: "building.columns",
-                        view: AnyView(ExchangeListView(model: ExchangeModel.model())
-                                      { sidebarVisible = !sidebarVisible }     // hamburgerAction
+                        view: AnyView(ExchangeListView(navTitle: exchanges,
+                                                          model: ExchangeModel.model(),
+                                                hamburgerAction: hamburgerAction)
                                      )),
-            SidebarItem(name: String(localized: "Settings"),    // TODO: "About"?
+            SidebarItem(name: settings,    // TODO: "About"?
                     sysImage: "gearshape.fill",
-                        view: AnyView(SettingsView()
-                                      { sidebarVisible = !sidebarVisible }     // hamburgerAction
+                        view: AnyView(SettingsView(navTitle: settings,
+                                            hamburgerAction: hamburgerAction)
                                      ))
         ]}
+        @State var currentView: Int = 0
+
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
@@ -89,12 +98,11 @@ extension MainView {
 #endif
             ZStack(alignment: .leading) {
                 views[currentView].view
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .id(views[currentView].name)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .transition(.backslide)
                 SideBarView(views: views, currentView: $currentView, sidebarVisible: $sidebarVisible)
             }
-                .background(WalletColors().backgroundColor)
         }
     }
 }

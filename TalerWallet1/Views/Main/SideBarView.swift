@@ -22,19 +22,19 @@ struct SideBarView: View {
     var body: some View {
         HStack {    // sideView left, clear dismiss target right
             EqualIconWidthDomain {
-                VStack {
-                    Spacer()
+                VStack(spacing: 10) {
+                    Text("GNU Taler")
+                        .font(.largeTitle).bold()
                     Image("taler-logo-2023-red")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
-                        .padding(.top, 30)
+                        .accessibilityHidden(true)          // decorative logo
                     ForEach(0..<views.count, id: \.self) { i in
                         Button {
                             symLog.log("sidebar item \"\(views[i].name)\" selected")
                             sidebarVisible = false      // slide sidebar to the left
                             withAnimation(.easeInOut) {currentView = i}                     // switch to the view the user selected
-//                            withAnimation(.easeInOut(duration: 0.5)) {currentView = i}      // switch to the view the user selected
                         } label: {
                             if let sysImage = views[i].sysImage {
                                 Label(views[i].name, systemImage: sysImage)
@@ -46,35 +46,19 @@ struct SideBarView: View {
                         }
                         .buttonStyle(.bordered)
                         .font(.title)
-                        //                        .padding(.vertical)
+                        .disabled(i == currentView)
+                        .accessibilityHidden(i == currentView)      // don't suggest the current item
                     }
                     Spacer()
-                    Spacer()
-                    Spacer()
-//                    Button {
-//                        symLog.log("Scan QR selected")
-//                        sidebarVisible = false      // slide sidebar to the left
-                        // TODO: show scan sheet
-//                    } label: {
-//                        Label("Scan QR", systemImage: "qrcode.viewfinder")
-//                            .frame(maxWidth: sidebarWidth, alignment: .leading)
-//                    }
-//                    .buttonStyle(.bordered)
-//                    .font(.title)
-//                    .padding(.bottom, 26.0)
                 }
                 .background(WalletColors().sideBackground)
                 .frame(width: sidebarWidth, alignment: .center)
                 // TODO: use leading instead of sidebarWidth for right-to-left
                 .offset(x: sidebarVisible ? 0 : -sidebarWidth)
-                .animation(.easeInOut, value: sidebarVisible)
-                .ignoresSafeArea()
                 //  .onAppear can NOT be used here, because we don't show or dismiss this view,
                 //   but only slide it left or right - so it is always there.
-                //   .onAppear {}    would be called once even before LaunchScreen is dismissed and then never again
-                
-                // this is just a target for a tap gesture outside the sidebar to dismiss it
             }
+            // this is just a target for a tap gesture outside the sidebar to dismiss it
             Color.clear
                 .frame(maxWidth: sidebarVisible ? .infinity : 0, maxHeight: .infinity, alignment: .leading)
                 // TODO: right-to-left ?
@@ -84,6 +68,7 @@ struct SideBarView: View {
                     sidebarVisible = false
                 }
         }
+        .animation(sidebarVisible ? .easeOut : .easeIn, value: sidebarVisible)
     }
 }
 // MARK: -
