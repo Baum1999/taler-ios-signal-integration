@@ -19,11 +19,11 @@ import SymLog
 
 struct SettingsView: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Settings")
+    let navTitle: String
 
     @AppStorage("developerMode") var developerMode: Bool = false
     @AppStorage("developDelay") var developDelay: Bool = false
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var hamburgerAction: () -> Void
 
@@ -50,7 +50,7 @@ struct SettingsView: View {
                     Spacer()
                     Picker(selection: $myListStyle) {
                         ForEach(MyListStyle.allCases, id: \.self) {
-                            Text($0.displayName).tag($0)
+                            Text($0.displayName.capitalized).tag($0)
                                 .font(.title2)
                         }
                     } label: {}
@@ -159,8 +159,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            .listStyle(myListStyle.style)
-            .anyView
+            .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
         .navigationBarItems(leading: HamburgerButton(action: hamburgerAction))
@@ -190,11 +189,11 @@ extension Bundle {
         return "v\(releaseVersionNumber ?? "1.0.0")"
     }
 }
-
-//struct SettingsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SettingsView {
-//
-//        }
-//    }
-//}
+// MARK: -
+#if DEBUG
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsView(navTitle: "Settings") { }
+    }
+}
+#endif

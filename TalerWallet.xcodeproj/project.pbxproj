@@ -15,6 +15,8 @@
 		4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
 		4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */; };
 		4E53A33729F50B7B00830EC2 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E53A33629F50B7B00830EC2 /* CurrencyField.swift */; };
+		4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
+		4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */; };
 		4E6EDD852A3615BE0031D520 /* ManualDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetails.swift */; };
 		4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD862A363D8D0031D520 /* ListStyle.swift */; };
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
@@ -140,6 +142,8 @@
 		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendAmount.swift; path = TalerWallet1/Views/Peer2peer/SendAmount.swift; sourceTree = SOURCE_ROOT; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
+		4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeDetailView.swift; sourceTree = "<group>"; };
+		4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptDone.swift; sourceTree = "<group>"; };
 		4E6EDD842A3615BE0031D520 /* ManualDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetails.swift; sourceTree = "<group>"; };
 		4E6EDD862A363D8D0031D520 /* ListStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListStyle.swift; sourceTree = "<group>"; };
 		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
@@ -433,6 +437,7 @@
 			children = (
 				4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */,
 				4EB0953E2989CBFE0043A8A1 /* WithdrawAcceptView.swift */,
+				4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */,
 				4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */,
 				4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */,
 			);
@@ -459,6 +464,7 @@
 				4E53A33629F50B7B00830EC2 /* CurrencyField.swift */,
 				4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */,
 				4EEC157229F8242800D46A03 /* QRGeneratorView.swift */,
+				4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */,
 				4E6EDD862A363D8D0031D520 /* ListStyle.swift */,
 				4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */,
 				4EB095492989CBFE0043A8A1 /* AmountView.swift */,
@@ -697,6 +703,7 @@
 				4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */,
 				4EB095602989CBFE0043A8A1 /* BalancesSectionView.swift in Sources */,
 				4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */,
+				4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */,
 				4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */,
 				4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */,
 				4EB0955D2989CBFE0043A8A1 /* BalancesListView.swift in Sources */,
@@ -707,6 +714,7 @@
 				4EB095632989CBFE0043A8A1 /* WithdrawAcceptView.swift in Sources */,
 				4EB0956D2989CBFE0043A8A1 /* LoadingView.swift in Sources */,
 				4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */,
+				4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */,
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
 				4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */,
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,

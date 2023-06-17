@@ -9,11 +9,11 @@ import SymLog
 struct SendPurpose: View {
     private let symLog = SymLogV()
     @FocusState private var isFocused: Bool
-    @StateObject var model = Peer2peerModel.model()
-    @State var peerPushCheck: CheckPeerPushDebitResponse?
+    var model: Peer2peerModel?
 
     var amountAvailable: Amount
     var centsToSend: UInt64
+    var fee: String
     @Binding var purpose: String
     @Binding var expireDays: UInt
     var deactivateAction: () -> Void
@@ -26,20 +26,9 @@ struct SendPurpose: View {
         return formatter.string(for: Decimal(centsToSend) / mag) ?? ""
     }
 
-    private func fee(ppCheck: CheckPeerPushDebitResponse?) -> String {
-        do {
-            if let p2pcheck = ppCheck {
-                let fee = try p2pcheck.amountEffective - p2pcheck.amountRaw
-                return fee.readableDescription
-            }
-        } catch {}
-        return ""
-    }
-
     var body: some View {
         let amount = Amount.amountFromCents(amountAvailable.currencyStr, centsToSend)
 
-        let fee = fee(ppCheck: peerPushCheck)
         VStack (spacing: 6) {
             Text(amount.readableDescription)
             Text("+ \(fee) payment fee")
@@ -79,7 +68,6 @@ struct SendPurpose: View {
 
                 NavigationLink(destination: LazyView {
                     SendNow(amountToSend: amount, purpose: purpose, expireDays: expireDays, model: model)
-                        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
                 }) {
                     Text(buttonTitle)
                         .font(buttonFont)
@@ -93,8 +81,9 @@ struct SendPurpose: View {
             .padding(.horizontal)
         }
         .navigationTitle("To another Wallet")
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setSheetID(VIEW_SEND_PURPOSE)
+            DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE)
             print("❗️ SendPurpose onAppear")
         }
         .onDisappear {
@@ -104,7 +93,7 @@ struct SendPurpose: View {
         .task {
             symLog.log(".task")
             do {
-                peerPushCheck = try await model.checkPeerPushDebitM(amount)
+//                peerPushCheck = try await model.checkPeerPushDebitM(amount)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }
@@ -113,14 +102,21 @@ struct SendPurpose: View {
 
 }
 // MARK: -
+#if DEBUG
 struct SendPurpose_Previews: PreviewProvider {
     static var previews: some View {
         @State var purpose: String = ""
         @State var expireDays: UInt = 0
-        let amount = Amount(currency: "TaLeR", integer: 10, fraction: 0)
-        SendPurpose(amountAvailable: amount, centsToSend: 5,
-                    purpose: $purpose, expireDays: $expireDays) {
+        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
+        SendPurpose(model: nil,
+          amountAvailable: amount,
+              centsToSend: 543,
+                      fee: "0,43",
+                  purpose: $purpose,
+               expireDays: $expireDays
+        ) {
             print("deactivateAction")
         }
     }
 }
+#endif

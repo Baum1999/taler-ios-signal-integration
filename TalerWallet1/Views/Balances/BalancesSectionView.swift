@@ -18,37 +18,46 @@ struct BalancesSectionView: View {
     private let symLog = SymLogV()
     var balance:Balance
     @Binding var centsToTransfer: UInt64
-    @ObservedObject var model: TransactionsModel
+    var model: TransactionsModel?
 
     @State private var isShowingDetailView = false
     @State private var buttonSelected: Int? = nil
+
+    @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
     @State private var uncompletedTransactions: [Transaction] = []
 
+    func dummyTransaction (_ transactionId: String) async throws {}
     var body: some View {
         let currency = balance.available.currencyStr
         let reloadCompleted = {
-            await model.fetchTransactions(currency: currency)
-            completedTransactions = TransactionsModel.completedTransactions(model.transactions)
+            if let model {
+                transactions = await model.fetchTransactionsT(currency: currency)
+                completedTransactions = TransactionsModel.completedTransactions(transactions)
+            }
         }
         let reloadPending = {
-            await model.fetchTransactions(currency: currency)
-            pendingTransactions = TransactionsModel.pendingTransactions(model.transactions)
+            if let model {
+                transactions = await model.fetchTransactionsT(currency: currency)
+                pendingTransactions = TransactionsModel.pendingTransactions(transactions)
+            }
         }
         let reloadUncompleted = {
-            await model.fetchTransactions(currency: currency)
-            uncompletedTransactions = TransactionsModel.uncompletedTransactions(model.transactions)
+            if let model {
+                transactions = await model.fetchTransactionsT(currency: currency)
+                uncompletedTransactions = TransactionsModel.uncompletedTransactions(transactions)
+            }
         }
-        let deleteAction = model.deleteTransaction
-        let abortAction = model.abortTransaction
+        let deleteAction = model?.deleteTransactionT ?? dummyTransaction
+        let abortAction = model?.abortTransactionT ?? dummyTransaction
 
 
         Section {
-            if "KUDOS" == currency && !balance.available.isZero {
-                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send coins to another wallet.")
-                    .multilineTextAlignment(.leading)
-            }
+//            if "KUDOS" == currency && !balance.available.isZero {
+//                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send coins to another wallet.")
+//                    .multilineTextAlignment(.leading)
+//            }
             HStack(spacing: 0) {
                 NavigationLink(destination: LazyView {
                     SendAmount(amountAvailable: balance.available)
@@ -56,10 +65,8 @@ struct BalancesSectionView: View {
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 NavigationLink(destination: LazyView {
-                    RequestPayment(model: Peer2peerModel.model(),
-                               scopeInfo: balance.scopeInfo,
-                         centsToTransfer: $centsToTransfer)
-                        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+                    RequestPayment(scopeInfo: balance.scopeInfo,
+                             centsToTransfer: $centsToTransfer)
                   }, tag: 2, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
@@ -127,9 +134,11 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
             Text(currency)
                 .font(.title)
         } .task {
-            await model.fetchTransactions(currency: currency)
-            pendingTransactions = TransactionsModel.pendingTransactions(model.transactions)
-            uncompletedTransactions = TransactionsModel.uncompletedTransactions(model.transactions)
+            if let model {
+                transactions = await model.fetchTransactionsT(currency: currency)
+                pendingTransactions = TransactionsModel.pendingTransactions(transactions)
+                uncompletedTransactions = TransactionsModel.uncompletedTransactions(transactions)
+            }
         }
     } // body
 }
@@ -137,7 +146,6 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
 #if DEBUG
 fileprivate struct BindingViewContainer : View {
     @State var centsToTransfer: UInt64 = 333
-    let model = TransactionsModel.model(currency: LONGCURRENCY)
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
@@ -148,7 +156,7 @@ fileprivate struct BindingViewContainer : View {
                       requiresUserInput: false,
                               scopeInfo: scopeInfo)
         List {
-            BalancesSectionView(balance: balance, centsToTransfer: $centsToTransfer, model: model)
+            BalancesSectionView(balance: balance, centsToTransfer: $centsToTransfer, model: nil)
         }
     }
 }

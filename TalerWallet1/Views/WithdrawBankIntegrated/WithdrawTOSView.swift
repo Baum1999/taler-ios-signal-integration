@@ -7,12 +7,12 @@ import SymLog
 
 struct WithdrawTOSView: View {
     private let symLog = SymLogV()
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let navTitle = String(localized: "Terms of Service")
 
     var exchangeBaseUrl: String
-    @ObservedObject var model: WithdrawModel
+    var model: WithdrawModel?
 
     @State var exchangeTOS: ExchangeTermsOfService?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
@@ -22,29 +22,29 @@ struct WithdrawTOSView: View {
 
     var body: some View {
         VStack {
-            switch model.withdrawState {
-                case .receivedAmountDetails, .waitingForTOS:
-                    WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                        .navigationTitle("Loading " + navTitle)
-                case .receivedTOS, .waitingForTOSAck, .receivedTOSAck:
-                    Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
-                        Task {
-                            do {
-                                _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)
-                                if acceptAction != nil {
-                                    acceptAction!()
-                                } else {
-                                    self.presentationMode.wrappedValue.dismiss()
-                                }
-                            } catch {    // TODO: Show Error
-                                symLog.log(error.localizedDescription)
+            Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
+                Task {
+                    do {
+                        if let model {
+                            _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)
+                            if acceptAction != nil {
+                                acceptAction!()
+                            } else {
+                                self.presentationMode.wrappedValue.dismiss()
                             }
                         }
+                    } catch {    // TODO: Show Error
+                        symLog.log(error.localizedDescription)
                     }
-                        .navigationBarTitleDisplayMode(.large)      // .inline
-                        .navigationTitle(navTitle)
-                default:
-                    ErrorView(errortext: "unknown state")   // TODO: ???
+                }
+            }
+            .navigationBarTitleDisplayMode(.large)      // .inline
+            .navigationTitle(navTitle)
+            .overlay {
+                if exchangeTOS == nil {
+                    WithdrawProgressView(message: exchangeBaseUrl.trimURL())
+                        .navigationTitle("Loading " + navTitle)
+                }
             }
         }.onAppear() {
             if viewID > SHEET_WITHDRAWAL {
@@ -54,8 +54,10 @@ struct WithdrawTOSView: View {
             }
         }.task {
             do {
-                let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl)
-                exchangeTOS = someTOS
+                if let model {
+                    let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl)
+                    exchangeTOS = someTOS
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }
@@ -77,12 +79,11 @@ extension WithdrawTOSView {
                 List (components, id: \.self) { term in
                     Text(term)
                 }.safeAreaInset(edge: .bottom) {
-                    Button(String(localized: "Accept"), action: acceptAction)
+                    Button(String(localized: "Accept ToS"), action: acceptAction)
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }
-                .listStyle(myListStyle.style)
-                .anyView
+                .listStyle(myListStyle.style).anyView
             } else {
                 ErrorView(errortext: String(localized: "unknown ToS"))     // TODO: ???
             }

@@ -9,23 +9,20 @@ struct PendingOpsListView: View {
     private let symLog = SymLogV(0)
     let navTitle = String(localized: "Pending")
 
-    @ObservedObject var model: PendingModel
+    @State var pendingOperations: [PendingOperation] = []
+    var model: PendingModel
 
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let reloadAction = model.updateM
-        Content(symLog: symLog, model: model, reloadAction: reloadAction)
+        let reloadAction = model.getPendingOperationsM
+        Content(symLog: symLog, pendingOperations: $pendingOperations, reloadAction: reloadAction)
             .navigationTitle(navTitle)
             .task {
                 symLog.log(".task")
-                do {
-                    try await reloadAction()
-                } catch {    // TODO: show error
-                    symLog.log(error.localizedDescription)
-                }
+                pendingOperations = await reloadAction()
             }
     }
 }
@@ -33,16 +30,15 @@ struct PendingOpsListView: View {
 extension PendingOpsListView {
     struct Content: View {
         let symLog: SymLogV?
-        @ObservedObject var model: PendingModel
-        var reloadAction: () async throws -> ()
-
+        @Binding var pendingOperations: [PendingOperation]
+        var reloadAction: () async -> [PendingOperation]
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
             ScrollViewReader { scrollView in
-                List(model.pendingOperations, id: \.self) { pendingOp in
+                List(pendingOperations, id: \.self) { pendingOp in
                     PendingOpView(pendingOp: pendingOp)
                 }
                 .listStyle(SidebarListStyle())
@@ -51,12 +47,8 @@ extension PendingOpsListView {
                     DebugViewC.shared.setViewID(VIEW_PENDING)
                 }
                 .refreshable {
-                    do {
-                        symLog?.log("refreshing")
-                        try await reloadAction()
-                    } catch {    // TODO: error
-                        symLog?.log(error.localizedDescription)
-                    }
+                    symLog?.log("refreshing")
+                    pendingOperations = await reloadAction()
                 }
             }
         }

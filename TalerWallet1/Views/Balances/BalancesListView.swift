@@ -11,13 +11,13 @@ import AVFoundation
 
 struct BalancesListView: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "GNU Taler")       // + Wallet
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    let navTitle: String
 
-    @ObservedObject var model: BalancesModel
-    var hamburgerAction: () -> Void
+    @State var balances: [Balance] = []
+    let model: BalancesModel?
+    let hamburgerAction: () -> Void
 
-    @State private var centsToTransfer: UInt64 = 0        // TODO: maybe Decimal?
+    @State private var centsToTransfer: UInt64 = 0
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
 
@@ -60,22 +60,38 @@ struct BalancesListView: View {
         })
     }
 
+    private func reloadAction() async {
+        if let model {
+            balances = await model.fetchBalancesM()
+        } else {
+            balances = []
+        }
+    }
+
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let reloadAction = model.fetchBalancesM
-        Content(symLog: symLog, model: model, centsToTransfer: $centsToTransfer,
-                reloadAction: reloadAction, myListStyle: $myListStyle)
+        Content(symLog: symLog, balances: $balances, centsToTransfer: $centsToTransfer,
+                reloadAction: reloadAction)
             .navigationTitle(navTitle)
+            .navigationBarTitleDisplayMode(.automatic)
             .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
                                 trailing: QRButton(action: checkCameraAvailable))
+            .overlay {
+                if balances.isEmpty {
+                    WalletEmptyView()
+                }
+            }
             .alert("Scanning QR-codes requires access to the camera",
                    isPresented: $showCameraAlert,
                        actions: {   openSettingsButton
                                     dismissAlertButton },
                        message: {   Text("Please allow camera access in settings.") })
+            .onAppear() {
+                DebugViewC.shared.setViewID(VIEW_BALANCES)
+            }
             .sheet(isPresented: $showQRScanner) {
                 let sheet = AnyView(QRSheet())
                 Sheet(sheetView: sheet)
@@ -90,18 +106,18 @@ struct BalancesListView: View {
 extension BalancesListView {
     struct Content: View {
         let symLog: SymLogV?
-        @ObservedObject var model: BalancesModel
+        @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+        @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
-        var reloadAction: () async -> ()
-        @Binding var myListStyle: MyListStyle
+        var reloadAction: () async -> Void
 
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-            Group {
-                List (model.balances, id: \.self) { balance in
+            Group { // necessary for .backslide transition (bug in SwiftUI)
+                List(balances, id: \.self) { balance in
                     let model = TransactionsModel.model(currency: balance.available.currencyStr)
                     BalancesSectionView(balance: balance, centsToTransfer: $centsToTransfer, model: model)
                 }
@@ -109,18 +125,7 @@ extension BalancesListView {
                     symLog?.log("refreshing")
                     await reloadAction()      // this closure is already async, no need for a Task
                 }
-                .listStyle(myListStyle.style)
-                .anyView
-            }
-            .navigationBarTitleDisplayMode(.automatic)
-            .onAppear() {
-                DebugViewC.shared.setViewID(VIEW_BALANCES)
-            }
-            .overlay {
-                if model.balances.isEmpty {
-                    WalletEmptyView()
-                        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-                }
+                .listStyle(myListStyle.style).anyView
             }
             // automatically fetch balances after receiving transaction-state-transition ...
             .onNotification(.TransactionStateTransition) { notification in

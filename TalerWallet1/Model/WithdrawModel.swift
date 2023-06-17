@@ -7,22 +7,8 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-enum WithdrawState {
-    case error
-    case waitingForUriDetails
-    case receivedUriDetails
-    case waitingForAmountDetails
-    case receivedAmountDetails
-    case waitingForTOS
-    case receivedTOS
-    case waitingForTOSAck
-    case receivedTOSAck
-    case waitingForWithdrAck
-    case receivedWithdrAck
-}
-
 class WithdrawModel: WalletModel {
-    @Published var withdrawState: WithdrawState?
+
     override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
         super.init(symbol)
     }
@@ -166,87 +152,45 @@ extension WithdrawModel {
     @MainActor
     func loadWithdrawalDetailsForUriM(_ talerWithdrawUri: String)               // M for MainActor
       async throws -> WithdrawUriInfoResponse {
-        do {
-            withdrawState = .waitingForUriDetails
-            let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerWithdrawUri)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedUriDetails
-            return response
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+        let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerWithdrawUri)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
     @MainActor
     func loadWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount)  // M for MainActor
       async throws -> ManualWithdrawalDetails {
-        do {
-            withdrawState = .waitingForAmountDetails
-            let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
-                                                                 amount: amount)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedAmountDetails
-            return response
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+        let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
+                                                             amount: amount)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
     @MainActor
     func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String)             // M for MainActor
       async throws -> ExchangeTermsOfService {
-        do {
-            withdrawState = .waitingForTOS
-            let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedTOS
-            return response
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
     @MainActor
     func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String)       // M for MainActor
       async throws -> Decodable {
-        do {
-            withdrawState = .waitingForTOSAck
-            let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedTOSAck
-            return response
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+        let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
     @MainActor
     func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String)   // M for MainActor
       async throws -> String? {
-        do {
-            withdrawState = .waitingForWithdrAck
-            let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedWithdrAck
-            return response.confirmTransferUrl
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+        let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response.confirmTransferUrl
     }
     @MainActor
     func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?)   // M for MainActor
-    async throws -> AcceptManualWithdrawalResult? {
-        do {
-            withdrawState = .waitingForWithdrAck
-            let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
-            let response = try await sendRequestM(request, ASYNCDELAY)          // TODO: MainActor ?
-            withdrawState = .receivedWithdrAck
-            return response
-        } catch {       // rethrows
-            withdrawState = .error
-            throw error
-        }
+      async throws -> AcceptManualWithdrawalResult? {
+        let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
 }
 

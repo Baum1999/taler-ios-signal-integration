@@ -9,53 +9,24 @@ import SymLog
 
 struct PaymentAcceptView: View {
     private let symLog = SymLogV()
-    @ObservedObject var model: PaymentURIModel
 
-    let detailsForAmount: PaymentDetailsForUri
+    let detailsForUri: PaymentDetailsForUri
+    let acceptAction: () -> Void
 
     let navTitle = String(localized: "Accept Payment")
-    @State private var confirmPayResult: ConfirmPayResult?
-
-    func playSound(success: Bool) {
-//        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/PaymentReceived.caf")
-        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_" + (success ? "success.caf"
-                                                                                            : "failure.caf"))
-        var soundID: SystemSoundID = 0
-        AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-        print(soundID)
-        AudioServicesPlaySystemSound(soundID);
-    }
-    func acceptAction() {
-        Task {
-            do {
-                confirmPayResult = try await model.confirmPayM(detailsForAmount.proposalId)
-                symLog.log(confirmPayResult as Any)
-                if confirmPayResult?.type == "done" {
-                    // TODO: Show Hints that Payment was successfull
-                    playSound(success: true)
-                } else {
-                    // TODO: show error
-                    playSound(success: false)
-                }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-            }
-            dismissTop()
-        }
-    }
 
     @State private var disabled = false
     var body: some View {
         Group {
-            let raw = detailsForAmount.amountRaw
-            let effective = detailsForAmount.amountEffective
+            let raw = detailsForUri.amountRaw
+            let effective = detailsForUri.amountEffective
             let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
             ThreeAmountsView(topTitle: "Amount to pay:",
                              topAmount: raw, fee: fee,
                              bottomTitle: "Coins to be spent:",
                              bottomAmount: effective,
                              large: true, pending: false, incoming: false,
-                             baseURL: detailsForAmount.contractTerms.exchanges.first?.url)
+                             baseURL: detailsForUri.contractTerms.exchanges.first?.url)
                 // TODO: payment: popup with all possible exchanges, check fees
             .safeAreaInset(edge: .bottom) {
                 Button(String(localized: "Accept"), action: acceptAction)
@@ -66,10 +37,42 @@ struct PaymentAcceptView: View {
             .navigationTitle(navTitle)
     }
 }
-
-//struct PaymentAccept_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let model: PaymentURIModel =
-//        PaymentAcceptView(model: <#PaymentURIModel#>, detailsForAmount: <#PaymentDetailsForUri#>)
-//    }
-//}
+// MARK: -
+struct PaymentAccept_Previews: PreviewProvider {
+    static var previews: some View {
+        let merchant = Merchant(name: "Merchant")
+        let extra = Extra(articleName: "articleName")
+        let product = Product(description: "description")
+        let terms = ContractTerms(amount: try! Amount(fromString: LONGCURRENCY + ":2.2"),
+                                  maxFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                  maxWireFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                  merchant: merchant,
+                                  extra: extra,
+                                  summary: "summary",
+                                  timestamp: Timestamp.now(),
+                                  payDeadline: Timestamp.tomorrow(),
+                                  refundDeadline: Timestamp.tomorrow(),
+                                  wireTransferDeadline: Timestamp.tomorrow(),
+                                  merchantBaseURL: "merchantBaseURL",
+                                  fulfillmentURL: "fulfillmentURL",
+                                  publicReorderURL: "publicReorderURL",
+                                  auditors: [],
+                                  exchanges: [],
+                                  orderID: "orderID",
+                                  nonce: "nonce",
+                                  merchantPub: "merchantPub",
+                                  products: [product],
+                                  hWire: "hWire",
+                                  wireMethod: "wireMethod",
+                                  wireFeeAmortization: 0)
+        let details = PaymentDetailsForUri(
+            amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
+            amountEffective: try! Amount(fromString: LONGCURRENCY + ":2.4"),
+            noncePriv: "noncePriv",
+            proposalId: "proposalId",
+            contractTerms: terms,
+            contractTermsHash: "termsHash"
+        )
+        PaymentAcceptView(detailsForUri: details, acceptAction: {})
+    }
+}

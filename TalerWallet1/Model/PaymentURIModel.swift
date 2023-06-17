@@ -8,22 +8,12 @@ import AnyCodable
 //import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-enum PaymentState {
-    case error
-    case waitingForUriDetails
-    case receivedUriDetails
-    case waitingForPaymentAck
-    case receivedPaymentAck
-}
-
 class PaymentURIModel: WalletModel {
-    @Published var paymentState: PaymentState?
+
     override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
         super.init(symbol)
     }
 }
-
-
 // MARK: - ContractTerms
 struct ContractTerms: Codable {
     let amount: Amount
@@ -149,30 +139,16 @@ extension PaymentURIModel {
     @MainActor
     func preparePayForUriM(_ talerPayUri: String)       // M for MainActor
       async throws -> PaymentDetailsForUri {
-        do {
-            paymentState = .waitingForUriDetails
-            let request = PreparePayForUri(talerPayUri: talerPayUri)
-            let response = try await sendRequestM(request, ASYNCDELAY)      // TODO: MainActor ?
-            paymentState = .receivedUriDetails
-            return response
-        } catch {       // rethrows
-            paymentState = .error
-            throw error
-        }
+          let request = PreparePayForUri(talerPayUri: talerPayUri)
+          let response = try await sendRequest(request, ASYNCDELAY)
+          return response
     }
     @MainActor
     func confirmPayM(_ proposalId: String)              // M for MainActor
       async throws -> ConfirmPayResult {
-        do {
-            paymentState = .waitingForPaymentAck
-            let request = confirmPayForUri(proposalId: proposalId)
-            let response = try await sendRequestM(request, ASYNCDELAY)      // TODO: MainActor ?
-            paymentState = .receivedPaymentAck
-            return response
-        } catch {       // rethrows
-            paymentState = .error
-            throw error
-        }
+          let request = confirmPayForUri(proposalId: proposalId)
+          let response = try await sendRequest(request, ASYNCDELAY)
+          return response
     }
 }
 

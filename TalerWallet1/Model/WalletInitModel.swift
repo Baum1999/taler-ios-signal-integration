@@ -49,16 +49,11 @@ extension WalletInitModel {
     /// initalize Wallet-Core. Will do networking
     func initWalletT()              // T for any Thread
       async throws -> VersionInfo? {
-        do {
-            let docPath = try docPath()
-            let request = WalletBackendInitRequest(persistentStoragePath: docPath)
-            symLog?.log("info: not main thread")
-            let response = try await sendRequestT(request, 0)    // no Delay
-            return response.versionInfo
-        } catch {       // rethrows
-            symLog?.log("error: \(error)")
-            throw error
-        }
+          let docPath = try docPath()
+          let request = WalletBackendInitRequest(persistentStoragePath: docPath)
+          symLog?.log("info: not main thread")
+          let response = try await sendRequest(request, 0)    // no Delay
+          return response.versionInfo
     }
 
     private func docPath () throws -> String {

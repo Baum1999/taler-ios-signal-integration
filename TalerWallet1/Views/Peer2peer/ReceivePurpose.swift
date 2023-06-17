@@ -9,7 +9,7 @@ import SymLog
 struct ReceivePurpose: View {
     private let symLog = SymLogV()
     @FocusState private var isFocused: Bool
-    @StateObject var model = Peer2peerModel.model()
+    let model = Peer2peerModel.model()
     @State var peerPullCheck: CheckPeerPullCreditResponse?
 
     var scopeInfo: ScopeInfo
@@ -78,7 +78,6 @@ struct ReceivePurpose: View {
 
                 NavigationLink(destination: LazyView {
                     SendNow(amountToSend: amount, purpose: purpose, expireDays: expireDays, model: model)
-                    .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
                 }) {
                     Text(buttonTitle)
                         .font(buttonFont)
@@ -92,6 +91,7 @@ struct ReceivePurpose: View {
             .padding(.horizontal)
         }
         .navigationTitle("Invoice another Wallet")
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setSheetID(VIEW_INVOICE_PURPOSE)
             print("❗️ ReceivePurpose onAppear")

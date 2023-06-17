@@ -7,10 +7,10 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-fileprivate let DEMO_EXCHANGEBASEURL = DEMOEXCHANGE     // "https://exchange.demo.taler.net/"
-fileprivate let DEMO_BANKBASEURL     = DEMOBANK         // "https://bank.demo.taler.net/"
+fileprivate let DEMO_EXCHANGEBASEURL = DEMOEXCHANGE
+fileprivate let DEMO_BANKBASEURL     = DEMOBANK
 fileprivate let DEMO_BANKAPIBASEURL  = DEMOBANK + "/demobanks/default/access-api/"
-fileprivate let DEMO_MERCHANTBASEURL = "https://backend.demo.taler.net/"
+fileprivate let DEMO_MERCHANTBASEURL = DEMOBACKEND
 fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
@@ -23,42 +23,32 @@ class SettingsModel: WalletModel {
 extension SettingsModel {
     @MainActor func loadTestKudosM()
       async throws {          // M for MainActor
-        do {
-            let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)
-            let request = WalletBackendWithdrawTestBalance(amount: amount,
-                                                      bankBaseUrl: DEMO_BANKBASEURL,
-                                                  exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                             bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
-            let response = try await sendRequestM(request, ASYNCDELAY)
-            symLog?.log("received: \(response)")
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
-        }
+        let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)
+        let request = WalletBackendWithdrawTestBalance(amount: amount,
+                                                  bankBaseUrl: DEMO_BANKBASEURL,
+                                              exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                         bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        symLog?.log("received: \(response)")
     }
 
     @MainActor func runIntegrationTestM(newVersion: Bool)
       async throws {               // M for MainActor
-        do {
-            let amountW = Amount(currency: DEMOCURRENCY, integer: 3, fraction: 0)
-            let amountS = Amount(currency: DEMOCURRENCY, integer: 1, fraction: 0)
-            let request = WalletBackendRunIntegration(newVersion: newVersion,
-                                                amountToWithdraw: amountW,
-                                                   amountToSpend: amountS,
-                                                     bankBaseUrl: DEMO_BANKAPIBASEURL,
-                                            bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL,
-                                                 exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                                 merchantBaseUrl: DEMO_MERCHANTBASEURL,
-                                               merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
-            let _ = try await sendRequestT(request, ASYNCDELAY)
-            symLog?.log("runIntegrationTest finished")
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
-        }
+        let amountW = Amount(currency: DEMOCURRENCY, integer: 3, fraction: 0)
+        let amountS = Amount(currency: DEMOCURRENCY, integer: 1, fraction: 0)
+        let request = WalletBackendRunIntegration(newVersion: newVersion,
+                                            amountToWithdraw: amountW,
+                                               amountToSpend: amountS,
+                                                 bankBaseUrl: DEMO_BANKAPIBASEURL,
+                                        bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL,
+                                             exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                             merchantBaseUrl: DEMO_MERCHANTBASEURL,
+                                           merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
+        let _ = try await sendRequest(request, ASYNCDELAY)
+        symLog?.log("runIntegrationTest finished")
     }
 }
-
+// MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedRequest {
     typealias Response = String
@@ -80,7 +70,7 @@ fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedReque
         var bankAccessApiBaseUrl: String
     }
 }
-
+// MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
     struct Response: Decodable {}

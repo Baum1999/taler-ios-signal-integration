@@ -10,7 +10,6 @@ struct RequestPayment: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Request Payment")
 
-    @ObservedObject var model: Peer2peerModel
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64
 
@@ -43,7 +42,6 @@ struct RequestPayment: View {
                     ) {
                         deactivateAction()
                     }
-                    .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
                 }) {
                     Text("title2")
                 }
@@ -56,6 +54,7 @@ struct RequestPayment: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .navigationTitle(navTitle)
         .padding(.horizontal)
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {   // make CurrencyField show the keyboard
             DebugViewC.shared.setViewID(VIEW_INVOICE_P2P)
             print("❗️Yikes \(navTitle) onAppear")

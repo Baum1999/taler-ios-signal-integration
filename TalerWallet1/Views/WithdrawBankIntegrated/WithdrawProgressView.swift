@@ -8,7 +8,7 @@ struct WithdrawProgressView: View {
     let message: String
 
     var body: some View {
-        VStack {
+        Form {
             Spacer()
             ProgressView()
             Spacer()
@@ -17,6 +17,7 @@ struct WithdrawProgressView: View {
             Spacer()
             Spacer()
         }
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
     }
 }
 

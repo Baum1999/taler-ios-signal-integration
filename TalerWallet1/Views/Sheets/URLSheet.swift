@@ -15,9 +15,8 @@ struct URLSheet: View {
 
     var body: some View {
         Group {
-            if urlCommand == UrlCommand.withdraw {
-                let model = WithdrawModel.model(baseURL: "global")      // TODO: get baseURL from command
-                WithdrawURIView(url: urlToOpen, model: model)
+            if urlCommand == .withdraw {
+                WithdrawURIView(url: urlToOpen)
             } else if urlCommand == UrlCommand.pay {
                 let model = PaymentURIModel.model()
                 PaymentURIView(url: urlToOpen, model: model)

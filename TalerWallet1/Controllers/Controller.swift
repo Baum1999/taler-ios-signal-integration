@@ -43,8 +43,8 @@ class Controller: ObservableObject {
                 WalletCore.shared.versionInfo = versionInfo
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows
-                symLog.log(error.localizedDescription)
-                backendState = .error                       // TODO: ❗️Yikes app cannot continue
+                symLog.log(error.localizedDescription)      // TODO: .error
+                backendState = .error                       // ❗️Yikes app cannot continue
                 throw error
             }
         } else {

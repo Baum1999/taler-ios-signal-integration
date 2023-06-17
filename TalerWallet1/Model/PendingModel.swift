@@ -9,10 +9,8 @@ import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 class PendingModel: WalletModel {
-    @Published var pendingOperations: [PendingOperation]
 
     override init(_ symbol: Int = -1) {
-        pendingOperations = []                // empty, but not nil
         super.init(symbol)
     }
 }
@@ -51,12 +49,14 @@ struct PendingOperation: Codable, Hashable {
 }
 // MARK: -
 extension PendingModel {
-    @MainActor func updateM()
-      async throws {   // M for MainActor
+    @MainActor func getPendingOperationsM()
+      async -> [PendingOperation] {   // M for MainActor
         do {
             let request = GetPendingOperations()
-            let response = try await sendRequestM(request, ASYNCDELAY)
-            pendingOperations = response.pendingOperations
+            let response = try await sendRequest(request, ASYNCDELAY)
+            return response.pendingOperations
+        } catch {
+            return []
         }
     }
 }

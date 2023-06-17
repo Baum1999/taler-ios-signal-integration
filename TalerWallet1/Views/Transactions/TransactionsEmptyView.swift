@@ -10,7 +10,7 @@ import SymLog
 
 struct TransactionsEmptyView: View {
     private let symLog = SymLogV()
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let currency: String
 
@@ -22,8 +22,8 @@ struct TransactionsEmptyView: View {
         }
         .padding(.vertical)
         .font(.title2)
-        .listStyle(myListStyle.style)
-        .anyView
+        .listStyle(myListStyle.style).anyView
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10
         }

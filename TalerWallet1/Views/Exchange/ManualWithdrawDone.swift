@@ -11,7 +11,7 @@ struct ManualWithdrawDone: View {
     let navTitle = String(localized: "Wire Transfer")
 
     var exchange: Exchange
-    @ObservedObject var model: WithdrawModel
+    var model: WithdrawModel?
     var centsToTransfer: UInt64
     var restrictAge: Int?
     @State var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
@@ -37,13 +37,15 @@ struct ManualWithdrawDone: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT)
         }.task {
             do {
-                let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
-                let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                          amount: amount, restrictAge: restrictAge)
+                if let model {
+                    let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
+                    let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
+                                                                             amount: amount, restrictAge: restrictAge)
 print(result as Any)
-                let transaction = try await model.getTransactionById(transactionId: result!.transactionId)
-                withdrawalTransaction = transaction
-//                acceptManualWithdrawalResult = result
+                    let transaction = try await model.getTransactionByIdT(result!.transactionId)
+                    withdrawalTransaction = transaction
+//                  acceptManualWithdrawalResult = result
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }
@@ -57,7 +59,6 @@ struct ManualWithdrawDone_Container : View {
     @State private var centsToTransfer: UInt64 = 510
 
     var body: some View {
-        let model = WithdrawModel.model(baseURL: DEMOEXCHANGE)
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
                                        currency: LONGCURRENCY,
                                       paytoUris: [],
@@ -66,7 +67,7 @@ struct ManualWithdrawDone_Container : View {
                           ageRestrictionOptions: [],
                                       permanent: false)
         ManualWithdrawDone(exchange: exchange,
-                              model: model,
+                              model: nil,
                     centsToTransfer: centsToTransfer)
     }
 }

@@ -8,10 +8,7 @@ import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 class ExchangeModel: WalletModel {
-    @Published var exchanges: [Exchange]
-
     override init(_ symbol: Int = -1) {
-        exchanges = []                        // empty, but not nil
         super.init(symbol)
     }
 }
@@ -88,30 +85,22 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 // MARK: -
 extension ExchangeModel {
     /// ask wallet-core for its list of known exchanges
-    @MainActor func updateListM()
-      async throws {       // M for MainActor
+    @MainActor func listExchangesM()
+      async -> [Exchange] {         // M for MainActor
         do {
             let request = ListExchanges()
-            let response = try await sendRequestM(request, ASYNCDELAY)
-            exchanges = response.exchanges              // trigger view update in ExchangeListView
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
+            let response = try await sendRequest(request, ASYNCDELAY)
+            return response.exchanges
+        } catch {
+            return []               // empty, but not nil
         }
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func add(url: String) async throws  {
-        do {
-            symLog?.log("adding exchange: \(url)")       // TODO: notice
-            let request = AddExchange(exchangeBaseUrl: url)
-            _ = try await sendRequestT(request)         // TODO: MainActor?
-            symLog?.log("added exchange: \(url)")
-            try await updateListM()
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
-        }
+    func addExchange(url: String) async throws  {
+        symLog?.log("adding exchange: \(url)")       // TODO: .notice
+        let request = AddExchange(exchangeBaseUrl: url)
+        _ = try await sendRequest(request)
     }
 }
 

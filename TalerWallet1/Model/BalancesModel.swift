@@ -8,10 +8,8 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 class BalancesModel: WalletModel {
-    @Published var balances: [Balance]
 
-    override init(_ symbol: Int = -1) {
-        balances = []                        // empty, but not nil
+    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
         super.init(symbol)
     }
 }
@@ -57,13 +55,13 @@ struct Balance: Decodable, Hashable {
 extension BalancesModel {
     /// fetch Balances from Wallet-Core. No networking involved
     @MainActor func fetchBalancesM()
-      async {          // M for MainActor
+      async -> [Balance] {          // M for MainActor
         do {
             let request = GetBalances()
-            let response = try await sendRequestM(request, ASYNCDELAY)
-            balances = response.balances                // trigger view update in BalancesListView
+            let response = try await sendRequest(request, ASYNCDELAY)
+            return response.balances                // trigger view update in BalancesListView
         } catch {
-            balances = []
+            return []
         }
     }
 }

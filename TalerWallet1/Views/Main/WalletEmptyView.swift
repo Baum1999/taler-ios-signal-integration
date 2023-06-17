@@ -10,7 +10,7 @@ import SymLog
 
 struct WalletEmptyView: View {
     private let symLog = SymLogV()
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
         List {
@@ -27,10 +27,10 @@ struct WalletEmptyView: View {
                 Text("Just register a test account, then withdraw some coins.")
             }
         }
-        .padding(.vertical)
+//        .padding(.vertical)
         .font(.title2)
-        .listStyle(myListStyle.style)
-        .anyView
+        .listStyle(myListStyle.style).anyView
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10
         }

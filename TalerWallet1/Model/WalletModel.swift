@@ -10,30 +10,15 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 /// The "virtual" base class for all models
-class WalletModel: ObservableObject {
+class WalletModel {
     static func className() -> String {"\(self)"}
     var symLog: SymLogC?
-
-    @Published var loading: Bool = false                // update view
 
     init(_ symbol: Int) {                               // init with 0 to disable logging for this class
         self.symLog = SymLogC(symbol == 0 ? 0 : -1, funcName: Self.className())
     }
 
-    @MainActor func sendRequestM<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
-      async throws -> T.Response {  // M for MainActor
-        loading = true                                  // enter progressView
-        do {
-            let response = try await sendRequestT(request, delay)
-            loading = false                             // exit progressView
-            return response
-        } catch {       // rethrows
-            loading = false                             // exit progressView
-            throw error
-        }
-    }
-
-    func sendRequestT<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
+    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
     async throws -> T.Response {    // T for any Thread
         let sendTime = Date.now
         do {
@@ -56,24 +41,21 @@ class WalletModel: ObservableObject {
         }
     }
 
-    func getTransactionById(transactionId: String) async throws -> Transaction {        // might be called from a background thread itself
-        return try await getTransactionByIdM(transactionId: transactionId)      // call deleteTransactionM on main thread
+    func getTransactionByIdT(_ transactionId: String)
+      async throws -> Transaction {              // T for any Thread
+        // might be called from a background thread itself
+        let request = GetTransactionById(transactionId: transactionId)
+        return try await sendRequest(request, ASYNCDELAY)
     }
     /// get the specified transaction from Wallet-Core. No networking involved
-    @MainActor func getTransactionByIdM(transactionId: String)
+    @MainActor func getTransactionByIdM(_ transactionId: String)
     async throws -> Transaction {                // M for MainActor
-        do {
-            let request = GetTransactionById(transactionId: transactionId)
-            let response = try await sendRequestT(request, ASYNCDELAY)
-            return response
-        } catch {       // rethrows
-            throw error
-        }
+        return try await getTransactionByIdT(transactionId)      // call GetTransactionById on main thread
     }
 }
 // MARK: -
 /// A request to get a wallet transaction by ID.
-struct GetTransactionById: WalletBackendFormattedRequest {
+fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = Transaction
     func operation() -> String { return "getTransactionById" }
     func args() -> Args { return Args(transactionId: transactionId) }

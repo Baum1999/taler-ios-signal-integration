@@ -22,9 +22,10 @@ struct PeerContractTerms: Codable {
 // MARK: -
 /// The result from CheckPeerPushDebit
 struct CheckPeerPushDebitResponse: Codable {
-    let amountEffective: Amount
+    let exchangeBaseUrl: String
     let amountRaw: Amount
-//    let maxExpirationDate: Timestamp          // TODO: limit expiration (30 days or 7 days)
+    let amountEffective: Amount
+    let maxExpirationDate: Timestamp?          // TODO: limit expiration (30 days or 7 days)
 }
 /// A request to check fees before sending coins to another wallet.
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
@@ -91,7 +92,7 @@ extension Peer2peerModel {
     func checkPeerPushDebitM(_ amount: Amount)       // M for MainActor
       async throws -> CheckPeerPushDebitResponse {
           let request = CheckPeerPushDebit(amount: amount)
-          let response = try await sendRequestM(request, ASYNCDELAY)
+          let response = try await sendRequest(request, ASYNCDELAY)
           return response
     }
     /// query exchange for fees (invoice coins). Networking involved
@@ -99,7 +100,7 @@ extension Peer2peerModel {
     func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?)       // M for MainActor
     async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
-        let response = try await sendRequestM(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
     /// generate peer-push. Networking involved
@@ -108,7 +109,7 @@ extension Peer2peerModel {
       async throws -> PeerPushResponse {
         let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
                                        partialContractTerms: terms)
-        let response = try await sendRequestM(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
 }

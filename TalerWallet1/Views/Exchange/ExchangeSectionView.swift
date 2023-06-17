@@ -18,22 +18,15 @@ struct ExchangeRowView: View {
             Text(baseURL.trimURL())
 
             NavigationLink(destination: LazyView {
-                EmptyView()
+                EmptyView()     // TODO: Deposit
             }, tag: 1, selection: $buttonSelected
-            ) {
-                EmptyView()
-            }   .frame(width: 0)
-                .opacity(0)
+            ) { EmptyView() }.frame(width: 0).opacity(0)
             NavigationLink(destination: LazyView {
                 ManualWithdraw(exchange: exchange,
                                model: model,
                                centsToTransfer: $centsToTransfer)
-                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             }, tag: 2, selection: $buttonSelected
-            ) {
-                EmptyView()
-            }   .frame(width: 0)
-                .opacity(0)
+            ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
 
         HStack {        // buttons just set "buttonSelected" so the NavigationLink will trigger
@@ -80,7 +73,7 @@ struct ExchangeSectionView: View {
 // MARK: -
 #if DEBUG
 struct ExchangeRow_Container : View {
-    @State private var centsToTransfer: UInt64 = 100        // TODO: maybe Decimal?
+    @State private var centsToTransfer: UInt64 = 100
 
     var body: some View {
         let exchange1 = Exchange(exchangeBaseUrl: DEMO_AGE_EXCHANGE,

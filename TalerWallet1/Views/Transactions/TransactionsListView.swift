@@ -7,7 +7,7 @@ import SymLog
 
 struct TransactionsListView: View {
     private let symLog = SymLogV()
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     let navTitle: String
 
     let currency: String
@@ -22,11 +22,13 @@ struct TransactionsListView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let count = transactions.count
+        // TODO: Unlock the power of grammatical agreement
 //        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
         let title: String = "\(count) \(navTitle)"
         Content(symLog: symLog, currency: currency, transactions: transactions, myListStyle: $myListStyle,
                 reloadAction: reloadAction, deleteAction: deleteAction, abortAction: abortAction)
             .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
                 DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST)
             }
@@ -94,10 +96,10 @@ extension TransactionsListView {
 //                    .onDelete(perform: removeItems)     // delete this row from the list
                 }
                 .refreshable {
+                    symLog?.log("refreshing")
                     await reloadAction()
                 }
-                .listStyle(myListStyle.style)
-                .anyView
+                .listStyle(myListStyle.style).anyView
                 .onAppear {
                     upAction = { withAnimation { scrollView.scrollTo(0) }}
                     downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
@@ -106,7 +108,6 @@ extension TransactionsListView {
                 .overlay {
                     if transactions.isEmpty {
                         TransactionsEmptyView(currency: currency)
-                            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
                     }
                 }
             }
@@ -114,7 +115,6 @@ extension TransactionsListView {
                 ArrowUpButton(action: upAction)
                 ArrowDownButton(action: downAction)
             })
-            .navigationBarTitleDisplayMode(.large)      // .inline
         }
     }
 }

@@ -9,14 +9,8 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 class TransactionsModel: WalletModel {
-    @Published var transactions: [Transaction]
 
     static func specialTransactions(_ transactions: [Transaction]) -> [Transaction] {
-        transactions.filter { transaction in
-            transaction.isSpecial
-        }
-    }
-    var specialTransactions: [Transaction] {
         transactions.filter { transaction in
             transaction.isSpecial
         }
@@ -39,7 +33,6 @@ class TransactionsModel: WalletModel {
     }
 
     override init(_ symbol: Int = -1) {
-        transactions = []                // empty, but not nil
         super.init(symbol)
     }
 }
@@ -92,49 +85,42 @@ struct DeleteTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension TransactionsModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func fetchTransactions(currency: String?) async {             // might be called from a background thread itself
-        await fetchTransactionsM(currency: currency, searchString: nil)
+    func fetchTransactionsT(currency: String? = nil, searchString: String? = nil)
+      async -> [Transaction] {                                          // might be called from a background thread itself
+        do {
+            let request = GetTransactions(currency: currency, search: searchString)
+            let response = try await sendRequest(request, ASYNCDELAY)
+            return response.transactions
+        } catch {
+            return []
+        }
     }
     /// fetch transactions from Wallet-Core. No networking involved
     @MainActor func fetchTransactionsM(currency: String? = nil, searchString: String? = nil)
-      async {              // M for MainActor
-        do {
-            let request = GetTransactions(currency: currency, search: searchString)
-            let response = try await sendRequestM(request, ASYNCDELAY)
-            transactions = response.transactions        // trigger view update in TransactionsListView
-        } catch {
-            transactions = []
-        }
+      async -> [Transaction] {    // M for MainActor
+        await fetchTransactionsT(currency: currency, searchString: searchString)
     }
 
-    func abortTransaction(transactionId: String) async throws {        // might be called from a background thread itself
-        try await abortTransactionM(transactionId: transactionId)      // call deleteTransactionM on main thread
+    func abortTransactionT(transactionId: String)
+      async throws {                                                    // might be called from a background thread itself
+        let request = AbortTransaction(transactionId: transactionId)
+        let _ = try await sendRequest(request, ASYNCDELAY)
     }
     /// delete the specified transaction from Wallet-Core. No networking involved
     @MainActor func abortTransactionM(transactionId: String)
-    async throws {                // M for MainActor
-        do {
-            let request = AbortTransaction(transactionId: transactionId)
-            let _ = try await sendRequestT(request, ASYNCDELAY)
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
-        }
+      async throws {             // M for MainActor
+        try await abortTransactionT(transactionId: transactionId)       // call abortTransaction on main thread
     }
 
-    func deleteTransaction(transactionId: String) async throws {        // might be called from a background thread itself
-        try await deleteTransactionM(transactionId: transactionId)      // call deleteTransactionM on main thread
+    func deleteTransactionT(transactionId: String)
+      async throws {                                                    // might be called from a background thread itself
+        let request = DeleteTransaction(transactionId: transactionId)
+        let _ = try await sendRequest(request, ASYNCDELAY)
     }
     /// delete the specified transaction from Wallet-Core. No networking involved
     @MainActor func deleteTransactionM(transactionId: String)
-    async throws {                // M for MainActor
-        do {
-            let request = DeleteTransaction(transactionId: transactionId)
-            let _ = try await sendRequestT(request, ASYNCDELAY)
-        } catch {       // rethrows
-            symLog?.log(error.localizedDescription)
-            throw error
-        }
+      async throws {              // M for MainActor
+        try await deleteTransactionT(transactionId: transactionId)      // call deleteTransaction on main thread
     }
 }
 

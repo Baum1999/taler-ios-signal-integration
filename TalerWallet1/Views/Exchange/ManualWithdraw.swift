@@ -11,7 +11,7 @@ struct ManualWithdraw: View {
     let navTitle = String(localized: "Withdraw Coins")
 
     var exchange: Exchange
-    @ObservedObject var model: WithdrawModel
+    var model: WithdrawModel?
     @Binding var centsToTransfer: UInt64
 
     @State var manualWithdrawalDetails: ManualWithdrawalDetails? = nil
@@ -45,7 +45,6 @@ struct ManualWithdraw: View {
 
         ScrollView {
             Text("from \(exchange.exchangeBaseUrl.trimURL())")
-                .padding(.top)
                 .font(.title3)
             CurrencyInputView(currencyField: currencyField, title: String(localized: "Amount to withdraw:"))
 
@@ -119,8 +118,9 @@ let _ = print(selectedAge, restrictAge)
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .navigationTitle(navTitle)
         .padding(.horizontal)
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .navigationTitle(navTitle)
         .onAppear {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAWAL)
@@ -128,8 +128,10 @@ let _ = print(selectedAge, restrictAge)
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
-                agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
+                if let model {
+                    manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
+//                  agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 manualWithdrawalDetails = nil

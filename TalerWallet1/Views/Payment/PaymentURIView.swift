@@ -3,41 +3,65 @@
  * See LICENSE.md
  */
 import SwiftUI
+import AVFoundation
 import SymLog
 
 struct PaymentURIView: View {
     private let symLog = SymLogV()
     var url: URL
-    @ObservedObject var model: PaymentURIModel
-    @State var detailsForUri: PaymentDetailsForUri?
+    var model: PaymentURIModel?
 
-    let navTitle = String(localized: "Payment")
+    @State var detailsForUri: PaymentDetailsForUri? = nil
+
+    func playSound(success: Bool) {
+//        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/PaymentReceived.caf")
+        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_" + (success ? "success.caf"
+                                                                                    : "failure.caf"))
+        var soundID: SystemSoundID = 0
+        AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+        print(soundID)
+        AudioServicesPlaySystemSound(soundID);
+    }
+
+    func acceptAction() {
+        Task {
+            do {
+                if let detailsForUri {
+                    if let model {
+                        let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
+                        symLog.log(confirmPayResult as Any)
+                        if confirmPayResult.type == "done" {
+                            // TODO: Show Hints that Payment was successfull
+                            playSound(success: true)
+                        } else {
+                            // TODO: show error
+                            playSound(success: false)
+                        }
+                    }
+                }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+            }
+            dismissTop()
+        }
+    }
 
     var body: some View {
         let badURL = "Error in URL: \(url)"
         VStack {
-            if model.paymentState == nil {
-                LoadingView(backButtonHidden: false)
-            } else { switch model.paymentState {
-                case .waitingForUriDetails:
-                    let _ = symLog.vlog("waitingForUriDetails")
-                    WithdrawProgressView(message: url.host ?? badURL)
-                        .navigationTitle("Contacting Exchange")
-                case .receivedUriDetails:
-                    let _ = symLog.vlog("waitingForUser")
-                    PaymentAcceptView(model: model, detailsForAmount: detailsForUri!)
-                default:
-                    Text("Payment")
-                        .navigationTitle(navTitle)
-            } }
+            if let detailsForUri {
+                PaymentAcceptView(detailsForUri: detailsForUri, acceptAction: acceptAction)
+                    .navigationTitle("Payment")
+            } else {
+                WithdrawProgressView(message: url.host ?? badURL)
+                    .navigationTitle("Contacting Exchange")
+            }
         }.task {
-            do { // TODO: cancelled
+            do {
                 symLog.log(".task")
-                detailsForUri = try await model.preparePayForUriM(url.absoluteString)
-//                print(detailsForUri?.status)
-//                print(detailsForUri?.amountRaw.description)
-//                print(detailsForUri?.amountEffective.description)
-//                print(detailsForUri?.proposalId)
+                if let model {
+                    detailsForUri = try await model.preparePayForUriM(url.absoluteString)
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }

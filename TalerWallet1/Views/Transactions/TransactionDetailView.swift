@@ -8,7 +8,7 @@ import SymLog
 
 struct TransactionDetailView: View {
     private let symLog = SymLogV()
-    @AppStorage("listStyle") var myListStyle = MyListStyle.automatic
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var transaction: Transaction
     var deleteAction: ((_ transactionId: String) async throws -> Void)?
@@ -58,8 +58,7 @@ print(transition.newTxState.major)
 //                    ResumeButton(common: common, resumeAction: resumeAction)
 //                } }
             }
-            .listStyle(myListStyle.style)
-            .anyView
+            .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
         .onAppear {
@@ -125,6 +124,7 @@ print(transition.newTxState.major)
             }
         }
     }
+
     struct QRCodeDetails: View {
         var transaction : Transaction
         var body: some View {
