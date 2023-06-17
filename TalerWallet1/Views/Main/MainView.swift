@@ -28,33 +28,34 @@ struct MainView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-            NavigationView {   // the one and only for all non-sheet views
-                if controller.backendState == .ready {
-                    Content(symLog: symLog)
-                        // any change to rootViewId triggers popToRootView behaviour
-                        .id(viewState.rootViewId)
-                        .onOpenURL { url in
-                            symLog.log(".onOpenURL: \(url)")
-                            // will be called on a taler:// scheme either
-                            // by user tapping such link in a browser (bank website)
-                            // or when launching the app from iOS Camera.app scanning a QR code
-                            urlToOpen = url     // raise sheet
-                        }
-                } else if controller.backendState == .error {
-                    ErrorView(errortext: nil)            // TODO: show Error View
-                } else {
-                    LaunchAnimationView()
-                }
-            }.navigationViewStyle(.stack)
-            .overlay(alignment: .top) {
-                // Show the viewID on top of the app's NavigationView
-                DebugViewV()
-                    .id("ViewID")
+        Group {
+            if controller.backendState == .ready {
+                Content(symLog: symLog)
+                // any change to rootViewId triggers popToRootView behaviour
+                    .id(viewState.rootViewId)
+            } else if controller.backendState == .error {
+                ErrorView(errortext: nil)            // TODO: show Error View
+            } else {
+                LaunchAnimationView()
             }
-            .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
-                let sheet = AnyView(URLSheet(urlToOpen: url))
-                Sheet(sheetView: sheet)
-            }
+        }
+        .animation(.easeOut(duration: LAUNCHDURATION), value: controller.backendState)
+        .overlay(alignment: .top) {
+            // Show the viewID on top of the app's NavigationView
+            DebugViewV()
+                .id("ViewID")
+        }
+        .onOpenURL { url in
+            symLog.log(".onOpenURL: \(url)")
+            // will be called on a taler:// scheme either
+            // by user tapping such link in a browser (bank website)
+            // or when launching the app from iOS Camera.app scanning a QR code
+            urlToOpen = url     // raise sheet
+        }
+        .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
+            let sheet = AnyView(URLSheet(urlToOpen: url))
+            Sheet(sheetView: sheet)
+        }
     } // body
 }
 // MARK: - Content
@@ -97,12 +98,19 @@ extension MainView {
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
             ZStack(alignment: .leading) {
-                views[currentView].view
-                    .id(views[currentView].name)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .transition(.backslide)
-                SideBarView(views: views, currentView: $currentView, sidebarVisible: $sidebarVisible)
+                NavigationView {   // the one and only for all non-sheet views
+                    VStack(alignment: .leading) {   // only needed for backslide transition
+                        views[currentView].view
+                            .id(views[currentView].name)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .transition(.backslide)
+                    }
+                }.navigationViewStyle(.stack)
+                // The side view is on top of the current view
+                SideBarView(views: views,
+                      currentView: $currentView,
+                   sidebarVisible: $sidebarVisible)
             }
         }
-    }
+    } // Content
 }

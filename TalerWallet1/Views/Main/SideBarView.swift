@@ -15,21 +15,39 @@ struct SidebarItem {
 
 struct SideBarView: View {
     private let symLog = SymLogV(0)
-    var views: [SidebarItem]
+    let views: [SidebarItem]
     @Binding var currentView: Int
     @Binding var sidebarVisible: Bool
+    @State private var rotationEnabled = false
+    @State private var rotationDirection = false
+
+    private let animationTimer = Timer
+        .publish(every: 1.6, on: .current, in: .common)
+        .autoconnect()
 
     var body: some View {
         HStack {    // sideView left, clear dismiss target right
             EqualIconWidthDomain {
                 VStack(spacing: 10) {
-                    Text("GNU Taler")
-                        .font(.largeTitle).bold()
+                    Link("GNU Taler", destination: URL(string:"https://taler.net")!)
+                        .font(.largeTitle)  //.bold()     iOS 16
+                        .padding(.top, 30)
                     Image("taler-logo-2023-red")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 100)
+                        .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
                         .accessibilityHidden(true)          // decorative logo
+                        .onTapGesture {
+                            rotationEnabled.toggle()
+                        }
+                        .onReceive(animationTimer) { timerValue in
+                            if rotationEnabled {
+                                withAnimation(.easeInOut(duration: 1.9)) {
+                                    rotationDirection.toggle()
+                                }
+                            }
+                        }
                     ForEach(0..<views.count, id: \.self) { i in
                         Button {
                             symLog.log("sidebar item \"\(views[i].name)\" selected")
@@ -68,7 +86,8 @@ struct SideBarView: View {
                     sidebarVisible = false
                 }
         }
-        .animation(sidebarVisible ? .easeOut : .easeIn, value: sidebarVisible)
+        .animation(.linear  //(duration: SLIDEDURATION)
+                   , value: sidebarVisible)
     }
 }
 // MARK: -
@@ -81,6 +100,7 @@ fileprivate struct BindingViewContainer : View {
     var body: some View {
         ZStack(alignment: .leading) {
             views[currentView].view
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             SideBarView(views: views, currentView: $currentView, sidebarVisible: $sidebarVisible)
         }
     }

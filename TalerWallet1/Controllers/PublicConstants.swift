@@ -4,6 +4,9 @@
  */
 import Foundation
 
+public let LAUNCHDURATION: Double = 1.60
+public let SLIDEDURATION: Double = 0.45
+
 public let HTTPS = "https://"
 public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
 public let DEMOSHOP = HTTPS + "shop.demo.taler.net"
