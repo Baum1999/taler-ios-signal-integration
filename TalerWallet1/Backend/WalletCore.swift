@@ -98,6 +98,7 @@ extension WalletCore {
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
+                // TODO: Error handling
             } catch {        // JSON encoding of response.result failed / should never happen
                 symLog.log(walletError)                 // TODO: .error
                 completion(requestId, timeSent, nil, WalletCore.parseFailureError())
@@ -163,6 +164,9 @@ extension WalletCore {
         } else if id.hasPrefix("withdraw:") {
             // TODO: handle withdraw
 //            symLog.log("\(pendingOp): \(id)")
+        } else if id.hasPrefix("peer-push-debit:") {
+            // TODO: handle peer-push-debit
+//            symLog.log("\(pendingOp): \(id)")
         } else {
             // TODO: handle other pending-operation-processed
 print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I haven't seen before
@@ -206,17 +210,16 @@ print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I have
                     symLog.log(anyPayload)
                     postNotification(.ProposalDownloaded, userInfo: nil)
 
-                case "reserve-registered-with-bank":
-                    symLog.log(anyPayload)
-
-                // TODO: remove these once wallet-core doesn't send them anymore
-                case "withdraw-group-finished",
-                     "pay-operation-success",
-                     "withdrawal-group-bank-confirmed",          // replaced by transaction-state-transition
-                     "withdrawal-group-reserve-ready",
-                     "coin-withdrawn",                           // totally useless since wallet-core handles coins in bulk
-                     "waiting-for-retry",                        // Bla Bla Bla
-                     "refresh-started", "refresh-melted",
+                    // TODO: remove these once wallet-core doesn't send them anymore
+//                case "reserve-registered-with-bank":
+//                    symLog.log(anyPayload)
+//                case "withdraw-group-finished",
+//                     "pay-operation-success",
+//                     "withdrawal-group-bank-confirmed",          // replaced by transaction-state-transition
+//                     "withdrawal-group-reserve-ready",
+//                     "coin-withdrawn",                           // totally useless since wallet-core handles coins in bulk
+//                     "waiting-for-retry",                        // Bla Bla Bla
+                case "refresh-started", "refresh-melted",
                      "refresh-revealed", "refresh-unwarranted":
                     break
                 default:
@@ -336,7 +339,7 @@ print("Request \(requestId) took \(millisecs) ms")
                         } else {
                             self.symLog.log(json)       // TODO: .error
                         }
-                        err = error     // this will be thrown
+                        err = error     // this will be thrown, otherwise keep nil
                     }
                 } else {
                     if let error = error {
