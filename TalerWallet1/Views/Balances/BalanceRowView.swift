@@ -28,7 +28,7 @@ struct BalanceRowView: View {
                     Text("Balance")
                         .font(.footnote)
                         .accessibility(sortPriority: 2)
-                    Text("\(amount.valueStr)")  // TODO: CurrencyFormatter
+                    Text("\(amount.valueStr)")  // TODO: CurrencyFormatter?
                         .font(.title)
                         .accessibility(sortPriority: 1)
                 }

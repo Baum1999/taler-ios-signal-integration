@@ -119,22 +119,30 @@ struct TalerButtonStyle: ButtonStyle {
     }
 
     func foreColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
-        return if type == .plain {
-            WalletColors().fieldForeground
-        } else {
+//        return if type == .plain {
+//            WalletColors().fieldForeground
+//        } else {
+//            WalletColors().buttonForeColor(pressed: pressed,
+//                                          disabled: disabled(),
+//                                         prominent: type == .prominent)
+//        }
+        return type == .plain ? WalletColors().fieldForeground :
             WalletColors().buttonForeColor(pressed: pressed,
-                                          disabled: disabled(),
-                                         prominent: type == .prominent)
-        }
+                                           disabled: disabled(),
+                                           prominent: type == .prominent)
     }
     func backColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
-        return if type == .plain {
-            Color.clear
-        } else {
+//        return if type == .plain {
+//            Color.clear
+//        } else {
+//            WalletColors().buttonBackColor(pressed: pressed,
+//                                           disabled: disabled(),
+//                                           prominent: type == .prominent)
+//        }
+        return type == .plain ? Color.clear :
             WalletColors().buttonBackColor(pressed: pressed,
                                            disabled: disabled(),
                                            prominent: type == .prominent)
-        }
     }
     struct BackgroundView: View {
         let color: Color
@@ -207,7 +215,7 @@ struct Buttons_Previews: PreviewProvider {
 }
 
 #if DEBUG
-struct ContentView: View {
+fileprivate struct ContentView: View {
     @State var isOn = false
     //The better route is to have a separate variable to control the animations
     // This prevents unpleasant side-effects.
@@ -235,7 +243,7 @@ struct ContentView: View {
         }
     }
 }
-struct ContentView_Previews: PreviewProvider {
+fileprivate struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }

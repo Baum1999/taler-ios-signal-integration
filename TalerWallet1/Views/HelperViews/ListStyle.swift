@@ -31,12 +31,12 @@ public extension View {
 // Here we make it CaseIterable for SwiftUI.ForEach
 // and the UI Display name
 public enum MyListStyle: String, CaseIterable, Hashable {
-    case automatic    = "Automatic"
-    case grouped      = "Grouped"
-    case inset        = "Inset"
-    case insetGrouped = "InsetGrouped"
-    case plain        = "Plain"
-    case sidebar      = "Sidebar"
+    case automatic
+    case grouped
+    case inset
+    case insetGrouped
+    case plain
+    case sidebar
 
     // map to SwiftUI ListStyle
     var style: any SwiftUI.ListStyle {
@@ -59,45 +59,29 @@ public enum MyListStyle: String, CaseIterable, Hashable {
 struct AnyViewDemo: View {
     @State private var selectedStyle = MyListStyle.automatic
 
-    let sections = ["Breakfast", "Lunch", "Dinner"]
-    let breakfast = ["pancakes", "bacon", "orange juice"]
+    let sections  = ["Breakfast" : ["pancakes", "bacon", "orange juice"],
+                                    "Lunch"     : ["sandwich", "chips", "lemonade"],
+                                    "Dinner"    : ["spaghetti", "bread", "water"]]
+
+
     var body: some View {
         VStack {
             Picker("List Style", selection: $selectedStyle) {
                 ForEach(MyListStyle.allCases, id: \.self) {
-                    Text($0.displayName).tag($0)
+                    Text($0.displayName.capitalized).tag($0)
                 }
             }
 
-            List(sections, id: \.self) { section in
-                Section(section) {
-                    if "Breakfast" == section {
-                        ForEach(breakfast, id: \.self) { item in
+            let keys = Array(sections.keys)
+            List(keys.indices, id: \.self) { index in
+                let key = keys[index]
+                if let section = sections[key] {
+                    Section(key) {
+                        ForEach(section, id: \.self) { item in
                             Text(item)
                         }
-                    } else {
-                        Text("row")
                     }
                 }
-//                Section("Breakfast") {
-//                    Text("pancakes")
-//                    Text("bacon")
-//                    Text("orange juice")
-//                }
-//                Section("Lunch") {
-//                    Text("sandwich")
-//                    Text("chips")
-//                    Text("lemonade")
-//                }
-//                Section("Dinner") {
-//                    Text("spaghetti")
-//                    Text("bread")
-//                    Text("water")
-//                }
-            }
-            .refreshable {
-                print("refreshing")
-                // this closure is already async, no need for a Task
             }
             .listStyle(selectedStyle.style)
             .anyView

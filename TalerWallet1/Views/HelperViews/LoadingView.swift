@@ -15,7 +15,7 @@ struct LoadingView: View {
             .navigationBarBackButtonHidden(backButtonHidden)
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .background(WalletColors().backgroundColor)
+//            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
     }
 }
 // MARK: -

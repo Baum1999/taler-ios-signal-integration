@@ -4,12 +4,14 @@
  */
 import Foundation
 
-public let DEMOBANK = "https://bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
-public let DEMOSHOP = "https://shop.demo.taler.net"
-//public let DEMOEXCHANGE = "https://eXcHaNgE.dEmO.tAlEr.nEt"
-public let DEMOEXCHANGE = "https://exchange.demo.taler.net"
-public let DEMO_AGE_EXCHANGE = "https://exchange-age.taler.ar"
-public let DEMO_EXP_EXCHANGE = "https://exchange-expensive.taler.ar"
+public let HTTPS = "https://"
+public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
+public let DEMOSHOP = HTTPS + "shop.demo.taler.net"
+public let DEMOBACKEND = HTTPS + "backend.demo.taler.net"
+//public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"
+public let DEMOEXCHANGE = HTTPS + "exchange.demo.taler.net"
+public let DEMO_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar"
+public let DEMO_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar"
 public let DEMOCURRENCY = "KUDOS"
 //public let LONGCURRENCY = "gold-pressed Latinum"                // 20 characters, with dash and space
 public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters, no dash, no space
