@@ -20,6 +20,7 @@ struct ManualDetails: View {
                 Text(iban)
                 Spacer()
                 CopyButton(textToCopy: iban, vertical: true)
+                    .accessibilityLabel("Copy IBAN")
                     .disabled(false)
             }   .padding(.leading)
                 .padding(.vertical, -8)
@@ -28,8 +29,10 @@ struct ManualDetails: View {
                 .listRowSeparator(.hidden)
             HStack {
                 Text(details.reservePub)
+                    .accessibilityLabel("Taler cryptocode")
                 Spacer()
                 CopyButton(textToCopy: details.reservePub, vertical: true)
+                    .accessibilityLabel("Copy subject")
                     .disabled(false)
             }   .padding(.leading)
                 .padding(.vertical, -8)
@@ -37,14 +40,16 @@ struct ManualDetails: View {
             HStack {
                 Spacer()
                 ShareButton(textToShare: payto, dismissFirst: false)
+                    .accessibilityLabel("Share PayTo ULR")
                     .disabled(false)
                 Spacer()
             }   .listRowSeparator(.hidden)
-            Text("Payto URL")
+            Text(verbatim: "PayTo URL")       // the only reason for this leading-aligned text is to get a nice full lenght listRowSeparator
                 .font(.footnote)
                 .foregroundColor(Color.yellow)   // clear
                 .padding(.vertical, -8)
                 .listRowSeparator(.automatic)
+                .accessibilityHidden(true)
         }
     }
 }
