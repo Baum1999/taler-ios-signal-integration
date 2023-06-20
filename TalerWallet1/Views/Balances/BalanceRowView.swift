@@ -14,26 +14,32 @@ struct BalanceRowView: View {
     let recvAction: () -> Void
     let rowAction: () -> Void
     var body: some View {
+        let currency = amount.currencyStr
         HStack {
             Button("Request\nPayment", action: recvAction)
                 .lineLimit(2)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .leading))
-            Button("Send\nCoins", action: sendAction)
+            Button("Send\n\(currency)", action: sendAction)
                 .lineLimit(2)
                 .disabled(amount.isZero)
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .leading))
             Button(action: rowAction) {
-                VStack(alignment: .trailing) {
-                    Text("Balance")
-                        .font(.footnote)
+                VStack(alignment: .trailing, spacing: 0) {
+                    HStack(alignment: .firstTextBaseline, spacing: 0) {
+                        Text("B")
+                            .font(.title2)
+                        Text("alance")
+                            .font(.footnote).bold()
                         .accessibility(sortPriority: 2)
+                    }
                     Text("\(amount.valueStr)")  // TODO: CurrencyFormatter?
                         .font(.title)
                         .accessibility(sortPriority: 1)
                 }
             }   .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .plain, aligned: .trailing))
+//                .background(Color.yellow)
         }
         .fixedSize(horizontal: false, vertical: true)   // should make all buttons equal height - but doesn't
         .accessibilityElement(children: .combine)

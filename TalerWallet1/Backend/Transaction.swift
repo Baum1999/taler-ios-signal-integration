@@ -321,6 +321,21 @@ enum Transaction: Decodable, Hashable, Identifiable {
 
     var id: String { common.transactionId }
 
+    var localizedType: String {
+        switch common.type {
+            case .withdrawal:   return String(localized: "Withdrawal")
+            case .deposit:      return String(localized: "Deposit")
+            case .payment:      return String(localized: "Payment")
+            case .refund:       return String(localized: "Refund")
+            case .refresh:      return String(localized: "Refresh")
+            case .reward:       return String(localized: "Reward")
+            case .peerPushDebit:  return String(localized: "P2P Send")
+            case .scanPushCredit: return String(localized: "P2P Receive")
+            case .peerPullCredit: return String(localized: "P2P Invoice")
+            case .scanPullDebit:  return String(localized: "P2P Payment")
+        }
+    }
+    
     static func == (lhs: Transaction, rhs: Transaction) -> Bool {
         return lhs.id == rhs.id
     }

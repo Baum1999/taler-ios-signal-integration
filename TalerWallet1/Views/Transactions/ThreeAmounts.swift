@@ -64,7 +64,7 @@ struct ThreeAmountsView: View {
                        large: large)
             if let baseURL {
                 VStack {
-                    Text(incoming ? "from Exchange" : "to Exchange")
+                    Text(incoming ? "from Exchange:" : "to Exchange:")
                         .font(.title3)
                     Text(baseURL.trimURL())
                         .font(large ? .title : .title2)

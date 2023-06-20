@@ -38,6 +38,7 @@ struct SendAmount: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountAvailable.currencyStr
+        let navTitle = String(localized: "Send \(currency)")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         let fee = fee(ppCheck: peerPushCheck)
@@ -45,7 +46,8 @@ struct SendAmount: View {
             let available = amountAvailable.readableDescription
             Text("Available: \(available)")
                 .font(.title3)
-            CurrencyInputView(currencyField: currencyField, title: "Amount to send:")
+            CurrencyInputView(currencyField: currencyField,
+                              title: String(localized: "Amount to send:"))
 
             Text("+ \(fee) payment fee")
                 .foregroundColor(.red)
@@ -67,7 +69,7 @@ struct SendAmount: View {
                            expireDays: $expireDays,
                      deactivateAction: {})
                 }) {
-                    Text(title2)
+                    Text("To another wallet")
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)

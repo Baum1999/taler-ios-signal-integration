@@ -8,7 +8,6 @@ import SymLog
 
 struct RequestPayment: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Request Payment")
 
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64
@@ -22,10 +21,13 @@ struct RequestPayment: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currencyField = CurrencyField(value: $centsToTransfer, currency: scopeInfo.currency)
+        let currency = scopeInfo.currency
+        let navTitle = String(localized: "Request \(currency)")
+        let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         VStack(alignment: .leading, spacing: 6) {
-            CurrencyInputView(currencyField: currencyField, title: "Amount to receive:")
+            CurrencyInputView(currencyField: currencyField,
+                              title: String(localized: "Amount to receive:"))
 
             HStack {
                 let disabled = centsToTransfer == 0
@@ -43,7 +45,7 @@ struct RequestPayment: View {
                         deactivateAction()
                     }
                 }) {
-                    Text("title2")
+                    Text("Create invoice")
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
@@ -52,9 +54,9 @@ struct RequestPayment: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .navigationTitle(navTitle)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .navigationTitle(navTitle)
         .onAppear {   // make CurrencyField show the keyboard
             DebugViewC.shared.setViewID(VIEW_INVOICE_P2P)
             print("❗️Yikes \(navTitle) onAppear")

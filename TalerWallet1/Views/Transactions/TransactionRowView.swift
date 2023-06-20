@@ -38,30 +38,14 @@ struct TransactionRowView: View {
                       : done ? WalletColors().transactionColor(incoming)
                              : WalletColors().uncompletedColor
 
-        HStack {
+        HStack(spacing: 6) {
             Image(systemName: incoming ? "text.badge.plus" : "text.badge.minus")
                 .foregroundColor(foreColor)
-                .padding(.trailing)
                 .font(.largeTitle)
                 .accessibility(hidden: true)
 
-            if transaction.isWithdrawal {
-                TransactionRowCenter(centerTop: String(localized: "Withdrawal"), centerBottom: dateString)
-            } else if transaction.isPayment {
-                TransactionRowCenter(centerTop: String(localized: "Payment"), centerBottom: dateString)
-            } else if transaction.isP2pOutgoing {
-                TransactionRowCenter(centerTop: String(localized: "P2P Send"), centerBottom: dateString)
-            } else if transaction.isP2pIncoming {
-                TransactionRowCenter(centerTop: String(localized: "P2P Receive"), centerBottom: dateString)
-            } else if transaction.isRefund {
-                TransactionRowCenter(centerTop: String(localized: "Refund"), centerBottom: dateString)
-            } else if transaction.isRefresh {
-                TransactionRowCenter(centerTop: String(localized: "Refresh"), centerBottom: dateString)
-            } else if keys.contains(EXCHANGEBASEURL) {
-                if let baseURL = details[EXCHANGEBASEURL] {
-                    TransactionRowCenter(centerTop: baseURL.trimURL(), centerBottom: dateString)
-                }
-            }
+            TransactionRowCenter(centerTop: transaction.localizedType,
+                                 centerBottom: dateString)
             Spacer()
             VStack(alignment: .trailing) {
                 let sign = incoming ? "+" : "-"

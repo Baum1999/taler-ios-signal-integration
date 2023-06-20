@@ -29,7 +29,8 @@ struct SideBarView: View {
         HStack {    // sideView left, clear dismiss target right
             EqualIconWidthDomain {
                 VStack(spacing: 10) {
-                    Link("GNU Taler", destination: URL(string:"https://taler.net")!)
+                    let gnuTaler = String("GNU Taler")  // this should NOT be translated
+                    Link(gnuTaler, destination: URL(string:"https://taler.net")!)
                         .font(.largeTitle)  //.bold()     iOS 16
                         .padding(.top, 30)
                     Image("taler-logo-2023-red")

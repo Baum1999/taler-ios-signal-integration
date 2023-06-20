@@ -20,10 +20,11 @@ struct PaymentAcceptView: View {
         Group {
             let raw = detailsForUri.amountRaw
             let effective = detailsForUri.amountEffective
+            let currency = raw.currencyStr
             let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-            ThreeAmountsView(topTitle: "Amount to pay:",
+            ThreeAmountsView(topTitle: String(localized: "Amount to pay:"),
                              topAmount: raw, fee: fee,
-                             bottomTitle: "Coins to be spent:",
+                             bottomTitle: String(localized: "\(currency) to be spent:"),
                              bottomAmount: effective,
                              large: true, pending: false, incoming: false,
                              baseURL: detailsForUri.contractTerms.exchanges.first?.url)
