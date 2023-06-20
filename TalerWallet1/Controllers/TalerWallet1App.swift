@@ -45,27 +45,27 @@ struct TalerWallet1App: App {
                     symLog.log("task -> initWalletCore done")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
-                    print("❗️App Did Become Active notification")
+                    symLog.log("❗️App Did Become Active notification")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
-                    print("❗️App Will Resign notification")
+                    symLog.log("❗️App Will Resign notification")
                     isActive = false
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
-                    print("❗️App Will Enter Foreground notification")
+                    symLog.log("❗️App Will Enter Foreground notification")
                     isActive = true
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification, object: nil)) { _ in
-                    print("❗️App Will Terminate notification")
+                    symLog.log("❗️App Will Terminate notification")
                 }
 
         }
         .onChange(of: phase) { newPhase in
             switch newPhase {
                 case .active:
-                    print("❗️ .onChange(of: phase) ==> newPhase: Active")
+                    symLog.log("❗️ .onChange(of: phase) ==> newPhase: Active")
                 case .background:
-                    print("❗️ .onChange(of: phase) ==> newPhase: Background)")
+                    symLog.log("❗️ .onChange(of: phase) ==> newPhase: Background)")
                     scheduleAppRefresh()
                 default: break
             }

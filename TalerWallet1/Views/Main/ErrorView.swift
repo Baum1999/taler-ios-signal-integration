@@ -6,7 +6,7 @@ import SwiftUI
 import SymLog
 
 struct ErrorView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     let errortext: String?
 

@@ -33,7 +33,7 @@ class TransactionsModel: WalletModel {
     }
 
     override init(_ symbol: Int = -1) {
-        super.init(symbol)
+        super.init(0)//symbol)
     }
 }
 

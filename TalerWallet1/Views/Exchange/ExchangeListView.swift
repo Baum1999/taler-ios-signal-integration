@@ -8,7 +8,7 @@ import SymLog
 
 /// This view shows the list of exchanges
 struct ExchangeListView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle: String
 
     var model: ExchangeModel?

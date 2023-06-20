@@ -90,7 +90,7 @@ public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 170 Recei
 
 // MARK: -
 struct DebugViewV: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @EnvironmentObject private var debugViewC: DebugViewC
 
     var body: some View {
@@ -113,7 +113,7 @@ struct DebugViewV: View {
 }
 // MARK: -
 class DebugViewC: ObservableObject {
-    private let symLog = SymLogC()                         // 0 to switch off viewID change logging
+    private let symLog = SymLogC(0)                         // 0 to switch off viewID change logging
     public static let shared = DebugViewC()
     @AppStorage("developerMode") var developerMode: Bool = false
 

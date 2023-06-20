@@ -18,7 +18,7 @@ import SymLog
  */
 
 struct SettingsView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle: String
 
     @AppStorage("developerMode") var developerMode: Bool = false

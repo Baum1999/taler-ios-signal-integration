@@ -9,7 +9,7 @@ private let DATABASE = "talerwalletdb-v30"
 
 class WalletInitModel: WalletModel {
     override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
-        super.init(symbol)
+        super.init(0)//symbol)
     }
 }
 // MARK: -

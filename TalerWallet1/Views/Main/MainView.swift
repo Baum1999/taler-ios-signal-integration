@@ -14,7 +14,7 @@ struct LazyView<Content: View>: View {
 }
 
 struct MainView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
     @State private var sheetPresented = false

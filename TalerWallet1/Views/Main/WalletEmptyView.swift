@@ -9,7 +9,7 @@ import SymLog
 /// It is the very first thing the user sees after installing the app
 
 struct WalletEmptyView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {

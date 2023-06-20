@@ -139,16 +139,16 @@ extension WalletCore {
     private func postNotificationM(_ aName: NSNotification.Name,
                            object anObject: Any? = nil,
                                   userInfo: [AnyHashable: Any]? = nil) async {
-        symLog.log(aName.rawValue)
         NotificationCenter.default.post(name: aName, object: anObject, userInfo: userInfo)
     }
     private func postNotification(_ aName: NSNotification.Name,
                           object anObject: Any? = nil,
                                  userInfo: [AnyHashable: Any]? = nil) {
         Task {
+            if let userInfo { symLog.log(userInfo) } else { symLog.log(aName) }
             await postNotificationM(aName, object: anObject, userInfo: userInfo)
+            symLog.log("sent " + aName.rawValue)
         }
-        if let userInfo { symLog.log(userInfo) } else { symLog.log(aName) }
     }
 
     private func handlePendingProcessed(_ payload: Payload) throws {
@@ -223,7 +223,7 @@ print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I have
                      "refresh-revealed", "refresh-unwarranted":
                     break
                 default:
-print("\n❗️ ", anyPayload, "\n")        // this is a new notification I haven't seen before
+print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {

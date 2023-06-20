@@ -11,7 +11,7 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 class PendingModel: WalletModel {
 
     override init(_ symbol: Int = -1) {
-        super.init(symbol)
+        super.init(0)//symbol)
     }
 }
 // MARK: -
