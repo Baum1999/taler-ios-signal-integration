@@ -9,11 +9,12 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV()
 
+    let model: Peer2peerModel?
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64
+    @Binding var purpose: String
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
-    @State private var purpose: String = ""
     @State private var expireDays: UInt = 0
 
     var body: some View {
@@ -28,6 +29,10 @@ struct RequestPayment: View {
         VStack(alignment: .leading, spacing: 6) {
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to receive:"))
+
+            let someCoins = SomeCoins(details: peerPullCheck)
+            QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
+                           currency: currency, amountEffective: peerPullCheck?.amountEffective)
 
             HStack {
                 let disabled = centsToTransfer == 0
@@ -59,10 +64,24 @@ struct RequestPayment: View {
         .navigationTitle(navTitle)
         .onAppear {   // make CurrencyField show the keyboard
             DebugViewC.shared.setViewID(VIEW_INVOICE_P2P)
-            print("❗️Yikes \(navTitle) onAppear")
+            symLog.log("❗️Yikes \(navTitle) onAppear")
         }
         .onDisappear {
-            print("❗️Yikes \(navTitle) onDisappear")
+            symLog.log("❗️Yikes \(navTitle) onDisappear")
+        }
+        .task(id: centsToTransfer) {
+            let amount = Amount.amountFromCents(currency, centsToTransfer)
+            do {
+                if let model {
+                    let ppCheck = try await model.checkPeerPullCreditM(amount, exchangeBaseUrl: nil)
+                    peerPullCheck = ppCheck
+                    // TODO: set from exchange
+//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+                peerPullCheck = nil
+            }
         }
     }
 }

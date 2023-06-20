@@ -3,6 +3,7 @@
  * See LICENSE.md
  */
 import SwiftUI
+import taler_swift
 import SymLog
 
 // Will be called either by the user scanning a QR code or tapping the provided link, both from the bank's website
@@ -10,41 +11,67 @@ import SymLog
 // after the user confirmed the withdrawal, we remind them to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
     private let symLog = SymLogV()
+    let navTitle = String(localized: "Accept Withdrawal")
+
     // the URL from the bank website
-    var url: URL
+    let url: URL
 
     let model = WithdrawModel.model(baseURL: "global")      // TODO: get baseURL from URL
 
     // the exchange used for this withdrawal.
-    @State var exchangeBaseUrl: String = ""
-    @State var manualWithdrawalDetails: ManualWithdrawalDetails?
-    @State var didAcceptTOS: Bool = false
+    @State private var exchangeBaseUrl: String? = nil
+    @State private var manualWithdrawalDetails: ManualWithdrawalDetails?
 
     var body: some View {
         let badURL = "Error in URL: \(url)"
         VStack {
-            if !didAcceptTOS {      // user must accept ToS first
-                WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
-                                          model: model,
-                                         viewID: SHEET_WITHDRAW_TOS) {
-                    didAcceptTOS = true
+            if let manualWithdrawalDetails, let exchangeBaseUrl {
+                List {
+                    let raw = manualWithdrawalDetails.amountRaw
+                    let effective = manualWithdrawalDetails.amountEffective
+                    let currency = raw.currencyStr
+                    let fee = try! Amount.diff(raw, effective)
+                    let outColor = WalletColors().transactionColor(false)
+                    let inColor = WalletColors().transactionColor(true)
+
+                    ThreeAmountsView(topTitle: String(localized: "Chosen amount to withdraw:"),
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "\(currency) to be withdrawn:"),
+                                 bottomAmount: effective,
+                                        large: false, pending: false, incoming: true,
+                                      baseURL: exchangeBaseUrl)
+                    let someCoins = SomeCoins(details: manualWithdrawalDetails)
+                    QuiteSomeCoins(someCoins: someCoins, shouldShowFee: false,
+                                   currency: raw.currencyStr, amountEffective: effective)
                 }
-            } else {                // show Amount details and let user accept
-                WithdrawAcceptView(url: url, model: model,
-                                   detailsForAmount: manualWithdrawalDetails!,
-                                   baseURL: exchangeBaseUrl)
-            }
-        }
-        .overlay {
-            if !exchangeBaseUrl.hasPrefix(HTTPS) {
-                WithdrawProgressView(message: url.host ?? badURL)
-                    .navigationTitle("Contacting Exchange")
-            } else if manualWithdrawalDetails == nil {
-                WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                    .navigationTitle("Found Exchange")
+                .navigationTitle(navTitle)
+                let tosAccepted = manualWithdrawalDetails.tosAccepted
+                if tosAccepted {
+                    NavigationLink(destination: LazyView {
+                        WithdrawAcceptDone(exchangeBaseUrl: exchangeBaseUrl, model: model, url: url)
+                    }) {
+                        Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                    }.buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding()
+                } else {
+                    NavigationLink(destination: LazyView {
+                        WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
+                                                  model: model,
+                                                 viewID: SHEET_WITHDRAW_TOS,
+                                           acceptAction: nil)         // pop back to here
+                    }) {
+                        Text("Check Terms of Service")  // VIEW_WITHDRAW_TOS
+                    }.buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding()
+                }
+            } else {
+                // Yikes no details or no baseURL
+//                WithdrawProgressView(message: url.host ?? badURL)
+//                    .navigationTitle("Contacting Exchange")
             }
         }
         .onAppear() {
+            symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)
         }
         .task {
@@ -57,19 +84,17 @@ struct WithdrawURIView: View {
                 } else if let first = withdrawUriInfo.possibleExchanges.first {
                     exchangeBaseUrl = first.exchangeBaseUrl
                 }
-                if exchangeBaseUrl.hasPrefix(HTTPS) {
-                    symLog.log("amount: \(amount), baseURL: \(String(describing: exchangeBaseUrl))")
-                    // TODO: let user choose exchange from list
-                    manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
-                    symLog.log("raw: \(manualWithdrawalDetails!.amountRaw), effective: \(manualWithdrawalDetails!.amountEffective)")
-                    if manualWithdrawalDetails!.tosAccepted {
-                        didAcceptTOS = true
-                    }
-                } else {
-                    // TODO: error no exchange!
+                if let exchangeBaseUrl {
+                    let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
+                    manualWithdrawalDetails = details
+//                  agePicker.setAges(ages: details?.ageRestrictionOptions)
+                } else {    // TODO: error
+                    symLog.log("no exchangeBaseUrl")
+                    manualWithdrawalDetails = nil
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
+                manualWithdrawalDetails = nil
             }
         }
     }

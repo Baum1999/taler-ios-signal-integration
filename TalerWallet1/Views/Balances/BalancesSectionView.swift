@@ -18,6 +18,7 @@ struct BalancesSectionView: View {
     private let symLog = SymLogV()
     var balance:Balance
     @Binding var centsToTransfer: UInt64
+    @Binding var purpose: String
     var model: TransactionsModel?
 
     @State private var isShowingDetailView = false
@@ -29,7 +30,19 @@ struct BalancesSectionView: View {
     @State private var uncompletedTransactions: [Transaction] = []
 
     func dummyTransaction (_ transactionId: String) async throws {}
+    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
+        if let model {
+            return try await model.getTransactionByIdT(transactionId)
+        } else {
+            throw WalletBackendError.walletCoreError
+        }
+    }
+
     var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         let currency = balance.available.currencyStr
         let reloadCompleted = {
             if let model {
@@ -52,6 +65,7 @@ struct BalancesSectionView: View {
         let deleteAction = model?.deleteTransactionT ?? dummyTransaction
         let abortAction = model?.abortTransactionT ?? dummyTransaction
 
+        let p2pModel = Peer2peerModel.model(baseURL: currency)
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -60,27 +74,33 @@ struct BalancesSectionView: View {
 //            }
             HStack(spacing: 0) {
                 NavigationLink(destination: LazyView {
-                    SendAmount(amountAvailable: balance.available)
+                    SendAmount(model: p2pModel,
+                     amountAvailable: balance.available,
+                     centsToTransfer: $centsToTransfer,
+                             purpose: $purpose)
                   }, tag: 1, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 NavigationLink(destination: LazyView {
-                    RequestPayment(scopeInfo: balance.scopeInfo,
-                             centsToTransfer: $centsToTransfer)
+                    RequestPayment(model: p2pModel,
+                               scopeInfo: balance.scopeInfo,
+                         centsToTransfer: $centsToTransfer,
+                                 purpose: $purpose)
                   }, tag: 2, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 NavigationLink(destination: LazyView {
                     TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
                                      transactions: completedTransactions,
-                                     reloadAction: reloadCompleted,
+                                  reloadAllAction: reloadCompleted,
+                                  reloadOneAction: reloadOneAction,
                                      deleteAction: deleteAction,
                                       abortAction: abortAction)
                   }, tag: 3, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 BalanceRowView(amount: balance.available, sendAction: {
-print("button: Send Coins: \(currency)")
+print("button: Send \(currency)")
                         buttonSelected = 1      // will trigger SendAmount NavigationLink
                     }, recvAction: {
 print("button: Request Payment: \(currency)")
@@ -99,7 +119,8 @@ let _ = print("button: Pending Transactions: \(currency)")
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Pending"), currency: currency,
                                          transactions: pendingTransactions,
-                                         reloadAction: reloadPending,
+                                      reloadAllAction: reloadPending,
+                                      reloadOneAction: reloadOneAction,
                                          deleteAction: deleteAction,
                                           abortAction: abortAction)
                     }
@@ -121,9 +142,10 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Uncompleted"), currency: currency,
                                              transactions: uncompletedTransactions,
-                                             reloadAction: reloadUncompleted,
+                                          reloadAllAction: reloadUncompleted,
+                                          reloadOneAction: reloadOneAction,
                                              deleteAction: deleteAction,
-                                             abortAction: abortAction)
+                                              abortAction: abortAction)
                     }
                 } label: {
                     UncompletedRowView(uncompletedTransactions: uncompletedTransactions)
@@ -146,6 +168,7 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
 #if DEBUG
 fileprivate struct BindingViewContainer : View {
     @State var centsToTransfer: UInt64 = 333
+    @State private var purpose: String = "bla-bla"
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
@@ -156,7 +179,10 @@ fileprivate struct BindingViewContainer : View {
                       requiresUserInput: false,
                               scopeInfo: scopeInfo)
         List {
-            BalancesSectionView(balance: balance, centsToTransfer: $centsToTransfer, model: nil)
+            BalancesSectionView(balance: balance,
+                        centsToTransfer: $centsToTransfer,
+                                purpose: $purpose,
+                                  model: nil)
         }
     }
 }

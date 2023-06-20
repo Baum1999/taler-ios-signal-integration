@@ -12,7 +12,8 @@ struct TransactionsListView: View {
 
     let currency: String
     let transactions: [Transaction]
-    var reloadAction: () async -> ()
+    let reloadAllAction: () async -> ()
+    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
     let deleteAction: (_ transactionId: String) async throws -> ()
     let abortAction: (_ transactionId: String) async throws -> ()
 
@@ -26,7 +27,8 @@ struct TransactionsListView: View {
 //        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
         let title: String = "\(count) \(navTitle)"
         Content(symLog: symLog, currency: currency, transactions: transactions, myListStyle: $myListStyle,
-                reloadAction: reloadAction, deleteAction: deleteAction, abortAction: abortAction)
+                reloadAllAction: reloadAllAction, reloadOneAction: reloadOneAction,
+                deleteAction: deleteAction, abortAction: abortAction)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
@@ -34,7 +36,7 @@ struct TransactionsListView: View {
             }
             .task {
                 symLog.log(".task ")
-                await reloadAction()
+                await reloadAllAction()
             }
     }
 }
@@ -45,7 +47,8 @@ extension TransactionsListView {
         let currency: String
         let transactions: [Transaction]
         @Binding var myListStyle: MyListStyle
-        let reloadAction: () async -> ()
+        let reloadAllAction: () async -> ()
+        let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
         let deleteAction: (_ transactionId: String) async throws -> ()
         let abortAction: (_ transactionId: String) async throws -> ()
 
@@ -87,6 +90,7 @@ extension TransactionsListView {
                         NavigationLink { LazyView {        // whole row like in a tableView
                             // pending may not be deleted, but only aborted
                             TransactionDetailView(transaction: transaction,
+                                                 reloadAction: reloadOneAction,
                                                  deleteAction: deleteAction,
                                                   abortAction: abortAction)
                         }} label: {
@@ -97,7 +101,7 @@ extension TransactionsListView {
                 }
                 .refreshable {
                     symLog?.log("refreshing")
-                    await reloadAction()
+                    await reloadAllAction()
                 }
                 .listStyle(myListStyle.style).anyView
                 .onAppear {

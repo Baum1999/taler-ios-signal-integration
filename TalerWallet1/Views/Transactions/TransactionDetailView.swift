@@ -9,11 +9,15 @@ import SymLog
 struct TransactionDetailView: View {
     private let symLog = SymLogV()
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("developerMode") var developerMode: Bool = false
 
-    var transaction: Transaction
+    @State var transaction: Transaction
+    var reloadAction: ((_ transactionId: String) async throws -> Transaction)
     var deleteAction: ((_ transactionId: String) async throws -> Void)?
     var abortAction: ((_ transactionId: String) async throws -> Void)?
     var doneAction: (() -> Void)?
+    var suspendAction: ((_ transactionId: String) async throws -> Void)?
+    var resumeAction: ((_ transactionId: String) async throws -> Void)?
 
     var body: some View {
 #if DEBUG
@@ -30,35 +34,49 @@ struct TransactionDetailView: View {
                 Text("\(dateString)")
                     .font(.title2)
 //                .listRowSeparator(.hidden)
-                SwitchCase(transaction: transaction, common: common)
+                SwitchCase(transaction: $transaction)
 
                 if transaction.isAbortable { if let abortAction {
-                    AbortButton(common: common, abortAction: abortAction)
+                    TransactionButton(transactionId: common.transactionId,
+                                      command: .abort, action: abortAction)
                 } }
                 if transaction.isDeleteable { if let deleteAction {
-                    DeleteButton(common: common, deleteAction: deleteAction)
+                    TransactionButton(transactionId: common.transactionId,
+                                      command: .delete, action: deleteAction)
                 } }
 
                 if let doneAction {
                     DoneButton(doneAction: doneAction)
-                        .onNotification(.TransactionStateTransition) { notification in
-print(notification.userInfo)
-                            if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-print(transition.newTxState.major)
-                                if transition.transactionId == common.transactionId {
-                                    doneAction()
-                                }
-                            }
-                        }
                 }
-//                if transaction.isSuspendable { if let suspendAction {
-//                    SuspendButton(common: common, suspendAction: suspendAction)
-//                } }
-//                if transaction.isResumable { if let resumeAction {
-//                    ResumeButton(common: common, resumeAction: resumeAction)
-//                } }
+                if developerMode {
+                    if transaction.isSuspendable { if let suspendAction {
+                        TransactionButton(transactionId: common.transactionId,
+                                          command: .suspend, action: suspendAction)
+                    } }
+                    if transaction.isResumable { if let resumeAction {
+                        TransactionButton(transactionId: common.transactionId,
+                                          command: .resume, action: resumeAction)
+                    } }
+                }
+            }.listStyle(myListStyle.style).anyView
+        }.onNotification(.TransactionStateTransition) { notification in
+            if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+                if transition.transactionId == common.transactionId {
+                    let newState = transition.newTxState.major
+                    if newState == .done { if let doneAction {
+                        symLog.log("newTxState.major == done")
+                        doneAction()
+                    }} else { Task { do {
+                        symLog.log("newState: \(newState), reloading transaction")
+                        let reloadedTransaction = try await reloadAction(common.transactionId)
+                        transaction = reloadedTransaction       // redraw
+                      } catch {
+                          symLog.log(error.localizedDescription)
+                    }}}
+                }
+            } else {
+                symLog.log(notification.userInfo as Any)
             }
-            .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
         .onAppear {
@@ -73,21 +91,34 @@ print(transition.newTxState.major)
 //
 //extension TransactionDetail {
     struct SwitchCase: View {
-        let transaction: Transaction
-        let common: TransactionCommon
+        @Binding var transaction: Transaction
 
         var body: some View {
-            let pending = (common.txState.major == TransactionMajorState.pending)
+            let common = transaction.common
+            let pending = transaction.isPending
             switch transaction {
                 case .withdrawal(let withdrawalTransaction):
                     let details = withdrawalTransaction.details
                     if pending {
-                        switch details.withdrawalDetails.type {
-                            case .manual:
-                                ManualDetails(common: common, details: details.withdrawalDetails)
+                        let withdrawalDetails = details.withdrawalDetails
+                        switch withdrawalDetails.type {
+                            case .manual:               // "Make a wire transfer of \(amount) to"
+                                ManualDetails(common: common, details: withdrawalDetails)
 
-                            case .bankIntegrated:
-                                QRCodeDetails(transaction: transaction)
+                            case .bankIntegrated:       // "Confirm with bank"
+                                VStack {
+                                    if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
+                                        if let destination = URL(string: confirmationUrl) {
+                                            // Show Hint that User should Confirm on bank website
+                                            Text("Waiting for bank confirmation")
+                                                .listRowSeparator(.hidden)
+                                            Link("Confirm with bank", destination: destination)
+                                                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+                                                .padding(.horizontal)
+
+                                        }
+                                    }
+                                }
                         }
                     }
                     ThreeAmounts(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
@@ -148,78 +179,6 @@ print(transition.newTxState.major)
             }
         }
     }
-    struct DeleteButton: View {
-        var common : TransactionCommon
-        var deleteAction: (_ transactionId: String) async throws -> Void
-
-        @State var disabled: Bool = false
-        @State var deleted: Bool = false
-        var body: some View {
-            Button(role: .destructive, action: {
-                Task {                  // delete from wallet-core
-                    disabled = true     // don't try this more than once
-                    do {
-                        try await deleteAction(common.transactionId)
-//                        symLog.log("deleted \(common.transactionId)")
-                        deleted = true
-                    } catch {    // TODO: error
-//                        symLog.log(error.localizedDescription)
-                    }
-                }
-            }, label: {
-                HStack {
-                    if deleted {
-                        Text("Deleted from list")
-                    } else {
-                        Text("Delete from list" + "        ")
-                        Image(systemName: "trash")
-                    }
-                }
-                .font(.title)
-                .frame(maxWidth: .infinity)
-            })
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            .padding(.horizontal)
-            .disabled(disabled)
-        }
-    }
-    struct AbortButton: View {
-        var common : TransactionCommon
-        var abortAction: (_ transactionId: String) async throws -> Void
-
-        @State var disabled: Bool = false
-        @State var aborting: Bool = false
-        var body: some View {
-            Button(role: .cancel, action: {
-                Task {                  // delete from wallet-core
-                    disabled = true     // don't try this more than once
-                    do {
-                        try await abortAction(common.transactionId)
-//                        symLog.log("aborted \(common.transactionId)")
-                        aborting = true
-                    } catch {    // TODO: error
-//                        symLog.log(error.localizedDescription)
-                    }
-                }
-            }, label: {
-                HStack {
-                    if aborting {
-                        Text("Abort pending...")
-                    } else {
-                        Text("Abort" + "        ")
-                        Image(systemName: "x.circle")
-                    }
-                }
-                .font(.title)
-                .frame(maxWidth: .infinity)
-            })
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            .padding(.horizontal)
-            .disabled(disabled)
-        }
-    }
     struct DoneButton: View {
         var doneAction: () -> Void
 
@@ -245,10 +204,11 @@ struct TransactionDetail_Previews: PreviewProvider {
                                       pending: false,
                                            id: "some payment ID",
                                          time: Timestamp(from: 1_666_666_000_000))
+    static func reloadActionDummy(transactionId: String) async -> Transaction { return withdrawal }
     static var previews: some View {
         Group {
-            TransactionDetailView(transaction: withdrawal, doneAction: doneActionDummy)
-            TransactionDetailView(transaction: payment, deleteAction: deleteTransactionDummy)
+            TransactionDetailView(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
+            TransactionDetailView(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
         }
     }
 }

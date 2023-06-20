@@ -9,7 +9,6 @@ import SymLog
 struct ReceivePurpose: View {
     private let symLog = SymLogV()
     @FocusState private var isFocused: Bool
-    let model = Peer2peerModel.model()
     @State var peerPullCheck: CheckPeerPullCreditResponse?
 
     var scopeInfo: ScopeInfo
@@ -38,6 +37,7 @@ struct ReceivePurpose: View {
 
     var body: some View {
         let amount = Amount.amountFromCents(scopeInfo.currency, centsToTransfer)
+        let model = Peer2peerModel.model(baseURL: scopeInfo.currency)
 
         let fee = pullFee(ppCheck: peerPullCheck)
         VStack (spacing: 6) {

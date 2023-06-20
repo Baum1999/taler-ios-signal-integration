@@ -8,54 +8,61 @@ import SymLog
 
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV()
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-
-    let confirmTransferUrl: String?
-
     let navTitle = String(localized: "Confirm with Bank")
 
+    let exchangeBaseUrl: String
+    let model: WithdrawModel?
+    let url: URL
+
+    @State private var confirmTransferUrl: String? = nil
+    @State private var transaction: Transaction? = nil
+
+    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
+        if let model {
+            return try await model.getTransactionByIdT(transactionId)
+        } else {
+            throw WalletBackendError.walletCoreError
+        }
+    }
+
     var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         VStack {
-            Text(navTitle)
-                .font(.title)
-                .padding()
-            List {
-                if let confirmTransferUrl {
-                    let destination = URL(string: confirmTransferUrl)!
-                    // Show Hint that User should Confirm on bank website
-                    Text("Waiting for bank confirmation")
-                        .listRowSeparator(.hidden)
-                    
-                    
-                    Link("Confirm with bank", destination: destination)
-                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                    // balances will be updated by TransactionStateTransition
-                }
+            if let transaction {
+                TransactionDetailView(transaction: transaction,
+                                     reloadAction: reloadOneAction,
+                                       doneAction: { dismissTop() })
+                .navigationBarBackButtonHidden(true)
+                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+                .navigationTitle(navTitle)
+            } else {
+                WithdrawProgressView(message: "Bank Confirmation")
+                    .navigationTitle("Loading...")
             }
-            .listStyle(myListStyle.style).anyView
-
-        }
-        .interactiveDismissDisabled()       // can only use "Done" button to dismiss
-        .navigationBarHidden(true)          // no back button, no title
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-
-        .safeAreaInset(edge: .bottom) {
-            Button("Done", action: { dismissTop() })
-                .lineLimit(2)
-                .disabled(false)
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-                .padding()
-        }
-        .navigationTitle(navTitle)
-        .onAppear() {
+        }.onAppear() {
+            symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
+        }.task {
+            do {
+                if let model {
+                    let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
+                    confirmTransferUrl = result!.confirmTransferUrl
+                    transaction = try await model.getTransactionByIdT(result!.transactionId)
+                }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+            }
         }
     }
 }
 // MARK: -
 struct WithdrawAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
-        WithdrawAcceptDone(confirmTransferUrl: DEMOBANK)
+        WithdrawAcceptDone(exchangeBaseUrl: DEMOEXCHANGE,
+                           model: nil,
+                           url: URL(string: DEMOSHOP)!)
     }
 }

@@ -8,12 +8,16 @@ struct WithdrawProgressView: View {
     let message: String
 
     var body: some View {
-        Form {
+        VStack {
             Spacer()
             ProgressView()
             Spacer()
-            Text(message)
-                .font(.title)
+            HStack {
+                Spacer()
+                Text(message)
+                    .font(.title)
+                Spacer()
+            }
             Spacer()
             Spacer()
         }

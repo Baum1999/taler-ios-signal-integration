@@ -6,31 +6,28 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+// Will be called by the user tapping "Send Coins" in the balances list
 struct SendAmount: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Send Coins")
-//    @ObservedObject private var keyboardResponder = KeyboardResponder()
-//    @FocusState private var isFocused: Bool
-    let model = Peer2peerModel.model()
-    @State var peerPushCheck: CheckPeerPushDebitResponse?
 
+    let model: Peer2peerModel?
     let amountAvailable: Amount
-    let buttonFont: Font = .title2
+    @Binding var centsToTransfer: UInt64
+    @Binding var purpose: String
 
-    @State private var centsToTransfer: UInt64 = 0
-    @State private var purpose: String = ""
+    @State var peerPushCheck: CheckPeerPushDebitResponse?
     @State private var expireDays: UInt = 0
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> String {
         do {
-            if let p2pcheck = ppCheck {
-                let fee = try p2pcheck.amountEffective - p2pcheck.amountRaw
+            if let ppCheck {
+                // Outgoing: fee = effective - raw
+                let fee = try ppCheck.amountEffective - ppCheck.amountRaw
                 return fee.readableDescription
             }
         } catch {}
         return ""
     }
-
 
     var body: some View {
 #if DEBUG
@@ -51,14 +48,10 @@ struct SendAmount: View {
 
             Text("+ \(fee) payment fee")
                 .foregroundColor(.red)
-            Text("Choose where to send to:")
-                .padding(.top)
-                .font(.title3)
-            HStack {
-                let kbdShown: Bool = false  // keyboardResponder.keyboardHeight > 0
-                let title2 = kbdShown ? "To wallet" : "To another\nwallet"
-                let disabled = centsToTransfer == 0    // TODO: check amountAvailable
+                .padding(4)
 
+            HStack {
+                let disabled = centsToTransfer == 0    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
                     SendPurpose(model: model,
@@ -82,19 +75,21 @@ struct SendAmount: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {   // make CurrencyField show the keyboard
-            symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_SEND_P2P)
-            print("❗️Yikes SendAmount onAppear")
+            symLog.log("❗️Yikes SendAmount onAppear")
         }
         .onDisappear {
-            print("❗️Yikes SendAmount onDisappear")
+            symLog.log("❗️Yikes SendAmount onDisappear")
         }
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                peerPushCheck = try await model.checkPeerPushDebitM(amount)
-                // TODO: set from exchange
-//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                if let model {
+                    let ppCheck = try await model.checkPeerPushDebitM(amount)
+                    peerPushCheck = ppCheck
+                    // TODO: set from exchange
+                    //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 peerPushCheck = nil
@@ -104,10 +99,22 @@ struct SendAmount: View {
 }
 // MARK: -
 #if DEBUG
+struct SendAmount_Container : View {
+    @State private var centsToTransfer: UInt64 = 510
+    @State private var purpose: String = ""
+
+    var body: some View {
+        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
+        SendAmount(model: nil,
+         amountAvailable: amount,
+         centsToTransfer: $centsToTransfer,
+                 purpose: $purpose)
+    }
+}
+
 struct SendAmount_Previews: PreviewProvider {
     static var previews: some View {
-        let amount = Amount(currency: "TaLeR", integer: 10, fraction: 0)
-        SendAmount(amountAvailable: amount)
+        SendAmount_Container()
     }
 }
 #endif

@@ -10,12 +10,21 @@ struct ManualWithdrawDone: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Wire Transfer")
 
-    var exchange: Exchange
-    var model: WithdrawModel?
-    var centsToTransfer: UInt64
-    var restrictAge: Int?
+    let exchange: Exchange
+    let model: WithdrawModel?
+    let centsToTransfer: UInt64
+//    let restrictAge: Int?
+
     @State var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State var withdrawalTransaction: Transaction?
+
+    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
+        if let model {
+            return try await model.getTransactionByIdT(transactionId)
+        } else {
+            throw WalletBackendError.walletCoreError
+        }
+    }
 
     var body: some View {
 #if DEBUG
@@ -25,7 +34,8 @@ struct ManualWithdrawDone: View {
         VStack {
             if let transaction = withdrawalTransaction {
                 TransactionDetailView(transaction: transaction,
-                                       doneAction: {ViewState.shared.popToRootView()})
+                                     reloadAction: reloadOneAction,
+                                       doneAction: ViewState.shared.popToRootView)
                 .navigationBarBackButtonHidden(true)            // exit only by Done-Button
                 .navigationTitle(navTitle)
             } else {
@@ -40,11 +50,10 @@ struct ManualWithdrawDone: View {
                 if let model {
                     let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
                     let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                             amount: amount, restrictAge: restrictAge)
+                                                                             amount: amount, restrictAge: 0)
 print(result as Any)
                     let transaction = try await model.getTransactionByIdT(result!.transactionId)
                     withdrawalTransaction = transaction
-//                  acceptManualWithdrawalResult = result
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)

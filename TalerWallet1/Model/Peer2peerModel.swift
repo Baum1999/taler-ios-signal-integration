@@ -22,7 +22,7 @@ struct PeerContractTerms: Codable {
 // MARK: -
 /// The result from CheckPeerPushDebit
 struct CheckPeerPushDebitResponse: Codable {
-    let exchangeBaseUrl: String
+    let exchangeBaseUrl: String?
     let amountRaw: Amount
     let amountEffective: Amount
     let maxExpirationDate: Timestamp?          // TODO: limit expiration (30 days or 7 days)
@@ -43,8 +43,9 @@ fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
 struct CheckPeerPullCreditResponse: Codable {
     let scopeInfo: ScopeInfo?
     let exchangeBaseUrl: String?
-    let amountEffective: Amount
     let amountRaw: Amount
+    let amountEffective: Amount
+    var numCoins: Int?                  // Number of coins this amountEffective will create
 }
 /// A request to check fees before invoicing another wallet.
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
@@ -105,7 +106,7 @@ extension Peer2peerModel {
     }
     /// generate peer-push. Networking involved
     @MainActor
-    func initiatePeerPushDebitM(_ baseURL: String, terms: PeerContractTerms)       // M for MainActor
+    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
       async throws -> PeerPushResponse {
         let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
                                        partialContractTerms: terms)
@@ -116,15 +117,17 @@ extension Peer2peerModel {
 
 // MARK: -
 extension Peer2peerModel {
-    private static var models: [Peer2peerModel] = []     // a list of models even though I currently need only one
+    private static var exchanges: [String] = []         // names of exchanges
+    private static var models: [Peer2peerModel] = []    // one model per exchange
 
-    static func model() -> Peer2peerModel {
-        if Peer2peerModel.models.count > 0 {
-            let model = Peer2peerModel.models[0]
+    static func model(baseURL: String) -> Peer2peerModel {
+        if let index = Peer2peerModel.exchanges.firstIndex(of:baseURL) {
+            let model = Peer2peerModel.models[index]
             return model
         } else {        // new model
             let model = Peer2peerModel()
             Peer2peerModel.models.append(model)
+            Peer2peerModel.exchanges.append(baseURL)
             return model
         }
     }

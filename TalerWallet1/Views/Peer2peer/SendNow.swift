@@ -53,8 +53,8 @@ struct SendNow: View {
                 if let model {
                     let timestamp = Timestamp.inSomeDays(expireDays)
                     let terms = PeerContractTerms(amount: amountToSend, summary: purpose, purse_expiration: timestamp)
-                    let baseURL = DEMOEXCHANGE  // TODO: use correct baseURL
-                    peerPushResponse = try await model.initiatePeerPushDebitM(baseURL, terms: terms)
+                    // TODO: user might choose baseURL
+                    peerPushResponse = try await model.initiatePeerPushDebitM(nil, terms: terms)
                     talerURI = peerPushResponse?.talerUri
                 }
             } catch {    // TODO: error

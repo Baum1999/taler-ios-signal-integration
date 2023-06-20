@@ -7,6 +7,7 @@ import taler_swift
 
 struct ExchangeRowView: View {
     let exchange: Exchange
+    let currency: String
     @Binding var centsToTransfer: UInt64
 
     @State private var buttonSelected: Int? = nil
@@ -30,15 +31,13 @@ struct ExchangeRowView: View {
         }.listRowSeparator(.hidden)
 
         HStack {        // buttons just set "buttonSelected" so the NavigationLink will trigger
-            Button("Deposit\nCoins") { buttonSelected = 1 }
+            Button("Deposit\n\(currency)") { buttonSelected = 1 }
                 .multilineTextAlignment(.center)
-                .lineLimit(2)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
                 .disabled(true)     // TODO: after implementing Deposit check available
 
-            Button("Withdraw\nCoins") { buttonSelected = 2 }
+            Button("Withdraw\n\(currency)") { buttonSelected = 2 }
                 .multilineTextAlignment(.center)
-                .lineLimit(2)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
         }.listRowSeparator(.visible)
 //        .listRowSeparatorTint(.red)
@@ -61,7 +60,7 @@ struct ExchangeSectionView: View {
 #endif
         Section {
             ForEach(exchanges) { exchange in
-                ExchangeRowView(exchange: exchange, centsToTransfer: $centsToTransfer)
+                ExchangeRowView(exchange: exchange, currency: currency, centsToTransfer: $centsToTransfer)
             }
             .accessibilityElement(children: .combine)
         } header: {

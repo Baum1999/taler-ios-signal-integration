@@ -52,12 +52,12 @@ fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
 // MARK: -
 /// The result from getWithdrawalDetailsForAmount
 struct ManualWithdrawalDetails: Decodable {
-    var amountRaw: Amount
-    var amountEffective: Amount
-    var paytoUris: [String]
-    var tosAccepted: Bool
-    var ageRestrictionOptions: [Int]?
-    var numCoins: Int?
+    var tosAccepted: Bool               // Did the user accept the current version of the exchange's terms of service?
+    var amountRaw: Amount               // Amount that the user will transfer to the exchange
+    var amountEffective: Amount         // Amount that will be added to the user's wallet balance
+    var paytoUris: [String]             // Ways to pay the exchange
+    var ageRestrictionOptions: [Int]?   // Array of ages
+    var numCoins: Int?                  // Number of coins this amountEffective will create
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
@@ -180,10 +180,10 @@ extension WithdrawModel {
     }
     @MainActor
     func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String)   // M for MainActor
-      async throws -> String? {
+      async throws -> AcceptWithdrawalResponse? {
         let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl)
         let response = try await sendRequest(request, ASYNCDELAY)
-        return response.confirmTransferUrl
+        return response
     }
     @MainActor
     func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?)   // M for MainActor
@@ -196,7 +196,7 @@ extension WithdrawModel {
 
 // MARK: -
 extension WithdrawModel {
-    private static var exchanges: [String] = []            // names of exchanges
+    private static var exchanges: [String] = []         // names of exchanges
     private static var models: [WithdrawModel] = []     // one model per exchange
 
     static func model(baseURL: String) -> WithdrawModel {
