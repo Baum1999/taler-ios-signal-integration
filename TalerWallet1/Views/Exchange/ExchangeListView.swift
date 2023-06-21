@@ -10,9 +10,9 @@ import SymLog
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let navTitle: String
-
-    var model: ExchangeModel?
     var hamburgerAction: () -> Void
+
+    @EnvironmentObject private var model: WalletModel
 
     @State private var exchanges: [Exchange] = []
 
@@ -20,25 +20,17 @@ struct ExchangeListView: View {
     @State private var centsToTransfer: UInt64 = 0        // TODO: different values for different currencies?
 
     func reloadAction() async -> Void {
-        if let model {
             exchanges = await model.listExchangesM()
-        } else {
-            exchanges = []
-        }
     }
 
     func addExchange(_ exUrl: String) -> Void {
         Task {
-            if let model {
-                symLog.log("adding: \(exUrl)")
-                do {
-                    try await model.addExchange(url: exUrl)
-                    symLog.log("added: \(exUrl)")
-                } catch {    // TODO: error handling - couldn't add exchangeURL
-                    symLog.log("error: \(error)")
-                }
-            } else {
-                symLog.log("no model, cannot add \(exUrl)")
+            symLog.log("adding: \(exUrl)")
+            do {
+                try await model.addExchange(url: exUrl)
+                symLog.log("added: \(exUrl)")
+            } catch {    // TODO: error handling - couldn't add exchangeURL
+                symLog.log("error: \(error)")
             }
         }
     }

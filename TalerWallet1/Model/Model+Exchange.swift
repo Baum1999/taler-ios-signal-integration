@@ -7,11 +7,6 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-class ExchangeModel: WalletModel {
-    override init(_ symbol: Int = -1) {
-        super.init(0)//symbol)
-    }
-}
 // MARK: -
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
@@ -83,39 +78,27 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}
 }
 // MARK: -
-extension ExchangeModel {
+extension WalletModel {
     /// ask wallet-core for its list of known exchanges
     @MainActor func listExchangesM()
       async -> [Exchange] {         // M for MainActor
         do {
             let request = ListExchanges()
+            logger.info("ListExchanges")
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.exchanges
         } catch {
+            logger.error("listExchangesM failed: \(error)")
             return []               // empty, but not nil
         }
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func addExchange(url: String) async throws  {
+    func addExchange(url: String)
+      async throws  {
         symLog?.log("adding exchange: \(url)")       // TODO: .notice
         let request = AddExchange(exchangeBaseUrl: url)
+        logger.info("adding exchange: \(url)")
         _ = try await sendRequest(request)
-    }
-}
-
-// MARK: -
-extension ExchangeModel {
-    private static var models: [ExchangeModel] = []     // a list of models even though I currently need only one
-
-    static func model() -> ExchangeModel {
-        if ExchangeModel.models.count > 0 {
-            let model = ExchangeModel.models[0]
-            return model
-        } else {        // new model
-            let model = ExchangeModel()
-            ExchangeModel.models.append(model)
-            return model
-        }
     }
 }

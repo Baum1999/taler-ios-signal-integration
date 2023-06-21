@@ -4,25 +4,29 @@
  */
 import Foundation
 import SymLog
+import os
 
+fileprivate let DATABASE = "talerwalletdb-v30"
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 
 // MARK: -
 /// The "virtual" base class for all models
-class WalletModel {
+class WalletModel: ObservableObject {
+    public static let shared = WalletModel(-1)
     static func className() -> String {"\(self)"}
     var symLog: SymLogC?
+    let logger = Logger (subsystem: "net.taler.gnu", category: "wallet-core")
 
     init(_ symbol: Int) {                               // init with 0 to disable logging for this class
         self.symLog = SymLogC(symbol == 0 ? 0 : -1, funcName: Self.className())
     }
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
-    async throws -> T.Response {    // T for any Thread
+      async throws -> T.Response {    // T for any Thread
+        symLog?.log("sending: \(request)")
         let sendTime = Date.now
         do {
-            symLog?.log("sending: \(request)")
             let (response, id) = try await WalletCore.shared.sendFormattedRequest(request: request)
             let timeUsed = Date.now - sendTime
             let asyncDelay: UInt = delay > 0 ? delay : UInt(ASYNCDELAY)
@@ -66,4 +70,67 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
         var transactionId: String
     }
 }
+// MARK: -
+/// The info returned from Wallet-core init
+struct VersionInfo: Decodable {
+    var hash: String
+    var version: String
+    var exchange: String
+    var merchant: String
+    var bank: String
+    var devMode: Bool
+}
+// MARK: -
+///  A request to initialize Wallet-core
+fileprivate struct InitRequest: WalletBackendFormattedRequest {
+    func operation() -> String { return "init" }
+    func args() -> Args {
+        return Args(persistentStoragePath: persistentStoragePath,
+//                       cryptoWorkerType: "sync",
+                                 logLevel: "info") // trace, info, warn, error, none
+    }
 
+    struct Args: Encodable {
+        var persistentStoragePath: String
+//        var cryptoWorkerType: String
+        var logLevel: String
+    }
+
+    var persistentStoragePath: String
+
+    struct Response: Decodable {
+        var versionInfo: VersionInfo
+    }
+}
+// MARK: -
+extension WalletModel {
+    /// initalize Wallet-Core. Will do networking
+    func initWalletCoreT() async throws -> VersionInfo {
+        do {        // T for any Thread
+            let docPath = try docPath()
+            let request = InitRequest(persistentStoragePath: docPath)
+            logger.info("initWalletCoreT")
+            let response = try await sendRequest(request, 0)    // no Delay
+            return response.versionInfo
+        } catch {
+            logger.error("initWalletCoreT failed: \(error)")
+            throw error
+        }
+    }
+
+    private func docPath () throws -> String {
+        let documentUrls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        if (documentUrls.count > 0) {
+            var storageDir = documentUrls[0]
+            storageDir.appendPathComponent(DATABASE, isDirectory: false)
+            storageDir.appendPathExtension("json")
+            let docPath = storageDir.path
+            logger.debug("\(docPath)")
+            return docPath
+        } else {    // should never happen
+            symLog?.log("Yikes❗️ documentURLs empty")
+            logger.error("documentURLs empty")
+            throw WalletBackendError.initializationError
+        }
+    }
+}

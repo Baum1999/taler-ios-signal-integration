@@ -11,8 +11,9 @@ struct ManualWithdraw: View {
     private let symLog = SymLogV()
 
     let exchange: Exchange
-    let model: WithdrawModel?
     @Binding var centsToTransfer: UInt64
+
+    @EnvironmentObject private var model: WalletModel
 
     @State var manualWithdrawalDetails: ManualWithdrawalDetails? = nil
 
@@ -50,7 +51,6 @@ struct ManualWithdraw: View {
 //let _ = print(selectedAge, restrictAge)
                             NavigationLink(destination: LazyView {
                                 ManualWithdrawDone(exchange: exchange,
-                                                      model: model,
                                             centsToTransfer: centsToTransfer)
 //                                                restrictAge: restrictAge)
                             }) {
@@ -59,7 +59,6 @@ struct ManualWithdraw: View {
                         } else {
                             NavigationLink(destination: LazyView {
                                 WithdrawTOSView(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                          model: model,
                                                          viewID: VIEW_WITHDRAW_TOS,
                                                    acceptAction: nil)         // pop back to here
                             }) {
@@ -69,7 +68,6 @@ struct ManualWithdraw: View {
                     }
                 } // tooMany
             } // invalid
-            Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
@@ -82,10 +80,8 @@ struct ManualWithdraw: View {
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                if let model {
-                    manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
-//                  agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
-                }
+                manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
+//                agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 manualWithdrawalDetails = nil
@@ -112,7 +108,6 @@ struct ManualWithdraw_Container : View {
                           ageRestrictionOptions: [],
                                       permanent: false)
         ManualWithdraw(exchange: exchange,
-                          model: nil,
                 centsToTransfer: $centsToTransfer,
         manualWithdrawalDetails: details)
     }

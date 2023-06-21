@@ -14,13 +14,7 @@ fileprivate let DEMO_MERCHANTBASEURL = DEMOBACKEND
 fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
-class SettingsModel: WalletModel {
-    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
-        super.init(0)//symbol)
-    }
-}
-// MARK: -
-extension SettingsModel {
+extension WalletModel {
     @MainActor func loadTestKudosM()
       async throws {          // M for MainActor
         let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)

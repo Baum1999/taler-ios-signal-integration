@@ -6,10 +6,13 @@ import SwiftUI
 import AVFoundation
 import SymLog
 
+// Will be called either by the user scanning a QR code or tapping the provided link, both from the shop's website
+// we show the user the payment details
 struct PaymentURIView: View {
     private let symLog = SymLogV()
-    var url: URL
-    var model: PaymentURIModel?
+    let url: URL
+
+    @EnvironmentObject private var model: WalletModel
 
     @State var detailsForUri: PaymentDetailsForUri? = nil
 
@@ -27,16 +30,14 @@ struct PaymentURIView: View {
         Task {
             do {
                 if let detailsForUri {
-                    if let model {
-                        let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
-                        symLog.log(confirmPayResult as Any)
-                        if confirmPayResult.type == "done" {
-                            // TODO: Show Hints that Payment was successfull
-                            playSound(success: true)
-                        } else {
-                            // TODO: show error
-                            playSound(success: false)
-                        }
+                    let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
+                    symLog.log(confirmPayResult as Any)
+                    if confirmPayResult.type == "done" {
+                        // TODO: Show Hints that Payment was successfull
+                        playSound(success: true)
+                    } else {
+                        // TODO: show error
+                        playSound(success: false)
                     }
                 }
             } catch {    // TODO: error
@@ -59,9 +60,8 @@ struct PaymentURIView: View {
         }.task {
             do {
                 symLog.log(".task")
-                if let model {
-                    detailsForUri = try await model.preparePayForUriM(url.absoluteString)
-                }
+                let details = try await model.preparePayForUriM(url.absoluteString)
+                detailsForUri = details
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }

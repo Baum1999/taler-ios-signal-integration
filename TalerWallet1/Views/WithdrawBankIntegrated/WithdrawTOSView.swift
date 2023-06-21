@@ -11,8 +11,9 @@ struct WithdrawTOSView: View {
 
     let navTitle = String(localized: "Terms of Service")
 
-    var exchangeBaseUrl: String
-    var model: WithdrawModel?
+    var exchangeBaseUrl: String?
+
+    @EnvironmentObject private var model: WalletModel
 
     @State var exchangeTOS: ExchangeTermsOfService?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
@@ -25,7 +26,7 @@ struct WithdrawTOSView: View {
             Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
                 Task {
                     do {
-                        if let model {
+                        if let exchangeBaseUrl {
                             _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)
                             if acceptAction != nil {
                                 acceptAction!()
@@ -42,8 +43,14 @@ struct WithdrawTOSView: View {
             .navigationTitle(navTitle)
             .overlay {
                 if exchangeTOS == nil {
-                    WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                        .navigationTitle("Loading " + navTitle)
+                    if let exchangeBaseUrl {
+                        WithdrawProgressView(message: exchangeBaseUrl.trimURL())
+                            .navigationTitle("Loading " + navTitle)
+                    } else {
+                        // Yikes!
+                        WithdrawProgressView(message: "No exchangeBaseUrl!")
+                            .navigationTitle("Loading " + navTitle)
+                    }
                 }
             }
         }.onAppear() {
@@ -54,7 +61,7 @@ struct WithdrawTOSView: View {
             }
         }.task {
             do {
-                if let model {
+                if let exchangeBaseUrl {
                     let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl)
                     exchangeTOS = someTOS
                 }

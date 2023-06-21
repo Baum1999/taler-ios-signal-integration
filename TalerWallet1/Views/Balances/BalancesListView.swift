@@ -12,13 +12,13 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let navTitle: String
-
-    @State var balances: [Balance] = []
-    let model: BalancesModel?
     let hamburgerAction: () -> Void
 
+    @State var balances: [Balance] = []
+    @EnvironmentObject private var model: WalletModel
+
     @State private var centsToTransfer: UInt64 = 0
-    @State private var purpose: String = ""
+    @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
 
@@ -62,11 +62,7 @@ struct BalancesListView: View {
     }
 
     private func reloadAction() async {
-        if let model {
-            balances = await model.fetchBalancesM()
-        } else {
-            balances = []
-        }
+        balances = await model.balancesM()
     }
 
     var body: some View {
@@ -75,7 +71,7 @@ struct BalancesListView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Content(symLog: symLog, balances: $balances,
-                centsToTransfer: $centsToTransfer, purpose: $purpose,
+                centsToTransfer: $centsToTransfer, summary: $summary,
                 reloadAction: reloadAction)
             .navigationTitle(navTitle)
             .navigationBarTitleDisplayMode(.automatic)
@@ -111,7 +107,7 @@ extension BalancesListView {
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
-        @Binding var purpose: String
+        @Binding var summary: String
         var reloadAction: () async -> Void
 
         var body: some View {
@@ -121,11 +117,9 @@ extension BalancesListView {
 #endif
             Group { // necessary for .backslide transition (bug in SwiftUI)
                 List(balances, id: \.self) { balance in
-                    let model = TransactionsModel.model(currency: balance.available.currencyStr)
                     BalancesSectionView(balance: balance,
                                 centsToTransfer: $centsToTransfer,
-                                        purpose: $purpose,
-                                          model: model)
+                                        summary: $summary)
                 }
                 .refreshable {
                     symLog?.log("refreshing")

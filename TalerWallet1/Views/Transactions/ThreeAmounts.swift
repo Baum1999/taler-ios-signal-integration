@@ -79,7 +79,7 @@ struct ThreeAmountsView: View {
             if let status {
                 HStack {
                     Spacer()
-                    Text("Status: \(status)")       // TODO: localize
+                    Text("Status: \(status)")
                         .font(.title2)
                 }.padding()
             }
@@ -103,6 +103,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
+                            .disabled(true)
                     }
             }
         }

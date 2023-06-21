@@ -18,63 +18,6 @@
 //
 import SwiftUI
 
-// John Sundell
-extension View {
-    func onNotification(
-        _ notificationName: Notification.Name,
-        perform action: @escaping () -> Void
-    ) -> some View {
-        onReceive(NotificationCenter.default
-                    .publisher(for: notificationName)
-        ) { _ in
-            action()
-        }
-    }
-    func onNotification(
-        _ notificationName: Notification.Name,
-        perform action: @escaping (_ notification: Notification) -> Void
-    ) -> some View {
-        onReceive(NotificationCenter.default
-            .publisher(for: notificationName)
-        ) { notification in
-            action(notification)
-        }
-    }
-
-    func onNotificationM(       // M for main thread
-        _ notificationName: Notification.Name,
-        perform action: @escaping () -> Void
-    ) -> some View {
-        onReceive(NotificationCenter.default
-                    .publisher(for: notificationName)
-                    .receive(on: RunLoop.main)
-        ) { _ in
-            action()
-        }
-    }
-
-    func onNotificationM(       // M for main thread
-        _ notificationName: Notification.Name,
-        perform action: @escaping (_ notification: Notification) -> Void
-    ) -> some View {
-        onReceive(NotificationCenter.default
-            .publisher(for: notificationName)
-            .receive(on: RunLoop.main)
-        ) { notification in
-            action(notification)
-        }
-    }
-
-    func onAppEnteredBackground(
-        perform action: @escaping () -> Void
-    ) -> some View {
-        onNotification(
-            UIApplication.didEnterBackgroundNotification,
-            perform: action
-        )
-    }
-}
-
 /// This is just a workaround for a SwiftUI bug
 /// A presented sheet (SwiftUI view) doesn't always close when calling "dismiss()" provided by @Environment(\.dismiss),
 /// so we are walking the view stack to find the top presentedViewController (UIKit) and dismiss it.

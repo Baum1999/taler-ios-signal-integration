@@ -10,22 +10,22 @@ import SymLog
 struct SendNow: View {
     private let symLog = SymLogV()
 
-    var amountToSend: Amount
-    var purpose: String
-    var expireDays: UInt
+    let amountToSend: Amount?
+    let amountToReceive: Amount?
+    let summary: String
+    let expireDays: UInt
 
-    var model: Peer2peerModel?
-    @State var peerPushResponse: PeerPushResponse?
+    @EnvironmentObject private var model: WalletModel
 
-    @State var talerURI: String? = nil
+    @State var talerURI: String = ""
 
     var body: some View {
         ScrollView {
-            if talerURI == nil {
+            if talerURI.isEmpty {
                 LoadingView(backButtonHidden: true)
             } else {
                 VStack() {
-                    QRCodeDetailView(talerURI: talerURI!)
+                    QRCodeDetailView(talerURI: $talerURI, incoming: amountToSend == nil)
 
                     Text("The QR code can also be copied and shared from Transactions later")
                         .fixedSize(horizontal: false, vertical: true)
@@ -50,29 +50,38 @@ struct SendNow: View {
             symLog.log(".task")
             do {
                 // generate talerURI
-                if let model {
-                    let timestamp = Timestamp.inSomeDays(expireDays)
-                    let terms = PeerContractTerms(amount: amountToSend, summary: purpose, purse_expiration: timestamp)
+                let timestamp = Timestamp.inSomeDays(expireDays)
+                if let amountToSend {
+                    let terms = PeerContractTerms(amount: amountToSend,
+                                                 summary: summary,
+                                        purse_expiration: timestamp)
                     // TODO: user might choose baseURL
-                    peerPushResponse = try await model.initiatePeerPushDebitM(nil, terms: terms)
-                    talerURI = peerPushResponse?.talerUri
-                }
+                    let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
+                    talerURI = response.talerUri
+                } else if let amountToReceive {
+                    let terms = PeerContractTerms(amount: amountToReceive,
+                                                 summary: summary,
+                                        purse_expiration: timestamp)
+                    // TODO: user might choose baseURL
+                    let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
+                    talerURI = response.talerUri
+                } else { talerURI = "" }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
+                talerURI = ""
             }
         } // task
     }
 }
 // MARK: -
-//struct SendNow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            SendNow(amountToSend: <#T##Amount#>,
-//                    purpose: <#T##String#>,
-//                    expireDays: <#T##UInt#>,
-//                    model: <#T##Peer2peerModel#>,
-//                    peerPushResponse: <#T##PeerPushResponse?#>,
-//                    talerURI: "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520")
-//        }
-//    }
-//}
+struct SendNow_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            SendNow(amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
+                    amountToReceive: nil,
+                    summary: "some purpose",
+                    expireDays: 0,
+                    talerURI: "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520")
+        }
+    }
+}

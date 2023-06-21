@@ -15,11 +15,19 @@ struct URLSheet: View {
 
     var body: some View {
         Group {
-            if urlCommand == .withdraw {
-                WithdrawURIView(url: urlToOpen)
-            } else if urlCommand == UrlCommand.pay {
-                let model = PaymentURIModel.model()
-                PaymentURIView(url: urlToOpen, model: model)
+            if let urlCommand {
+                switch urlCommand {
+                    case .withdraw:
+                        WithdrawURIView(url: urlToOpen)
+                    case .pay:
+                        PaymentURIView(url: urlToOpen)
+                    case .payPull:
+                        Text("payPull not implemented yet")
+                    case .payPush:
+                        P2pReceiveURIView(url: urlToOpen)
+                    case .unknown:
+                        Text("unknown command")
+                }
             } else {
                 VStack {        // Error view
                     Spacer()

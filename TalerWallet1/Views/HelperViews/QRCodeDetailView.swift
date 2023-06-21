@@ -8,12 +8,14 @@ import AVFoundation
 
 
 struct QRCodeDetailView: View {
-    var talerURI: String
+    @Binding var talerURI: String
+    let incoming: Bool
 
     var body: some View {
         if talerURI.count > 10 {
             VStack {
-                Text("Let the payee scan this QR code to receive:")
+                Text(incoming ? "Let the payer scan this QR code to pay:"
+                              : "Let the payee scan this QR code to receive:")
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.top, 30)
                     .font(.title3)
@@ -35,25 +37,21 @@ struct QRCodeDetailView: View {
         }
     }
 }
-
-
+// MARK: -
 #if DEBUG
 fileprivate struct ContentView: View {
-    @State var isOn = false
+    @State var talerURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
 
     var body: some View {
-        VStack {
-
+        List {
+            QRCodeDetailView(talerURI: $talerURI, incoming: false)
         }
     }
 }
 struct QRCodeDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
-//        ContentView()
-        List {
-            QRCodeDetailView(talerURI: "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520")
-        }
+        ContentView()
     }
 }
 #endif

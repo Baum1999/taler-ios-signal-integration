@@ -10,19 +10,16 @@ struct WithdrawAcceptDone: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Confirm with Bank")
 
-    let exchangeBaseUrl: String
-    let model: WithdrawModel?
+    let exchangeBaseUrl: String?
     let url: URL
+
+    @EnvironmentObject private var model: WalletModel
 
     @State private var confirmTransferUrl: String? = nil
     @State private var transaction: Transaction? = nil
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        if let model {
             return try await model.getTransactionByIdT(transactionId)
-        } else {
-            throw WalletBackendError.walletCoreError
-        }
     }
 
     var body: some View {
@@ -47,7 +44,7 @@ struct WithdrawAcceptDone: View {
             DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
         }.task {
             do {
-                if let model {
+                if let exchangeBaseUrl {
                     let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
                     confirmTransferUrl = result!.confirmTransferUrl
                     transaction = try await model.getTransactionByIdT(result!.transactionId)
@@ -62,7 +59,6 @@ struct WithdrawAcceptDone: View {
 struct WithdrawAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
         WithdrawAcceptDone(exchangeBaseUrl: DEMOEXCHANGE,
-                           model: nil,
                            url: URL(string: DEMOSHOP)!)
     }
 }

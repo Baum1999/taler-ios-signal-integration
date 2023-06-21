@@ -102,8 +102,8 @@ struct TransactionCommon: Decodable {
         case payment
         case refund
         case refresh
-        case reward
-//        case tip
+        case reward         // get paid for e.g. survey participation
+//        case tip            // tip personnel at restaurants
         case peerPushDebit = "peer-push-debit"              // send coins to peer, show QR
         case scanPushCredit = "peer-push-credit"            // scan QR, receive coins from peer
         case peerPullCredit = "peer-pull-credit"            // request payment from peer, show QR
@@ -329,13 +329,13 @@ enum Transaction: Decodable, Hashable, Identifiable {
             case .refund:       return String(localized: "Refund")
             case .refresh:      return String(localized: "Refresh")
             case .reward:       return String(localized: "Reward")
-            case .peerPushDebit:  return String(localized: "P2P Send")
-            case .scanPushCredit: return String(localized: "P2P Receive")
-            case .peerPullCredit: return String(localized: "P2P Invoice")
-            case .scanPullDebit:  return String(localized: "P2P Payment")
+            case .peerPushDebit:  return String(localized: "P2P Send", comment: "send coins to another wallet")
+            case .scanPushCredit: return String(localized: "P2P Receive", comment: "scan to receive coins sent from another wallet")
+            case .peerPullCredit: return String(localized: "P2P Invoice", comment: "send invoice to another wallet")
+            case .scanPullDebit:  return String(localized: "P2P Payment", comment: "scan invoice to pay to another wallet")
         }
     }
-    
+
     static func == (lhs: Transaction, rhs: Transaction) -> Bool {
         return lhs.id == rhs.id
     }
@@ -360,13 +360,16 @@ enum Transaction: Decodable, Hashable, Identifiable {
     var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
 
-    var isDone       : Bool { common.txState.major == .done }
     var isPending    : Bool { common.txState.major == .pending }
+    var isDone       : Bool { common.txState.major == .done }
     var isAborting   : Bool { common.txState.major == .aborting }
     var isAborted    : Bool { common.txState.major == .aborted }
+    var isSuspended  : Bool { common.txState.major == .suspended }
+    var isDialog     : Bool { common.txState.major == .dialog }
+    var isAbSuspended: Bool { common.txState.major == .suspendedAborting }
     var isFailed     : Bool { common.txState.major == .failed }
     var isExpired    : Bool { common.txState.major == .expired }
-    var isSpecial    : Bool { isPending || isAborting || isAborted || isFailed || isExpired }
+    var isSpecial    : Bool { !(isDone || isPending) }
 
     var isAbortable  : Bool { common.txActions.contains(.abort) }
     var isFailable   : Bool { common.txActions.contains(.fail) }

@@ -16,7 +16,7 @@ struct WithdrawURIView: View {
     // the URL from the bank website
     let url: URL
 
-    let model = WithdrawModel.model(baseURL: "global")      // TODO: get baseURL from URL
+    @EnvironmentObject private var model: WalletModel
 
     // the exchange used for this withdrawal.
     @State private var exchangeBaseUrl: String? = nil
@@ -48,7 +48,7 @@ struct WithdrawURIView: View {
                 let tosAccepted = manualWithdrawalDetails.tosAccepted
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
-                        WithdrawAcceptDone(exchangeBaseUrl: exchangeBaseUrl, model: model, url: url)
+                        WithdrawAcceptDone(exchangeBaseUrl: exchangeBaseUrl, url: url)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
@@ -56,7 +56,6 @@ struct WithdrawURIView: View {
                 } else {
                     NavigationLink(destination: LazyView {
                         WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
-                                                  model: model,
                                                  viewID: SHEET_WITHDRAW_TOS,
                                            acceptAction: nil)         // pop back to here
                     }) {

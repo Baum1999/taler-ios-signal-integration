@@ -27,6 +27,8 @@ struct SettingsView: View {
 
     var hamburgerAction: () -> Void
 
+    @EnvironmentObject private var model: WalletModel
+
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
 #if DEBUG
@@ -66,7 +68,7 @@ struct SettingsView: View {
                     }
                     if showDevelopItems {  // show or hide the following items
                         NavigationLink {        // whole row like in a tableView
-                            LazyView { PendingOpsListView(model: PendingModel.model()) }
+                            LazyView { PendingOpsListView() }
                         } label: {
                             SettingsItem(name: String(localized: "Pending Operations"), description: String(localized: "Exchange not yet ready...")) {}
                         }
@@ -80,7 +82,6 @@ struct SettingsView: View {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task {
-                                    let model: SettingsModel = SettingsModel()
                                     symLog.log("Withdraw TestKUDOS")
                                     do {
                                         try await model.loadTestKudosM()
@@ -97,7 +98,6 @@ struct SettingsView: View {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
                                 Task {
-                                    let model: SettingsModel = SettingsModel()
                                     symLog.log("running integration test")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: false)
@@ -114,7 +114,6 @@ struct SettingsView: View {
                             Button("Test 2") {
                                 checkDisabled = true    // don't run twice
                                 Task {
-                                    let model: SettingsModel = SettingsModel()
                                     symLog.log("running integration test V2")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: true)

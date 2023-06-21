@@ -8,12 +8,6 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-class PendingModel: WalletModel {
-
-    override init(_ symbol: Int = -1) {
-        super.init(0)//symbol)
-    }
-}
 // MARK: -
 /// A request to list the backend's currently pending operations.
 fileprivate struct GetPendingOperations: WalletBackendFormattedRequest {
@@ -45,10 +39,9 @@ struct PendingOperation: Codable, Hashable {
         hasher.combine(isDue)
         hasher.combine(timestampDue)
     }
-
 }
 // MARK: -
-extension PendingModel {
+extension WalletModel {
     @MainActor func getPendingOperationsM()
       async -> [PendingOperation] {   // M for MainActor
         do {
@@ -57,22 +50,6 @@ extension PendingModel {
             return response.pendingOperations
         } catch {
             return []
-        }
-    }
-}
-
-// MARK: -
-extension PendingModel {
-    private static var models: [PendingModel] = []     // a list of models even though I currently need only one
-
-    static func model() -> PendingModel {
-        if PendingModel.models.count > 0 {
-            let model = PendingModel.models[0]
-            return model
-        } else {        // new model
-            let model = PendingModel()
-            PendingModel.models.append(model)
-            return model
         }
     }
 }

@@ -14,10 +14,12 @@ enum BackendState {
     case error
 }
 
-enum UrlCommand {
+enum UrlCommand: String {
     case unknown
     case withdraw
     case pay
+    case payPull = "pay-pull"
+    case payPush = "pay-push"
 }
 
 // MARK: -
@@ -33,13 +35,12 @@ class Controller: ObservableObject {
         backendState = .instantiated
     }
 
-    @MainActor func initWalletCoreM()
+    @MainActor func initWalletCoreM(_ model: WalletModel)
       async throws {           // M for MainActor
         if backendState == .instantiated {
             backendState = .initing
             do {
-                let walletInitModel = WalletInitModel()
-                let versionInfo = try await walletInitModel.initWalletT()
+                let versionInfo = try await model.initWalletCoreT()
                 WalletCore.shared.versionInfo = versionInfo
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows
@@ -48,7 +49,7 @@ class Controller: ObservableObject {
                 throw error
             }
         } else {
-            symLog.log("Yikes❗️ wallet-core already initialized")     // TODO: .warning
+            symLog.log("Yikes❗️ wallet-core already initialized")     // TODO: .fault
         }
     }
 }
@@ -93,6 +94,10 @@ extension Controller {
                 return UrlCommand.withdraw
             case "pay":
                 return UrlCommand.pay
+            case "pay-pull":
+                return UrlCommand.payPull
+            case "pay-push":
+                return UrlCommand.payPush
             default:
                 symLog.log("unknown command taler://\(command)")
         }

@@ -11,19 +11,16 @@ struct ManualWithdrawDone: View {
     let navTitle = String(localized: "Wire Transfer")
 
     let exchange: Exchange
-    let model: WithdrawModel?
     let centsToTransfer: UInt64
 //    let restrictAge: Int?
+
+    @EnvironmentObject private var model: WalletModel
 
     @State var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State var withdrawalTransaction: Transaction?
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        if let model {
-            return try await model.getTransactionByIdT(transactionId)
-        } else {
-            throw WalletBackendError.walletCoreError
-        }
+        return try await model.getTransactionByIdT(transactionId)
     }
 
     var body: some View {
@@ -47,14 +44,12 @@ struct ManualWithdrawDone: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT)
         }.task {
             do {
-                if let model {
-                    let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
-                    let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                             amount: amount, restrictAge: 0)
+                let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
+                let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
+                                                                         amount: amount, restrictAge: 0)
 print(result as Any)
-                    let transaction = try await model.getTransactionByIdT(result!.transactionId)
-                    withdrawalTransaction = transaction
-                }
+                let transaction = try await model.getTransactionByIdT(result!.transactionId)
+                withdrawalTransaction = transaction
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }
@@ -76,7 +71,6 @@ struct ManualWithdrawDone_Container : View {
                           ageRestrictionOptions: [],
                                       permanent: false)
         ManualWithdrawDone(exchange: exchange,
-                              model: nil,
                     centsToTransfer: centsToTransfer)
     }
 }

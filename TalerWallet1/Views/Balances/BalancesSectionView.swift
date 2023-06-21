@@ -18,8 +18,9 @@ struct BalancesSectionView: View {
     private let symLog = SymLogV()
     var balance:Balance
     @Binding var centsToTransfer: UInt64
-    @Binding var purpose: String
-    var model: TransactionsModel?
+    @Binding var summary: String
+
+    @EnvironmentObject private var model: WalletModel
 
     @State private var isShowingDetailView = false
     @State private var buttonSelected: Int? = nil
@@ -29,14 +30,32 @@ struct BalancesSectionView: View {
     @State private var pendingTransactions: [Transaction] = []
     @State private var uncompletedTransactions: [Transaction] = []
 
-    func dummyTransaction (_ transactionId: String) async throws {}
+//    func dummyTransaction (_ transactionId: String) async throws {}
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        if let model {
-            return try await model.getTransactionByIdT(transactionId)
-        } else {
-            throw WalletBackendError.walletCoreError
-        }
+        return try await model.getTransactionByIdT(transactionId)
     }
+
+    func computePending(currency: String) -> (Amount, Amount) {
+        var incoming = Amount(currency: currency, value: 0)
+        var outgoing = Amount(currency: currency, value: 0)
+        for transaction in pendingTransactions {
+            let effective = transaction.common.amountEffective
+            if currency == effective.currencyStr {
+                do {
+                    if transaction.common.incoming() {
+                        incoming = try incoming + effective
+                    } else {
+                        outgoing = try outgoing + effective
+                    }
+                } catch {
+                    // TODO: log error
+                    symLog.log(error.localizedDescription)
+                }
+            }
+        }
+        return (incoming, outgoing)
+    }
+
 
     var body: some View {
 #if DEBUG
@@ -45,27 +64,19 @@ struct BalancesSectionView: View {
 #endif
         let currency = balance.available.currencyStr
         let reloadCompleted = {
-            if let model {
-                transactions = await model.fetchTransactionsT(currency: currency)
-                completedTransactions = TransactionsModel.completedTransactions(transactions)
-            }
+            transactions = await model.fetchTransactionsT(currency: currency)
+            completedTransactions = WalletModel.completedTransactions(transactions)
         }
         let reloadPending = {
-            if let model {
-                transactions = await model.fetchTransactionsT(currency: currency)
-                pendingTransactions = TransactionsModel.pendingTransactions(transactions)
-            }
+            transactions = await model.fetchTransactionsT(currency: currency)
+            pendingTransactions = WalletModel.pendingTransactions(transactions)
         }
         let reloadUncompleted = {
-            if let model {
-                transactions = await model.fetchTransactionsT(currency: currency)
-                uncompletedTransactions = TransactionsModel.uncompletedTransactions(transactions)
-            }
+            transactions = await model.fetchTransactionsT(currency: currency)
+            uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
         }
-        let deleteAction = model?.deleteTransactionT ?? dummyTransaction
-        let abortAction = model?.abortTransactionT ?? dummyTransaction
-
-        let p2pModel = Peer2peerModel.model(baseURL: currency)
+        let deleteAction = model.deleteTransactionT // dummyTransaction
+        let abortAction = model.abortTransactionT
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -74,18 +85,16 @@ struct BalancesSectionView: View {
 //            }
             HStack(spacing: 0) {
                 NavigationLink(destination: LazyView {
-                    SendAmount(model: p2pModel,
-                     amountAvailable: balance.available,
-                     centsToTransfer: $centsToTransfer,
-                             purpose: $purpose)
+                    SendAmount(amountAvailable: balance.available,
+                               centsToTransfer: $centsToTransfer,
+                                       summary: $summary)
                   }, tag: 1, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 NavigationLink(destination: LazyView {
-                    RequestPayment(model: p2pModel,
-                               scopeInfo: balance.scopeInfo,
-                         centsToTransfer: $centsToTransfer,
-                                 purpose: $purpose)
+                    RequestPayment(scopeInfo: balance.scopeInfo,
+                             centsToTransfer: $centsToTransfer,
+                                     summary: $summary)
                   }, tag: 2, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
@@ -100,22 +109,22 @@ struct BalancesSectionView: View {
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
                 BalanceRowView(amount: balance.available, sendAction: {
-print("button: Send \(currency)")
+//print("button: Send \(currency)")
                         buttonSelected = 1      // will trigger SendAmount NavigationLink
                     }, recvAction: {
-print("button: Request Payment: \(currency)")
+//print("button: Request Payment: \(currency)")
                         buttonSelected = 2      // will trigger RequestPayment NavigationLink
                     }, rowAction: {
-print("button: Transactions: \(currency)")
+//print("button: Transactions: \(currency)")
                         buttonSelected = 3      // will trigger TransactionList NavigationLink
                     })
             }
             let hasPending = pendingTransactions.count > 0
             if hasPending {
-                let hasPendingIn = !balance.pendingIncoming.isZero
-                let hasPendingOut = !balance.pendingOutgoing.isZero
+                let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
+
                 NavigationLink {
-let _ = print("button: Pending Transactions: \(currency)")
+//let _ = print("button: Pending Transactions: \(currency)")
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Pending"), currency: currency,
                                          transactions: pendingTransactions,
@@ -126,11 +135,17 @@ let _ = print("button: Pending Transactions: \(currency)")
                     }
                 } label: {
                     VStack(spacing: 6) {
-                        if hasPendingIn {
-                            PendingRowView(amount: balance.pendingIncoming, incoming: true)
+                        var rows = 0
+                        if !pendingIncoming.isZero {
+                            PendingRowView(amount: pendingIncoming, incoming: true)
+                            let _ = (rows+=1)
                         }
-                        if hasPendingOut {
-                            PendingRowView(amount: balance.pendingOutgoing, incoming: false)
+                        if !pendingOutgoing.isZero {
+                            PendingRowView(amount: pendingOutgoing, incoming: false)
+                            let _ = (rows+=1)
+                        }
+                        if rows == 0 {
+                            Text("Some pending transactions")
                         }
                     }
                 }
@@ -138,7 +153,7 @@ let _ = print("button: Pending Transactions: \(currency)")
             let hasUncompleted = uncompletedTransactions.count > 0
             if hasUncompleted {
                 NavigationLink {
-let _ = print("button: Uncompleted Transactions: \(currency)")
+//let _ = print("button: Uncompleted Transactions: \(currency)")
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Uncompleted"), currency: currency,
                                              transactions: uncompletedTransactions,
@@ -156,11 +171,10 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
             Text(currency)
                 .font(.title)
         } .task {
-            if let model {
-                transactions = await model.fetchTransactionsT(currency: currency)
-                pendingTransactions = TransactionsModel.pendingTransactions(transactions)
-                uncompletedTransactions = TransactionsModel.uncompletedTransactions(transactions)
-            }
+            let response = await model.fetchTransactionsT(currency: currency)
+            transactions = response
+            pendingTransactions = WalletModel.pendingTransactions(response)
+            uncompletedTransactions = WalletModel.uncompletedTransactions(response)
         }
     } // body
 }
@@ -168,21 +182,18 @@ let _ = print("button: Uncompleted Transactions: \(currency)")
 #if DEBUG
 fileprivate struct BindingViewContainer : View {
     @State var centsToTransfer: UInt64 = 333
-    @State private var purpose: String = "bla-bla"
+    @State private var summary: String = "bla-bla"
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
         let balance = Balance(available: try! Amount(fromString: LONGCURRENCY + ":0.1"),
-                        pendingIncoming: try! Amount(fromString: LONGCURRENCY + ":4.8"),
-                        pendingOutgoing: try! Amount(fromString: LONGCURRENCY + ":3.25"),
-                 hasPendingTransactions: true,
+                              scopeInfo: scopeInfo,
                       requiresUserInput: false,
-                              scopeInfo: scopeInfo)
+                 hasPendingTransactions: true)
         List {
             BalancesSectionView(balance: balance,
                         centsToTransfer: $centsToTransfer,
-                                purpose: $purpose,
-                                  model: nil)
+                                summary: $summary)
         }
     }
 }

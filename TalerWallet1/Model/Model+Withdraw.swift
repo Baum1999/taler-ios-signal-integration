@@ -7,13 +7,6 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-class WithdrawModel: WalletModel {
-
-    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
-        super.init(0)//symbol)
-    }
-}
-
 // MARK: -
 /// The result from getWithdrawalDetailsForUri
 struct WithdrawUriInfoResponse: Decodable {
@@ -147,7 +140,7 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
-extension WithdrawModel {
+extension WalletModel {
     /// load withdrawal details. Networking involved
     @MainActor
     func loadWithdrawalDetailsForUriM(_ talerWithdrawUri: String)               // M for MainActor
@@ -191,23 +184,5 @@ extension WithdrawModel {
         let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
-    }
-}
-
-// MARK: -
-extension WithdrawModel {
-    private static var exchanges: [String] = []         // names of exchanges
-    private static var models: [WithdrawModel] = []     // one model per exchange
-
-    static func model(baseURL: String) -> WithdrawModel {
-        if let index = WithdrawModel.exchanges.firstIndex(of:baseURL) {
-            let model = WithdrawModel.models[index]
-            return model
-        } else {        // new model
-            let model = WithdrawModel()
-            WithdrawModel.models.append(model)
-            WithdrawModel.exchanges.append(baseURL)
-            return model
-        }
     }
 }

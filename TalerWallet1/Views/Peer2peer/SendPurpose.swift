@@ -9,25 +9,24 @@ import SymLog
 struct SendPurpose: View {
     private let symLog = SymLogV()
     @FocusState private var isFocused: Bool
-    var model: Peer2peerModel?
 
-    var amountAvailable: Amount
-    var centsToSend: UInt64
-    var fee: String
-    @Binding var purpose: String
+    let amountAvailable: Amount
+    let centsToTransfer: UInt64
+    let fee: String
+    @Binding var summary: String
     @Binding var expireDays: UInt
-    var deactivateAction: () -> Void
+//    var deactivateAction: () -> Void
 
     let formatter = CurrencyFormatter.shared    // TODO: based on currency
 
     let buttonFont: Font = .title2
     private var label: String {
         let mag = pow(10, formatter.maximumFractionDigits)
-        return formatter.string(for: Decimal(centsToSend) / mag) ?? ""
+        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
     }
 
     var body: some View {
-        let amount = Amount.amountFromCents(amountAvailable.currencyStr, centsToSend)
+        let amount = Amount.amountFromCents(amountAvailable.currencyStr, centsToTransfer)
 
         VStack (spacing: 6) {
             Text(amount.readableDescription)
@@ -38,7 +37,7 @@ struct SendPurpose: View {
                     .padding(.top)
                     .font(.title3)
 
-                TextField("Purpose", text: $purpose)
+                TextField("Purpose", text: $summary)
                     .font(.title)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
@@ -52,7 +51,7 @@ struct SendPurpose: View {
 
                 HStack{
                     Spacer()
-                    Text("\(purpose.count)/100")
+                    Text("\(summary.count)/100")
                 } // maximum 100 characters
 
                 Text("Expires in:")
@@ -63,13 +62,14 @@ struct SendPurpose: View {
                     .disabled(false)
                     .padding(.bottom)
 
-                let buttonTitle = "Send \(label) \(amountAvailable.currencyStr) now"
-                let disabled = (expireDays == 0) || (purpose.count < 1)    // TODO: check amountAvailable
+                let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
-                    SendNow(amountToSend: amount, purpose: purpose, expireDays: expireDays, model: model)
+                    SendNow(amountToSend: amount,
+                            amountToReceive: nil,
+                            summary: summary, expireDays: expireDays)
                 }) {
-                    Text(buttonTitle)
+                    Text("Send \(label) \(amountAvailable.currencyStr) now")
                         .font(buttonFont)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -88,7 +88,7 @@ struct SendPurpose: View {
         }
         .onDisappear {
             print("❗️ SendPurpose onDisappear")
-            deactivateAction()
+//            deactivateAction()
         }
         .task {
             symLog.log(".task")
@@ -105,18 +105,15 @@ struct SendPurpose: View {
 #if DEBUG
 struct SendPurpose_Previews: PreviewProvider {
     static var previews: some View {
-        @State var purpose: String = ""
+        @State var summary: String = ""
         @State var expireDays: UInt = 0
         let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
-        SendPurpose(model: nil,
-          amountAvailable: amount,
-              centsToSend: 543,
-                      fee: "0,43",
-                  purpose: $purpose,
-               expireDays: $expireDays
-        ) {
-            print("deactivateAction")
-        }
+        SendPurpose(amountAvailable: amount,
+                    centsToTransfer: 543,
+                                fee: "0,43",
+                            summary: $summary,
+                         expireDays: $expireDays)
+//        { print("deactivateAction") }
     }
 }
 #endif

@@ -10,12 +10,13 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV()
 
-    let model: Peer2peerModel?
     let amountAvailable: Amount
     @Binding var centsToTransfer: UInt64
-    @Binding var purpose: String
+    @Binding var summary: String
 
-    @State var peerPushCheck: CheckPeerPushDebitResponse?
+    @EnvironmentObject private var model: WalletModel
+
+    @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays: UInt = 0
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> String {
@@ -54,21 +55,18 @@ struct SendAmount: View {
                 let disabled = centsToTransfer == 0    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
-                    SendPurpose(model: model,
-                      amountAvailable: amountAvailable,
-                          centsToSend: centsToTransfer,
-                                  fee: fee,
-                              purpose: $purpose,
-                           expireDays: $expireDays,
-                     deactivateAction: {})
+                    SendPurpose(amountAvailable: amountAvailable,
+                                centsToTransfer: centsToTransfer,
+                                            fee: fee,
+                                        summary: $summary,
+                                     expireDays: $expireDays)
+//                        { deactivateAction() }
                 }) {
                     Text("To another wallet")
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
             }
-            
-            Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
@@ -84,12 +82,10 @@ struct SendAmount: View {
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                if let model {
-                    let ppCheck = try await model.checkPeerPushDebitM(amount)
-                    peerPushCheck = ppCheck
-                    // TODO: set from exchange
-                    //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                }
+                let ppCheck = try await model.checkPeerPushDebitM(amount)
+                peerPushCheck = ppCheck
+                // TODO: set from exchange
+//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 peerPushCheck = nil
@@ -101,14 +97,13 @@ struct SendAmount: View {
 #if DEBUG
 struct SendAmount_Container : View {
     @State private var centsToTransfer: UInt64 = 510
-    @State private var purpose: String = ""
+    @State private var summary: String = ""
 
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
-        SendAmount(model: nil,
-         amountAvailable: amount,
-         centsToTransfer: $centsToTransfer,
-                 purpose: $purpose)
+        SendAmount(amountAvailable: amount,
+                   centsToTransfer: $centsToTransfer,
+                           summary: $summary)
     }
 }
 

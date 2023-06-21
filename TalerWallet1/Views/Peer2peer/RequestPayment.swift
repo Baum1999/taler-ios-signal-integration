@@ -6,13 +6,15 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+// Will be called by the user tapping "Request Payment" in the balances list
 struct RequestPayment: View {
     private let symLog = SymLogV()
 
-    let model: Peer2peerModel?
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64
-    @Binding var purpose: String
+    @Binding var summary: String
+
+    @EnvironmentObject private var model: WalletModel
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
@@ -26,7 +28,7 @@ struct RequestPayment: View {
         let navTitle = String(localized: "Request \(currency)")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
-        VStack(alignment: .leading, spacing: 6) {
+        ScrollView {
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to receive:"))
 
@@ -37,26 +39,19 @@ struct RequestPayment: View {
             HStack {
                 let disabled = centsToTransfer == 0
 
-                let deactivateAction = {
-                    print("❗️ deactivateAction")
-                }
-
                 NavigationLink(destination: LazyView {
-                    ReceivePurpose(scopeInfo: scopeInfo,
+                    PaymentPurpose(scopeInfo: scopeInfo,
                              centsToTransfer: centsToTransfer,
-                                     purpose: $purpose,
-                                  expireDays: $expireDays
-                    ) {
-                        deactivateAction()
-                    }
+                                         fee: someCoins.fee,
+                                     summary: $summary,
+                                  expireDays: $expireDays)
+//                        { deactivateAction() }
                 }) {
                     Text("Create invoice")
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
             }
-            
-            Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
@@ -72,12 +67,10 @@ struct RequestPayment: View {
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                if let model {
-                    let ppCheck = try await model.checkPeerPullCreditM(amount, exchangeBaseUrl: nil)
-                    peerPullCheck = ppCheck
-                    // TODO: set from exchange
+                let ppCheck = try await model.checkPeerPullCreditM(amount, exchangeBaseUrl: nil)
+                peerPullCheck = ppCheck
+                // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 peerPullCheck = nil

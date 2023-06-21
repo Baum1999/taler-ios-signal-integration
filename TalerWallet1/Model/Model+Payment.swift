@@ -8,12 +8,6 @@ import AnyCodable
 //import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-class PaymentURIModel: WalletModel {
-
-    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
-        super.init(0)//symbol)
-    }
-}
 // MARK: - ContractTerms
 struct ContractTerms: Codable {
     let amount: Amount
@@ -59,7 +53,6 @@ struct ContractTerms: Codable {
         case wireFeeAmortization = "wire_fee_amortization"
     }
 }
-
 // MARK: - Auditor
 struct Auditor: Codable {
     let name: String
@@ -72,7 +65,6 @@ struct Auditor: Codable {
         case url
     }
 }
-
 // MARK: - Exchange
 struct ExchangeForPay: Codable {
     let url: String
@@ -83,7 +75,6 @@ struct ExchangeForPay: Codable {
         case masterPub = "master_pub"
     }
 }
-
 // MARK: - Extra
 struct Extra: Codable {
     let articleName: String
@@ -92,7 +83,6 @@ struct Extra: Codable {
         case articleName = "article_name"
     }
 }
-
 // MARK: -
 /// The result from PreparePayForUri
 struct PaymentDetailsForUri: Codable {
@@ -134,7 +124,7 @@ fileprivate struct confirmPayForUri: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
-extension PaymentURIModel {
+extension WalletModel {
     /// load payment details. Networking involved
     @MainActor
     func preparePayForUriM(_ talerPayUri: String)       // M for MainActor
@@ -149,21 +139,5 @@ extension PaymentURIModel {
           let request = confirmPayForUri(proposalId: proposalId)
           let response = try await sendRequest(request, ASYNCDELAY)
           return response
-    }
-}
-
-// MARK: -
-extension PaymentURIModel {
-    private static var models: [PaymentURIModel] = []     // a list of models even though I currently need only one
-
-    static func model() -> PaymentURIModel {
-        if PaymentURIModel.models.count > 0 {
-            let model = PaymentURIModel.models[0]
-            return model
-        } else {        // new model
-            let model = PaymentURIModel()
-            PaymentURIModel.models.append(model)
-            return model
-        }
     }
 }

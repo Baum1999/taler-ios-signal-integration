@@ -27,8 +27,9 @@ struct TransactionDetailView: View {
         let common = transaction.common
         let pending = transaction.isPending
         let dateString = TalerDater.dateString(from: common.timestamp)
-        let navTitle = (pending ? String(localized: "Pending ") : "") + "\(common.type)"   // TODO: localize type
-
+        let localizedType = transaction.localizedType
+        let navTitle = pending ? String(localized: "Pending \(localizedType)")
+                               : localizedType
         Group {
             List {
                 Text("\(dateString)")

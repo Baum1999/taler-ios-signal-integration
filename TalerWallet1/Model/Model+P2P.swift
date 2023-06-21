@@ -8,11 +8,6 @@ import AnyCodable
 //import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-class Peer2peerModel: WalletModel {
-    override init(_ symbol: Int = -1) {     // init with 0 to disable logging for this class
-        super.init(0)//symbol)
-    }
-}
 // MARK: - PeerContractTerms
 struct PeerContractTerms: Codable {
     let amount: Amount
@@ -77,7 +72,45 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = PeerPushResponse
     func operation() -> String { return "initiatePeerPushDebit" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
-                                 partialContractTerms: partialContractTerms) }
+                                      partialContractTerms: partialContractTerms) }
+
+    var exchangeBaseUrl: String?
+    var partialContractTerms: PeerContractTerms
+    struct Args: Encodable {
+        var exchangeBaseUrl: String?
+        var partialContractTerms: PeerContractTerms
+    }
+}
+
+struct PreparePeerPushCreditResponse: Codable {
+    let contractTerms: PeerContractTerms
+    let amountRaw: Amount
+    let amountEffective: Amount
+    let peerPushPaymentIncomingId: String
+}
+/// A request to receive coins from another wallet.
+fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
+    typealias Response = PreparePeerPushCreditResponse
+    func operation() -> String { return "preparePeerPushCredit" }
+    func args() -> Args { return Args(talerUri: talerUri) }
+
+    var talerUri: String
+    struct Args: Encodable {
+        var talerUri: String
+    }
+}
+// MARK: -
+/// The result from InitiatePeerPullCredit
+struct PeerPullResponse: Codable {
+    let talerUri: String
+    let transactionId: String
+}
+/// A request to send a payment request to another wallet.
+fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
+    typealias Response = PeerPullResponse
+    func operation() -> String { return "initiatePeerPullCredit" }
+    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
+                                      partialContractTerms: partialContractTerms) }
 
     var exchangeBaseUrl: String?
     var partialContractTerms: PeerContractTerms
@@ -87,7 +120,7 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
-extension Peer2peerModel {
+extension WalletModel {
     /// query exchange for fees (sending coins). Networking involved
     @MainActor
     func checkPeerPushDebitM(_ amount: Amount)       // M for MainActor
@@ -96,6 +129,16 @@ extension Peer2peerModel {
           let response = try await sendRequest(request, ASYNCDELAY)
           return response
     }
+    /// generate peer-push. Networking involved
+    @MainActor
+    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
+    async throws -> PeerPushResponse {
+        let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
+                                       partialContractTerms: terms)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
+    }
+
     /// query exchange for fees (invoice coins). Networking involved
     @MainActor
     func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?)       // M for MainActor
@@ -104,31 +147,22 @@ extension Peer2peerModel {
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    /// generate peer-push. Networking involved
+    /// generate peer-pull. Networking involved
     @MainActor
-    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
-      async throws -> PeerPushResponse {
-        let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
-                                       partialContractTerms: terms)
+    func initiatePeerPullCreditM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
+      async throws -> PeerPullResponse {
+        let request = InitiatePeerPullCredit(exchangeBaseUrl: baseURL,
+                                        partialContractTerms: terms)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-}
 
-// MARK: -
-extension Peer2peerModel {
-    private static var exchanges: [String] = []         // names of exchanges
-    private static var models: [Peer2peerModel] = []    // one model per exchange
-
-    static func model(baseURL: String) -> Peer2peerModel {
-        if let index = Peer2peerModel.exchanges.firstIndex(of:baseURL) {
-            let model = Peer2peerModel.models[index]
-            return model
-        } else {        // new model
-            let model = Peer2peerModel()
-            Peer2peerModel.models.append(model)
-            Peer2peerModel.exchanges.append(baseURL)
-            return model
-        }
+    /// prepare peer-pull. Networking involved
+    @MainActor
+    func preparePeerPushCreditM(_ talerUri: String)       // M for MainActor
+    async throws -> PreparePeerPushCreditResponse {
+        let request = PreparePeerPushCredit(talerUri: talerUri)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
 }

@@ -13,7 +13,6 @@ struct ExchangeRowView: View {
     @State private var buttonSelected: Int? = nil
     var body: some View {
         let baseURL = exchange.exchangeBaseUrl
-        let model = WithdrawModel.model(baseURL: baseURL)
 
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
             Text(baseURL.trimURL())
@@ -24,7 +23,6 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
             NavigationLink(destination: LazyView {
                 ManualWithdraw(exchange: exchange,
-                               model: model,
                                centsToTransfer: $centsToTransfer)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0)

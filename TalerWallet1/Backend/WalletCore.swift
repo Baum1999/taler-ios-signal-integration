@@ -6,6 +6,7 @@ import SwiftUI              // FOUNDATION has no AppStorage
 import AnyCodable
 import FTalerWalletcore
 import SymLog
+import os
 
 /// Delegate for the wallet backend.
 protocol WalletBackendDelegate {
@@ -22,13 +23,14 @@ class WalletCore: QuickjsMessageHandler {
     private var queue: DispatchQueue
     private var semaphore: DispatchSemaphore
 
-    private var quickjs: Quickjs
+    private let quickjs: Quickjs
     private var requestsMade: UInt          // counter for array of completion closures
     private var completions: [UInt : (Date, (UInt, Date, Data?, WalletBackendResponseError?) -> Void)] = [:]
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
     var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
+    let logger = Logger (subsystem: "net.taler.gnu", category: "wallet-core")
 
     private struct FullRequest: Encodable {
         let operation: String
@@ -164,6 +166,9 @@ extension WalletCore {
         } else if id.hasPrefix("withdraw:") {
             // TODO: handle withdraw
 //            symLog.log("\(pendingOp): \(id)")
+        } else if id.hasPrefix("peer-pull-credit:") {
+            // TODO: handle peer-pull-credit
+//            symLog.log("\(pendingOp): \(id)")
         } else if id.hasPrefix("peer-push-debit:") {
             // TODO: handle peer-push-debit
 //            symLog.log("\(pendingOp): \(id)")
@@ -176,8 +181,10 @@ print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I have
     private func handleStateTransition(_ jsonData: Data) throws {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
-            postNotification(.TransactionStateTransition,
-                             userInfo: [TRANSACTIONTRANSITION: decoded])
+            if decoded.newTxState != decoded.oldTxState {
+                postNotification(.TransactionStateTransition,
+                                 userInfo: [TRANSACTIONTRANSITION: decoded])
+            }
         } catch {       // rethrows
             symLog.log(jsonData)       // TODO: .error
             throw WalletBackendError.deserializationError
@@ -315,7 +322,7 @@ extension WalletCore {
             sendRequest(request: reqData) { requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
-print("Request \(requestId) took \(millisecs) ms")
+                self.logger.log("Request \(requestId) took \(millisecs) ms")
                 var err: Error? = nil
                 if let json = result {
                     do {
@@ -339,7 +346,7 @@ print("Request \(requestId) took \(millisecs) ms")
                         } else {
                             self.symLog.log(json)       // TODO: .error
                         }
-                        err = error     // this will be thrown, otherwise keep nil
+                        err = error     // this will be thrown in continuation.resume(throwing:), otherwise keep nil
                     }
                 } else {
                     if let error = error {

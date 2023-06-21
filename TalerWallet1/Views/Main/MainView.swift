@@ -75,13 +75,11 @@ extension MainView {
             SidebarItem(name: balances,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
                         view: AnyView(BalancesListView(navTitle: balances,
-                                                          model: BalancesModel.model(currency: "*"),
                                                 hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchanges,
                     sysImage: "building.columns",
                         view: AnyView(ExchangeListView(navTitle: exchanges,
-                                                          model: ExchangeModel.model(),
                                                 hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: settings,    // TODO: "About"?

@@ -22,6 +22,7 @@ struct TalerWallet1App: App {
     private let walletCore = WalletCore.shared
     // our main controller
     private let controller = Controller.shared
+    private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
 
     func scheduleAppRefresh() {
@@ -36,12 +37,13 @@ struct TalerWallet1App: App {
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(controller)
+                .environmentObject(model)
                     /// external events are taler:// or payto:// URLs passed to this app
                     /// we handle them in .onOpenURL in MainView.swift
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .task {
                     symLog.log("task -> initWalletCore")
-                    try! await controller.initWalletCoreM()      // will (and should) crash on failure
+                    try! await controller.initWalletCoreM(model)      // will (and should) crash on failure
                     symLog.log("task -> initWalletCore done")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in

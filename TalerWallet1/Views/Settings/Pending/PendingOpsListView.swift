@@ -9,8 +9,9 @@ struct PendingOpsListView: View {
     private let symLog = SymLogV(0)
     let navTitle = String(localized: "Pending")
 
+    @EnvironmentObject private var model: WalletModel
+
     @State var pendingOperations: [PendingOperation] = []
-    var model: PendingModel
 
     var body: some View {
 #if DEBUG
@@ -32,6 +33,7 @@ extension PendingOpsListView {
         let symLog: SymLogV?
         @Binding var pendingOperations: [PendingOperation]
         var reloadAction: () async -> [PendingOperation]
+        @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
@@ -41,7 +43,7 @@ extension PendingOpsListView {
                 List(pendingOperations, id: \.self) { pendingOp in
                     PendingOpView(pendingOp: pendingOp)
                 }
-                .listStyle(SidebarListStyle())
+                .listStyle(myListStyle.style).anyView
                 .navigationBarTitleDisplayMode(.large)
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_PENDING)

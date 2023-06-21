@@ -8,8 +8,7 @@ import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
-class TransactionsModel: WalletModel {
-
+extension WalletModel {
     static func specialTransactions(_ transactions: [Transaction]) -> [Transaction] {
         transactions.filter { transaction in
             transaction.isSpecial
@@ -30,10 +29,6 @@ class TransactionsModel: WalletModel {
         transactions.filter { transaction in
             !transaction.isDone && !transaction.isPending
         }
-    }
-
-    override init(_ symbol: Int = -1) {
-        super.init(0)//symbol)
     }
 }
 
@@ -83,7 +78,7 @@ struct DeleteTransaction: WalletBackendFormattedRequest {
 }
 
 // MARK: -
-extension TransactionsModel {
+extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
     func fetchTransactionsT(currency: String? = nil, searchString: String? = nil)
       async -> [Transaction] {                                          // might be called from a background thread itself
@@ -121,23 +116,5 @@ extension TransactionsModel {
     @MainActor func deleteTransactionM(transactionId: String)
       async throws {              // M for MainActor
         try await deleteTransactionT(transactionId: transactionId)      // call deleteTransaction on main thread
-    }
-}
-
-// MARK: -
-extension TransactionsModel {
-    private static var currencies: [String] = []            // names of currencies
-    private static var models: [TransactionsModel] = []     // one model per currency
-
-    static func model(currency: String) -> TransactionsModel {
-        if let index = TransactionsModel.currencies.firstIndex(of:currency) {
-            let model = TransactionsModel.models[index]
-            return model
-        } else {        // new currency
-            let model = TransactionsModel()
-            TransactionsModel.models.append(model)
-            TransactionsModel.currencies.append(currency)
-            return model
-        }
     }
 }
