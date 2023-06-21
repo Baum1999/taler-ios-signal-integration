@@ -6,12 +6,30 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+extension Transaction {             // for Dummys
+    init(dummy: Bool) {
+        let amount = try! Amount(fromString: "KUDOS:0")
+        let now = Timestamp.now()
+        let common = TransactionCommon(type: .dummy,
+                                       txState: TransactionState(major: .pending),
+                                       amountEffective: amount,
+                                       amountRaw: amount,
+                                       transactionId: "",
+                                       timestamp: now,
+                                       txActions: [])
+        self = .dummy(DummyTransaction(common: common, loaded: now))
+    }
+}
+// MARK: -
 struct TransactionDetailView: View {
     private let symLog = SymLogV()
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("developerMode") var developerMode: Bool = false
 
-    @State var transaction: Transaction
+    var transactionId: String
+    @State var transaction: Transaction = Transaction(dummy: true)
+    @State var viewId: Int = 0
+
     var reloadAction: ((_ transactionId: String) async throws -> Transaction)
     var deleteAction: ((_ transactionId: String) async throws -> Void)?
     var abortAction: ((_ transactionId: String) async throws -> Void)?
@@ -26,12 +44,15 @@ struct TransactionDetailView: View {
 #endif
         let common = transaction.common
         let pending = transaction.isPending
+        let loaded = TalerDater.dateString(from: transaction.loaded)
         let dateString = TalerDater.dateString(from: common.timestamp)
         let localizedType = transaction.localizedType
         let navTitle = pending ? String(localized: "Pending \(localizedType)")
                                : localizedType
         Group {
             List {
+                Text("Loaded: \(loaded)")
+                    .font(.title2)
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
                         TransactionButton(transactionId: common.transactionId,
@@ -59,7 +80,8 @@ struct TransactionDetailView: View {
                 if let doneAction {
                     DoneButton(doneAction: doneAction)
                 }
-            }.listStyle(myListStyle.style).anyView
+            }.id(viewId)
+            .listStyle(myListStyle.style).anyView
         }.onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == common.transactionId {
@@ -69,9 +91,10 @@ struct TransactionDetailView: View {
                         doneAction()
                     }} else { Task { do {
                         symLog.log("newState: \(newState), reloading transaction")
+                        withAnimation() { transaction = Transaction(dummy: true); viewId += 1 }
                         let reloadedTransaction = try await reloadAction(common.transactionId)
-                        transaction = reloadedTransaction       // redraw
                         symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
+                        withAnimation() { transaction = reloadedTransaction; viewId += 1 }      // redraw
                       } catch {
                           symLog.log(error.localizedDescription)
                     }}}
@@ -81,6 +104,15 @@ struct TransactionDetailView: View {
             }
         }
         .navigationTitle(navTitle)
+        .task {
+            do {
+                symLog.log("task")
+                let reloadedTransaction = try await reloadAction(transactionId)
+                withAnimation() { transaction = reloadedTransaction }      // redraw
+            } catch {
+                withAnimation() { transaction = Transaction(dummy: true) }
+            }
+        }
         .onAppear {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_TRANSACTIONDETAIL)
@@ -99,6 +131,8 @@ struct TransactionDetailView: View {
             let common = transaction.common
             let pending = transaction.isPending
             switch transaction {
+                case .dummy(let dummyTransaction):
+                    Text("Dummy")
                 case .withdrawal(let withdrawalTransaction):
                     let details = withdrawalTransaction.details
                     if pending {
@@ -197,23 +231,23 @@ struct TransactionDetailView: View {
 }
 // MARK: -
 #if DEBUG
-struct TransactionDetail_Previews: PreviewProvider {
-    static func deleteTransactionDummy(transactionId: String) async throws {}
-    static func doneActionDummy() {}
-    static var withdrawal = Transaction(incoming: true,
-                                         pending: true,
-                                              id: "some withdrawal ID",
-                                            time: Timestamp(from: 1_666_000_000_000))
-    static var payment = Transaction(incoming: false,
-                                      pending: false,
-                                           id: "some payment ID",
-                                         time: Timestamp(from: 1_666_666_000_000))
-    static func reloadActionDummy(transactionId: String) async -> Transaction { return withdrawal }
-    static var previews: some View {
-        Group {
-            TransactionDetailView(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
-            TransactionDetailView(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
-        }
-    }
-}
+//struct TransactionDetail_Previews: PreviewProvider {
+//    static func deleteTransactionDummy(transactionId: String) async throws {}
+//    static func doneActionDummy() {}
+//    static var withdrawal = Transaction(incoming: true,
+//                                         pending: true,
+//                                              id: "some withdrawal ID",
+//                                            time: Timestamp(from: 1_666_000_000_000))
+//    static var payment = Transaction(incoming: false,
+//                                      pending: false,
+//                                           id: "some payment ID",
+//                                         time: Timestamp(from: 1_666_666_000_000))
+//    static func reloadActionDummy(transactionId: String) async -> Transaction { return withdrawal }
+//    static var previews: some View {
+//        Group {
+//            TransactionDetailView(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
+//            TransactionDetailView(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
+//        }
+//    }
+//}
 #endif

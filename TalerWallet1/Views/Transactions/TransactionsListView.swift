@@ -100,7 +100,7 @@ extension TransactionsListView {
 //                        let common = transaction.common
                         NavigationLink { LazyView {        // whole row like in a tableView
                             // pending may not be deleted, but only aborted
-                            TransactionDetailView(transaction: transaction,
+                            TransactionDetailView(transactionId: transaction.id,
                                                  reloadAction: reloadOneAction,
                                                  deleteAction: deleteAction,
                                                   abortAction: abortAction,

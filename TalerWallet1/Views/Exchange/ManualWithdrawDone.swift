@@ -17,7 +17,7 @@ struct ManualWithdrawDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
-    @State var withdrawalTransaction: Transaction?
+    @State var transactionId: String?
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -29,10 +29,10 @@ struct ManualWithdrawDone: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         VStack {
-            if let transaction = withdrawalTransaction {
-                TransactionDetailView(transaction: transaction,
-                                     reloadAction: reloadOneAction,
-                                       doneAction: ViewState.shared.popToRootView)
+            if let transactionId {
+                TransactionDetailView(transactionId: transactionId,
+                                       reloadAction: reloadOneAction,
+                                         doneAction: ViewState.shared.popToRootView)
                 .navigationBarBackButtonHidden(true)            // exit only by Done-Button
                 .navigationTitle(navTitle)
             } else {
@@ -48,8 +48,7 @@ struct ManualWithdrawDone: View {
                 let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
                                                                          amount: amount, restrictAge: 0)
 print(result as Any)
-                let transaction = try await model.getTransactionByIdT(result!.transactionId)
-                withdrawalTransaction = transaction
+                transactionId = result!.transactionId
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }

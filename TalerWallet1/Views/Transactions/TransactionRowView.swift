@@ -93,6 +93,7 @@ extension Transaction {             // for PreViews
                               transactionId: id,
                                   timestamp: time,
                                   txActions: [.abort])
+        let now = Timestamp.now()
         if incoming {
             // if pending then manual else bank-integrated
             let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company&amount=KUDOS%3A9.99&message=Taler+Withdrawal+J41FQPJGAP1BED1SFSXHC989EN8HRDYAHK688MQ228H6SKBMV0AG"
@@ -103,7 +104,7 @@ extension Transaction {             // for PreViews
                                          exchangePaytoUris: pending ? [payto] : nil)
             let wDetails = WithdrawalTransactionDetails(exchangeBaseUrl: DEMOEXCHANGE,
                                                       withdrawalDetails: withdrawalDetails)
-            self = .withdrawal(WithdrawalTransaction(common: common, details: wDetails))
+            self = .withdrawal(WithdrawalTransaction(common: common, details: wDetails, loaded: now))
         } else {
             let merchant = Merchant(name: "some random shop")
             let info = OrderShortInfo(orderId: "some order ID",
@@ -114,7 +115,7 @@ extension Transaction {             // for PreViews
                                                  totalRefundRaw: try! Amount(fromString: refRaw),
                                            totalRefundEffective: try! Amount(fromString: refEff),
                                                            info: info)
-            self = .payment(PaymentTransaction(common: common, details: pDetails))
+            self = .payment(PaymentTransaction(common: common, details: pDetails, loaded: now))
         }
     }
 }

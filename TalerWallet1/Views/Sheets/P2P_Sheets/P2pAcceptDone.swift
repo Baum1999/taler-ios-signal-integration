@@ -16,7 +16,7 @@ struct P2pAcceptDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var confirmTransferUrl: String? = nil
-    @State private var transaction: Transaction? = nil
+    @State private var transactionId: String? = nil
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -28,10 +28,10 @@ struct P2pAcceptDone: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         VStack {
-            if let transaction {
-                TransactionDetailView(transaction: transaction,
-                                     reloadAction: reloadOneAction,
-                                       doneAction: { dismissTop() })
+            if let transactionId {
+                TransactionDetailView(transactionId: transactionId,
+                                       reloadAction: reloadOneAction,
+                                         doneAction: { dismissTop() })
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
@@ -47,7 +47,7 @@ struct P2pAcceptDone: View {
                 if let exchangeBaseUrl {
                     let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
                     confirmTransferUrl = result!.confirmTransferUrl
-                    transaction = try await model.getTransactionByIdT(result!.transactionId)
+                    transactionId = result!.transactionId
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
