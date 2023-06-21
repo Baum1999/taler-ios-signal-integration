@@ -7,7 +7,7 @@ import taler_swift
 
 /// This view shows an uncompleted transaction row in a currency section
 struct UncompletedRowView: View {
-    var uncompletedTransactions: [Transaction]
+    @Binding var uncompletedTransactions: [Transaction]
 
     var body: some View {
         let count = uncompletedTransactions.count
@@ -23,12 +23,12 @@ struct UncompletedRowView: View {
 }
 // MARK: -
 #if DEBUG
-struct UncompletedRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        let uncompletedTransactions: [Transaction] = []
-        List {
-            UncompletedRowView(uncompletedTransactions: uncompletedTransactions)
-        }
-    }
-}
+//struct UncompletedRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let uncompletedTransactions: [Transaction] = []
+//        List {
+//            UncompletedRowView(uncompletedTransactions: uncompletedTransactions)
+//        }
+//    }
+//}
 #endif

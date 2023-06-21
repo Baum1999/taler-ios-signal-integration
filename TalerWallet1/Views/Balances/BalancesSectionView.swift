@@ -77,6 +77,8 @@ struct BalancesSectionView: View {
         }
         let deleteAction = model.deleteTransactionT // dummyTransaction
         let abortAction = model.abortTransactionT
+        let suspendAction = model.suspendTransactionT // dummyTransaction
+        let resumeAction = model.resumeTransactionT
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -104,7 +106,9 @@ struct BalancesSectionView: View {
                                   reloadAllAction: reloadCompleted,
                                   reloadOneAction: reloadOneAction,
                                      deleteAction: deleteAction,
-                                      abortAction: abortAction)
+                                      abortAction: abortAction,
+                                    suspendAction: suspendAction,
+                                     resumeAction: resumeAction)
                   }, tag: 3, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
@@ -131,7 +135,9 @@ struct BalancesSectionView: View {
                                       reloadAllAction: reloadPending,
                                       reloadOneAction: reloadOneAction,
                                          deleteAction: deleteAction,
-                                          abortAction: abortAction)
+                                          abortAction: abortAction,
+                                        suspendAction: suspendAction,
+                                         resumeAction: resumeAction)
                     }
                 } label: {
                     VStack(spacing: 6) {
@@ -160,10 +166,12 @@ struct BalancesSectionView: View {
                                           reloadAllAction: reloadUncompleted,
                                           reloadOneAction: reloadOneAction,
                                              deleteAction: deleteAction,
-                                              abortAction: abortAction)
+                                              abortAction: abortAction,
+                                            suspendAction: suspendAction,
+                                             resumeAction: resumeAction)
                     }
                 } label: {
-                    UncompletedRowView(uncompletedTransactions: uncompletedTransactions)
+                    UncompletedRowView(uncompletedTransactions: $uncompletedTransactions)
                 }
 
             }

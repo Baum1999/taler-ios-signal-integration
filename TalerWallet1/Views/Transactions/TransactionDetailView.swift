@@ -32,6 +32,16 @@ struct TransactionDetailView: View {
                                : localizedType
         Group {
             List {
+                if developerMode {
+                    if transaction.isSuspendable { if let suspendAction {
+                        TransactionButton(transactionId: common.transactionId,
+                                          command: .suspend, action: suspendAction)
+                    } }
+                    if transaction.isResumable { if let resumeAction {
+                        TransactionButton(transactionId: common.transactionId,
+                                          command: .resume, action: resumeAction)
+                    } }
+                }
                 Text("\(dateString)")
                     .font(.title2)
 //                .listRowSeparator(.hidden)
@@ -49,16 +59,6 @@ struct TransactionDetailView: View {
                 if let doneAction {
                     DoneButton(doneAction: doneAction)
                 }
-                if developerMode {
-                    if transaction.isSuspendable { if let suspendAction {
-                        TransactionButton(transactionId: common.transactionId,
-                                          command: .suspend, action: suspendAction)
-                    } }
-                    if transaction.isResumable { if let resumeAction {
-                        TransactionButton(transactionId: common.transactionId,
-                                          command: .resume, action: resumeAction)
-                    } }
-                }
             }.listStyle(myListStyle.style).anyView
         }.onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
@@ -71,6 +71,7 @@ struct TransactionDetailView: View {
                         symLog.log("newState: \(newState), reloading transaction")
                         let reloadedTransaction = try await reloadAction(common.transactionId)
                         transaction = reloadedTransaction       // redraw
+                        symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
                       } catch {
                           symLog.log(error.localizedDescription)
                     }}}
@@ -150,7 +151,9 @@ struct TransactionDetailView: View {
                                  baseURL: nil, large: true)     // TODO: baseURL
                 case .peer2peer(let p2pTransaction):
                     let details = p2pTransaction.details                    // TODO: details
-                    QRCodeDetails(transaction: transaction)
+                    if pending {
+                        QRCodeDetails(transaction: transaction)
+                    }
                     ThreeAmounts(common: common, topTitle: String(localized: "Peer to Peer:"),
                                  baseURL: details.exchangeBaseUrl, large: false)
             }

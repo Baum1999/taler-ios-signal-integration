@@ -6,7 +6,7 @@ import SwiftUI
 import SymLog
 
 struct TransactionsListView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     let navTitle: String
 
@@ -16,6 +16,8 @@ struct TransactionsListView: View {
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
     let deleteAction: (_ transactionId: String) async throws -> ()
     let abortAction: (_ transactionId: String) async throws -> ()
+    let suspendAction: (_ transactionId: String) async throws -> ()
+    let resumeAction: (_ transactionId: String) async throws -> ()
 
     var body: some View {
 #if DEBUG
@@ -26,9 +28,16 @@ struct TransactionsListView: View {
         // TODO: Unlock the power of grammatical agreement
 //        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
         let title: String = "\(count) \(navTitle)"
-        Content(symLog: symLog, currency: currency, transactions: transactions, myListStyle: $myListStyle,
-                reloadAllAction: reloadAllAction, reloadOneAction: reloadOneAction,
-                deleteAction: deleteAction, abortAction: abortAction)
+        Content(symLog: symLog,
+                currency: currency,
+                transactions: transactions,
+                myListStyle: $myListStyle,
+                reloadAllAction: reloadAllAction,
+                reloadOneAction: reloadOneAction,
+                deleteAction: deleteAction,
+                abortAction: abortAction,
+                suspendAction: suspendAction,
+                resumeAction: resumeAction)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
@@ -51,6 +60,8 @@ extension TransactionsListView {
         let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
         let deleteAction: (_ transactionId: String) async throws -> ()
         let abortAction: (_ transactionId: String) async throws -> ()
+        let suspendAction: (_ transactionId: String) async throws -> ()
+        let resumeAction: (_ transactionId: String) async throws -> ()
 
         @State private var upAction: () -> Void = {}
         @State private var downAction: () -> Void = {}
@@ -92,7 +103,9 @@ extension TransactionsListView {
                             TransactionDetailView(transaction: transaction,
                                                  reloadAction: reloadOneAction,
                                                  deleteAction: deleteAction,
-                                                  abortAction: abortAction)
+                                                  abortAction: abortAction,
+                                                suspendAction: suspendAction,
+                                                 resumeAction: resumeAction)
                         }} label: {
                             TransactionRowView(transaction: transaction)
                         }

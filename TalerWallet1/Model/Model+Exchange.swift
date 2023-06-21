@@ -98,7 +98,7 @@ extension WalletModel {
       async throws  {
         symLog?.log("adding exchange: \(url)")       // TODO: .notice
         let request = AddExchange(exchangeBaseUrl: url)
-        logger.info("adding exchange: \(url)")
+          logger.info("adding exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request)
     }
 }

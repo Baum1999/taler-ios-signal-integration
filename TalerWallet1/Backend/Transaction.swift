@@ -102,12 +102,12 @@ struct TransactionCommon: Decodable {
         case payment
         case refund
         case refresh
-        case reward         // get paid for e.g. survey participation
-//        case tip            // tip personnel at restaurants
-        case peerPushDebit = "peer-push-debit"              // send coins to peer, show QR
-        case scanPushCredit = "peer-push-credit"            // scan QR, receive coins from peer
-        case peerPullCredit = "peer-pull-credit"            // request payment from peer, show QR
-        case scanPullDebit = "peer-pull-debit"              // scan QR, pay requested
+        case reward        = "tip"                  // get paid for e.g. survey participation
+//        case tip                                  // tip personnel at restaurants
+        case peerPushDebit = "peer-push-debit"      // send coins to peer, show QR
+        case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
+        case peerPullCredit = "peer-pull-credit"    // request payment from peer, show QR
+        case scanPullDebit = "peer-pull-debit"      // scan QR, pay requested
     }
     var type: TransactionType
     var txState: TransactionState
