@@ -78,6 +78,12 @@ extension Timestamp {
         return Timestamp.milliseconds(now + (UInt64(days) * seconds * 1000))
     }
 
+    public static func inSomeMinutes(_ minutes: UInt) -> Timestamp {
+        let now = Date().millisecondsSince1970
+        let seconds: UInt64 = 60
+        return Timestamp.milliseconds(now + (UInt64(minutes) * seconds * 1000))
+    }
+
 
     /// convenience initializer from UInt64 (milliseconds from January 1, 1970)
     public init(from: UInt64) {

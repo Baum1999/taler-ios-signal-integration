@@ -9,6 +9,7 @@ import SymLog
 struct SelectDays: View {
     private let symLog = SymLogV(0)
     @Environment(\.isEnabled) private var isEnabled: Bool
+    @AppStorage("developerMode") var developerMode: Bool = false
 
     @Binding var selected: UInt
     let maxExpiration: UInt
@@ -31,17 +32,17 @@ struct SelectDays: View {
     var body: some View {
         HStack {
             Button(action: oneDayAction) {
-                Text("1 Day")
+                Text(developerMode ? "3 Min." : "1 Day")
             }.buttonStyle(TalerButtonStyle(type: (selected == 1) ? .prominent : .bordered, dimmed: true))
                 .disabled(!isEnabled)
 
             Button(action: sevenDayAction) {
-                Text("7 Days")
+                Text(developerMode ? "1 Hour" : "7 Days")
             }.buttonStyle(TalerButtonStyle(type: (selected == 7) ? .prominent : .bordered, dimmed: true))
                 .disabled(!isEnabled || maxExpiration < 7)
 
             Button(action: thirtyDayAction) {
-                Text("30 Days")
+                Text(developerMode ? "1 Day" : "30 Days")
             }.buttonStyle(TalerButtonStyle(type: (selected == 30) ? .prominent : .bordered, dimmed: true))
                 .disabled(!isEnabled || maxExpiration < 30)
         } // 3 buttons

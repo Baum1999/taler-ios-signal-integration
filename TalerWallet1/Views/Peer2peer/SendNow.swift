@@ -6,9 +6,9 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-
 struct SendNow: View {
     private let symLog = SymLogV()
+    @AppStorage("developerMode") var developerMode: Bool = false
 
     let amountToSend: Amount?
     let amountToReceive: Amount?
@@ -50,7 +50,9 @@ struct SendNow: View {
             symLog.log(".task")
             do {
                 // generate talerURI
-                let timestamp = Timestamp.inSomeDays(expireDays)
+                var timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
+                                                                      : expireDays > 5 ? 60 : 3)
+                                              : Timestamp.inSomeDays(expireDays)
                 if let amountToSend {
                     let terms = PeerContractTerms(amount: amountToSend,
                                                  summary: summary,
