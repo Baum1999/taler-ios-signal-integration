@@ -166,7 +166,6 @@ struct WithdrawalTransactionDetails: Decodable {
 struct WithdrawalTransaction {
     var common: TransactionCommon
     var details: WithdrawalTransactionDetails
-    var loaded: Timestamp
 }
 
 struct PaymentTransactionDetails: Decodable {
@@ -182,7 +181,6 @@ struct PaymentTransactionDetails: Decodable {
 struct PaymentTransaction {
     var common: TransactionCommon
     var details: PaymentTransactionDetails
-    var loaded: Timestamp
 }
 
 struct RefundTransactionDetails: Decodable {
@@ -196,7 +194,6 @@ struct RefundTransactionDetails: Decodable {
 struct RefundTransaction {
     var common: TransactionCommon
     var details: RefundTransactionDetails
-    var loaded: Timestamp
 }
 
 struct RewardTransactionDetails: Decodable {
@@ -207,7 +204,6 @@ struct RewardTransactionDetails: Decodable {
 struct RewardTransaction {
     var common: TransactionCommon
     var details: RewardTransactionDetails
-    var loaded: Timestamp
 }
 
 //struct TipTransactionDetails: Decodable {
@@ -218,7 +214,6 @@ struct RewardTransaction {
 //struct TipTransaction {
 //    var common: TransactionCommon
 //    var details: TipTransactionDetails
-//    var loaded: Timestamp
 //}
 
 enum RefreshReason: String, Decodable {
@@ -244,7 +239,6 @@ struct RefreshTransactionDetails: Decodable {
 struct RefreshTransaction {
     var common: TransactionCommon
     var details: RefreshTransactionDetails
-    var loaded: Timestamp
 }
 
 struct P2pShortInfo: Codable {
@@ -261,11 +255,10 @@ struct P2PTransactionDetails: Codable {
 struct P2PTransaction {
     var common: TransactionCommon
     var details: P2PTransactionDetails
-    var loaded: Timestamp
 }
+
 struct DummyTransaction {
     var common: TransactionCommon
-    var loaded: Timestamp
 }
 
 enum Transaction: Decodable, Hashable, Identifiable {
@@ -281,30 +274,28 @@ enum Transaction: Decodable, Hashable, Identifiable {
     init(from decoder: Decoder) throws {
         do {
             let common = try TransactionCommon.init(from: decoder)
-            let now = Timestamp.now()
-
             switch (common.type) {
                 case .withdrawal:
                     let details = try WithdrawalTransactionDetails.init(from: decoder)
-                    self = .withdrawal(WithdrawalTransaction(common: common, details: details, loaded: now))
+                    self = .withdrawal(WithdrawalTransaction(common: common, details: details))
                 case .payment:
                     let details = try PaymentTransactionDetails.init(from: decoder)
-                    self = .payment(PaymentTransaction(common: common, details: details, loaded: now))
+                    self = .payment(PaymentTransaction(common: common, details: details))
                 case .refund:
                     let details = try RefundTransactionDetails.init(from: decoder)
-                    self = .refund(RefundTransaction(common: common, details: details, loaded: now))
+                    self = .refund(RefundTransaction(common: common, details: details))
                 case .reward:
                     let details = try RewardTransactionDetails.init(from: decoder)
-                    self = .reward(RewardTransaction(common: common, details: details, loaded: now))
+                    self = .reward(RewardTransaction(common: common, details: details))
 //                case .tip:
 //                    let details = try TipTransactionDetails.init(from: decoder)
-//                    self = .tip(TipTransaction(common: common, details: details, loaded: now))
+//                    self = .tip(TipTransaction(common: common, details: details))
                 case .refresh:
                     let details = try RefreshTransactionDetails.init(from: decoder)
-                    self = .refresh(RefreshTransaction(common: common, details: details, loaded: now))
+                    self = .refresh(RefreshTransaction(common: common, details: details))
                 case .peerPushDebit, .peerPullCredit, .scanPullDebit, .scanPushCredit:
                     let details = try P2PTransactionDetails.init(from: decoder)
-                    self = .peer2peer(P2PTransaction(common: common, details: details, loaded: now))
+                    self = .peer2peer(P2PTransaction(common: common, details: details))
                 default:
                     let context = DecodingError.Context(
                         codingPath: decoder.codingPath,
@@ -410,27 +401,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
                 return refreshTransaction.common
             case .peer2peer(let p2pTransaction):
                 return p2pTransaction.common
-        }
-    }
-
-    var loaded: Timestamp {
-        switch self {
-            case .dummy(let dummyTransaction):
-                return dummyTransaction.loaded
-            case .withdrawal(let withdrawalTransaction):
-                return withdrawalTransaction.loaded
-            case .payment(let paymentTransaction):
-                return paymentTransaction.loaded
-            case .refund(let refundTransaction):
-                return refundTransaction.loaded
-            case .reward(let rewardTransaction):
-                return rewardTransaction.loaded
-//            case .tip(let tipTransaction):
-//                return tipTransaction.loaded
-            case .refresh(let refreshTransaction):
-                return refreshTransaction.loaded
-            case .peer2peer(let p2pTransaction):
-                return p2pTransaction.loaded
         }
     }
 

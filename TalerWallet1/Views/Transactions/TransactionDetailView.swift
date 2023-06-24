@@ -17,7 +17,7 @@ extension Transaction {             // for Dummys
                                        transactionId: "",
                                        timestamp: now,
                                        txActions: [])
-        self = .dummy(DummyTransaction(common: common, loaded: now))
+        self = .dummy(DummyTransaction(common: common))
     }
 }
 // MARK: -
@@ -44,15 +44,12 @@ struct TransactionDetailView: View {
 #endif
         let common = transaction.common
         let pending = transaction.isPending
-        let loaded = TalerDater.dateString(from: transaction.loaded)
         let dateString = TalerDater.dateString(from: common.timestamp)
         let localizedType = transaction.localizedType
         let navTitle = pending ? String(localized: "Pending \(localizedType)")
                                : localizedType
         Group {
             List {
-                Text("Loaded: \(loaded)")
-                    .font(.title2)
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
                         TransactionButton(transactionId: common.transactionId,
