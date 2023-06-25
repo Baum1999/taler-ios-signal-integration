@@ -7,8 +7,8 @@ import taler_swift
 import SymLog
 
 extension Transaction {             // for Dummys
-    init(dummy: Bool) {
-        let amount = try! Amount(fromString: "KUDOS:0")
+    init(dummyCurrency: String) {
+        let amount = try! Amount(fromString: "\(dummyCurrency):0")
         let now = Timestamp.now()
         let common = TransactionCommon(type: .dummy,
                                        txState: TransactionState(major: .pending),
@@ -27,8 +27,8 @@ struct TransactionDetailView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 
     var transactionId: String
-    @State var transaction: Transaction = Transaction(dummy: true)
-    @State var viewId: Int = 0
+    @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
+    @State var viewId = UUID()
 
     var reloadAction: ((_ transactionId: String) async throws -> Transaction)
     var deleteAction: ((_ transactionId: String) async throws -> Void)?
@@ -59,7 +59,7 @@ struct TransactionDetailView: View {
                         TransactionButton(transactionId: common.transactionId,
                                           command: .resume, action: resumeAction)
                     } }
-                }
+                } // Suspend + Resume buttons
                 Text("\(dateString)")
                     .font(.title2)
 //                .listRowSeparator(.hidden)
@@ -68,46 +68,52 @@ struct TransactionDetailView: View {
                 if transaction.isAbortable { if let abortAction {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .abort, action: abortAction)
-                } }
+                } } // Abort button
                 if transaction.isDeleteable { if let deleteAction {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .delete, action: deleteAction)
-                } }
+                } } // Delete button
 
                 if let doneAction {
                     DoneButton(doneAction: doneAction)
-                }
-            }.id(viewId)
+                } // Done button
+            }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
         }.onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == common.transactionId {
                     let newState = transition.newTxState.major
                     if newState == .done { if let doneAction {
-                        symLog.log("newTxState.major == done")
-                        doneAction()
+                        symLog.log("newTxState.major == done  => dismiss sheet")
+                        doneAction()        // if this view is in a sheet this action will dissmiss it
                     }} else { Task { do {
-                        symLog.log("newState: \(newState), reloading transaction")
-                        withAnimation() { transaction = Transaction(dummy: true); viewId += 1 }
-                        let reloadedTransaction = try await reloadAction(common.transactionId)
-                        symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
-                        withAnimation() { transaction = reloadedTransaction; viewId += 1 }      // redraw
+                        if doneAction != nil { // don't update while we are in a sheet - except done
+                            symLog.log("ignoring newState: \(newState)")
+                        } else {
+                            symLog.log("newState: \(newState), reloading transaction")
+                            withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                            let reloadedTransaction = try await reloadAction(common.transactionId)
+                            symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
+                            withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
+                        }
                       } catch {
                           symLog.log(error.localizedDescription)
                     }}}
                 }
             } else {
+                // Yikes - should never happen
                 symLog.log(notification.userInfo as Any)
             }
         }
         .navigationTitle(navTitle)
         .task {
             do {
-                symLog.log("task")
+                symLog.log("task - load transaction")
                 let reloadedTransaction = try await reloadAction(transactionId)
-                withAnimation() { transaction = reloadedTransaction }      // redraw
+                withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
             } catch {
-                withAnimation() { transaction = Transaction(dummy: true) }
+                symLog.log(error)
+                withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
             }
         }
         .onAppear {
@@ -129,7 +135,7 @@ struct TransactionDetailView: View {
             let pending = transaction.isPending
             switch transaction {
                 case .dummy(let dummyTransaction):
-                    Text("Dummy")
+                    Text("")
                 case .withdrawal(let withdrawalTransaction):
                     let details = withdrawalTransaction.details
                     if pending {
@@ -153,7 +159,7 @@ struct TransactionDetailView: View {
                                     }
                                 }
                         }
-                    }
+                    } // ManualDetails or Confirm with bank
                     ThreeAmounts(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
                                 baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
                 case .payment(let paymentTransaction):
@@ -182,7 +188,8 @@ struct TransactionDetailView: View {
                                  baseURL: nil, large: true)     // TODO: baseURL
                 case .peer2peer(let p2pTransaction):
                     let details = p2pTransaction.details                    // TODO: details
-                    if pending {
+                    // TODO: isSendCoins should show QR only while not expired
+                    if pending || transaction.isSendCoins {
                         QRCodeDetails(transaction: transaction)
                     }
                     ThreeAmounts(common: common, topTitle: String(localized: "Peer to Peer:"),
@@ -199,15 +206,13 @@ struct TransactionDetailView: View {
             if keys.contains(TALERURI) {
                 if let talerURI = details[TALERURI] {
                     if talerURI.count > 10 {
-                        VStack {
-                            QRGeneratorView(text: talerURI)
-                            Text(talerURI)
-                        }
+                        QRCodeDetailView(talerURI: talerURI,
+                                         incoming: transaction.isP2pIncoming)
                     }
                 }
             } else if keys.contains(EXCHANGEBASEURL) {
                 if let baseURL = details[EXCHANGEBASEURL] {
-                    Text("from \(baseURL.trimURL())")
+                    Text("from \(baseURL.trimURL())") 
                         .font(.title2)
                         .padding(.bottom)
                 }

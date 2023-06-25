@@ -56,6 +56,8 @@ struct BalancesSectionView: View {
         return (incoming, outgoing)
     }
 
+    @State private var sectionID = UUID()
+    @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     var body: some View {
 #if DEBUG
@@ -66,14 +68,17 @@ struct BalancesSectionView: View {
         let reloadCompleted = {
             transactions = await model.fetchTransactionsT(currency: currency)
             completedTransactions = WalletModel.completedTransactions(transactions)
+//            sectionID = UUID()
         }
         let reloadPending = {
             transactions = await model.fetchTransactionsT(currency: currency)
             pendingTransactions = WalletModel.pendingTransactions(transactions)
+//            sectionID = UUID()
         }
         let reloadUncompleted = {
             transactions = await model.fetchTransactionsT(currency: currency)
             uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
+//            sectionID = UUID()
         }
         let deleteAction = model.deleteTransactionT // dummyTransaction
         let abortAction = model.abortTransactionT
@@ -178,11 +183,16 @@ struct BalancesSectionView: View {
         } header: {
             Text(currency)
                 .font(.title)
-        } .task {
-            let response = await model.fetchTransactionsT(currency: currency)
-            transactions = response
-            pendingTransactions = WalletModel.pendingTransactions(response)
-            uncompletedTransactions = WalletModel.uncompletedTransactions(response)
+        }.id(sectionID)
+        .task {
+            if shownSectionID != sectionID {
+                symLog.log("task for BalancesSectionView \(sectionID)")
+                let response = await model.fetchTransactionsT(currency: currency)
+                transactions = response
+                pendingTransactions = WalletModel.pendingTransactions(response)
+                uncompletedTransactions = WalletModel.uncompletedTransactions(response)
+                shownSectionID = sectionID
+            }
         }
     } // body
 }

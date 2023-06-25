@@ -80,10 +80,10 @@ struct PaymentPurpose: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }
-        .navigationTitle("Invoice another Wallet")
+        .navigationTitle("Invoice")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setSheetID(VIEW_INVOICE_PURPOSE)
+            DebugViewC.shared.setViewID(VIEW_INVOICE_PURPOSE)
             print("❗️ PaymentPurpose onAppear")
         }
         .onDisappear {

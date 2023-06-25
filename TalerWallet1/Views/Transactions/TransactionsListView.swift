@@ -88,6 +88,7 @@ extension TransactionsListView {
 //            }
 //        }
 
+        @State var viewId = UUID()
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
@@ -97,7 +98,6 @@ extension TransactionsListView {
             ScrollViewReader { scrollView in
                 List {
                     ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
-//                        let common = transaction.common
                         NavigationLink { LazyView {        // whole row like in a tableView
                             // pending may not be deleted, but only aborted
                             TransactionDetailView(transactionId: transaction.id,
@@ -115,7 +115,7 @@ extension TransactionsListView {
                 .refreshable {
                     symLog?.log("refreshing")
                     await reloadAllAction()
-                }
+                }.id(viewId)
                 .listStyle(myListStyle.style).anyView
                 .onAppear {
                     upAction = { withAnimation { scrollView.scrollTo(0) }}

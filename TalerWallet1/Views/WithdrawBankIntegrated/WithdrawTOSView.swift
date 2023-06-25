@@ -30,7 +30,7 @@ struct WithdrawTOSView: View {
                             _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)
                             if acceptAction != nil {
                                 acceptAction!()
-                            } else {
+                            } else { // just go back - caller will reload
                                 self.presentationMode.wrappedValue.dismiss()
                             }
                         }

@@ -6,8 +6,8 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called either by the user scanning a QR code or tapping the provided link, from another user's SendCoins
-// we show the user the P2P details - but first the ToS must be accepted
+// Will be called either by the user scanning a QR code or tapping the provided link,
+// from another user's SendCoins. We show the P2P details - but first the ToS must be accepted.
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Accept P2P Receive")
