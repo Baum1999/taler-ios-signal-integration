@@ -10,13 +10,18 @@ struct P2pAcceptDone: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Received P2P")
 
-    let exchangeBaseUrl: String?
-    let url: URL
+    let transactionId: String
 
     @EnvironmentObject private var model: WalletModel
 
-    @State private var confirmTransferUrl: String? = nil
-    @State private var transactionId: String? = nil
+    @State private var finished: Bool = false
+
+    func playSound(success: Bool) {
+        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
+                      + (success ? "PaymentReceived.caf"
+                                 : "payment_failure.caf"))
+        GNU_Taler.playSound(fileURL: url)
+    }
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -28,29 +33,23 @@ struct P2pAcceptDone: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         VStack {
-            if let transactionId {
-                TransactionDetailView(transactionId: transactionId,
-                                       reloadAction: reloadOneAction,
-                                         doneAction: { dismissTop() })
-                .navigationBarBackButtonHidden(true)
-                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .navigationTitle(navTitle)
-            } else {
-                WithdrawProgressView(message: "Bank Confirmation")
-                    .navigationTitle("Loading...")
-            }
+            TransactionDetailView(transactionId: transactionId,
+                                   reloadAction: reloadOneAction,
+                                     doneAction: { dismissTop() })
+            .navigationBarBackButtonHidden(true)
+            .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+            .navigationTitle(navTitle)
         }.onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P_ACCEPT)
         }.task {
             do {
-                if let exchangeBaseUrl {
-                    let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
-                    confirmTransferUrl = result!.confirmTransferUrl
-                    transactionId = result!.transactionId
-                }
+                _ = try await model.confirmPeerPushCreditM(transactionId)
+                finished = true
+                playSound(success: true)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
+                playSound(success: false)
             }
         }
     }
@@ -58,7 +57,6 @@ struct P2pAcceptDone: View {
 // MARK: -
 struct P2pAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
-        P2pAcceptDone(exchangeBaseUrl: DEMOEXCHANGE,
-                           url: URL(string: DEMOSHOP)!)
+        P2pAcceptDone(transactionId: "some ID")
     }
 }

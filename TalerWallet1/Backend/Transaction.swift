@@ -118,6 +118,22 @@ struct TransactionCommon: Decodable {
     var timestamp: Timestamp
     var txActions: [TxAction]
 
+    func localizedType(_ type: TransactionType) -> String {
+        switch type {
+            case .dummy:          return String("")
+            case .withdrawal:     return String(localized: "Withdrawal")
+            case .deposit:        return String(localized: "Deposit")
+            case .payment:        return String(localized: "Payment")
+            case .refund:         return String(localized: "Refund")
+            case .refresh:        return String(localized: "Refresh")
+            case .reward:         return String(localized: "Reward")
+            case .peerPushDebit:  return String(localized: "P2P Send", comment: "send coins to another wallet")
+            case .scanPushCredit: return String(localized: "P2P Receive", comment: "scan to receive coins sent from another wallet")
+            case .peerPullCredit: return String(localized: "P2P Invoice", comment: "send invoice to another wallet")
+            case .scanPullDebit:  return String(localized: "P2P Payment", comment: "scan invoice to pay to another wallet")
+        }
+    }
+
     func fee() -> Amount {
         do {
             return try Amount.diff(amountRaw, amountEffective)
@@ -327,19 +343,7 @@ enum Transaction: Decodable, Hashable, Identifiable {
     var id: String { common.transactionId }
 
     var localizedType: String {
-        switch common.type {
-            case .dummy:        return String("Dummy")
-            case .withdrawal:   return String(localized: "Withdrawal")
-            case .deposit:      return String(localized: "Deposit")
-            case .payment:      return String(localized: "Payment")
-            case .refund:       return String(localized: "Refund")
-            case .refresh:      return String(localized: "Refresh")
-            case .reward:       return String(localized: "Reward")
-            case .peerPushDebit:  return String(localized: "P2P Send", comment: "send coins to another wallet")
-            case .scanPushCredit: return String(localized: "P2P Receive", comment: "scan to receive coins sent from another wallet")
-            case .peerPullCredit: return String(localized: "P2P Invoice", comment: "send invoice to another wallet")
-            case .scanPullDebit:  return String(localized: "P2P Payment", comment: "scan invoice to pay to another wallet")
-        }
+        common.localizedType(common.type)
     }
 
     static func == (lhs: Transaction, rhs: Transaction) -> Bool {

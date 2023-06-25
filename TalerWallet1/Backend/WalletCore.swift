@@ -297,7 +297,7 @@ print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        /
             let now = Date.now
             do {
                 let full = FullRequest(operation: request.operation, id: requestId, args: request.args)
-                //            symLog.log(full)
+//              symLog.log(full)
                 let encoded = try JSONEncoder().encode(full)
                 guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
                 self.completions[requestId] = (now, completionHandler)

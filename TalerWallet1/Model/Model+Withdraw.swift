@@ -82,7 +82,6 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
         var exchangeBaseUrl: String
     }
 }
-// MARK: -
 /// A request to mark an exchange's terms of service as accepted.
 fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
     struct Response: Decodable {}

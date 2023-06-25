@@ -59,7 +59,7 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
 }
 // MARK: -
 /// The result from InitiatePeerPushDebit
-struct PeerPushResponse: Codable {
+struct InitiatePeerPushDebitResponse: Codable {
     let contractPriv: String
     let mergePriv: String
     let pursePub: String
@@ -69,7 +69,7 @@ struct PeerPushResponse: Codable {
 }
 /// A request to send coins to another wallet.
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
-    typealias Response = PeerPushResponse
+    typealias Response = InitiatePeerPushDebitResponse
     func operation() -> String { return "initiatePeerPushDebit" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
                                       partialContractTerms: partialContractTerms) }
@@ -81,12 +81,12 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
         var partialContractTerms: PeerContractTerms
     }
 }
-
+// MARK: -
 struct PreparePeerPushCreditResponse: Codable {
     let contractTerms: PeerContractTerms
     let amountRaw: Amount
     let amountEffective: Amount
-    let peerPushPaymentIncomingId: String
+    let transactionId: String           // after scanning the transaction already is created in the local DB
 }
 /// A request to receive coins from another wallet.
 fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
@@ -100,14 +100,25 @@ fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+fileprivate struct ConfirmPeerPushCredit: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { return "confirmPeerPushCredit" }
+    func args() -> Args { return Args(transactionId: transactionId) }
+
+    var transactionId: String
+    struct Args: Encodable {
+        var transactionId: String
+    }
+}
+// MARK: -
 /// The result from InitiatePeerPullCredit
-struct PeerPullResponse: Codable {
+struct InitiatePeerPullCreditResponse: Codable {
     let talerUri: String
     let transactionId: String
 }
 /// A request to send a payment request to another wallet.
 fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
-    typealias Response = PeerPullResponse
+    typealias Response = InitiatePeerPullCreditResponse
     func operation() -> String { return "initiatePeerPullCredit" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
                                       partialContractTerms: partialContractTerms) }
@@ -132,7 +143,7 @@ extension WalletModel {
     /// generate peer-push. Networking involved
     @MainActor
     func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
-    async throws -> PeerPushResponse {
+      async throws -> InitiatePeerPushDebitResponse {
         let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
                                        partialContractTerms: terms)
         let response = try await sendRequest(request, ASYNCDELAY)
@@ -142,7 +153,7 @@ extension WalletModel {
     /// query exchange for fees (invoice coins). Networking involved
     @MainActor
     func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?)       // M for MainActor
-    async throws -> CheckPeerPullCreditResponse {
+      async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
@@ -150,7 +161,7 @@ extension WalletModel {
     /// generate peer-pull. Networking involved
     @MainActor
     func initiatePeerPullCreditM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
-      async throws -> PeerPullResponse {
+      async throws -> InitiatePeerPullCreditResponse {
         let request = InitiatePeerPullCredit(exchangeBaseUrl: baseURL,
                                         partialContractTerms: terms)
         let response = try await sendRequest(request, ASYNCDELAY)
@@ -160,8 +171,16 @@ extension WalletModel {
     /// prepare peer-pull. Networking involved
     @MainActor
     func preparePeerPushCreditM(_ talerUri: String)       // M for MainActor
-    async throws -> PreparePeerPushCreditResponse {
+      async throws -> PreparePeerPushCreditResponse {
         let request = PreparePeerPushCredit(talerUri: talerUri)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
+    }
+    /// confirm peer-pull. Networking involved
+    @MainActor
+    func confirmPeerPushCreditM(_ transactionId: String)       // M for MainActor
+      async throws -> Decodable {
+        let request = ConfirmPeerPushCredit(transactionId: transactionId)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }

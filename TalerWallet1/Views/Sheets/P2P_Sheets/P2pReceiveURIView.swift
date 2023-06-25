@@ -41,7 +41,7 @@ struct P2pReceiveURIView: View {
                 let tosAccepted = true  // TODO: https://bugs.gnunet.org/view.php?id=7869
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
-                        P2pAcceptDone(exchangeBaseUrl: nil, url: url)
+                        P2pAcceptDone(transactionId: peerPushCreditResponse.transactionId)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))

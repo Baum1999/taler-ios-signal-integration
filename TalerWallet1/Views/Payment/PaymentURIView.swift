@@ -3,7 +3,6 @@
  * See LICENSE.md
  */
 import SwiftUI
-import AVFoundation
 import SymLog
 
 // Will be called either by the user scanning a QR code or tapping the provided link, both from the shop's website
@@ -17,13 +16,9 @@ struct PaymentURIView: View {
     @State var detailsForUri: PaymentDetailsForUri? = nil
 
     func playSound(success: Bool) {
-//        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/PaymentReceived.caf")
-        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_" + (success ? "success.caf"
-                                                                                    : "failure.caf"))
-        var soundID: SystemSoundID = 0
-        AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
-        print(soundID)
-        AudioServicesPlaySystemSound(soundID);
+        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_"
+                      + (success ? "success.caf" : "failure.caf"))
+        GNU_Taler.playSound(fileURL: url)
     }
 
     func acceptAction() {

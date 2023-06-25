@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,8 @@
 		4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
 		4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */; };
 		4E53A33729F50B7B00830EC2 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E53A33629F50B7B00830EC2 /* CurrencyField.swift */; };
+		4E578E922A481D8600F21F1C /* playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* playSound.swift */; };
+		4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E932A4822D500F21F1C /* P2pPayURIView.swift */; };
 		4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */; };
 		4E6EDD852A3615BE0031D520 /* ManualDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetails.swift */; };
@@ -150,6 +152,8 @@
 		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendAmount.swift; path = TalerWallet1/Views/Peer2peer/SendAmount.swift; sourceTree = SOURCE_ROOT; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
+		4E578E912A481D8600F21F1C /* playSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playSound.swift; sourceTree = "<group>"; };
+		4E578E932A4822D500F21F1C /* P2pPayURIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P2pPayURIView.swift; sourceTree = "<group>"; };
 		4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeDetailView.swift; sourceTree = "<group>"; };
 		4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptDone.swift; sourceTree = "<group>"; };
 		4E6EDD842A3615BE0031D520 /* ManualDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetails.swift; sourceTree = "<group>"; };
@@ -272,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				4E3B4BC02A41E6C200CC88B8 /* P2pReceiveURIView.swift */,
+				4E578E932A4822D500F21F1C /* P2pPayURIView.swift */,
 				4E3B4BC22A42252300CC88B8 /* P2pAcceptDone.swift */,
 			);
 			path = P2P_Sheets;
@@ -329,6 +334,7 @@
 				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
+				4E578E912A481D8600F21F1C /* playSound.swift */,
 				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
 				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
 				4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */,
@@ -735,6 +741,7 @@
 				4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */,
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,
+				4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */,
 				4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */,
 				4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */,
 				4EB095552989CBFE0043A8A1 /* PaymentURIView.swift in Sources */,
@@ -760,6 +767,7 @@
 				4E3B4BC32A42252300CC88B8 /* P2pAcceptDone.swift in Sources */,
 				4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */,
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
+				4E578E922A481D8600F21F1C /* playSound.swift in Sources */,
 				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
 				4E16E12329F3BB99008B9C86 /* CurrencyFormatter.swift in Sources */,
 				4EB095092989CB7C0043A8A1 /* TalerDater.swift in Sources */,

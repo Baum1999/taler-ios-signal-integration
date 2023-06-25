@@ -1,0 +1,12 @@
+/*
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
+ */
+import Foundation
+import AVFoundation
+
+func playSound(fileURL: URL) {
+    var soundID: SystemSoundID = 0
+    AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
+    AudioServicesPlaySystemSound(soundID);
+}

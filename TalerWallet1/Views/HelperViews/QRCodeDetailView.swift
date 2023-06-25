@@ -8,7 +8,7 @@ import AVFoundation
 
 
 struct QRCodeDetailView: View {
-    @Binding var talerURI: String
+    let talerURI: String
     let incoming: Bool
 
     var body: some View {
@@ -44,7 +44,7 @@ fileprivate struct ContentView: View {
 
     var body: some View {
         List {
-            QRCodeDetailView(talerURI: $talerURI, incoming: false)
+            QRCodeDetailView(talerURI: talerURI, incoming: false)
         }
     }
 }

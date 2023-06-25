@@ -20,32 +20,32 @@ struct SendNow: View {
     @State var talerURI: String = ""
 
     var body: some View {
-        ScrollView {
+        VStack {
             if talerURI.isEmpty {
                 LoadingView(backButtonHidden: true)
             } else {
-                VStack() {
-                    QRCodeDetailView(talerURI: $talerURI, incoming: amountToSend == nil)
-
+                    QRCodeDetailView(talerURI: talerURI,
+                                     incoming: amountToSend == nil)
+                    .padding()
                     Text("The QR code can also be copied and shared from Transactions later")
                         .fixedSize(horizontal: false, vertical: true)
                         .font(.subheadline)
                         .padding(.vertical, 20)
 
+                    Spacer()
                     Button("Done") {
-                        ViewState.shared.popToRootView()
+                        withAnimation(){ ViewState.shared.popToRootView() }
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.vertical)
+                    .padding()
 
-                }
-                .interactiveDismissDisabled()       // can only use "Done" button to dismiss
-                .navigationBarHidden(true)          // no back button, no title
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.horizontal)
-                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             }
         }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+//        .padding(.horizontal)
+        .interactiveDismissDisabled()       // can only use "Done" button to dismiss
+        .navigationBarHidden(true)          // no back button, no title
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .task {
             symLog.log(".task")
             do {
