@@ -31,7 +31,7 @@ struct QRCodeDetailView: View {
                 Text(talerURI)
                     .padding(.bottom)
 
-                CopyShare(textToCopy: talerURI, dismissFirst: true)
+                CopyShare(textToCopy: talerURI)
                     .disabled(false)
             }
         }

@@ -39,7 +39,7 @@ struct ManualDetails: View {
                 .listRowSeparator(.hidden)
             HStack {
                 Spacer()
-                ShareButton(textToShare: payto, dismissFirst: false)
+                ShareButton(textToShare: payto)
                     .accessibilityLabel("Share PayTo ULR")
                     .disabled(false)
                 Spacer()

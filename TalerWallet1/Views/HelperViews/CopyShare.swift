@@ -41,12 +41,8 @@ struct ShareButton: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
 
     let textToShare: String
-    let dismissFirst: Bool
 
     func shareAction() -> Void {
-        if dismissFirst {
-            dismissTop()        // cannot open another sheet from within a sheet
-        }
         symLog.log(textToShare)
         ShareSheet.shareSheet(url: textToShare)
     }
@@ -66,13 +62,12 @@ struct CopyShare: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
 
     let textToCopy: String
-    let dismissFirst: Bool
 
     var body: some View {
         HStack {
             CopyButton(textToCopy: textToCopy, vertical: false)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
-            ShareButton(textToShare: textToCopy, dismissFirst: dismissFirst)
+            ShareButton(textToShare: textToCopy)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
         } // two buttons
     }
@@ -80,6 +75,6 @@ struct CopyShare: View {
 // MARK: -
 struct CopyShare_Previews: PreviewProvider {
     static var previews: some View {
-        CopyShare(textToCopy: "Hallö", dismissFirst: false)
+        CopyShare(textToCopy: "Hallö")
     }
 }
