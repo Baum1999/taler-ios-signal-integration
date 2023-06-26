@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -276,8 +276,8 @@
 			isa = PBXGroup;
 			children = (
 				4E3B4BC02A41E6C200CC88B8 /* P2pReceiveURIView.swift */,
-				4E578E932A4822D500F21F1C /* P2pPayURIView.swift */,
 				4E3B4BC22A42252300CC88B8 /* P2pAcceptDone.swift */,
+				4E578E932A4822D500F21F1C /* P2pPayURIView.swift */,
 			);
 			path = P2P_Sheets;
 			sourceTree = "<group>";

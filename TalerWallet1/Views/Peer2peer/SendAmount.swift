@@ -10,7 +10,7 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV()
 
-    let amountAvailable: Amount
+    let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
 

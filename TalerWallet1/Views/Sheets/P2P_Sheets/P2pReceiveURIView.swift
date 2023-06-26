@@ -12,14 +12,14 @@ struct P2pReceiveURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Accept P2P Receive")
 
-    // the URL from the bank website
+    // the scanned URL
     let url: URL
+    
     @EnvironmentObject private var model: WalletModel
 
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse?
 
     var body: some View {
-        let badURL = "Error in URL: \(url)"
         VStack {
             if let peerPushCreditResponse {
                 List {
@@ -27,9 +27,6 @@ struct P2pReceiveURIView: View {
                     let effective = peerPushCreditResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    let outColor = WalletColors().transactionColor(false)
-                    let inColor = WalletColors().transactionColor(true)
-
                     ThreeAmountsView(topTitle: String(localized: "Amount to receive:"),
                                     topAmount: raw, fee: fee,
                                   bottomTitle: String(localized: "\(currency) to be obtained:"),
@@ -43,7 +40,7 @@ struct P2pReceiveURIView: View {
                     NavigationLink(destination: LazyView {
                         P2pAcceptDone(transactionId: peerPushCreditResponse.transactionId)
                     }) {
-                        Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                        Text("Accept Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {

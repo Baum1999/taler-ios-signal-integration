@@ -12,14 +12,14 @@ struct P2pPayURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Pay P2P Invoice")
 
-    // the URL from the bank website
+    // the scanned URL
     let url: URL
+
     @EnvironmentObject private var model: WalletModel
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
     var body: some View {
-        let badURL = "Error in URL: \(url)"
         VStack {
             if let peerPullDebitResponse {
                 List {
@@ -27,35 +27,21 @@ struct P2pPayURIView: View {
                     let effective = peerPullDebitResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    let outColor = WalletColors().transactionColor(false)
-                    let inColor = WalletColors().transactionColor(true)
-
-                    ThreeAmountsView(topTitle: String(localized: "Amount to receive:"),
+                    ThreeAmountsView(topTitle: String(localized: "Amount to pay:"),
                                      topAmount: raw, fee: fee,
-                                     bottomTitle: String(localized: "\(currency) to be obtained:"),
+                                     bottomTitle: String(localized: "\(currency) to be spent:"),
                                      bottomAmount: effective,
-                                     large: false, pending: false, incoming: true,
+                                     large: false, pending: false, incoming: false,
                                      baseURL: nil)
                 }
                 .navigationTitle(navTitle)
-                let tosAccepted = true  // TODO: https://bugs.gnunet.org/view.php?id=7869
-                if tosAccepted {
-                    NavigationLink(destination: LazyView {
+
+                NavigationLink(destination: LazyView {
                         P2pAcceptDone(transactionId: peerPullDebitResponse.transactionId)
                     }) {
-                        Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                        Text("Confirm Payment", comment:"pay P2P invoice")      // SHEET_PAY_P2P
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
-                } else {
-                    NavigationLink(destination: LazyView {
-                        WithdrawTOSView(exchangeBaseUrl: nil,
-                                        viewID: SHEET_RCV_P2P_TOS,
-                                        acceptAction: nil)         // pop back to here
-                    }) {
-                        Text("Check Terms of Service")
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
-                }
             } else {
                 // Yikes no details or no baseURL
                 //                WithdrawProgressView(message: url.host ?? badURL)
@@ -64,12 +50,12 @@ struct P2pPayURIView: View {
         }
         .onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
+            DebugViewC.shared.setSheetID(SHEET_PAY_P2P)
         }
         .task {
             do { // TODO: cancelled
                 symLog.log(".task")
-                let ppDebitResponse = try await model.preparePeerPushCreditM(url.absoluteString)
+                let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)
                 peerPullDebitResponse = ppDebitResponse
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)

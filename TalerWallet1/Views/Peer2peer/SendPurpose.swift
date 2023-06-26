@@ -93,7 +93,7 @@ struct SendPurpose: View {
         .task {
             symLog.log(".task")
             do {
-//                peerPushCheck = try await model.checkPeerPushDebitM(amount)
+
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }

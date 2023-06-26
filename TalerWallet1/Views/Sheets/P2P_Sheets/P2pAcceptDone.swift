@@ -44,7 +44,7 @@ struct P2pAcceptDone: View {
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P_ACCEPT)
         }.task {
             do {
-                _ = try await model.confirmPeerPushCreditM(transactionId)
+                _ = try await model.acceptPeerPushCreditM(transactionId)
                 finished = true
                 playSound(success: true)
             } catch {    // TODO: error
