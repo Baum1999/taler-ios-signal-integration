@@ -84,6 +84,7 @@ struct BalancesSectionView: View {
         let abortAction = model.abortTransactionT
         let suspendAction = model.suspendTransactionT // dummyTransaction
         let resumeAction = model.resumeTransactionT
+        let failAction = model.failTransaction
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -110,8 +111,9 @@ struct BalancesSectionView: View {
                                      transactions: completedTransactions,
                                   reloadAllAction: reloadCompleted,
                                   reloadOneAction: reloadOneAction,
-                                     deleteAction: deleteAction,
                                       abortAction: abortAction,
+                                     deleteAction: deleteAction,
+                                       failAction: failAction,
                                     suspendAction: suspendAction,
                                      resumeAction: resumeAction)
                   }, tag: 3, selection: $buttonSelected
@@ -139,8 +141,9 @@ struct BalancesSectionView: View {
                                          transactions: pendingTransactions,
                                       reloadAllAction: reloadPending,
                                       reloadOneAction: reloadOneAction,
-                                         deleteAction: deleteAction,
                                           abortAction: abortAction,
+                                         deleteAction: deleteAction,
+                                           failAction: failAction,
                                         suspendAction: suspendAction,
                                          resumeAction: resumeAction)
                     }
@@ -170,8 +173,9 @@ struct BalancesSectionView: View {
                                              transactions: uncompletedTransactions,
                                           reloadAllAction: reloadUncompleted,
                                           reloadOneAction: reloadOneAction,
-                                             deleteAction: deleteAction,
                                               abortAction: abortAction,
+                                             deleteAction: deleteAction,
+                                               failAction: failAction,
                                             suspendAction: suspendAction,
                                              resumeAction: resumeAction)
                     }

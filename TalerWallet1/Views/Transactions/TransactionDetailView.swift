@@ -31,8 +31,9 @@ struct TransactionDetailView: View {
     @State var viewId = UUID()
 
     var reloadAction: ((_ transactionId: String) async throws -> Transaction)
-    var deleteAction: ((_ transactionId: String) async throws -> Void)?
     var abortAction: ((_ transactionId: String) async throws -> Void)?
+    var deleteAction: ((_ transactionId: String) async throws -> Void)?
+    var failAction: ((_ transactionId: String) async throws -> Void)?
     var doneAction: (() -> Void)?
     var suspendAction: ((_ transactionId: String) async throws -> Void)?
     var resumeAction: ((_ transactionId: String) async throws -> Void)?
@@ -69,6 +70,10 @@ struct TransactionDetailView: View {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .abort, action: abortAction)
                 } } // Abort button
+                if transaction.isFailable { if let failAction {
+                    TransactionButton(transactionId: common.transactionId,
+                                      command: .fail, action: failAction)
+                } } // Delete button
                 if transaction.isDeleteable { if let deleteAction {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .delete, action: deleteAction)

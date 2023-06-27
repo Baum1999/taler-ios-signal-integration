@@ -14,8 +14,9 @@ struct TransactionsListView: View {
     let transactions: [Transaction]
     let reloadAllAction: () async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
-    let deleteAction: (_ transactionId: String) async throws -> ()
     let abortAction: (_ transactionId: String) async throws -> ()
+    let deleteAction: (_ transactionId: String) async throws -> ()
+    let failAction: (_ transactionId: String) async throws -> ()
     let suspendAction: (_ transactionId: String) async throws -> ()
     let resumeAction: (_ transactionId: String) async throws -> ()
 
@@ -29,15 +30,16 @@ struct TransactionsListView: View {
 //        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
         let title: String = "\(count) \(navTitle)"
         Content(symLog: symLog,
-                currency: currency,
-                transactions: transactions,
-                myListStyle: $myListStyle,
-                reloadAllAction: reloadAllAction,
-                reloadOneAction: reloadOneAction,
-                deleteAction: deleteAction,
-                abortAction: abortAction,
-                suspendAction: suspendAction,
-                resumeAction: resumeAction)
+              currency: currency,
+          transactions: transactions,
+           myListStyle: $myListStyle,
+       reloadAllAction: reloadAllAction,
+       reloadOneAction: reloadOneAction,
+           abortAction: abortAction,
+          deleteAction: deleteAction,
+            failAction: failAction,
+         suspendAction: suspendAction,
+          resumeAction: resumeAction)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
@@ -58,8 +60,9 @@ extension TransactionsListView {
         @Binding var myListStyle: MyListStyle
         let reloadAllAction: () async -> ()
         let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
-        let deleteAction: (_ transactionId: String) async throws -> ()
         let abortAction: (_ transactionId: String) async throws -> ()
+        let deleteAction: (_ transactionId: String) async throws -> ()
+        let failAction: (_ transactionId: String) async throws -> ()
         let suspendAction: (_ transactionId: String) async throws -> ()
         let resumeAction: (_ transactionId: String) async throws -> ()
 
@@ -102,8 +105,9 @@ extension TransactionsListView {
                             // pending may not be deleted, but only aborted
                             TransactionDetailView(transactionId: transaction.id,
                                                  reloadAction: reloadOneAction,
-                                                 deleteAction: deleteAction,
                                                   abortAction: abortAction,
+                                                 deleteAction: deleteAction,
+                                                   failAction: failAction,
                                                 suspendAction: suspendAction,
                                                  resumeAction: resumeAction)
                         }} label: {

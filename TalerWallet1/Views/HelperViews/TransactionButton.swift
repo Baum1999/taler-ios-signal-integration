@@ -14,9 +14,10 @@ struct TransactionButton: View {
     @State var disabled: Bool = false
     @State var executed: Bool = false
     var body: some View {
+        let isDestructive = (command == .delete) || (command == .fail)
         let role: ButtonRole? = (command == .abort) ? .cancel
-                              : (command == .delete) ? .destructive
-                                                     : nil
+                              :  isDestructive ? .destructive
+                                               : nil
         Button(role: role, action: {
             Task {
                 disabled = true     // don't try this more than once
