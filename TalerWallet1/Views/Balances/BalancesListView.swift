@@ -110,6 +110,7 @@ extension BalancesListView {
         @Binding var summary: String
         var reloadAction: () async -> Void
 
+        @State private var shouldLoad = false
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
@@ -124,14 +125,22 @@ extension BalancesListView {
                 .refreshable {
                     symLog?.log("refreshing")
                     await reloadAction()      // this closure is already async, no need for a Task
+                    // TODO: reload transactions
                 }
                 .listStyle(myListStyle.style).anyView
             }
-            // automatically fetch balances after receiving transaction-state-transition ...
-            .onNotification(.TransactionStateTransition) { notification in
+            .onAppear {
+                if shouldLoad {
+                    shouldLoad = false
+                    symLog?.log(".onAppear: shouldLoad ==> reloading balances")
+                    Task { await reloadAction() }
+                }
+            }
+            // automatically reload balances after receiving BalanceChange notification ...
+            .onNotification(.BalanceChange) { notification in
                 // doesn't need to be received on main thread because we just reload in the background anyway
-                symLog?.log(".onNotification(.TransactionStateTransition) ==> reloading balances")
-                Task { await reloadAction() }
+                symLog?.log(".onNotification(.BalanceChange) ==> shouldLoad = true")
+                shouldLoad = true
             }
         } // body
     } // Content

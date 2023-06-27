@@ -28,6 +28,7 @@ public let TALERURI = "talerUri"
 public let TRANSACTIONTRANSITION = "transactionTransition"
 
 extension Notification.Name {
+    static let BalanceChange = Notification.Name("balance-change")
     static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
     static let ExchangeAdded = Notification.Name("exchange-added")
     static let PendingOperationProcessed = Notification.Name("pending-operation-processed")

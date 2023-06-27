@@ -202,6 +202,8 @@ print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I have
                     try handleStateTransition(jsonData)
                 case Notification.Name.PendingOperationProcessed.rawValue:
                     try handlePendingProcessed(payload)
+                case Notification.Name.BalanceChange.rawValue:
+                    postNotification(.BalanceChange)
                 case Notification.Name.ExchangeAdded.rawValue:
                     postNotification(.ExchangeAdded)
                 case Notification.Name.ReserveNotYetFound.rawValue:
@@ -224,7 +226,6 @@ print("\n❗️ \(pendingOp): \(id)\n")        // this is a new pendingOp I have
 //                     "pay-operation-success",
 //                     "withdrawal-group-bank-confirmed",          // replaced by transaction-state-transition
 //                     "withdrawal-group-reserve-ready",
-//                     "coin-withdrawn",                           // totally useless since wallet-core handles coins in bulk
 //                     "waiting-for-retry",                        // Bla Bla Bla
                 case "refresh-started", "refresh-melted",
                      "refresh-revealed", "refresh-unwarranted":
