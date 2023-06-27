@@ -19,12 +19,16 @@ class WalletModel: ObservableObject {
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
       async throws -> T.Response {    // T for any Thread
+#if !DEBUG
         logger.log("sending: \(request.operation(), privacy: .public)")
+#endif
         let sendTime = Date.now
         do {
             let (response, id) = try await WalletCore.shared.sendFormattedRequest(request: request)
+#if !DEBUG
             let timeUsed = Date.now - sendTime
             logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
+#endif
             let asyncDelay: UInt = delay > 0 ? delay : UInt(ASYNCDELAY)
             if asyncDelay > 0 {     // test LoadingView, sleep some seconds
                 try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(asyncDelay))
