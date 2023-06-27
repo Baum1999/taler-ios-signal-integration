@@ -80,6 +80,12 @@ struct BalancesListView: View {
             .overlay {
                 if balances.isEmpty {
                     WalletEmptyView()
+                        .refreshable {
+                            symLog.log("refreshing")
+                            await reloadAction()      // this closure is already async, no need for a Task
+                                                      // TODO: reload transactions
+                        }
+
                 }
             }
             .alert("Scanning QR-codes requires access to the camera",

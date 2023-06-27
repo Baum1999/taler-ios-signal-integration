@@ -66,25 +66,25 @@ struct BalancesSectionView: View {
 #endif
         let currency = balance.available.currencyStr
         let reloadCompleted = {
-            transactions = await model.fetchTransactionsT(currency: currency)
+            transactions = await model.transactionsT(currency: currency)
             completedTransactions = WalletModel.completedTransactions(transactions)
 //            sectionID = UUID()
         }
         let reloadPending = {
-            transactions = await model.fetchTransactionsT(currency: currency)
+            transactions = await model.transactionsT(currency: currency)
             pendingTransactions = WalletModel.pendingTransactions(transactions)
 //            sectionID = UUID()
         }
         let reloadUncompleted = {
-            transactions = await model.fetchTransactionsT(currency: currency)
+            transactions = await model.transactionsT(currency: currency)
             uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
 //            sectionID = UUID()
         }
-        let deleteAction = model.deleteTransactionT // dummyTransaction
-        let abortAction = model.abortTransactionT
-        let suspendAction = model.suspendTransactionT // dummyTransaction
-        let resumeAction = model.resumeTransactionT
+        let abortAction = model.abortTransaction
+        let deleteAction = model.deleteTransaction // dummyTransaction
         let failAction = model.failTransaction
+        let suspendAction = model.suspendTransaction // dummyTransaction
+        let resumeAction = model.resumeTransaction
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -190,8 +190,8 @@ struct BalancesSectionView: View {
         }.id(sectionID)
         .task {
             if shownSectionID != sectionID {
-                let response = await model.fetchTransactionsT(currency: currency)
                 symLog.log("task for BalancesSectionView \(sectionID) - reload Transactions")
+                let response = await model.transactionsT(currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)

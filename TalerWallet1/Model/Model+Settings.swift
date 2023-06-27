@@ -14,35 +14,6 @@ fileprivate let DEMO_MERCHANTBASEURL = DEMOBACKEND
 fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
-extension WalletModel {
-    @MainActor func loadTestKudosM()
-      async throws {          // M for MainActor
-        let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)
-        let request = WalletBackendWithdrawTestBalance(amount: amount,
-                                                  bankBaseUrl: DEMO_BANKBASEURL,
-                                              exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                         bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
-        let response = try await sendRequest(request, ASYNCDELAY)
-        symLog?.log("received: \(response)")
-    }
-
-    @MainActor func runIntegrationTestM(newVersion: Bool)
-      async throws {               // M for MainActor
-        let amountW = Amount(currency: DEMOCURRENCY, integer: 3, fraction: 0)
-        let amountS = Amount(currency: DEMOCURRENCY, integer: 1, fraction: 0)
-        let request = WalletBackendRunIntegration(newVersion: newVersion,
-                                            amountToWithdraw: amountW,
-                                               amountToSpend: amountS,
-                                                 bankBaseUrl: DEMO_BANKAPIBASEURL,
-                                        bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL,
-                                             exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                             merchantBaseUrl: DEMO_MERCHANTBASEURL,
-                                           merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
-        let _ = try await sendRequest(request, ASYNCDELAY)
-        symLog?.log("runIntegrationTest finished")
-    }
-}
-// MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedRequest {
     typealias Response = String
@@ -64,6 +35,17 @@ fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedReque
         var bankAccessApiBaseUrl: String
     }
 }
+extension WalletModel {
+    @MainActor func loadTestKudosM()
+    async throws {          // M for MainActor
+        let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)
+        let request = WalletBackendWithdrawTestBalance(amount: amount,
+                                                       bankBaseUrl: DEMO_BANKBASEURL,
+                                                       exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                                       bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
+        let response = try await sendRequest(request, ASYNCDELAY)
+    }
+} // loadTestKudosM()
 // MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
@@ -100,3 +82,19 @@ fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
         var merchantAuthToken: String
     }
 }
+extension WalletModel {
+    @MainActor func runIntegrationTestM(newVersion: Bool)
+    async throws {               // M for MainActor
+        let amountW = Amount(currency: DEMOCURRENCY, integer: 3, fraction: 0)
+        let amountS = Amount(currency: DEMOCURRENCY, integer: 1, fraction: 0)
+        let request = WalletBackendRunIntegration(newVersion: newVersion,
+                                                  amountToWithdraw: amountW,
+                                                  amountToSpend: amountS,
+                                                  bankBaseUrl: DEMO_BANKAPIBASEURL,
+                                                  bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL,
+                                                  exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
+                                                  merchantBaseUrl: DEMO_MERCHANTBASEURL,
+                                                  merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
+        let _ = try await sendRequest(request, ASYNCDELAY)
+    }
+} // runIntegrationTestM()

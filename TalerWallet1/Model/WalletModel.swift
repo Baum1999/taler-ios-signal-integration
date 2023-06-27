@@ -13,13 +13,8 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 // MARK: -
 /// The "virtual" base class for all models
 class WalletModel: ObservableObject {
-    public static let shared = WalletModel(0)
+    public static let shared = WalletModel()
     static func className() -> String {"\(self)"}
-    var symLog: SymLogC?
-
-    init(_ symbol: Int) {                               // init with 0 to disable logging for this class
-        self.symLog = SymLogC(symbol == 0 ? 0 : -1, funcName: Self.className())
-    }
     let logger = Logger (subsystem: "net.taler.gnu", category: "WalletModel")
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)

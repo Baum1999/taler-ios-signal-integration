@@ -72,6 +72,17 @@ struct DeleteTransaction: WalletBackendFormattedRequest {
         var transactionId: String
     }
 }
+/// A request to delete a wallet transaction by ID.
+struct FailTransaction: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { return "failTransaction" }
+    func args() -> Args { return Args(transactionId: transactionId) }
+
+    var transactionId: String
+    struct Args: Encodable {
+        var transactionId: String
+    }
+}
 /// A request to suspend a wallet transaction by ID.
 struct SuspendTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}
@@ -97,69 +108,51 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func fetchTransactionsT(currency: String? = nil, searchString: String? = nil)
+    func transactionsT(currency: String? = nil, searchString: String? = nil)
     async -> [Transaction] {                                          // might be called from a background thread itself
         do {
             let request = GetTransactions(currency: currency, search: searchString)
-            logger.info("getTransactions")
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.transactions
         } catch {
-            logger.error("getTransactions failed: \(error)")
             return []
         }
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func fetchTransactionsM(currency: String? = nil, searchString: String? = nil)
+    @MainActor func transactionsMA(currency: String? = nil, searchString: String? = nil)
     async -> [Transaction] {    // M for MainActor
-        return await fetchTransactionsT(currency: currency, searchString: searchString)
+        return await transactionsT(currency: currency, searchString: searchString)
     }
 
-    func abortTransactionT(transactionId: String)
-      async throws {          // might be called from a background thread itself
+    /// abort the specified transaction from Wallet-Core. No networking involved
+    func abortTransaction(transactionId: String) async throws {
         let request = AbortTransaction(transactionId: transactionId)
         logger.info("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
-    /// delete the specified transaction from Wallet-Core. No networking involved
-    @MainActor func abortTransactionM(transactionId: String)
-    async throws {             // M for MainActor
-        try await abortTransactionT(transactionId: transactionId)
-    }
 
-    func deleteTransactionT(transactionId: String)
-      async throws {          // might be called from a background thread itself
+    /// delete the specified transaction from Wallet-Core. No networking involved
+    func deleteTransaction(transactionId: String) async throws {
         let request = DeleteTransaction(transactionId: transactionId)
         logger.info("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
-    /// delete the specified transaction from Wallet-Core. No networking involved
-    @MainActor func deleteTransactionM(transactionId: String)
-      async throws {              // M for MainActor
-        try await deleteTransactionT(transactionId: transactionId)
+
+    func failTransaction(transactionId: String) async throws {
+        let request = FailTransaction(transactionId: transactionId)
+        logger.info("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        let _ = try await sendRequest(request, ASYNCDELAY)
     }
 
-    func suspendTransactionT(transactionId: String)
-      async throws {          // might be called from a background thread itself
+    func suspendTransaction(transactionId: String) async throws {
         let request = SuspendTransaction(transactionId: transactionId)
         logger.info("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
-    /// delete the specified transaction from Wallet-Core. No networking involved
-    @MainActor func suspendTransactionM(transactionId: String)
-      async throws {               // M for MainActor
-        try await suspendTransactionT(transactionId: transactionId)
-    }
 
-    func resumeTransactionT(transactionId: String)
-    async throws {            // might be called from a background thread itself
+    func resumeTransaction(transactionId: String) async throws {
         let request = ResumeTransaction(transactionId: transactionId)
         logger.info("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
-    }
-    /// delete the specified transaction from Wallet-Core. No networking involved
-    @MainActor func resumeTransactionM(transactionId: String)
-      async throws {              // M for MainActor
-        try await resumeTransactionT(transactionId: transactionId)
     }
 }
