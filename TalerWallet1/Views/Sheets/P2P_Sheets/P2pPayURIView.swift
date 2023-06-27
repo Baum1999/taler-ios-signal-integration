@@ -37,15 +37,15 @@ struct P2pPayURIView: View {
                 .navigationTitle(navTitle)
 
                 NavigationLink(destination: LazyView {
-                        P2pAcceptDone(transactionId: peerPullDebitResponse.transactionId)
+                        P2pAcceptDone(transactionId: peerPullDebitResponse.transactionId,
+                                           incoming: false)
                     }) {
                         Text("Confirm Payment", comment:"pay P2P invoice")      // SHEET_PAY_P2P
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
             } else {
-                // Yikes no details or no baseURL
-                //                WithdrawProgressView(message: url.host ?? badURL)
-                //                    .navigationTitle("Contacting Exchange")
+                WithdrawProgressView(message: url.host ?? "Yikes - no valid URL")
+                    .navigationTitle("Contacting Exchange")
             }
         }
         .onAppear() {

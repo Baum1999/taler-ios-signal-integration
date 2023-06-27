@@ -7,7 +7,7 @@ import SymLog
 
 struct URLSheet: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Invalid URL")
+    let navTitle = String(localized: "Examining URL")
     var urlToOpen: URL
     @EnvironmentObject private var controller: Controller
 
@@ -22,7 +22,7 @@ struct URLSheet: View {
                     case .pay:
                         PaymentURIView(url: urlToOpen)
                     case .payPull:
-                        Text("payPull not implemented yet")
+                        P2pPayURIView(url: urlToOpen)
                     case .payPush:
                         P2pReceiveURIView(url: urlToOpen)
                     case .unknown:

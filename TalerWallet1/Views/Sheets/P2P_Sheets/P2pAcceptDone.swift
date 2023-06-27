@@ -8,9 +8,9 @@ import SymLog
 
 struct P2pAcceptDone: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Received P2P")
 
     let transactionId: String
+    let incoming: Bool
 
     @EnvironmentObject private var model: WalletModel
 
@@ -32,6 +32,8 @@ struct P2pAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let navTitle = incoming ? String(localized: "Received P2P")
+                                : String(localized: "Paid P2P")
         VStack {
             TransactionDetailView(transactionId: transactionId,
                                    reloadAction: reloadOneAction,
@@ -44,7 +46,11 @@ struct P2pAcceptDone: View {
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P_ACCEPT)
         }.task {
             do {
-                _ = try await model.acceptPeerPushCreditM(transactionId)
+                if incoming {
+                    _ = try await model.acceptPeerPushCreditM(transactionId)
+                } else {
+                    _ = try await model.confirmPeerPullDebitM(transactionId)
+                }
                 finished = true
                 playSound(success: true)
             } catch {    // TODO: error
@@ -57,6 +63,6 @@ struct P2pAcceptDone: View {
 // MARK: -
 struct P2pAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
-        P2pAcceptDone(transactionId: "some ID")
+        P2pAcceptDone(transactionId: "some ID", incoming: true)
     }
 }
