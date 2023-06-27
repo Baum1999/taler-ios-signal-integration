@@ -14,12 +14,12 @@ enum BackendState {
     case error
 }
 
-enum UrlCommand: String {
+enum UrlCommand {
     case unknown
     case withdraw
     case pay
-    case payPull = "pay-pull"
-    case payPush = "pay-push"
+    case payPull
+    case payPush
 }
 
 // MARK: -
@@ -35,8 +35,9 @@ class Controller: ObservableObject {
         backendState = .instantiated
     }
 
-    @MainActor func initWalletCoreM(_ model: WalletModel)
-      async throws {           // M for MainActor
+    @MainActor
+    func initWalletCore(_ model: WalletModel)
+      async throws {
         if backendState == .instantiated {
             backendState = .initing
             do {

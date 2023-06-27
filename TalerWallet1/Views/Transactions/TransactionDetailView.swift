@@ -155,6 +155,7 @@ struct TransactionDetailView: View {
                                         if let destination = URL(string: confirmationUrl) {
                                             // Show Hint that User should Confirm on bank website
                                             Text("Waiting for bank confirmation")
+                                                .multilineTextAlignment(.leading)
                                                 .listRowSeparator(.hidden)
                                             Link("Confirm with bank", destination: destination)
                                                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
