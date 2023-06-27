@@ -90,7 +90,12 @@ public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 172 Recei
 
 //public let SHEET_REFUND =
 
-
+extension UIDevice {
+    var hasNotch: Bool {
+        let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+        return bottom > 0
+    }
+}
 // MARK: -
 struct DebugViewV: View {
     private let symLog = SymLogV(0)
@@ -106,6 +111,10 @@ struct DebugViewV: View {
         HStack {
             Spacer()
             Spacer()
+            if UIDevice.current.hasNotch {
+                Spacer()
+                Spacer()
+            }
             Text(viewIDString)
                 .font(.caption2)
                 .foregroundColor(.red)

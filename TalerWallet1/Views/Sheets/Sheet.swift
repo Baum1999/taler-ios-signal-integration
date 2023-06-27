@@ -4,6 +4,7 @@
  */
 import SwiftUI
 import SymLog
+import os.log
 
 struct Sheet: View {
     private let symLog = SymLogV()
@@ -12,15 +13,18 @@ struct Sheet: View {
 
     var sheetView: AnyView
 
+    let logger = Logger (subsystem: "net.taler.gnu", category: "Sheet")
+
     var cancelButton: some View {
         Button("Cancel") {
-            print(dismiss)  // TODO: delete this line
+            logger.log("Cancel")
             dismissTop()
         }
     }
 
     var body: some View {
-        let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID) : ""
+        let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
+                                              : ""      // show nothing if 0
         NavigationView {
             sheetView
                 .navigationBarItems(leading: cancelButton)
@@ -36,9 +40,3 @@ struct Sheet: View {
         }
     }
 }
-// MARK: -
-//struct Sheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//
-//    }
-//}
