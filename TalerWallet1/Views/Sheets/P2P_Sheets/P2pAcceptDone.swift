@@ -16,9 +16,10 @@ struct P2pAcceptDone: View {
 
     @State private var finished: Bool = false
 
-    func playSound(success: Bool) {
+    func playSound(success: Bool, incoming: Bool) {
         let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
-                      + (success ? "PaymentReceived.caf"
+                      + (success ? (incoming ? "PaymentReceived.caf"
+                                             : "payment_success.caf")
                                  : "payment_failure.caf"))
         GNU_Taler.playSound(fileURL: url)
     }
@@ -52,10 +53,10 @@ struct P2pAcceptDone: View {
                     _ = try await model.confirmPeerPullDebitM(transactionId)
                 }
                 finished = true
-                playSound(success: true)
+                playSound(success: true, incoming: incoming)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                playSound(success: false)
+                playSound(success: false, incoming: incoming)
             }
         }
     }

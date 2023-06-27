@@ -19,6 +19,7 @@ struct TalerWallet1App: App {
     @Environment(\.scenePhase) private var phase
     @StateObject private var viewState = ViewState.shared         // popToRootView()
     @State private var isActive = true
+    @State private var soundPlayed = false
 
     private let walletCore = WalletCore.shared
     // our main controller
@@ -35,7 +36,7 @@ struct TalerWallet1App: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainView(soundPlayed: $soundPlayed)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(controller)

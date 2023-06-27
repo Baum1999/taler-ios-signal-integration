@@ -36,6 +36,7 @@ struct PaymentURIView: View {
                     }
                 }
             } catch {    // TODO: error
+                playSound(success: false)
                 symLog.log(error.localizedDescription)
             }
             dismissTop()

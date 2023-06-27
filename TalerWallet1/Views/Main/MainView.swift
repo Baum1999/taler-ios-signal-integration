@@ -19,7 +19,17 @@ struct MainView: View {
     @EnvironmentObject private var controller: Controller
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
+    @Binding var soundPlayed: Bool
 
+    func playSound() -> Void {
+        if !soundPlayed {
+            let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
+                          + "PaymentReceived.caf")
+            //                                  + "payment_success.caf")
+            //                                  + "payment_failure.caf")
+            GNU_Taler.playSound(fileURL: url)
+        }
+    }
     func sheetDismissed() -> Void {
         symLog.log("sheet dismiss")
     }
@@ -33,6 +43,10 @@ struct MainView: View {
                 Content(symLog: symLog)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
+                    .onAppear() {
+                        playSound()
+                        soundPlayed = true
+                    }
             } else if controller.backendState == .error {
                 ErrorView(errortext: nil)            // TODO: show Error View
             } else {
