@@ -21,6 +21,7 @@
  */
 import SwiftUI
 import SymLog
+import os.log
 
 // Numbering Scheme for Views
 // MARK: - Main View
@@ -97,8 +98,8 @@ struct DebugViewV: View {
 
     var body: some View {
 #if DEBUG
-        let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+//        let _ = Self._printChanges()
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let viewIDString = debugViewC.viewID > 0 ? String(debugViewC.viewID)
                                                  : ""
@@ -118,6 +119,7 @@ class DebugViewC: ObservableObject {
     private let symLog = SymLogC(0)                         // 0 to switch off viewID change logging
     public static let shared = DebugViewC()
     @AppStorage("developerMode") var developerMode: Bool = false
+    let logger = Logger (subsystem: "net.taler.gnu", category: "DebugView")
 
     @Published var viewID: Int = 0
     @Published var sheetID: Int = 0
@@ -126,19 +128,24 @@ class DebugViewC: ObservableObject {
         if developerMode {
             if viewID == 0 {
                 symLog.log("switching ON, \(newID)")
+                logger.info("switching ON, \(newID, privacy: .public)")
                 viewID = newID                              // publish ON
             } else if viewID != newID {
                 symLog.log("switching from \(viewID) to \(newID)")
+                logger.info("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
                 viewID = newID                              // publish new viewID
             } else {
                 symLog.log("\(newID) stays")
+                logger.info("\(newID, privacy: .public) stays")
                 // don't set viewID to the same value, it would just trigger an unneccessary redraw
             }
         } else if viewID > 0 {
             symLog.log("switching OFF, will not use \(newID)")
+            logger.info("switching OFF, will not use \(newID, privacy: .public)")
             viewID = 0                                      // publish OFF
         } else {
             symLog.log("off, will not use \(newID)")
+            logger.info("off, will not use \(newID, privacy: .public)")
             // don't set viewID from 0 to 0 again, it would just trigger an unneccessary redraw
         }
     }
@@ -147,17 +154,21 @@ class DebugViewC: ObservableObject {
         if developerMode {
             if sheetID != newID {
                 symLog.log("switching from \(sheetID) to \(newID)")
+                logger.info("switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public) for sheet")
                 sheetID = newID                             // publish new sheetID
             } else {
                 symLog.log("\(newID) stays")
+                logger.info("\(newID, privacy: .public) stays for sheet")
                 // don't set sheetID to the same value, it would just trigger an unneccessary redraw
             }
         } else if sheetID > 0 {
             // might happen after switching DevMode off, if sheetID still has the old value of the last sheet
             symLog.log("switching OFF, will not use \(newID)")
+            logger.info("switching OFF, will not use \(newID, privacy: .public) for sheet")
             sheetID = 0                                     // publish OFF
         } else {
             symLog.log("off, will not use \(newID)")
+            logger.info("off, will not use \(newID, privacy: .public) for sheet")
             // don't set sheetID from 0 to 0 again, it would just trigger an unneccessary redraw
         }
     }

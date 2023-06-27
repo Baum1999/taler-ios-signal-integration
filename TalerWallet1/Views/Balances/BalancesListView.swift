@@ -95,7 +95,7 @@ struct BalancesListView: View {
                 Sheet(sheetView: sheet)
             } // sheet
             .task {
-                symLog.log(".task fetchBalancesM")
+                symLog.log(".task getBalances")
                 await reloadAction()
             } // task
     }

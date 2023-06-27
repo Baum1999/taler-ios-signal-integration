@@ -11,6 +11,7 @@
 import BackgroundTasks
 import SwiftUI
 import SymLog
+import os.log
 
 @main
 struct TalerWallet1App: App {
@@ -24,9 +25,10 @@ struct TalerWallet1App: App {
     private let controller = Controller.shared
     private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
+    let logger = Logger (subsystem: "net.taler.gnu", category: "Main App")
 
     func scheduleAppRefresh() {
-        let request = BGAppRefreshTaskRequest(identifier: "net.taler.refresh")
+        let request = BGAppRefreshTaskRequest(identifier: "net.taler.gnu.refresh")
         request.earliestBeginDate = .now.addingTimeInterval(24 * 3600)
         try? BGTaskScheduler.shared.submit(request)
     }
@@ -42,33 +44,31 @@ struct TalerWallet1App: App {
                     /// we handle them in .onOpenURL in MainView.swift
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .task {
-                    symLog.log("task -> initWalletCore")
-                    try! await controller.initWalletCoreM(model)      // will (and should) crash on failure
-                    symLog.log("task -> initWalletCore done")
+                    try! await controller.initWalletCore(model)     // will (and should) crash on failure
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
-                    symLog.log("❗️App Did Become Active notification")
+                    logger.log("❗️App Did Become Active")
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
-                    symLog.log("❗️App Will Resign notification")
+                    logger.log("❗️App Will Resign")
                     isActive = false
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
-                    symLog.log("❗️App Will Enter Foreground notification")
+                    logger.log("❗️App Will Enter Foreground")
                     isActive = true
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification, object: nil)) { _ in
-                    symLog.log("❗️App Will Terminate notification")
+                    logger.log("❗️App Will Terminate")
                 }
 
         }
         .onChange(of: phase) { newPhase in
             switch newPhase {
                 case .active:
-                    symLog.log("❗️ .onChange(of: phase) ==> newPhase: Active")
+                    logger.log("❗️.onChange() ==> Active")
                 case .background:
-                    symLog.log("❗️ .onChange(of: phase) ==> newPhase: Background)")
-                    scheduleAppRefresh()
+                    logger.log("❗️.onChange() ==> Background)")
+//                    scheduleAppRefresh()
                 default: break
             }
         }
@@ -101,9 +101,10 @@ struct TalerWallet1App: App {
 final class ViewState : ObservableObject {
     static let shared = ViewState()
     @Published var rootViewId = UUID()
+    let logger = Logger (subsystem: "net.taler.gnu", category: "ViewState")
 
     public func popToRootView() -> Void {
-        let _ = symLog()
+        logger.info("popToRootView")
         rootViewId = UUID() // setting a new ID will cause tableView popToRootView behaviour
     }
 

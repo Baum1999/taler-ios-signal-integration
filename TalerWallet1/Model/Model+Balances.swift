@@ -47,7 +47,6 @@ extension WalletModel {
       async -> [Balance] {          // M for MainActor
         do {
             let request = Balances()
-            logger.info("balancesM")
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.balances                // trigger view update in BalancesListView
         } catch {

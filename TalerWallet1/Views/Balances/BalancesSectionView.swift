@@ -190,12 +190,15 @@ struct BalancesSectionView: View {
         }.id(sectionID)
         .task {
             if shownSectionID != sectionID {
-                symLog.log("task for BalancesSectionView \(sectionID)")
                 let response = await model.fetchTransactionsT(currency: currency)
+                symLog.log("task for BalancesSectionView \(sectionID) - reload Transactions")
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)
                 shownSectionID = sectionID
+            } else {
+                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
+
             }
         }
     } // body

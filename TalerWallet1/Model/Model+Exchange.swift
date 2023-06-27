@@ -81,14 +81,12 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
     @MainActor func listExchangesM()
-      async -> [Exchange] {         // M for MainActor
+      async -> [Exchange] {   // M for MainActor
         do {
             let request = ListExchanges()
-            logger.info("ListExchanges")
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.exchanges
         } catch {
-            logger.error("listExchangesM failed: \(error)")
             return []               // empty, but not nil
         }
     }
@@ -96,9 +94,8 @@ extension WalletModel {
     /// add a new exchange with URL to the wallet's list of known exchanges
     func addExchange(url: String)
       async throws  {
-        symLog?.log("adding exchange: \(url)")       // TODO: .notice
         let request = AddExchange(exchangeBaseUrl: url)
-          logger.info("adding exchange: \(url, privacy: .public)")
+        logger.info("adding exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request)
     }
 }

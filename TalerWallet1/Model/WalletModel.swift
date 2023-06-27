@@ -4,7 +4,7 @@
  */
 import Foundation
 import SymLog
-import os
+import os.log
 
 fileprivate let DATABASE = "talerwalletdb-v30"
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
@@ -16,31 +16,28 @@ class WalletModel: ObservableObject {
     public static let shared = WalletModel(0)
     static func className() -> String {"\(self)"}
     var symLog: SymLogC?
-    let logger = Logger (subsystem: "net.taler.gnu", category: "wallet-core")
 
     init(_ symbol: Int) {                               // init with 0 to disable logging for this class
         self.symLog = SymLogC(symbol == 0 ? 0 : -1, funcName: Self.className())
     }
+    let logger = Logger (subsystem: "net.taler.gnu", category: "WalletModel")
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
       async throws -> T.Response {    // T for any Thread
-        symLog?.log("sending: \(request)")
+        logger.log("sending: \(request.operation(), privacy: .public)")
         let sendTime = Date.now
         do {
             let (response, id) = try await WalletCore.shared.sendFormattedRequest(request: request)
             let timeUsed = Date.now - sendTime
+            logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
             let asyncDelay: UInt = delay > 0 ? delay : UInt(ASYNCDELAY)
             if asyncDelay > 0 {     // test LoadingView, sleep some seconds
-                symLog?.log("received: (\(id)) after \(timeUsed.milliseconds) ms, going to sleep for \(asyncDelay) seconds...")
                 try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(asyncDelay))
-                symLog?.log("(\(id)) waking up again after \(asyncDelay) seconds, will deliver \(response)")
-            } else {
-                symLog?.log("received: (\(id)) after \(timeUsed.milliseconds) ms, \(response)")
             }
             return response
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
-            symLog?.log("Yikes❗️ \(request.operation()) failed after \(timeUsed.milliseconds) ms")
+            logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error)")
             throw error
         }
     }
@@ -106,16 +103,11 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
     func initWalletCoreT() async throws -> VersionInfo {
-        do {        // T for any Thread
-            let docPath = try docPath()
-            let request = InitRequest(persistentStoragePath: docPath)
-            logger.info("initWalletCoreT")
-            let response = try await sendRequest(request, 0)    // no Delay
-            return response.versionInfo
-        } catch {
-            logger.error("initWalletCoreT failed: \(error)")
-            throw error
-        }
+                    // T for any Thread
+        let docPath = try docPath()
+        let request = InitRequest(persistentStoragePath: docPath)
+        let response = try await sendRequest(request, 0)    // no Delay
+        return response.versionInfo
     }
 
     private func docPath () throws -> String {
@@ -128,7 +120,6 @@ extension WalletModel {
             logger.debug("\(docPath)")
             return docPath
         } else {    // should never happen
-            symLog?.log("Yikes❗️ documentURLs empty")
             logger.error("documentURLs empty")
             throw WalletBackendError.initializationError
         }
