@@ -84,7 +84,7 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
 }
 /// A request to mark an exchange's terms of service as accepted.
 fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
-    struct Response: Decodable {}
+    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return "setExchangeTosAccepted" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, etag: etag) }
 

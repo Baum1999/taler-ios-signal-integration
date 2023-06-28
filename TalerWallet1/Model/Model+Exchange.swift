@@ -66,6 +66,7 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return "addExchange" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl) }
 
@@ -74,8 +75,6 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
     struct Args: Encodable {
         var exchangeBaseUrl: String
     }
-
-    struct Response: Decodable {}
 }
 // MARK: -
 extension WalletModel {

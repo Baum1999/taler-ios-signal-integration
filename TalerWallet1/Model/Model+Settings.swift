@@ -16,7 +16,7 @@ fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
 // MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedRequest {
-    typealias Response = String
+    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return "withdrawTestBalance" }
     func args() -> Args {
         return Args(amount: amount, bankBaseUrl: bankBaseUrl,
@@ -49,7 +49,7 @@ extension WalletModel {
 // MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
-    struct Response: Decodable {}
+    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
     func args() -> Args {
         return Args(amountToWithdraw: amountToWithdraw,
