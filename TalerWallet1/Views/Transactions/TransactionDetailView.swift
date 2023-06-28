@@ -24,7 +24,11 @@ extension Transaction {             // for Dummys
 struct TransactionDetailView: View {
     private let symLog = SymLogV()
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
     @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     var transactionId: String
     @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)

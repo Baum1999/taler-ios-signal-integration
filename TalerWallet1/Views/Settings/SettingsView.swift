@@ -21,7 +21,11 @@ struct SettingsView: View {
     private let symLog = SymLogV(0)
     let navTitle: String
 
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
     @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 

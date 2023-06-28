@@ -9,7 +9,11 @@ import SymLog
 struct SelectDays: View {
     private let symLog = SymLogV(0)
     @Environment(\.isEnabled) private var isEnabled: Bool
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
     @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @Binding var selected: UInt
     let maxExpiration: UInt

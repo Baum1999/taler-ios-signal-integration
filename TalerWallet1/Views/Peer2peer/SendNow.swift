@@ -8,7 +8,11 @@ import SymLog
 
 struct SendNow: View {
     private let symLog = SymLogV()
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
     @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     let amountToSend: Amount?
     let amountToReceive: Amount?

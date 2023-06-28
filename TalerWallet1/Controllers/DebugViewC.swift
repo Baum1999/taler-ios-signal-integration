@@ -127,7 +127,11 @@ struct DebugViewV: View {
 class DebugViewC: ObservableObject {
     private let symLog = SymLogC(0)                         // 0 to switch off viewID change logging
     public static let shared = DebugViewC()
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
     @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     let logger = Logger (subsystem: "net.taler.gnu", category: "DebugView")
 
     @Published var viewID: Int = 0
