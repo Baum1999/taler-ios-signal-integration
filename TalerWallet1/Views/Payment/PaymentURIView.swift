@@ -42,6 +42,7 @@ struct PaymentURIView: View {
 
     var body: some View {
         if let detailsForUri {
+          ScrollViewReader { scrollView in
             VStack {
                 let baseURL = detailsForUri.contractTerms.exchanges.first?.url
                 let raw = detailsForUri.amountRaw
@@ -62,6 +63,7 @@ struct PaymentURIView: View {
                 }
             }
             .navigationTitle(navTitle)
+          }
         } else {
             let badURL = "Error in URL: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)

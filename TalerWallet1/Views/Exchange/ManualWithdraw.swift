@@ -30,7 +30,7 @@ struct ManualWithdraw: View {
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency) // becomeFirstResponder
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
-        ScrollView {
+        ScrollViewReader { scrollView in
             Text("from \(exchange.exchangeBaseUrl.trimURL())")
                 .font(.title3)
             CurrencyInputView(currencyField: currencyField,

@@ -27,6 +27,7 @@ struct P2pAcceptDone: View {
 #endif
         let navTitle = incoming ? String(localized: "Received P2P")
                                 : String(localized: "Paid P2P")
+      ScrollViewReader { scrollView in
         VStack {
             TransactionDetailView(transactionId: transactionId,
                                    reloadAction: reloadOneAction,
@@ -51,6 +52,7 @@ struct P2pAcceptDone: View {
                 GNU_Taler.playSound(0)
             }
         }
+      }
     }
 }
 // MARK: -

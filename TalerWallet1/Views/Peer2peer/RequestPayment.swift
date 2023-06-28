@@ -28,7 +28,7 @@ struct RequestPayment: View {
         let navTitle = String(localized: "Request \(currency)")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
-        ScrollView {
+        ScrollViewReader { scrollView in
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to receive:"))
 

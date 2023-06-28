@@ -40,7 +40,7 @@ struct SendAmount: View {
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         let fee = fee(ppCheck: peerPushCheck)
-        ScrollView {
+        ScrollViewReader { scrollView in
             let available = amountAvailable.readableDescription
             Text("Available: \(available)")
                 .font(.title3)
