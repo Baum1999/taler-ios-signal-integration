@@ -5,7 +5,11 @@
 import Foundation
 import AVFoundation
 
-func playSound(fileURL: URL) {
+func playSound(_ number: Int) {
+    let sound = (number == 0) ? "payment_failure" :
+                (number == 1) ? "payment_success" : "PaymentReceived"
+    let fileURL = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
+                                        + sound + ".caf")
     var soundID: SystemSoundID = 0
     AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
     AudioServicesPlaySystemSound(soundID);

@@ -48,9 +48,11 @@ struct WithdrawAcceptDone: View {
                     let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
                     confirmTransferUrl = result!.confirmTransferUrl
                     transactionId = result!.transactionId
+                    GNU_Taler.playSound(2)
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
+                GNU_Taler.playSound(0)
             }
         }
     }

@@ -21,15 +21,6 @@ struct MainView: View {
     @State private var urlToOpen: URL? = nil
     @Binding var soundPlayed: Bool
 
-    func playSound() -> Void {
-        if !soundPlayed {
-            let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
-                          + "PaymentReceived.caf")
-            //                                  + "payment_success.caf")
-            //                                  + "payment_failure.caf")
-            GNU_Taler.playSound(fileURL: url)
-        }
-    }
     func sheetDismissed() -> Void {
         symLog.log("sheet dismiss")
     }
@@ -44,7 +35,7 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        playSound()
+                        GNU_Taler.playSound(2)
                         soundPlayed = true
                     }
             } else if controller.backendState == .error {

@@ -17,27 +17,20 @@ struct PaymentURIView: View {
 
     @EnvironmentObject private var model: WalletModel
 
-
-    func playSound(success: Bool) {
-        let url = URL(fileURLWithPath: "/System/Library/Audio/UISounds/payment_"
-                      + (success ? "success.caf" : "failure.caf"))
-        GNU_Taler.playSound(fileURL: url)
-    }
-
     func acceptAction(detailsForUri: PaymentDetailsForUri) {
         Task {
             do {
                 let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
                 symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type == "done" {
-                    playSound(success: true)
+                    GNU_Taler.playSound(1)
                     // TODO: Show Hints that Payment was successfull
                 } else {
-                    playSound(success: false)
+                    GNU_Taler.playSound(0)
                     // TODO: show error
                 }
             } catch {
-                playSound(success: false)
+                GNU_Taler.playSound(0)
                 // TODO: error
                 symLog.log(error.localizedDescription)
             }
