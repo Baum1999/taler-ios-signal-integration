@@ -30,7 +30,6 @@ struct BalancesSectionView: View {
     @State private var pendingTransactions: [Transaction] = []
     @State private var uncompletedTransactions: [Transaction] = []
 
-//    func dummyTransaction (_ transactionId: String) async throws {}
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
     }
@@ -80,11 +79,6 @@ struct BalancesSectionView: View {
             uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
 //            sectionID = UUID()
         }
-        let abortAction = model.abortTransaction
-        let deleteAction = model.deleteTransaction // dummyTransaction
-        let failAction = model.failTransaction
-        let suspendAction = model.suspendTransaction // dummyTransaction
-        let resumeAction = model.resumeTransaction
 
         Section {
 //            if "KUDOS" == currency && !balance.available.isZero {
@@ -110,12 +104,7 @@ struct BalancesSectionView: View {
                     TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
                                      transactions: completedTransactions,
                                   reloadAllAction: reloadCompleted,
-                                  reloadOneAction: reloadOneAction,
-                                      abortAction: abortAction,
-                                     deleteAction: deleteAction,
-                                       failAction: failAction,
-                                    suspendAction: suspendAction,
-                                     resumeAction: resumeAction)
+                                  reloadOneAction: reloadOneAction)
                   }, tag: 3, selection: $buttonSelected
                 ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
 
@@ -140,12 +129,7 @@ struct BalancesSectionView: View {
                         TransactionsListView(navTitle: String(localized: "Pending"), currency: currency,
                                          transactions: pendingTransactions,
                                       reloadAllAction: reloadPending,
-                                      reloadOneAction: reloadOneAction,
-                                          abortAction: abortAction,
-                                         deleteAction: deleteAction,
-                                           failAction: failAction,
-                                        suspendAction: suspendAction,
-                                         resumeAction: resumeAction)
+                                      reloadOneAction: reloadOneAction)
                     }
                 } label: {
                     VStack(spacing: 6) {
@@ -172,12 +156,7 @@ struct BalancesSectionView: View {
                         TransactionsListView(navTitle: String(localized: "Uncompleted"), currency: currency,
                                              transactions: uncompletedTransactions,
                                           reloadAllAction: reloadUncompleted,
-                                          reloadOneAction: reloadOneAction,
-                                              abortAction: abortAction,
-                                             deleteAction: deleteAction,
-                                               failAction: failAction,
-                                            suspendAction: suspendAction,
-                                             resumeAction: resumeAction)
+                                          reloadOneAction: reloadOneAction)
                     }
                 } label: {
                     UncompletedRowView(uncompletedTransactions: $uncompletedTransactions)

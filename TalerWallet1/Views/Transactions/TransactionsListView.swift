@@ -14,11 +14,6 @@ struct TransactionsListView: View {
     let transactions: [Transaction]
     let reloadAllAction: () async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
-    let abortAction: (_ transactionId: String) async throws -> ()
-    let deleteAction: (_ transactionId: String) async throws -> ()
-    let failAction: (_ transactionId: String) async throws -> ()
-    let suspendAction: (_ transactionId: String) async throws -> ()
-    let resumeAction: (_ transactionId: String) async throws -> ()
 
     var body: some View {
 #if DEBUG
@@ -34,12 +29,7 @@ struct TransactionsListView: View {
           transactions: transactions,
            myListStyle: $myListStyle,
        reloadAllAction: reloadAllAction,
-       reloadOneAction: reloadOneAction,
-           abortAction: abortAction,
-          deleteAction: deleteAction,
-            failAction: failAction,
-         suspendAction: suspendAction,
-          resumeAction: resumeAction)
+       reloadOneAction: reloadOneAction)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
@@ -60,11 +50,8 @@ extension TransactionsListView {
         @Binding var myListStyle: MyListStyle
         let reloadAllAction: () async -> ()
         let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
-        let abortAction: (_ transactionId: String) async throws -> ()
-        let deleteAction: (_ transactionId: String) async throws -> ()
-        let failAction: (_ transactionId: String) async throws -> ()
-        let suspendAction: (_ transactionId: String) async throws -> ()
-        let resumeAction: (_ transactionId: String) async throws -> ()
+
+        @EnvironmentObject private var model: WalletModel
 
         @State private var upAction: () -> Void = {}
         @State private var downAction: () -> Void = {}
@@ -97,7 +84,11 @@ extension TransactionsListView {
             let _ = Self._printChanges()
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-
+            let abortAction = model.abortTransaction
+            let deleteAction = model.deleteTransaction
+            let failAction = model.failTransaction
+            let suspendAction = model.suspendTransaction
+            let resumeAction = model.resumeTransaction
             ScrollViewReader { scrollView in
                 List {
                     ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
