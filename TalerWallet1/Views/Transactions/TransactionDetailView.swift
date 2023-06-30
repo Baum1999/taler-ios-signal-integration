@@ -188,7 +188,6 @@ struct TransactionDetailView: View {
                                     }
                             }
                         } // ManualDetails or Confirm with bank
-                        let _ = print("ThreeAmounts")
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
                     case .payment(let paymentTransaction):

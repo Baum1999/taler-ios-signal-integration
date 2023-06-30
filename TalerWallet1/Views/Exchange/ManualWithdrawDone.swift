@@ -47,7 +47,6 @@ struct ManualWithdrawDone: View {
                 let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
                 let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
                                                                          amount: amount, restrictAge: 0)
-print(result as Any)
                 transactionId = result!.transactionId
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)

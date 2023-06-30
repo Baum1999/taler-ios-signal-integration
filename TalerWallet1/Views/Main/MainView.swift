@@ -42,11 +42,11 @@ struct MainView: View {
                 ErrorView(errortext: nil)            // TODO: show Error View
             } else {
                 LaunchAnimationView()
-                    .task {
-                        let deviceW = UIScreen.main.bounds.width
-                        let deviceH = UIScreen.main.bounds.height
-                        print(deviceW, deviceH)
-                    }
+//                    .task {
+//                        let deviceW = UIScreen.main.bounds.width
+//                        let deviceH = UIScreen.main.bounds.height
+//                        print("UIScreen: \(deviceW), \(deviceH)")
+//                    }
             }
         }
         .animation(.easeOut(duration: LAUNCHDURATION), value: controller.backendState)
