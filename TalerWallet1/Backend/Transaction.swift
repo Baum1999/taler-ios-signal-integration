@@ -95,21 +95,38 @@ enum TxAction: String, Codable {
     case resume     // suspended -> pending; ab_suspended -> aborting
 }
 
+enum TransactionType: String, Codable {
+    case dummy
+    case withdrawal
+    case deposit
+    case payment
+    case refund
+    case refresh
+    case reward         = "tip"     // TODO: reward        // get paid for e.g. survey participation
+//    case tip                                  // tip personnel at restaurants
+    case peerPushDebit  = "peer-push-debit"     // send coins to peer, show QR
+    case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
+    case peerPullCredit = "peer-pull-credit"    // request payment from peer, show QR
+    case scanPullDebit  = "peer-pull-debit"     // scan QR, pay requested
+
+    var isWithdrawal : Bool { self == .withdrawal }
+    var isDeposit    : Bool { self == .deposit }
+    var isPayment    : Bool { self == .payment }
+    var isRefund     : Bool { self == .refund }
+    var isRefresh    : Bool { self == .refresh }
+    var isReward     : Bool { self == .reward }
+    //    var isTipPayment : Bool { self == .tip }
+    var isSendCoins  : Bool { self == .peerPushDebit }
+    var isRcvCoins   : Bool { self == .scanPushCredit }
+    var isSendInvoice: Bool { self == .peerPullCredit }
+    var isPayInvoice : Bool { self == .scanPullDebit }
+
+    var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
+    var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
+    var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund || isReward }
+}
+
 struct TransactionCommon: Decodable {
-    enum TransactionType: String, Codable {
-        case dummy
-        case withdrawal
-        case deposit
-        case payment
-        case refund
-        case refresh
-        case reward        = "tip"                  // get paid for e.g. survey participation
-//        case tip                                  // tip personnel at restaurants
-        case peerPushDebit = "peer-push-debit"      // send coins to peer, show QR
-        case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
-        case peerPullCredit = "peer-pull-credit"    // request payment from peer, show QR
-        case scanPullDebit = "peer-pull-debit"      // scan QR, pay requested
-    }
     var type: TransactionType
     var txState: TransactionState
     var amountEffective: Amount
@@ -121,16 +138,26 @@ struct TransactionCommon: Decodable {
     func localizedType(_ type: TransactionType) -> String {
         switch type {
             case .dummy:          return String("")
-            case .withdrawal:     return String(localized: "Withdrawal")
-            case .deposit:        return String(localized: "Deposit")
-            case .payment:        return String(localized: "Payment")
-            case .refund:         return String(localized: "Refund")
-            case .refresh:        return String(localized: "Refresh")
-            case .reward:         return String(localized: "Reward")
-            case .peerPushDebit:  return String(localized: "P2P Send", comment: "send coins to another wallet")
-            case .scanPushCredit: return String(localized: "P2P Receive", comment: "scan to receive coins sent from another wallet")
-            case .peerPullCredit: return String(localized: "P2P Invoice", comment: "send invoice to another wallet")
-            case .scanPullDebit:  return String(localized: "P2P Payment", comment: "scan invoice to pay to another wallet")
+            case .withdrawal:     return String(localized: "Withdrawal",
+                                                  comment: "TransactionType")
+            case .deposit:        return String(localized: "Deposit",
+                                                  comment: "TransactionType")
+            case .payment:        return String(localized: "Payment",
+                                                  comment: "TransactionType")
+            case .refund:         return String(localized: "Refund",
+                                                  comment: "TransactionType")
+            case .refresh:        return String(localized: "Refresh",
+                                                  comment: "TransactionType")
+            case .reward:         return String(localized: "Reward",
+                                                  comment: "TransactionType")
+            case .peerPushDebit:  return String(localized: "P2P Send",
+                                                  comment: "TransactionType, send coins to another wallet")
+            case .scanPushCredit: return String(localized: "P2P Receive",
+                                                  comment: "TransactionType, scan to receive coins sent from another wallet")
+            case .peerPullCredit: return String(localized: "P2P Invoice",
+                                                  comment: "TransactionType, send invoice to another wallet")
+            case .scanPullDebit:  return String(localized: "P2P Payment",
+                                                  comment: "TransactionType, scan invoice to pay to another wallet")
         }
     }
 
