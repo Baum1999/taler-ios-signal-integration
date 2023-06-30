@@ -21,16 +21,18 @@ struct BalancesListView: View {
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
 
-    var ClosingAnnouncement = AttributedString(localized: "Closing Camera")
     private var openSettingsButton: some View {
         Button("Open Settings") {
             showCameraAlert = false
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
     }
+    var ClosingAnnouncement = AttributedString(localized: "Closing Camera")
     private var dismissAlertButton: some View {
         Button("Cancel", role: .cancel) {
-//            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+            if #available(iOS 17.0, *) {
+//                AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+            }
             showCameraAlert = false
         }
     }
@@ -38,23 +40,31 @@ struct BalancesListView: View {
     var defaultPriorityAnnouncement = AttributedString(localized: "Opening Camera")
     var lowPriorityAnnouncement: AttributedString {
         var lowPriorityString = AttributedString ("Camera Loading")
-        //        lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
+        if #available(iOS 17.0, *) {
+//            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
+        }
         return lowPriorityString
     }
     var highPriorityAnnouncement: AttributedString {
         var highPriorityString = AttributedString("Camera Active")
-        //        highPriorityString.accessibilitySpeechAnnouncementPriority = .high
+        if #available(iOS 17.0, *) {
+//            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
+        }
         return highPriorityString
     }
     private func checkCameraAvailable() -> Void {
         /// Open Camera Code
-//        AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
+        if #available(iOS 17.0, *) {
+//            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
+        }
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
             if granted {
                 showQRScanner = true
             } else {
                 // Camera Loaded Code
-//                AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                if #available(iOS 17.0, *) {
+//                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                }
                 showCameraAlert = true
             }
         })
