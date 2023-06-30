@@ -77,34 +77,51 @@ struct TransactionDetailView: View {
                 if transaction.isFailable { if let failAction {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .fail, action: failAction)
-                } } // Delete button
+                } } // Fail button
                 if transaction.isDeleteable { if let deleteAction {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .delete, action: deleteAction)
                 } } // Delete button
-
-                if let doneAction {
-                    DoneButton(doneAction: doneAction)
-                } // Done button
+//                if let doneAction {
+//                    DoneButton(doneAction: doneAction)
+//                } // Done button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
+                .safeAreaInset(edge: .bottom) {
+                    if let doneAction {
+                        Button("Done", action: doneAction)
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                    }
+                }
         }.onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == common.transactionId {
-                    let newState = transition.newTxState.major
-                    if newState == .done { if let doneAction {
-                        symLog.log("newTxState.major == done  => dismiss sheet")
-                        doneAction()        // if this view is in a sheet this action will dissmiss it
-                    }} else { Task { do {
-                        if doneAction != nil { // don't update while we are in a sheet - except done
-                            symLog.log("ignoring newState: \(newState)")
+                    let newMajor = transition.newTxState.major
+                    let newMinor = transition.newTxState.minor
+                    if let doneAction {
+                        if newMajor == .done {
+                            symLog.log("newTxState.major == done  => dismiss sheet")
+                            doneAction()        // if this view is in a sheet this action will dissmiss it
+                        } else if newMajor == .pending {
+                            if let newMinor {
+                                if newMinor == .withdrawCoins { // coin-withdrawal has started
+                                    symLog.log("newTxState.minor == withdrawCoins  => dismiss sheet")
+                                    doneAction()        // if this view is in a sheet this action will dissmiss it
+                                } else {
+                                    symLog.log("ignoring newTxState: \(newMajor):\(newMinor)")
+                                }
+                            }
                         } else {
-                            symLog.log("newState: \(newState), reloading transaction")
+                            symLog.log("ignoring newTxState.major: \(newMajor)")
+                        }
+                    } else { Task {
+                        do {
+                            symLog.log("newState: \(newMajor), reloading transaction")
                             withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
                             let reloadedTransaction = try await reloadAction(common.transactionId)
                             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
                             withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
-                        }
                       } catch {
                           symLog.log(error.localizedDescription)
                     }}}
@@ -142,69 +159,72 @@ struct TransactionDetailView: View {
         var body: some View {
             let common = transaction.common
             let pending = transaction.isPending
-            switch transaction {
-                case .dummy(let dummyTransaction):
-                    Text("")
-                case .withdrawal(let withdrawalTransaction):
-                    let details = withdrawalTransaction.details
-                    if pending {
-                        let withdrawalDetails = details.withdrawalDetails
-                        switch withdrawalDetails.type {
-                            case .manual:               // "Make a wire transfer of \(amount) to"
-                                ManualDetails(common: common, details: withdrawalDetails)
-
-                            case .bankIntegrated:       // "Confirm with bank"
-                                VStack {
-                                    if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
-                                        if let destination = URL(string: confirmationUrl) {
-                                            // Show Hint that User should Confirm on bank website
-                                            Text("Waiting for bank confirmation")
-                                                .multilineTextAlignment(.leading)
-                                                .listRowSeparator(.hidden)
-                                            Link("Confirm with bank", destination: destination)
-                                                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                                                .padding(.horizontal)
-
+            Group {
+                switch transaction {
+                    case .dummy(let dummyTransaction):
+                        Text("")
+                    case .withdrawal(let withdrawalTransaction):
+                        let details = withdrawalTransaction.details
+                        if pending {
+                            let withdrawalDetails = details.withdrawalDetails
+                            switch withdrawalDetails.type {
+                                case .manual:               // "Make a wire transfer of \(amount) to"
+                                    ManualDetails(common: common, details: withdrawalDetails)
+                                    
+                                case .bankIntegrated:       // "Confirm with bank"
+                                    VStack {
+                                        if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
+                                            if let destination = URL(string: confirmationUrl) {
+                                                // Show Hint that User should Confirm on bank website
+                                                Text("Waiting for bank confirmation")
+                                                    .multilineTextAlignment(.leading)
+                                                    .listRowSeparator(.hidden)
+                                                Link("Confirm with bank", destination: destination)
+                                                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+                                                    .padding(.horizontal)
+                                                
+                                            }
                                         }
                                     }
-                                }
-                        }
-                    } // ManualDetails or Confirm with bank
-                    ThreeAmounts(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
-                                baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
-                case .payment(let paymentTransaction):
-                    let details = paymentTransaction.details
-                    let info = details.info
-                    Text(info.summary)
-                        .font(.title)
-                        .lineLimit(4)
-                        .padding(.bottom)
-                    ThreeAmounts(common: common, topTitle: String(localized: "Sum to be paid:"),
-                                 baseURL: nil, large: true)     // TODO: baseURL
-                case .refund(let refundTransaction):
-                    let details = refundTransaction.details                 // TODO: more details
-                    ThreeAmounts(common: common, topTitle: String(localized: "Refunded amount:"),
-                                 baseURL: nil, large: true)     // TODO: baseURL
-                case .reward(let rewardTransaction):
-                    let details = rewardTransaction.details                 // TODO: more details
-                    ThreeAmounts(common: common, topTitle: String(localized: "Received Reward:"),
-                                 baseURL: details.exchangeBaseUrl, large: true)
+                            }
+                        } // ManualDetails or Confirm with bank
+                        let _ = print("ThreeAmounts")
+                        ThreeAmounts(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
+                                     baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
+                    case .payment(let paymentTransaction):
+                        let details = paymentTransaction.details
+                        let info = details.info
+                        Text(info.summary)
+                            .font(.title)
+                            .lineLimit(4)
+                            .padding(.bottom)
+                        ThreeAmounts(common: common, topTitle: String(localized: "Sum to be paid:"),
+                                     baseURL: nil, large: true)     // TODO: baseURL
+                    case .refund(let refundTransaction):
+                        let details = refundTransaction.details                 // TODO: more details
+                        ThreeAmounts(common: common, topTitle: String(localized: "Refunded amount:"),
+                                     baseURL: nil, large: true)     // TODO: baseURL
+                    case .reward(let rewardTransaction):
+                        let details = rewardTransaction.details                 // TODO: more details
+                        ThreeAmounts(common: common, topTitle: String(localized: "Received Reward:"),
+                                     baseURL: details.exchangeBaseUrl, large: true)
 //                case .tip(let tipTransaction):
 //                    let details = tipTransaction.details                  // TODO: details
 //                    ThreeAmounts(common: common, topTitle: String(localized: "Received Tip:"), large: true)
-                case .refresh(let refreshTransaction):
-                    let details = refreshTransaction.details                // TODO: details
-                    ThreeAmounts(common: common, topTitle: String(localized: "Refreshed amount:"),
-                                 baseURL: nil, large: true)     // TODO: baseURL
-                case .peer2peer(let p2pTransaction):
-                    let details = p2pTransaction.details                    // TODO: details
-                    // TODO: isSendCoins should show QR only while not expired
-                    if pending || transaction.isSendCoins {
-                        QRCodeDetails(transaction: transaction)
-                    }
-                    ThreeAmounts(common: common, topTitle: String(localized: "Peer to Peer:"),
-                                 baseURL: details.exchangeBaseUrl, large: false)
-            }
+                    case .refresh(let refreshTransaction):
+                        let details = refreshTransaction.details                // TODO: details
+                        ThreeAmounts(common: common, topTitle: String(localized: "Refreshed amount:"),
+                                     baseURL: nil, large: true)     // TODO: baseURL
+                    case .peer2peer(let p2pTransaction):
+                        let details = p2pTransaction.details                    // TODO: details
+                        // TODO: isSendCoins should show QR only while not expired
+                        if pending || transaction.isSendCoins {
+                            QRCodeDetails(transaction: transaction)
+                        }
+                        ThreeAmounts(common: common, topTitle: String(localized: "Peer to Peer:"),
+                                     baseURL: details.exchangeBaseUrl, large: false)
+                } // switch
+            } // Group
         }
     }
 
