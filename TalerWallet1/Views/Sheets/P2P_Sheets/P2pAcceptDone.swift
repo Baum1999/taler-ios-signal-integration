@@ -13,6 +13,7 @@ struct P2pAcceptDone: View {
     let incoming: Bool
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
     @State private var finished: Bool = false
 
@@ -48,7 +49,7 @@ struct P2pAcceptDone: View {
                 finished = true
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                GNU_Taler.playSound(0)
+                controller.playSound(0)
             }
         }
       }

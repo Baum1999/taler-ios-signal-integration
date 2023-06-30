@@ -28,6 +28,7 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
+    @AppStorage("playSounds") var playSounds: Bool = false
 
     var messageForSheet: String? = nil
 

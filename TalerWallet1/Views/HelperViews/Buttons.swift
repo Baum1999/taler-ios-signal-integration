@@ -191,32 +191,32 @@ struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             HamburgerButton() {
-                playSound(1000)
+                Controller.shared.playSound(1000)
             }.padding()
             QRButton() {
-                playSound(1001)
+                Controller.shared.playSound(1001)
             }.padding()
             PlusButton() {
-                playSound(1002) // == 7
+                Controller.shared.playSound(1002) // == 7
             }.padding()
             HamburgerButton() {
-                playSound(1003)
+                Controller.shared.playSound(1003)
             }.padding()
             QRButton() {
-                playSound(1004)
+                Controller.shared.playSound(1004)
             }.padding()
             PlusButton() {
-                playSound(1005)
+                Controller.shared.playSound(1005)
             }.padding()
             HStack {
                 ReloadButton(disabled: false) {
-                    playSound(1006)
+                    Controller.shared.playSound(1006)
                 }.padding()
                 ReloadButton(disabled: true) {
                 }.padding()
             }
             Button(String(localized: "Accept"), action: {
-                playSound(1008)
+                Controller.shared.playSound(1008)
             })
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .padding(.horizontal)

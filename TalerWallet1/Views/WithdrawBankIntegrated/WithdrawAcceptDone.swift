@@ -14,6 +14,7 @@ struct WithdrawAcceptDone: View {
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
     @State private var transactionId: String? = nil
 
@@ -52,7 +53,7 @@ struct WithdrawAcceptDone: View {
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                GNU_Taler.playSound(0)
+                controller.playSound(0)
             }
         }
       }

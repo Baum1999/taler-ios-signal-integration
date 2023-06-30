@@ -12,6 +12,8 @@ struct PaymentURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
+    @EnvironmentObject private var controller: Controller
+
     // the scanned URL
     let url: URL
 
@@ -23,11 +25,11 @@ struct PaymentURIView: View {
                 let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
                 symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
-                    GNU_Taler.playSound(0)
+                    controller.playSound(0)
                     // TODO: show error
                 }
             } catch {
-                GNU_Taler.playSound(0)
+                controller.playSound(0)
                 // TODO: error
                 symLog.log(error.localizedDescription)
             }

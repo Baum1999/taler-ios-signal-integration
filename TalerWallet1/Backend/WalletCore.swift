@@ -190,7 +190,7 @@ extension WalletCore {
                     let components = decoded.transactionId.components(separatedBy: [":"])
                     if components.count >= 3 {  // txn:$txtype:$uid
                         if let type = TransactionType(rawValue: components[1]) {
-                            playSound(type.isIncoming ? 2 : 1)
+                            Controller.shared.playSound(type.isIncoming ? 2 : 1)
                         }
                     }
                 }
