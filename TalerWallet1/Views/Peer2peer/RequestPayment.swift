@@ -29,6 +29,7 @@ struct RequestPayment: View {
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         ScrollViewReader { scrollView in
+          VStack {
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to receive:"))
 
@@ -52,6 +53,7 @@ struct RequestPayment: View {
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
             }
+          }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)

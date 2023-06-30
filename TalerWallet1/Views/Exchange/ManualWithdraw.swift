@@ -31,6 +31,7 @@ struct ManualWithdraw: View {
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
         ScrollViewReader { scrollView in
+          VStack {
             Text("from \(exchange.exchangeBaseUrl.trimURL())")
                 .font(.title3)
             CurrencyInputView(currencyField: currencyField,
@@ -68,6 +69,7 @@ struct ManualWithdraw: View {
                     }
                 } // tooMany
             } // invalid
+          }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
