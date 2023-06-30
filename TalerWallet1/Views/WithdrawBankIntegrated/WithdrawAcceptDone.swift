@@ -15,7 +15,6 @@ struct WithdrawAcceptDone: View {
 
     @EnvironmentObject private var model: WalletModel
 
-    @State private var confirmTransferUrl: String? = nil
     @State private var transactionId: String? = nil
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
@@ -47,7 +46,8 @@ struct WithdrawAcceptDone: View {
             do {
                 if let exchangeBaseUrl {
                     let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
-                    confirmTransferUrl = result!.confirmTransferUrl
+                    let confirmTransferUrl = result!.confirmTransferUrl
+                    symLog.log(confirmTransferUrl)
                     transactionId = result!.transactionId
                 }
             } catch {    // TODO: error
