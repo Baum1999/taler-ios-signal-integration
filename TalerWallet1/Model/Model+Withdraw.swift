@@ -44,7 +44,7 @@ fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
 }
 // MARK: -
 /// The result from getWithdrawalDetailsForAmount
-struct ManualWithdrawalDetails: Decodable {
+struct WithdrawalAmountDetails: Decodable {
     var tosAccepted: Bool               // Did the user accept the current version of the exchange's terms of service?
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
@@ -54,7 +54,7 @@ struct ManualWithdrawalDetails: Decodable {
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
-    typealias Response = ManualWithdrawalDetails
+    typealias Response = WithdrawalAmountDetails
     func operation() -> String { return "getWithdrawalDetailsForAmount" }
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount) }
 
@@ -150,7 +150,7 @@ extension WalletModel {
     }
     @MainActor
     func loadWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount)  // M for MainActor
-      async throws -> ManualWithdrawalDetails {
+      async throws -> WithdrawalAmountDetails {
         let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
                                                              amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY)

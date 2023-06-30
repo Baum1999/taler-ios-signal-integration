@@ -20,15 +20,15 @@ struct WithdrawURIView: View {
 
     // the exchange used for this withdrawal.
     @State private var exchangeBaseUrl: String? = nil
-    @State private var manualWithdrawalDetails: ManualWithdrawalDetails?
+    @State private var withdrawalAmountDetails: WithdrawalAmountDetails?
 
     var body: some View {
         let badURL = "Error in URL: \(url)"
         VStack {
-            if let manualWithdrawalDetails, let exchangeBaseUrl {
+            if let withdrawalAmountDetails, let exchangeBaseUrl {
                 List {
-                    let raw = manualWithdrawalDetails.amountRaw
-                    let effective = manualWithdrawalDetails.amountEffective
+                    let raw = withdrawalAmountDetails.amountRaw
+                    let effective = withdrawalAmountDetails.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     let outColor = WalletColors().transactionColor(false)
@@ -40,12 +40,12 @@ struct WithdrawURIView: View {
                                  bottomAmount: effective,
                                         large: false, pending: false, incoming: true,
                                       baseURL: exchangeBaseUrl)
-                    let someCoins = SomeCoins(details: manualWithdrawalDetails)
+                    let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins, shouldShowFee: false,
                                    currency: raw.currencyStr, amountEffective: effective)
                 }
                 .navigationTitle(navTitle)
-                let tosAccepted = manualWithdrawalDetails.tosAccepted
+                let tosAccepted = withdrawalAmountDetails.tosAccepted
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         WithdrawAcceptDone(exchangeBaseUrl: exchangeBaseUrl, url: url)
@@ -85,15 +85,15 @@ struct WithdrawURIView: View {
                 }
                 if let exchangeBaseUrl {
                     let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
-                    manualWithdrawalDetails = details
+                    withdrawalAmountDetails = details
 //                  agePicker.setAges(ages: details?.ageRestrictionOptions)
                 } else {    // TODO: error
                     symLog.log("no exchangeBaseUrl")
-                    manualWithdrawalDetails = nil
+                    withdrawalAmountDetails = nil
                 }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                manualWithdrawalDetails = nil
+                withdrawalAmountDetails = nil
             }
         }
     }

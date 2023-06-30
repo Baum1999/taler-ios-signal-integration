@@ -15,7 +15,7 @@ struct ManualWithdraw: View {
 
     @EnvironmentObject private var model: WalletModel
 
-    @State var manualWithdrawalDetails: ManualWithdrawalDetails? = nil
+    @State var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
@@ -37,15 +37,15 @@ struct ManualWithdraw: View {
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to withdraw:"))
 
-            let someCoins = SomeCoins(details: manualWithdrawalDetails)
+            let someCoins = SomeCoins(details: withdrawalAmountDetails)
             QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
-                           currency: currency, amountEffective: manualWithdrawalDetails?.amountEffective)
+                           currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
 
             if !someCoins.invalid {
                 if !someCoins.tooMany {
 //                    agePicker
 
-                    if let tosAccepted = manualWithdrawalDetails?.tosAccepted {
+                    if let tosAccepted = withdrawalAmountDetails?.tosAccepted {
                         if tosAccepted {
 //                            let restrictAge: Int? = (selectedAge == 0) ? nil
 //                                                                       : selectedAge
@@ -82,11 +82,11 @@ struct ManualWithdraw: View {
         .task(id: centsToTransfer) {
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
-                manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
-//                agePicker.setAges(ages: manualWithdrawalDetails?.ageRestrictionOptions)
+                withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
+//                agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                manualWithdrawalDetails = nil
+                withdrawalAmountDetails = nil
             }
         }
     }
@@ -95,7 +95,7 @@ struct ManualWithdraw: View {
 #if DEBUG
 struct ManualWithdraw_Container : View {
     @State private var centsToTransfer: UInt64 = 510
-    @State private var details = ManualWithdrawalDetails(tosAccepted: false,
+    @State private var details = WithdrawalAmountDetails(tosAccepted: false,
                                                            amountRaw: try! Amount(fromString: LONGCURRENCY + ":5.1"),
                                                      amountEffective: try! Amount(fromString: LONGCURRENCY + ":5.0"),
                                                            paytoUris: [],
@@ -111,7 +111,7 @@ struct ManualWithdraw_Container : View {
                                       permanent: false)
         ManualWithdraw(exchange: exchange,
                 centsToTransfer: $centsToTransfer,
-        manualWithdrawalDetails: details)
+        withdrawalAmountDetails: details)
     }
 }
 

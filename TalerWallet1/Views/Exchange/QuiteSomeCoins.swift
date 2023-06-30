@@ -19,7 +19,7 @@ struct SomeCoins {
 }
 
 extension SomeCoins {
-    init(details: ManualWithdrawalDetails?) {
+    init(details: WithdrawalAmountDetails?) {
         do {
             if let details {
                 // Incoming: fee = raw - effective
