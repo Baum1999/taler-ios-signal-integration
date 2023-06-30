@@ -189,8 +189,8 @@ struct TransactionDetailView: View {
                             }
                         } // ManualDetails or Confirm with bank
                         let _ = print("ThreeAmounts")
-                        ThreeAmounts(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
-                                     baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
+                                         baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
                         let info = details.info
@@ -198,31 +198,32 @@ struct TransactionDetailView: View {
                             .font(.title)
                             .lineLimit(4)
                             .padding(.bottom)
-                        ThreeAmounts(common: common, topTitle: String(localized: "Sum to be paid:"),
-                                     baseURL: nil, large: true)     // TODO: baseURL
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Sum to be paid:"),
+                                         baseURL: nil, large: true)     // TODO: baseURL
                     case .refund(let refundTransaction):
                         let details = refundTransaction.details                 // TODO: more details
-                        ThreeAmounts(common: common, topTitle: String(localized: "Refunded amount:"),
-                                     baseURL: nil, large: true)     // TODO: baseURL
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Refunded amount:"),
+                                         baseURL: nil, large: true)     // TODO: baseURL
                     case .reward(let rewardTransaction):
                         let details = rewardTransaction.details                 // TODO: more details
-                        ThreeAmounts(common: common, topTitle: String(localized: "Received Reward:"),
-                                     baseURL: details.exchangeBaseUrl, large: true)
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Received Reward:"),
+                                         baseURL: details.exchangeBaseUrl, large: true)
 //                case .tip(let tipTransaction):
 //                    let details = tipTransaction.details                  // TODO: details
-//                    ThreeAmounts(common: common, topTitle: String(localized: "Received Tip:"), large: true)
+//                    ThreeAmountsSheet(common: common, topTitle: String(localized: "Received Tip:"),
+//                                      baseURL: nil, large: true)
                     case .refresh(let refreshTransaction):
                         let details = refreshTransaction.details                // TODO: details
-                        ThreeAmounts(common: common, topTitle: String(localized: "Refreshed amount:"),
-                                     baseURL: nil, large: true)     // TODO: baseURL
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Refreshed amount:"),
+                                         baseURL: nil, large: true)     // TODO: baseURL
                     case .peer2peer(let p2pTransaction):
                         let details = p2pTransaction.details                    // TODO: details
                         // TODO: isSendCoins should show QR only while not expired
                         if pending || transaction.isSendCoins {
                             QRCodeDetails(transaction: transaction)
                         }
-                        ThreeAmounts(common: common, topTitle: String(localized: "Peer to Peer:"),
-                                     baseURL: details.exchangeBaseUrl, large: false)
+                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Peer to Peer:"),
+                                         baseURL: details.exchangeBaseUrl, large: false)
                 } // switch
             } // Group
         }

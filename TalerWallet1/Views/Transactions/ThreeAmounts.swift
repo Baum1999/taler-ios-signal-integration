@@ -5,12 +5,13 @@
 import SwiftUI
 import taler_swift
 
-struct ThreeAmounts: View {
+struct ThreeAmountsSheet: View {
     var common: TransactionCommon
     var topTitle: String
     var bottomTitle: String?
     let baseURL: String?
     let large: Bool               // set to false for QR or IBAN
+
     var body: some View {
         let raw = common.amountRaw
         let effective = common.amountEffective
@@ -98,7 +99,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                   txActions: [])
         Group {
             List {
-                ThreeAmounts(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==1)
+                ThreeAmountsSheet(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==1)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))
