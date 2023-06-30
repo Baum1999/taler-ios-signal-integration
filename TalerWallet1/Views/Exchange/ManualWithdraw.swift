@@ -69,6 +69,7 @@ struct ManualWithdraw: View {
                     }
                 } // tooMany
             } // invalid
+            Spacer()
           }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

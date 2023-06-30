@@ -68,6 +68,7 @@ struct SendAmount: View {
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
             }
+            Spacer()
           }
 //        }
         .frame(maxWidth: .infinity, alignment: .leading)
