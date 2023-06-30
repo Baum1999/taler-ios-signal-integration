@@ -171,7 +171,8 @@ struct TalerButtonStyle: ButtonStyle {
                                     : Alignment.trailing
             configuration.label
                 .multilineTextAlignment(aligned)
-                .font(.title2)
+                .font(.title3)
+//                .font(narrow ? .title3 : .title2)
                 .frame(minWidth: 0, maxWidth: narrow ? nil : .infinity, alignment: aligned2)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 6)

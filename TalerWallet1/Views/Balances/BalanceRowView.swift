@@ -8,6 +8,30 @@ import taler_swift
 /// This view shows the currency row in a currency section
 /// [Send Coins]  [Receive Coins]     Balance
 
+struct BalanceButton: View {
+    let amount: Amount
+    let rowAction: () -> Void
+
+    var body: some View {
+        Button(action: rowAction) {
+            VStack(alignment: .trailing, spacing: 0) {
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text("B", comment: "the first letter of Balance - or leave empty")
+                        .font(.title2)
+                    Text("alance", comment: "the remaining letters of Balance - or all if you left B empty")
+                        .font(.footnote).bold()
+                }
+                Text("\(amount.valueStr)")  // TODO: CurrencyFormatter?
+                    .font(.title)
+            }
+        }   .disabled(false)
+            .accessibilityElement(children: /*@START_MENU_TOKEN@*/.ignore/*@END_MENU_TOKEN@*/)
+            .accessibilityLabel("Balance \(amount.readableDescription)")    // TODO: CurrencyFormatter!
+            .buttonStyle(TalerButtonStyle(type: .plain, aligned: .trailing))
+//                .background(Color.yellow)
+    }
+}
+
 struct BalanceRowView: View {
     let amount: Amount
     let sendAction: () -> Void
@@ -15,48 +39,46 @@ struct BalanceRowView: View {
     let rowAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
 
+    func needVStack(_ amount: Amount) -> Bool {
+        // Sizes: 320 (SE), 375 (X, Xs, 12, 13 mini), 390 (12,13,14), 414 (Plus, Max), 428 (Pro Max)
+        guard 350 < UIScreen.main.bounds.width else {return true}   // always for iPhone SE 1st Gen
+        var count = amount.currencyStr.count
+//        print(sizeCategory)
+        switch sizeCategory {
+            case ContentSizeCategory.extraSmall:
+                count += 0
+            case ContentSizeCategory.small:
+                count += 1
+            case ContentSizeCategory.medium:
+                count += 2
+            case ContentSizeCategory.large:
+                count += 3
+            case ContentSizeCategory.extraLarge:
+                count += 4
+            default:
+                count += 5
+        }
+        return count > 9
+    }
+
     var body: some View {
-        let currency = amount.currencyStr
-        HStack {
-            if sizeCategory > ContentSizeCategory.large {
-                VStack {
-                    Button("Request\nPayment", action: recvAction)
-                        .disabled(false)
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .leading))
-                    Button("Send\n\(currency)", action: sendAction)
-                        .disabled(amount.isZero)
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .leading))
+        Group {
+            if needVStack(amount) {
+                VStack (alignment: .trailing) {
+                    BalanceButton(amount: amount, rowAction: rowAction)
+                    HStack {
+                        BalanceRowButtons(amount: amount, narrow: false, lineLimit: 5,
+                                          sendAction: sendAction, recvAction: recvAction)
+                    }
                 }
-                .fixedSize(horizontal: true, vertical: false)   // make the buttons equal width
             } else {
                 HStack {
-                    Button("Request\nPayment", action: recvAction)
-                        .lineLimit(2)
-                        .disabled(false)
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .leading))
-                    Button("Send\n\(currency)", action: sendAction)
-                        .lineLimit(2)
-                        .disabled(amount.isZero)
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .leading))
+                    BalanceRowButtons(amount: amount, narrow: true, lineLimit: 5,
+                                      sendAction: sendAction, recvAction: recvAction)
+                    BalanceButton(amount: amount, rowAction: rowAction)
                 }
-                .fixedSize(horizontal: true, vertical: true)   // should make all buttons equal height - but doesn't
+//                .fixedSize(horizontal: true, vertical: true)   // should make all buttons equal height - but doesn't
             }
-            Button(action: rowAction) {
-                VStack(alignment: .trailing, spacing: 0) {
-                    HStack(alignment: .firstTextBaseline, spacing: 0) {
-                        Text("B")
-                            .font(.title2)
-                        Text("alance")
-                            .font(.footnote).bold()
-                        .accessibility(sortPriority: 2)
-                    }
-                    Text("\(amount.valueStr)")  // TODO: CurrencyFormatter?
-                        .font(.title)
-                        .accessibility(sortPriority: 1)
-                }
-            }   .disabled(false)
-                .buttonStyle(TalerButtonStyle(type: .plain, aligned: .trailing))
-//                .background(Color.yellow)
         }
         .accessibilityElement(children: .combine)
     }
@@ -66,7 +88,9 @@ struct BalanceRowView: View {
 struct BalanceRowView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            BalanceRowView(amount: try! Amount(fromString: LONGCURRENCY + ":0.1"),
+            BalanceRowView(amount: try! Amount(fromString: "TestKUDOS" + ":1234.56"),
+                           sendAction: {}, recvAction: {}, rowAction: {})
+            BalanceRowView(amount: try! Amount(fromString: "KUDOS" + ":1234.56"),
                            sendAction: {}, recvAction: {}, rowAction: {})
         }
     }
