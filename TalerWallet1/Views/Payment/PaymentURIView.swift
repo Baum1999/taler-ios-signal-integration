@@ -22,10 +22,7 @@ struct PaymentURIView: View {
             do {
                 let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
                 symLog.log(confirmPayResult as Any)
-                if confirmPayResult.type == "done" {
-                    GNU_Taler.playSound(1)
-                    // TODO: Show Hints that Payment was successfull
-                } else {
+                if confirmPayResult.type != "done" {
                     GNU_Taler.playSound(0)
                     // TODO: show error
                 }

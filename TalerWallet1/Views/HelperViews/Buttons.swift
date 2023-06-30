@@ -4,8 +4,6 @@
  */
 import SwiftUI
 import Foundation
-import AVFoundation
-
 
 
 
@@ -191,22 +189,33 @@ struct TalerButtonStyle: ButtonStyle {
 struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            HamburgerButton() {}
-                .padding()
-            QRButton() {}
-                .padding()
-            PlusButton() {}
-                .padding()
+            HamburgerButton() {
+                playSound(1000)
+            }.padding()
+            QRButton() {
+                playSound(1001)
+            }.padding()
+            PlusButton() {
+                playSound(1002) // == 7
+            }.padding()
+            HamburgerButton() {
+                playSound(1003)
+            }.padding()
+            QRButton() {
+                playSound(1004)
+            }.padding()
+            PlusButton() {
+                playSound(1005)
+            }.padding()
             HStack {
                 ReloadButton(disabled: false) {
-                    AudioServicesPlaySystemSound(1000)
-                }
-                    .padding()
-                ReloadButton(disabled: true) {}
-                    .padding()
+                    playSound(1006)
+                }.padding()
+                ReloadButton(disabled: true) {
+                }.padding()
             }
             Button(String(localized: "Accept"), action: {
-                AudioServicesPlaySystemSound(1015)
+                playSound(1008)
             })
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .padding(.horizontal)

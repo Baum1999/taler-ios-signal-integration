@@ -35,7 +35,7 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        GNU_Taler.playSound(2)
+                        GNU_Taler.playSound(1008)     // TODO: Startup chime
                         soundPlayed = true
                     }
             } else if controller.backendState == .error {

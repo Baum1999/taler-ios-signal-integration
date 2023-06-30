@@ -46,7 +46,6 @@ struct P2pAcceptDone: View {
                     _ = try await model.confirmPeerPullDebitM(transactionId)
                 }
                 finished = true
-                GNU_Taler.playSound( incoming ? 2 : 1)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 GNU_Taler.playSound(0)
