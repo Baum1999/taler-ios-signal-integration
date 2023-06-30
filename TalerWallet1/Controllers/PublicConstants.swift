@@ -27,6 +27,7 @@ public let TALERURI = "talerUri"
 
 public let TRANSACTIONTRANSITION = "transactionTransition"
 
+/// Notifications sent by wallet-core
 extension Notification.Name {
     static let BalanceChange = Notification.Name("balance-change")
     static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
@@ -39,4 +40,9 @@ extension Notification.Name {
 //    static let PayOperationSuccess = Notification.Name("pay-operation-success")
     static let ProposalAccepted = Notification.Name("proposal-accepted")
     static let ProposalDownloaded = Notification.Name("proposal-downloaded")
+}
+
+/// Notifications for internal synchronization
+extension Notification.Name {
+    static let BalanceReloaded = Notification.Name("balanceReloaded")
 }

@@ -14,9 +14,8 @@ struct BalancesListView: View {
     let navTitle: String
     let hamburgerAction: () -> Void
 
-    @State var balances: [Balance] = []
     @EnvironmentObject private var model: WalletModel
-
+    @State private var balances: [Balance] = []
     @State private var centsToTransfer: UInt64 = 0
     @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
@@ -61,8 +60,11 @@ struct BalancesListView: View {
         })
     }
 
-    private func reloadAction() async {
-        balances = await model.balancesM()
+    private func reloadAction() async -> Int {
+        let reloaded = await model.balancesM()
+        let count = reloaded.count
+        balances = reloaded
+        return count
     }
 
     var body: some View {
@@ -80,10 +82,13 @@ struct BalancesListView: View {
             .overlay {
                 if balances.isEmpty {
                     WalletEmptyView()
-                        .refreshable {
+                        .refreshable {  // already async
                             symLog.log("refreshing")
-                            await reloadAction()      // this closure is already async, no need for a Task
-                                                      // TODO: reload transactions
+                            let count = await reloadAction()
+                            if count > 0 {
+//                                postNotificationM(.BalanceReloaded)
+                                NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
+                            }
                         }
 
                 }
@@ -102,7 +107,7 @@ struct BalancesListView: View {
             } // sheet
             .task {
                 symLog.log(".task getBalances")
-                await reloadAction()
+                _ = await reloadAction()
             } // task
     }
 }
@@ -114,7 +119,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
         @Binding var summary: String
-        var reloadAction: () async -> Void
+        var reloadAction: () async -> Int
 
         @State private var shouldLoad = false
         var body: some View {
@@ -128,10 +133,13 @@ extension BalancesListView {
                                 centsToTransfer: $centsToTransfer,
                                         summary: $summary)
                 }
-                .refreshable {
+                .refreshable {  // already async
                     symLog?.log("refreshing")
-                    await reloadAction()      // this closure is already async, no need for a Task
-                    // TODO: reload transactions
+                    let count = await reloadAction()
+                    if count > 0 {
+//                        postNotificationM(.BalanceReloaded)
+                        NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
+                    }
                 }
                 .listStyle(myListStyle.style).anyView
             }
