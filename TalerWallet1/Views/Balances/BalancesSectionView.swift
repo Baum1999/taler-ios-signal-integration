@@ -81,24 +81,24 @@ struct BalancesSectionView: View {
         }
 
         Section {
-//            if "KUDOS" == currency && !balance.available.isZero {
-//                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send coins to another wallet.")
-//                    .multilineTextAlignment(.leading)
-//            }
+            if "KUDOS" == currency && !balance.available.isZero {
+                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send coins to another wallet.")
+                    .multilineTextAlignment(.leading)
+            }
             HStack(spacing: 0) {
                 NavigationLink(destination: LazyView {
                     SendAmount(amountAvailable: balance.available,
                                centsToTransfer: $centsToTransfer,
                                        summary: $summary)
                   }, tag: 1, selection: $buttonSelected
-                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
                 NavigationLink(destination: LazyView {
                     RequestPayment(scopeInfo: balance.scopeInfo,
                              centsToTransfer: $centsToTransfer,
                                      summary: $summary)
                   }, tag: 2, selection: $buttonSelected
-                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 
                 NavigationLink(destination: LazyView {
                     TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
@@ -106,16 +106,13 @@ struct BalancesSectionView: View {
                                   reloadAllAction: reloadCompleted,
                                   reloadOneAction: reloadOneAction)
                   }, tag: 3, selection: $buttonSelected
-                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
                 BalanceRowView(amount: balance.available, sendAction: {
-//print("button: Send \(currency)")
                         buttonSelected = 1      // will trigger SendAmount NavigationLink
                     }, recvAction: {
-//print("button: Request Payment: \(currency)")
                         buttonSelected = 2      // will trigger RequestPayment NavigationLink
                     }, rowAction: {
-//print("button: Transactions: \(currency)")
                         buttonSelected = 3      // will trigger TransactionList NavigationLink
                     })
             }
@@ -168,17 +165,16 @@ struct BalancesSectionView: View {
                 .font(.title)
         }.id(sectionID)
         .task {
-            if shownSectionID != sectionID {
+//            if shownSectionID != sectionID {
                 symLog.log("task for BalancesSectionView \(sectionID) - reload Transactions")
                 let response = await model.transactionsT(currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)
                 shownSectionID = sectionID
-            } else {
-                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
-
-            }
+//            } else {
+//                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
+//            }
         }
     } // body
 }
