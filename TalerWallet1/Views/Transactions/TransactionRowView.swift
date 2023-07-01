@@ -11,11 +11,11 @@ struct TransactionRowCenter: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(centerTop)")
+            Text(centerTop)
                 .font(.headline)
                 .fontWeight(.medium)
                 .padding(.bottom, -2.0)
-            Text("\(centerBottom)")
+            Text(centerBottom)
                 .font(.callout)
         }
     }
@@ -49,7 +49,8 @@ struct TransactionRowView: View {
             Spacer()
             VStack(alignment: .trailing) {
                 let sign = incoming ? "+" : "-"
-                Text(sign + "\(amount.valueStr)")
+                let valueStr = sign + amount.valueStr
+                Text(valueStr)
                     .font(.title)
                     .foregroundColor(foreColor)
             }

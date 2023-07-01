@@ -55,17 +55,18 @@ struct QuiteSomeCoins: View {
 
     var body: some View {
         if shouldShowFee {
-            let shownFee = someCoins.hasFee ? String(localized: "- \(someCoins.fee)")
-                                            : String(localized: "No")
-            Text(someCoins.invalid ? "invalid amount"
-               : someCoins.tooMany ? "too many coins for a single withdrawal"
-                                   : "\(shownFee) withdrawal fee")
+            Text(someCoins.invalid ? "Invalid amount"
+               : someCoins.tooMany ? "Too many coins for a single withdrawal"
+                : someCoins.hasFee ? "- \(someCoins.fee) withdrawal fee"
+                                   : "No withdrawal fee")
             .foregroundColor((someCoins.invalid || someCoins.tooMany || someCoins.hasFee) ? .red : .primary)
             .padding(4)
         }
         if !someCoins.invalid {
             HStack {
-                Text(someCoins.unknown ? "Some" : "\(someCoins.numCoins)")
+                let coins: String = someCoins.unknown ? String(localized: "Some", comment: "unknown number of coins")
+                                                      : "\(someCoins.numCoins)"
+                Text(coins)
                     .foregroundColor(someCoins.quiteSome ? .red : .primary)
                 Text(someCoins.tooMany ? "coins" : "coins to obtain:")
                     .foregroundColor(someCoins.tooMany ? .red : .primary)

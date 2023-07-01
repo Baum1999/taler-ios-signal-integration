@@ -85,17 +85,20 @@ struct EqualIconWidthDomain<Content: View>: View {
 struct Demo1View: View {
     var body: some View {
         VStack(alignment: .leading) {
+            let people = "People"
+            let star = "Star"
+            let plane = "This is a plane"
             VStack(alignment: .leading) {
-                Label("People", systemImage: "person.3")
-                Label("Star", systemImage: "star")
-                Label("This is a plane", systemImage: "airplane")
+                Label(people, systemImage: "person.3")
+                Label(star, systemImage: "star")
+                Label(plane, systemImage: "airplane")
             }
             .padding()
             EqualIconWidthDomain {
                 VStack(alignment: .leading) {
-                    Label("People", systemImage: "person.3")
-                    Label("Star", systemImage: "star")
-                    Label("This is a plane", systemImage: "airplane")
+                    Label(people, systemImage: "person.3")
+                    Label(star, systemImage: "star")
+                    Label(plane, systemImage: "airplane")
                 }
             }
         }
@@ -113,19 +116,22 @@ struct FancyView: View {
     var body: some View {
         EqualIconWidthDomain {
             VStack {
-                Text("Le Menu")
+                let people = "People"
+                let star = "Star"
+                let money = "Money"
+                Text(verbatim: "Le Menu")
                     .font(.caption)
                 Divider()
                 HStack {
                     VStack(alignment: .leading) {
                         Label(
-                            title: { Text("Strawberry") },
-                            icon: { Text("🍓") })
-                        Label("Money", systemImage: "banknote")
+                            title: { Text(verbatim: "Strawberry") },
+                            icon: { Text(verbatim: "🍓") })
+                        Label(money, systemImage: "banknote")
                     }
                     VStack(alignment: .leading) {
-                        Label("People", systemImage: "person.3")
-                        Label("Star", systemImage: "star")
+                        Label(people, systemImage: "person.3")
+                        Label(star, systemImage: "star")
                     }
                 }
             }

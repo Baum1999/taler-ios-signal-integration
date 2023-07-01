@@ -25,7 +25,7 @@ struct RequestPayment: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = scopeInfo.currency
-        let navTitle = String(localized: "Request \(currency)")
+        let navTitle = String(localized: "Request \(currency)", comment: "Request currency, Dialog Title")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         ScrollViewReader { scrollView in

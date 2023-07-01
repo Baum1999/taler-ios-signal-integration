@@ -51,7 +51,7 @@ struct SendPurpose: View {
 
                 HStack{
                     Spacer()
-                    Text("\(summary.count)/100")
+                    Text(verbatim: "\(summary.count)/100")
                 } // maximum 100 characters
 
                 Text("Expires in:")
@@ -69,7 +69,7 @@ struct SendPurpose: View {
                             amountToReceive: nil,
                             summary: summary, expireDays: expireDays)
                 }) {
-                    Text("Send \(label) \(amountAvailable.currencyStr) now")
+                    Text("Send \(label) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")
                         .font(buttonFont)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))

@@ -145,23 +145,23 @@ struct SettingsView: View {
                 }
 
                 VStack {
-                    SettingsItem(name: String(localized: "App Version")) {
-                        Text("\(Bundle.main.releaseVersionNumberPretty)")
+                    SettingsItem(name: "App Version") {
+                        Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
                     }
-                    SettingsItem(name: String(localized: "Wallet Core Version")) {
-                        Text("\(walletCore.versionInfo!.version)")
+                    SettingsItem(name: "Wallet Core Version") {
+                        Text(verbatim: "\(walletCore.versionInfo!.version)")
                     }
-                    SettingsItem(name: String(localized: "Wallet Core DevMode")) {
-                        Text("\(walletCore.versionInfo!.devMode ? "YES" : "NO")")
+                    SettingsItem(name: "Wallet Core DevMode") {
+                        Text(verbatim: "\(walletCore.versionInfo!.devMode ? "YES" : "NO")")
                     }
-                    SettingsItem(name: String(localized: "Supported Exchange Versions")) {
-                        Text("\(walletCore.versionInfo!.exchange)")
+                    SettingsItem(name: "Supported Exchange Versions") {
+                        Text(verbatim: "\(walletCore.versionInfo!.exchange)")
                     }
-                    SettingsItem(name: String(localized: "Supported Merchant Versions")) {
-                        Text("\(walletCore.versionInfo!.merchant)")
+                    SettingsItem(name: "Supported Merchant Versions") {
+                        Text(verbatim: "\(walletCore.versionInfo!.merchant)")
                     }
-                    SettingsItem(name: String(localized: "Used Bank")) {
-                        Text("\(walletCore.versionInfo!.bank)")
+                    SettingsItem(name: "Used Bank") {
+                        Text(verbatim: "\(walletCore.versionInfo!.bank)")
                     }
                 }
             }

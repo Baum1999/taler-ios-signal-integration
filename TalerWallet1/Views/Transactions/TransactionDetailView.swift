@@ -65,7 +65,7 @@ struct TransactionDetailView: View {
                                           command: .resume, action: resumeAction)
                     } }
                 } // Suspend + Resume buttons
-                Text("\(dateString)")
+                Text(dateString)
                     .font(.title2)
 //                .listRowSeparator(.hidden)
                 SwitchCase(transaction: $transaction)

@@ -24,7 +24,8 @@ struct PendingRowView: View {
             Spacer()
             VStack(alignment: .trailing) {
                 let sign = incoming ? "+" : "-"
-                Text(sign + "\(amount.valueStr)")
+                let valueStr = sign + amount.valueStr
+                Text(valueStr)
                     .font(.title)
                     .foregroundColor(WalletColors().pendingColor(incoming))
 //                Text("PENDING")

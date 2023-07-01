@@ -21,7 +21,7 @@ struct BalanceButton: View {
                     Text("alance", comment: "the remaining letters of Balance - or all if you left B empty")
                         .font(.footnote).bold()
                 }
-                Text("\(amount.valueStr)")  // TODO: CurrencyFormatter?
+                Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
                     .font(.title)
             }
         }   .disabled(false)

@@ -36,7 +36,7 @@ struct SendAmount: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountAvailable.currencyStr
-        let navTitle = String(localized: "Send \(currency)")
+        let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         let fee = fee(ppCheck: peerPushCheck)

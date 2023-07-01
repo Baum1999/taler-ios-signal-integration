@@ -40,7 +40,7 @@ struct ManualDetails: View {
             HStack {
                 Spacer()
                 ShareButton(textToShare: payto)
-                    .accessibilityLabel("Share PayTo ULR")
+                    .accessibilityLabel("Share PayTo URL")
                     .disabled(false)
                 Spacer()
             }   .listRowSeparator(.hidden)

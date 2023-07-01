@@ -11,24 +11,24 @@ public class TalerDater: DateFormatter {
     static func relativeDate(from: TimeInterval) -> String? {
         if from > 0 {       // transactions should always be in the past
             let minute = from / 60.0                // from is in seconds
-            if minute < 1 { return "Right now" }
-            if minute < 2 { return "1 minute ago" }
-            if minute < 55 { return "\(Int(minute)) minutes ago" }
-            if minute < 60 { return "About an hour ago" }
-            if minute < 80 { return "1 hour ago" }
-            if minute < 105 { return "About 1½ hours ago" }
-            if minute < 125 { return "About 2 hours ago" }
+            if minute < 1 { return String(localized: "Right now") }
+            if minute < 2 { return String(localized: "1 minute ago") }
+            if minute < 55 { return String(localized: "\(Int(minute)) minutes ago") }
+            if minute < 60 { return String(localized: "About an hour ago") }
+            if minute < 80 { return String(localized: "1 hour ago") }
+            if minute < 105 { return String(localized: "About 1½ hours ago") }
+            if minute < 125 { return String(localized: "About 2 hours ago") }
             let hour = minute / 60.0
             let calendar = Calendar.current
             let now = Date.now
             let currHour = Double(calendar.component(.hour, from: now))
             let currMin = Double(calendar.component(.minute, from: now))
             let currTime = currHour + currMin/60
-            if hour < currTime { return "\(Int(hour)) hours ago" }
-            if hour < currTime + 24 { return "Yesterday" }
+            if hour < currTime { return String(localized: "\(Int(hour)) hours ago") }
+            if hour < currTime + 24 { return String(localized: "Yesterday") }
             let day = (hour - currTime) / 24.0
-            if day < 7 { return "\(Int(day+1)) days ago" }
-            if day < 14 { return "More than a week ago" }
+            if day < 7 { return String(localized: "\(Int(day+1)) days ago") }
+            if day < 14 { return String(localized: "More than a week ago") }
             // will fall thru...
             return nil
         } else {            // Yikes❗️ transaction date is in the future

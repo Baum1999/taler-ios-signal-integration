@@ -18,14 +18,17 @@ struct PendingOpView: View {
             }
             Text(pendingOp.id)
                 .font(.caption)
-            Toggle("isLongPolling", isOn: $polling)
+            let isLongPolling = "isLongPolling"
+            Toggle(isLongPolling, isOn: $polling)
                 .disabled(true)
-            Toggle("givesLifeness", isOn: $liveliness)
+            let givesLifeness = "givesLifeness"
+            Toggle(givesLifeness, isOn: $liveliness)
                 .disabled(true)
-            Toggle("isDue", isOn: $isDue)
+            let isDue = "isDue"
+            Toggle(isDue, isOn: $isDue)
                 .disabled(true)
             let dateString = TalerDater.dateString(from: pendingOp.timestampDue)
-            Text("\(dateString)")
+            Text(dateString)
         } header: {
             Text(pendingOp.type)
                 .font(.title2)

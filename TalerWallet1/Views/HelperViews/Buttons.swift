@@ -233,7 +233,7 @@ fileprivate struct ContentView: View {
 
     var body: some View {
         VStack {
-            Text("I don't change.")
+            Text(verbatim: "I don't change.")
                 .padding()
             Button("Press me, I do change") {
                 isOn.toggle()
