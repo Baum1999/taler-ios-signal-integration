@@ -38,6 +38,7 @@ struct QRButton : View  {
             Image(systemName: "qrcode.viewfinder")
         }
         .font(font ?? .title)
+        .accessibilityLabel("Scan QR codes")
     }
 }
 

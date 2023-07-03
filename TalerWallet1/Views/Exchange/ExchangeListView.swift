@@ -56,7 +56,8 @@ struct ExchangeListView: View {
         .navigationTitle(navTitle)
         .navigationBarTitleDisplayMode(.automatic)
         .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
-                            trailing: PlusButton(action: plusAction))
+                            trailing: PlusButton(action: plusAction)
+                                        .accessibilityLabel("Add Exchange"))
         .overlay {
             if exchanges.isEmpty {
                 Text("No Exchanges yet...")
