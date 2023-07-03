@@ -414,6 +414,15 @@ enum Transaction: Decodable, Hashable, Identifiable {
     var isResumable  : Bool { common.txActions.contains(.resume) }
     var isSuspendable: Bool { common.txActions.contains(.suspend) }
 
+    var shouldConfirm: Bool {
+        switch self {
+            case .withdrawal(let withdrawalTransaction):
+                let details = withdrawalTransaction.details.withdrawalDetails
+                return details.type == .bankIntegrated // && details.bankConfirmationUrl != nil
+            default:
+                return false
+        }
+    }
     var common: TransactionCommon {
         switch self {
             case .dummy(let dummyTransaction):

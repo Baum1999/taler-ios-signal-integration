@@ -89,8 +89,8 @@ struct TransactionDetailView: View {
             .listStyle(myListStyle.style).anyView
                 .safeAreaInset(edge: .bottom) {
                     if let doneAction {
-                        Button("Done", action: doneAction)
-                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                        Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
+                            .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
                             .padding(.horizontal)
                     }
                 }
