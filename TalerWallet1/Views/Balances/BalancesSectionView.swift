@@ -103,6 +103,7 @@ struct BalancesSectionView: View {
                 NavigationLink(destination: LazyView {
                     TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
                                      transactions: completedTransactions,
+                                       showUpDown: true,
                                   reloadAllAction: reloadCompleted,
                                   reloadOneAction: reloadOneAction)
                   }, tag: 3, selection: $buttonSelected
@@ -125,6 +126,7 @@ struct BalancesSectionView: View {
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Pending"), currency: currency,
                                          transactions: pendingTransactions,
+                                           showUpDown: false,
                                       reloadAllAction: reloadPending,
                                       reloadOneAction: reloadOneAction)
                     }
@@ -152,6 +154,7 @@ struct BalancesSectionView: View {
                     LazyView {
                         TransactionsListView(navTitle: String(localized: "Uncompleted"), currency: currency,
                                              transactions: uncompletedTransactions,
+                                               showUpDown: false,
                                           reloadAllAction: reloadUncompleted,
                                           reloadOneAction: reloadOneAction)
                     }

@@ -12,6 +12,7 @@ struct TransactionsListView: View {
 
     let currency: String
     let transactions: [Transaction]
+    let showUpDown: Bool
     let reloadAllAction: () async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
@@ -27,6 +28,7 @@ struct TransactionsListView: View {
         Content(symLog: symLog,
               currency: currency,
           transactions: transactions,
+            showUpDown: showUpDown,
            myListStyle: $myListStyle,
        reloadAllAction: reloadAllAction,
        reloadOneAction: reloadOneAction)
@@ -48,6 +50,7 @@ extension TransactionsListView {
         let symLog: SymLogV?
         let currency: String
         let transactions: [Transaction]
+        let showUpDown: Bool
         @Binding var myListStyle: MyListStyle
         let reloadAllAction: () async -> ()
         let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
@@ -114,9 +117,11 @@ extension TransactionsListView {
                 }.id(viewId)
                 .listStyle(myListStyle.style).anyView
                 .onAppear {
-                    upAction = { withAnimation { scrollView.scrollTo(0) }}
-                    downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
-                    downAction()
+                    if showUpDown {
+                        upAction = { withAnimation { scrollView.scrollTo(0) }}
+                        downAction = { withAnimation { scrollView.scrollTo(transactions.count - 1) }}
+                        downAction()
+                    }
                 }
                 .overlay {
                     if transactions.isEmpty {
@@ -125,8 +130,11 @@ extension TransactionsListView {
                 }
             }
             .navigationBarItems(trailing: HStack {
-                ArrowUpButton(action: upAction)
-                ArrowDownButton(action: downAction)
+                EmptyView()
+                if showUpDown {
+                    ArrowUpButton(action: upAction)
+                    ArrowDownButton(action: downAction)
+                }
             })
         }
     }
