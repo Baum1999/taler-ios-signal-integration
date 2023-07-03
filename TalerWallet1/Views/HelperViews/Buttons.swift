@@ -190,33 +190,95 @@ struct TalerButtonStyle: ButtonStyle {
 struct Buttons_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            HamburgerButton() {
-                Controller.shared.playSound(1000)
-            }.padding()
-            QRButton() {
-                Controller.shared.playSound(1001)
-            }.padding()
-            PlusButton() {
-                Controller.shared.playSound(1002) // == 7
-            }.padding()
-            HamburgerButton() {
-                Controller.shared.playSound(1003)
-            }.padding()
-            QRButton() {
-                Controller.shared.playSound(1004)
-            }.padding()
-            PlusButton() {
-                Controller.shared.playSound(1005)
-            }.padding()
+            HStack {
+                Button("1000") {
+                    Controller.shared.playSound(1000)
+                }.padding()
+                Button("1013") {
+                    Controller.shared.playSound(1013)
+                }.padding()
+                Button("1001") {
+                    Controller.shared.playSound(1001)
+                }.padding()
+                Button("1018") {
+                    Controller.shared.playSound(1018)
+                }.padding()
+            } // Single
+            HStack {
+                Button("1008") {
+                    Controller.shared.playSound(1008)
+                }.padding()
+                Button("1023") {
+                    Controller.shared.playSound(1023)
+                }.padding()
+            } // long single
+            HStack {
+                Button("1003") {
+                    Controller.shared.playSound(1003)
+                }.padding()
+                Button("1004") {
+                    Controller.shared.playSound(1004)
+                }.padding()
+                Button("1016") {
+                    Controller.shared.playSound(1016)
+                }.padding()
+                Button("1022") {
+                    Controller.shared.playSound(1022)
+                }.padding()
+            } // Double
+            HStack {
+                Button("1002") {
+                    Controller.shared.playSound(1002) // == 7,12,15
+                }.padding()
+                Button("1006") {
+                    Controller.shared.playSound(1006)
+                }.padding()
+                Button("1025") {
+                    Controller.shared.playSound(1025)
+                }.padding()
+                Button("1026") {
+                    Controller.shared.playSound(1026)
+                }.padding()
+            } // Triple
+            HStack {
+                PlusButton() {
+                    Controller.shared.playSound(1009)
+                }.padding()
+                QRButton() {
+                    Controller.shared.playSound(1005) // 17
+                }.padding()
+                HamburgerButton() {
+                    Controller.shared.playSound(1010)
+                }.padding()
+            }
+            HStack {
+                Button("1014") {
+                    Controller.shared.playSound(1014)
+                }.padding()
+                Button("1021") {
+                    Controller.shared.playSound(1021)
+                }.padding()
+                Button("1029") {
+                    Controller.shared.playSound(1029)
+                }.padding()
+            }
+            HStack {
+                PlusButton() {
+                    Controller.shared.playSound(1020)
+                }.padding()
+                HamburgerButton() {
+                    Controller.shared.playSound(1024)
+                }.padding()
+            }
             HStack {
                 ReloadButton(disabled: false) {
-                    Controller.shared.playSound(1006)
+                    Controller.shared.playSound(1027)
                 }.padding()
                 ReloadButton(disabled: true) {
                 }.padding()
             }
             Button(String(localized: "Accept"), action: {
-                Controller.shared.playSound(1008)
+                Controller.shared.playSound(1028)
             })
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .padding(.horizontal)
@@ -225,37 +287,37 @@ struct Buttons_Previews: PreviewProvider {
 }
 
 #if DEBUG
-fileprivate struct ContentView: View {
-    @State var isOn = false
-    //The better route is to have a separate variable to control the animations
-    // This prevents unpleasant side-effects.
-    @State private var animate = false
-
-    var body: some View {
-        VStack {
-            Text(verbatim: "I don't change.")
-                .padding()
-            Button("Press me, I do change") {
-                isOn.toggle()
-                animate = false
-                // Because .opacity is animated, we need to switch it
-                // back so the button shows.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    animate = true
-                }
-            }
-            // In this case I chose to animate .opacity
-            .opacity(animate ? 1 : 0)
-            .animation(.easeIn, value: animate)
-            .frame(width: 300, height: 400)
-            // If you want the button to animate when the view appears, you need to change the value
-            .onAppear { animate = true }
-        }
-    }
-}
-fileprivate struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//fileprivate struct ContentView: View {
+//    @State var isOn = false
+//    //The better route is to have a separate variable to control the animations
+//    // This prevents unpleasant side-effects.
+//    @State private var animate = false
+//
+//    var body: some View {
+//        VStack {
+//            Text(verbatim: "I don't change.")
+//                .padding()
+//            Button("Press me, I do change") {
+//                isOn.toggle()
+//                animate = false
+//                // Because .opacity is animated, we need to switch it
+//                // back so the button shows.
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                    animate = true
+//                }
+//            }
+//            // In this case I chose to animate .opacity
+//            .opacity(animate ? 1 : 0)
+//            .animation(.easeIn, value: animate)
+//            .frame(width: 300, height: 400)
+//            // If you want the button to animate when the view appears, you need to change the value
+//            .onAppear { animate = true }
+//        }
+//    }
+//}
+//fileprivate struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
 #endif

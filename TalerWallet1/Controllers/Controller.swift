@@ -28,7 +28,7 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
-    @AppStorage("playSounds") var playSounds: Bool = false
+    @AppStorage("playSounds") var playSounds: Bool = false  // extension mustn't define this, so it must be here
 
     var messageForSheet: String? = nil
 

@@ -307,13 +307,13 @@ print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        /
         queue.async {
             self.semaphore.wait()               // guard access to requestsMade
             let requestId = self.requestsMade
-            let now = Date.now
+            let sendTime = Date.now
             do {
                 let full = FullRequest(operation: request.operation, id: requestId, args: request.args)
 //          symLog.log(full)
                 let encoded = try JSONEncoder().encode(full)
                 guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
-                self.completions[requestId] = (now, completionHandler)
+                self.completions[requestId] = (sendTime, completionHandler)
                 self.requestsMade += 1
                 self.semaphore.signal()         // free requestsMade
               self.symLog.log(jsonString)
@@ -321,7 +321,7 @@ print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        /
             } catch {       // call completion
                 self.semaphore.signal()
               self.symLog.log(error)
-                completionHandler(requestId, now, nil, WalletCore.serializeRequestError());
+                completionHandler(requestId, sendTime, nil, WalletCore.serializeRequestError());
             }
         }
     }
