@@ -965,7 +965,7 @@
 				CODE_SIGN_ENTITLEMENTS = "GNU Taler.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -1007,7 +1007,7 @@
 				CODE_SIGN_ENTITLEMENTS = "GNU Taler.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
