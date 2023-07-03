@@ -198,6 +198,9 @@ struct Buttons_Previews: PreviewProvider {
                 Button("1013") {
                     Controller.shared.playSound(1013)
                 }.padding()
+                Button("1008") {
+                    Controller.shared.playSound(1008)
+                }.padding()
                 Button("1001") {
                     Controller.shared.playSound(1001)
                 }.padding()
@@ -205,14 +208,6 @@ struct Buttons_Previews: PreviewProvider {
                     Controller.shared.playSound(1018)
                 }.padding()
             } // Single
-            HStack {
-                Button("1008") {
-                    Controller.shared.playSound(1008)
-                }.padding()
-                Button("1023") {
-                    Controller.shared.playSound(1023)
-                }.padding()
-            } // long single
             HStack {
                 Button("1003") {
                     Controller.shared.playSound(1003)
@@ -226,7 +221,27 @@ struct Buttons_Previews: PreviewProvider {
                 Button("1022") {
                     Controller.shared.playSound(1022)
                 }.padding()
+                Button("1034") {
+                    Controller.shared.playSound(1034)
+                }.padding()
             } // Double
+            HStack {
+                Button("1023") {
+                    Controller.shared.playSound(1023)
+                }.padding()
+                Button("1029") {
+                    Controller.shared.playSound(1029)
+                }.padding()
+                Button("1014") {
+                    Controller.shared.playSound(1014)
+                }.padding()
+                Button("1021") {
+                    Controller.shared.playSound(1021)
+                }.padding()
+                Button("1031") {
+                    Controller.shared.playSound(1031)
+                }.padding()
+            } // long single
             HStack {
                 Button("1002") {
                     Controller.shared.playSound(1002) // == 7,12,15
@@ -240,40 +255,57 @@ struct Buttons_Previews: PreviewProvider {
                 Button("1026") {
                     Controller.shared.playSound(1026)
                 }.padding()
+                Button("1033") {
+                    Controller.shared.playSound(1033)
+                }.padding()
             } // Triple
             HStack {
-                PlusButton() {
-                    Controller.shared.playSound(1009)
-                }.padding()
-                QRButton() {
+                Button("1005") {
                     Controller.shared.playSound(1005) // 17
                 }.padding()
-                HamburgerButton() {
+                Button("1009") {
+                    Controller.shared.playSound(1009)
+                }.padding()
+                Button("1010") {
                     Controller.shared.playSound(1010)
+                }.padding()
+            } // Double 2
+            HStack {
+                Button("1030") {
+                    Controller.shared.playSound(1030)
+                }.padding()
+                Button("1035") {
+                    Controller.shared.playSound(1035)
+                }.padding()
+                Button("1036") {
+                    Controller.shared.playSound(1036)
+                }.padding()
+                Button("1027") {
+                    Controller.shared.playSound(1027)
                 }.padding()
             }
             HStack {
-                Button("1014") {
-                    Controller.shared.playSound(1014)
+                Button("1020") {
+                    Controller.shared.playSound(1020)
                 }.padding()
-                Button("1021") {
-                    Controller.shared.playSound(1021)
+                Button("1024") {
+                    Controller.shared.playSound(1024)
                 }.padding()
-                Button("1029") {
-                    Controller.shared.playSound(1029)
+                Button("1032") {
+                    Controller.shared.playSound(1032)
+                }.padding()
+                Button("1028") {
+                    Controller.shared.playSound(1028)
                 }.padding()
             }
             HStack {
                 PlusButton() {
-                    Controller.shared.playSound(1020)
                 }.padding()
                 HamburgerButton() {
-                    Controller.shared.playSound(1024)
                 }.padding()
-            }
-            HStack {
+                QRButton() {
+                }.padding()
                 ReloadButton(disabled: false) {
-                    Controller.shared.playSound(1027)
                 }.padding()
                 ReloadButton(disabled: true) {
                 }.padding()
