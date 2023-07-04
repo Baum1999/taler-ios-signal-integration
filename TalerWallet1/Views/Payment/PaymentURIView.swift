@@ -110,7 +110,6 @@ struct PaymentURIView_Previews: PreviewProvider {
         let details = PaymentDetailsForUri(
             amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
             amountEffective: try! Amount(fromString: LONGCURRENCY + ":2.4"),
-            noncePriv: "noncePriv",
             proposalId: "proposalId",
             contractTerms: terms,
             contractTermsHash: "termsHash"

@@ -86,10 +86,8 @@ struct Extra: Codable {
 // MARK: -
 /// The result from PreparePayForUri
 struct PaymentDetailsForUri: Codable {
-//    let status: String
     let amountRaw: Amount
     let amountEffective: Amount
-    let noncePriv: String
     let proposalId: String
     let contractTerms: ContractTerms
     let contractTermsHash: String
