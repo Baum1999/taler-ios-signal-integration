@@ -40,8 +40,8 @@ enum TransactionMinorState: String, Codable {
     case repurchase
     case bankRegisterReserve = "bank-register-reserve"
     case bankConfirmTransfer = "bank-confirm-transfer"
-    case withdrawCoins = "withdraw-coins"
     case exchangeWaitReserve = "exchange-wait-reserve"
+    case withdrawCoins = "withdraw-coins"
     case abortingBank = "aborting-bank"
     case refused
     case withdraw

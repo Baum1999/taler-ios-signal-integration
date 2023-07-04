@@ -105,8 +105,12 @@ struct TransactionDetailView: View {
                             doneAction()        // if this view is in a sheet this action will dissmiss it
                         } else if newMajor == .pending {
                             if let newMinor {
-                                if newMinor == .withdrawCoins { // coin-withdrawal has started
-                                    symLog.log("newTxState.minor == withdrawCoins  => dismiss sheet")
+                                if newMinor == .exchangeWaitReserve { // user did confirm on bank website
+//                                    symLog.log("newTxState.minor == exchangeWaitReserve  => change Buttons")
+                                    symLog.log("newTxState.minor == exchangeWaitReserve => dismiss sheet")
+                                    doneAction()        // if this view is in a sheet this action will dissmiss it
+                                } else if newMinor == .withdrawCoins { // coin-withdrawal has started
+                                    symLog.log("newTxState.minor == withdrawCoins => dismiss sheet")
                                     doneAction()        // if this view is in a sheet this action will dissmiss it
                                 } else {
                                     symLog.log("ignoring newTxState: \(newMajor):\(newMinor)")
@@ -172,24 +176,25 @@ struct TransactionDetailView: View {
                                     ManualDetails(common: common, details: withdrawalDetails)
                                     
                                 case .bankIntegrated:       // "Confirm with bank"
-                                    VStack {
+                                    let confirmed = withdrawalDetails.confirmed ?? false
+                                    if !confirmed {
                                         if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                             if let destination = URL(string: confirmationUrl) {
-                                                // Show Hint that User should Confirm on bank website
-                                                Text("Waiting for bank confirmation")
-                                                    .multilineTextAlignment(.leading)
-                                                    .listRowSeparator(.hidden)
-                                                Link("Confirm with bank", destination: destination)
-                                                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                                                    .padding(.horizontal)
-                                                
+                                                VStack {  // Show Hint that User should Confirm on bank website
+                                                    Text("Waiting for bank confirmation")
+                                                        .multilineTextAlignment(.leading)
+                                                        .listRowSeparator(.hidden)
+                                                    Link("Confirm with bank", destination: destination)
+                                                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+                                                        .padding(.horizontal)                                                    
+                                                }
                                             }
                                         }
                                     }
                             }
                         } // ManualDetails or Confirm with bank
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         baseURL: withdrawalTransaction.details.exchangeBaseUrl, large: true)
+                                         baseURL: details.exchangeBaseUrl, large: false)
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
                         let info = details.info
