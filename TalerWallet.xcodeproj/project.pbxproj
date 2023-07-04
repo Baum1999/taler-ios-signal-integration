@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,6 +29,7 @@
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
 		4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
 		4E7940DE29FC307C00A9AEA1 /* SendPurpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* SendPurpose.swift */; };
+		4E7CFD382A532CE100CBAFF3 /* WhatToTest.en-US.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */; };
 		4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
 		4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8742A34B411001C6406 /* UncompletedRowView.swift */; };
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
@@ -162,6 +163,7 @@
 		4E753A052A0952F7002D9328 /* DebugViewC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewC.swift; sourceTree = "<group>"; };
 		4E753A072A0B6A5F002D9328 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		4E7940DD29FC307C00A9AEA1 /* SendPurpose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendPurpose.swift; sourceTree = "<group>"; };
+		4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
 		4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsEmptyView.swift; sourceTree = "<group>"; };
 		4E87C8742A34B411001C6406 /* UncompletedRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UncompletedRowView.swift; sourceTree = "<group>"; };
 		4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualIconWidthDomain.swift; sourceTree = "<group>"; };
@@ -280,6 +282,14 @@
 				4E578E932A4822D500F21F1C /* P2pPayURIView.swift */,
 			);
 			path = P2P_Sheets;
+			sourceTree = "<group>";
+		};
+		4E7CFD362A532C7A00CBAFF3 /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */,
+			);
+			path = TestFlight;
 			sourceTree = "<group>";
 		};
 		4EB094EE298979840043A8A1 /* TalerWallet1 */ = {
@@ -532,6 +542,7 @@
 		D14AFD1424D232B300C51073 = {
 			isa = PBXGroup;
 			children = (
+				4E7CFD362A532C7A00CBAFF3 /* TestFlight */,
 				4EB094EE298979840043A8A1 /* TalerWallet1 */,
 				4EB094E129896FED0043A8A1 /* Info.plist */,
 				4E3AE7EF29A7E8F40070BEC4 /* Taler Wallet.entitlements */,
@@ -694,6 +705,7 @@
 				4EB094F429897A510043A8A1 /* Preview Assets.xcassets in Resources */,
 				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
 				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
+				4E7CFD382A532CE100CBAFF3 /* WhatToTest.en-US.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

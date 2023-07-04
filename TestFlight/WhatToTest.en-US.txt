@@ -1,0 +1,29 @@
+
+Version 0.9.3 (14)
+
+- ToS formatted with markdown (if the exchange supports this)
+
+
+Version 0.9.3 (13)
+
+- Checks that the amount is valid when sending coins
+- Shows the P2P purpose in the transaction details
+
+
+Version 0.9.3 (12)
+
+• Try to add an exchange, and then withdraw money from that
+
+- Automatic reload of balances
+
+
+Version 0.9.3 (11)
+
+- Bank-integrated withdrawal now hints better that you should confirm with bank
+
+
+Version 0.9.3 (10)
+
+• Try to withdraw some KUDOS (by tapping the link in Balances)
+• Try to spend them at the store
+• Try to send a friend/colleague some money
