@@ -73,14 +73,14 @@ struct ExchangeRow_Container : View {
     @State private var centsToTransfer: UInt64 = 100
 
     var body: some View {
-        let exchange1 = Exchange(exchangeBaseUrl: DEMO_AGE_EXCHANGE,
+        let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
                                         currency: LONGCURRENCY,
                                        paytoUris: [],
                                        tosStatus: "tosStatus",
                                   exchangeStatus: "exchangeStatus",
                            ageRestrictionOptions: [12,16],
                                        permanent: true)
-        let exchange2 = Exchange(exchangeBaseUrl: DEMO_EXP_EXCHANGE,
+        let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
                                         currency: LONGCURRENCY,
                                        paytoUris: [],
                                        tosStatus: "tosStatus",

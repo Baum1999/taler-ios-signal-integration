@@ -9,14 +9,19 @@ public let SLIDEDURATION: Double = 0.45
 
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
+//public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"
 public let DEMOBANK = HTTPS + "bank.demo.taler.net"
 public let DEMOSHOP = HTTPS + "shop.demo.taler.net"
 public let DEMOBACKEND = HTTPS + "backend.demo.taler.net"
-//public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"
 public let DEMOEXCHANGE = HTTPS + "exchange.demo.taler.net"
-public let DEMO_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar"
-public let DEMO_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar"
+public let TESTBANK = HTTPS + "bank.test.taler.net"
+public let TESTSHOP = HTTPS + "shop.test.taler.net"
+public let TESTBACKEND = HTTPS + "backend.test.taler.net"
+public let TESTEXCHANGE = HTTPS + "exchange.test.taler.net"
+public let ARS_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar"
+public let ARS_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar"
 public let DEMOCURRENCY = "KUDOS"
+public let TESTCURRENCY = "TESTKUDOS"
 //public let LONGCURRENCY = "gold-pressed Latinum"                // 20 characters, with dash and space
 public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters, no dash, no space
 

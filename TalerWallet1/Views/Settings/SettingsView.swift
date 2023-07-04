@@ -89,9 +89,24 @@ struct SettingsView: View {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task {
-                                    symLog.log("Withdraw TestKUDOS")
+                                    symLog.log("Withdraw KUDOS")
                                     do {
-                                        try await model.loadTestKudosM()
+                                        try await model.loadTestKudosM(test: false)
+                                    } catch {    // TODO: show error
+                                        symLog.log(error.localizedDescription)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(withDrawDisabled)
+                        }
+                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"), description: String(localized: "Get money for testing")) {
+                            Button("Withdraw") {
+                                withDrawDisabled = true    // don't run twice
+                                Task {
+                                    symLog.log("Withdraw TESTKUDOS")
+                                    do {
+                                        try await model.loadTestKudosM(test: true)
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
                                     }
@@ -102,12 +117,44 @@ struct SettingsView: View {
                         }
                         SettingsItem(name: String(localized: "Run Integration Test"),
                                      description: String(localized: "Perform basic test transactions")) {
+                            Button("Demo 1") {
+                                checkDisabled = true    // don't run twice
+                                Task {
+                                    symLog.log("running integration test on demo")
+                                    do {
+                                        try await model.runIntegrationTestM(newVersion: false, test: false)
+                                    } catch {    // TODO: show error
+                                        symLog.log(error.localizedDescription)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(checkDisabled)
+                        }
+                        SettingsItem(name: String(localized: "Run Integration Test"),
+                                     description: String(localized: "Perform basic test transactions")) {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
                                 Task {
-                                    symLog.log("running integration test")
+                                    symLog.log("running integration test on test")
                                     do {
-                                        try await model.runIntegrationTestM(newVersion: false)
+                                        try await model.runIntegrationTestM(newVersion: false, test: true)
+                                    } catch {    // TODO: show error
+                                        symLog.log(error.localizedDescription)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(checkDisabled)
+                        }
+                        SettingsItem(name: String(localized: "Run Integration Test V2"),
+                                     description: String(localized: "Perform more test transactions")) {
+                            Button("Demo 2") {
+                                checkDisabled = true    // don't run twice
+                                Task {
+                                    symLog.log("running integration test V2 on demo")
+                                    do {
+                                        try await model.runIntegrationTestM(newVersion: true, test: false)
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
                                     }
@@ -121,9 +168,9 @@ struct SettingsView: View {
                             Button("Test 2") {
                                 checkDisabled = true    // don't run twice
                                 Task {
-                                    symLog.log("running integration test V2")
+                                    symLog.log("running integration test V2 on test")
                                     do {
-                                        try await model.runIntegrationTestM(newVersion: true)
+                                        try await model.runIntegrationTestM(newVersion: true, test: true)
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
                                     }

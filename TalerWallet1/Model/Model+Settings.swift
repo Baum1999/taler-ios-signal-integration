@@ -7,11 +7,8 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-fileprivate let DEMO_EXCHANGEBASEURL = DEMOEXCHANGE
-fileprivate let DEMO_BANKBASEURL     = DEMOBANK
-fileprivate let DEMO_BANKAPIBASEURL  = DEMOBANK + "/demobanks/default/access-api/"
-fileprivate let DEMO_MERCHANTBASEURL = DEMOBACKEND
-fileprivate let DEMO_MERCHANTAUTHTOKEN = "secret-token:sandbox"
+fileprivate let APIBASEURL  = "/demobanks/default/access-api/"
+fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
 /// A request to add a test balance to the wallet.
@@ -36,13 +33,13 @@ fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedReque
     }
 }
 extension WalletModel {
-    @MainActor func loadTestKudosM()
+    @MainActor func loadTestKudosM(test: Bool)
     async throws {          // M for MainActor
-        let amount = Amount(currency: DEMOCURRENCY, integer: 11, fraction: 0)
+        let amount = Amount(currency:  test ? TESTCURRENCY : DEMOCURRENCY, integer: 11, fraction: 0)
         let request = WalletBackendWithdrawTestBalance(amount: amount,
-                                                       bankBaseUrl: DEMO_BANKBASEURL,
-                                                       exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                                       bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL)
+                                                       bankBaseUrl: test ? TESTBANK : DEMOBANK,
+                                                       exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
+                                                       bankAccessApiBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL)
         let response = try await sendRequest(request, ASYNCDELAY)
     }
 } // loadTestKudosM()
@@ -83,18 +80,18 @@ fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func runIntegrationTestM(newVersion: Bool)
+    @MainActor func runIntegrationTestM(newVersion: Bool, test: Bool)
     async throws {               // M for MainActor
-        let amountW = Amount(currency: DEMOCURRENCY, integer: 3, fraction: 0)
-        let amountS = Amount(currency: DEMOCURRENCY, integer: 1, fraction: 0)
+        let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 3, fraction: 0)
+        let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 1, fraction: 0)
         let request = WalletBackendRunIntegration(newVersion: newVersion,
                                                   amountToWithdraw: amountW,
                                                   amountToSpend: amountS,
-                                                  bankBaseUrl: DEMO_BANKAPIBASEURL,
-                                                  bankAccessApiBaseUrl: DEMO_BANKAPIBASEURL,
-                                                  exchangeBaseUrl: DEMO_EXCHANGEBASEURL,
-                                                  merchantBaseUrl: DEMO_MERCHANTBASEURL,
-                                                  merchantAuthToken: DEMO_MERCHANTAUTHTOKEN)
+                                                  bankBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL,
+                                                  bankAccessApiBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL,
+                                                  exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
+                                                  merchantBaseUrl: test ? TESTBACKEND : DEMOBACKEND,
+                                                  merchantAuthToken: MERCHANTAUTHTOKEN)
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 } // runIntegrationTestM()

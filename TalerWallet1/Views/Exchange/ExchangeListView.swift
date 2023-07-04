@@ -36,7 +36,7 @@ struct ExchangeListView: View {
     }
 
     @State var showAlert: Bool = false
-    @State var newExchange: String = "https://exchange-age.taler.ar/"
+    @State var newExchange: String = TESTEXCHANGE
 
     var body: some View {
 #if DEBUG
