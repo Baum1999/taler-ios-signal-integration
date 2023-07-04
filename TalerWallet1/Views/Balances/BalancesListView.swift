@@ -131,7 +131,6 @@ extension BalancesListView {
         @Binding var summary: String
         var reloadAction: () async -> Int
 
-        @State private var shouldLoad = false
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
@@ -153,18 +152,13 @@ extension BalancesListView {
                 }
                 .listStyle(myListStyle.style).anyView
             }
-            .onAppear {
-                if shouldLoad {
-                    shouldLoad = false
-                    symLog?.log(".onAppear: shouldLoad ==> reloading balances")
-                    Task { await reloadAction() }
-                }
-            }
-            // automatically reload balances after receiving BalanceChange notification ...
             .onNotification(.BalanceChange) { notification in
-                // doesn't need to be received on main thread because we just reload in the background anyway
-                symLog?.log(".onNotification(.BalanceChange) ==> shouldLoad = true")
-                shouldLoad = true
+                // reload balances on receiving BalanceChange notification ...
+                // doesn't need to be received on main thread because we just reload in a background task anyway
+                symLog?.log(".onNotification(.BalanceChange) ==> reload")
+                Task {
+                    await reloadAction()
+                }
             }
         } // body
     } // Content
