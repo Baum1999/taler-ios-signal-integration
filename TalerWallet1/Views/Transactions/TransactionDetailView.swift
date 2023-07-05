@@ -197,9 +197,8 @@ struct TransactionDetailView: View {
                                          baseURL: details.exchangeBaseUrl, large: false)
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
-                        let info = details.info
-                        Text(info.summary)
-                            .font(.title)
+                        Text(details.info.summary)
+                            .font(.title2)
                             .lineLimit(4)
                             .padding(.bottom)
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Sum to be paid:"),
@@ -222,6 +221,10 @@ struct TransactionDetailView: View {
                                          baseURL: nil, large: true)     // TODO: baseURL
                     case .peer2peer(let p2pTransaction):
                         let details = p2pTransaction.details                    // TODO: details
+                        Text(details.info.summary)
+                            .font(.title2)
+                            .lineLimit(4)
+                            .padding(.bottom)
                         // TODO: isSendCoins should show QR only while not expired
                         if pending || transaction.isSendCoins {
                             QRCodeDetails(transaction: transaction)
