@@ -38,7 +38,7 @@ struct RequestPayment: View {
                            currency: currency, amountEffective: peerPullCheck?.amountEffective)
 
             HStack {
-                let disabled = centsToTransfer == 0
+                let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
 
                 NavigationLink(destination: LazyView {
                     PaymentPurpose(scopeInfo: scopeInfo,

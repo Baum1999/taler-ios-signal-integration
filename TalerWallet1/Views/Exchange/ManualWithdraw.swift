@@ -31,18 +31,18 @@ struct ManualWithdraw: View {
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
         ScrollViewReader { scrollView in
-          VStack {
-            Text("from \(exchange.exchangeBaseUrl.trimURL())")
-                .font(.title3)
-            CurrencyInputView(currencyField: currencyField,
-                              title: String(localized: "Amount to withdraw:"))
+            VStack {
+                Text("from \(exchange.exchangeBaseUrl.trimURL())")
+                    .font(.title3)
+                CurrencyInputView(currencyField: currencyField,
+                                  title: String(localized: "Amount to withdraw:"))
 
-            let someCoins = SomeCoins(details: withdrawalAmountDetails)
-            QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
-                           currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
+                let someCoins = SomeCoins(details: withdrawalAmountDetails)
+                QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
+                               currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
 
-            if !someCoins.invalid {
-                if !someCoins.tooMany {
+                let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
+                if !disabled {
 //                    agePicker
 
                     if let tosAccepted = withdrawalAmountDetails?.tosAccepted {
@@ -67,10 +67,9 @@ struct ManualWithdraw: View {
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
                         }
                     }
-                } // tooMany
-            } // invalid
-            Spacer()
-          }
+                } // disabled
+                Spacer()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
