@@ -64,18 +64,23 @@ struct ThreeAmountsView: View {
                        color: foreColor,
                        large: large)
             if let baseURL {
-                VStack {
+                VStack(alignment: .leading) {
                     Text(incoming ? "from Exchange:" : "to Exchange:")
-                        .font(.title3)
-                    Text(baseURL.trimURL())
-                        .font(large ? .title : .title2)
-                        .fontWeight(large ? .medium : .regular)
-                        .foregroundColor(labelColor)
+                        .multilineTextAlignment(.leading)
+                        .font(.body)
+                    HStack {
+                        Spacer()
+                        Text(baseURL.trimURL())
+                            .multilineTextAlignment(.center)
+                            .font(large ? .title : .title2)
+                        //                        .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+                            .foregroundColor(labelColor)
+                        Spacer()
+                    }
                 }
                 .padding(.top, 4)
-                .frame(maxWidth: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)
-
             }
             if let status {
                 HStack {
@@ -99,7 +104,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                   txActions: [])
         Group {
             List {
-                ThreeAmountsSheet(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==1)
+                ThreeAmountsSheet(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==0)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))

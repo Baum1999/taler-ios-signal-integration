@@ -9,16 +9,23 @@ struct AmountView: View {
     let value: String
     let color: Color
     let large: Bool      // set to false for QR or IBAN
+
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(title)
-                .font(.title3)
-            Text(value)
-                .font(large ? .largeTitle : .title)
-                .fontWeight(large ? .medium : .regular)
-                .foregroundColor(color)
+                .multilineTextAlignment(.leading)
+                .font(.body)
+            HStack {
+                Spacer()
+                Text(value)
+                    .multilineTextAlignment(.center)
+                    .font(large ? .title : .title2)
+//                    .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+                    .foregroundColor(color)
+                Spacer()
+            }
         }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .listRowSeparator(.hidden)
     }
 }
