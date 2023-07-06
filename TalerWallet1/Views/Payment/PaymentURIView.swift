@@ -22,7 +22,7 @@ struct PaymentURIView: View {
     func acceptAction(detailsForUri: PaymentDetailsForUri) {
         Task {
             do {
-                let confirmPayResult = try await model.confirmPayM(detailsForUri.proposalId)
+                let confirmPayResult = try await model.confirmPayM(detailsForUri.transactionId)
                 symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
                     controller.playSound(0)
@@ -85,34 +85,43 @@ struct PaymentURIView_Previews: PreviewProvider {
         let merchant = Merchant(name: "Merchant")
         let extra = Extra(articleName: "articleName")
         let product = Product(description: "description")
-        let terms = ContractTerms(amount: try! Amount(fromString: LONGCURRENCY + ":2.2"),
-                                  maxFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
-                                  maxWireFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
-                                  merchant: merchant,
-                                  extra: extra,
-                                  summary: "summary",
-                                  timestamp: Timestamp.now(),
-                                  payDeadline: Timestamp.tomorrow(),
-                                  refundDeadline: Timestamp.tomorrow(),
-                                  wireTransferDeadline: Timestamp.tomorrow(),
-                                  merchantBaseURL: "merchantBaseURL",
-                                  fulfillmentURL: "fulfillmentURL",
-                                  publicReorderURL: "publicReorderURL",
-                                  auditors: [],
-                                  exchanges: [],
-                                  orderID: "orderID",
-                                  nonce: "nonce",
-                                  merchantPub: "merchantPub",
-                                  products: [product],
-                                  hWire: "hWire",
-                                  wireMethod: "wireMethod",
-                                  wireFeeAmortization: 0)
+        let terms = MerchantContractTerms(hWire: "hWire",
+                                          wireMethod: "wireMethod",
+                                          summary: "summary",
+                                            summaryI18n: nil,
+                                          nonce: "nonce",
+                                          amount: try! Amount(fromString: LONGCURRENCY + ":2.2"),
+                                          payDeadline: Timestamp.tomorrow(),
+                                          maxFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                          merchant: merchant,
+                                          merchantPub: "merchantPub",
+                                            deliveryDate: nil,
+                                            deliveryLocation: nil,
+                                          exchanges: [],
+                                          products: [product],
+                                          refundDeadline: Timestamp.tomorrow(),
+                                          wireTransferDeadline: Timestamp.tomorrow(),
+                                          timestamp: Timestamp.now(),
+                                          orderID: "orderID",
+                                          merchantBaseURL: "merchantBaseURL",
+                                            fulfillmentURL: "fulfillmentURL",
+                                            publicReorderURL: "publicReorderURL",
+                                            fulfillmentMessage: nil,
+                                            fulfillmentMessageI18n: nil,
+                                          wireFeeAmortization: 0,
+                                          maxWireFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                            minimumAge: nil,
+                                          extra: extra
+//                                          auditors: [],
+                                  )
         let details = PaymentDetailsForUri(
+            status: PreparePayResultType.paymentPossible,
+            transactionId: "txn:payment:012345",
+            contractTerms: terms,
+            contractTermsHash: "termsHash",
             amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
             amountEffective: try! Amount(fromString: LONGCURRENCY + ":2.4"),
-            proposalId: "proposalId",
-            contractTerms: terms,
-            contractTermsHash: "termsHash"
+            talerUri: "talerURI"
         )
         let url = URL(string: "taler://pay/some_amount")!
         
