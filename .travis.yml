@@ -1,6 +1,0 @@
-os: osx
-language: swift
-xcode_project: Taler.xcodeproj
-xcode_scheme: Taler
-osx_image: xcode11.6
-xcode_destination: platform=iOS Simulator,OS=13.6,name=iPhone 11
