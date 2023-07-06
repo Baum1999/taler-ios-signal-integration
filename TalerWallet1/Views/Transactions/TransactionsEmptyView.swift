@@ -19,10 +19,10 @@ struct TransactionsEmptyView: View {
             Section {
                 Text("There are no transactions for \(currency).")
             }
+            .font(.title2)
         }
-        .padding(.vertical)
-        .font(.title2)
         .listStyle(myListStyle.style).anyView
+//        .padding(.vertical)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10

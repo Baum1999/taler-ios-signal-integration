@@ -16,6 +16,7 @@ struct P2pPayURIView: View {
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
@@ -34,6 +35,7 @@ struct P2pPayURIView: View {
                                      large: false, pending: false, incoming: false,
                                      baseURL: nil)
                 }
+                .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
 
                 NavigationLink(destination: LazyView {

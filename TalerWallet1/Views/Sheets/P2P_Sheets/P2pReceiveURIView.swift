@@ -11,6 +11,7 @@ import SymLog
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Accept P2P Receive")
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     // the scanned URL
     let url: URL
@@ -34,6 +35,7 @@ struct P2pReceiveURIView: View {
                                         large: false, pending: false, incoming: true,
                                       baseURL: nil)
                 }
+                .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
                 let tosAccepted = true  // TODO: https://bugs.gnunet.org/view.php?id=7869
                 if tosAccepted {

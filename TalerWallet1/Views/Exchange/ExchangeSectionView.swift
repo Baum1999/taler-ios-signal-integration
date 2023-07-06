@@ -87,16 +87,16 @@ struct ExchangeRow_Container : View {
                                   exchangeStatus: "exchangeStatus",
                            ageRestrictionOptions: [],
                                        permanent: false)
-        List {
             ExchangeSectionView(currency: LONGCURRENCY, exchanges: [exchange1, exchange2],
                                 centsToTransfer: $centsToTransfer)
-        }
     }
 }
 
 struct ExchangeRow_Previews: PreviewProvider {
     static var previews: some View {
-        ExchangeRow_Container()
+        List {
+            ExchangeRow_Container()
+        }
     }
 }
 #endif

@@ -17,6 +17,7 @@ struct WithdrawURIView: View {
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     // the exchange used for this withdrawal.
     @State private var exchangeBaseUrl: String? = nil
@@ -44,6 +45,7 @@ struct WithdrawURIView: View {
                     QuiteSomeCoins(someCoins: someCoins, shouldShowFee: false,
                                    currency: raw.currencyStr, amountEffective: effective)
                 }
+                .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
                 let tosAccepted = withdrawalAmountDetails.tosAccepted
                 if tosAccepted {

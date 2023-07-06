@@ -13,6 +13,7 @@ struct PaymentURIView: View {
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
     @EnvironmentObject private var controller: Controller
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     // the scanned URL
     let url: URL
@@ -42,7 +43,7 @@ struct PaymentURIView: View {
     var body: some View {
         if let detailsForUri {
           ScrollViewReader { scrollView in
-            VStack {
+            List {
                 let baseURL = detailsForUri.contractTerms.exchanges.first?.url
                 let raw = detailsForUri.amountRaw
                 let effective = detailsForUri.amountEffective
@@ -52,17 +53,18 @@ struct PaymentURIView: View {
                                 topAmount: raw, fee: fee,
                               bottomTitle: String(localized: "\(currency) to be spent:"),
                              bottomAmount: effective,
-                                    large: true, pending: false, incoming: false,
+                                    large: false, pending: false, incoming: false,
                                   baseURL: baseURL)
                 // TODO: payment: popup with all possible exchanges, check fees
-                .safeAreaInset(edge: .bottom) {
-                    Button(navTitle, action: { acceptAction(detailsForUri: detailsForUri) })
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
-                }
+            }
+            .listStyle(myListStyle.style).anyView
+            .safeAreaInset(edge: .bottom) {
+                Button(navTitle, action: { acceptAction(detailsForUri: detailsForUri) })
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
             }
             .navigationTitle(navTitle)
-          }
+          } // ScrollViewReader
         } else {
             let badURL = "Error in URL: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)

@@ -193,17 +193,17 @@ fileprivate struct BindingViewContainer : View {
                               scopeInfo: scopeInfo,
                       requiresUserInput: false,
                  hasPendingTransactions: true)
-        List {
-            BalancesSectionView(balance: balance,
-                        centsToTransfer: $centsToTransfer,
-                                summary: $summary)
-        }
+        BalancesSectionView(balance: balance,
+                    centsToTransfer: $centsToTransfer,
+                            summary: $summary)
     }
 }
 
 struct BalancesSectionView_Previews: PreviewProvider {
     static var previews: some View {
-        BindingViewContainer()
+        List {
+            BindingViewContainer()
+        }
     }
 }
 #endif

@@ -27,9 +27,8 @@ struct WalletEmptyView: View {
                 Text("Just register a test account, then withdraw some coins.")
             }
         }
-//        .padding(.vertical)
-        .font(.title2)
         .listStyle(myListStyle.style).anyView
+        .font(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10

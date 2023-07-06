@@ -110,12 +110,12 @@ extension TransactionsListView {
                         }
                     }
 //                    .onDelete(perform: removeItems)     // delete this row from the list
-                }
+                }.id(viewId)
+                .listStyle(myListStyle.style).anyView
                 .refreshable {
                     symLog?.log("refreshing")
                     await reloadAllAction()
-                }.id(viewId)
-                .listStyle(myListStyle.style).anyView
+                }
                 .onAppear {
                     if showUpDown {
                         upAction = { withAnimation { scrollView.scrollTo(0) }}
