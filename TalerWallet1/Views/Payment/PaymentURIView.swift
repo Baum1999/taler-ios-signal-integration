@@ -68,7 +68,7 @@ struct PaymentURIView: View {
         } else {
             let badURL = "Error in URL: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)
-                .navigationTitle("Contacting Exchange")
+                .navigationTitle("Find Exchange")
                 .task {
                     do {
                         symLog.log(".task")

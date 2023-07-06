@@ -39,6 +39,7 @@ struct URLSheet: View {
                 .navigationTitle(navTitle)
             }
         }.task {
+            symLog.log(urlToOpen)
             urlCommand = controller.openURL(urlToOpen)
         }
     }
