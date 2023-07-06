@@ -31,7 +31,7 @@ struct SendNow: View {
                     QRCodeDetailView(talerURI: talerURI,
                                      incoming: amountToSend == nil)
                     .padding()
-                    Text("The QR code can also be copied and shared from Transactions later")
+                    Text("The QR code can also be copied and shared from Transactions later.")
                         .fixedSize(horizontal: false, vertical: true)
                         .font(.subheadline)
                         .padding(.vertical, 20)

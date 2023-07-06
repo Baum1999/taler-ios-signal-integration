@@ -75,11 +75,13 @@ struct ExchangeTermsOfService: Decodable {
 fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     typealias Response = ExchangeTermsOfService
     func operation() -> String { return "getExchangeTos" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl) }
+    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat) }
 
     var exchangeBaseUrl: String
+    var acceptedFormat: [String]?
     struct Args: Encodable {
         var exchangeBaseUrl: String
+        var acceptedFormat: [String]?
     }
 }
 /// A request to mark an exchange's terms of service as accepted.
@@ -157,9 +159,9 @@ extension WalletModel {
         return response
     }
     @MainActor
-    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String)             // M for MainActor
+    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String])             // M for MainActor
       async throws -> ExchangeTermsOfService {
-        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl)
+        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }

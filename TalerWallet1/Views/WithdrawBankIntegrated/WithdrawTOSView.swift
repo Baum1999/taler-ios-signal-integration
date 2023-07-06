@@ -62,7 +62,9 @@ struct WithdrawTOSView: View {
         }.task {
             do {
                 if let exchangeBaseUrl {
-                    let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl)
+                    let acceptedFormat: [String] = ["text/markdown", "text/plain"]
+                    let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
+                                                                acceptedFormat: acceptedFormat)
                     exchangeTOS = someTOS
                 }
             } catch {    // TODO: error
