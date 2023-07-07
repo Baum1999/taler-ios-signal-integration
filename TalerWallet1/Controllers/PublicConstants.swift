@@ -27,6 +27,9 @@ public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters
 
 // MARK: - Keys used in JSON
 
+public let PLAINTEXT = "text/plain"
+public let MARKDOWN = "text/markdown"
+
 public let EXCHANGEBASEURL = "exchangeBaseUrl"
 public let TALERURI = "talerUri"
 

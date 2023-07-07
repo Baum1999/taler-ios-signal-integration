@@ -62,7 +62,7 @@ struct WithdrawTOSView: View {
         }.task {
             do {
                 if let exchangeBaseUrl {
-                    let acceptedFormat: [String] = ["text/markdown", "text/plain"]
+                    let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]
                     let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
                                                                 acceptedFormat: acceptedFormat)
                     exchangeTOS = someTOS
@@ -83,10 +83,22 @@ extension WithdrawTOSView {
 
         var body: some View {
             if let tos = exchangeTOS {
-                let components = tos.content.components(separatedBy:"\n\n")
+                let components = tos.content.components(separatedBy: "\n\n")
 
-                List (components, id: \.self) { term in
-                    Text(term)
+                List (components, id: \.self) { term0 in
+                    if tos.contentType == PLAINTEXT {
+                        let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
+                        let term2 = term1.replacingOccurrences(of: "\n"     , with: " ")    // remove all other linebreaks
+                        let term3 = term2.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
+                        let term4 = term3.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
+                        Section {
+                            Text(term4)
+                        }
+                    } else {
+                        Section {
+                            Text(term0)
+                        }
+                    }
                 }.safeAreaInset(edge: .bottom) {
                     Button(String(localized: "Accept ToS"), action: acceptAction)
                         .buttonStyle(TalerButtonStyle(type: .prominent))

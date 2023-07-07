@@ -67,9 +67,10 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
 }
 // MARK: -
 struct ExchangeTermsOfService: Decodable {
-    var content: String
     var currentEtag: String
     var acceptedEtag: String?
+    var contentType: String
+    var content: String
 }
 /// A request to query an exchange's terms of service.
 fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
