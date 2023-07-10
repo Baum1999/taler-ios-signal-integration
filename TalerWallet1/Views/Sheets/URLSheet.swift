@@ -11,36 +11,27 @@ struct URLSheet: View {
     var urlToOpen: URL
     @EnvironmentObject private var controller: Controller
 
-    @State private var urlCommand: UrlCommand? = nil
-
     var body: some View {
+        let urlCommand = controller.openURL(urlToOpen)
+
         Group {
-            if let urlCommand {
-                switch urlCommand {
-                    case .withdraw:
-                        WithdrawURIView(url: urlToOpen)
-                    case .pay:
-                        PaymentURIView(url: urlToOpen)
-                    case .payPull:
-                        P2pPayURIView(url: urlToOpen)
-                    case .payPush:
-                        P2pReceiveURIView(url: urlToOpen)
-                    case .unknown:
+            switch urlCommand {
+                case .withdraw:
+                    WithdrawURIView(url: urlToOpen)
+                case .pay:
+                    PaymentURIView(url: urlToOpen)
+                case .payPull:
+                    P2pPayURIView(url: urlToOpen)
+                case .payPush:
+                    P2pReceiveURIView(url: urlToOpen)
+                case .unknown:        // Error view
+                    VStack {
                         Text("unknown command")
-                }
-            } else {
-                VStack {        // Error view
-                    Spacer()
-                    Text(controller.messageForSheet ?? urlToOpen.absoluteString)
-                        .font(.title)
-                    Spacer()
-                    Spacer()
-                }
-                .navigationTitle(navTitle)
+                            .font(.title)
+                        Text(controller.messageForSheet ?? urlToOpen.absoluteString)
+                    }
+                    .navigationTitle(navTitle)
             }
-        }.task {
-            symLog.log(urlToOpen)
-            urlCommand = controller.openURL(urlToOpen)
         }
     }
 }
