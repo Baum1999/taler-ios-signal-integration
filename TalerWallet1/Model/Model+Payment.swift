@@ -125,11 +125,11 @@ struct PayMerchantInsufficientBalanceDetails: Codable {
 }
 
 /// The result from PreparePayForUri
-struct PaymentDetailsForUri: Codable {
+struct PreparePayResult: Codable {
     let status: PreparePayResultType
     let transactionId: String
     let contractTerms: MerchantContractTerms
-    let contractTermsHash: String
+    let contractTermsHash: String?                              // only if status != insufficientBalance
     let amountRaw: Amount
     let amountEffective: Amount?                                // only if status != insufficientBalance
     let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
@@ -138,7 +138,7 @@ struct PaymentDetailsForUri: Codable {
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
-    typealias Response = PaymentDetailsForUri
+    typealias Response = PreparePayResult
     func operation() -> String { return "preparePayForUri" }
     func args() -> Args { return Args(talerPayUri: talerPayUri) }
 
@@ -170,7 +170,7 @@ extension WalletModel {
     /// load payment details. Networking involved
     @MainActor
     func preparePayForUriM(_ talerPayUri: String)       // M for MainActor
-      async throws -> PaymentDetailsForUri {
+      async throws -> PreparePayResult {
           let request = PreparePayForUri(talerPayUri: talerPayUri)
           let response = try await sendRequest(request, ASYNCDELAY)
           return response

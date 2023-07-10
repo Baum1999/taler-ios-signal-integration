@@ -32,7 +32,7 @@ struct ThreeAmountsSheet: View {
 struct ThreeAmountsView: View {
     var topTitle: String
     var topAmount: Amount
-    var fee: Amount
+    var fee: Amount?
     var bottomTitle: String
     var bottomAmount: Amount
     let large: Bool
@@ -54,11 +54,13 @@ struct ThreeAmountsView: View {
                        color: labelColor,
                        large: large)
                 .padding(.bottom, 4)
-            AmountView(title: "Exchange fee:",
-                       value: feeSign + fee.readableDescription,
-                       color: fee.isZero ? labelColor : feeColor,
-                       large: false)
+            if let fee {
+                AmountView(title: "Exchange fee:",
+                           value: feeSign + fee.readableDescription,
+                           color: fee.isZero ? labelColor : feeColor,
+                           large: false)
                 .padding(.bottom, 4)
+            }
             AmountView(title: bottomTitle,
                        value: bottomAmount.readableDescription,
                        color: foreColor,

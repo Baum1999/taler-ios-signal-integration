@@ -20,11 +20,11 @@ struct PaymentURIView: View {
 
     @EnvironmentObject private var model: WalletModel
 
-    func acceptAction(detailsForUri: PaymentDetailsForUri) {
+    func acceptAction(preparePayResult: PreparePayResult) {
         Task {
             do {
-                let confirmPayResult = try await model.confirmPayM(detailsForUri.transactionId)
-                symLog.log(confirmPayResult as Any)
+                let confirmPayResult = try await model.confirmPayM(preparePayResult.transactionId)
+//                symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
                     controller.playSound(0)
                     // TODO: show error
@@ -38,30 +38,51 @@ struct PaymentURIView: View {
         }
     }
 
-    @State var detailsForUri: PaymentDetailsForUri? = nil
+    @State var preparePayResult: PreparePayResult? = nil
 
     var body: some View {
-        if let detailsForUri {
+        if let preparePayResult {
           ScrollViewReader { scrollView in
+            let effective = preparePayResult.amountEffective
             List {
-                let baseURL = detailsForUri.contractTerms.exchanges.first?.url
-                let raw = detailsForUri.amountRaw
-                let effective = detailsForUri.amountEffective
+                let baseURL = preparePayResult.contractTerms.exchanges.first?.url
+                let raw = preparePayResult.amountRaw
                 let currency = raw.currencyStr
-                let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-                ThreeAmountsView(topTitle: String(localized: "Amount to pay:"),
-                                topAmount: raw, fee: fee,
-                              bottomTitle: String(localized: "\(currency) to be spent:"),
-                             bottomAmount: effective,
-                                    large: false, pending: false, incoming: false,
-                                  baseURL: baseURL)
-                // TODO: payment: popup with all possible exchanges, check fees
+                let topTitle = String(localized: "Amount to pay:")
+                if let effective {
+                    // TODO: already paid
+                    let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
+                    ThreeAmountsView(topTitle: topTitle,
+                                     topAmount: raw, fee: fee,
+                                     bottomTitle: String(localized: "\(currency) to be spent:"),
+                                     bottomAmount: effective,
+                                     large: false, pending: false, incoming: false,
+                                     baseURL: baseURL)
+                    // TODO: payment: popup with all possible exchanges, check fees
+                } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
+                    Text("You don't have enough \(currency)")
+                    ThreeAmountsView(topTitle: topTitle,
+                                     topAmount: raw, fee: nil,
+                                     bottomTitle: String(localized: "\(currency) available:"),
+                                     bottomAmount: balanceDetails.balanceAvailable,
+                                     large: false, pending: false, incoming: false,
+                                     baseURL: baseURL)
+                } else {
+                    // TODO: Error - neither effective nor balanceDetails
+                    Text("Error")
+                }
             }
             .listStyle(myListStyle.style).anyView
             .safeAreaInset(edge: .bottom) {
-                Button(navTitle, action: { acceptAction(detailsForUri: detailsForUri) })
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
+                if let effective {
+                    Button(navTitle, action: { acceptAction(preparePayResult: preparePayResult) })
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
+                } else {
+                    Button("Cancel", action: { dismissTop() })
+                        .buttonStyle(TalerButtonStyle(type: .bordered))
+                        .padding(.horizontal)
+                }
             }
             .navigationTitle(navTitle)
           } // ScrollViewReader
@@ -72,8 +93,8 @@ struct PaymentURIView: View {
                 .task {
                     do {
                         symLog.log(".task")
-                        let details = try await model.preparePayForUriM(url.absoluteString)
-                        detailsForUri = details
+                        let result = try await model.preparePayForUriM(url.absoluteString)
+                        preparePayResult = result
                     } catch {    // TODO: error
                         symLog.log(error.localizedDescription)
                     }
@@ -116,17 +137,19 @@ struct PaymentURIView_Previews: PreviewProvider {
                                           extra: extra
 //                                          auditors: [],
                                   )
-        let details = PaymentDetailsForUri(
+        let details = PreparePayResult(
             status: PreparePayResultType.paymentPossible,
             transactionId: "txn:payment:012345",
             contractTerms: terms,
             contractTermsHash: "termsHash",
             amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
             amountEffective: try! Amount(fromString: LONGCURRENCY + ":2.4"),
-            talerUri: "talerURI"
+            balanceDetails: nil,
+            paid: nil
+//        ,   talerUri: "talerURI"
         )
         let url = URL(string: "taler://pay/some_amount")!
         
-        PaymentURIView(url: url, detailsForUri: details)
+        PaymentURIView(url: url, preparePayResult: details)
     }
 }
