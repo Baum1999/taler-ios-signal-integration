@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 import SymLog
+import os.log
 
 enum BackendState {
     case none
@@ -29,6 +30,7 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @AppStorage("playSounds") var playSounds: Bool = false  // extension mustn't define this, so it must be here
+    let logger = Logger (subsystem: "net.taler.gnu", category: "Controller")
 
     var messageForSheet: String? = nil
 
@@ -59,6 +61,7 @@ class Controller: ObservableObject {
 // MARK: -
 extension Controller {
     func openURL(_ url:URL) -> UrlCommand {
+        symLog.log(url)
         guard let scheme = url.scheme else {return UrlCommand.unknown}
         var uncrypted = false
         switch scheme {
