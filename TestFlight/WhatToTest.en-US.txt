@@ -1,8 +1,17 @@
 
+Version 0.9.3 (15)
+
+• New Feature: Reset wallet (Throw away all your coins)
+• Insufficient Balance detected when trying to pay sth.
+
+- Integration Test works again (was broken in 10..14)
+
+
 Version 0.9.3 (14)
 
 - ToS formatted with markdown (if the exchange supports this)
 - Payment in the shop works again (was broken in 12 + 13)
+
 
 Version 0.9.3 (13)
 

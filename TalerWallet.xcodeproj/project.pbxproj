@@ -29,7 +29,6 @@
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
 		4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
 		4E7940DE29FC307C00A9AEA1 /* SendPurpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* SendPurpose.swift */; };
-		4E7CFD382A532CE100CBAFF3 /* WhatToTest.en-US.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */; };
 		4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
 		4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8742A34B411001C6406 /* UncompletedRowView.swift */; };
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
@@ -48,7 +47,6 @@
 		4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */; };
 		4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094EC298979620043A8A1 /* TalerWallet1App.swift */; };
 		4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094EF298979D30043A8A1 /* Assets.xcassets */; };
-		4EB094F429897A510043A8A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094F329897A510043A8A1 /* Preview Assets.xcassets */; };
 		4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */; };
 		4EB094FD29897D280043A8A1 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4EB094FC29897D280043A8A1 /* SymLog */; };
 		4EB095032989C9BC0043A8A1 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095012989C9BC0043A8A1 /* Controller.swift */; };
@@ -702,10 +700,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EB094F429897A510043A8A1 /* Preview Assets.xcassets in Resources */,
 				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
 				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
-				4E7CFD382A532CE100CBAFF3 /* WhatToTest.en-US.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,7 +973,7 @@
 				CODE_SIGN_ENTITLEMENTS = "GNU Taler.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -1019,7 +1015,7 @@
 				CODE_SIGN_ENTITLEMENTS = "GNU Taler.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
