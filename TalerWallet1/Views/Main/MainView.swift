@@ -113,6 +113,7 @@ extension MainView {
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             .transition(.backslide)
                     }
+                        .navigationBarTitleDisplayMode(.automatic)
                 }.navigationViewStyle(.stack)
                 // The side view is on top of the current view
                 SideBarView(views: views,

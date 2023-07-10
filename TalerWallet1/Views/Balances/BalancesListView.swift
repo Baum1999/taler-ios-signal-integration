@@ -86,7 +86,6 @@ struct BalancesListView: View {
                 centsToTransfer: $centsToTransfer, summary: $summary,
                 reloadAction: reloadAction)
             .navigationTitle(navTitle)
-            .navigationBarTitleDisplayMode(.automatic)
             .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
                                 trailing: QRButton(action: checkCameraAvailable))
             .overlay {

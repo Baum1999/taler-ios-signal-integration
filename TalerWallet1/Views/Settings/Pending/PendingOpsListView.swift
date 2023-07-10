@@ -44,7 +44,6 @@ extension PendingOpsListView {
                     PendingOpView(pendingOp: pendingOp)
                 }
                 .listStyle(myListStyle.style).anyView
-                .navigationBarTitleDisplayMode(.large)
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_PENDING)
                 }

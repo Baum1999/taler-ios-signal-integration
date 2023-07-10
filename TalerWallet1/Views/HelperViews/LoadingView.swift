@@ -23,6 +23,7 @@ struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             LoadingView(backButtonHidden: true)
-        }
+                .navigationBarTitleDisplayMode(.automatic)
+        }.navigationViewStyle(.stack)
     }
 }

@@ -39,7 +39,6 @@ struct WithdrawTOSView: View {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.large)      // .inline
             .navigationTitle(navTitle)
             .overlay {
                 if exchangeTOS == nil {

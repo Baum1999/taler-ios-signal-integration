@@ -54,7 +54,6 @@ struct ExchangeListView: View {
                 centsToTransfer: $centsToTransfer,
                 reloadAction: reloadAction)
         .navigationTitle(navTitle)
-        .navigationBarTitleDisplayMode(.automatic)
         .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
                             trailing: PlusButton(action: plusAction)
                                         .accessibilityLabel("Add Exchange"))

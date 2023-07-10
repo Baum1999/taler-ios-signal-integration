@@ -22,9 +22,6 @@ struct TransactionsListView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let count = transactions.count
-        // TODO: Unlock the power of grammatical agreement
-//        let title = AttributedString(localized: "^[\(count) Ticket](inflect: true)")
-//        let title: String = "\(count) \(navTitle)"
         Content(symLog: symLog,
               currency: currency,
           transactions: transactions,
@@ -32,9 +29,7 @@ struct TransactionsListView: View {
            myListStyle: $myListStyle,
        reloadAllAction: reloadAllAction,
        reloadOneAction: reloadOneAction)
-//            .navigationTitle(title)
             .navigationTitle(navTitle)
-            .navigationBarTitleDisplayMode(.large)      // .inline
             .onAppear {
                 DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST)
             }

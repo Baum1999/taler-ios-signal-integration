@@ -114,6 +114,16 @@ enum PreparePayResultType: String, Codable {
     case insufficientBalance = "insufficient-balance"
 }
 
+struct PayMerchantInsufficientBalanceDetails: Codable {
+    let amountRequested: Amount
+    let balanceAvailable: Amount
+    let balanceMaterial: Amount
+    let balanceAgeAcceptable: Amount
+    let balanceMerchantAcceptable: Amount
+    let balanceMerchantDepositable: Amount
+    let feeGapEstimate: Amount
+}
+
 /// The result from PreparePayForUri
 struct PaymentDetailsForUri: Codable {
     let status: PreparePayResultType
@@ -121,8 +131,10 @@ struct PaymentDetailsForUri: Codable {
     let contractTerms: MerchantContractTerms
     let contractTermsHash: String
     let amountRaw: Amount
-    let amountEffective: Amount
-    let talerUri: String
+    let amountEffective: Amount?                                // only if status != insufficientBalance
+    let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
+    let paid: Bool?                                             // only if status == alreadyConfirmed
+//    let talerUri: String?
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {

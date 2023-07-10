@@ -28,8 +28,9 @@ struct Sheet: View {
         NavigationView {
             sheetView
                 .navigationBarItems(leading: cancelButton)
+                .navigationBarTitleDisplayMode(.automatic)
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        }
+        }.navigationViewStyle(.stack)
         .overlay(alignment: .top) {
             // Show the viewID on top of the sheet's NavigationView
             Text(idString)
