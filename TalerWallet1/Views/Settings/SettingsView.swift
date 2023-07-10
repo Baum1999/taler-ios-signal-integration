@@ -42,6 +42,28 @@ struct SettingsView: View {
     @State private var diagnosticModeEnabled = UserDefaults.standard.bool(forKey: "diagnostic_mode_enabled")
 #endif
     @State private var showDevelopItems = false
+    @State private var showResetAlert: Bool = false
+    @State private var didReset: Bool = false
+
+    private var dismissAlertButton: some View {
+        Button("Cancel", role: .cancel) {
+            showResetAlert = false
+        }
+    }
+    private var resetButton: some View {
+        Button("Reset", role: .destructive) {
+            didReset = true
+            showResetAlert = false
+            Task {
+                symLog.log("❗️Reset wallet-core❗️")
+                do {
+                    try await model.resetWalletCoreT()
+                } catch {    // TODO: show error
+                    symLog.log(error.localizedDescription)
+                }
+            }
+        }
+    }
 
     var body: some View {
 #if DEBUG
@@ -69,7 +91,7 @@ struct SettingsView: View {
                 }
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,
-                                   description: String(localized: "More information intended for debugging")) {
+                            description: String(localized: "More information intended for debugging")) {
                         DebugViewC.shared.setViewID(VIEW_SETTINGS)
                         withAnimation { showDevelopItems = developerMode }
                     }
@@ -77,15 +99,17 @@ struct SettingsView: View {
                         NavigationLink {        // whole row like in a tableView
                             LazyView { PendingOpsListView() }
                         } label: {
-                            SettingsItem(name: String(localized: "Pending Operations"), description: String(localized: "Exchange not yet ready...")) {}
+                            SettingsItem(name: String(localized: "Pending Operations"),
+                                  description: String(localized: "Exchange not yet ready...")) {}
                         }
                         SettingsToggle(name: String(localized: "Set 2 seconds delay"), value: $developDelay,
-                                       description: String(localized: "After each wallet-core action"))
+                                description: String(localized: "After each wallet-core action"))
                         .onChange(of: developDelay, perform: { developDelay in
                             walletCore.developDelay = developDelay
                         })
 
-                        SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"), description: String(localized: "Get money for testing")) {
+                        SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"),
+                              description: String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task {
@@ -100,7 +124,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }
-                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"), description: String(localized: "Get money for testing")) {
+                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"),
+                              description: String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task {
@@ -116,7 +141,7 @@ struct SettingsView: View {
                             .disabled(withDrawDisabled)
                         }
                         SettingsItem(name: String(localized: "Run Integration Test"),
-                                     description: String(localized: "Perform basic test transactions")) {
+                              description: String(localized: "Perform basic test transactions")) {
                             Button("Demo 1") {
                                 checkDisabled = true    // don't run twice
                                 Task {
@@ -132,23 +157,15 @@ struct SettingsView: View {
                             .disabled(checkDisabled)
                         }
                         SettingsItem(name: String(localized: "Run Integration Test"),
-                                     description: String(localized: "Perform basic test transactions")) {
+                              description: String(localized: "Perform basic test transactions")) {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
-                                Task {
-                                    symLog.log("running integration test on test")
-                                    do {
-                                        try await model.runIntegrationTestM(newVersion: false, test: true)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
-                                }
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
                         SettingsItem(name: String(localized: "Run Integration Test V2"),
-                                     description: String(localized: "Perform more test transactions")) {
+                              description: String(localized: "Perform more test transactions")) {
                             Button("Demo 2") {
                                 checkDisabled = true    // don't run twice
                                 Task {
@@ -164,7 +181,7 @@ struct SettingsView: View {
                             .disabled(checkDisabled)
                         }
                         SettingsItem(name: String(localized: "Run Integration Test V2"),
-                                     description: String(localized: "Perform more test transactions")) {
+                              description: String(localized: "Perform more test transactions")) {
                             Button("Test 2") {
                                 checkDisabled = true    // don't run twice
                                 Task {
@@ -180,13 +197,21 @@ struct SettingsView: View {
                             .disabled(checkDisabled)
                         }
                         SettingsItem(name: String(localized: "Save Logfile"),
-                                     description: String(localized: "Help debugging wallet-core")) {
+                              description: String(localized: "Help debugging wallet-core")) {
                             Button("Save") {
                                 symLog.log("Saving Log")
                                 // FIXME: Save Logfile
                             }
                             .buttonStyle(.bordered)
                             .disabled(true)
+                        }
+                        SettingsItem(name: String(localized: "Reset Wallet"),
+                              description: String(localized: "Throw away all your coins")) {
+                            Button("Reset") {
+                                showResetAlert = true
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(didReset)
                         }
                     }
                 }
@@ -210,7 +235,7 @@ struct SettingsView: View {
                     SettingsItem(name: "Used Bank") {
                         Text(verbatim: "\(walletCore.versionInfo!.bank)")
                     }
-                }
+                } // App version info
             }
             .listStyle(myListStyle.style).anyView
         }
@@ -220,6 +245,12 @@ struct SettingsView: View {
             showDevelopItems = developerMode
             DebugViewC.shared.setViewID(VIEW_SETTINGS)
         }
+        .alert("Reset Wallet",
+               isPresented: $showResetAlert,
+               actions: { dismissAlertButton
+                          resetButton },
+               message: {   Text("Are you sure you want to throw away all your coins?\nThis cannot be reverted, all money will be gone.") })
+
 #if !DEBUG
         .onReceive(
             NotificationCenter.default

@@ -98,7 +98,7 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         var versionInfo: VersionInfo
     }
 }
-// MARK: -
+
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
     func initWalletCoreT() async throws -> VersionInfo {
@@ -122,5 +122,23 @@ extension WalletModel {
             logger.error("documentURLs empty")
             throw WalletBackendError.initializationError
         }
+    }
+}
+// MARK: -
+///  A request to initialize Wallet-core
+fileprivate struct ResetRequest: WalletBackendFormattedRequest {
+    func operation() -> String { return "reset" }
+    func args() -> Args { return Args() }
+
+    struct Args: Encodable {}                           // no arguments needed
+    struct Response: Decodable {}
+}
+
+extension WalletModel {
+    /// reset Wallet-Core
+    func resetWalletCoreT() async throws {
+        // T for any Thread
+        let request = ResetRequest()
+        _ = try await sendRequest(request, 0)
     }
 }
