@@ -90,8 +90,18 @@ extension WithdrawTOSView {
                         let term2 = term1.replacingOccurrences(of: "\n"     , with: " ")    // remove all other linebreaks
                         let term3 = term2.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
                         let term4 = term3.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
-                        Section {
-                            Text(term4)
+                        let term5 = term4.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
+//                        Text("term0")
+                        if #available(iOS 16.0, *) {
+                            Section {
+                                Text(term5)
+                                    .font(.footnote)
+                                    .foregroundColor(Color(UIColor.label))
+                            }
+                        } else {
+                            Text(term5)
+                                .font(.footnote)
+                                .foregroundColor(Color(UIColor.label))
                         }
                     } else {
                         Section {
