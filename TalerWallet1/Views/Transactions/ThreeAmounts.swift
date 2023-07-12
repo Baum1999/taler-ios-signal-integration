@@ -19,13 +19,14 @@ struct ThreeAmountsSheet: View {
         let incoming = common.incoming()
         let pending = (common.txState.major == TransactionMajorState.pending)
 
-        let defaultBottomTitle = incoming ? (pending ? "Pending coins to obtain:" : "Obtained coins:")
-                                                     : "Paid coins:"
+        let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending coins to obtain:")
+                                                     : String(localized: "Obtained coins:") )
+                                          :            String(localized: "Paid coins:")
         ThreeAmountsView(topTitle: topTitle, topAmount: raw, fee: fee,
                       bottomTitle: bottomTitle ?? defaultBottomTitle, bottomAmount: effective,
                             large: large, pending: pending, incoming: incoming,
                           baseURL: baseURL,
-                           status: common.txState.major.rawValue)
+                           status: common.txState.major.localizedState)
     }
 }
 // MARK: -
@@ -74,8 +75,8 @@ struct ThreeAmountsView: View {
                         Spacer()
                         Text(baseURL.trimURL())
                             .multilineTextAlignment(.center)
-                            .font(large ? .title : .title2)
-                        //                        .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+                            .font(large ? .title2 : .title3)
+//                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                             .foregroundColor(labelColor)
                         Spacer()
                     }

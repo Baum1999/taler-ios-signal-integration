@@ -23,7 +23,7 @@ struct QRCodeDetailView: View {
                 QRGeneratorView(text: talerURI)
 //                Text(talerURI)
 
-                Text("Alternatively, copy and send this URI:")
+                Text("Alternatively, copy and send this link:")
                     .fixedSize(horizontal: false, vertical: true)
                     .font(.title3)
                     .padding(.vertical)

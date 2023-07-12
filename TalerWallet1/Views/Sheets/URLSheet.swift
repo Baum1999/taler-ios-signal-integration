@@ -7,7 +7,7 @@ import SymLog
 
 struct URLSheet: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Examining URL")
+    let navTitle = String(localized: "Checking Link")
     var urlToOpen: URL
     @EnvironmentObject private var controller: Controller
 

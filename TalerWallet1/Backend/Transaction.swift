@@ -69,6 +69,23 @@ enum TransactionMajorState: String, Codable {
     case deleted
       // Placeholder until D37 is fully implemented
     case unknown
+
+    var localizedState: String {
+        switch self {
+            case .none:      return                   "none"
+            case .pending:   return String(localized: "Pending", comment: "TransactionMajorState")
+            case .done:      return String(localized: "Done", comment: "TransactionMajorState")
+            case .aborting:  return String(localized: "Aborting", comment: "TransactionMajorState")
+            case .aborted:   return String(localized: "Aborted", comment: "TransactionMajorState")
+            case .suspended: return                   "Suspended"
+            case .dialog:    return String(localized: "Dialog", comment: "TransactionMajorState")
+            case .suspendedAborting: return           "AbortingSuspended"
+            case .failed:    return String(localized: "Failed", comment: "TransactionMajorState")
+            case .expired:   return String(localized: "Expired", comment: "TransactionMajorState")
+            case .deleted:   return String(localized: "Deleted", comment: "TransactionMajorState")
+            case .unknown:   return String(localized: "Unknown", comment: "TransactionMajorState")
+        }
+    }
 }
 
 struct TransactionState: Codable, Hashable {

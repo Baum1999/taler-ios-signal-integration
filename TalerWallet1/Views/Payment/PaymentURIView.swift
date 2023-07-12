@@ -87,7 +87,7 @@ struct PaymentURIView: View {
             .navigationTitle(navTitle)
           } // ScrollViewReader
         } else {
-            let badURL = "Error in URL: \(url)"
+            let badURL = "Error in Link: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)
                 .navigationTitle("Find Exchange")
                 .task {

@@ -51,7 +51,7 @@ struct TransactionDetailView: View {
         let pending = transaction.isPending
         let dateString = TalerDater.dateString(from: common.timestamp)
         let localizedType = transaction.localizedType
-        let navTitle = pending ? String(localized: "Pending \(localizedType)")
+        let navTitle = pending ? String(localized: "Pending")
                                : localizedType
         Group {
             List {
@@ -229,7 +229,7 @@ struct TransactionDetailView: View {
                         if pending || transaction.isSendCoins {
                             QRCodeDetails(transaction: transaction)
                         }
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Peer to Peer:"),
+                        ThreeAmountsSheet(common: common, topTitle: transaction.localizedType,
                                          baseURL: details.exchangeBaseUrl, large: false)
                 } // switch
             } // Group

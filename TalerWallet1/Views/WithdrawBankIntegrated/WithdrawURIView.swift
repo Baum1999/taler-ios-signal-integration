@@ -11,7 +11,7 @@ import SymLog
 // after the user confirmed the withdrawal, we remind them to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Accept Withdrawal")
+    let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website
     let url: URL

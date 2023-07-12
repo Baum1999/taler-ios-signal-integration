@@ -10,7 +10,7 @@ import SymLog
 // from another user's SendInvoice. We show the P2P details.
 struct P2pPayURIView: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Pay P2P Invoice")
+    let navTitle = String(localized: "Pay P2P")
 
     // the scanned URL
     let url: URL

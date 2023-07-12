@@ -10,7 +10,7 @@ import SymLog
 // from another user's SendCoins. We show the P2P details - but first the ToS must be accepted.
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV()
-    let navTitle = String(localized: "Accept P2P Receive")
+    let navTitle = String(localized: "P2P Receive")
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     // the scanned URL
@@ -43,7 +43,7 @@ struct P2pReceiveURIView: View {
                         P2pAcceptDone(transactionId: peerPushCreditResponse.transactionId,
                                            incoming: true)
                     }) {
-                        Text("Accept Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                        Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {
