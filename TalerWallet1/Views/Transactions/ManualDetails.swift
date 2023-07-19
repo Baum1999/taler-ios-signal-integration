@@ -47,9 +47,13 @@ struct ManualDetails: View {
                     .disabled(false)
                 Spacer()
             }   .listRowSeparator(.hidden)
-            Text(verbatim: "PayTo URL")       // the only reason for this leading-aligned text is to get a nice full lenght listRowSeparator
+            Text(verbatim: "PayTo URL")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                 .font(.footnote)
-                .foregroundColor(Color.yellow)   // clear
+#if DEBUG
+                .foregroundColor(Color.yellow)
+#else
+                .foregroundColor(Color.clear)
+#endif
                 .padding(.vertical, -8)
                 .listRowSeparator(.automatic)
                 .accessibilityHidden(true)
