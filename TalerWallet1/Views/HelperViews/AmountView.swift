@@ -22,6 +22,7 @@ struct AmountView: View {
                     .font(large ? .title : .title2)
 //                    .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                     .foregroundColor(color)
+                    .monospacedDigit()
                 Spacer()
             }
         }

@@ -23,6 +23,7 @@ struct BalanceButton: View {
                 }
                 Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
                     .font(.title)
+                    .monospacedDigit()
             }
         }   .disabled(false)
             .accessibilityElement(children: /*@START_MENU_TOKEN@*/.ignore/*@END_MENU_TOKEN@*/)

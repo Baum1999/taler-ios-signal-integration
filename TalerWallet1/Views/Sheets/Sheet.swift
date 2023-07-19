@@ -36,6 +36,7 @@ struct Sheet: View {
             Text(idString)
                 .font(.caption2)
                 .foregroundColor(.purple)
+                .monospacedDigit()
                 .edgesIgnoringSafeArea(.top)
                 .id("sheetID")
         }

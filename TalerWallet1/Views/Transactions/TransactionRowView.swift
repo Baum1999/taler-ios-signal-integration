@@ -53,6 +53,7 @@ struct TransactionRowView: View {
                 Text(valueStr)
                     .font(.title)
                     .foregroundColor(foreColor)
+                    .monospacedDigit()
             }
         }
         .accessibilityElement(children: .combine)

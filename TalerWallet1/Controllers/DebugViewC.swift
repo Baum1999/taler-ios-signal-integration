@@ -118,6 +118,7 @@ struct DebugViewV: View {
             Text(viewIDString)
                 .font(.caption2)
                 .foregroundColor(.red)
+                .monospacedDigit()
             Spacer()
         }
         .edgesIgnoringSafeArea(.top)

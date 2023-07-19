@@ -28,6 +28,7 @@ struct PendingRowView: View {
                 Text(valueStr)
                     .font(.title)
                     .foregroundColor(WalletColors().pendingColor(incoming))
+                    .monospacedDigit()
 //                Text("PENDING")
 //                    .font(.callout)
 //                    .foregroundColor(WalletColors().pendingColor(incoming))

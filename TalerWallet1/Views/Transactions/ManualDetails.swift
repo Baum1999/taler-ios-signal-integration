@@ -15,9 +15,11 @@ struct ManualDetails: View {
             let iban = payURL?.iban ?? "unknown IBAN"
             let amount = common.amountRaw.readableDescription
             Text("Make a wire transfer of \(amount) to:")
+                .monospacedDigit()
                 .listRowSeparator(.hidden)
             HStack {
                 Text(iban)
+                    .monospacedDigit()
                 Spacer()
                 CopyButton(textToCopy: iban, vertical: true)
                     .accessibilityLabel("Copy IBAN")
@@ -29,6 +31,7 @@ struct ManualDetails: View {
                 .listRowSeparator(.hidden)
             HStack {
                 Text(details.reservePub)
+                    .monospacedDigit()
                     .accessibilityLabel("Taler cryptocode")
                 Spacer()
                 CopyButton(textToCopy: details.reservePub, vertical: true)
