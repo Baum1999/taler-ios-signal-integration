@@ -31,6 +31,10 @@
 		4E7940DE29FC307C00A9AEA1 /* SendPurpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* SendPurpose.swift */; };
 		4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
 		4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8742A34B411001C6406 /* UncompletedRowView.swift */; };
+		4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171C2A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf */; };
+		4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171D2A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf */; };
+		4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */; };
+		4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */; };
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
 		4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320422A14F6EA00A87B0E /* WalletColors.swift */; };
 		4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
@@ -164,6 +168,10 @@
 		4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
 		4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsEmptyView.swift; sourceTree = "<group>"; };
 		4E87C8742A34B411001C6406 /* UncompletedRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UncompletedRowView.swift; sourceTree = "<group>"; };
+		4E8C171C2A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Regular-102.otf"; sourceTree = "<group>"; };
+		4E8C171D2A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Italic-102.otf"; sourceTree = "<group>"; };
+		4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Bold-102.otf"; sourceTree = "<group>"; };
+		4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-BoldItalic-102.otf"; sourceTree = "<group>"; };
 		4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualIconWidthDomain.swift; sourceTree = "<group>"; };
 		4E9320422A14F6EA00A87B0E /* WalletColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletColors.swift; sourceTree = "<group>"; };
 		4E9320442A1645B600A87B0E /* RequestPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPayment.swift; sourceTree = "<group>"; };
@@ -290,6 +298,17 @@
 			path = TestFlight;
 			sourceTree = "<group>";
 		};
+		4E8C171B2A6509BB005B2392 /* Atkinson-Hyperlegible */ = {
+			isa = PBXGroup;
+			children = (
+				4E8C171C2A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf */,
+				4E8C171D2A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf */,
+				4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */,
+				4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */,
+			);
+			path = "Atkinson-Hyperlegible";
+			sourceTree = SOURCE_ROOT;
+		};
 		4EB094EE298979840043A8A1 /* TalerWallet1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +319,7 @@
 				4EB095052989CB7C0043A8A1 /* Helper */,
 				4EB0950C2989CB9A0043A8A1 /* Quickjs */,
 				4EB094EF298979D30043A8A1 /* Assets.xcassets */,
+				4E8C171B2A6509BB005B2392 /* Atkinson-Hyperlegible */,
 				4E363CBF2A24754200D7E98C /* Settings.bundle */,
 				4EB094F529897A9A0043A8A1 /* Preview Content */,
 			);
@@ -701,6 +721,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
+                4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */,
+				4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */,
+				4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
+				4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
