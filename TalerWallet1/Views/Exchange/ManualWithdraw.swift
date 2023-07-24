@@ -32,14 +32,14 @@ struct ManualWithdraw: View {
 
         ScrollViewReader { scrollView in
             VStack {
-                Text("from \(exchange.exchangeBaseUrl.trimURL())")
-                    .font(.title3)
                 CurrencyInputView(currencyField: currencyField,
                                   title: String(localized: "Amount to withdraw:"))
-
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)
                 QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
+                Text(exchange.exchangeBaseUrl.trimURL())
+                    .multilineTextAlignment(.center)
+//                    .font(.title3)
 
                 let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
                 if !disabled {
@@ -58,12 +58,15 @@ struct ManualWithdraw: View {
                                 Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
                         } else {
+                            Text("You must accept the Terms of Service first before you can withdraw electronic cash to your wallet.")
+                                .multilineTextAlignment(.leading)
+                                .padding()
                             NavigationLink(destination: LazyView {
                                 WithdrawTOSView(exchangeBaseUrl: exchange.exchangeBaseUrl,
                                                          viewID: VIEW_WITHDRAW_TOS,
                                                    acceptAction: nil)         // pop back to here
                             }) {
-                                Text("Check Terms of Service")  // VIEW_WITHDRAW_TOS
+                                Text("Read Terms of Service")  // VIEW_WITHDRAW_TOS
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
                         }
                     }
