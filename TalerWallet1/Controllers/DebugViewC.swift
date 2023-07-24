@@ -81,6 +81,7 @@ public let SHEET_RCV_REWARD = SHEET_PAYMENT + 10                    // 150 Recei
 // MARK: P2P Pay Invoice
 // p2p pull debit - openURL (Link or scan QR)
 public let SHEET_PAY_P2P = SHEET_RCV_REWARD + 10                    // 160 Pay P2P Invoice
+public let SHEET_PAY_P2P_ACCEPT = SHEET_PAY_P2P + 2                 // 162 Pay P2P AcceptView
 
 // MARK: P2P Receive Coins
 // p2p push credit - openURL (Link or scan QR)

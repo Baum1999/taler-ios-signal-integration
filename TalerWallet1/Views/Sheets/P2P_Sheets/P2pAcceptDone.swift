@@ -26,33 +26,32 @@ struct P2pAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let navTitle = incoming ? String(localized: "Received P2P")
-                                : String(localized: "Paid P2P")
-      ScrollViewReader { scrollView in
-        VStack {
-            TransactionDetailView(transactionId: transactionId,
-                                   reloadAction: reloadOneAction,
-                                     doneAction: { dismissTop() })
+        let navTitle = incoming ? String(localized: "Received P2P", comment: "Title, short")
+                                : String(localized: "Paid P2P", comment: "Title, short")
+        TransactionDetailView(transactionId: transactionId,
+                               reloadAction: reloadOneAction,
+                                 doneAction: { dismissTop() })
             .navigationBarBackButtonHidden(true)
             .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)
-        }.onAppear() {
-            symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_RCV_P2P_ACCEPT)
-        }.task {
-            do {
-                if incoming {
-                    _ = try await model.acceptPeerPushCreditM(transactionId)
-                } else {
-                    _ = try await model.confirmPeerPullDebitM(transactionId)
-                }
-                finished = true
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                controller.playSound(0)
+            .onAppear() {
+                symLog.log("onAppear")
+                DebugViewC.shared.setSheetID(incoming ? SHEET_RCV_P2P_ACCEPT
+                                                      : SHEET_PAY_P2P_ACCEPT)
             }
-        }
-      }
+            .task {
+                do {
+                    if incoming {
+                        _ = try await model.acceptPeerPushCreditM(transactionId)
+                    } else {
+                        _ = try await model.confirmPeerPullDebitM(transactionId)
+                    }
+                    finished = true
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    controller.playSound(0)
+                }
+            }
     }
 }
 // MARK: -
