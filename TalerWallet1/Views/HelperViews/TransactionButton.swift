@@ -49,19 +49,23 @@ struct TransactionButton: View {
                     switch command {
                         case .delete:
                             Text("Delete from list" + spaces)
-                            Image(systemName: "trash")                  // 􀈑
+                            Image(systemName: "trash")                          // 􀈑
                         case .abort:
                             Text("Abort" + spaces)
-                            Image(systemName: "x.circle")               // 􀀲
+                            Image(systemName: "x.circle")                       // 􀀲
                         case .fail:
                             Text("Fail" + spaces)
-                            Image(systemName: "fanblades.slash")        // 􁝚
+                            Image(systemName: "play.slash")                     // 􀪅
                         case .suspend:
                             Text("Suspend" + spaces)
-                            Image(systemName: "clock.badge.xmark")      // 􁜒
+                            if #available(iOS 16.0, *) {
+                                Image(systemName: "clock.badge.xmark")          // 􁜒
+                            } else {
+                                Image(systemName: "clock.badge.exclamationmark")// 􀹶
+                            }
                         case .resume:
                             Text("Resume" + spaces)
-                            Image(systemName: "clock.arrow.circlepath") // 􀣔
+                            Image(systemName: "clock.arrow.circlepath")         // 􀣔
                     }
                 }
             }
@@ -70,7 +74,6 @@ struct TransactionButton: View {
         })
         .buttonStyle(.bordered)
         .controlSize(.large)
-        .padding(.horizontal)
         .disabled(disabled)
     }
 
