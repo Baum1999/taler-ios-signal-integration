@@ -17,7 +17,7 @@ struct SendAmount: View {
     @EnvironmentObject private var model: WalletModel
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
-    @State private var expireDays: UInt = 0
+    @State private var expireDays: UInt = SEVENDAYS
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> String {
         do {

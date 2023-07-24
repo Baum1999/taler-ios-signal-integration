@@ -19,36 +19,48 @@ struct SelectDays: View {
     let maxExpiration: UInt
 
     func oneDayAction() -> Void {
-        selected = 1
+        selected = ONEDAY
         symLog.log(selected)
     }
 
     func sevenDayAction() -> Void {
-        selected = 7
+        selected = SEVENDAYS
         symLog.log(selected)
     }
 
     func thirtyDayAction() -> Void {
-        selected = 30
+        selected = THIRTYDAYS
         symLog.log(selected)
     }
 
     var body: some View {
         HStack {
             Button(action: oneDayAction) {
-                Text(developerMode ? "3 Min." : "1 Day")
-            }.buttonStyle(TalerButtonStyle(type: (selected == 1) ? .prominent : .bordered, dimmed: true))
+                if developerMode {
+                    Text(verbatim: "3 Min.")
+                } else {
+                    Text("\(ONEDAY) Day", comment: "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer")     // TODO: Plural
+                }
+            }.buttonStyle(TalerButtonStyle(type: (selected == ONEDAY) ? .prominent : .bordered, dimmed: true))
                 .disabled(!isEnabled)
 
             Button(action: sevenDayAction) {
-                Text(developerMode ? "1 Hour" : "7 Days")
-            }.buttonStyle(TalerButtonStyle(type: (selected == 7) ? .prominent : .bordered, dimmed: true))
-                .disabled(!isEnabled || maxExpiration < 7)
+                if developerMode {
+                    Text(verbatim: "1 Hour")
+                } else {
+                    Text("\(SEVENDAYS) Days", comment: "7 Days, always plural (3..9), 4 letters max., abbreviate if longer")
+                }
+            }.buttonStyle(TalerButtonStyle(type: (selected == SEVENDAYS) ? .prominent : .bordered, dimmed: true))
+                .disabled(!isEnabled || maxExpiration < SEVENDAYS)
 
             Button(action: thirtyDayAction) {
-                Text(developerMode ? "1 Day" : "30 Days")
-            }.buttonStyle(TalerButtonStyle(type: (selected == 30) ? .prominent : .bordered, dimmed: true))
-                .disabled(!isEnabled || maxExpiration < 30)
+                if developerMode {
+                    Text(verbatim: "1 Day")
+                } else {
+                    Text("\(THIRTYDAYS) Days", comment: "30 Days, always plural (10..30), 4 letters max., abbreviate if longer")
+                }
+            }.buttonStyle(TalerButtonStyle(type: (selected == THIRTYDAYS) ? .prominent : .bordered, dimmed: true))
+                .disabled(!isEnabled || maxExpiration < THIRTYDAYS)
         } // 3 buttons
     }
 }

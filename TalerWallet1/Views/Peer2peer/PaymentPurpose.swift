@@ -58,7 +58,7 @@ struct PaymentPurpose: View {
                 Text("Expires in:")
                     .font(.title3)
 
-                SelectDays(selected: $expireDays, maxExpiration: 35)
+                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
                     .disabled(false)
                     .padding(.bottom)
 

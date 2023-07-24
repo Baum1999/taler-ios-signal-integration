@@ -58,7 +58,7 @@ struct SendPurpose: View {
                     .font(.title3)
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
-                SelectDays(selected: $expireDays, maxExpiration: 35)
+                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
                     .disabled(false)
                     .padding(.bottom)
 
