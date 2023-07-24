@@ -65,7 +65,7 @@ struct PaymentPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)
 
                 NavigationLink(destination: LazyView {
-                    SendNow(amountToSend: nil,
+                    SendDone(amountToSend: nil,
                             amountToReceive: amount,
                             summary: summary, expireDays: expireDays)
                 }) {

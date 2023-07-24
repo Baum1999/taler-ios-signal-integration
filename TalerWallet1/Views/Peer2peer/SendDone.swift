@@ -6,13 +6,15 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-struct SendNow: View {
+struct SendDone: View {
     private let symLog = SymLogV()
+    let navTitle = String(localized: "P2P Ready")
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let amountToSend: Amount?
     let amountToReceive: Amount?
@@ -24,37 +26,39 @@ struct SendNow: View {
     @State var talerURI: String = ""
 
     var body: some View {
-        VStack {
+        List {
+            let incoming = (amountToSend == nil)
+            QRCodeDetailView(talerURI: talerURI,
+                             incoming: incoming,
+                               amount: incoming ? amountToReceive : amountToSend)
+            Text("QR code and link can also be scanned or copied / shared from Transactions later.")
+                .multilineTextAlignment(.leading)
+                .font(.subheadline)
+                .padding(.top)
+        }
+        .listStyle(myListStyle.style).anyView
+        .safeAreaInset(edge: .bottom) {
+            Button("Done") {
+                withAnimation() { ViewState.shared.popToRootView() }
+            }
+            .buttonStyle(TalerButtonStyle(type: .prominent))
+            .padding(.horizontal)
+        }
+        .overlay {
             if talerURI.isEmpty {
                 LoadingView(backButtonHidden: true)
-            } else {
-                    QRCodeDetailView(talerURI: talerURI,
-                                     incoming: amountToSend == nil)
-                    .padding()
-                    Text("The QR code can also be copied and shared from Transactions later.")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .font(.subheadline)
-                        .padding(.vertical, 20)
-
-                    Spacer()
-                    Button("Done") {
-                        withAnimation(){ ViewState.shared.popToRootView() }
-                    }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding()
-
             }
         }
-//        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-//        .padding(.horizontal)
         .interactiveDismissDisabled()       // can only use "Done" button to dismiss
-        .navigationBarHidden(true)          // no back button, no title
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle(navTitle)
+//        .navigationBarHidden(true)          // no back button, no title
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .task {
             symLog.log(".task")
             do {
                 // generate talerURI
-                var timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
+                let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
                                                                       : expireDays > 5 ? 60 : 3)
                                               : Timestamp.inSomeDays(expireDays)
                 if let amountToSend {
@@ -83,7 +87,7 @@ struct SendNow: View {
 struct SendNow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SendNow(amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
+            SendDone(amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
                     amountToReceive: nil,
                     summary: "some purpose",
                     expireDays: 0,

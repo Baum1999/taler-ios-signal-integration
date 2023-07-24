@@ -65,7 +65,7 @@ struct SendPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
-                    SendNow(amountToSend: amount,
+                    SendDone(amountToSend: amount,
                             amountToReceive: nil,
                             summary: summary, expireDays: expireDays)
                 }) {
