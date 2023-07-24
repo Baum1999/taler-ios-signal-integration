@@ -14,49 +14,42 @@ struct ManualDetails: View {
             let payURL = URL(string: payto)
             let iban = payURL?.iban ?? "unknown IBAN"
             let amount = common.amountRaw.readableDescription
-            Text("Make a wire transfer of \(amount) to:")
-                .monospacedDigit()
+            Text("From your regular bank account, make a wire transfer of \(amount) to:")
+                .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             HStack {
                 Text(iban)
                     .monospacedDigit()
                 Spacer()
                 CopyButton(textToCopy: iban, vertical: true)
-                    .accessibilityLabel("Copy IBAN")
+                    .accessibilityLabel("Copy the IBAN")
                     .disabled(false)
             }   .padding(.leading)
                 .padding(.vertical, -8)
                 .listRowSeparator(.hidden)
-            Text("and use the transaction subject:")
+            Text("with the code below as subject to receive the money in this wallet:")
+                .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             HStack {
                 Text(details.reservePub)
                     .monospacedDigit()
-                    .accessibilityLabel("Taler cryptocode")
+                    .accessibilityLabel("Cryptocode")
                 Spacer()
                 CopyButton(textToCopy: details.reservePub, vertical: true)
-                    .accessibilityLabel("Copy subject")
+                    .accessibilityLabel("Copy the cryptocode")
                     .disabled(false)
             }   .padding(.leading)
-                .padding(.vertical, -8)
                 .listRowSeparator(.hidden)
             HStack {
+                Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                    .accessibilityHidden(true)
+                    .foregroundColor(Color.clear)
                 Spacer()
                 ShareButton(textToShare: payto)
-                    .accessibilityLabel("Share PayTo URL")
+                    .accessibilityLabel("Share the PayTo URL")
                     .disabled(false)
                 Spacer()
-            }   .listRowSeparator(.hidden)
-            Text(verbatim: "PayTo URL")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-                .font(.footnote)
-#if DEBUG
-                .foregroundColor(Color.yellow)
-#else
-                .foregroundColor(Color.clear)
-#endif
-                .padding(.vertical, -8)
-                .listRowSeparator(.automatic)
-                .accessibilityHidden(true)
+            }   .listRowSeparator(.automatic)
         }
     }
 }
