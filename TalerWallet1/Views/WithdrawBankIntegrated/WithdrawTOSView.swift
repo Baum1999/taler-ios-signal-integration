@@ -109,7 +109,7 @@ extension WithdrawTOSView {
                         }
                     }
                 }.safeAreaInset(edge: .bottom) {
-                    Button(String(localized: "Accept ToS"), action: acceptAction)
+                    Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }

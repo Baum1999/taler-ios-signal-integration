@@ -56,12 +56,15 @@ struct WithdrawURIView: View {
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {
+                    Text("You must accept the Terms of Service first before you can withdraw electronic cash to your wallet.")
+                        .multilineTextAlignment(.leading)
+                        .padding()
                     NavigationLink(destination: LazyView {
                         WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
                                                  viewID: SHEET_WITHDRAW_TOS,
                                            acceptAction: nil)         // pop back to here
                     }) {
-                        Text("Check Terms of Service")  // VIEW_WITHDRAW_TOS
+                        Text("Read Terms of Service")  // VIEW_WITHDRAW_TOS
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 }
