@@ -186,16 +186,19 @@ extension WalletCore {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
             if decoded.newTxState != decoded.oldTxState {
-                if decoded.newTxState.major == .done {
-                    let components = decoded.transactionId.components(separatedBy: [":"])
-                    if components.count >= 3 {  // txn:$txtype:$uid
-                        if let type = TransactionType(rawValue: components[1]) {
+                let components = decoded.transactionId.components(separatedBy: [":"])
+                if components.count >= 3 {  // txn:$txtype:$uid
+                    if let type = TransactionType(rawValue: components[1]) {
+                        guard type != .refresh else { return }
+                        if decoded.newTxState.major == .done {
                             Controller.shared.playSound(type.isIncoming ? 2 : 1)
+                        } else if decoded.newTxState.major == .expired {
+                            Controller.shared.playSound(0)
                         }
+                        postNotification(.TransactionStateTransition,
+                                         userInfo: [TRANSACTIONTRANSITION: decoded])
                     }
                 }
-                postNotification(.TransactionStateTransition,
-                                 userInfo: [TRANSACTIONTRANSITION: decoded])
             }
         } catch {       // rethrows
             symLog.log(jsonData)       // TODO: .error
