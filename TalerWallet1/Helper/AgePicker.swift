@@ -30,7 +30,7 @@ struct AgePicker: View {
         if ageMenuList.count > 1 {
             VStack {
                 HStack {
-                    Text("If this wallet belongs to a child or teenager, the generated coins should be age-restricted:")
+                    Text("If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:")
                         .multilineTextAlignment(.leading)
                         .font(.footnote)
                     Spacer()

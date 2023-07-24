@@ -82,7 +82,7 @@ struct BalancesSectionView: View {
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
-                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send coins to another wallet.")
+                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send them to another wallet.")
                     .multilineTextAlignment(.leading)
             }
             HStack(spacing: 0) {

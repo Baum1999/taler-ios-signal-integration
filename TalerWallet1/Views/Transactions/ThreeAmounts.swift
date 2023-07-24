@@ -19,9 +19,9 @@ struct ThreeAmountsSheet: View {
         let incoming = common.incoming()
         let pending = (common.txState.major == TransactionMajorState.pending)
 
-        let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending coins to obtain:")
-                                                     : String(localized: "Obtained coins:") )
-                                          :            String(localized: "Paid coins:")
+        let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending amount to obtain:")
+                                                     : String(localized: "Obtained amount:") )
+                                          :            String(localized: "Paid amount:")
         ThreeAmountsView(topTitle: topTitle, topAmount: raw, fee: fee,
                       bottomTitle: bottomTitle ?? defaultBottomTitle, bottomAmount: effective,
                             large: large, pending: pending, incoming: incoming,

@@ -206,7 +206,7 @@ struct SettingsView: View {
                             .disabled(true)
                         }
                         SettingsItem(name: String(localized: "Reset Wallet"),
-                              description: String(localized: "Throw away all your coins")) {
+                              description: String(localized: "Throw away all your money")) {
                             Button("Reset") {
                                 showResetAlert = true
                             }
@@ -249,7 +249,7 @@ struct SettingsView: View {
                isPresented: $showResetAlert,
                actions: { dismissAlertButton
                           resetButton },
-               message: {   Text("Are you sure you want to throw away all your coins?\nThis cannot be reverted, all money will be gone.") })
+               message: {   Text("Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
 
 #if !DEBUG
         .onReceive(

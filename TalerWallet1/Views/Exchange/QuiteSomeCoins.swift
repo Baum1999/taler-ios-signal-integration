@@ -54,41 +54,24 @@ struct QuiteSomeCoins: View {
     let amountEffective: Amount?
 
     var body: some View {
-        if shouldShowFee {
-            Text(someCoins.invalid ? "Invalid amount"
-               : someCoins.tooMany ? "Too many coins for a single withdrawal"
-                : someCoins.hasFee ? "- \(someCoins.fee) withdrawal fee"
-                                   : "No withdrawal fee")
-            .foregroundColor((someCoins.invalid || someCoins.tooMany || someCoins.hasFee) ? .red : .primary)
-            .padding(4)
-        }
         if !someCoins.invalid {
-            HStack {
-                let coins: String = someCoins.unknown ? String(localized: "Some", comment: "unknown number of coins")
-                                                      : "\(someCoins.numCoins)"
-                Text(coins)
-                    .foregroundColor(someCoins.quiteSome ? .red : .primary)
-                Text(someCoins.tooMany ? "coins" : "coins to obtain:")
-                    .foregroundColor(someCoins.tooMany ? .red : .primary)
-
-                Spacer()
-                if !someCoins.tooMany {
-                    let effective = amountEffective ?? Amount(currency: currency, value: 0)
-                    Text(effective.readableDescription)
-                }
-            } // xx coins to obtain:    YYY currency
-//            .font(.title3)
-            .padding(.top)
-
             if !someCoins.tooMany {
                 if someCoins.manyCoins {
-                    Text(someCoins.quiteSome ? "Warning: It will take quite some time\nto generate this many coins!"
-                                             : "Warning: It will take some time\nto generate this many coins.")
+                    Text(someCoins.quiteSome ? "Warning: It will take quite some time to encrypt this amount!"
+                                             : "Warning: It will take some time to encrypt this amount.")
                     .multilineTextAlignment(.leading)
-                    .padding(.top, 6)
+                    .padding(.vertical, 6)
                     .foregroundColor(someCoins.quiteSome ? .red : .primary)
                 } // warnings
             }
+        }
+        if shouldShowFee {
+            Text(someCoins.invalid ? "Amount too small!"
+               : someCoins.tooMany ? "Amount too big for a single withdrawal!"
+                : someCoins.hasFee ? "- \(someCoins.fee) fee"
+                                   : "No withdrawal fee")
+            .foregroundColor((someCoins.invalid || someCoins.tooMany || someCoins.hasFee) ? .red : .primary)
+//            .padding(4)
         }
     }
 }

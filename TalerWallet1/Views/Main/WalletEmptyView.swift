@@ -24,7 +24,7 @@ struct WalletEmptyView: View {
                 Link(DEMOBANK, destination: URL(string: DEMOBANK)!)
             }
             Section {
-                Text("Just register a test account, then withdraw some coins.")
+                Text("Just register a test account, then withdraw some electronic cash.")
             }
         }
         .listStyle(myListStyle.style).anyView
