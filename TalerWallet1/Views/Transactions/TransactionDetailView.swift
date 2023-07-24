@@ -67,7 +67,16 @@ struct TransactionDetailView: View {
                 } // Suspend + Resume buttons
                 Text(dateString)
                     .font(.title2)
-//                .listRowSeparator(.hidden)
+                    .listRowSeparator(.hidden)
+                HStack {
+                    Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                        .font(.title2)
+                        .accessibilityHidden(true)
+                        .foregroundColor(Color.clear)
+                    Spacer()
+                    Text("Status: \(common.txState.major.localizedState)")
+                        .font(.title2)
+                }    .listRowSeparator(.automatic)
                 SwitchCase(transaction: $transaction)
 
                 if transaction.isAbortable { if let abortAction {
@@ -180,9 +189,10 @@ struct TransactionDetailView: View {
                                     if !confirmed {
                                         if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                             if let destination = URL(string: confirmationUrl) {
-                                                VStack {  // Show Hint that User should Confirm on bank website
+                                                VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
                                                     Text("Waiting for bank confirmation")
-                                                        .multilineTextAlignment(.leading)
+                                                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                                                        .multilineTextAlignment(.leading)                   // otherwise
                                                         .listRowSeparator(.hidden)
                                                     Link("Confirm with bank", destination: destination)
                                                         .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))

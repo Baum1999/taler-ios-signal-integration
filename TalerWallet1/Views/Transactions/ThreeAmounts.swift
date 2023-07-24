@@ -85,13 +85,6 @@ struct ThreeAmountsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)
             }
-            if let status {
-                HStack {
-                    Spacer()
-                    Text("Status: \(status)")
-                        .font(.title2)
-                }.padding()
-            }
         }
     }
 }
