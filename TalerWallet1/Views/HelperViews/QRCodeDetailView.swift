@@ -10,25 +10,37 @@ import AVFoundation
 struct QRCodeDetailView: View {
     let talerURI: String
     let incoming: Bool
+    let amount: Amount?
 
     var body: some View {
         if talerURI.count > 10 {
-            VStack {
-                Text(incoming ? "Let the payer scan this QR code to pay:"
-                              : "Let the payee scan this QR code to receive:")
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, 30)
+            VStack (alignment: .leading) {
+                // TODO: use currency formatter instead of .readableDescription
+                let amountStr = (amount == nil) ?
+                    (incoming ? String(localized: "Let the payer scan this QR code to pay:")
+                              : String(localized: "Let the payee scan this QR code to receive:"))
+                :   (incoming ? String(localized: "Let the payer scan this QR code to pay \(amount!.readableDescription):",
+                                       comment: "amount.readableDescription: 5,3 €")
+                              : String(localized: "Let the payee scan this QR code to receive \(amount!.readableDescription):",
+                                       comment: "amount.readableDescription: 7.41 $"))
+                Text(amountStr)
+                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+//                    .padding(.top, 30)
                     .font(.title3)
-
-                QRGeneratorView(text: talerURI)
-//                Text(talerURI)
+                HStack {
+                    Spacer()
+                    QRGeneratorView(text: talerURI)
+                    Spacer()
+                }
 
                 Text("Alternatively, copy and send this link:")
-                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.leading)
                     .font(.title3)
                     .padding(.vertical)
 
                 Text(talerURI)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                     .padding(.bottom)
 
                 CopyShare(textToCopy: talerURI)
@@ -44,7 +56,7 @@ fileprivate struct ContentView: View {
 
     var body: some View {
         List {
-            QRCodeDetailView(talerURI: talerURI, incoming: false)
+            QRCodeDetailView(talerURI: talerURI, incoming: false, amount: nil)
         }
     }
 }

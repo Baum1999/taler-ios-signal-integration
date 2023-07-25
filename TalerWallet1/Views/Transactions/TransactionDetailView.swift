@@ -252,7 +252,8 @@ struct TransactionDetailView: View {
                 if let talerURI = details[TALERURI] {
                     if talerURI.count > 10 {
                         QRCodeDetailView(talerURI: talerURI,
-                                         incoming: transaction.isP2pIncoming)
+                                         incoming: transaction.isP2pIncoming,
+                                           amount: transaction.common.amountRaw)
                     }
                 }
             } else if keys.contains(EXCHANGEBASEURL) {
