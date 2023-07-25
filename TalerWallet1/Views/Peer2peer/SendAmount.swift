@@ -110,9 +110,9 @@ struct SendAmount_Container : View {
     }
 }
 
-struct SendAmount_Previews: PreviewProvider {
-    static var previews: some View {
-        SendAmount_Container()
-    }
-}
+//struct SendAmount_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SendAmount_Container()
+//    }
+//}
 #endif

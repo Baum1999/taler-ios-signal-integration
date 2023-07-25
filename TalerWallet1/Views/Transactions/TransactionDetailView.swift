@@ -91,9 +91,6 @@ struct TransactionDetailView: View {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .delete, action: deleteAction)
                 } } // Delete button
-//                if let doneAction {
-//                    DoneButton(doneAction: doneAction)
-//                } // Done button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
                 .safeAreaInset(edge: .bottom) {

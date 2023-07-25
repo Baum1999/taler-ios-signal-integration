@@ -82,7 +82,7 @@ struct ManualWithdraw: View {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAWAL)
         }
-        .task(id: centsToTransfer) {
+        .task(id: centsToTransfer) { // re-run this whenever centsToTransfer changes
             let amount = Amount.amountFromCents(currency, centsToTransfer)
             do {
                 withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
