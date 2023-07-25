@@ -10,7 +10,7 @@ import AVFoundation
 /// This view shows the list of balances / currencies, each in its own section
 
 struct BalancesListView: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     let navTitle: String
     let hamburgerAction: () -> Void
 
@@ -139,8 +139,10 @@ extension BalancesListView {
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
             Group { // necessary for .backslide transition (bug in SwiftUI)
+                let count = balances.count
                 List(balances, id: \.self) { balance in
                     BalancesSectionView(balance: balance,
+                                   sectionCount: count,
                                 centsToTransfer: $centsToTransfer,
                                         summary: $summary)
                 }

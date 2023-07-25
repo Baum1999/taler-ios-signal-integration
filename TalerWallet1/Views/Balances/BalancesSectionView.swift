@@ -16,7 +16,8 @@ import SymLog
 
 struct BalancesSectionView: View {
     private let symLog = SymLogV()
-    var balance:Balance
+    let balance: Balance
+    let sectionCount: Int
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
 
@@ -174,10 +175,35 @@ struct BalancesSectionView: View {
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)
+                completedTransactions = WalletModel.completedTransactions(response)
                 shownSectionID = sectionID
 //            } else {
 //                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
 //            }
+        }
+        let transactionCount = completedTransactions.count
+        if sectionCount == 1 && transactionCount > 0 {
+            let sortedTransactions = completedTransactions.sorted {
+                do {
+                    let first = try $0.common.timestamp.milliseconds()
+                    let second = try $1.common.timestamp.milliseconds()
+                    return first > second
+                } catch {
+                    symLog.log(error)
+                    return false        // should never happen
+                }
+            }
+            Section {
+                let slice = sortedTransactions.prefix(3)
+                let threeTransactions = Array(slice)
+                TransactionsRowsView(symLog: symLog,
+                                     currency: currency,
+                                     transactions: threeTransactions,
+                                     reloadOneAction: reloadOneAction)
+            } header: {
+                Text("Last transactions")
+                    .font(.callout)
+            }
         }
     } // body
 }
@@ -194,6 +220,7 @@ fileprivate struct BindingViewContainer : View {
                       requiresUserInput: false,
                  hasPendingTransactions: true)
         BalancesSectionView(balance: balance,
+                       sectionCount: 2,
                     centsToTransfer: $centsToTransfer,
                             summary: $summary)
     }
