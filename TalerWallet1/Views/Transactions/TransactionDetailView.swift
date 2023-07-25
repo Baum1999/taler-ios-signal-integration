@@ -109,6 +109,9 @@ struct TransactionDetailView: View {
                         if newMajor == .done {
                             symLog.log("newTxState.major == done  => dismiss sheet")
                             doneAction()        // if this view is in a sheet this action will dissmiss it
+                        } else if newMajor == .expired {
+                            symLog.log("newTxState.major == expired  => dismiss sheet")
+                            doneAction()        // if this view is in a sheet this action will dissmiss it
                         } else if newMajor == .pending {
                             if let newMinor {
                                 if newMinor == .exchangeWaitReserve { // user did confirm on bank website
@@ -233,7 +236,7 @@ struct TransactionDetailView: View {
                             .lineLimit(4)
                             .padding(.bottom)
                         // TODO: isSendCoins should show QR only while not expired
-                        if pending || transaction.isSendCoins {
+                        if pending {
                             QRCodeDetails(transaction: transaction)
                         }
                         ThreeAmountsSheet(common: common, topTitle: transaction.localizedType,
