@@ -41,18 +41,17 @@ struct SendAmount: View {
 
         let fee = fee(ppCheck: peerPushCheck)
 //        ScrollViewReader { scrollView in
-          VStack {
-            let available = amountAvailable.readableDescription
-            Text("Available: \(available)")
-                .font(.title3)
-            CurrencyInputView(currencyField: currencyField,
-                              title: String(localized: "Amount to send:"))
+            VStack(alignment: .trailing) {
+                let available = amountAvailable.readableDescription
+                Text("Available: \(available)")
+                    .font(.title3)
+                    .padding(.bottom, 2)
+                CurrencyInputView(currencyField: currencyField,
+                                  title: String(localized: "Amount to send:"))
+                Text("+ \(fee) payment fee")
+                    .foregroundColor(.red)
+                    .padding(4)
 
-            Text("+ \(fee) payment fee")
-                .foregroundColor(.red)
-                .padding(4)
-
-            HStack {
                 let disabled = centsToTransfer == 0    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
@@ -61,15 +60,12 @@ struct SendAmount: View {
                                             fee: fee,
                                         summary: $summary,
                                      expireDays: $expireDays)
-//                        { deactivateAction() }
                 }) {
                     Text("To another wallet")
-                }
-                .buttonStyle(TalerButtonStyle(type: .prominent))
-                .disabled(disabled)
+                }   .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .disabled(disabled)
+                Spacer()
             }
-            Spacer()
-          }
 //        }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
@@ -83,15 +79,17 @@ struct SendAmount: View {
             symLog.log("❗️Yikes SendAmount onDisappear")
         }
         .task(id: centsToTransfer) {
-            let amount = Amount.amountFromCents(currency, centsToTransfer)
-            do {
-                let ppCheck = try await model.checkPeerPushDebitM(amount)
-                peerPushCheck = ppCheck
+            if centsToTransfer > 0 {
+                let amount = Amount.amountFromCents(currency, centsToTransfer)
+                do {
+                    let ppCheck = try await model.checkPeerPushDebitM(amount)
+                    peerPushCheck = ppCheck
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                peerPushCheck = nil
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    peerPushCheck = nil
+                }
             }
         }
     }

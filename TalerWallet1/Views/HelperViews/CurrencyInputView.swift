@@ -16,7 +16,7 @@ struct CurrencyInputView: View {
     var body: some View {
         VStack (alignment: .leading) {
             Text(title)
-                .padding(.top)
+//                .padding(.top)
                 .font(.title3)
             currencyField
                 .frame(maxWidth: .infinity, alignment: .trailing)

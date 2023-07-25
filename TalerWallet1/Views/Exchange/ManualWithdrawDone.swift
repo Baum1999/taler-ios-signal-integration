@@ -33,7 +33,8 @@ struct ManualWithdrawDone: View {
                 TransactionDetailView(transactionId: transactionId,
                                        reloadAction: reloadOneAction,
                                          doneAction: ViewState.shared.popToRootView)
-                .navigationBarBackButtonHidden(true)            // exit only by Done-Button
+                .navigationBarBackButtonHidden(true)
+                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
             } else {
                 WithdrawProgressView(message: exchange.exchangeBaseUrl.trimURL())
