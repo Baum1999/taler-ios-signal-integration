@@ -32,7 +32,13 @@ struct WithdrawAcceptDone: View {
             if let transactionId {
                 TransactionDetailView(transactionId: transactionId,
                                        reloadAction: reloadOneAction,
-                                         doneAction: { dismissTop() })
+                                           navTitle: navTitle,
+                                         doneAction: { dismissTop() },
+                                        abortAction: nil,
+                                       deleteAction: nil,
+                                         failAction: nil,
+                                      suspendAction: nil,
+                                       resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)

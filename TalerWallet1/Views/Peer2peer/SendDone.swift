@@ -23,41 +23,40 @@ struct SendDone: View {
 
     @EnvironmentObject private var model: WalletModel
 
-    @State var talerURI: String = ""
+    @State private var transactionId: String?
+
+    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId)
+    }
 
     var body: some View {
-        List {
-            let incoming = (amountToSend == nil)
-            QRCodeDetailView(talerURI: talerURI,
-                             incoming: incoming,
-                               amount: incoming ? amountToReceive : amountToSend)
-            Text("QR code and link can also be scanned or copied / shared from Transactions later.")
-                .multilineTextAlignment(.leading)
-                .font(.subheadline)
-                .padding(.top)
-        }
-        .listStyle(myListStyle.style).anyView
-        .safeAreaInset(edge: .bottom) {
-            Button("Done") {
-                withAnimation() { ViewState.shared.popToRootView() }
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        VStack {
+            if let transactionId {
+                TransactionDetailView(transactionId: transactionId,
+                                       reloadAction: reloadOneAction,
+                                           navTitle: navTitle,
+                                         doneAction: ViewState.shared.popToRootView,
+                                        abortAction: nil,
+                                       deleteAction: nil,
+                                         failAction: nil,
+                                      suspendAction: nil,
+                                       resumeAction: nil)
+                .navigationBarBackButtonHidden(true)
+                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+                .navigationTitle(navTitle)
+            } else {
+                WithdrawProgressView(message: "Loading...")
+                    .navigationTitle(navTitle)
             }
-            .buttonStyle(TalerButtonStyle(type: .prominent))
-            .padding(.horizontal)
         }
-        .overlay {
-            if talerURI.isEmpty {
-                LoadingView(backButtonHidden: true)
-            }
-        }
-        .interactiveDismissDisabled()       // can only use "Done" button to dismiss
-        .navigationBarBackButtonHidden(true)
-        .navigationTitle(navTitle)
-//        .navigationBarHidden(true)          // no back button, no title
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+//        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .task {
             symLog.log(".task")
             do {
-                // generate talerURI
                 let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
                                                                       : expireDays > 5 ? 60 : 3)
                                               : Timestamp.inSomeDays(expireDays)
@@ -67,18 +66,17 @@ struct SendDone: View {
                                         purse_expiration: timestamp)
                     // TODO: user might choose baseURL
                     let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
-                    talerURI = response.talerUri
+                    transactionId = response.transactionId
                 } else if let amountToReceive {
                     let terms = PeerContractTerms(amount: amountToReceive,
                                                  summary: summary,
                                         purse_expiration: timestamp)
                     // TODO: user might choose baseURL
                     let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
-                    talerURI = response.talerUri
-                } else { talerURI = "" }
+                    transactionId = response.transactionId
+                } else { fatalError() }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
-                talerURI = ""
             }
         } // task
     }
@@ -90,8 +88,7 @@ struct SendNow_Previews: PreviewProvider {
             SendDone(amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
                     amountToReceive: nil,
                     summary: "some purpose",
-                    expireDays: 0,
-                    talerURI: "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520")
+                    expireDays: 0)
         }
     }
 }

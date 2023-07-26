@@ -30,17 +30,19 @@ struct TransactionDetailView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
 
-    var transactionId: String
+    let transactionId: String
+    let reloadAction: ((_ transactionId: String) async throws -> Transaction)
+
+    let navTitle: String?
+    let doneAction: (() -> Void)?
+    let abortAction: ((_ transactionId: String) async throws -> Void)?
+    let deleteAction: ((_ transactionId: String) async throws -> Void)?
+    let failAction: ((_ transactionId: String) async throws -> Void)?
+    let suspendAction: ((_ transactionId: String) async throws -> Void)?
+    let resumeAction: ((_ transactionId: String) async throws -> Void)?
+
     @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
-
-    var reloadAction: ((_ transactionId: String) async throws -> Transaction)
-    var abortAction: ((_ transactionId: String) async throws -> Void)?
-    var deleteAction: ((_ transactionId: String) async throws -> Void)?
-    var failAction: ((_ transactionId: String) async throws -> Void)?
-    var doneAction: (() -> Void)?
-    var suspendAction: ((_ transactionId: String) async throws -> Void)?
-    var resumeAction: ((_ transactionId: String) async throws -> Void)?
 
     var body: some View {
 #if DEBUG
@@ -51,7 +53,7 @@ struct TransactionDetailView: View {
         let pending = transaction.isPending
         let dateString = TalerDater.dateString(from: common.timestamp)
         let localizedType = transaction.localizedType
-        let navTitle = pending ? String(localized: "Pending")
+        let navTitle2 = pending ? String(localized: "Pending")
                                : localizedType
         Group {
             List {
@@ -77,7 +79,7 @@ struct TransactionDetailView: View {
                     Text("Status: \(common.txState.major.localizedState)")
                         .font(.title2)
                 }    .listRowSeparator(.automatic)
-                SwitchCase(transaction: $transaction)
+                SwitchCase(transaction: $transaction, hasDone: doneAction != nil)
 
                 if transaction.isAbortable { if let abortAction {
                     TransactionButton(transactionId: common.transactionId,
@@ -144,7 +146,7 @@ struct TransactionDetailView: View {
                 symLog.log(notification.userInfo as Any)
             }
         }
-        .navigationTitle(navTitle)
+        .navigationTitle(navTitle ?? navTitle2)
         .task {
             do {
                 symLog.log("task - load transaction")
@@ -168,6 +170,7 @@ struct TransactionDetailView: View {
 //extension TransactionDetail {
     struct SwitchCase: View {
         @Binding var transaction: Transaction
+        let hasDone: Bool
 
         var body: some View {
             let common = transaction.common
@@ -238,6 +241,12 @@ struct TransactionDetailView: View {
                         // TODO: isSendCoins should show QR only while not expired
                         if pending {
                             QRCodeDetails(transaction: transaction)
+                            if hasDone {
+                                Text("QR code and link can also be scanned or copied / shared from Transactions later.")
+                                    .multilineTextAlignment(.leading)
+                                    .font(.subheadline)
+                                    .padding(.top)
+                            }
                         }
                         ThreeAmountsSheet(common: common, topTitle: transaction.localizedType,
                                          baseURL: details.exchangeBaseUrl, large: false)

@@ -16,8 +16,8 @@ struct ManualWithdrawDone: View {
 
     @EnvironmentObject private var model: WalletModel
 
-    @State var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
-    @State var transactionId: String?
+    @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
+    @State private var transactionId: String?
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -28,14 +28,20 @@ struct ManualWithdrawDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        VStack {
+        Group {
             if let transactionId {
                 TransactionDetailView(transactionId: transactionId,
                                        reloadAction: reloadOneAction,
-                                         doneAction: ViewState.shared.popToRootView)
+                                           navTitle: navTitle,
+                                         doneAction: ViewState.shared.popToRootView,
+                                        abortAction: nil,
+                                       deleteAction: nil,
+                                         failAction: nil,
+                                      suspendAction: nil,
+                                       resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .navigationTitle(navTitle)
+//                .navigationTitle(navTitle)
             } else {
                 WithdrawProgressView(message: exchange.exchangeBaseUrl.trimURL())
                     .navigationTitle("Loading " + navTitle)

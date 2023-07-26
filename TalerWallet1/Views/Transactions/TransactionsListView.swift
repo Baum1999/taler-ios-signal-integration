@@ -75,49 +75,41 @@ struct TransactionsListView: View {
     }
 }
 // MARK: -
-//extension TransactionsListView {
-    struct TransactionsRowsView: View {
-        let symLog: SymLogV?
-        let currency: String
-        let transactions: [Transaction]
-//        let reloadAllAction: () async -> ()
-        let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+struct TransactionsRowsView: View {
+    let symLog: SymLogV?
+    let currency: String
+    let transactions: [Transaction]
+//  let reloadAllAction: () async -> ()
+    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
-        @EnvironmentObject private var model: WalletModel
-        var body: some View {
+    @EnvironmentObject private var model: WalletModel
+    var body: some View {
 #if DEBUG
-            let _ = Self._printChanges()
-            let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+        let _ = Self._printChanges()
+        let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-            let abortAction = model.abortTransaction
-            let deleteAction = model.deleteTransaction
-            let failAction = model.failTransaction
-            let suspendAction = model.suspendTransaction
-            let resumeAction = model.resumeTransaction
-                ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
-                    NavigationLink { LazyView {        // whole row like in a tableView
-                        TransactionDetailView(transactionId: transaction.id,
-                                               reloadAction: reloadOneAction,
-                                                abortAction: abortAction,
-                                               deleteAction: deleteAction,
-                                                 failAction: failAction,
-                                              suspendAction: suspendAction,
-                                               resumeAction: resumeAction)
-                    }} label: {
-                        TransactionRowView(transaction: transaction)
-                    }
-                    .id(Int(index))
+        let abortAction = model.abortTransaction
+        let deleteAction = model.deleteTransaction
+        let failAction = model.failTransaction
+        let suspendAction = model.suspendTransaction
+        let resumeAction = model.resumeTransaction
+        ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
+            NavigationLink {
+                LazyView {
+                    TransactionDetailView(transactionId: transaction.id,
+                                           reloadAction: reloadOneAction,
+                                               navTitle: nil,
+                                             doneAction: nil,
+                                            abortAction: abortAction,
+                                           deleteAction: deleteAction,
+                                             failAction: failAction,
+                                          suspendAction: suspendAction,
+                                           resumeAction: resumeAction)
                 }
-                // pending may not be deleted, but only aborted
-//                .onDelete(perform: removeItems)     // delete this row from the list
+            } label: {
+                TransactionRowView(transaction: transaction)
+            }
+            .id(Int(index))
         }
     }
-//}
-// MARK: -
-#if DEBUG
-//struct TransactionsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TransactionsView()
-//    }
-//}
-#endif
+}

@@ -30,7 +30,13 @@ struct P2pAcceptDone: View {
                                 : String(localized: "Paid P2P", comment: "Title, short")
         TransactionDetailView(transactionId: transactionId,
                                reloadAction: reloadOneAction,
-                                 doneAction: { dismissTop() })
+                                   navTitle: navTitle,
+                                 doneAction: { dismissTop() },
+                                abortAction: nil,
+                               deleteAction: nil,
+                                 failAction: nil,
+                              suspendAction: nil,
+                               resumeAction: nil)
             .navigationBarBackButtonHidden(true)
             .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)
