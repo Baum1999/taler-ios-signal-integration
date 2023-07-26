@@ -1,4 +1,17 @@
 
+Version 0.9.3 (16)
+
+• Switch on Developer Mode in Settings, then
+• Run Integration Test (Demo 1), then immediately switch back to Balances
+• (repeat with Demo 2)
+
+- Terms of Service more self-explaining (check this before running the integration test)
+- Expiration pre-selected (middle button) in P2P
+- Transaction details: Status field on top for better recognition
+- Balances shows the last 3 transactions
+- QR screen no longer vanishes immediately (P2P)
+
+
 Version 0.9.3 (15)
 
 • New Feature: Reset wallet (Throw away all your coins)
