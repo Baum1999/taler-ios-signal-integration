@@ -27,8 +27,7 @@ struct WithdrawAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-      ScrollViewReader { scrollView in
-        VStack {
+        Group {
             if let transactionId {
                 TransactionDetailView(transactionId: transactionId,
                                        reloadAction: reloadOneAction,
@@ -62,7 +61,6 @@ struct WithdrawAcceptDone: View {
                 controller.playSound(0)
             }
         }
-      }
     }
 }
 // MARK: -

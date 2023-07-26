@@ -28,8 +28,7 @@ struct RequestPayment: View {
         let navTitle = String(localized: "Request \(currency)", comment: "Request currency, Dialog Title")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
-        ScrollViewReader { scrollView in
-          VStack {
+        ScrollView { VStack {
             CurrencyInputView(currencyField: currencyField,
                               title: String(localized: "Amount to receive:"))
 
@@ -54,8 +53,7 @@ struct RequestPayment: View {
                 .disabled(disabled)
             }
             Spacer()
-          }
-        }
+        } }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))

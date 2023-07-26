@@ -42,7 +42,6 @@ struct PaymentURIView: View {
 
     var body: some View {
         if let preparePayResult {
-          ScrollViewReader { scrollView in
             let effective = preparePayResult.amountEffective
             List {
                 let baseURL = preparePayResult.contractTerms.exchanges.first?.url
@@ -85,7 +84,6 @@ struct PaymentURIView: View {
                 }
             }
             .navigationTitle(navTitle)
-          } // ScrollViewReader
         } else {
             let badURL = "Error in Link: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)

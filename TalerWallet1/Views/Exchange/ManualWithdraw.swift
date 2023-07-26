@@ -30,7 +30,7 @@ struct ManualWithdraw: View {
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency) // becomeFirstResponder
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
-        ScrollViewReader { scrollView in
+        ScrollView {
             VStack {
                 CurrencyInputView(currencyField: currencyField,
                                   title: String(localized: "Amount to withdraw:"))

@@ -40,7 +40,7 @@ struct SendAmount: View {
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         let fee = fee(ppCheck: peerPushCheck)
-//        ScrollViewReader { scrollView in
+        ScrollView {
             VStack(alignment: .trailing) {
                 let available = amountAvailable.readableDescription
                 Text("Available: \(available)")
@@ -66,7 +66,7 @@ struct SendAmount: View {
                     .disabled(disabled)
                 Spacer()
             }
-//        }
+        }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
