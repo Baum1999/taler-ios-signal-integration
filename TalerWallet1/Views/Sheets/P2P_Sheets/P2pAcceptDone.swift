@@ -6,6 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+// Called when accepting a scanned P2P transaction (Receive coins or Pay Invoice)
 struct P2pAcceptDone: View {
     private let symLog = SymLogV()
 

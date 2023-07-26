@@ -75,6 +75,7 @@ struct TransactionsListView: View {
     }
 }
 // MARK: -
+// used by TransactionsListView, and by Balances to show the last 3 transactions
 struct TransactionsRowsView: View {
     let symLog: SymLogV?
     let currency: String

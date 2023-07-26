@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called by the user tapping "Send Coins" in the balances list
+// Called when tapping "Send Coins" in the balances list
 struct SendAmount: View {
     private let symLog = SymLogV()
 
