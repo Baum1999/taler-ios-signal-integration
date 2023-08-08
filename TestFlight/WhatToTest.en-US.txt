@@ -1,4 +1,11 @@
 
+Version 0.9.3 (17)
+
+• New Feature: Payment Sounds from carlo von lynX
+
+- Usability improved for manual withdrawal + P2P
+
+
 Version 0.9.3 (16)
 
 • Switch on Developer Mode in Settings, then
