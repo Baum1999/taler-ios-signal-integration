@@ -76,6 +76,26 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
         var exchangeBaseUrl: String
     }
 }
+
+/// A request to get info about a currency
+struct ScopedCurrencyInfo: Decodable {
+    var decimalSeparator: String
+    var numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
+    var numTinyDigits: Int              // SuperScriptDigits
+    var isCurrencyNameLeading: Bool
+}
+
+fileprivate struct GetScopedCurrencyInfo: WalletBackendFormattedRequest {
+    typealias Response = ScopedCurrencyInfo
+    func operation() -> String { return "getScopedCurrencyInfo" }
+    func args() -> Args { return Args(scope: scope) }
+
+    var scope: ScopeInfo
+
+    struct Args: Encodable {
+        var scope: ScopeInfo
+    }
+}
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
@@ -97,4 +117,12 @@ extension WalletModel {
         logger.info("adding exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request)
     }
+
+    @MainActor func getScopedCurrencyInfoM(scope: ScopeInfo)
+    async throws -> ScopedCurrencyInfo {   // M for MainActor
+        let request = GetScopedCurrencyInfo(scope: scope)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
+    }
+
 }
