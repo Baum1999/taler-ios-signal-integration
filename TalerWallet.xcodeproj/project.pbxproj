@@ -68,7 +68,7 @@
 		4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095262989CBFE0043A8A1 /* SettingsItem.swift */; };
 		4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */; };
 		4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952C2989CBFE0043A8A1 /* Model+Payment.swift */; };
-		4EB095552989CBFE0043A8A1 /* PaymentURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */; };
+		4EB095552989CBFE0043A8A1 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */; };
 		4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */; };
 		4EB095572989CBFE0043A8A1 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095302989CBFE0043A8A1 /* TransactionRowView.swift */; };
 		4EB095582989CBFE0043A8A1 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095312989CBFE0043A8A1 /* TransactionDetailView.swift */; };
@@ -206,7 +206,7 @@
 		4EB095262989CBFE0043A8A1 /* SettingsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsItem.swift; sourceTree = "<group>"; };
 		4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeListView.swift; sourceTree = "<group>"; };
 		4EB0952C2989CBFE0043A8A1 /* Model+Payment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Payment.swift"; sourceTree = "<group>"; };
-		4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentURIView.swift; sourceTree = "<group>"; };
+		4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
 		4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
 		4EB095302989CBFE0043A8A1 /* TransactionRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
 		4EB095312989CBFE0043A8A1 /* TransactionDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
@@ -451,7 +451,7 @@
 		4EB0952A2989CBFE0043A8A1 /* Payment */ = {
 			isa = PBXGroup;
 			children = (
-				4EB0952D2989CBFE0043A8A1 /* PaymentURIView.swift */,
+				4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -775,7 +775,7 @@
 				4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */,
 				4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */,
 				4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */,
-				4EB095552989CBFE0043A8A1 /* PaymentURIView.swift in Sources */,
+				4EB095552989CBFE0043A8A1 /* PaymentView.swift in Sources */,
 				4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */,
 				4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */,
 				4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */,

@@ -103,17 +103,17 @@ struct SendPurpose: View {
 }
 // MARK: -
 #if DEBUG
-struct SendPurpose_Previews: PreviewProvider {
-    static var previews: some View {
-        @State var summary: String = ""
-        @State var expireDays: UInt = 0
-        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
-        SendPurpose(amountAvailable: amount,
-                    centsToTransfer: 543,
-                                fee: "0,43",
-                            summary: $summary,
-                         expireDays: $expireDays)
+//struct SendPurpose_Previews: PreviewProvider {
+//    static var previews: some View {
+//        @State var summary: String = ""
+//        @State var expireDays: UInt = 0
+//        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
+//        SendPurpose(amountAvailable: amount,
+//                    centsToTransfer: 543,
+//                                fee: "0,43",
+//                            summary: $summary,
+//                         expireDays: $expireDays)
 //        { print("deactivateAction") }
-    }
-}
+//    }
+//}
 #endif

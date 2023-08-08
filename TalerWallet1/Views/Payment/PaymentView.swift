@@ -8,7 +8,7 @@ import SymLog
 
 // Will be called either by the user scanning a QR code or tapping the provided link,
 // both from the shop's website. We show the payment details
-struct PaymentURIView: View {
+struct PaymentView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
@@ -84,6 +84,10 @@ struct PaymentURIView: View {
                 }
             }
             .navigationTitle(navTitle)
+            .onAppear() {
+                symLog.log("onAppear")
+                DebugViewC.shared.setSheetID(SHEET_PAYMENT)
+            }
         } else {
             let badURL = "Error in Link: \(url)"
             WithdrawProgressView(message: url.host ?? badURL)
@@ -148,6 +152,6 @@ struct PaymentURIView_Previews: PreviewProvider {
         )
         let url = URL(string: "taler://pay/some_amount")!
         
-        PaymentURIView(url: url, preparePayResult: details)
+        PaymentView(url: url, preparePayResult: details)
     }
 }

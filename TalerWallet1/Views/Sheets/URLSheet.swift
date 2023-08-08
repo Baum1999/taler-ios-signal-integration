@@ -19,7 +19,7 @@ struct URLSheet: View {
                 case .withdraw:
                     WithdrawURIView(url: urlToOpen)
                 case .pay:
-                    PaymentURIView(url: urlToOpen)
+                    PaymentView(url: urlToOpen)
                 case .payPull:
                     P2pPayURIView(url: urlToOpen)
                 case .payPush:

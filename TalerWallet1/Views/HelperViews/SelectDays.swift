@@ -65,9 +65,9 @@ struct SelectDays: View {
     }
 }
 
-struct SelectDays_Previews: PreviewProvider {
-    static var previews: some View {
-        @State var expireDays: UInt = 1
-        SelectDays(selected: $expireDays, maxExpiration: 20)
-    }
-}
+//struct SelectDays_Previews: PreviewProvider {
+//    static var previews: some View {
+//        @State var expireDays: UInt = 1
+//        SelectDays(selected: $expireDays, maxExpiration: 20)
+//    }
+//}

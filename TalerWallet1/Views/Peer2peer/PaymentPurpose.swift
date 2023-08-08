@@ -95,17 +95,17 @@ struct PaymentPurpose: View {
 }
 // MARK: -
 #if DEBUG
-struct PaymentPurpose_Previews: PreviewProvider {
-    static var previews: some View {
-        let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
-        @State var summary: String = "pUrPoSe"
-        @State var expireDays: UInt = 0
-        PaymentPurpose(scopeInfo: scopeInfo,
-                 centsToTransfer: 5,
-                             fee: "fee",
-                         summary: $summary,
-                      expireDays: $expireDays)
+//struct PaymentPurpose_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
+//        @State var summary: String = "pUrPoSe"
+//        @State var expireDays: UInt = 0
+//        PaymentPurpose(scopeInfo: scopeInfo,
+//                 centsToTransfer: 5,
+//                             fee: "fee",
+//                         summary: $summary,
+//                      expireDays: $expireDays)
 //        { print("deactivateAction") }
-    }
-}
+//    }
+//}
 #endif
