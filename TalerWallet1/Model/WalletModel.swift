@@ -69,7 +69,7 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 // MARK: -
 /// The info returned from Wallet-core init
 struct VersionInfo: Decodable {
-    var hash: String
+    var hash: String?
     var version: String
     var exchange: String
     var merchant: String

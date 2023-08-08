@@ -186,7 +186,7 @@ extension WalletCore {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
             if decoded.newTxState != decoded.oldTxState {
-                let components = decoded.transactionId.components(separatedBy: [":"])
+                let components = decoded.transactionId.components(separatedBy: ":")
                 if components.count >= 3 {  // txn:$txtype:$uid
                     if let type = TransactionType(rawValue: components[1]) {
                         guard type != .refresh else { return }

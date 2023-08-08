@@ -28,18 +28,19 @@ struct ScopeInfo: Codable, Hashable {
     enum ScopeInfoType: String, Codable {
         case global
         case exchange
+        case auditor
     }
     var type: ScopeInfoType
-    var exchangeBaseUrl: String?    // only for "exchange"
+    var url: String?    // only for "exchange"
     var currency: String
 
     public static func == (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
-        if let lhsBaseURL = lhs.exchangeBaseUrl {
-            if let rhsBaseURL = rhs.exchangeBaseUrl {
+        if let lhsBaseURL = lhs.url {
+            if let rhsBaseURL = rhs.url {
                 if lhsBaseURL != rhsBaseURL { return false }    // different exchanges
                                                                 // else fall thru and check type & currency
             } else { return false }                             // left but not right
-        } else if rhs.exchangeBaseUrl != nil {
+        } else if rhs.url != nil {
             return false                                        // right but not left
         }
         return lhs.type == rhs.type &&
@@ -47,8 +48,8 @@ struct ScopeInfo: Codable, Hashable {
     }
     public func hash(into hasher: inout Hasher) {
         hasher.combine(type)
-        if let baseURL = exchangeBaseUrl {
-            hasher.combine(baseURL)
+        if let url {
+            hasher.combine(url)
         }
         hasher.combine(currency)
     }
