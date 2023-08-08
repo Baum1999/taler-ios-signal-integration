@@ -73,6 +73,7 @@ public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiti
 // MARK: Merchant Payment
 // openURL (Link, NFC or scan QR) ==> pays merchant
 public let SHEET_PAYMENT = SHEET_WITHDRAWAL + 10                    // 140 Pay Merchant
+public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 2                   // 142 Pay Merchant Template
 
 // MARK: Reward - Receive Coins (from merchant)
 // openURL (Link, NFC or scan QR) ==> receive coins from merchant

@@ -96,6 +96,7 @@
 		4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
 		4EB3136129FEE79B007D68BC /* SendDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDone.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
+		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
 		4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */; };
@@ -234,6 +235,7 @@
 		4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpsListView.swift; sourceTree = "<group>"; };
 		4EB3136029FEE79B007D68BC /* SendDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendDone.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
+		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
 		4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeSectionView.swift; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */,
+				4EBA56402A7FF5200084948B /* PayTemplateView.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -791,6 +794,7 @@
 				4EB3136129FEE79B007D68BC /* SendDone.swift in Sources */,
 				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
 				4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */,
+				4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */,
 				4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */,
 				4E9320472A164BC700A87B0E /* PaymentPurpose.swift in Sources */,
 				4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */,

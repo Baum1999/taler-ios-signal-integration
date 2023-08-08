@@ -147,6 +147,17 @@ fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
         var talerPayUri: String
     }
 }
+/// A request to get an exchange's payment contract terms.
+fileprivate struct PreparePayForTemplate: WalletBackendFormattedRequest {
+    typealias Response = PreparePayResult
+    func operation() -> String { return "preparePayForTemplate" }
+    func args() -> Args { return Args(talerPayTemplateUri: talerPayTemplateUri) }
+
+    var talerPayTemplateUri: String
+    struct Args: Encodable {
+        var talerPayTemplateUri: String
+    }
+}
 // MARK: -
 /// The result from confirmPayForUri
 struct ConfirmPayResult: Decodable {
@@ -174,6 +185,13 @@ extension WalletModel {
           let request = PreparePayForUri(talerPayUri: talerPayUri)
           let response = try await sendRequest(request, ASYNCDELAY)
           return response
+    }
+    @MainActor
+    func preparePayForTemplateM(_ talerPayTemplateUri: String)       // M for MainActor
+    async throws -> PreparePayResult {
+        let request = PreparePayForTemplate(talerPayTemplateUri: talerPayTemplateUri)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
     }
     @MainActor
     func confirmPayM(_ transactionId: String)              // M for MainActor

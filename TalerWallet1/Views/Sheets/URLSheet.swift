@@ -24,7 +24,11 @@ struct URLSheet: View {
                     P2pPayURIView(url: urlToOpen)
                 case .payPush:
                     P2pReceiveURIView(url: urlToOpen)
-                case .unknown:        // Error view
+                case .payTemplate:
+                    PayTemplateView(url: urlToOpen)
+//                case .reward:
+//                    RewardURIView(url: urlToOpen)
+                default:        // Error view
                     VStack {
                         Text("unknown command")
                             .font(.title)
