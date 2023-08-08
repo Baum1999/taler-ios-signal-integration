@@ -98,6 +98,7 @@
 		4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
 		4EB3136129FEE79B007D68BC /* SendDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDone.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
+		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
 		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
@@ -239,6 +240,7 @@
 		4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpsListView.swift; sourceTree = "<group>"; };
 		4EB3136029FEE79B007D68BC /* SendDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendDone.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
+		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
 		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */,
 				4E9320422A14F6EA00A87B0E /* WalletColors.swift */,
 				4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */,
+				4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -791,6 +794,7 @@
 				4E87C8752A34B411001C6406 /* UncompletedRowView.swift in Sources */,
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,
+				4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */,
 				4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */,
 				4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */,
 				4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */,
