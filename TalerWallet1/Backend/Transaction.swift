@@ -119,7 +119,7 @@ enum TransactionType: String, Codable {
     case payment
     case refund
     case refresh
-    case reward         = "tip"     // TODO: reward        // get paid for e.g. survey participation
+    case reward                                 // get paid for e.g. survey participation
 //    case tip                                  // tip personnel at restaurants
     case peerPushDebit  = "peer-push-debit"     // send coins to peer, show QR
     case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
@@ -132,7 +132,6 @@ enum TransactionType: String, Codable {
     var isRefund     : Bool { self == .refund }
     var isRefresh    : Bool { self == .refresh }
     var isReward     : Bool { self == .reward }
-    //    var isTipPayment : Bool { self == .tip }
     var isSendCoins  : Bool { self == .peerPushDebit }
     var isRcvCoins   : Bool { self == .scanPushCredit }
     var isSendInvoice: Bool { self == .peerPullCredit }
@@ -266,16 +265,6 @@ struct RewardTransaction {
     var details: RewardTransactionDetails
 }
 
-//struct TipTransactionDetails: Decodable {
-//    /// The exchange that the tip will be withdrawn from
-//    var exchangeBaseUrl: String
-//}
-
-//struct TipTransaction {
-//    var common: TransactionCommon
-//    var details: TipTransactionDetails
-//}
-
 enum RefreshReason: String, Decodable {
     case manual
     case payMerchant = "pay-merchant"
@@ -327,7 +316,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
     case payment (PaymentTransaction)
     case refund (RefundTransaction)
     case reward (RewardTransaction)
-//    case tip (TipTransaction)
     case refresh (RefreshTransaction)
     case peer2peer (P2PTransaction)
 
@@ -347,9 +335,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
                 case .reward:
                     let details = try RewardTransactionDetails.init(from: decoder)
                     self = .reward(RewardTransaction(common: common, details: details))
-//                case .tip:
-//                    let details = try TipTransactionDetails.init(from: decoder)
-//                    self = .tip(TipTransaction(common: common, details: details))
                 case .refresh:
                     let details = try RefreshTransactionDetails.init(from: decoder)
                     self = .refresh(RefreshTransaction(common: common, details: details))
@@ -405,7 +390,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
     var isRefund     : Bool { common.type == .refund }
     var isRefresh    : Bool { common.type == .refresh }
     var isReward     : Bool { common.type == .reward }
-//    var isTipPayment : Bool { common.type == .tip }
     var isSendCoins  : Bool { common.type == .peerPushDebit }
     var isRcvCoins   : Bool { common.type == .scanPushCredit }
     var isSendInvoice: Bool { common.type == .peerPullCredit }
@@ -452,8 +436,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
                 return refundTransaction.common
             case .reward(let rewardTransaction):
                 return rewardTransaction.common
-//            case .tip(let tipTransaction):
-//                return tipTransaction.common
             case .refresh(let refreshTransaction):
                 return refreshTransaction.common
             case .peer2peer(let p2pTransaction):
@@ -476,8 +458,6 @@ enum Transaction: Decodable, Hashable, Identifiable {
                 }
             case .reward(let rewardTransaction):
                 result[EXCHANGEBASEURL] = rewardTransaction.details.exchangeBaseUrl
-//            case .tip(let tipTransaction):
-//                result[EXCHANGEBASEURL] = tipTransaction.details.exchangeBaseUrl
             case .refresh(let refreshTransaction):
                 result["reason"] = refreshTransaction.details.refreshReason.rawValue
             case .peer2peer(let p2pTransaction):
