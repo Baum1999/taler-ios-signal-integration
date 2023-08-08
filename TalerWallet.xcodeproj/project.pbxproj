@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4E16E12329F3BB99008B9C86 /* CurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */; };
+		4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254952A822B8100E41D29 /* payment_received.m4a */; };
+		4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254962A822B8100E41D29 /* payment_sent.m4a */; };
 		4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */; };
 		4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */; };
 		4E363CC02A24754200D7E98C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
@@ -143,6 +145,8 @@
 
 /* Begin PBXFileReference section */
 		4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFormatter.swift; sourceTree = "<group>"; };
+		4E2254952A822B8100E41D29 /* payment_received.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_received.m4a; sourceTree = "<group>"; };
+		4E2254962A822B8100E41D29 /* payment_sent.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_sent.m4a; sourceTree = "<group>"; };
 		4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+id+iban.swift"; sourceTree = "<group>"; };
 		4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyTransition+backslide.swift"; sourceTree = "<group>"; };
 		4E363CBF2A24754200D7E98C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -282,6 +286,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E2254942A822B8100E41D29 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				4E2254952A822B8100E41D29 /* payment_received.m4a */,
+				4E2254962A822B8100E41D29 /* payment_sent.m4a */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */ = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +334,7 @@
 				4EB095052989CB7C0043A8A1 /* Helper */,
 				4EB0950C2989CB9A0043A8A1 /* Quickjs */,
 				4EB094EF298979D30043A8A1 /* Assets.xcassets */,
+				4E2254942A822B8100E41D29 /* Sounds */,
 				4E8C171B2A6509BB005B2392 /* Atkinson-Hyperlegible */,
 				4E363CBF2A24754200D7E98C /* Settings.bundle */,
 				4EB094F529897A9A0043A8A1 /* Preview Content */,
@@ -727,8 +741,10 @@
 				4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */,
 				4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */,
 				4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
+				4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */,
 				4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
+				4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

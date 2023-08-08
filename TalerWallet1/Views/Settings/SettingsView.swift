@@ -26,7 +26,7 @@ struct SettingsView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-    @AppStorage("playSounds") var playSounds: Bool = false
+    @AppStorage("playSounds") var playSounds: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -73,8 +73,8 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSounds,
-                        description: String(localized: "After a transaction finished"))
+                SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
+                         description: String(localized: "After a transaction finished"))
                 HStack {
                     Text("Liststyle:")
                         .font(.title2)

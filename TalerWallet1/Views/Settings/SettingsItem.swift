@@ -56,13 +56,58 @@ struct SettingsToggle: View {
     }
 }
 // MARK: -
-#if DEBUG
-struct SettingsItemPreview : View {
-    @State var developerMode: Bool = false
+struct SettingsSpeaker: View {
+    var name: String
+    @Binding var value: Int
+    var description: String?
+    var action: (_ value: Int) -> Void = {value in }
 
     var body: some View {
         VStack {
-            SettingsToggle(name: "Developer Mode", value: $developerMode, description: "More information intended for debugging")
+            let image = (value == 0) ? "speaker.slash"
+                      : (value == 1) ? "speaker.fill"
+                                     : "speaker"
+            HStack {
+                Text(name)
+                    .font(.title2)
+                Text(" ")
+                    .font(.largeTitle)
+                Spacer()
+                Image(systemName: image)
+                    .font(.largeTitle)
+                    .onTapGesture {
+                        if value > 0 {
+                            value = -1
+                        } else {
+                            value = value + 1
+                        }
+                    }
+            }
+//                .onChange(of: value) { value in
+//                    action(value)
+//                }
+
+            if let desc = description {
+                Text(desc)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.caption)
+            }
+        }.padding([.bottom], 4)
+    }
+}
+// MARK: -
+#if DEBUG
+struct SettingsItemPreview : View {
+    @State var developerMode: Bool = false
+    @State var playSounds: Int = 0
+
+    var body: some View {
+        VStack {
+            SettingsToggle(name: "Developer Mode", value: $developerMode,
+                    description: "More information intended for debugging")
+            SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
+                     description: String(localized: "After a transaction finished"))
+
         }
     }
 }
