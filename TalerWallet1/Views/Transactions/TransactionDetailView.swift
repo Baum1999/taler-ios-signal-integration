@@ -52,9 +52,7 @@ struct TransactionDetailView: View {
         let common = transaction.common
         let pending = transaction.isPending
         let dateString = TalerDater.dateString(from: common.timestamp)
-        let localizedType = transaction.localizedType
-        let navTitle2 = pending ? String(localized: "Pending")
-                               : localizedType
+        let navTitle2 = transaction.localizedType
         Group {
             List {
                 if developerMode {
@@ -224,10 +222,6 @@ struct TransactionDetailView: View {
                         let details = rewardTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Received Reward:"),
                                          baseURL: details.exchangeBaseUrl, large: true)
-//                case .tip(let tipTransaction):
-//                    let details = tipTransaction.details                  // TODO: details
-//                    ThreeAmountsSheet(common: common, topTitle: String(localized: "Received Tip:"),
-//                                      baseURL: nil, large: true)
                     case .refresh(let refreshTransaction):
                         let details = refreshTransaction.details                // TODO: details
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Refreshed amount:"),

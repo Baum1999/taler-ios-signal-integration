@@ -46,9 +46,6 @@ struct ThreeAmountsView: View {
         let labelColor = Color(UIColor.label)
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
-        let feeColor = WalletColors().transactionColor(false)
-        let feeSign = incoming ? "-" : "+"
-
         VStack {
             AmountView(title: topTitle,
                        value: topAmount.readableDescription,
@@ -56,9 +53,10 @@ struct ThreeAmountsView: View {
                        large: large)
                 .padding(.bottom, 4)
             if let fee {
-                AmountView(title: "Exchange fee:",
-                           value: feeSign + fee.readableDescription,
-                           color: fee.isZero ? labelColor : feeColor,
+                let feeSign = incoming ? "- " : "+ "
+                AmountView(title: feeSign + String(localized: "Exchange fee:"),
+                           value: fee.readableDescription,
+                           color: labelColor,
                            large: false)
                 .padding(.bottom, 4)
             }
@@ -68,7 +66,7 @@ struct ThreeAmountsView: View {
                        large: large)
             if let baseURL {
                 VStack(alignment: .leading) {
-                    Text(incoming ? "from Exchange:" : "to Exchange:")
+                    Text("Using Exchange:")
                         .multilineTextAlignment(.leading)
                         .font(.body)
                     HStack {
