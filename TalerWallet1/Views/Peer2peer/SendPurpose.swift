@@ -35,19 +35,35 @@ struct SendPurpose: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Purpose:")
                     .padding(.top)
-                    .font(.title3)
+                    .font(.title2)
 
-                TextField("Purpose", text: $summary)
-                    .font(.title)
-                    .foregroundColor(WalletColors().fieldForeground)     // text color
-                    .background(WalletColors().fieldBackground)
-                    .border(.primary)
-                    .focused($isFocused)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                            isFocused = true        // make first responder - raise keybord
+                if #available(iOS 16.0, *) {
+                    TextField("Purpose", text: $summary)
+                        .font(.title2)
+                        .lineLimit(2...)
+                        .foregroundColor(WalletColors().fieldForeground)     // text color
+                        .background(WalletColors().fieldBackground)
+                        .border(.primary)
+                        .focused($isFocused)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                isFocused = true        // make first responder - raise keybord
+                            }
                         }
-                    }
+                } else {
+                    TextField("Purpose", text: $summary)
+                        .font(.title)
+//                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
+                        .foregroundColor(WalletColors().fieldForeground)     // text color
+                        .background(WalletColors().fieldBackground)
+                        .border(.primary)
+                        .focused($isFocused)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                isFocused = true        // make first responder - raise keybord
+                            }
+                        }
+                }
 
                 HStack{
                     Spacer()
@@ -80,7 +96,7 @@ struct SendPurpose: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }
-        .navigationTitle("To another Wallet")
+        .navigationTitle("Purpose")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE)

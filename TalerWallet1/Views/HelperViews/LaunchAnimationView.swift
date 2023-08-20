@@ -5,6 +5,18 @@
 import SwiftUI
 
 struct LaunchAnimationView: View {
+    @State private var rotationEnabled = true
+    var body: some View {
+        ZStack {
+            Color(.systemGray6).ignoresSafeArea()
+            RotatingTaler(size: (350 < UIScreen.main.bounds.width) ? 200 : 250, rotationEnabled: $rotationEnabled)
+        }
+    }
+}
+
+struct RotatingTaler: View {
+    let size: CGFloat
+    @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
 
     private let animationTimer = Timer
@@ -12,17 +24,17 @@ struct LaunchAnimationView: View {
         .autoconnect()
 
     var body: some View {
-        ZStack {
-            Color(.systemGray6).ignoresSafeArea()
-            Image("taler-logo-2023-red")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 250, height: 250)
-                .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-        }
+        Image("taler-logo-2023-red")
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
+            .accessibilityHidden(true)          // decorative logo
             .onReceive(animationTimer) { timerValue in
-                withAnimation(.easeInOut(duration: 1.9)) {
-                    rotationDirection.toggle()
+                if rotationEnabled {
+                    withAnimation(.easeInOut(duration: 1.9)) {
+                        rotationDirection.toggle()
+                    }
                 }
             }
     }

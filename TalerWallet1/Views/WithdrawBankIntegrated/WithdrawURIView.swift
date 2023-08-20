@@ -56,7 +56,7 @@ struct WithdrawURIView: View {
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {
-                    Text("You must accept the Terms of Service first before you can withdraw electronic cash to your wallet.")
+                    Text("You must accept the Exchange's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
                         .multilineTextAlignment(.leading)
                         .padding()
                     NavigationLink(destination: LazyView {

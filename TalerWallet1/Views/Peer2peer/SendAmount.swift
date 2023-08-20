@@ -61,7 +61,7 @@ struct SendAmount: View {
                                         summary: $summary,
                                      expireDays: $expireDays)
                 }) {
-                    Text("To another wallet")
+                    Text("Next")
                 }   .buttonStyle(TalerButtonStyle(type: .prominent))
                     .disabled(disabled)
                 Spacer()

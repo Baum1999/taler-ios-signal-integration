@@ -5,7 +5,7 @@
 import SwiftUI
 import SymLog
 
-fileprivate let sidebarWidth = 220.0
+fileprivate let sidebarWidth = 200.0
 
 struct SidebarItem {
     var name: String
@@ -19,11 +19,6 @@ struct SideBarView: View {
     @Binding var currentView: Int
     @Binding var sidebarVisible: Bool
     @State private var rotationEnabled = false
-    @State private var rotationDirection = false
-
-    private let animationTimer = Timer
-        .publish(every: 1.6, on: .current, in: .common)
-        .autoconnect()
 
     var body: some View {
         HStack {    // sideView left, clear dismiss target right
@@ -33,21 +28,9 @@ struct SideBarView: View {
                     Link(gnuTaler, destination: URL(string:"https://taler.net")!)
                         .font(.largeTitle)  //.bold()     iOS 16
                         .padding(.top, 30)
-                    Image("taler-logo-2023-red")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-                        .accessibilityHidden(true)          // decorative logo
+                    RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
                         .onTapGesture {
                             rotationEnabled.toggle()
-                        }
-                        .onReceive(animationTimer) { timerValue in
-                            if rotationEnabled {
-                                withAnimation(.easeInOut(duration: 1.9)) {
-                                    rotationDirection.toggle()
-                                }
-                            }
                         }
                     ForEach(0..<views.count, id: \.self) { i in
                         Button {
@@ -63,8 +46,9 @@ struct SideBarView: View {
                                     .frame(maxWidth: sidebarWidth)
                             }
                         }
-                        .buttonStyle(.bordered)
-                        .font(.title)
+                        .padding()
+                        .buttonStyle(.borderless)
+                        .font(.title2)
                         .disabled(i == currentView)
                         .accessibilityHidden(i == currentView)      // don't suggest the current item
                     }

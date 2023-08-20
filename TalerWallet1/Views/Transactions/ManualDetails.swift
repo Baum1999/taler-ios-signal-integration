@@ -28,7 +28,7 @@ struct ManualDetails: View {
                     .disabled(false)
             }   .padding(.leading)
                 .listRowSeparator(.hidden)
-            Text("Step 2: If you dont already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website:")
+            Text("Step 2: If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website:")
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             HStack {

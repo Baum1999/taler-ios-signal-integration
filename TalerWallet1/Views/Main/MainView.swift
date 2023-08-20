@@ -35,21 +35,16 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        controller.playSound(1008)     // TODO: Startup chime
+                        controller.playSound(1008)     // Startup chime
                         soundPlayed = true
                     }
             } else if controller.backendState == .error {
                 ErrorView(errortext: nil)            // TODO: show Error View
             } else {
                 LaunchAnimationView()
-//                    .task {
-//                        let deviceW = UIScreen.main.bounds.width
-//                        let deviceH = UIScreen.main.bounds.height
-//                        print("UIScreen: \(deviceW), \(deviceH)")
-//                    }
             }
         }
-        .animation(.easeOut(duration: LAUNCHDURATION), value: controller.backendState)
+        .animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
         .overlay(alignment: .top) {
             // Show the viewID on top of the app's NavigationView
             DebugViewV()

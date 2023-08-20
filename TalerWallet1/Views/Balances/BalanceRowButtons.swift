@@ -19,12 +19,17 @@ struct BalanceRowButtons: View {
             Button("Request\nPayment", action: recvAction)
                 .lineLimit(lineLimit)
                 .disabled(false)
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: narrow, aligned: .center))
+                .buttonStyle(TalerButtonStyle(type: .bordered,
+                                            dimmed: false,
+                                            narrow: narrow,
+                                           aligned: .center))
             Button("Send\n\(currency)", action: sendAction)
                 .lineLimit(lineLimit)
                 .disabled(amount.isZero)
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: narrow, aligned: .center))
-
+                .buttonStyle(TalerButtonStyle(type: .bordered,
+                                            dimmed: false,
+                                            narrow: narrow,
+                                           aligned: .center))
         }
     }
 }
