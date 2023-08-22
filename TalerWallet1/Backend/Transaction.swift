@@ -166,13 +166,13 @@ struct TransactionCommon: Decodable {
                                                   comment: "TransactionType")
             case .reward:         return String(localized: "Reward",
                                                   comment: "TransactionType")
-            case .peerPushDebit:  return String(localized: "P2P Send",
+            case .peerPushDebit:  return String(localized: "Send Money",
                                                   comment: "TransactionType, send coins to another wallet")
-            case .scanPushCredit: return String(localized: "P2P Receive",
+            case .scanPushCredit: return String(localized: "Receive Money",
                                                   comment: "TransactionType, scan to receive coins sent from another wallet")
-            case .peerPullCredit: return String(localized: "P2P Invoice",
+            case .peerPullCredit: return String(localized: "Request Money",     // Invoice?
                                                   comment: "TransactionType, send invoice to another wallet")
-            case .scanPullDebit:  return String(localized: "P2P Payment",
+            case .scanPullDebit:  return String(localized: "Pay Request",       // Pay Invoice is the same as Payment
                                                   comment: "TransactionType, scan invoice to pay to another wallet")
         }
     }

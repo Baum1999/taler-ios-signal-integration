@@ -49,17 +49,23 @@ public let VIEW_DEPOSIT = VIEW_WITHDRAWAL + 10                      // 40 Deposi
 //public let VIEW_DEPOSIT_TOS                                       // 41 - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
 
-// MARK: P2P Invoice (from Balances)
-// pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_INVOICE_P2P = VIEW_DEPOSIT + 10                     // 50 Invoice Amount
-public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 51 Invoice ToS
-public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 52 Invoice Purpose
-
 // MARK: P2P Send Coins (from Balances)
 // push debit to another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_SEND_P2P = VIEW_INVOICE_P2P + 10                    // 60 Send Coins
-//public let VIEW_SEND_TOS                                          // 61 - user already accepted the ToS at withdrawal, invoice or receive
-public let VIEW_SEND_PURPOSE = VIEW_SEND_P2P + 2                    // 62
+public let VIEW_SEND_P2P = VIEW_DEPOSIT + 10                        // 50 Send Coins
+//public let VIEW_SEND_TOS                                          // 51 - user already accepted the ToS at withdrawal, invoice or receive
+public let VIEW_SEND_PURPOSE = VIEW_SEND_P2P + 2                    // 52
+
+// MARK: P2P Private Receive (from Balances)
+// pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
+public let VIEW_RECEIVE_P2P = VIEW_SEND_P2P + 10                    // 60 Receive Amount
+public let VIEW_RECEIVE_TOS = VIEW_RECEIVE_P2P + 1                  // 61 Receive ToS
+public let VIEW_RECEIVE_PURPOSE = VIEW_RECEIVE_TOS + 1              // 62 Receive Purpose
+
+// MARK: P2P Business Invoice (from Balances)
+// pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
+public let VIEW_INVOICE_P2P = VIEW_RECEIVE_P2P + 10                 // 70 Invoice Amount
+public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 71 Invoice ToS
+public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 72 Invoice Purpose
 
 
 

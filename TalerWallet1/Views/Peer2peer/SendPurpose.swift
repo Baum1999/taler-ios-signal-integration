@@ -38,12 +38,12 @@ struct SendPurpose: View {
                     .font(.title2)
 
                 if #available(iOS 16.0, *) {
-                    TextField("Purpose", text: $summary)
+                    TextField("Purpose", text: $summary, axis: .vertical)
                         .font(.title2)
                         .lineLimit(2...)
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
-                        .border(.primary)
+                        .textFieldStyle(.roundedBorder)
                         .focused($isFocused)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -56,7 +56,7 @@ struct SendPurpose: View {
 //                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
-                        .border(.primary)
+                        .textFieldStyle(.roundedBorder)
                         .focused($isFocused)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -93,6 +93,7 @@ struct SendPurpose: View {
 
                 Spacer()
             }
+            .textFieldStyle(.roundedBorder)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }

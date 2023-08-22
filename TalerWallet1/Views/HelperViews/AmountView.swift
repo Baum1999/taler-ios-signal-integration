@@ -13,14 +13,16 @@ struct AmountView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
+                .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                 .multilineTextAlignment(.leading)
                 .font(.body)
             HStack {
                 Spacer()
                 Text(value)
+                    .fixedSize(horizontal: false, vertical: true)   // wrap in scrollview
                     .multilineTextAlignment(.center)
                     .font(large ? .title : .title2)
-//                    .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+//                    .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
                     .foregroundColor(color)
                     .monospacedDigit()
                 Spacer()

@@ -200,23 +200,23 @@ fileprivate struct NavigationLinksView : View {
             NavigationLink(destination: LazyView {
                 SendAmount(amountAvailable: balance.available,
                            centsToTransfer: $centsToTransfer,
-                           summary: $summary)
+                                   summary: $summary)
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
             NavigationLink(destination: LazyView {
                 RequestPayment(scopeInfo: balance.scopeInfo,
-                               centsToTransfer: $centsToTransfer,
-                               summary: $summary)
+                         centsToTransfer: $centsToTransfer,
+                                 summary: $summary)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 
             NavigationLink(destination: LazyView {
                 TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
-                                     transactions: completedTransactions,
-                                     showUpDown: true,
-                                     reloadAllAction: reloadAllAction,
-                                     reloadOneAction: reloadOneAction)
+                                 transactions: completedTransactions,
+                                   showUpDown: true,
+                              reloadAllAction: reloadAllAction,
+                              reloadOneAction: reloadOneAction)
             }, tag: 3, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 

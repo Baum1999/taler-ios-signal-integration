@@ -42,7 +42,7 @@ struct PaymentPurpose: View {
                     .font(.title)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
-                    .border(.primary)
+                    .textFieldStyle(.roundedBorder)
                     .focused($isFocused)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -69,7 +69,7 @@ struct PaymentPurpose: View {
                             amountToReceive: amount,
                             summary: summary, expireDays: expireDays)
                 }) {
-                    Text("Invoice \(label) \(scopeInfo.currency)")
+                    Text("Request \(label) \(scopeInfo.currency)")
                         .font(buttonFont)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -80,10 +80,10 @@ struct PaymentPurpose: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }
-        .navigationTitle("Invoice")
+        .navigationTitle("Request")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_INVOICE_PURPOSE)
+            DebugViewC.shared.setViewID(VIEW_RECEIVE_PURPOSE)
             print("❗️ PaymentPurpose onAppear")
         }
         .onDisappear {

@@ -65,9 +65,10 @@ public struct CurrencyField: View {
             // Set as priority so CurrencyInputField size doesn't affect parent
             Text(label)
                 .layoutPriority(1)
-                
+
             // Input text field to handle UI
             currencyInputField
+//                .textFieldStyle(.roundedBorder)
         }
     }
 }

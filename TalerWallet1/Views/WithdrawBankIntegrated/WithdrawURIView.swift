@@ -6,9 +6,9 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called either by the user scanning a QR code or tapping the provided link, both from the bank's website
-// we show the user the withdrawal details - but first the ToS must be accepted
-// after the user confirmed the withdrawal, we remind them to return to the bank website to confirm there, too
+// Called either when scanning a QR code or tapping the provided link, both from the bank's website.
+// We show the user the withdrawal details - but first the ToS must be accepted.
+// After the user confirmed the withdrawal, we show a button to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Withdrawal")

@@ -5,7 +5,6 @@
 //  Created by Marc Stibane on 2023-06-04.
 //  Copyright © 2023 Taler. All rights reserved.
 //
-
 import SwiftUI
 
 struct CurrencyInputView: View {
@@ -22,8 +21,8 @@ struct CurrencyInputView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
-                .font(.title)
-                .border(.primary)
+                .font(.title2)
+                .textFieldStyle(.roundedBorder)
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
                 print("❗️Yikes: CurrencyInputView hasBeenShown")
@@ -39,6 +38,7 @@ struct CurrencyInputView: View {
         }
     }
 }
+// MARK: -
 #if DEBUG
 fileprivate struct BindingViewContainer : View {
     @State var centsToTransfer: UInt64 = 0

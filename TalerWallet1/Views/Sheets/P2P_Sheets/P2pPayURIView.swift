@@ -6,8 +6,8 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called either by the user scanning a QR code or tapping the provided link,
-// from another user's SendInvoice. We show the P2P details.
+// Called either when scanning a QR code or tapping the provided link
+// from another user's Send Request(Invoice). We show the P2P details.
 struct P2pPayURIView: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "Pay P2P")
@@ -42,7 +42,7 @@ struct P2pPayURIView: View {
                         P2pAcceptDone(transactionId: peerPullDebitResponse.transactionId,
                                            incoming: false)
                     }) {
-                        Text("Confirm Payment", comment:"pay P2P invoice")      // SHEET_PAY_P2P
+                        Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
             } else {

@@ -25,12 +25,12 @@ struct RequestPayment: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = scopeInfo.currency
-        let navTitle = String(localized: "Request \(currency)", comment: "Request currency, Dialog Title")
+        let navTitle = String(localized: "Request Money", comment: "Dialog Title")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
 
         ScrollView { VStack {
             CurrencyInputView(currencyField: currencyField,
-                              title: String(localized: "Amount to receive:"))
+                              title: String(localized: "Amount to request:"))
 
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
@@ -47,7 +47,8 @@ struct RequestPayment: View {
                                   expireDays: $expireDays)
 //                        { deactivateAction() }
                 }) {
-                    Text("Create invoice")
+                    let amount = Amount.amountFromCents(currency, centsToTransfer)
+                    Text("Request \(amount.readableDescription)")
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
@@ -59,7 +60,7 @@ struct RequestPayment: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {   // make CurrencyField show the keyboard
-            DebugViewC.shared.setViewID(VIEW_INVOICE_P2P)
+            DebugViewC.shared.setViewID(VIEW_RECEIVE_P2P)
             symLog.log("❗️Yikes \(navTitle) onAppear")
         }
         .onDisappear {

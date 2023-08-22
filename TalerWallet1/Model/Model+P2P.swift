@@ -99,7 +99,7 @@ extension WalletModel {
     }
 } // initiatePeerPushDebitM
 // MARK: - PeerPullCredit
-/// Check fees before sending an invoice to another wallet
+/// Check fees before sending a request(invoice) to another wallet
 struct CheckPeerPullCreditResponse: Codable {
     let scopeInfo: ScopeInfo?
     let exchangeBaseUrl: String?
@@ -131,7 +131,7 @@ extension WalletModel {
     }
 } // checkPeerPullCreditM
 // - - - - - -
-/// Initiate an outgoing peer pull payment, send an invoice
+/// Initiate an outgoing peer pull payment, send a request(invoice)
 struct InitiatePeerPullCreditResponse: Codable {
     let talerUri: String
     let transactionId: String
@@ -209,7 +209,7 @@ extension WalletModel {
     }
 } // acceptPeerPushCreditM
 // MARK: - PeerPullDebit
-/// Prepare an incoming peer push invoice, pay coins
+/// Prepare an incoming peer push request(invoice), pay coins
 struct PreparePeerPullDebitResponse: Codable {
     let contractTerms: PeerContractTerms
     let amountRaw: Amount
@@ -237,7 +237,7 @@ extension WalletModel {
     }
 } // preparePeerPullDebitM
 // - - - - - -
-/// Confirm incoming peer push invoice and pay
+/// Confirm incoming peer push request(invoice) and pay
 fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return "confirmPeerPullDebit" }
