@@ -101,20 +101,20 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
-    func initWalletCoreT() async throws -> VersionInfo {
+    func initWalletCoreT(sqlite3: Bool) async throws -> VersionInfo {
                     // T for any Thread
-        let docPath = try docPath()
+        let docPath = try docPath(sqlite3: sqlite3)
         let request = InitRequest(persistentStoragePath: docPath)
         let response = try await sendRequest(request, 0)    // no Delay
         return response.versionInfo
     }
 
-    private func docPath () throws -> String {
+    private func docPath (sqlite3: Bool) throws -> String {
         let documentUrls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         if (documentUrls.count > 0) {
             var storageDir = documentUrls[0]
             storageDir.appendPathComponent(DATABASE, isDirectory: false)
-            storageDir.appendPathExtension("json")
+            storageDir.appendPathExtension(sqlite3 ? "sqlite3" : "json")
             let docPath = storageDir.path
             logger.debug("\(docPath)")
             return docPath

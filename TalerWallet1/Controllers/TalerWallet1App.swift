@@ -27,6 +27,7 @@ struct TalerWallet1App: App {
     private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
     let logger = Logger (subsystem: "net.taler.gnu", category: "Main App")
+    let sqlite3 = true                                                          // true = SQLITE3, false = JSON
 
     func scheduleAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: "net.taler.gnu.refresh")
@@ -45,7 +46,7 @@ struct TalerWallet1App: App {
                     /// we handle them in .onOpenURL in MainView.swift
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .task {
-                    try! await controller.initWalletCore(model)     // will (and should) crash on failure
+                    try! await controller.initWalletCore(model, sqlite3: sqlite3)     // will (and should) crash on failure
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
                     logger.log("❗️App Did Become Active")
