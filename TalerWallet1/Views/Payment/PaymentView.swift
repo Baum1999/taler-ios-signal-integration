@@ -135,8 +135,8 @@ struct PaymentURIView_Previews: PreviewProvider {
                                             fulfillmentMessageI18n: nil,
                                           wireFeeAmortization: 0,
                                           maxWireFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
-                                            minimumAge: nil,
-                                          extra: extra
+                                          minimumAge: nil
+//                                          extra: extra,
 //                                          auditors: [],
                                   )
         let details = PreparePayResult(

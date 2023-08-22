@@ -1,4 +1,9 @@
 
+Version 0.9.3 (18)
+
+- Should work now with https://kaufen.tschunk.shop
+
+
 Version 0.9.3 (17)
 
 • New Feature: Payment Sounds from carlo von lynX

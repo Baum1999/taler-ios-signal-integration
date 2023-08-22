@@ -42,7 +42,7 @@ struct MerchantContractTerms: Codable {
     let wireFeeAmortization: Int?       // Share of the wire fee that must be settled with one payment
     let maxWireFee: Amount?             // Maximum wire fee that the merchant agrees to pay for
     let minimumAge: Int?
-    let extra: Extra                    // Extra data, interpreted by the mechant only
+//    let extra: Extra?                   // Extra data, interpreted by the mechant only
 //    let auditors: [Auditor]?
 
     enum CodingKeys: String, CodingKey {
@@ -73,7 +73,7 @@ struct MerchantContractTerms: Codable {
         case wireFeeAmortization = "wire_fee_amortization"
         case maxWireFee = "max_wire_fee"
         case minimumAge = "minimum_age"
-        case extra
+//        case extra
 //        case auditors
     }
 }
