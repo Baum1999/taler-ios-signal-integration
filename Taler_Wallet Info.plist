@@ -12,7 +12,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>com.taler-systems.gnutalerwallet09</string>
+			<string>com.taler-systems.talerwallet-2</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>taler</string>
@@ -30,6 +30,7 @@
 		<string>Atkinson-Hyperlegible-Italic-102.otf</string>
 		<string>Atkinson-Hyperlegible-Bold-102.otf</string>
 		<string>Atkinson-Hyperlegible-BoldItalic-102.otf</string>
+		<string>Nunito-Regular</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
