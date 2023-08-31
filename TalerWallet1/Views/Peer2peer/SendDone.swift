@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when initiating a P2P transaction (Send coins or Send Invoice)
+// Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
 struct SendDone: View {
     private let symLog = SymLogV()
     let navTitle = String(localized: "P2P Ready")
