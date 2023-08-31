@@ -22,7 +22,7 @@
 		4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
 		4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */; };
 		4E53A33729F50B7B00830EC2 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E53A33629F50B7B00830EC2 /* CurrencyField.swift */; };
-		4E578E922A481D8600F21F1C /* playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* playSound.swift */; };
+		4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* Controller+playSound.swift */; };
 		4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E932A4822D500F21F1C /* P2pPayURIView.swift */; };
 		4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */; };
@@ -161,7 +161,7 @@
 		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendAmount.swift; path = TalerWallet1/Views/Peer2peer/SendAmount.swift; sourceTree = SOURCE_ROOT; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
-		4E578E912A481D8600F21F1C /* playSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playSound.swift; sourceTree = "<group>"; };
+		4E578E912A481D8600F21F1C /* Controller+playSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+playSound.swift"; sourceTree = "<group>"; };
 		4E578E932A4822D500F21F1C /* P2pPayURIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P2pPayURIView.swift; sourceTree = "<group>"; };
 		4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeDetailView.swift; sourceTree = "<group>"; };
 		4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptDone.swift; sourceTree = "<group>"; };
@@ -380,7 +380,7 @@
 				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
-				4E578E912A481D8600F21F1C /* playSound.swift */,
+				4E578E912A481D8600F21F1C /* Controller+playSound.swift */,
 				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
 				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
 				4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */,
@@ -744,9 +744,9 @@
 				4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */,
 				4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */,
 				4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
-				4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */,
 				4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
+				4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */,
 				4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -823,7 +823,7 @@
 				4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */,
 				4EB065442A4CD1A80039B91D /* BalanceRowButtons.swift in Sources */,
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
-				4E578E922A481D8600F21F1C /* playSound.swift in Sources */,
+				4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */,
 				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
 				4E16E12329F3BB99008B9C86 /* CurrencyFormatter.swift in Sources */,
 				4EB095092989CB7C0043A8A1 /* TalerDater.swift in Sources */,
