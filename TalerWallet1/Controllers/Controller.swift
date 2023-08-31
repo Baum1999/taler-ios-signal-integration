@@ -33,6 +33,7 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @AppStorage("playSounds") var playSounds: Int = 0       // extension mustn't define this, so it must be here
+    @AppStorage("talerFonts") var talerFonts: Int = 0       // extension mustn't define this, so it must be here
     let logger = Logger (subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
 

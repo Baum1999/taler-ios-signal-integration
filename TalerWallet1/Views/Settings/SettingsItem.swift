@@ -56,6 +56,47 @@ struct SettingsToggle: View {
     }
 }
 // MARK: -
+struct SettingsFont: View {
+    var name: String
+    @Binding var value: Int
+    var action: (_ value: Int) -> Void = {value in }
+
+    func fontName(_ value: Int) -> (String, String, String) {
+        return (value == 0) ? ("textformat", String(localized:"System Font"), String(localized: "Standard iOS Font"))
+             : (value == 1) ? ("textformat.alt", String(localized:"Taler Font"), String(localized: "Atkinson-Hyperlegible"))
+                            : ("placeholdertext.fill", String(localized:"New Font"), String(localized:"New Font"))      // Neumorphism
+    }
+    var body: some View {
+        VStack {
+            let fontName = fontName(value)
+            HStack {
+                Text(name)
+                    .font(.talerTitle2)
+                Text(" ")
+                    .font(.talerLargeTitle)
+                Spacer()
+                Image(systemName: fontName.0)
+                    .font(.talerLargeTitle)
+                    .accessibilityLabel(fontName.1)
+                    .onTapGesture {
+                        if value > 0 {
+                            value = 0       // TODO: -1 for Neumorphism
+                        } else {
+                            value = value + 1
+                        }
+                    }
+            }
+//                .onChange(of: value) { value in
+//                    action(value)
+//                }
+
+            Text(fontName.2)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.talerCaption)
+        }.padding([.bottom], 4)
+    }
+}
+// MARK: -
 struct SettingsSpeaker: View {
     var name: String
     @Binding var value: Int
