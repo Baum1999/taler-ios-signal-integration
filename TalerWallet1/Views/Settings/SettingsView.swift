@@ -160,6 +160,14 @@ struct SettingsView: View {
                               description: String(localized: "Perform basic test transactions")) {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
+                                Task {
+                                    symLog.log("running integration test on test")
+                                    do {
+                                        try await model.runIntegrationTestM(newVersion: false, test: true)
+                                    } catch {    // TODO: show error
+                                        symLog.log(error.localizedDescription)
+                                    }
+                                }
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
