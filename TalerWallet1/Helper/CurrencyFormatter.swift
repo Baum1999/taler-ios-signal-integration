@@ -6,19 +6,22 @@ import Foundation
 import taler_swift
 
 public class CurrencyFormatter: NumberFormatter {
-    public static var shared = CurrencyFormatter()
+    public static let shared = CurrencyFormatter()
 
-    private override convenience init() {
-        self.init(fractionDigits: 2)
-    }
-
-    public init(fractionDigits: Int) {
+    public override init() {
         super.init()
-        self.numberStyle = .decimal // currency could be changed by user
-        self.minimumFractionDigits = fractionDigits
-        self.maximumFractionDigits = fractionDigits
-        self.usesGroupingSeparator = true
         self.locale = Locale.current
+        self.numberStyle = .currency            // currencyISOCode, currencyPlural, (currencyAccounting)
+        self.numberStyle = .currencyISOCode
+        self.numberStyle = .spellOut
+
+//        self.currencyCode = code              // EUR, USD, JPY, GBP
+//        self.minimumFractionDigits = fractionDigits
+//        self.maximumFractionDigits = fractionDigits
+//        self.groupingSize = 3                 // thousands
+//        self.groupingSeparator = ","
+//        self.usesGroupingSeparator = true
+//        self.decimalSeparator = "."
     }
 
     required init?(coder aDecoder: NSCoder) {
