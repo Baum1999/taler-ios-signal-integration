@@ -62,24 +62,30 @@ struct SettingsSpeaker: View {
     var description: String?
     var action: (_ value: Int) -> Void = {value in }
 
+    func imageName(_ value: Int) -> (String, String) {
+        return (value == 0) ? ("speaker.slash", String(localized:"off", comment: "Accessibility String for Payment Sounds Off"))
+             : (value == 1) ? ("speaker.fill", String(localized:"Taler Sounds", comment: "Accessibility String for Payment Sounds"))
+                            : ("speaker", String(localized:"Apple Sounds", comment: "Accessibility String for Payment Sounds"))
+    }
     var body: some View {
         VStack {
-            let image = (value == 0) ? "speaker.slash"
-                      : (value == 1) ? "speaker.fill"
-                                     : "speaker"
+            let image = imageName(value)
             HStack {
                 Text(name)
                     .font(.title2)
                 Text(" ")
                     .font(.largeTitle)
                 Spacer()
-                Image(systemName: image)
+                Image(systemName: image.0)
                     .font(.largeTitle)
+                    .accessibilityLabel(image.1)
                     .onTapGesture {
                         if value > 0 {
                             value = -1
+                            Controller.shared.playSound(1)
                         } else {
                             value = value + 1
+                            Controller.shared.playSound(value)
                         }
                     }
             }
