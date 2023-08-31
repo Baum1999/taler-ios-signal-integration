@@ -4,6 +4,22 @@
  */
 import Foundation
 
+public func SuperScriptDigit(_ number: UInt32) -> String {
+    switch number {
+        case 0: return String("\u{2070}")
+        case 1: return String("\u{00B9}")
+        case 2: return String("\u{00B2}")
+        case 3: return String("\u{00B3}")
+        case 4: return String("\u{2074}")
+        case 5: return String("\u{2075}")
+        case 6: return String("\u{2076}")
+        case 7: return String("\u{2077}")
+        case 8: return String("\u{2078}")
+        case 9: return String("\u{2079}")
+        default: return ""
+    }
+}
+
 /// Errors for `Amount`.
 enum AmountError: Error {
     /// The string cannot be parsed to create an `Amount`.
@@ -20,6 +36,13 @@ enum AmountError: Error {
     
     /// The operation was division by zero.
     case divideByZero
+}
+
+public struct ScopedCurrencyInfo: Codable {
+    var decimalSeparator: String
+    var numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
+    var numTinyDigits: Int              // SuperScriptDigits
+    var isCurrencyNameLeading: Bool
 }
 
 /// A value of some currency.
@@ -45,6 +68,9 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
     /// The fractional value of the amount (number to the right of the decimal point).
     var fraction: UInt32
 
+    /// Additional info for formatting currency strings
+    var currencyInfo: ScopedCurrencyInfo?
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(currency)
         if let normalized = try? normalizedCopy() {
@@ -69,6 +95,10 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
 
     /// The string representation of the value, formatted as "`integer`.`fraction`".
     public var valueStr: String {
+        var decimalSeparator = "."
+        if let currencyInfo {
+            decimalSeparator = currencyInfo.decimalSeparator
+        }
         if fraction == 0 {
             return "\(integer)"
         } else {
@@ -78,7 +108,7 @@ public class Amount: Codable, Hashable, CustomStringConvertible {
                 fracStr += "\(frac / (Amount.fractionalBase / 10))"
                 frac = (frac * 10) % Amount.fractionalBase
             }
-            return "\(integer).\(fracStr)"
+            return "\(integer)\(decimalSeparator)\(fracStr)"
         }
     }
 

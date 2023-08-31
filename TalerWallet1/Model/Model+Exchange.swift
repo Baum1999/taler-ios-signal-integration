@@ -78,12 +78,6 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 }
 
 /// A request to get info about a currency
-struct ScopedCurrencyInfo: Decodable {
-    var decimalSeparator: String
-    var numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
-    var numTinyDigits: Int              // SuperScriptDigits
-    var isCurrencyNameLeading: Bool
-}
 
 fileprivate struct GetScopedCurrencyInfo: WalletBackendFormattedRequest {
     typealias Response = ScopedCurrencyInfo
