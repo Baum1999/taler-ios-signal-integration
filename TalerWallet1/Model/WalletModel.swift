@@ -110,16 +110,36 @@ extension WalletModel {
     }
 
     private func docPath (sqlite3: Bool) throws -> String {
-        let documentUrls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        if (documentUrls.count > 0) {
-            var storageDir = documentUrls[0]
-            storageDir.appendPathComponent(DATABASE, isDirectory: false)
-            storageDir.appendPathExtension(sqlite3 ? "sqlite3" : "json")
-            let docPath = storageDir.path
+        if let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let documentUrl = documentsUrl.appendingPathComponent(DATABASE, isDirectory: false)
+                                          .appendingPathExtension(sqlite3 ? "sqlite3" : "json")
+            let docPath = documentUrl.path
             logger.debug("\(docPath)")
             return docPath
         } else {    // should never happen
-            logger.error("documentURLs empty")
+            logger.error("No documentDirectory")
+            throw WalletBackendError.initializationError
+        }
+    }
+
+    private func cachePath () throws -> String {
+        let fileManager = FileManager.default
+        if let cachesURL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            let cacheURL = cachesURL.appendingPathComponent("cache.json")
+            let cachePath = cacheURL.path
+            logger.debug("\(cachePath)")
+
+            if !fileManager.fileExists(atPath: cachePath) {
+                let contents = Data()       /// Initialize an empty `Data`.
+                fileManager.createFile(atPath: cachePath, contents: contents)
+                print("File \(cachePath) created")
+            } else {
+                print("File \(cachePath) already exists")
+            }
+
+            return cachePath
+        } else {    // should never happen
+            logger.error("No cachesDirectory")
             throw WalletBackendError.initializationError
         }
     }
