@@ -158,7 +158,7 @@
 		4E3B4BC42A428AF700CC88B8 /* Model+Balances.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Balances.swift"; sourceTree = "<group>"; };
 		4E3B4BC62A429F2A00CC88B8 /* View+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Notification.swift"; sourceTree = "<group>"; };
 		4E3B4BC82A42BC4800CC88B8 /* Model+Exchange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Exchange.swift"; sourceTree = "<group>"; };
-		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SendAmount.swift; path = TalerWallet1/Views/Peer2peer/SendAmount.swift; sourceTree = SOURCE_ROOT; };
+		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmount.swift; sourceTree = "<group>"; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
 		4E578E912A481D8600F21F1C /* Controller+playSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+playSound.swift"; sourceTree = "<group>"; };
