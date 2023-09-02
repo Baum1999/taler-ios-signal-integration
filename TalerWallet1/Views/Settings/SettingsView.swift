@@ -27,7 +27,7 @@ struct SettingsView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("playSounds") var playSounds: Int = 0
-    @AppStorage("talerFonts") var talerFonts: Int = 0
+    @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -65,7 +65,14 @@ struct SettingsView: View {
             }
         }
     }
+    @State private var listID = UUID()
 
+    func redraw(_ newFont: Int) -> Void {
+        if newFont != talerFont {
+            talerFont = newFont
+            withAnimation { listID = UUID() }
+        }
+    }
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
@@ -74,23 +81,10 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                SettingsFont(name: String(localized: "Font to use"), value: $talerFonts)
                 SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
-                         description: String(localized: "After a transaction finished"))
-                HStack {
-                    Text("Liststyle:")
-                        .font(.title2)
-                    Spacer()
-                    Picker(selection: $myListStyle) {
-                        ForEach(MyListStyle.allCases, id: \.self) {
-                            Text($0.displayName.capitalized).tag($0)
-                                .font(.title2)
-                        }
-                    } label: {}
-                        .pickerStyle(.menu)
-//                        .frame(alignment: .trailing)
-//                        .background(WalletColors().buttonBackColor(pressed: false, disabled: false))  TODO: RoundRect
-                }
+                                description: String(localized: "After a transaction finished"))
+                SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
+                SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,
                             description: String(localized: "More information intended for debugging")) {
@@ -247,6 +241,7 @@ struct SettingsView: View {
                     }
                 } // App version info
             }
+            .id(listID)
             .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)

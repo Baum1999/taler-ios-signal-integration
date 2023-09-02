@@ -6,25 +6,28 @@ import SwiftUI
 
 // Use enums for multiple font types and functions for the set custom font.
 
-fileprivate let REGULAR    = "AtkinsonHyperlegible-Regular"
-fileprivate let ITALIC     = "AtkinsonHyperlegible-Italic"
-fileprivate let BOLD       = "AtkinsonHyperlegible-Bold"
-fileprivate let BOLDITALIC = "AtkinsonHyperlegible-BoldItalic"
+fileprivate let ATKINSON   = "AtkinsonHyperlegible-"
+fileprivate let NUNITO     = "Nunito-"
+
+fileprivate let REGULAR    = "Regular"
+fileprivate let BOLD       = "Bold"
+fileprivate let BOLDITALIC = "BoldItalic"
+fileprivate let ITALIC     = "Italic"
 
 extension Font {
     enum TalerFont {
         case regular
-        case italic
         case bold
         case boldItalic
+        case italic
         case custom(String)
 
         var value: String {
             switch self {
                 case .regular: return REGULAR
-                case .italic: return ITALIC
                 case .bold: return BOLD
                 case .boldItalic: return BOLDITALIC
+                case .italic: return ITALIC
 
                 case .custom(let name):
                     return name
@@ -36,49 +39,57 @@ extension Font {
         return .custom(type.value, size: size)
     }
 
+    static func talerFontName(_ index: Int) -> String {
+        if index == 1 {
+            return ATKINSON
+        } else {
+            return NUNITO
+        }
+    }
+
     static var talerLargeTitle: Font {
-        Controller.shared.talerFonts == 0 ? .largeTitle :
-        .custom(REGULAR, size: 38, relativeTo: .largeTitle)
+        Controller.shared.talerFont == 0 ? .largeTitle :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 38, relativeTo: .largeTitle)
     } // 34 -> 38
     static var talerTitle: Font {
-        Controller.shared.talerFonts == 0 ? .title :
-        .custom(REGULAR, size: 31, relativeTo: .title)
+        Controller.shared.talerFont == 0 ? .title :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 31, relativeTo: .title)
     } // 28 -> 31
     static var talerTitle2: Font {
-        Controller.shared.talerFonts == 0 ? .title2 :
-        .custom(REGULAR, size: 25, relativeTo: .title2)
+        Controller.shared.talerFont == 0 ? .title2 :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 25, relativeTo: .title2)
     } // 22 -> 25
     static var talerTitle3: Font {
-        Controller.shared.talerFonts == 0 ? .title3 :
-        .custom(REGULAR, size: 23, relativeTo: .title3)
+        Controller.shared.talerFont == 0 ? .title3 :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 23, relativeTo: .title3)
     } // 20 -> 23
     static var talerHeadline: Font {
-        Controller.shared.talerFonts == 0 ? .headline :
-        .custom(BOLD, size: 19, relativeTo: .headline)
+        Controller.shared.talerFont == 0 ? .headline :
+            .custom(talerFontName(Controller.shared.talerFont) + BOLD, size: 19, relativeTo: .headline)
     } // 17 bold -> 19 bold
     static var talerBody: Font {
-        Controller.shared.talerFonts == 0 ? .body :
-        .custom(REGULAR, size: 19, relativeTo: .body)
+        Controller.shared.talerFont == 0 ? .body :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 19, relativeTo: .body)
     } // 17 -> 19
     static var talerCallout: Font {
-        Controller.shared.talerFonts == 0 ? .callout :
-        .custom(REGULAR, size: 18, relativeTo: .callout)
+        Controller.shared.talerFont == 0 ? .callout :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 18, relativeTo: .callout)
     } // 16 -> 18
     static var talerSubheadline: Font {
-        Controller.shared.talerFonts == 0 ? .subheadline :
-        .custom(REGULAR, size: 17, relativeTo: .subheadline)
+        Controller.shared.talerFont == 0 ? .subheadline :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 17, relativeTo: .subheadline)
     } // 15 -> 17
     static var talerFootnote: Font {
-        Controller.shared.talerFonts == 0 ? .footnote :
-        .custom(REGULAR, size: 15, relativeTo: .footnote)
+        Controller.shared.talerFont == 0 ? .footnote :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 15, relativeTo: .footnote)
     } // 13 -> 15
     static var talerCaption: Font {
-        Controller.shared.talerFonts == 0 ? .caption :
-        .custom(REGULAR, size: 13, relativeTo: .caption)
+        Controller.shared.talerFont == 0 ? .caption :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 13, relativeTo: .caption)
     } // 12 -> 13
     static var talerCaption2: Font {
-        Controller.shared.talerFonts == 0 ? .caption2 :
-        .custom(REGULAR, size: 12, relativeTo: .caption2)
+        Controller.shared.talerFont == 0 ? .caption2 :
+            .custom(talerFontName(Controller.shared.talerFont) + REGULAR, size: 12, relativeTo: .caption2)
     } // 11 -> 12
 }
 

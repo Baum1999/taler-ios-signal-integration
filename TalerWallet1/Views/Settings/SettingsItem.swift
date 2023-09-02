@@ -20,12 +20,12 @@ struct SettingsItem<Content: View>: View {
             VStack {
                 Text(name)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.title2)
+                    .font(.talerTitle2)
                     .padding([.bottom], 0.01)
                 if let desc = description {
                     Text(desc)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.caption)
+                        .font(.talerCaption)
                 }
             }
             content()
@@ -42,7 +42,7 @@ struct SettingsToggle: View {
     var body: some View {
         VStack {
             Toggle(name, isOn: $value.animation())
-                .font(.title2)
+                .font(.talerTitle2)
                 .onChange(of: value) { value in
                     action()
                 }
@@ -50,50 +50,56 @@ struct SettingsToggle: View {
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.caption)
+                    .font(.talerCaption)
             }
         }.padding([.bottom], 4)
     }
 }
 // MARK: -
 struct SettingsFont: View {
-    var name: String
-    @Binding var value: Int
-    var action: (_ value: Int) -> Void = {value in }
+    let title: String
+    let value: Int
+    let action: (Int) -> Void
 
-    func fontName(_ value: Int) -> (String, String, String) {
-        return (value == 0) ? ("textformat", String(localized:"System Font"), String(localized: "Standard iOS Font"))
-             : (value == 1) ? ("textformat.alt", String(localized:"Taler Font"), String(localized: "Atkinson-Hyperlegible"))
-                            : ("placeholdertext.fill", String(localized:"New Font"), String(localized:"New Font"))      // Neumorphism
-    }
+    @State private var selected = 0
+    let fonts = [String(localized: "Standard iOS Font"), "Atkinson-Hyperlegible", "Nunito"]
+
     var body: some View {
-        VStack {
-            let fontName = fontName(value)
-            HStack {
-                Text(name)
-                    .font(.talerTitle2)
-                Text(" ")
-                    .font(.talerLargeTitle)
-                Spacer()
-                Image(systemName: fontName.0)
-                    .font(.talerLargeTitle)
-                    .accessibilityLabel(fontName.1)
-                    .onTapGesture {
-                        if value > 0 {
-                            value = 0       // TODO: -1 for Neumorphism
-                        } else {
-                            value = value + 1
-                        }
-                    }
+        Picker(title, selection: $selected, content: {
+            ForEach(0..<fonts.count, id: \.self, content: { index in
+                Text(fonts[index]).tag(index)
+            })
+        })
+            .font(.talerTitle2)
+            .pickerStyle(.menu)
+            .onAppear() {
+                withAnimation { selected = value }
             }
-//                .onChange(of: value) { value in
-//                    action(value)
-//                }
+            .onChange(of: selected) { selected in
+                action(selected)
+            }
+    }
+}
+// MARK: -
+struct SettingsStyle: View {
+    let title: String
+    @Binding var myListStyle: MyListStyle
 
-            Text(fontName.2)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.talerCaption)
-        }.padding([.bottom], 4)
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.talerTitle2)
+            Spacer()
+            Picker(selection: $myListStyle) {
+                ForEach(MyListStyle.allCases, id: \.self) {
+                    Text($0.displayName.capitalized).tag($0)
+                        .font(.talerTitle2)
+                }
+            } label: {}
+                .pickerStyle(.menu)
+//                .frame(alignment: .trailing)
+//                .background(WalletColors().buttonBackColor(pressed: false, disabled: false))  TODO: RoundRect
+        }
     }
 }
 // MARK: -
@@ -113,12 +119,12 @@ struct SettingsSpeaker: View {
             let image = imageName(value)
             HStack {
                 Text(name)
-                    .font(.title2)
+                    .font(.talerTitle2)
                 Text(" ")
-                    .font(.largeTitle)
+                    .font(.talerLargeTitle)
                 Spacer()
                 Image(systemName: image.0)
-                    .font(.largeTitle)
+                    .font(.talerLargeTitle)
                     .accessibilityLabel(image.1)
                     .onTapGesture {
                         if value > 0 {
@@ -137,7 +143,7 @@ struct SettingsSpeaker: View {
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.caption)
+                    .font(.talerCaption)
             }
         }.padding([.bottom], 4)
     }
