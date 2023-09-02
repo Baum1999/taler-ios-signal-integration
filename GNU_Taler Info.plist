@@ -27,11 +27,13 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Atkinson-Hyperlegible-Regular-102.otf</string>
-		<string>Atkinson-Hyperlegible-Italic-102.otf</string>
 		<string>Atkinson-Hyperlegible-Bold-102.otf</string>
 		<string>Atkinson-Hyperlegible-BoldItalic-102.otf</string>
-		<string>Nunito-Regular</string>
-		<string>Nunito-Bold</string>
+		<string>Atkinson-Hyperlegible-Italic-102.otf</string>
+		<string>Nunito-Regular.ttf</string>
+		<string>Nunito-Bold.ttf</string>
+		<string>Nunito-BoldItalic.ttf</string>
+		<string>Nunito-Italic.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
