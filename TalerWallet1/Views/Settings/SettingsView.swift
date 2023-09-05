@@ -21,11 +21,13 @@ struct SettingsView: View {
     private let symLog = SymLogV(0)
     let navTitle: String
 
+    @EnvironmentObject private var controller: Controller
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("useHaptics") var useHaptics: Bool = false
     @AppStorage("playSounds") var playSounds: Int = 0
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
@@ -81,8 +83,12 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
+                if controller.hapticCapability.supportsHaptics {
+                    SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
+                                   description: String(localized: "Vibration Feedback"))
+                }
                 SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
-                                description: String(localized: "After a transaction finished"))
+                                description: String(localized: "When a transaction finished"))
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                 if diagnosticModeEnabled {

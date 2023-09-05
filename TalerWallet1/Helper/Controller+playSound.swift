@@ -4,12 +4,14 @@
  */
 import Foundation
 import AVFoundation
+import UIKit
 
 extension Controller {
 
     /// 0 = failure, 1 = received, 2 = sent
     func playSound(_ number: Int) {
         var soundID: SystemSoundID = 0
+        let notificationGenerator = useHaptics ? UINotificationFeedbackGenerator() : nil
         if number > 9 {
             soundID = UInt32(number)
         } else {
@@ -33,6 +35,9 @@ extension Controller {
             } else {
                 AudioServicesPlaySystemSound(soundID);
             }
+        }
+        if let notificationGenerator {
+            notificationGenerator.notificationOccurred(number == 0 ? .error : .success)
         }
     }
 }
