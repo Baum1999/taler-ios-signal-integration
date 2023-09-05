@@ -15,7 +15,7 @@ struct WithdrawProgressView: View {
             HStack {
                 Spacer()
                 Text(message)
-                    .font(.title)
+                    .font(.talerTitle)
                 Spacer()
             }
             Spacer()

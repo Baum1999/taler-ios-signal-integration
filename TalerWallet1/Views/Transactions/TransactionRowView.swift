@@ -12,11 +12,11 @@ struct TransactionRowCenter: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(centerTop)
-                .font(.headline)
+                .font(.talerHeadline)
                 .fontWeight(.medium)
                 .padding(.bottom, -2.0)
             Text(centerBottom)
-                .font(.callout)
+                .font(.talerCallout)
         }
     }
 }
@@ -41,7 +41,7 @@ struct TransactionRowView: View {
         HStack(spacing: 6) {
             Image(systemName: incoming ? "text.badge.plus" : "text.badge.minus")
                 .foregroundColor(foreColor)
-                .font(.largeTitle)
+                .font(.talerLargeTitle)
                 .accessibility(hidden: true)
 
             TransactionRowCenter(centerTop: transaction.localizedType,
@@ -51,7 +51,7 @@ struct TransactionRowView: View {
                 let sign = incoming ? "+" : "-"
                 let valueStr = sign + amount.valueStr
                 Text(valueStr)
-                    .font(.title)
+                    .font(.talerTitle)
                     .foregroundColor(foreColor)
                     .monospacedDigit()
             }

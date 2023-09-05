@@ -14,7 +14,7 @@ struct UncompletedRowView: View {
         HStack {
             Spacer()
             Text("\(count) uncompleted transactions")
-                .font(.title2)
+                .font(.talerTitle2)
                 .foregroundColor(WalletColors().uncompletedColor)
             Spacer()
         }

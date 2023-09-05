@@ -44,11 +44,12 @@ struct SendAmount: View {
             VStack(alignment: .trailing) {
                 let available = amountAvailable.readableDescription
                 Text("Available: \(available)")
-                    .font(.title3)
+                    .font(.talerTitle3)
                     .padding(.bottom, 2)
                 CurrencyInputView(currencyField: currencyField,
                                   title: String(localized: "Amount to send:"))
                 Text("+ \(fee) payment fee")
+                    .font(.talerBody)
                     .foregroundColor(.red)
                     .padding(4)
 

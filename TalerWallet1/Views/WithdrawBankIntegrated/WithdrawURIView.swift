@@ -57,6 +57,7 @@ struct WithdrawURIView: View {
                         .padding()
                 } else {
                     Text("You must accept the Exchange's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
+                        .font(.talerBody)
                         .multilineTextAlignment(.leading)
                         .padding()
                     NavigationLink(destination: LazyView {

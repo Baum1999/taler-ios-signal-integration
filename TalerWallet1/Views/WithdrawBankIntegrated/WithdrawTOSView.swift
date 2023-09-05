@@ -95,17 +95,18 @@ extension WithdrawTOSView {
                         if #available(iOS 16.0, *) {
                             Section {
                                 Text(term5)
-                                    .font(.footnote)
+                                    .font(.talerFootnote)
                                     .foregroundColor(Color(UIColor.label))
                             }
                         } else {
                             Text(term5)
-                                .font(.footnote)
+                                .font(.talerFootnote)
                                 .foregroundColor(Color(UIColor.label))
                         }
                     } else {
                         Section {
                             Text(term0)
+                                .font(.talerBody)
                         }
                     }
                 }.safeAreaInset(edge: .bottom) {

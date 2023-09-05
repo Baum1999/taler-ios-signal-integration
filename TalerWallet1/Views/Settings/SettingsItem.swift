@@ -29,6 +29,7 @@ struct SettingsItem<Content: View>: View {
                 }
             }
             content()
+                .font(.talerBody)
         }.padding([.bottom], 4)
     }
 }

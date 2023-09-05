@@ -39,7 +39,7 @@ struct ManualWithdraw: View {
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
                 Text(exchange.exchangeBaseUrl.trimURL())
                     .multilineTextAlignment(.center)
-//                    .font(.title3)
+                    .font(.talerBody)
 
                 let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
                 if !disabled {
@@ -59,6 +59,7 @@ struct ManualWithdraw: View {
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
                         } else {
                             Text("You must accept the Terms of Service first before you can withdraw electronic cash to your wallet.")
+                                .font(.talerBody)
                                 .multilineTextAlignment(.leading)
                                 .padding()
                             NavigationLink(destination: LazyView {

@@ -13,25 +13,27 @@ struct PendingOpView: View {
 
     var body: some View {
         Section {
-            if let baseURL = pendingOp.exchangeBaseUrl {
-                Text(baseURL)
-            }
-            Text(pendingOp.id)
-                .font(.caption)
-            let isLongPolling = "isLongPolling"
-            Toggle(isLongPolling, isOn: $polling)
-                .disabled(true)
-            let givesLifeness = "givesLifeness"
-            Toggle(givesLifeness, isOn: $liveliness)
-                .disabled(true)
-            let isDue = "isDue"
-            Toggle(isDue, isOn: $isDue)
-                .disabled(true)
-            let dateString = TalerDater.dateString(from: pendingOp.timestampDue)
-            Text(dateString)
+            Group {
+                if let baseURL = pendingOp.exchangeBaseUrl {
+                    Text(baseURL)
+                }
+                Text(pendingOp.id)
+                    .font(.talerCaption)
+                let isLongPolling = "isLongPolling"
+                Toggle(isLongPolling, isOn: $polling)
+                    .disabled(true)
+                let givesLifeness = "givesLifeness"
+                Toggle(givesLifeness, isOn: $liveliness)
+                    .disabled(true)
+                let isDue = "isDue"
+                Toggle(isDue, isOn: $isDue)
+                    .disabled(true)
+                let dateString = TalerDater.dateString(from: pendingOp.timestampDue)
+                Text(dateString)
+            }.font(.talerBody)
         } header: {
             Text(pendingOp.type)
-                .font(.title2)
+                .font(.talerTitle2)
         }
 //        .textCase(nil)    // don't capitalize
         .onAppear {

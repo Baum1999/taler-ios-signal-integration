@@ -21,16 +21,17 @@ struct PendingRowView: View {
 
             Spacer()
             Text("pending\n" + (incoming ? "incoming" : "outgoing"))
+                .font(.talerBody)
             Spacer()
             VStack(alignment: .trailing) {
                 let sign = incoming ? "+" : "-"
                 let valueStr = sign + amount.valueStr
                 Text(valueStr)
-                    .font(.title)
+                    .font(.talerTitle)
                     .foregroundColor(WalletColors().pendingColor(incoming))
                     .monospacedDigit()
 //                Text("PENDING")
-//                    .font(.callout)
+//                    .font(.talerCallout)
 //                    .foregroundColor(WalletColors().pendingColor(incoming))
             }
         }

@@ -15,13 +15,13 @@ struct AmountView: View {
             Text(title)
                 .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                 .multilineTextAlignment(.leading)
-                .font(.body)
+                .font(.talerBody)
             HStack {
                 Spacer()
                 Text(value)
                     .fixedSize(horizontal: false, vertical: true)   // wrap in scrollview
                     .multilineTextAlignment(.center)
-                    .font(large ? .title : .title2)
+                    .font(large ? .talerTitle : .talerTitle2)
 //                    .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
                     .foregroundColor(color)
                     .monospacedDigit()

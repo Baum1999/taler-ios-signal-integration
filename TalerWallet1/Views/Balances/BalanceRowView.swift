@@ -22,7 +22,7 @@ struct BalanceButton: View {
                         .font(.footnote).bold()
                 }
                 Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
-                    .font(.title)
+                    .font(.talerTitle)
                     .monospacedDigit()
             }
         }   .disabled(false)

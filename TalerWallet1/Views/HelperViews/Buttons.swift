@@ -25,7 +25,7 @@ struct HamburgerButton : View  {
         Button(action: action) {
             Image(systemName: "line.3.horizontal")
         }
-            .font(font ?? .title)
+            .font(font ?? .talerTitle)
     }
 }
 
@@ -37,7 +37,7 @@ struct QRButton : View  {
         Button(action: action) {
             Image(systemName: "qrcode.viewfinder")
         }
-        .font(font ?? .title)
+        .font(font ?? .talerTitle)
         .accessibilityLabel("Scan QR codes")
     }
 }
@@ -50,7 +50,7 @@ struct PlusButton : View  {
         Button(action: action) {
             Image(systemName: "plus")
         }
-            .font(font ?? .title)
+            .font(font ?? .talerTitle)
     }
 }
 
@@ -62,7 +62,7 @@ struct ArrowUpButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.up.to.line")
         }
-            .font(font ?? .title3)
+            .font(font ?? .talerTitle3)
     }
 }
 
@@ -74,7 +74,7 @@ struct ArrowDownButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.down.to.line")
         }
-            .font(font ?? .title3)
+            .font(font ?? .talerTitle3)
     }
 }
 
@@ -87,7 +87,7 @@ struct ReloadButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.clockwise")
         }
-            .font(font ?? .title)
+            .font(font ?? .talerTitle)
             .disabled(disabled)
     }
 }
@@ -172,8 +172,8 @@ struct TalerButtonStyle: ButtonStyle {
                                     : Alignment.trailing
             configuration.label
                 .multilineTextAlignment(aligned)
-                .font(.title3)
-//                .font(narrow ? .title3 : .title2)
+                .font(.talerTitle3)
+//                .font(narrow ? .talerTitle3 : .talerTitle2)
                 .frame(minWidth: 0, maxWidth: narrow ? nil : .infinity, alignment: aligned2)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 6)

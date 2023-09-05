@@ -69,7 +69,7 @@ struct TransactionButton: View {
                     }
                 }
             }
-            .font(.title)
+            .font(.talerTitle2)
             .frame(maxWidth: .infinity)
         })
         .buttonStyle(.bordered)

@@ -20,7 +20,7 @@ struct SendPurpose: View {
     let formatter = CurrencyFormatter.shared    // TODO: based on currency
 
     let buttonFont: Font = .title2
-    private var label: String {
+    private var value: String {
         let mag = pow(10, formatter.maximumFractionDigits)
         return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
     }
@@ -31,15 +31,16 @@ struct SendPurpose: View {
         VStack (spacing: 6) {
             Text(amount.readableDescription)
             Text("+ \(fee) payment fee")
+                .font(.talerBody)
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
                 Text("Purpose:")
+                    .font(.talerTitle2)
                     .padding(.top)
-                    .font(.title2)
 
                 if #available(iOS 16.0, *) {
                     TextField("Purpose", text: $summary, axis: .vertical)
-                        .font(.title2)
+                        .font(.talerTitle2)
                         .lineLimit(2...)
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
@@ -52,7 +53,7 @@ struct SendPurpose: View {
                         }
                 } else {
                     TextField("Purpose", text: $summary)
-                        .font(.title)
+                        .font(.talerTitle)
 //                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
@@ -68,10 +69,11 @@ struct SendPurpose: View {
                 HStack{
                     Spacer()
                     Text(verbatim: "\(summary.count)/100")
+                        .font(.talerBody)
                 } // maximum 100 characters
 
                 Text("Expires in:")
-                    .font(.title3)
+                    .font(.talerTitle3)
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)

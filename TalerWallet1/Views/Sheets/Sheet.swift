@@ -34,7 +34,7 @@ struct Sheet: View {
         .overlay(alignment: .top) {
             // Show the viewID on top of the sheet's NavigationView
             Text(idString)
-                .font(.caption2)
+                .font(.talerCaption2)
                 .foregroundColor(.purple)
                 .monospacedDigit()
                 .edgesIgnoringSafeArea(.top)

@@ -19,7 +19,7 @@ struct TransactionsEmptyView: View {
             Section {
                 Text("There are no transactions for \(currency).")
             }
-            .font(.title2)
+            .font(.talerTitle2)
         }
         .listStyle(myListStyle.style).anyView
 //        .padding(.vertical)

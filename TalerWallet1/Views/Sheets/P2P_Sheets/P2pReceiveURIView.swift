@@ -48,6 +48,7 @@ struct P2pReceiveURIView: View {
                         .padding()
                 } else {
                     Text("You must accept the Terms of Service first before you can receive electronic cash to your wallet.")
+                        .font(.talerBody)
                         .multilineTextAlignment(.leading)
                         .padding()
                     NavigationLink(destination: LazyView {
