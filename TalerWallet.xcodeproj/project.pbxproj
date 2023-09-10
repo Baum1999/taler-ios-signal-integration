@@ -545,7 +545,6 @@
 		4EB095052989CB7C0043A8A1 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				4E97968F2A3765ED006F73BC /* AgePicker.swift */,
 				4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */,
 				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
@@ -699,6 +698,7 @@
 		4EB095462989CBFE0043A8A1 /* HelperViews */ = {
 			isa = PBXGroup;
 			children = (
+				4E97968F2A3765ED006F73BC /* AgePicker.swift */,
 				4EB095472989CBFE0043A8A1 /* Buttons.swift */,
 				4EF840A62A0B85F400EE0D47 /* CopyShare.swift */,
 				4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */,
