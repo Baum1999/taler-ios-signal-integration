@@ -71,10 +71,10 @@ struct ManualWithdrawDone_Container : View {
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
                                        currency: LONGCURRENCY,
                                       paytoUris: [],
-                                      tosStatus: "tosStatus",
-                                 exchangeStatus: "exchangeStatus",
-                          ageRestrictionOptions: [],
-                                      permanent: false)
+                                      tosStatus: .pending,
+                            exchangeEntryStatus: .preset,
+                           exchangeUpdateStatus: .initial,
+                          ageRestrictionOptions: [])
         ManualWithdrawDone(exchange: exchange,
                     centsToTransfer: centsToTransfer)
     }

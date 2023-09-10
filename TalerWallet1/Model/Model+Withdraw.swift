@@ -67,11 +67,9 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
 }
 // MARK: -
 enum ExchangeTosStatus: String, Codable {
-    case new = "new"
-    case accepted = "accepted"
-    case changed = "changed"
-    case notFound = "not-found"
-    case unknown = "unknown"
+    case pending
+    case proposed
+    case accepted
 }
 struct ExchangeTermsOfService: Decodable {
     var currentEtag: String

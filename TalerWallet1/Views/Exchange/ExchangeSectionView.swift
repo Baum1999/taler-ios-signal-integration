@@ -76,17 +76,17 @@ struct ExchangeRow_Container : View {
         let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
                                         currency: LONGCURRENCY,
                                        paytoUris: [],
-                                       tosStatus: "tosStatus",
-                                  exchangeStatus: "exchangeStatus",
-                           ageRestrictionOptions: [12,16],
-                                       permanent: true)
+                                       tosStatus: .pending,
+                             exchangeEntryStatus: .preset,
+                            exchangeUpdateStatus: .initial,
+                           ageRestrictionOptions: [12,16])
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
                                         currency: LONGCURRENCY,
                                        paytoUris: [],
-                                       tosStatus: "tosStatus",
-                                  exchangeStatus: "exchangeStatus",
-                           ageRestrictionOptions: [],
-                                       permanent: false)
+                                       tosStatus: .proposed,
+                             exchangeEntryStatus: .ephemeral,
+                            exchangeUpdateStatus: .ready,
+                           ageRestrictionOptions: [])
             ExchangeSectionView(currency: LONGCURRENCY, exchanges: [exchange1, exchange2],
                                 centsToTransfer: $centsToTransfer)
     }

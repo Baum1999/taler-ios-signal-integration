@@ -7,22 +7,38 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+enum ExchangeEntryStatus: String, Codable {
+    case preset
+    case ephemeral
+    case used
+}
+
+enum ExchangeUpdateStatus: String, Codable {
+    case initial
+    case initialUpdate = "initial(update)"
+    case suspended
+    case failed
+    case outdatedUpdate = "outdated(update)"
+    case ready
+    case readyUpdate = "ready(update)"
+}
 // MARK: -
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
     static func == (lhs: Exchange, rhs: Exchange) -> Bool {
         return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl &&
-        lhs.exchangeStatus == rhs.exchangeStatus &&
-        lhs.permanent == rhs.permanent
+        lhs.tosStatus == rhs.tosStatus &&
+        lhs.exchangeEntryStatus == rhs.exchangeEntryStatus &&
+        lhs.exchangeUpdateStatus == rhs.exchangeUpdateStatus
     }
 
     var exchangeBaseUrl: String
     var currency: String?
     var paytoUris: [String]
-    var tosStatus: String
-    var exchangeStatus: String
+    var tosStatus: ExchangeTosStatus
+    var exchangeEntryStatus: ExchangeEntryStatus
+    var exchangeUpdateStatus: ExchangeUpdateStatus
     var ageRestrictionOptions: [Int]
-    var permanent: Bool
     var lastUpdateErrorInfo: ExchangeError?
 
     var id: String {
