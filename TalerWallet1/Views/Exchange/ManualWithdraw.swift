@@ -58,17 +58,9 @@ struct ManualWithdraw: View {
                                 Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
                         } else {
-                            Text("You must accept the Terms of Service first before you can withdraw electronic cash to your wallet.")
-                                .font(.talerBody)
-                                .multilineTextAlignment(.leading)
-                                .padding()
-                            NavigationLink(destination: LazyView {
-                                WithdrawTOSView(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                         viewID: VIEW_WITHDRAW_TOS,
-                                                   acceptAction: nil)         // pop back to here
-                            }) {
-                                Text("Read Terms of Service")  // VIEW_WITHDRAW_TOS
-                            }.buttonStyle(TalerButtonStyle(type: .prominent))
+                            ToSButtonView(exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                   viewID: VIEW_WITHDRAW_TOS,
+                                                      p2p: false)
                         }
                     }
                 } // disabled

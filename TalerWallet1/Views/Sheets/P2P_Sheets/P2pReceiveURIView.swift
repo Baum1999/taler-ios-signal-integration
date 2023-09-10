@@ -47,18 +47,9 @@ struct P2pReceiveURIView: View {
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {
-                    Text("You must accept the Terms of Service first before you can receive electronic cash to your wallet.")
-                        .font(.talerBody)
-                        .multilineTextAlignment(.leading)
-                        .padding()
-                    NavigationLink(destination: LazyView {
-                        WithdrawTOSView(exchangeBaseUrl: nil,
-                                                 viewID: SHEET_RCV_P2P_TOS,
-                                           acceptAction: nil)         // pop back to here
-                    }) {
-                        Text("Read Terms of Service")
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
+                    ToSButtonView(exchangeBaseUrl: nil,
+                                           viewID: SHEET_RCV_P2P_TOS,
+                                              p2p: true)
                 }
             } else {
                 // Yikes no details or no baseURL

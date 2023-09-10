@@ -222,6 +222,8 @@
 		4EEC157829F9032900D46A03 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
 		4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157929F9427F00D46A03 /* QRSheet.swift */; };
 		4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF840A62A0B85F400EE0D47 /* CopyShare.swift */; };
+		4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
+		4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
 		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 /* End PBXBuildFile section */
@@ -376,6 +378,7 @@
 		4EEC157729F9032900D46A03 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
 		4EF840A62A0B85F400EE0D47 /* CopyShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyShare.swift; sourceTree = "<group>"; };
+		4EFA395F2AA7946B00742548 /* ToSButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSButtonView.swift; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
 		D14AFD1D24D232B300C51073 /* Taler_Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -697,6 +700,7 @@
 				4EB095492989CBFE0043A8A1 /* AmountView.swift */,
 				4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */,
 				4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */,
+				4EFA395F2AA7946B00742548 /* ToSButtonView.swift */,
 			);
 			path = HelperViews;
 			sourceTree = "<group>";
@@ -1026,6 +1030,7 @@
 				4E3EAE4C2A990778009F1BE8 /* AmountView.swift in Sources */,
 				4E3EAE4D2A990778009F1BE8 /* P2pAcceptDone.swift in Sources */,
 				4E3EAE4E2A990778009F1BE8 /* AnyTransition+backslide.swift in Sources */,
+				4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */,
 				4E3EAE4F2A990778009F1BE8 /* BalanceRowButtons.swift in Sources */,
 				4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */,
 				4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */,
@@ -1122,6 +1127,7 @@
 				4EB0956C2989CBFE0043A8A1 /* AmountView.swift in Sources */,
 				4E3B4BC32A42252300CC88B8 /* P2pAcceptDone.swift in Sources */,
 				4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */,
+				4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */,
 				4EB065442A4CD1A80039B91D /* BalanceRowButtons.swift in Sources */,
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
 				4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */,

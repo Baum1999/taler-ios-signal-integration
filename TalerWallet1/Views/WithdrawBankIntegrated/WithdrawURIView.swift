@@ -56,18 +56,9 @@ struct WithdrawURIView: View {
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding()
                 } else {
-                    Text("You must accept the Exchange's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
-                        .font(.talerBody)
-                        .multilineTextAlignment(.leading)
-                        .padding()
-                    NavigationLink(destination: LazyView {
-                        WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
-                                                 viewID: SHEET_WITHDRAW_TOS,
-                                           acceptAction: nil)         // pop back to here
-                    }) {
-                        Text("Read Terms of Service")  // VIEW_WITHDRAW_TOS
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
+                    ToSButtonView(exchangeBaseUrl: exchangeBaseUrl,
+                                           viewID: SHEET_WITHDRAW_TOS,
+                                              p2p: false)
                 }
             } else {
                 // Yikes no details or no baseURL
