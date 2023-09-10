@@ -232,7 +232,7 @@ struct TransactionDetailView: View {
                             .accessibilityFont(.title2)
                             .lineLimit(4)
                             .padding(.bottom)
-                        // TODO: isSendCoins should show QR only while not expired
+                        // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             QRCodeDetails(transaction: transaction)
                             if hasDone {

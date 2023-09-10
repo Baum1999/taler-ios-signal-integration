@@ -11,7 +11,7 @@ struct WithdrawTOSView: View {
 
     let navTitle = String(localized: "Terms of Service")
 
-    var exchangeBaseUrl: String?
+    let exchangeBaseUrl: String?
 
     @EnvironmentObject private var model: WalletModel
 
@@ -103,7 +103,7 @@ extension WithdrawTOSView {
                                 .accessibilityFont(.footnote)
                                 .foregroundColor(Color(UIColor.label))
                         }
-                    } else {
+                    } else {        // MarkDown
                         Section {
                             Text(term0)
                                 .accessibilityFont(.body)
