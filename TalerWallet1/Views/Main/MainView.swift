@@ -71,7 +71,9 @@ extension MainView {
         @Binding var talerFont: Int
         @State var sidebarVisible: Bool = false
         func hamburgerAction() {
-            sidebarVisible = !sidebarVisible
+            withAnimation(.easeInOut(duration: 0.25)) {
+                sidebarVisible = !sidebarVisible
+            }
         }
 
         let balances = String(localized: "Balances")
@@ -108,13 +110,24 @@ extension MainView {
                             .id(views[currentView].name)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             .transition(.backslide)
-                    }
+                    }   .id(talerFont)
                         .navigationBarTitleDisplayMode(.automatic)
-                }.navigationViewStyle(.stack)
-                // The side view is on top of the current view
+                        .background(NavigationBarBuilder { navigationController in
+                            //                            navigationController.navigationBar.barTintColor = .red
+                            navigationController.navigationBar.titleTextAttributes =
+                                [.font: TalerFont.talerFont(talerFont, size: 24, relativeTo: .title2)]
+                            navigationController.navigationBar.largeTitleTextAttributes =
+                                [.font: TalerFont.talerFont(talerFont, size: 38, relativeTo: .largeTitle)]
+                        })
+                }
+                .navigationViewStyle(.stack)
+                .talerNavBar(talerFont: talerFont)
+
+                // The side view is above (Z-Axis) the current view
                 SideBarView(views: views,
                       currentView: $currentView,
-                   sidebarVisible: $sidebarVisible)
+                   sidebarVisible: sidebarVisible,
+                  hamburgerAction: hamburgerAction)
             }
         }
     } // Content

@@ -17,7 +17,8 @@ struct SideBarView: View {
     private let symLog = SymLogV(0)
     let views: [SidebarItem]
     @Binding var currentView: Int
-    @Binding var sidebarVisible: Bool
+    let sidebarVisible: Bool
+    let hamburgerAction: () -> Void
     @State private var rotationEnabled = false
 
     var body: some View {
@@ -35,8 +36,8 @@ struct SideBarView: View {
                     ForEach(0..<views.count, id: \.self) { i in
                         Button {
                             symLog.log("sidebar item \"\(views[i].name)\" selected")
-                            sidebarVisible = false      // slide sidebar to the left
-                            withAnimation(.easeInOut) {currentView = i}                     // switch to the view the user selected
+                            hamburgerAction()      // slide sidebar to the left
+                            withAnimation(.easeInOut(duration: 0.3)) {currentView = i}        // animate to the view the user selected
                         } label: {
                             if let sysImage = views[i].sysImage {
                                 Label(views[i].name, systemImage: sysImage)
@@ -68,11 +69,9 @@ struct SideBarView: View {
                 .offset(x: sidebarVisible ? sidebarWidth : 0)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    sidebarVisible = false
+                    hamburgerAction()      // slide sidebar to the left
                 }
         }
-        .animation(.linear  //(duration: SLIDEDURATION)
-                   , value: sidebarVisible)
     }
 }
 // MARK: -
@@ -86,7 +85,9 @@ fileprivate struct BindingViewContainer : View {
         ZStack(alignment: .leading) {
             views[currentView].view
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            SideBarView(views: views, currentView: $currentView, sidebarVisible: $sidebarVisible)
+            SideBarView(views: views, currentView: $currentView,
+                        sidebarVisible: sidebarVisible,
+                        hamburgerAction: { sidebarVisible = !sidebarVisible })
         }
     }
 }
