@@ -104,12 +104,10 @@ struct SettingsView: View {
                             SettingsItem(name: String(localized: "Pending Operations"),
                                   description: String(localized: "Exchange not yet ready...")) {}
                         }
-                        SettingsToggle(name: String(localized: "Set 2 seconds delay"), value: $developDelay,
+                        SettingsToggle(name: String(localized: "Set 2 seconds delay"),
+                                      value: $developDelay.onChange({ delay in
+                                        walletCore.developDelay = delay}),
                                 description: String(localized: "After each wallet-core action"))
-                        .onChange(of: developDelay, perform: { developDelay in
-                            walletCore.developDelay = developDelay
-                        })
-
                         SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"),
                               description: String(localized: "Get money for testing")) {
                             Button("Withdraw") {
