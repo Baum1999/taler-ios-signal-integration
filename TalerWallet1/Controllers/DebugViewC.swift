@@ -124,8 +124,8 @@ struct DebugViewV: View {
                 Spacer()
             }
             Text(viewIDString)
-                .font(.caption2)
                 .foregroundColor(.red)
+                .font(.system(size: 11))        // no accessibilityFont
                 .monospacedDigit()
             Spacer()
         }
