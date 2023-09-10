@@ -137,6 +137,10 @@
 		4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E932A4822D500F21F1C /* P2pPayURIView.swift */; };
 		4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */; };
+		4E605D902AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */; };
+		4E605D912AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */; };
+		4E605D922AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8F2AA8B407002FB9A7 /* Nunito-BlackItalic.ttf */; };
+		4E605D932AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8F2AA8B407002FB9A7 /* Nunito-BlackItalic.ttf */; };
 		4E6EDD852A3615BE0031D520 /* ManualDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetails.swift */; };
 		4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD862A363D8D0031D520 /* ListStyle.swift */; };
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
@@ -292,6 +296,8 @@
 		4E578E932A4822D500F21F1C /* P2pPayURIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P2pPayURIView.swift; sourceTree = "<group>"; };
 		4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeDetailView.swift; sourceTree = "<group>"; };
 		4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptDone.swift; sourceTree = "<group>"; };
+		4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
+		4E605D8F2AA8B407002FB9A7 /* Nunito-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-BlackItalic.ttf"; sourceTree = "<group>"; };
 		4E6EDD842A3615BE0031D520 /* ManualDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetails.swift; sourceTree = "<group>"; };
 		4E6EDD862A363D8D0031D520 /* ListStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListStyle.swift; sourceTree = "<group>"; };
 		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
@@ -453,6 +459,8 @@
 				4E3EAE9B2AA12467009F1BE8 /* Nunito-Bold.ttf */,
 				4E3EAEA12AA12582009F1BE8 /* Nunito-BoldItalic.ttf */,
 				4E3EAEA02AA12582009F1BE8 /* Nunito-Italic.ttf */,
+				4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */,
+				4E605D8F2AA8B407002FB9A7 /* Nunito-BlackItalic.ttf */,
 			);
 			path = Nunito;
 			sourceTree = "<group>";
@@ -932,8 +940,10 @@
 				4E3EAE812A990778009F1BE8 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
 				4E3EAE832A990778009F1BE8 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4E3EAE9C2AA12467009F1BE8 /* Nunito-Regular.ttf in Resources */,
+				4E605D922AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */,
 				4E3EAE9E2AA12467009F1BE8 /* Nunito-Bold.ttf in Resources */,
 				4E3EAEA42AA12582009F1BE8 /* Nunito-BoldItalic.ttf in Resources */,
+				4E605D902AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */,
 				4E3EAEA22AA12582009F1BE8 /* Nunito-Italic.ttf in Resources */,
 				4E3EAE822A990778009F1BE8 /* payment_received.m4a in Resources */,
 				4E3EAE852A990778009F1BE8 /* payment_sent.m4a in Resources */,
@@ -951,8 +961,10 @@
 				4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
 				4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4E3EAE9D2AA12467009F1BE8 /* Nunito-Regular.ttf in Resources */,
+				4E605D932AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */,
 				4E3EAE9F2AA12467009F1BE8 /* Nunito-Bold.ttf in Resources */,
 				4E3EAEA52AA12582009F1BE8 /* Nunito-BoldItalic.ttf in Resources */,
+				4E605D912AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */,
 				4E3EAEA32AA12582009F1BE8 /* Nunito-Italic.ttf in Resources */,
 				4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */,
 				4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */,
