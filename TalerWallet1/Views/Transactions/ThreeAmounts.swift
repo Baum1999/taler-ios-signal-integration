@@ -68,12 +68,12 @@ struct ThreeAmountsView: View {
                 VStack(alignment: .leading) {
                     Text("Using Exchange:")
                         .multilineTextAlignment(.leading)
-                        .font(.talerBody)
+                        .accessibilityFont(.body)
                     HStack {
                         Spacer()
                         Text(baseURL.trimURL())
                             .multilineTextAlignment(.center)
-                            .font(large ? .talerTitle2 : .talerTitle3)
+                            .accessibilityFont(large ? .title2 : .title3)
 //                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                             .foregroundColor(labelColor)
                         Spacer()

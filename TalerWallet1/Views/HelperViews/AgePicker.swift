@@ -32,7 +32,7 @@ struct AgePicker: View {
                 HStack {
                     Text("If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:")
                         .multilineTextAlignment(.leading)
-                        .font(.talerFootnote)
+                        .accessibilityFont(.footnote)
                     Spacer()
                 }.padding(.top)
                 Picker("Select age", selection: $selectedAge) {
@@ -42,7 +42,7 @@ struct AgePicker: View {
                                           : "\(index) years").tag(index)
                     }
                 }
-                .font(.talerBody)
+                .accessibilityFont(.body)
             }
         }
     }

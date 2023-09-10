@@ -66,7 +66,7 @@ struct TransactionDetailView: View {
                     } }
                 } // Suspend + Resume buttons
                 Text(dateString)
-                    .font(.talerTitle2)
+                    .accessibilityFont(.title2)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
@@ -75,7 +75,7 @@ struct TransactionDetailView: View {
                     Spacer()
                     Text("Status: \(common.txState.major.localizedState)")
                 }    .listRowSeparator(.automatic)
-                    .font(.talerTitle2)
+                    .accessibilityFont(.title2)
                 SwitchCase(transaction: $transaction, hasDone: doneAction != nil)
 
                 if transaction.isAbortable { if let abortAction {
@@ -174,8 +174,9 @@ struct TransactionDetailView: View {
             let pending = transaction.isPending
             Group {
                 switch transaction {
-                    case .dummy(let dummyTransaction):
-                        Text("").font(.talerBody)
+                    case .dummy(_):
+                        Text("")
+                            .accessibilityFont(.body)
                     case .withdrawal(let withdrawalTransaction):
                         let details = withdrawalTransaction.details
                         if pending {
@@ -208,7 +209,7 @@ struct TransactionDetailView: View {
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
                         Text(details.info.summary)
-                            .font(.talerTitle2)
+                            .accessibilityFont(.title2)
                             .lineLimit(4)
                             .padding(.bottom)
                         ThreeAmountsSheet(common: common, topTitle: String(localized: "Sum to be paid:"),
@@ -228,7 +229,7 @@ struct TransactionDetailView: View {
                     case .peer2peer(let p2pTransaction):
                         let details = p2pTransaction.details                    // TODO: details
                         Text(details.info.summary)
-                            .font(.talerTitle2)
+                            .accessibilityFont(.title2)
                             .lineLimit(4)
                             .padding(.bottom)
                         // TODO: isSendCoins should show QR only while not expired
@@ -237,7 +238,7 @@ struct TransactionDetailView: View {
                             if hasDone {
                                 Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                     .multilineTextAlignment(.leading)
-                                    .font(.talerSubheadline)
+                                    .accessibilityFont(.subheadline)
                                     .padding(.top)
                             }
                         }
@@ -264,7 +265,7 @@ struct TransactionDetailView: View {
             } else if keys.contains(EXCHANGEBASEURL) {
                 if let baseURL = details[EXCHANGEBASEURL] {
                     Text("from \(baseURL.trimURL())") 
-                        .font(.talerTitle2)
+                        .accessibilityFont(.title2)
                         .padding(.bottom)
                 }
             }

@@ -16,6 +16,7 @@ struct ExchangeRowView: View {
 
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
             Text(baseURL.trimURL())
+                .accessibilityFont(.body)
 
             NavigationLink(destination: LazyView {
                 EmptyView()     // TODO: Deposit
@@ -63,7 +64,7 @@ struct ExchangeSectionView: View {
             .accessibilityElement(children: .combine)
         } header: {
             Text(currency)
-                .font(.title)
+                .accessibilityFont(.title)
         }
     }
 }

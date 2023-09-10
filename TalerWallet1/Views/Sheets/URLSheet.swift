@@ -31,7 +31,7 @@ struct URLSheet: View {
                 default:        // Error view
                     VStack {
                         Text("unknown command")
-                            .font(.talerTitle)
+                            .accessibilityFont(.title)
                         Text(controller.messageForSheet ?? urlToOpen.absoluteString)
                     }
                     .navigationTitle(navTitle)

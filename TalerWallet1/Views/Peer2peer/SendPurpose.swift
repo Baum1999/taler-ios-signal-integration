@@ -19,7 +19,6 @@ struct SendPurpose: View {
 
     let formatter = CurrencyFormatter.shared    // TODO: based on currency
 
-    let buttonFont: Font = .title2
     private var value: String {
         let mag = pow(10, formatter.maximumFractionDigits)
         return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
@@ -31,16 +30,16 @@ struct SendPurpose: View {
         VStack (spacing: 6) {
             Text(amount.readableDescription)
             Text("+ \(fee) payment fee")
-                .font(.talerBody)
+                .accessibilityFont(.body)
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
                 Text("Purpose:")
-                    .font(.talerTitle2)
+                    .accessibilityFont(.title2)
                     .padding(.top)
 
                 if #available(iOS 16.0, *) {
                     TextField("Purpose", text: $summary, axis: .vertical)
-                        .font(.talerTitle2)
+                        .accessibilityFont(.title2)
                         .lineLimit(2...)
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
@@ -53,7 +52,7 @@ struct SendPurpose: View {
                         }
                 } else {
                     TextField("Purpose", text: $summary)
-                        .font(.talerTitle)
+                        .accessibilityFont(.title)
 //                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
                         .foregroundColor(WalletColors().fieldForeground)     // text color
                         .background(WalletColors().fieldBackground)
@@ -69,11 +68,11 @@ struct SendPurpose: View {
                 HStack{
                     Spacer()
                     Text(verbatim: "\(summary.count)/100")
-                        .font(.talerBody)
+                        .accessibilityFont(.body)
                 } // maximum 100 characters
 
                 Text("Expires in:")
-                    .font(.talerTitle3)
+                    .accessibilityFont(.title3)
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
@@ -87,8 +86,7 @@ struct SendPurpose: View {
                             amountToReceive: nil,
                             summary: summary, expireDays: expireDays)
                 }) {
-                    Text("Send \(label) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")
-                        .font(buttonFont)
+                    Text("Send \(value) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")  // TODO: currency formatter
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)

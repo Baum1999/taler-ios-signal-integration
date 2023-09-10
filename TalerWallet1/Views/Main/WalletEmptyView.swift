@@ -28,7 +28,7 @@ struct WalletEmptyView: View {
             }
         }
         .listStyle(myListStyle.style).anyView
-        .font(.talerTitle2)
+        .accessibilityFont(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10

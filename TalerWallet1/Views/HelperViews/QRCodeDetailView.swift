@@ -17,11 +17,11 @@ struct QRCodeDetailView: View {
             VStack (alignment: .leading) {
                 Text("Either copy and send this link:")
                     .multilineTextAlignment(.leading)
-                    .font(.talerTitle3)
+                    .accessibilityFont(.title3)
                     .padding(.vertical)
 
                 Text(talerURI)
-                    .font(.talerTitle3)
+                    .accessibilityFont(.title3)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                     .padding(.bottom)
@@ -41,7 +41,7 @@ struct QRCodeDetailView: View {
                 Text(amountStr)
                     .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
 //                    .padding(.top, 30)
-                    .font(.talerTitle3)
+                    .accessibilityFont(.title3)
                 HStack {
                     Spacer()
                     QRGeneratorView(text: talerURI)

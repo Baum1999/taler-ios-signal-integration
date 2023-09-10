@@ -20,16 +20,16 @@ struct SettingsItem<Content: View>: View {
             VStack {
                 Text(name)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.talerTitle2)
+                    .accessibilityFont(.title2)
                     .padding([.bottom], 0.01)
                 if let desc = description {
                     Text(desc)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.talerCaption)
+                        .accessibilityFont(.caption)
                 }
             }
             content()
-                .font(.talerBody)
+                .accessibilityFont(.body)
         }.padding([.bottom], 4)
     }
 }
@@ -43,7 +43,7 @@ struct SettingsToggle: View {
     var body: some View {
         VStack {
             Toggle(name, isOn: $value.animation())
-                .font(.talerTitle2)
+                .accessibilityFont(.title2)
                 .onChange(of: value) { value in
                     action()
                 }
@@ -51,7 +51,7 @@ struct SettingsToggle: View {
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.talerCaption)
+                    .accessibilityFont(.caption)
             }
         }.padding([.bottom], 4)
     }
@@ -71,7 +71,7 @@ struct SettingsFont: View {
                 Text(fonts[index]).tag(index)
             })
         })
-            .font(.talerTitle2)
+            .accessibilityFont(.title2)
             .pickerStyle(.menu)
             .onAppear() {
                 withAnimation { selected = value }
@@ -89,12 +89,12 @@ struct SettingsStyle: View {
     var body: some View {
         HStack {
             Text(title)
-                .font(.talerTitle2)
+                .accessibilityFont(.title2)
             Spacer()
             Picker(selection: $myListStyle) {
                 ForEach(MyListStyle.allCases, id: \.self) {
                     Text($0.displayName.capitalized).tag($0)
-                        .font(.talerTitle2)
+                        .accessibilityFont(.title2)
                 }
             } label: {}
                 .pickerStyle(.menu)
@@ -120,12 +120,12 @@ struct SettingsSpeaker: View {
             let image = imageName(value)
             HStack {
                 Text(name)
-                    .font(.talerTitle2)
+                    .accessibilityFont(.title2)
                 Text(" ")
-                    .font(.talerLargeTitle)
+                    .accessibilityFont(.largeTitle)
                 Spacer()
                 Image(systemName: image.0)
-                    .font(.talerLargeTitle)
+                    .accessibilityFont(.largeTitle)
                     .accessibilityLabel(image.1)
                     .onTapGesture {
                         if value > 0 {
@@ -144,7 +144,7 @@ struct SettingsSpeaker: View {
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.talerCaption)
+                    .accessibilityFont(.caption)
             }
         }.padding([.bottom], 4)
     }

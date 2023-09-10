@@ -15,16 +15,13 @@ struct BalanceButton: View {
     var body: some View {
         Button(action: rowAction) {
             VStack(alignment: .trailing, spacing: 0) {
-                HStack(alignment: .firstTextBaseline, spacing: 0) {
-                    Text("B", comment: "the first letter of Balance - or leave empty")
-                        .font(.title2)
-                    Text("alance", comment: "the remaining letters of Balance - or all if you left B empty")
-                        .font(.footnote).bold()
-                }
+                Text("Balance", comment: "Balance in main view")
+                    .bold()         // in iOS-15 defined for Text, but not for Font (only iOS-16)
                 Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
-                    .font(.talerTitle)
+                    .accessibilityFont(.title)
                     .monospacedDigit()
             }
+            .accessibilityFont(.subheadline)
         }   .disabled(false)
             .accessibilityElement(children: /*@START_MENU_TOKEN@*/.ignore/*@END_MENU_TOKEN@*/)
             .accessibilityLabel("Balance \(amount.readableDescription)")    // TODO: CurrencyFormatter!

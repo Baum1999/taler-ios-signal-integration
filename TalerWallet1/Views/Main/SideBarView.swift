@@ -26,7 +26,7 @@ struct SideBarView: View {
                 VStack(spacing: 10) {
                     let gnuTaler = String("GNU Taler")  // this should NOT be translated
                     Link(gnuTaler, destination: URL(string:"https://taler.net")!)
-                        .font(.talerLargeTitle)  //.bold()     iOS 16
+                        .accessibilityFont(.largeTitle)
                         .padding(.top, 30)
                     RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
                         .onTapGesture {
@@ -48,7 +48,7 @@ struct SideBarView: View {
                         }
                         .padding()
                         .buttonStyle(.borderless)
-                        .font(.talerTitle2)
+                        .accessibilityFont(.title2)
                         .disabled(i == currentView)
                         .accessibilityHidden(i == currentView)      // don't suggest the current item
                     }

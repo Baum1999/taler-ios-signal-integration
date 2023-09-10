@@ -17,7 +17,9 @@ struct TextFieldAlert: ViewModifier {
                 .disabled(isPresented)
             if isPresented {
                 VStack {
-                    Text(title).font(.talerHeadline).padding()
+                    Text(title)
+                        .accessibilityFont(.headline)
+                        .padding()
                     TextField(placeholder, text: $text).textFieldStyle(.roundedBorder).padding()
                     Divider()
                     HStack {
@@ -34,7 +36,7 @@ struct TextFieldAlert: ViewModifier {
                             action(text)
                             withAnimation { isPresented.toggle() }
                         }
-//                        .font(.talerBody)     TODO: check
+//                        .accessibilityFont(.talerBody)     TODO: check
                         Spacer()
                     }
                 }

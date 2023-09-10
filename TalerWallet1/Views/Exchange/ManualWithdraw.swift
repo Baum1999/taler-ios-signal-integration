@@ -39,7 +39,7 @@ struct ManualWithdraw: View {
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
                 Text(exchange.exchangeBaseUrl.trimURL())
                     .multilineTextAlignment(.center)
-                    .font(.talerBody)
+                    .accessibilityFont(.body)
 
                 let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
                 if !disabled {

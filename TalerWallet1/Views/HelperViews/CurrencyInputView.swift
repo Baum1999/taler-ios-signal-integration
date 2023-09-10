@@ -16,12 +16,12 @@ struct CurrencyInputView: View {
         VStack (alignment: .leading) {
             Text(title)
 //                .padding(.top)
-                .font(.talerTitle3)
+                .accessibilityFont(.title3)
             currencyField
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
-                .font(.talerTitle2)
+                .accessibilityFont(.title2)
                 .textFieldStyle(.roundedBorder)
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {

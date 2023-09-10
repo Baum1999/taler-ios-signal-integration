@@ -59,10 +59,10 @@ struct QuiteSomeCoins: View {
                 if someCoins.manyCoins {
                     Text(someCoins.quiteSome ? "Warning: It will take quite some time to encrypt this amount!"
                                              : "Warning: It will take some time to encrypt this amount.")
-                    .font(.talerBody)
+                    .foregroundColor(someCoins.quiteSome ? .red : .primary)
+                    .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
                     .padding(.vertical, 6)
-                    .foregroundColor(someCoins.quiteSome ? .red : .primary)
                 } // warnings
             }
         }
@@ -71,8 +71,8 @@ struct QuiteSomeCoins: View {
                : someCoins.tooMany ? "Amount too big for a single withdrawal!"
                 : someCoins.hasFee ? "- \(someCoins.fee) fee"
                                    : "No withdrawal fee")
-            .font(.talerBody)
             .foregroundColor((someCoins.invalid || someCoins.tooMany || someCoins.hasFee) ? .red : .primary)
+            .accessibilityFont(.body)
 //            .padding(4)
         }
     }

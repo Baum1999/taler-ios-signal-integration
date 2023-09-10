@@ -83,7 +83,7 @@ struct BalancesSectionView: View {
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
                 Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send them to another wallet.")
-                    .font(.talerBody)
+                    .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
             }
             NavigationLinksView(balance: balance,
@@ -119,7 +119,7 @@ struct BalancesSectionView: View {
                         }
                         if rows == 0 {
                             Text("Some pending transactions")
-                                .font(.talerBody)
+                                .accessibilityFont(.body)
                         }
                     }
                 }
@@ -143,7 +143,7 @@ struct BalancesSectionView: View {
             }
         } header: {
             Text(currency)
-                .font(.talerTitle)
+                .accessibilityFont(.title2)
         }.id(sectionID)
         .task {
 //            if shownSectionID != sectionID {
@@ -179,7 +179,7 @@ struct BalancesSectionView: View {
                                      reloadOneAction: reloadOneAction)
             } header: {
                 Text("Recent transactions")
-                    .font(.talerCallout)
+                    .accessibilityFont(.callout)
             }
         }
     } // body

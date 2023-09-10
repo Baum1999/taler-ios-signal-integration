@@ -60,7 +60,7 @@ struct ExchangeListView: View {
         .overlay {
             if exchanges.isEmpty {
                 Text("No Exchanges yet...")
-                    .font(.talerBody)
+                    .accessibilityFont(.body)
             }
         }
         .task {

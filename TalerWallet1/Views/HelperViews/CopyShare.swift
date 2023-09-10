@@ -32,7 +32,7 @@ struct CopyButton: View {
                 }
             }
         }
-        .font(.talerBody)
+        .accessibilityFont(.body)
         .disabled(!isEnabled)
     }
 }
@@ -55,7 +55,7 @@ struct ShareButton: View {
                 Text("Share")
             }
         }
-        .font(.talerBody)
+        .accessibilityFont(.body)
         .disabled(!isEnabled)
     }
 }

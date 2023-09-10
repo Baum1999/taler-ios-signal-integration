@@ -20,6 +20,7 @@ struct MainView: View {
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
     @Binding var soundPlayed: Bool
+    @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
 
     func sheetDismissed() -> Void {
         symLog.log("sheet dismiss")
@@ -31,7 +32,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(symLog: symLog)
+                Content(symLog: symLog, talerFont: $talerFont)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
@@ -67,7 +68,7 @@ struct MainView: View {
 extension MainView {
     struct Content: View {
         let symLog: SymLogV?
-
+        @Binding var talerFont: Int
         @State var sidebarVisible: Bool = false
         func hamburgerAction() {
             sidebarVisible = !sidebarVisible

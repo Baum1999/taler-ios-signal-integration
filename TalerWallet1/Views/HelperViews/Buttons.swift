@@ -18,77 +18,76 @@ extension ShapeStyle where Self == Color {
 }
 
 struct HamburgerButton : View  {
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "line.3.horizontal")
         }
-            .font(font ?? .talerTitle)
+        .accessibilityFont(.title)
+        .accessibilityLabel("Main Menu")
     }
 }
 
 struct QRButton : View  {
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "qrcode.viewfinder")
         }
-        .font(font ?? .talerTitle)
+        .accessibilityFont(.title)
         .accessibilityLabel("Scan QR codes")
     }
 }
 
 struct PlusButton : View  {
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "plus")
         }
-            .font(font ?? .talerTitle)
+        .accessibilityFont(.title)
+        .accessibilityLabel("Add...")
     }
 }
 
 struct ArrowUpButton : View  {
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.up.to.line")
         }
-            .font(font ?? .talerTitle3)
+        .accessibilityFont(.title2)
+        .accessibilityLabel("Scroll up")
     }
 }
 
 struct ArrowDownButton : View  {
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.down.to.line")
         }
-            .font(font ?? .talerTitle3)
+        .accessibilityFont(.title2)
+        .accessibilityLabel("Scroll down")
     }
 }
 
 struct ReloadButton : View  {
     let disabled: Bool
-    var font: Font?
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Image(systemName: "arrow.clockwise")
         }
-            .font(font ?? .talerTitle)
-            .disabled(disabled)
+        .accessibilityFont(.title)
+        .accessibilityLabel("Reload")
+        .disabled(disabled)
     }
 }
 
@@ -172,8 +171,8 @@ struct TalerButtonStyle: ButtonStyle {
                                     : Alignment.trailing
             configuration.label
                 .multilineTextAlignment(aligned)
-                .font(.talerTitle3)
-//                .font(narrow ? .talerTitle3 : .talerTitle2)
+                .accessibilityFont(.title3)
+//                                  narrow ? .title3 : .title2
                 .frame(minWidth: 0, maxWidth: narrow ? nil : .infinity, alignment: aligned2)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 6)

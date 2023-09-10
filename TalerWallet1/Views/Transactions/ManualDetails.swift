@@ -59,7 +59,8 @@ struct ManualDetails: View {
                         .disabled(false)
                     Spacer()
                 }   .listRowSeparator(.automatic)
-            }.font(.talerBody)
+            }
+                .accessibilityFont(.body)
         }
     }
 }

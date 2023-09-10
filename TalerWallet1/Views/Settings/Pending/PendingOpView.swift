@@ -18,7 +18,7 @@ struct PendingOpView: View {
                     Text(baseURL)
                 }
                 Text(pendingOp.id)
-                    .font(.talerCaption)
+                    .accessibilityFont(.caption)
                 let isLongPolling = "isLongPolling"
                 Toggle(isLongPolling, isOn: $polling)
                     .disabled(true)
@@ -30,10 +30,11 @@ struct PendingOpView: View {
                     .disabled(true)
                 let dateString = TalerDater.dateString(from: pendingOp.timestampDue)
                 Text(dateString)
-            }.font(.talerBody)
+            }
+            .accessibilityFont(.body)
         } header: {
             Text(pendingOp.type)
-                .font(.talerTitle2)
+                .accessibilityFont(.title2)
         }
 //        .textCase(nil)    // don't capitalize
         .onAppear {

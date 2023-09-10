@@ -12,27 +12,24 @@ struct PendingRowView: View {
 
     var body: some View {
         HStack {
+            let pendingColor = WalletColors().pendingColor(incoming)
             Image(systemName: incoming ? "text.badge.plus"
                                        : "text.badge.minus")
-                .font(.largeTitle)
-//                .foregroundColor(WalletColors().pendingColor)    // pending is always gray
-                .foregroundColor(WalletColors().pendingColor(incoming))
+                .foregroundColor(pendingColor)
+                .accessibilityFont(.largeTitle)
                 .accessibility(hidden: true)
 
             Spacer()
             Text("pending\n" + (incoming ? "incoming" : "outgoing"))
-                .font(.talerBody)
+                .accessibilityFont(.body)
             Spacer()
             VStack(alignment: .trailing) {
                 let sign = incoming ? "+" : "-"
                 let valueStr = sign + amount.valueStr
                 Text(valueStr)
-                    .font(.talerTitle)
-                    .foregroundColor(WalletColors().pendingColor(incoming))
+                    .foregroundColor(pendingColor)
+                    .accessibilityFont(.title)
                     .monospacedDigit()
-//                Text("PENDING")
-//                    .font(.talerCallout)
-//                    .foregroundColor(WalletColors().pendingColor(incoming))
             }
         }
         .accessibilityElement(children: .combine)

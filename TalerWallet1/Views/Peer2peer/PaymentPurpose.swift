@@ -19,7 +19,7 @@ struct PaymentPurpose: View {
     @FocusState private var isFocused: Bool
 
     let formatter = CurrencyFormatter.shared    // TODO: based on currency
-    let buttonFont: Font = .title2
+//    let buttonFont: Font = .talerTitle2
 
     private var label: String {
         let mag = pow(10, formatter.maximumFractionDigits)
@@ -36,10 +36,10 @@ struct PaymentPurpose: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Purpose:")
                     .padding(.top)
-                    .font(.title3)
+                    .accessibilityFont(.title3)
 
                 TextField("Purpose", text: $summary)
-                    .font(.title)
+                    .accessibilityFont(.title)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
                     .textFieldStyle(.roundedBorder)
@@ -56,7 +56,7 @@ struct PaymentPurpose: View {
                 } // maximum 100 characters
 
                 Text("Expires in:")
-                    .font(.title3)
+                    .accessibilityFont(.title3)
 
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
                     .disabled(false)
@@ -70,7 +70,7 @@ struct PaymentPurpose: View {
                             summary: summary, expireDays: expireDays)
                 }) {
                     Text("Request \(label) \(scopeInfo.currency)")
-                        .font(buttonFont)
+//                        .accessibilityFont(buttonFont)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
