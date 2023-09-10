@@ -9,7 +9,7 @@ struct LaunchAnimationView: View {
     var body: some View {
         ZStack {
             Color(.systemGray6).ignoresSafeArea()
-            RotatingTaler(size: (350 < UIScreen.main.bounds.width) ? 200 : 250, rotationEnabled: $rotationEnabled)
+            RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250, rotationEnabled: $rotationEnabled)
         }
     }
 }

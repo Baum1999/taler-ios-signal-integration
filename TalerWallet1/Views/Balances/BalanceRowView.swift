@@ -39,7 +39,7 @@ struct BalanceRowView: View {
 
     func needVStack(_ amount: Amount) -> Bool {
         // Sizes: 320 (SE), 375 (X, Xs, 12, 13 mini), 390 (12,13,14), 414 (Plus, Max), 428 (Pro Max)
-        guard 350 < UIScreen.main.bounds.width else {return true}   // always for iPhone SE 1st Gen
+        guard 350 < UIScreen.screenWidth else {return true}   // always for iPhone SE 1st Gen
         var count = amount.currencyStr.count
 //        print(sizeCategory)
         switch sizeCategory {
