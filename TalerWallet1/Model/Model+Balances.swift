@@ -8,7 +8,7 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 /// A currency balance
-struct Balance: Decodable, Hashable {
+struct Balance: Decodable, Hashable, Sendable {
     var available: Amount
     var scopeInfo: ScopeInfo
     var requiresUserInput: Bool
@@ -36,7 +36,7 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
 
     struct Args: Encodable {}                           // no arguments needed
 
-    struct Response: Decodable {                        // list of balances
+    struct Response: Decodable, Sendable {              // list of balances
         var balances: [Balance]
     }
 }

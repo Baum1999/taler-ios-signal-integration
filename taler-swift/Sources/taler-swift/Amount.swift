@@ -38,15 +38,15 @@ enum AmountError: Error {
     case divideByZero
 }
 
-public struct ScopedCurrencyInfo: Codable {
-    var decimalSeparator: String
-    var numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
-    var numTinyDigits: Int              // SuperScriptDigits
-    var isCurrencyNameLeading: Bool
+public struct ScopedCurrencyInfo: Codable, Sendable {
+    let decimalSeparator: String
+    let numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
+    let numTinyDigits: Int              // SuperScriptDigits
+    let isCurrencyNameLeading: Bool
 }
 
 /// A value of some currency.
-public class Amount: Codable, Hashable, CustomStringConvertible {
+public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringConvertible {        // TODO: @unchecked
     /// Format that a currency must match.
     private static let currencyRegex = #"^[-_*A-Za-z0-9]{1,12}$"#
     

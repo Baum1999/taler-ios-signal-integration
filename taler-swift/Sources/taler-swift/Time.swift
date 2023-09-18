@@ -17,7 +17,7 @@ enum TimestampError: Error {
 }
 
 /// A point in time, represented by milliseconds from January 1, 1970..
-public enum Timestamp: Codable, Hashable {
+public enum Timestamp: Codable, Hashable, Sendable {
     case milliseconds(UInt64)
     case never
     

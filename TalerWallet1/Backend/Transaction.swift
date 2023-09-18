@@ -142,7 +142,7 @@ enum TransactionType: String, Codable {
     var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund || isReward }
 }
 
-struct TransactionCommon: Decodable {
+struct TransactionCommon: Decodable, Sendable {
     var type: TransactionType
     var txState: TransactionState
     var amountEffective: Amount
@@ -222,7 +222,7 @@ struct WithdrawalTransactionDetails: Decodable {
     var withdrawalDetails: WithdrawalDetails
 }
 
-struct WithdrawalTransaction {
+struct WithdrawalTransaction : Sendable{
     var common: TransactionCommon
     var details: WithdrawalTransactionDetails
 }
@@ -237,7 +237,7 @@ struct PaymentTransactionDetails: Decodable {
     var info: OrderShortInfo
 }
 
-struct PaymentTransaction {
+struct PaymentTransaction : Sendable{
     var common: TransactionCommon
     var details: PaymentTransactionDetails
 }
@@ -250,7 +250,7 @@ struct RefundTransactionDetails: Decodable {
     var info: OrderShortInfo?       // TODO: is this still here?
 }
 
-struct RefundTransaction {
+struct RefundTransaction : Sendable{
     var common: TransactionCommon
     var details: RefundTransactionDetails
 }
@@ -260,7 +260,7 @@ struct RewardTransactionDetails: Decodable {
     var exchangeBaseUrl: String
 }
 
-struct RewardTransaction {
+struct RewardTransaction : Sendable{
     var common: TransactionCommon
     var details: RewardTransactionDetails
 }
@@ -285,32 +285,32 @@ struct RefreshTransactionDetails: Decodable {
     var refreshOutputAmount: Amount
 }
 
-struct RefreshTransaction {
+struct RefreshTransaction : Sendable{
     var common: TransactionCommon
     var details: RefreshTransactionDetails
 }
 
-struct P2pShortInfo: Codable {
+struct P2pShortInfo: Codable, Sendable {
     var summary: String
     var expiration: Timestamp
 }
 
-struct P2PTransactionDetails: Codable {
+struct P2PTransactionDetails: Codable, Sendable {
     var exchangeBaseUrl: String
     var talerUri: String?       // only if we initiated the transaction
     var info: P2pShortInfo
 }
 
-struct P2PTransaction {
+struct P2PTransaction : Sendable{
     var common: TransactionCommon
     var details: P2PTransactionDetails
 }
 
-struct DummyTransaction {
+struct DummyTransaction : Sendable{
     var common: TransactionCommon
 }
 
-enum Transaction: Decodable, Hashable, Identifiable {
+enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     case dummy (DummyTransaction)
     case withdrawal (WithdrawalTransaction)
     case payment (PaymentTransaction)
