@@ -15,6 +15,7 @@ struct SidebarItem {
 
 struct SideBarView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let views: [SidebarItem]
     @Binding var currentView: Int
     let sidebarVisible: Bool
@@ -85,7 +86,7 @@ fileprivate struct BindingViewContainer : View {
         ZStack(alignment: .leading) {
             views[currentView].view
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            SideBarView(views: views, currentView: $currentView,
+            SideBarView(stack: CallStack("Preview"), views: views, currentView: $currentView,
                         sidebarVisible: sidebarVisible,
                         hamburgerAction: { sidebarVisible = !sidebarVisible })
         }

@@ -16,6 +16,7 @@ import SymLog
 
 struct BalancesSectionView: View {
     private let symLog = SymLogV()
+    let stack: CallStack
     let balance: Balance
     let sectionCount: Int
     @Binding var centsToTransfer: UInt64

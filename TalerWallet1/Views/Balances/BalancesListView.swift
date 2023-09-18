@@ -11,6 +11,7 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV()
     let navTitle: String
+    let stack: CallStack
     let hamburgerAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
@@ -70,8 +71,8 @@ struct BalancesListView: View {
     }
 
     /// runs on MainActor if called in some Task {}
-    private func reloadAction() async -> Int {
-        let reloaded = await model.balancesM()
+    private func reloadAction(_ stack: CallStack) async -> Int {
+        let reloaded = await model.balancesM(stack.push())
         let count = reloaded.count
         balances = reloaded
         return count
@@ -82,7 +83,7 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Content(symLog: symLog, balances: $balances,
+        Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 centsToTransfer: $centsToTransfer, summary: $summary,
                 reloadAction: reloadAction)
             .navigationTitle(navTitle)
@@ -93,13 +94,12 @@ struct BalancesListView: View {
                     WalletEmptyView()
                         .refreshable {  // already async
                             symLog.log("refreshing")
-                            let count = await reloadAction()
+                            let count = await reloadAction(stack.push())
                             if count > 0 {
 //                                postNotificationM(.BalanceReloaded)
                                 NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
                             }
                         }
-
                 }
             }
             .alert("Scanning QR-codes requires access to the camera",
@@ -116,7 +116,7 @@ struct BalancesListView: View {
             } // sheet
             .task {
                 symLog.log(".task getBalances")
-                _ = await reloadAction()
+                _ = await reloadAction(stack.push(".task getBalances"))
             } // task
     }
 }
@@ -124,11 +124,12 @@ struct BalancesListView: View {
 extension BalancesListView {
     struct Content: View {
         let symLog: SymLogV?
+        let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
         @Binding var summary: String
-        var reloadAction: () async -> Int
+        var reloadAction: (_ stack: CallStack) async -> Int
 
         @State private var isActive = true
         @State private var shouldReload = false
@@ -141,14 +142,15 @@ extension BalancesListView {
             Group { // necessary for .backslide transition (bug in SwiftUI)
                 let count = balances.count
                 List(balances, id: \.self) { balance in
-                    BalancesSectionView(balance: balance,
+                    BalancesSectionView(stack: stack.push(),
+                                        balance: balance,
                                    sectionCount: count,
                                 centsToTransfer: $centsToTransfer,
                                         summary: $summary)
                 }
                 .refreshable {  // already async
                     symLog?.log("refreshing")
-                    let count = await reloadAction()
+                    let count = await reloadAction(stack.push())
                     if count > 0 {
 //                        postNotificationM(.BalanceReloaded)
                         NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
@@ -161,7 +163,7 @@ extension BalancesListView {
                 if shouldReload {
                     shouldReload = false
                     symLog?.log(".onAppear ==>  shouldReload was true, reloading now")
-                    Task { await reloadAction() } // runs on MainActor
+                    Task { await reloadAction(stack.push()) } // runs on MainActor
                 }
             }
             .onDisappear() {
@@ -172,7 +174,7 @@ extension BalancesListView {
                 // doesn't need to be received on main thread because we just reload in a background task anyway
                 if isActive {
                     symLog?.log(".onNotification(.BalanceChange) ==> reload")
-                    Task { await reloadAction() }
+                    Task { await reloadAction(stack.push()) }
                 } else {
                     symLog?.log(".onNotification(.BalanceChange) ==> reload postponed, shouldReload = true")
                     shouldReload = true

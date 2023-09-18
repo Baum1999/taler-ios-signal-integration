@@ -43,7 +43,7 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
-    @MainActor func balancesM()
+    @MainActor func balancesM(_ stack: CallStack)
       async -> [Balance] {          // M for MainActor
         do {
             let request = Balances()

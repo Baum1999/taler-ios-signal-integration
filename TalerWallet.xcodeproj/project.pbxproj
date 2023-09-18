@@ -229,6 +229,8 @@
 		4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */; };
 		4ECB62822A0BB01D004ABBB7 /* SelectDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */; };
 		4ED2F94B2A278F5100453B40 /* ThreeAmounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmounts.swift */; };
+		4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
+		4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
 		4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157229F8242800D46A03 /* QRGeneratorView.swift */; };
 		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
 		4EEC157829F9032900D46A03 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
@@ -392,6 +394,7 @@
 		4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+P2P.swift"; sourceTree = "<group>"; };
 		4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDays.swift; sourceTree = "<group>"; };
 		4ED2F94A2A278F5100453B40 /* ThreeAmounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmounts.swift; sourceTree = "<group>"; };
+		4EDBDCD82AB787CB00925C02 /* CallStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStack.swift; sourceTree = "<group>"; };
 		4EEC157229F8242800D46A03 /* QRGeneratorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRGeneratorView.swift; sourceTree = "<group>"; };
 		4EEC157729F9032900D46A03 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
@@ -555,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */,
+				4EDBDCD82AB787CB00925C02 /* CallStack.swift */,
 				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
@@ -1097,6 +1101,7 @@
 				4E3EAE6F2A990778009F1BE8 /* TalerStrings.swift in Sources */,
 				4E3EAE702A990778009F1BE8 /* CurrencyInputView.swift in Sources */,
 				4E3EAE712A990778009F1BE8 /* URL+id+iban.swift in Sources */,
+				4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E3EAE722A990778009F1BE8 /* RequestPayment.swift in Sources */,
 				4E3EAE732A990778009F1BE8 /* SettingsItem.swift in Sources */,
 				4E3EAE742A990778009F1BE8 /* BalanceRowView.swift in Sources */,
@@ -1198,6 +1203,7 @@
 				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
 				4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */,
 				4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */,
+				4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */,
 				4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */,
 				4EB0955C2989CBFE0043A8A1 /* BalanceRowView.swift in Sources */,

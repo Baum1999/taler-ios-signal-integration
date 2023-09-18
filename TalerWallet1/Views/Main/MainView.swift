@@ -15,6 +15,7 @@ struct LazyView<Content: View>: View {
 
 struct MainView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
     @State private var sheetPresented = false
@@ -32,7 +33,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(symLog: symLog, talerFont: $talerFont)
+                Content(symLog: symLog, stack: stack.push(), talerFont: $talerFont)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
@@ -68,6 +69,7 @@ struct MainView: View {
 extension MainView {
     struct Content: View {
         let symLog: SymLogV?
+        let stack: CallStack
         @Binding var talerFont: Int
         @State var sidebarVisible: Bool = false
         func hamburgerAction() {
@@ -83,6 +85,7 @@ extension MainView {
             SidebarItem(name: balances,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
                         view: AnyView(BalancesListView(navTitle: balances,
+                                                          stack: stack.push(),
                                                 hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchanges,
@@ -124,7 +127,8 @@ extension MainView {
                 .talerNavBar(talerFont: talerFont)
 
                 // The side view is above (Z-Axis) the current view
-                SideBarView(views: views,
+                SideBarView(stack: stack.push(),
+                            views: views,
                       currentView: $currentView,
                    sidebarVisible: sidebarVisible,
                   hamburgerAction: hamburgerAction)

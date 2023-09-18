@@ -37,7 +37,7 @@ struct TalerWallet1App: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView(soundPlayed: $soundPlayed)
+            MainView(stack: CallStack("App"), soundPlayed: $soundPlayed)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(controller)
