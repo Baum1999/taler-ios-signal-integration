@@ -142,8 +142,11 @@ struct BalancesSectionView: View {
 
             }
         } header: {
-            Text(currency)
-                .accessibilityFont(.title2)
+            HStack (alignment: .bottom, spacing: 10) {
+                BarGraph(transactions: $completedTransactions, barHeight: 10)
+                Text(currency)
+                    .accessibilityFont(.title2)
+            }
         }.id(sectionID)
         .task {
 //            if shownSectionID != sectionID {
@@ -233,7 +236,7 @@ fileprivate struct NavigationLinksView : View {
     }
 }
 // MARK: -
-#if DEBUG
+#if false   // model crashes
 fileprivate struct BindingViewContainer : View {
     @State var centsToTransfer: UInt64 = 333
     @State private var summary: String = "bla-bla"
