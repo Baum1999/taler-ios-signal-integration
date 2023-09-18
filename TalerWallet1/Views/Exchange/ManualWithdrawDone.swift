@@ -8,6 +8,7 @@ import SymLog
 
 struct ManualWithdrawDone: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Wire Transfer")
 
     let exchange: Exchange
@@ -30,15 +31,16 @@ struct ManualWithdrawDone: View {
 #endif
         Group {
             if let transactionId {
-                TransactionDetailView(transactionId: transactionId,
-                                       reloadAction: reloadOneAction,
-                                           navTitle: navTitle,
-                                         doneAction: ViewState.shared.popToRootView,
-                                        abortAction: nil,
-                                       deleteAction: nil,
-                                         failAction: nil,
-                                      suspendAction: nil,
-                                       resumeAction: nil)
+                TransactionDetailView(stack: stack.push(),
+                              transactionId: transactionId,
+                               reloadAction: reloadOneAction,
+                                   navTitle: navTitle,
+                                 doneAction: ViewState.shared.popToRootView,
+                                abortAction: nil,
+                               deleteAction: nil,
+                                 failAction: nil,
+                              suspendAction: nil,
+                               resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
@@ -75,8 +77,9 @@ struct ManualWithdrawDone_Container : View {
                             exchangeEntryStatus: .preset,
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
-        ManualWithdrawDone(exchange: exchange,
-                    centsToTransfer: centsToTransfer)
+        ManualWithdrawDone(stack: CallStack("Preview"),
+                        exchange: exchange,
+                 centsToTransfer: centsToTransfer)
     }
 }
 

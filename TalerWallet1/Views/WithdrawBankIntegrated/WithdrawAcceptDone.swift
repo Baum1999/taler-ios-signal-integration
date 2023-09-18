@@ -8,6 +8,7 @@ import SymLog
 
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Confirm with Bank")
 
     let exchangeBaseUrl: String?
@@ -29,15 +30,16 @@ struct WithdrawAcceptDone: View {
 #endif
         Group {
             if let transactionId {
-                TransactionDetailView(transactionId: transactionId,
-                                       reloadAction: reloadOneAction,
-                                           navTitle: navTitle,
-                                         doneAction: { dismissTop() },
-                                        abortAction: nil,
-                                       deleteAction: nil,
-                                         failAction: nil,
-                                      suspendAction: nil,
-                                       resumeAction: nil)
+                TransactionDetailView(stack: stack.push(),
+                              transactionId: transactionId,
+                               reloadAction: reloadOneAction,
+                                   navTitle: navTitle,
+                                 doneAction: { dismissTop() },
+                                abortAction: nil,
+                               deleteAction: nil,
+                                 failAction: nil,
+                              suspendAction: nil,
+                               resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
@@ -66,7 +68,8 @@ struct WithdrawAcceptDone: View {
 // MARK: -
 struct WithdrawAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
-        WithdrawAcceptDone(exchangeBaseUrl: DEMOEXCHANGE,
-                           url: URL(string: DEMOSHOP)!)
+        WithdrawAcceptDone(stack: CallStack("Preview"),
+                 exchangeBaseUrl: DEMOEXCHANGE,
+                             url: URL(string: DEMOSHOP)!)
     }
 }

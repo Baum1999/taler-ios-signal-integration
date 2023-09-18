@@ -7,6 +7,7 @@ import SymLog
 
 struct URLSheet: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Checking Link")
     var urlToOpen: URL
     @EnvironmentObject private var controller: Controller
@@ -17,15 +18,15 @@ struct URLSheet: View {
         Group {
             switch urlCommand {
                 case .withdraw:
-                    WithdrawURIView(url: urlToOpen)
+                    WithdrawURIView(stack: stack.push(), url: urlToOpen)
                 case .pay:
-                    PaymentView(url: urlToOpen)
+                    PaymentView(stack: stack.push(), url: urlToOpen)
                 case .payPull:
-                    P2pPayURIView(url: urlToOpen)
+                    P2pPayURIView(stack: stack.push(), url: urlToOpen)
                 case .payPush:
-                    P2pReceiveURIView(url: urlToOpen)
+                    P2pReceiveURIView(stack: stack.push(), url: urlToOpen)
                 case .payTemplate:
-                    PayTemplateView(url: urlToOpen)
+                    PayTemplateView(stack: stack.push(), url: urlToOpen)
 //                case .reward:
 //                    RewardURIView(url: urlToOpen)
                 default:        // Error view

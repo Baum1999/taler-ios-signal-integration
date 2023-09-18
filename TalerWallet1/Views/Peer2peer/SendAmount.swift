@@ -9,6 +9,7 @@ import SymLog
 // Called when tapping "Send Coins" in the balances list
 struct SendAmount: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var centsToTransfer: UInt64
@@ -56,11 +57,12 @@ struct SendAmount: View {
                 let disabled = centsToTransfer == 0    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
-                    SendPurpose(amountAvailable: amountAvailable,
-                                centsToTransfer: centsToTransfer,
-                                            fee: fee,
-                                        summary: $summary,
-                                     expireDays: $expireDays)
+                    SendPurpose(stack: stack.push(),
+                      amountAvailable: amountAvailable,
+                      centsToTransfer: centsToTransfer,
+                                  fee: fee,
+                              summary: $summary,
+                           expireDays: $expireDays)
                 }) {
                     Text("Next")
                 }   .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -103,9 +105,10 @@ struct SendAmount_Container : View {
 
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
-        SendAmount(amountAvailable: amount,
-                   centsToTransfer: $centsToTransfer,
-                           summary: $summary)
+        SendAmount(stack: CallStack("Preview"),
+         amountAvailable: amount,
+         centsToTransfer: $centsToTransfer,
+                 summary: $summary)
     }
 }
 

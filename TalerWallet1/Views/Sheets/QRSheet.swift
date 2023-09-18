@@ -9,6 +9,7 @@ import AVFoundation
 
 struct QRSheet: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @State private var scannedCode: String?
 
     var body: some View {
@@ -19,7 +20,7 @@ struct QRSheet: View {
                 if let scannedURL = URL(string: scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme == "taler" {
-                        URLSheet(urlToOpen: scannedURL)
+                        URLSheet(stack: stack.push(), urlToOpen: scannedURL)
                     } else {
                         let _ = print(scannedURL)       // TODO: logging
                         ErrorView(errortext: scannedURL.absoluteString)

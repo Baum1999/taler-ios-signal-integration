@@ -60,7 +60,7 @@ struct MainView: View {
             urlToOpen = url     // raise sheet
         }
         .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
-            let sheet = AnyView(URLSheet(urlToOpen: url))
+            let sheet = AnyView(URLSheet(stack: stack.push(), urlToOpen: url))
             Sheet(sheetView: sheet)
         }
     } // body
@@ -84,14 +84,15 @@ extension MainView {
         var views: [SidebarItem] {[
             SidebarItem(name: balances,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
-                        view: AnyView(BalancesListView(navTitle: balances,
-                                                          stack: stack.push(),
-                                                hamburgerAction: hamburgerAction)
+                        view: AnyView(BalancesListView(stack: stack.push(balances),
+                                                    navTitle: balances,
+                                             hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchanges,
                     sysImage: "building.columns",
-                        view: AnyView(ExchangeListView(navTitle: exchanges,
-                                                hamburgerAction: hamburgerAction)
+                        view: AnyView(ExchangeListView(stack: stack.push(exchanges),
+                                                    navTitle: exchanges,
+                                             hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: settings,    // TODO: "About"?
                     sysImage: "gearshape.fill",

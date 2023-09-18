@@ -10,6 +10,7 @@ import SymLog
 // both from the shop's website. We show the payment details
 struct PayTemplateView: View {
     private let symLog = SymLogV()
+    let stack: CallStack
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
     @EnvironmentObject private var controller: Controller

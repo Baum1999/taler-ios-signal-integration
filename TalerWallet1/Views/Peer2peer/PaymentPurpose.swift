@@ -8,6 +8,7 @@ import SymLog
 
 struct PaymentPurpose: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
 
     let scopeInfo: ScopeInfo
     let centsToTransfer: UInt64
@@ -65,9 +66,11 @@ struct PaymentPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)
 
                 NavigationLink(destination: LazyView {
-                    SendDone(amountToSend: nil,
-                            amountToReceive: amount,
-                            summary: summary, expireDays: expireDays)
+                    SendDone(stack: stack.push(),
+                      amountToSend: nil,
+                   amountToReceive: amount,
+                           summary: summary,
+                        expireDays: expireDays)
                 }) {
                     Text("Request \(label) \(scopeInfo.currency)")
 //                        .accessibilityFont(buttonFont)

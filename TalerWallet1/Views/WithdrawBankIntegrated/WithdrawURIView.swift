@@ -11,6 +11,7 @@ import SymLog
 // After the user confirmed the withdrawal, we show a button to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website
@@ -50,7 +51,9 @@ struct WithdrawURIView: View {
                 let tosAccepted = withdrawalAmountDetails.tosAccepted
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
-                        WithdrawAcceptDone(exchangeBaseUrl: exchangeBaseUrl, url: url)
+                        WithdrawAcceptDone(stack: stack.push(),
+                                 exchangeBaseUrl: exchangeBaseUrl,
+                                             url: url)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))

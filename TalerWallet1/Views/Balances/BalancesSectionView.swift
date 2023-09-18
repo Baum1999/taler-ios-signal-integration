@@ -66,17 +66,17 @@ struct BalancesSectionView: View {
 #endif
         let currency = balance.available.currencyStr
         let reloadCompleted = {
-            transactions = await model.transactionsT(currency: currency)
+            transactions = await model.transactionsT(stack.push(), currency: currency)
             completedTransactions = WalletModel.completedTransactions(transactions)
 //            sectionID = UUID()
         }
         let reloadPending = {
-            transactions = await model.transactionsT(currency: currency)
+            transactions = await model.transactionsT(stack.push(), currency: currency)
             pendingTransactions = WalletModel.pendingTransactions(transactions)
 //            sectionID = UUID()
         }
         let reloadUncompleted = {
-            transactions = await model.transactionsT(currency: currency)
+            transactions = await model.transactionsT(stack.push(), currency: currency)
             uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
 //            sectionID = UUID()
         }
@@ -87,13 +87,14 @@ struct BalancesSectionView: View {
                     .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
             }
-            NavigationLinksView(balance: balance,
-                        centsToTransfer: $centsToTransfer,
-                                summary: $summary,
-//                         buttonSelected: $buttonSelected,
-                  completedTransactions: $completedTransactions,
-                        reloadAllAction: reloadCompleted,
-                        reloadOneAction: reloadOneAction)
+            NavigationLinksView(stack: stack.push(),
+                              balance: balance,
+                      centsToTransfer: $centsToTransfer,
+                              summary: $summary,
+//                       buttonSelected: $buttonSelected,
+                completedTransactions: $completedTransactions,
+                      reloadAllAction: reloadCompleted,
+                      reloadOneAction: reloadOneAction)
             let hasPending = pendingTransactions.count > 0
             if hasPending {
                 let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
@@ -101,11 +102,13 @@ struct BalancesSectionView: View {
                 NavigationLink {
 //let _ = print("button: Pending Transactions: \(currency)")
                     LazyView {
-                        TransactionsListView(navTitle: String(localized: "Pending"), currency: currency,
-                                         transactions: pendingTransactions,
-                                           showUpDown: false,
-                                      reloadAllAction: reloadPending,
-                                      reloadOneAction: reloadOneAction)
+                        TransactionsListView(stack: stack.push(),
+                                          navTitle: String(localized: "Pending"),
+                                          currency: currency,
+                                      transactions: pendingTransactions,
+                                        showUpDown: false,
+                                   reloadAllAction: reloadPending,
+                                   reloadOneAction: reloadOneAction)
                     }
                 } label: {
                     VStack(spacing: 6) {
@@ -130,12 +133,13 @@ struct BalancesSectionView: View {
                 NavigationLink {
 //let _ = print("button: Uncompleted Transactions: \(currency)")
                     LazyView {
-                        TransactionsListView(navTitle: String(localized: "Uncompleted"),
-                                             currency: currency,
-                                         transactions: uncompletedTransactions,
-                                           showUpDown: false,
-                                      reloadAllAction: reloadUncompleted,
-                                      reloadOneAction: reloadOneAction)
+                        TransactionsListView(stack: stack.push(),
+                                          navTitle: String(localized: "Uncompleted"),
+                                          currency: currency,
+                                      transactions: uncompletedTransactions,
+                                        showUpDown: false,
+                                   reloadAllAction: reloadUncompleted,
+                                   reloadOneAction: reloadOneAction)
                     }
                 } label: {
                     UncompletedRowView(uncompletedTransactions: $uncompletedTransactions)
@@ -151,8 +155,8 @@ struct BalancesSectionView: View {
         }.id(sectionID)
         .task {
 //            if shownSectionID != sectionID {
-                symLog.log("task for BalancesSectionView \(sectionID) - reload Transactions")
-                let response = await model.transactionsT(currency: currency)
+                symLog.log("task for \(sectionID) - reload Transactions")
+                let response = await model.transactionsT(stack.push("task for \(sectionID) - reload Transactions"), currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)
@@ -178,9 +182,10 @@ struct BalancesSectionView: View {
                 let slice = sortedTransactions.prefix(3)
                 let threeTransactions = Array(slice)
                 TransactionsRowsView(symLog: symLog,
-                                     currency: currency,
-                                     transactions: threeTransactions,
-                                     reloadOneAction: reloadOneAction)
+                                      stack: stack.push(),
+                                   currency: currency,
+                               transactions: threeTransactions,
+                            reloadOneAction: reloadOneAction)
             } header: {
                 Text("Recent transactions")
                     .accessibilityFont(.callout)
@@ -190,6 +195,7 @@ struct BalancesSectionView: View {
 }
 
 fileprivate struct NavigationLinksView : View {
+    let stack: CallStack
     let balance: Balance
 //    let sectionCount: Int
     @Binding var centsToTransfer: UInt64
@@ -204,25 +210,29 @@ fileprivate struct NavigationLinksView : View {
         let currency = balance.available.currencyStr
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
-                SendAmount(amountAvailable: balance.available,
-                           centsToTransfer: $centsToTransfer,
-                                   summary: $summary)
+                SendAmount(stack: stack.push(),
+                 amountAvailable: balance.available,
+                 centsToTransfer: $centsToTransfer,
+                         summary: $summary)
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
             NavigationLink(destination: LazyView {
-                RequestPayment(scopeInfo: balance.scopeInfo,
-                         centsToTransfer: $centsToTransfer,
-                                 summary: $summary)
+                RequestPayment(stack: stack.push(),
+                           scopeInfo: balance.scopeInfo,
+                     centsToTransfer: $centsToTransfer,
+                             summary: $summary)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 
             NavigationLink(destination: LazyView {
-                TransactionsListView(navTitle: String(localized: "Transactions"), currency: currency,
-                                 transactions: completedTransactions,
-                                   showUpDown: true,
-                              reloadAllAction: reloadAllAction,
-                              reloadOneAction: reloadOneAction)
+                TransactionsListView(stack: stack.push(),
+                                  navTitle: String(localized: "Transactions"),
+                                  currency: currency,
+                              transactions: completedTransactions,
+                                showUpDown: true,
+                           reloadAllAction: reloadAllAction,
+                           reloadOneAction: reloadOneAction)
             }, tag: 3, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 

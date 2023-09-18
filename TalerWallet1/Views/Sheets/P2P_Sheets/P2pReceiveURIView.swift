@@ -10,6 +10,7 @@ import SymLog
 // from another user's SendCoins. We show the P2P details - but first the ToS must be accepted.
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "P2P Receive")
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -40,8 +41,9 @@ struct P2pReceiveURIView: View {
                 let tosAccepted = true  // TODO: https://bugs.gnunet.org/view.php?id=7869
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
-                        P2pAcceptDone(transactionId: peerPushCreditResponse.transactionId,
-                                           incoming: true)
+                        P2pAcceptDone(stack: stack.push(),
+                              transactionId: peerPushCreditResponse.transactionId,
+                                   incoming: true)
                     }) {
                         Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
                     }.buttonStyle(TalerButtonStyle(type: .prominent))

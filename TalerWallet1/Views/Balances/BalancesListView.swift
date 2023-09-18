@@ -9,9 +9,9 @@ import AVFoundation
 
 /// This view shows the list of balances / currencies, each in its own section
 struct BalancesListView: View {
-    private let symLog = SymLogV(0)
-    let navTitle: String
+    private let symLog = SymLogV()
     let stack: CallStack
+    let navTitle: String
     let hamburgerAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
@@ -71,10 +71,11 @@ struct BalancesListView: View {
     }
 
     /// runs on MainActor if called in some Task {}
+    @discardableResult
     private func reloadAction(_ stack: CallStack) async -> Int {
         let reloaded = await model.balancesM(stack.push())
         let count = reloaded.count
-        balances = reloaded
+        balances = reloaded         // redraw
         return count
     }
 
@@ -93,8 +94,8 @@ struct BalancesListView: View {
                 if balances.isEmpty {
                     WalletEmptyView()
                         .refreshable {  // already async
-                            symLog.log("refreshing")
-                            let count = await reloadAction(stack.push())
+                            symLog.log("empty refreshing")
+                            let count = await reloadAction(stack.push("empty refreshing"))
                             if count > 0 {
 //                                postNotificationM(.BalanceReloaded)
                                 NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
@@ -111,12 +112,12 @@ struct BalancesListView: View {
                 DebugViewC.shared.setViewID(VIEW_BALANCES)
             }
             .sheet(isPresented: $showQRScanner) {
-                let sheet = AnyView(QRSheet())
+                let sheet = AnyView(QRSheet(stack: stack.push()))
                 Sheet(sheetView: sheet)
             } // sheet
             .task {
                 symLog.log(".task getBalances")
-                _ = await reloadAction(stack.push(".task getBalances"))
+                await reloadAction(stack.push(".task"))
             } // task
     }
 }
@@ -129,6 +130,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
         @Binding var summary: String
+//        @discardableResult
         var reloadAction: (_ stack: CallStack) async -> Int
 
         @State private var isActive = true
@@ -150,7 +152,7 @@ extension BalancesListView {
                 }
                 .refreshable {  // already async
                     symLog?.log("refreshing")
-                    let count = await reloadAction(stack.push())
+                    let count = await reloadAction(stack.push("refreshing"))
                     if count > 0 {
 //                        postNotificationM(.BalanceReloaded)
                         NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
@@ -163,7 +165,7 @@ extension BalancesListView {
                 if shouldReload {
                     shouldReload = false
                     symLog?.log(".onAppear ==>  shouldReload was true, reloading now")
-                    Task { await reloadAction(stack.push()) } // runs on MainActor
+                    Task { await reloadAction(stack.push("shouldReload")) } // runs on MainActor
                 }
             }
             .onDisappear() {
@@ -174,7 +176,7 @@ extension BalancesListView {
                 // doesn't need to be received on main thread because we just reload in a background task anyway
                 if isActive {
                     symLog?.log(".onNotification(.BalanceChange) ==> reload")
-                    Task { await reloadAction(stack.push()) }
+                    Task { await reloadAction(stack.push(".BalanceChange")) }
                 } else {
                     symLog?.log(".onNotification(.BalanceChange) ==> reload postponed, shouldReload = true")
                     shouldReload = true

@@ -8,6 +8,7 @@ import SymLog
 
 struct SendPurpose: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @FocusState private var isFocused: Bool
 
     let amountAvailable: Amount
@@ -82,9 +83,11 @@ struct SendPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
-                    SendDone(amountToSend: amount,
-                            amountToReceive: nil,
-                            summary: summary, expireDays: expireDays)
+                    SendDone(stack: stack.push(),
+                      amountToSend: amount,
+                   amountToReceive: nil,
+                           summary: summary,
+                        expireDays: expireDays)
                 }) {
                     Text("Send \(value) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")  // TODO: currency formatter
                 }

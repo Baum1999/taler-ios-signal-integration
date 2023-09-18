@@ -9,6 +9,7 @@ import SymLog
 // Called when accepting a scanned P2P transaction: Receive coins or Pay Request(Invoice)
 struct P2pAcceptDone: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
 
     let transactionId: String
     let incoming: Bool
@@ -29,15 +30,16 @@ struct P2pAcceptDone: View {
 #endif
         let navTitle = incoming ? String(localized: "Received P2P", comment: "Title, short")
                                 : String(localized: "Paid P2P", comment: "Title, short")
-        TransactionDetailView(transactionId: transactionId,
-                               reloadAction: reloadOneAction,
-                                   navTitle: navTitle,
-                                 doneAction: { dismissTop() },
-                                abortAction: nil,
-                               deleteAction: nil,
-                                 failAction: nil,
-                              suspendAction: nil,
-                               resumeAction: nil)
+        TransactionDetailView(stack: stack.push(),
+                      transactionId: transactionId,
+                       reloadAction: reloadOneAction,
+                           navTitle: navTitle,
+                         doneAction: { dismissTop() },
+                        abortAction: nil,
+                       deleteAction: nil,
+                         failAction: nil,
+                      suspendAction: nil,
+                       resumeAction: nil)
             .navigationBarBackButtonHidden(true)
             .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)
@@ -64,6 +66,8 @@ struct P2pAcceptDone: View {
 // MARK: -
 struct P2pAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
-        P2pAcceptDone(transactionId: "some ID", incoming: true)
+        P2pAcceptDone(stack: CallStack("Preview"),
+              transactionId: "some ID",
+                   incoming: true)
     }
 }

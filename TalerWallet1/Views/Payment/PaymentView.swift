@@ -10,6 +10,7 @@ import SymLog
 // both from the shop's website. We show the payment details
 struct PaymentView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
     @EnvironmentObject private var controller: Controller
@@ -154,6 +155,6 @@ struct PaymentURIView_Previews: PreviewProvider {
         )
         let url = URL(string: "taler://pay/some_amount")!
         
-        PaymentView(url: url, preparePayResult: details)
+        PaymentView(stack: CallStack("Preview"), url: url, preparePayResult: details)
     }
 }

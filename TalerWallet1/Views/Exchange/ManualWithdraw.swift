@@ -9,6 +9,7 @@ import SymLog
 // Will be called by the user tapping "Withdraw Coins" in the exchange list
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
 
     let exchange: Exchange
     @Binding var centsToTransfer: UInt64
@@ -51,9 +52,10 @@ struct ManualWithdraw: View {
 //                                                                       : selectedAge
 //let _ = print(selectedAge, restrictAge)
                             NavigationLink(destination: LazyView {
-                                ManualWithdrawDone(exchange: exchange,
-                                            centsToTransfer: centsToTransfer)
-//                                                restrictAge: restrictAge)
+                                ManualWithdrawDone(stack: stack.push(),
+                                                exchange: exchange,
+                                         centsToTransfer: centsToTransfer)
+//                                              restrictAge: restrictAge)
                             }) {
                                 Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
                             }.buttonStyle(TalerButtonStyle(type: .prominent))
@@ -105,9 +107,10 @@ struct ManualWithdraw_Container : View {
                             exchangeEntryStatus: .preset,
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
-        ManualWithdraw(exchange: exchange,
-                centsToTransfer: $centsToTransfer,
-        withdrawalAmountDetails: details)
+        ManualWithdraw(stack: CallStack("Preview"),
+                    exchange: exchange,
+             centsToTransfer: $centsToTransfer,
+     withdrawalAmountDetails: details)
     }
 }
 

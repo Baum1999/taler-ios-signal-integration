@@ -9,6 +9,7 @@ import SymLog
 // Called when tapping "Request Payment" in the balances list
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
 
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64
@@ -40,11 +41,12 @@ struct RequestPayment: View {
                 let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
 
                 NavigationLink(destination: LazyView {
-                    PaymentPurpose(scopeInfo: scopeInfo,
-                             centsToTransfer: centsToTransfer,
-                                         fee: someCoins.fee,
-                                     summary: $summary,
-                                  expireDays: $expireDays)
+                    PaymentPurpose(stack: stack.push(),
+                               scopeInfo: scopeInfo,
+                         centsToTransfer: centsToTransfer,
+                                     fee: someCoins.fee,
+                                 summary: $summary,
+                              expireDays: $expireDays)
 //                        { deactivateAction() }
                 }) {
                     let amount = Amount.amountFromCents(currency, centsToTransfer)

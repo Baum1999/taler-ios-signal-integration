@@ -9,6 +9,7 @@ import SymLog
 // Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
 struct SendDone: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "P2P Ready")
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -37,15 +38,16 @@ struct SendDone: View {
 #endif
         VStack {
             if let transactionId {
-                TransactionDetailView(transactionId: transactionId,
-                                       reloadAction: reloadOneAction,
-                                           navTitle: navTitle,
-                                         doneAction: ViewState.shared.popToRootView,
-                                        abortAction: nil,
-                                       deleteAction: nil,
-                                         failAction: nil,
-                                      suspendAction: nil,
-                                       resumeAction: nil)
+                TransactionDetailView(stack: stack.push(),
+                              transactionId: transactionId,
+                               reloadAction: reloadOneAction,
+                                   navTitle: navTitle,
+                                 doneAction: ViewState.shared.popToRootView,
+                                abortAction: nil,
+                               deleteAction: nil,
+                                 failAction: nil,
+                              suspendAction: nil,
+                               resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
@@ -86,10 +88,11 @@ struct SendDone: View {
 struct SendNow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SendDone(amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
-                    amountToReceive: nil,
-                    summary: "some purpose",
-                    expireDays: 0)
+            SendDone(stack: CallStack("Preview"),
+              amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
+           amountToReceive: nil,
+                   summary: "some purpose",
+                expireDays: 0)
         }
     }
 }

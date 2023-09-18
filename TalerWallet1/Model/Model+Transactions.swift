@@ -108,7 +108,7 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(currency: String? = nil, searchString: String? = nil)
+    func transactionsT(_ stack: CallStack, currency: String? = nil, searchString: String? = nil)
     async -> [Transaction] {                                          // might be called from a background thread itself
         do {
             let request = GetTransactions(currency: currency, search: searchString)
@@ -119,9 +119,9 @@ extension WalletModel {
         }
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(currency: String? = nil, searchString: String? = nil)
+    @MainActor func transactionsMA(_ stack: CallStack, currency: String? = nil, searchString: String? = nil)
     async -> [Transaction] {    // M for MainActor
-        return await transactionsT(currency: currency, searchString: searchString)
+        return await transactionsT(stack.push(), currency: currency, searchString: searchString)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved

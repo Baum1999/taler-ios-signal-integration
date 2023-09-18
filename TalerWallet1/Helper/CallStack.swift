@@ -39,10 +39,10 @@ extension CallStackItem: Equatable {
 
 
 struct CallStack {
-    private var storage = [CallStackItem]()
-    func peek() -> CallStackItem? { storage.first }
+    private var stack = [CallStackItem]()
+    func peek() -> CallStackItem? { stack.first }
     func push(item: CallStackItem) -> CallStack {
-        return CallStack(storage: [item] + storage)
+        return CallStack(stack: [item] + stack)
     }
 }
 
@@ -60,7 +60,7 @@ extension CallStack {
           filePath: String = #file,
               line: UInt = #line) {
         let item = CallStackItem(file: filePath2Name(filePath) + ":\(line)", function: funcName, message: message)
-        self.storage = [item]
+        self.stack = [item]
     }
 #else
     init(_ message: String = "") {

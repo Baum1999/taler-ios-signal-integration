@@ -7,6 +7,7 @@ import SymLog
 
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     let navTitle: String
 
@@ -28,6 +29,7 @@ struct TransactionsListView: View {
         ScrollViewReader { scrollView in
             List {
                 TransactionsRowsView(symLog: symLog,
+                                      stack: stack.push(),
                                    currency: currency,
                                transactions: transactions,
 //                          reloadAllAction: reloadAllAction,
@@ -78,6 +80,7 @@ struct TransactionsListView: View {
 // used by TransactionsListView, and by Balances to show the last 3 transactions
 struct TransactionsRowsView: View {
     let symLog: SymLogV?
+    let stack: CallStack
     let currency: String
     let transactions: [Transaction]
 //  let reloadAllAction: () async -> ()
@@ -97,15 +100,16 @@ struct TransactionsRowsView: View {
         ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
             NavigationLink {
                 LazyView {
-                    TransactionDetailView(transactionId: transaction.id,
-                                           reloadAction: reloadOneAction,
-                                               navTitle: nil,
-                                             doneAction: nil,
-                                            abortAction: abortAction,
-                                           deleteAction: deleteAction,
-                                             failAction: failAction,
-                                          suspendAction: suspendAction,
-                                           resumeAction: resumeAction)
+                    TransactionDetailView(stack: stack.push(),
+                                  transactionId: transaction.id,
+                                   reloadAction: reloadOneAction,
+                                       navTitle: nil,
+                                     doneAction: nil,
+                                    abortAction: abortAction,
+                                   deleteAction: deleteAction,
+                                     failAction: failAction,
+                                  suspendAction: suspendAction,
+                                   resumeAction: resumeAction)
                 }
             } label: {
                 TransactionRowView(transaction: transaction)

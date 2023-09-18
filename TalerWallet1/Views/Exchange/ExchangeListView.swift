@@ -9,6 +9,7 @@ import SymLog
 /// This view shows the list of exchanges
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle: String
     var hamburgerAction: () -> Void
 
@@ -50,9 +51,10 @@ struct ExchangeListView: View {
 
         //Text("Exchanges...")
         Content(symLog: symLog,
-                exchanges: $exchanges,
-                centsToTransfer: $centsToTransfer,
-                reloadAction: reloadAction)
+                 stack: stack.push(),
+             exchanges: $exchanges,
+       centsToTransfer: $centsToTransfer,
+          reloadAction: reloadAction)
         .navigationTitle(navTitle)
         .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
                             trailing: PlusButton(action: plusAction)
@@ -84,6 +86,7 @@ struct ExchangeListView: View {
 extension ExchangeListView {
     struct Content: View {
         let symLog: SymLogV?
+        let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         @Binding var exchanges: [Exchange]
         @Binding var centsToTransfer: UInt64
@@ -110,7 +113,9 @@ extension ExchangeListView {
             let sortedDict = dict.sorted{ $0.key < $1.key}
             Group { // necessary for .backslide transition (bug in SwiftUI)
                 List(sortedDict, id: \.key) { key, value in
-                    ExchangeSectionView(currency: key, exchanges: value, centsToTransfer: $centsToTransfer)
+                    ExchangeSectionView(stack: stack.push(),
+                                     currency: key, exchanges: value,
+                              centsToTransfer: $centsToTransfer)
                 }
                 .refreshable {
                     symLog?.log("refreshing")

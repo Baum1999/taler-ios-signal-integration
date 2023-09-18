@@ -10,6 +10,7 @@ import SymLog
 // from another user's Send Request(Invoice). We show the P2P details.
 struct P2pPayURIView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle = String(localized: "Pay P2P")
 
     // the scanned URL
@@ -39,8 +40,9 @@ struct P2pPayURIView: View {
                 .navigationTitle(navTitle)
 
                 NavigationLink(destination: LazyView {
-                        P2pAcceptDone(transactionId: peerPullDebitResponse.transactionId,
-                                           incoming: false)
+                    P2pAcceptDone(stack: stack.push(),
+                          transactionId: peerPullDebitResponse.transactionId,
+                               incoming: false)
                     }) {
                         Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
                     }.buttonStyle(TalerButtonStyle(type: .prominent))

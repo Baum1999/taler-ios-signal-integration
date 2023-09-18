@@ -6,6 +6,7 @@ import SwiftUI
 import taler_swift
 
 struct ExchangeRowView: View {
+    let stack: CallStack
     let exchange: Exchange
     let currency: String
     @Binding var centsToTransfer: UInt64
@@ -23,8 +24,9 @@ struct ExchangeRowView: View {
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0)
             NavigationLink(destination: LazyView {
-                ManualWithdraw(exchange: exchange,
-                               centsToTransfer: $centsToTransfer)
+                ManualWithdraw(stack: stack.push(),
+                            exchange: exchange,
+                     centsToTransfer: $centsToTransfer)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
@@ -47,6 +49,7 @@ struct ExchangeRowView: View {
 ///         currency
 /// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
+    let stack: CallStack
     let currency: String
     let exchanges: [Exchange]
 
@@ -59,7 +62,10 @@ struct ExchangeSectionView: View {
 #endif
         Section {
             ForEach(exchanges) { exchange in
-                ExchangeRowView(exchange: exchange, currency: currency, centsToTransfer: $centsToTransfer)
+                ExchangeRowView(stack: stack.push(),
+                             exchange: exchange,
+                             currency: currency,
+                      centsToTransfer: $centsToTransfer)
             }
             .accessibilityElement(children: .combine)
         } header: {
@@ -88,7 +94,7 @@ struct ExchangeRow_Container : View {
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
-            ExchangeSectionView(currency: LONGCURRENCY, exchanges: [exchange1, exchange2],
+        ExchangeSectionView(stack: CallStack("Preview"), currency: LONGCURRENCY, exchanges: [exchange1, exchange2],
                                 centsToTransfer: $centsToTransfer)
     }
 }
