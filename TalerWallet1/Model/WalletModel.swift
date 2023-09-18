@@ -24,7 +24,7 @@ class WalletModel: ObservableObject {
 #endif
         let sendTime = Date.now
         do {
-            let (response, id) = try await WalletCore.shared.sendFormattedRequest(request: request)
+            let (response, id) = try await WalletCore.shared.sendFormattedRequest(request)
 #if !DEBUG
             let timeUsed = Date.now - sendTime
             logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")

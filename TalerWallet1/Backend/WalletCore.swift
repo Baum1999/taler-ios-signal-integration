@@ -332,7 +332,7 @@ print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        /
 // MARK: -  async / await function
 extension WalletCore {
     /// send async requests to wallet-core
-    func sendFormattedRequest<T: WalletBackendFormattedRequest> (request: T) async throws -> (T.Response, UInt) {
+    func sendFormattedRequest<T: WalletBackendFormattedRequest> (_ request: T) async throws -> (T.Response, UInt) {
         let reqData = WalletBackendRequest(operation: request.operation(),
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
