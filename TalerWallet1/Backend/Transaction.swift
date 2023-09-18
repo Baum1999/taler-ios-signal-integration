@@ -446,7 +446,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     func detailsToShow() -> Dictionary<String, String> {
         var result: [String:String] = [:]
         switch self {
-            case .dummy(let dummyTransaction):
+            case .dummy(_):  // let dummyTransaction
                 break
             case .withdrawal(let withdrawalTransaction):
                 result[EXCHANGEBASEURL] = withdrawalTransaction.details.exchangeBaseUrl
