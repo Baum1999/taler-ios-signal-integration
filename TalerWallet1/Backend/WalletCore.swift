@@ -152,7 +152,6 @@ extension WalletCore {
                           object anObject: Any? = nil,
                                  userInfo: [AnyHashable: Any]? = nil) {
         Task { // runs on MainActor
-            if let userInfo { symLog.log(userInfo) } else { symLog.log(aName) }
             await postNotificationM(aName, object: anObject, userInfo: userInfo)
             logger.log("Notification sent: \(aName.rawValue)")
         }
@@ -214,12 +213,15 @@ extension WalletCore {
 
             switch payload.type {
                 case Notification.Name.TransactionStateTransition.rawValue:
+                    symLog.log(anyPayload)
                     try handleStateTransition(jsonData)
                 case Notification.Name.PendingOperationProcessed.rawValue:
                     try handlePendingProcessed(payload)
                 case Notification.Name.BalanceChange.rawValue:
+                    symLog.log(anyPayload)
                     postNotification(.BalanceChange)
                 case Notification.Name.ExchangeAdded.rawValue:
+                    symLog.log(anyPayload)
                     postNotification(.ExchangeAdded)
                 case Notification.Name.ReserveNotYetFound.rawValue:
                     if let reservePub = payload.reservePub {
