@@ -86,9 +86,9 @@ struct BalanceRowView: View {
 struct BalanceRowView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            BalanceRowView(amount: try! Amount(fromString: "TestKUDOS" + ":1234.56"),
+            BalanceRowView(amount: try! Amount(fromString: TESTCURRENCY + ":1234.56"),
                            sendAction: {}, recvAction: {}, rowAction: {})
-            BalanceRowView(amount: try! Amount(fromString: "KUDOS" + ":1234.56"),
+            BalanceRowView(amount: try! Amount(fromString: DEMOCURRENCY + ":1234.56"),
                            sendAction: {}, recvAction: {}, rowAction: {})
         }
     }

@@ -25,7 +25,8 @@ public let TESTEXCHANGE = HTTPS + "exchange.test.taler.net"
 public let ARS_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar"
 public let ARS_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar"
 public let DEMOCURRENCY = "KUDOS"
-public let TESTCURRENCY = "TESTKUDOS"
+//public let TESTCURRENCY = "TESTKUDOS"
+public let TESTCURRENCY = "KUDOS"
 //public let LONGCURRENCY = "gold-pressed Latinum"                // 20 characters, with dash and space
 public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters, no dash, no space
 
