@@ -19,7 +19,7 @@ struct TransactionButton: View {
                               :  isDestructive ? .destructive
                                                : nil
         Button(role: role, action: {
-            Task {
+            Task { // runs on MainActor
                 disabled = true     // don't try this more than once
                 do {
                     try await action(transactionId)

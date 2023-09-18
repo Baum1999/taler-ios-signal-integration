@@ -37,6 +37,7 @@ struct CopyButton: View {
     }
 }
 // MARK: -
+@MainActor
 struct ShareButton: View {
     private let symLog = SymLogV(0)
     @Environment(\.isEnabled) private var isEnabled: Bool

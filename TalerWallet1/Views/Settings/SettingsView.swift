@@ -57,7 +57,7 @@ struct SettingsView: View {
         Button("Reset", role: .destructive) {
             didReset = true
             showResetAlert = false
-            Task {
+            Task { // runs on MainActor
                 symLog.log("❗️Reset wallet-core❗️")
                 do {
                     try await model.resetWalletCoreT()
@@ -112,7 +112,7 @@ struct SettingsView: View {
                               description: String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("Withdraw KUDOS")
                                     do {
                                         try await model.loadTestKudosM(test: false)
@@ -128,7 +128,7 @@ struct SettingsView: View {
                               description: String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
                                     do {
                                         try await model.loadTestKudosM(test: true)
@@ -144,7 +144,7 @@ struct SettingsView: View {
                               description: String(localized: "Perform basic test transactions")) {
                             Button("Demo 1") {
                                 checkDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("running integration test on demo")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: false, test: false)
@@ -160,7 +160,7 @@ struct SettingsView: View {
                               description: String(localized: "Perform basic test transactions")) {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("running integration test on test")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: false, test: true)
@@ -176,7 +176,7 @@ struct SettingsView: View {
                               description: String(localized: "Perform more test transactions")) {
                             Button("Demo 2") {
                                 checkDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("running integration test V2 on demo")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: true, test: false)
@@ -192,7 +192,7 @@ struct SettingsView: View {
                               description: String(localized: "Perform more test transactions")) {
                             Button("Test 2") {
                                 checkDisabled = true    // don't run twice
-                                Task {
+                                Task { // runs on MainActor
                                     symLog.log("running integration test V2 on test")
                                     do {
                                         try await model.runIntegrationTestM(newVersion: true, test: true)

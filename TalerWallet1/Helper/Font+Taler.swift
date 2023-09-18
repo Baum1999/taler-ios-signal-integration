@@ -165,6 +165,7 @@ struct NavigationBarBuilder: UIViewControllerRepresentable {
 }
 
 /// This works only once. Each following call does nothing - including (re-)setting to nil
+@MainActor
 struct TalerNavBar: ViewModifier {
     let talerFont: Int
 
@@ -191,7 +192,7 @@ struct TalerNavBar: ViewModifier {
 }
 
 extension View {
-    func talerNavBar(talerFont: Int) -> some View {
+    @MainActor func talerNavBar(talerFont: Int) -> some View {
         self.modifier(TalerNavBar(talerFont))
     }
 }

@@ -21,7 +21,7 @@ struct PayTemplateView: View {
     @EnvironmentObject private var model: WalletModel
 
     func acceptAction(preparePayResult: PreparePayResult) {
-        Task {
+        Task { // runs on MainActor
             do {
                 let confirmPayResult = try await model.confirmPayM(preparePayResult.transactionId)
                 //                symLog.log(confirmPayResult as Any)

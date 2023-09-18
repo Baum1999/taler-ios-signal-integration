@@ -127,7 +127,7 @@ struct TransactionDetailView: View {
                         } else {
                             symLog.log("ignoring newTxState.major: \(newMajor)")
                         }
-                    } else { Task {
+                    } else { Task { // runs on MainActor
                         do {
                             symLog.log("newState: \(newMajor), reloading transaction")
                             withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }

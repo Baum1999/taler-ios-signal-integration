@@ -69,6 +69,7 @@ struct BalancesListView: View {
         })
     }
 
+    /// runs on MainActor if called in some Task {}
     private func reloadAction() async -> Int {
         let reloaded = await model.balancesM()
         let count = reloaded.count
@@ -160,7 +161,7 @@ extension BalancesListView {
                 if shouldReload {
                     shouldReload = false
                     symLog?.log(".onAppear ==>  shouldReload was true, reloading now")
-                    Task { await reloadAction() }
+                    Task { await reloadAction() } // runs on MainActor
                 }
             }
             .onDisappear() {

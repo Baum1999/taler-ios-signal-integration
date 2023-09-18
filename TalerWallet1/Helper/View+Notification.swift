@@ -64,7 +64,7 @@ extension View {
         }
     }
 
-    func onAppEnteredBackground(
+    @MainActor func onAppEnteredBackground(
         perform action: @escaping () -> Void
     ) -> some View {
         onNotification(

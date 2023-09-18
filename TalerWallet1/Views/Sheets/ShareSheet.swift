@@ -21,7 +21,7 @@ import SymLog
 public class ShareSheet: ObservableObject {
     private let symLog = SymLogC()
 
-    static func shareSheet(url: String) {
+    @MainActor static func shareSheet(url: String) {
         let url = URL(string: url)
         let activityView = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
 

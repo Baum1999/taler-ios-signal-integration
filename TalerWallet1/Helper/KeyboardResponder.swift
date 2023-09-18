@@ -19,6 +19,7 @@
 import Combine
 import UIKit
 
+@MainActor
 public final class KeyboardResponder: ObservableObject {
 
     @Published public var keyboardHeight: CGFloat = 0

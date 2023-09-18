@@ -151,7 +151,7 @@ extension WalletCore {
     private func postNotification(_ aName: NSNotification.Name,
                           object anObject: Any? = nil,
                                  userInfo: [AnyHashable: Any]? = nil) {
-        Task {
+        Task { // runs on MainActor
             if let userInfo { symLog.log(userInfo) } else { symLog.log(aName) }
             await postNotificationM(aName, object: anObject, userInfo: userInfo)
             logger.log("Notification sent: \(aName.rawValue)")
@@ -182,7 +182,7 @@ extension WalletCore {
             logger.log("❗️ \(pendingOp, privacy: .public): \(id, privacy: .public)")        // this is a new pendingOp I haven't seen before
         }
     }
-    private func handleStateTransition(_ jsonData: Data) throws {
+    @MainActor private func handleStateTransition(_ jsonData: Data) throws {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
             if decoded.newTxState != decoded.oldTxState {
@@ -206,7 +206,7 @@ extension WalletCore {
         }
     }
 
-    private func handleNotification(_ anyCodable: AnyCodable?) throws {
+    @MainActor private func handleNotification(_ anyCodable: AnyCodable?) throws {
         guard let anyPayload = anyCodable else { throw WalletBackendError.deserializationError }
         do {
             let jsonData = try JSONEncoder().encode(anyPayload)
@@ -256,7 +256,7 @@ print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        /
     }
 
     /// here not only responses, but also notifications from wallet-core will be received
-    func handleMessage(message: String) {
+    @MainActor func handleMessage(message: String) {
         do {
             var asyncDelay = 0
             if let delay: Bool = developDelay {   // Settings: 2 seconds delay

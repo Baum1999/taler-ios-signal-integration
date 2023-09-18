@@ -24,7 +24,7 @@ struct WithdrawTOSView: View {
     var body: some View {
         VStack {
             Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
-                Task {
+                Task { // runs on MainActor
                     do {
                         if let exchangeBaseUrl {
                             _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)

@@ -24,7 +24,7 @@ struct ExchangeListView: View {
     }
 
     func addExchange(_ exUrl: String) -> Void {
-        Task {
+        Task { // runs on MainActor
             symLog.log("adding: \(exUrl)")
             do {
                 try await model.addExchange(url: exUrl)
@@ -124,7 +124,7 @@ extension ExchangeListView {
             .onNotification(.ExchangeAdded) { notification in
                 // doesn't need to be received on main thread because we just reload in the background anyway
                 symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
-                Task { await reloadAction() }
+                Task { await reloadAction() } // runs on MainActor
             }
         } // body
     }

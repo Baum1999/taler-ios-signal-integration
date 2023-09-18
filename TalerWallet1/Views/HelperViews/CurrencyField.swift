@@ -22,6 +22,7 @@
 import SwiftUI
 import UIKit
 
+@MainActor
 public struct CurrencyField: View {
     @Binding var value: UInt64
     var currency: String
@@ -88,6 +89,7 @@ class NoCaretTextField: UITextField {
     }
 }
 
+@MainActor
 struct CurrencyInputField: UIViewRepresentable {
     @Binding var value: UInt64
     var formatter: NumberFormatter
@@ -97,11 +99,11 @@ struct CurrencyInputField: UIViewRepresentable {
         Coordinator(self)
     }
 
-    public func becomeFirstResponder() -> Void {
+    @MainActor public func becomeFirstResponder() -> Void {
         textField.becomeFirstResponder()
     }
 
-    public func resignFirstResponder() -> Void {
+    @MainActor public func resignFirstResponder() -> Void {
         textField.resignFirstResponder()
     }
 
