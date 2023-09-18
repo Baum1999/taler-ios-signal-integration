@@ -8,7 +8,7 @@ import SymLog
 
 // Will be called by the user tapping "Withdraw Coins" in the exchange list
 struct ManualWithdraw: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     let exchange: Exchange
     @Binding var centsToTransfer: UInt64

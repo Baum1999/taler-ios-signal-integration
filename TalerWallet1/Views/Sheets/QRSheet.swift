@@ -8,7 +8,7 @@ import SymLog
 import AVFoundation
 
 struct QRSheet: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @State private var scannedCode: String?
 
     var body: some View {

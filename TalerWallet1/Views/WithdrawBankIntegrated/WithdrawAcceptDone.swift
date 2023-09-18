@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 struct WithdrawAcceptDone: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "Confirm with Bank")
 
     let exchangeBaseUrl: String?

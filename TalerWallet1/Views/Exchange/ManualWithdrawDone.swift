@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 struct ManualWithdrawDone: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "Wire Transfer")
 
     let exchange: Exchange

@@ -8,7 +8,7 @@ import SymLog
 
 // Called when tapping "Send Coins" in the balances list
 struct SendAmount: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var centsToTransfer: UInt64

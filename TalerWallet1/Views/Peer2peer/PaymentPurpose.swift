@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 struct PaymentPurpose: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     let scopeInfo: ScopeInfo
     let centsToTransfer: UInt64

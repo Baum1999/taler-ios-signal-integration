@@ -22,7 +22,7 @@ extension Transaction {             // for Dummys
 }
 // MARK: -
 struct TransactionDetailView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true

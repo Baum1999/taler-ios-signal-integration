@@ -10,7 +10,7 @@ import SymLog
 // We show the user the withdrawal details - but first the ToS must be accepted.
 // After the user confirmed the withdrawal, we show a button to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website

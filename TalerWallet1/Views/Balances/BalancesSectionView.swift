@@ -15,7 +15,7 @@ import SymLog
 /// optional:   Suspended / Aborting / Aborted / Expired
 
 struct BalancesSectionView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance
     let sectionCount: Int

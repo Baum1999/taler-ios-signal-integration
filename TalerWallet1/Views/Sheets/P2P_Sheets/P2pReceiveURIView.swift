@@ -9,7 +9,7 @@ import SymLog
 // Will be called either by the user scanning a QR code or tapping the provided link,
 // from another user's SendCoins. We show the P2P details - but first the ToS must be accepted.
 struct P2pReceiveURIView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "P2P Receive")
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 

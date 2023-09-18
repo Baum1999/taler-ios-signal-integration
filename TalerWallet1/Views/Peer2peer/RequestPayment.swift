@@ -8,7 +8,7 @@ import SymLog
 
 // Called when tapping "Request Payment" in the balances list
 struct RequestPayment: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     var scopeInfo: ScopeInfo
     @Binding var centsToTransfer: UInt64

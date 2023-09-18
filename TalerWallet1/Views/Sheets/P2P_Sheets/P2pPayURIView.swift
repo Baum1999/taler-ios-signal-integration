@@ -9,7 +9,7 @@ import SymLog
 // Called either when scanning a QR code or tapping the provided link
 // from another user's Send Request(Invoice). We show the P2P details.
 struct P2pPayURIView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "Pay P2P")
 
     // the scanned URL

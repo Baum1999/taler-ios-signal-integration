@@ -7,7 +7,7 @@ import SymLog
 import os.log
 
 struct Sheet: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
     @AppStorage("talerFont") var talerFont: Int = 0

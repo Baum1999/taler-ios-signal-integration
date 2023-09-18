@@ -8,7 +8,7 @@ import SymLog
 
 // Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
 struct SendDone: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "P2P Ready")
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true

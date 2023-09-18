@@ -6,7 +6,7 @@ import SwiftUI
 import SymLog
 
 struct WithdrawTOSView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let navTitle = String(localized: "Terms of Service")

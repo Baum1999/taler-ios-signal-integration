@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 struct SendPurpose: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     @FocusState private var isFocused: Bool
 
     let amountAvailable: Amount

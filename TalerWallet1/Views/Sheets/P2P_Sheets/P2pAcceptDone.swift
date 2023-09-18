@@ -8,7 +8,7 @@ import SymLog
 
 // Called when accepting a scanned P2P transaction: Receive coins or Pay Request(Invoice)
 struct P2pAcceptDone: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 
     let transactionId: String
     let incoming: Bool

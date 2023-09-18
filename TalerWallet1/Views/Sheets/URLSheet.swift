@@ -6,7 +6,7 @@ import SwiftUI
 import SymLog
 
 struct URLSheet: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let navTitle = String(localized: "Checking Link")
     var urlToOpen: URL
     @EnvironmentObject private var controller: Controller

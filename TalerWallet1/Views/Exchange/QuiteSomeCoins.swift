@@ -47,7 +47,7 @@ extension SomeCoins {
 }
 // MARK: -
 struct QuiteSomeCoins: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let someCoins: SomeCoins
     let shouldShowFee: Bool
     let currency: String
