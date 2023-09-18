@@ -10,6 +10,7 @@ struct Sheet: View {
     private let symLog = SymLogV()
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
+    @AppStorage("talerFont") var talerFont: Int = 0
 
     var sheetView: AnyView
 
@@ -30,7 +31,9 @@ struct Sheet: View {
                 .navigationBarItems(leading: cancelButton)
                 .navigationBarTitleDisplayMode(.automatic)
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        }.navigationViewStyle(.stack)
+        }
+        .navigationViewStyle(.stack)
+        .talerNavBar(talerFont: talerFont)
         .overlay(alignment: .top) {
             // Show the viewID on top of the sheet's NavigationView
             Text(idString)
