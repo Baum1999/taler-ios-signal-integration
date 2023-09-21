@@ -624,8 +624,6 @@
 				4EB095242989CBFE0043A8A1 /* Settings */,
 				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
-				4EB0953B2989CBFE0043A8A1 /* WithdrawBankIntegrated */,
-				4EB0952A2989CBFE0043A8A1 /* Payment */,
 				4EB095462989CBFE0043A8A1 /* HelperViews */,
 			);
 			path = Views;
@@ -761,6 +759,8 @@
 				4EEC157929F9427F00D46A03 /* QRSheet.swift */,
 				4E753A072A0B6A5F002D9328 /* ShareSheet.swift */,
 				4EB095332989CBFE0043A8A1 /* URLSheet.swift */,
+				4EB0953B2989CBFE0043A8A1 /* WithdrawBankIntegrated */,
+				4EB0952A2989CBFE0043A8A1 /* Payment */,
 				4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */,
 			);
 			path = Sheets;

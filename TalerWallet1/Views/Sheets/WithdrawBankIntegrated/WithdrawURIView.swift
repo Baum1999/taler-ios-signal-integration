@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 // Called either when scanning a QR code or tapping the provided link, both from the bank's website.
-// We show the user the withdrawal details - but first the ToS must be accepted.
+// We show the user the withdrawal details in a sheet - but first the ToS must be accepted.
 // After the user confirmed the withdrawal, we show a button to return to the bank website to confirm there, too
 struct WithdrawURIView: View {
     private let symLog = SymLogV(0)
