@@ -599,6 +599,7 @@
 				4EB095102989CBB00043A8A1 /* Model+Settings.swift */,
 				4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */,
 				4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */,
+				4EB0951E2989CBCB0043A8A1 /* Transaction.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -609,7 +610,6 @@
 				4EB0951B2989CBCB0043A8A1 /* WalletBackendRequest.swift */,
 				4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */,
 				4EB0951D2989CBCB0043A8A1 /* WalletBackendError.swift */,
-				4EB0951E2989CBCB0043A8A1 /* Transaction.swift */,
 			);
 			path = Backend;
 			sourceTree = "<group>";
