@@ -67,14 +67,14 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
 }
 // MARK: -
 enum ExchangeTosStatus: String, Codable {
-    case new = "new"
-    case accepted = "accepted"
-    case changed = "changed"
-    case notFound = "not-found"
-    case unknown = "unknown"
-    case pending
-    case proposed
-//    case accepted
+    case new = "new"                                                            // deprecated
+//    case accepted = "accepted"                                                  // old == new
+    case changed = "changed"                                                    // deprecated
+    case notFound = "not-found"                                                 // deprecated
+    case unknown = "unknown"                                                    // deprecated
+    case pending                                                // new, but not yet deployed in demo.taler.net
+    case proposed                                               // new, but not yet deployed in demo.taler.net
+    case accepted                                               // new == old
 }
 struct ExchangeTermsOfService: Decodable {
     var currentEtag: String

@@ -26,18 +26,20 @@ enum ExchangeUpdateStatus: String, Codable {
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
     static func == (lhs: Exchange, rhs: Exchange) -> Bool {
-        return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl &&
-        lhs.tosStatus == rhs.tosStatus &&
-        lhs.exchangeEntryStatus == rhs.exchangeEntryStatus &&
-        lhs.exchangeUpdateStatus == rhs.exchangeUpdateStatus
+        return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl
+        &&     lhs.tosStatus == rhs.tosStatus
+        &&     lhs.exchangeStatus == rhs.exchangeStatus                         // deprecated
+        &&     lhs.exchangeEntryStatus == rhs.exchangeEntryStatus
+        &&     lhs.exchangeUpdateStatus == rhs.exchangeUpdateStatus
     }
 
     var exchangeBaseUrl: String
     var currency: String?
     var paytoUris: [String]
     var tosStatus: ExchangeTosStatus
-    var exchangeEntryStatus: ExchangeEntryStatus
-    var exchangeUpdateStatus: ExchangeUpdateStatus
+    var exchangeStatus: String?                                                 // deprecated
+    var exchangeEntryStatus: ExchangeEntryStatus?                   // new, but not yet deployed in demo.taler.net
+    var exchangeUpdateStatus: ExchangeUpdateStatus?                 // new, but not yet deployed in demo.taler.net
     var ageRestrictionOptions: [Int]
     var lastUpdateErrorInfo: ExchangeError?
 
