@@ -69,9 +69,9 @@ struct AccessibleFont {
     var bold: Font
     static var talerFont: Int {
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            3
+            return 3
         } else {
-            Controller.shared.talerFont
+            return Controller.shared.talerFont
         }
     }
 
@@ -255,6 +255,6 @@ struct ContentViewFonts: View {
     }
 }
 
-#Preview("Font View") {
-    ContentViewFonts()
-}
+//#Preview("Font View") {
+//    ContentViewFonts()
+//}
