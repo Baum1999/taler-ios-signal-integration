@@ -14,7 +14,7 @@ struct TransactionsListView: View {
     let currency: String
     let transactions: [Transaction]
     let showUpDown: Bool
-    let reloadAllAction: () async -> ()
+    let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     @State private var viewId = UUID()
@@ -39,7 +39,7 @@ struct TransactionsListView: View {
             .listStyle(myListStyle.style).anyView
             .refreshable {
                 symLog.log("refreshing")
-                await reloadAllAction()
+                await reloadAllAction(stack.push())
             }
             .navigationBarItems(trailing: HStack {
                 if showUpDown {
@@ -64,7 +64,7 @@ struct TransactionsListView: View {
         .navigationTitle(navTitle)
         .task {
             symLog.log(".task ")
-            await reloadAllAction()
+            await reloadAllAction(stack.push())
         }
         .overlay {
             if transactions.isEmpty {
@@ -83,7 +83,7 @@ struct TransactionsRowsView: View {
     let stack: CallStack
     let currency: String
     let transactions: [Transaction]
-//  let reloadAllAction: () async -> ()
+//  let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     @EnvironmentObject private var model: WalletModel

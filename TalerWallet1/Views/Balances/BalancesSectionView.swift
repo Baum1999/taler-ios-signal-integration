@@ -14,7 +14,7 @@ import SymLog
 /// optional:   Pending Outgoing
 /// optional:   Suspended / Aborting / Aborted / Expired
 
-struct BalancesSectionView: View {
+struct BalancesSectionView {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance
@@ -35,51 +35,38 @@ struct BalancesSectionView: View {
         return try await model.getTransactionByIdT(transactionId)
     }
 
-    func computePending(currency: String) -> (Amount, Amount) {
-        var incoming = Amount(currency: currency, value: 0)
-        var outgoing = Amount(currency: currency, value: 0)
-        for transaction in pendingTransactions {
-            let effective = transaction.common.amountEffective
-            if currency == effective.currencyStr {
-                do {
-                    if transaction.common.incoming() {
-                        incoming = try incoming + effective
-                    } else {
-                        outgoing = try outgoing + effective
-                    }
-                } catch {
-                    // TODO: log error
-                    symLog.log(error.localizedDescription)
-                }
-            }
-        }
-        return (incoming, outgoing)
-    }
-
     @State private var sectionID = UUID()
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
+    func reloadCompleted(_ stack: CallStack) async -> () {
+        let currency = balance.available.currencyStr
+        transactions = await model.transactionsT(stack.push(), currency: currency)
+        completedTransactions = WalletModel.completedTransactions(transactions)
+//        sectionID = UUID()
+    }
+
+    func reloadPending(_ stack: CallStack) async -> () {
+        let currency = balance.available.currencyStr
+        transactions = await model.transactionsT(stack.push(), currency: currency)
+        pendingTransactions = WalletModel.pendingTransactions(transactions)
+//        sectionID = UUID()
+    }
+
+    func reloadUncompleted(_ stack: CallStack) async -> () {
+        let currency = balance.available.currencyStr
+        transactions = await model.transactionsT(stack.push(), currency: currency)
+        uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
+//        sectionID = UUID()
+    }
+}
+
+extension BalancesSectionView: View {
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = balance.available.currencyStr
-        let reloadCompleted = {
-            transactions = await model.transactionsT(stack.push(), currency: currency)
-            completedTransactions = WalletModel.completedTransactions(transactions)
-//            sectionID = UUID()
-        }
-        let reloadPending = {
-            transactions = await model.transactionsT(stack.push(), currency: currency)
-            pendingTransactions = WalletModel.pendingTransactions(transactions)
-//            sectionID = UUID()
-        }
-        let reloadUncompleted = {
-            transactions = await model.transactionsT(stack.push(), currency: currency)
-            uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
-//            sectionID = UUID()
-        }
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
@@ -97,36 +84,12 @@ struct BalancesSectionView: View {
                       reloadOneAction: reloadOneAction)
             let hasPending = pendingTransactions.count > 0
             if hasPending {
-                let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
-
-                NavigationLink {
-//let _ = print("button: Pending Transactions: \(currency)")
-                    LazyView {
-                        TransactionsListView(stack: stack.push(),
-                                          navTitle: String(localized: "Pending"),
-                                          currency: currency,
-                                      transactions: pendingTransactions,
-                                        showUpDown: false,
-                                   reloadAllAction: reloadPending,
-                                   reloadOneAction: reloadOneAction)
-                    }
-                } label: {
-                    VStack(spacing: 6) {
-                        var rows = 0
-                        if !pendingIncoming.isZero {
-                            PendingRowView(amount: pendingIncoming, incoming: true)
-                            let _ = (rows+=1)
-                        }
-                        if !pendingOutgoing.isZero {
-                            PendingRowView(amount: pendingOutgoing, incoming: false)
-                            let _ = (rows+=1)
-                        }
-                        if rows == 0 {
-                            Text("Some pending transactions")
-                                .accessibilityFont(.body)
-                        }
-                    }
-                }
+                SectionPendingRowView(symLog: symLog,
+                                       stack: stack.push(),
+                                    currency: currency,
+                         pendingTransactions: $pendingTransactions,
+                               reloadPending: reloadPending,
+                             reloadOneAction: reloadOneAction)
             }
             let hasUncompleted = uncompletedTransactions.count > 0
             if hasUncompleted {
@@ -194,14 +157,78 @@ struct BalancesSectionView: View {
     } // body
 }
 
-fileprivate struct NavigationLinksView : View {
+fileprivate struct SectionPendingRowView: View {
+    let symLog: SymLogV?
+    let stack: CallStack
+    let currency: String
+    @Binding var pendingTransactions: [Transaction]
+    let reloadPending: (_ stack: CallStack) async -> ()
+    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+
+    func computePending(currency: String) -> (Amount, Amount) {
+        var incoming = Amount(currency: currency, value: 0)
+        var outgoing = Amount(currency: currency, value: 0)
+        for transaction in pendingTransactions {
+            let effective = transaction.common.amountEffective
+            if currency == effective.currencyStr {
+                do {
+                    if transaction.common.incoming() {
+                        incoming = try incoming + effective
+                    } else {
+                        outgoing = try outgoing + effective
+                    }
+                } catch {
+                    // TODO: log error
+                    symLog?.log(error.localizedDescription)
+                }
+            }
+        }
+        return (incoming, outgoing)
+    }
+
+    var body: some View {
+        let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
+
+        NavigationLink {
+            //let _ = print("button: Pending Transactions: \(currency)")
+            LazyView {
+                TransactionsListView(stack: stack.push(),
+                                  navTitle: String(localized: "Pending"),
+                                  currency: currency,
+                              transactions: pendingTransactions,
+                                showUpDown: false,
+                           reloadAllAction: reloadPending,
+                           reloadOneAction: reloadOneAction)
+            }
+        } label: {
+            VStack(spacing: 6) {
+                var rows = 0
+                if !pendingIncoming.isZero {
+                    PendingRowView(amount: pendingIncoming, incoming: true)
+                    let _ = (rows+=1)
+                }
+                if !pendingOutgoing.isZero {
+                    PendingRowView(amount: pendingOutgoing, incoming: false)
+                    let _ = (rows+=1)
+                }
+                if rows == 0 {
+                    Text("Some pending transactions")
+                        .accessibilityFont(.body)
+                }
+            }
+        }
+
+    }
+}
+
+fileprivate struct NavigationLinksView: View {
     let stack: CallStack
     let balance: Balance
 //    let sectionCount: Int
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
     @Binding var completedTransactions: [Transaction]
-    let reloadAllAction: () async -> ()
+    let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     @State private var buttonSelected: Int? = nil
@@ -248,7 +275,7 @@ fileprivate struct NavigationLinksView : View {
 }
 // MARK: -
 #if false   // model crashes
-fileprivate struct BindingViewContainer : View {
+fileprivate struct BindingViewContainer: View {
     @State var centsToTransfer: UInt64 = 333
     @State private var summary: String = "bla-bla"
 
