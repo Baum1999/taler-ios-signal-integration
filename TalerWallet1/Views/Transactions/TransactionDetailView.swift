@@ -67,7 +67,8 @@ struct TransactionDetailView: View {
                     } }
                 } // Suspend + Resume buttons
                 Text(dateString)
-                    .accessibilityFont(.title2)
+                    .accessibilityFont(.body)
+                    .foregroundColor(.secondary)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
