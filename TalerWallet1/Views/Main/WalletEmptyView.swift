@@ -16,15 +16,15 @@ struct WalletEmptyView: View {
         List {
             Section {
                 Text("There is no digital cash in your wallet.")
+                    .accessibilityFont(.title3)
+                    .listRowSeparator(.hidden)
+                Link("Get some test money", destination: URL(string: DEMOBANK)!)
+                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+                    .padding(.vertical)
             }
             Section {
-                Text("You can get some test money from the demo bank:")
-            }
-            Section {
-                Link(DEMOBANK, destination: URL(string: DEMOBANK)!)
-            }
-            Section {
-                Text("Just register a test account, then withdraw some electronic cash.")
+                Text("Just register a test account in the demo bank, then withdraw some electronic cash.")
+                    .accessibilityFont(.body)
             }
         }
         .listStyle(myListStyle.style).anyView
