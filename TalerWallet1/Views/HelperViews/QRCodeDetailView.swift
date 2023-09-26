@@ -15,38 +15,39 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             VStack (alignment: .leading) {
-                Text("Either copy and send this link:")
+                Text("Either")
                     .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
-                    .padding(.vertical)
-
-                Text(talerURI)
-                    .accessibilityFont(.title3)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                    .padding(.bottom)
+//                    .padding(.vertical)
 
                 CopyShare(textToCopy: talerURI)
                     .disabled(false)
-                    .padding(.bottom)
+//                    .padding(.bottom)
 
-                // TODO: use currency formatter instead of .readableDescription
-                let amountStr = (amount == nil) ?
-                    (incoming ? String(localized: "or let the payer scan this QR code to pay:")
-                              : String(localized: "or let the payee scan this QR code to receive:"))
-                :   (incoming ? String(localized: "or let the payer scan this QR code to pay \(amount!.readableDescription):",
-                                       comment: "amount.readableDescription: 5,3 €")
-                              : String(localized: "or let the payee scan this QR code to receive \(amount!.readableDescription):",
-                                       comment: "amount.readableDescription: 7.41 $"))
-                Text(amountStr)
-                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-//                    .padding(.top, 30)
+                let otherParty = incoming ? String(localized: "payer")
+                                          : String(localized: "payee")
+                Text("the link to the \(otherParty), or", comment: "(copy/share) the link to the other party (payer/payee), or")
+                    .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
+
                 HStack {
                     Spacer()
                     QRGeneratorView(text: talerURI)
                     Spacer()
                 }
+
+                // TODO: use currency formatter instead of .readableDescription
+                let amountStr = (amount == nil) ?
+                    (incoming ? String(localized: "let the payer scan this QR code to pay.")
+                              : String(localized: "let the payee scan this QR code to receive."))
+                :   (incoming ? String(localized: "let the payer scan this QR code to pay \(amount!.readableDescription).",
+                                       comment: "amount.readableDescription: 5,3 €")
+                              : String(localized: "let the payee scan this QR code to receive \(amount!.readableDescription).",
+                                       comment: "amount.readableDescription: 7.41 $"))
+                Text(amountStr)
+                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                    .accessibilityFont(.title3)
+                    .padding(.top)
             }
         }
     }
