@@ -46,8 +46,9 @@ struct P2pReceiveURIView: View {
                                    incoming: true)
                     }) {
                         Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
+                    }
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
                 } else {
                     ToSButtonView(exchangeBaseUrl: nil,
                                            viewID: SHEET_RCV_P2P_TOS,

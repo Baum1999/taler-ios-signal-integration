@@ -58,7 +58,9 @@ struct ManualWithdraw: View {
 //                                              restrictAge: restrictAge)
                             }) {
                                 Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
-                            }.buttonStyle(TalerButtonStyle(type: .prominent))
+                            }
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
                         } else {
                             ToSButtonView(exchangeBaseUrl: exchange.exchangeBaseUrl,
                                                    viewID: VIEW_WITHDRAW_TOS,

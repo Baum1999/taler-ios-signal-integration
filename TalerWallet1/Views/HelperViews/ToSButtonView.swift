@@ -27,6 +27,7 @@ struct ToSButtonView: View {
         }) {
             Text("Terms of Service")  // VIEW_WITHDRAW_TOS
         }.buttonStyle(TalerButtonStyle(type: .prominent))
+            .padding(.horizontal)
     }
 }
 

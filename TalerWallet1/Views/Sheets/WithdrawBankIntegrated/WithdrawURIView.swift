@@ -56,8 +56,9 @@ struct WithdrawURIView: View {
                                              url: url)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
+                    }
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
                 } else {
                     ToSButtonView(exchangeBaseUrl: exchangeBaseUrl,
                                            viewID: SHEET_WITHDRAW_TOS,

@@ -45,8 +45,9 @@ struct P2pPayURIView: View {
                                incoming: false)
                     }) {
                         Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
-                    }.buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding()
+                    }
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
             } else {
                 WithdrawProgressView(message: url.host ?? "Yikes - no valid URL")
                     .navigationTitle("Contacting Exchange")
