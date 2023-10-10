@@ -65,7 +65,7 @@ extension CallStack {
 #else
     init(_ message: String = "") {
         let item = CallStackItem(message: message)
-        self.storage = [item]
+        self.stack = [item]
     }
 #endif
 #if DEBUG
