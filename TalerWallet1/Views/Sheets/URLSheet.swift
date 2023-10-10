@@ -13,7 +13,11 @@ struct URLSheet: View {
     @EnvironmentObject private var controller: Controller
 
     var body: some View {
-        let urlCommand = controller.openURL(urlToOpen)
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let urlCommand = controller.openURL(urlToOpen, stack: stack.push())
 
         Group {
             switch urlCommand {
