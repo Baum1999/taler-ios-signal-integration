@@ -102,7 +102,7 @@ struct OrderShortInfo: Codable {
     var merchant: Merchant
     var summary: String
 //    var summary_i18n:   ?
-    var products: [Product]
+    var products: [Product]?
     var fulfillmentUrl: String?
     var fulfillmentMessage: String?
 //    var fulfillmentMessage_i18n:    ?
