@@ -25,7 +25,6 @@ struct AmountView: View {
                     .accessibilityFont(large ? .title : .title2)
 //                    .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
                     .monospacedDigit()
-                Spacer()
             }
         }
             .frame(maxWidth: .infinity, alignment: .leading)

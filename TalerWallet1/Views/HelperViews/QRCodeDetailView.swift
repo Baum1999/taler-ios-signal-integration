@@ -14,40 +14,43 @@ struct QRCodeDetailView: View {
 
     var body: some View {
         if talerURI.count > 10 {
-            VStack (alignment: .leading) {
+            Section {
                 Text("Either")
                     .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
 //                    .padding(.vertical)
+                    .listRowSeparator(.hidden)
 
                 CopyShare(textToCopy: talerURI)
                     .disabled(false)
 //                    .padding(.bottom)
+                    .listRowSeparator(.hidden)
 
                 let otherParty = incoming ? String(localized: "payer")
                                           : String(localized: "payee")
                 Text("the link to the \(otherParty), or", comment: "(copy/share) the link to the other party (payer/payee), or")
                     .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
+                    .listRowSeparator(.hidden)
 
                 HStack {
                     Spacer()
                     QRGeneratorView(text: talerURI)
                     Spacer()
                 }
+                .listRowSeparator(.hidden)
 
                 // TODO: use currency formatter instead of .readableDescription
-                let amountStr = (amount == nil) ?
+                let hintStr = (amount == nil) ?
                     (incoming ? String(localized: "let the payer scan this QR code to pay.")
                               : String(localized: "let the payee scan this QR code to receive."))
                 :   (incoming ? String(localized: "let the payer scan this QR code to pay \(amount!.readableDescription).",
-                                       comment: "amount.readableDescription: 5,3 €")
+                                       comment: "e.g. '5,3 €'")
                               : String(localized: "let the payee scan this QR code to receive \(amount!.readableDescription).",
-                                       comment: "amount.readableDescription: 7.41 $"))
-                Text(amountStr)
+                                       comment: "e.g. '$ 7.41'"))
+                Text(hintStr)
                     .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                     .accessibilityFont(.title3)
-                    .padding(.top)
             }
         }
     }

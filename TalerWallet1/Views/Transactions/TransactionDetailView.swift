@@ -77,7 +77,7 @@ struct TransactionDetailView: View {
                     Spacer()
                     Text("Status: \(common.txState.major.localizedState)")
                 }    .listRowSeparator(.automatic)
-                    .accessibilityFont(.title2)
+                    .accessibilityFont(.title)
                 SwitchCase(transaction: $transaction, hasDone: doneAction != nil)
 
                 if transaction.isAbortable { if let abortAction {

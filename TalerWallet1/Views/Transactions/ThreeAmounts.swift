@@ -46,15 +46,14 @@ struct ThreeAmountsView: View {
         let labelColor = Color(UIColor.label)
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
-        VStack {
+        Section {
             AmountView(title: topTitle,
                        value: topAmount.readableDescription,
                        color: labelColor,
                        large: large)
                 .padding(.bottom, 4)
             if let fee {
-                let feeSign = incoming ? "- " : "+ "
-                AmountView(title: feeSign + String(localized: "Exchange fee:"),
+                AmountView(title: String(localized: "Exchange fee:"),
                            value: fee.readableDescription,
                            color: labelColor,
                            large: false)
@@ -73,10 +72,9 @@ struct ThreeAmountsView: View {
                         Spacer()
                         Text(baseURL.trimURL())
                             .multilineTextAlignment(.center)
-                            .accessibilityFont(large ? .title2 : .title3)
+                            .accessibilityFont(large ? .title3 : .body)
 //                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                             .foregroundColor(labelColor)
-                        Spacer()
                     }
                 }
                 .padding(.top, 4)
