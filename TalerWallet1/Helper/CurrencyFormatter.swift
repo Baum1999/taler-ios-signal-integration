@@ -13,7 +13,7 @@ public class CurrencyFormatter: NumberFormatter {
         self.locale = Locale.current
         self.numberStyle = .currency            // currencyISOCode, currencyPlural, (currencyAccounting)
         self.numberStyle = .currencyISOCode
-        self.numberStyle = .spellOut
+//        self.numberStyle = .spellOut
 
 //        self.currencyCode = code              // EUR, USD, JPY, GBP
 //        self.minimumFractionDigits = fractionDigits
