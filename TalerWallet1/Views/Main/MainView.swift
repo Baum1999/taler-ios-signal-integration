@@ -155,6 +155,7 @@ extension MainView {
                     if !iconOnly { Text(balancesTitle) }
                 }
                 .tag(Tab.balances)
+                .badge(0)         // TODO: set badge if transaction finished in background
 
                 NavigationView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
