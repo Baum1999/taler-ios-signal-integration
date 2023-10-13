@@ -82,10 +82,23 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
     }
 }
 
+/// A request to update a single exchange.
+fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
+    func operation() -> String { return "updateExchangeEntry" }
+    func args() -> Args { return Args(scopeInfo: scopeInfo) }
+
+    var scopeInfo: ScopeInfo
+
+    struct Args: Encodable {
+        var scopeInfo: ScopeInfo
+    }
+}
+
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "addExchange" }
+    func operation() -> String { return "addExchange" }     // addExchangeEntry
     func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl) }
 
     var exchangeBaseUrl: String
@@ -126,6 +139,14 @@ extension WalletModel {
       async throws  {
         let request = AddExchange(exchangeBaseUrl: url)
         logger.info("adding exchange: \(url, privacy: .public)")
+        _ = try await sendRequest(request)
+    }
+
+    /// ask wallet-core to update an existing exchange by querying it for denominations, fees, and scoped currency info
+    func updateExchange(scopeInfo: ScopeInfo)
+      async throws  {
+        let request = UpdateExchange(scopeInfo: scopeInfo)
+        logger.info("updating exchange for: \(scopeInfo.currency, privacy: .public)")
         _ = try await sendRequest(request)
     }
 
