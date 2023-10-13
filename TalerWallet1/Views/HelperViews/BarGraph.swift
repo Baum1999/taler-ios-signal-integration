@@ -20,17 +20,14 @@ struct BarGraph: View {
     }
 
     var body: some View {
-        let slice = transactions.prefix(8)
-        let eightTransactions: [Transaction] = Array(slice)
-        let count = eightTransactions.count
-        let maxValue = maxValue(eightTransactions)
+        let slice = transactions.prefix(10)
+        let count = slice.count
+        let tenTransactions: [Transaction] = Array(slice)
+        let maxValue = maxValue(tenTransactions)
 
-        HStack(alignment: .firstTextBaseline, spacing: 1) {
-#if DEBUG
-//            Text("first")
-#endif
+        HStack(alignment: .center, spacing: 1) {
             if count > 0 {
-                ForEach(Array(eightTransactions.enumerated()), id: \.element) { index, transaction in
+                ForEach(Array(zip(slice.indices, slice)), id: \.0) { index, transaction in
                     let common = transaction.common
                     let incoming = common.incoming()
                     let netto = common.amountEffective.value
@@ -50,19 +47,9 @@ struct BarGraph: View {
                     }
                 }
             }
-//            if count < 8 {
-//                ForEach(count...8, id: \.self) {_ in
-//                    Rectangle()
-//                        .opacity(0.001)
-//                        .frame (width: 3, height: barHeight * 2 )
-//                }
-//            }
-#if DEBUG
-//            Text("last")
-#endif
         }
         .accessibilityHidden(true)      // cannot speak out this bar chart info
-//        .flippedDirection()         // draw first array item on trailing edge
+        .flippedDirection()             // draw first array item on trailing edge
     }
 }
 
