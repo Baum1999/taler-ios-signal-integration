@@ -12,13 +12,15 @@ struct BalancesListView: View {
     private let symLog = SymLogV()
     let stack: CallStack
     let navTitle: String
+    @Binding var balances: [Balance]
+    @Binding var shouldReloadBalances: Int
+    @State private var lastReloadedBalances = 0
 #if TABBAR  // Taler Wallet
 #else       // GNU Taler
     let hamburgerAction: () -> Void
 #endif
 
     @EnvironmentObject private var model: WalletModel
-    @State private var balances: [Balance] = []
     @State private var centsToTransfer: UInt64 = 0
     @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
@@ -75,7 +77,10 @@ struct BalancesListView: View {
 
     /// runs on MainActor if called in some Task {}
     @discardableResult
-    private func reloadAction(_ stack: CallStack) async -> Int {
+    private func reloadAction(_ stack: CallStack, _ invalidateCache: Bool) async -> Int {
+        if invalidateCache {
+            model.cachedBalances = nil
+        }
         let reloaded = await model.balancesM(stack.push())
         let count = reloaded.count
         balances = reloaded         // redraw
@@ -98,34 +103,20 @@ struct BalancesListView: View {
             .navigationTitle(navTitle)
             .navigationBarItems(leading: hamburger,
                                 trailing: QRButton(action: checkCameraAvailable))
-            .overlay {
-                if balances.isEmpty {
-                    WalletEmptyView(stack: stack.push())
-                        .refreshable {  // already async
-                            symLog.log("empty refreshing")
-                            let count = await reloadAction(stack.push("empty refreshing"))
-                            if count > 0 {
-//                                postNotificationM(.BalanceReloaded)
-                                NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
-                            }
-                        }
-                }
-            }
             .alert("Scanning QR-codes requires access to the camera",
                    isPresented: $showCameraAlert,
                        actions: {   openSettingsButton
                                     dismissAlertButton },
                        message: {   Text("Please allow camera access in settings.") })
-            .onAppear() {
-                DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
-            }
             .sheet(isPresented: $showQRScanner) {
                 let sheet = AnyView(QRSheet(stack: stack.push()))
                 Sheet(sheetView: sheet)
             } // sheet
-            .task {
-                symLog.log(".task getBalances")
-                await reloadAction(stack.push(".task"))
+            .task(id: shouldReloadBalances) {
+                symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
+                let invalidateCache = (lastReloadedBalances != shouldReloadBalances)
+                lastReloadedBalances = shouldReloadBalances
+                await reloadAction(stack.push(".task"), invalidateCache)
             } // task
     }
 }
@@ -138,11 +129,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
         @Binding var summary: String
-//        @discardableResult
-        var reloadAction: (_ stack: CallStack) async -> Int
-
-        @State private var isActive = true
-        @State private var shouldReload = false
+        var reloadAction: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
 
         var body: some View {
 #if DEBUG
@@ -151,43 +138,27 @@ extension BalancesListView {
 #endif
             Group { // necessary for .backslide transition (bug in SwiftUI)
                 let count = balances.count
-                List(balances, id: \.self) { balance in
-                    BalancesSectionView(stack: stack.push(),
-                                        balance: balance,
-                                   sectionCount: count,
-                                centsToTransfer: $centsToTransfer,
-                                        summary: $summary)
-                }
-                .refreshable {  // already async
-                    symLog?.log("refreshing")
-                    let count = await reloadAction(stack.push("refreshing"))
-                    if count > 0 {
-//                        postNotificationM(.BalanceReloaded)
-                        NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
-                    }
-                }
-                .listStyle(myListStyle.style).anyView
-            }
-            .onAppear() {
-                isActive = true
-                if shouldReload {
-                    shouldReload = false
-                    symLog?.log(".onAppear ==>  shouldReload was true, reloading now")
-                    Task { await reloadAction(stack.push("shouldReload")) } // runs on MainActor
-                }
-            }
-            .onDisappear() {
-                isActive = false
-            }
-            .onNotification(.BalanceChange) { notification in
-                // reload balances on receiving BalanceChange notification ...
-                // doesn't need to be received on main thread because we just reload in a background task anyway
-                if isActive {
-                    symLog?.log(".onNotification(.BalanceChange) ==> reload")
-                    Task { await reloadAction(stack.push(".BalanceChange")) }
+                if balances.isEmpty {
+                    WalletEmptyView(stack: stack.push("isEmpty"))
                 } else {
-                    symLog?.log(".onNotification(.BalanceChange) ==> reload postponed, shouldReload = true")
-                    shouldReload = true
+                    List(balances, id: \.self) { balance in
+                        BalancesSectionView(stack: stack.push("\(balance.available.currencyStr)"),
+                                            balance: balance,
+                                            sectionCount: count,
+                                            centsToTransfer: $centsToTransfer,
+                                            summary: $summary)
+                    }
+                    .onAppear() {
+                        DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
+                    }
+                    .listStyle(myListStyle.style).anyView
+                }
+            }
+            .refreshable {  // already async
+                symLog?.log("refreshing balances")
+                let count = await reloadAction(stack.push("refreshing balances"), true)
+                if count > 0 {
+                    NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
                 }
             }
         } // body

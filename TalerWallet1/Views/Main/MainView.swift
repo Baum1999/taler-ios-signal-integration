@@ -75,6 +75,8 @@ extension MainView {
     struct Content: View {
         let symLog: SymLogV?
         let stack: CallStack
+        @State private var shouldReloadBalances = 0
+        @State private var balances: [Balance] = []
         @Binding var talerFont: Int
         @AppStorage("iconOnly") var iconOnly: Bool = false
         let balancesTitle = String(localized: "Balances")
@@ -112,6 +114,8 @@ extension MainView {
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
                         view: AnyView(BalancesListView(stack: stack.push(balancesTitle),
                                                     navTitle: balancesTitle,
+                                                    balances: $balances,
+                                        shouldReloadBalances: $shouldReloadBalances,
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchangesTitle,
@@ -141,7 +145,9 @@ extension MainView {
             TabView(selection: tabSelection()) {
                 NavigationView {
                     BalancesListView(stack: stack.push(balancesTitle),
-                                  navTitle: balancesTitle)
+                                  navTitle: balancesTitle,
+                                  balances: $balances,
+                      shouldReloadBalances: $shouldReloadBalances)
                 }
                 .tabItem {
                     Image(systemName: "creditcard")             // system will automatically use filled variant
@@ -199,6 +205,11 @@ extension MainView {
             }
 #endif
           }
-        }
+            .onNotification(.BalanceChange) { notification in
+              // reload balances on receiving BalanceChange notification ...
+                symLog?.log(".onNotification(.BalanceChange) ==> reload")
+                shouldReloadBalances += 1
+            }
+        } // body
     } // Content
 }
