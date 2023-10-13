@@ -54,28 +54,20 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
 
-        let sendTitle = depositTitle + "\n" + currency      // TODO:  amount.currencyStr
-        let recvTitle = withdrawTitle + "\n" + currency     // TODO:  amount.currencyStr
+        let sendTitle = depositTitle + "\n" + currency                          // TODO:  amount.currencyStr
+        let recvTitle = withdrawTitle + "\n" + currency                         // TODO:  amount.currencyStr
+        let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: recvTitle,
+                                          lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
+                                         sendAction: { selectAndUpdate(1) },
+                                         recvAction: { selectAndUpdate(2) })
         if needVStack(currency) {
-            VStack {
-                TwoRowButtons(sendTitle: sendTitle,
-                              recvTitle: recvTitle,
-                              lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
-                             sendAction: { selectAndUpdate(1) },
-                             recvAction: { selectAndUpdate(2) })
-            }
+            VStack { twoRowButtons }
         } else {
-            HStack {        // buttons just set "buttonSelected" so the NavigationLink will trigger
-                TwoRowButtons(sendTitle: sendTitle,
-                              recvTitle: recvTitle,
-                              lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
-                             sendAction: { selectAndUpdate(1) },
-                             recvAction: { selectAndUpdate(2) })
-
-            }
+            HStack { twoRowButtons }
         }
     }
 }
+// MARK: -
 /// This view shows the currency name in an exchange section
 ///         currency
 /// [Deposit Coins]  [Withdraw Coins]

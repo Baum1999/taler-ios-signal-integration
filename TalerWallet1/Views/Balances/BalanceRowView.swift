@@ -14,9 +14,10 @@ struct BalanceButton: View {
 
     var body: some View {
         Button(action: rowAction) {
-            VStack(alignment: .trailing, spacing: 0) {
-                Text("Balance", comment: "Balance in main view")
-                    .bold()         // in iOS-15 defined for Text, but not for Font (only iOS-16)
+            HStack() {
+                Text("Balance:", comment: "Balance in main view")
+                    .accessibilityFont(.title)
+                Spacer()
                 Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
                     .accessibilityFont(.title)
                     .monospacedDigit()
@@ -64,26 +65,17 @@ struct BalanceRowView: View {
     }
 
     var body: some View {
-        Group {
-            let requestTitle = requestTitle1 + "\n" + requestTitle2
+        VStack (alignment: .trailing) {
+            BalanceButton(amount: amount, rowAction: rowAction)
             let sendTitle = sendTitle1 + "\n" + sendTitle2
+            let requestTitle = requestTitle1 + "\n" + requestTitle2
+            let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
+                                              lineLimit: 5, sendDisabled: amount.isZero,
+                                             sendAction: sendAction, recvAction: recvAction)
             if needVStack(amount) {
-                VStack (alignment: .trailing) {
-                    BalanceButton(amount: amount, rowAction: rowAction)
-                    HStack {
-                    }
-                    TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
-                                  lineLimit: 5, sendDisabled: amount.isZero,
-                                  sendAction: sendAction, recvAction: recvAction)
-                }
+                VStack { twoRowButtons }
             } else {
-                HStack {
-                    BalanceButton(amount: amount, rowAction: rowAction)
-                    TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
-                                  lineLimit: 5, sendDisabled: amount.isZero,
-                                  sendAction: sendAction, recvAction: recvAction)
-                }
-//                .fixedSize(horizontal: true, vertical: true)   // should make all buttons equal height - but doesn't
+                HStack { twoRowButtons }
             }
         }
         .accessibilityElement(children: .combine)

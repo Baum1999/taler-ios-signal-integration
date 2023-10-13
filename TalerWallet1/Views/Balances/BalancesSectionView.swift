@@ -74,22 +74,22 @@ extension BalancesSectionView: View {
                     .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
             }
-            NavigationLinksView(stack: stack.push(),
-                              balance: balance,
-                      centsToTransfer: $centsToTransfer,
-                              summary: $summary,
-//                       buttonSelected: $buttonSelected,
-                completedTransactions: $completedTransactions,
-                      reloadAllAction: reloadCompleted,
-                      reloadOneAction: reloadOneAction)
+            BalancesNavigationLinksView(stack: stack.push(),
+                                      balance: balance,
+                              centsToTransfer: $centsToTransfer,
+                                      summary: $summary,
+//                             buttonSelected: $buttonSelected,
+                        completedTransactions: $completedTransactions,
+                              reloadAllAction: reloadCompleted,
+                              reloadOneAction: reloadOneAction)
             let hasPending = pendingTransactions.count > 0
             if hasPending {
-                SectionPendingRowView(symLog: symLog,
-                                       stack: stack.push(),
-                                    currency: currency,
-                         pendingTransactions: $pendingTransactions,
-                               reloadPending: reloadPending,
-                             reloadOneAction: reloadOneAction)
+                BalancesPendingRowView(symLog: symLog,
+                                        stack: stack.push(),
+                                     currency: currency,
+                          pendingTransactions: $pendingTransactions,
+                                reloadPending: reloadPending,
+                              reloadOneAction: reloadOneAction)
             }
             let hasUncompleted = uncompletedTransactions.count > 0
             if hasUncompleted {
@@ -110,7 +110,7 @@ extension BalancesSectionView: View {
 
             }
         } header: {
-            HStack (alignment: .bottom, spacing: 10) {
+            HStack (alignment: .center, spacing: 10) {
                 BarGraph(transactions: $completedTransactions, barHeight: 10)
                 Text(currency)
                     .accessibilityFont(.title2)
@@ -118,8 +118,8 @@ extension BalancesSectionView: View {
         }.id(sectionID)
         .task {
 //            if shownSectionID != sectionID {
-                symLog.log("task for \(sectionID) - reload Transactions")
-                let response = await model.transactionsT(stack.push("task for \(sectionID) - reload Transactions"), currency: currency)
+                symLog.log(".task for BalancesSectionView - reload Transactions")
+                let response = await model.transactionsT(stack.push(".task - reload Transactions"), currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 uncompletedTransactions = WalletModel.uncompletedTransactions(response)
@@ -155,9 +155,9 @@ extension BalancesSectionView: View {
             }
         }
     } // body
-}
+} // extension BalancesSectionView
 
-fileprivate struct SectionPendingRowView: View {
+fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack
     let currency: String
@@ -218,10 +218,10 @@ fileprivate struct SectionPendingRowView: View {
             }
         }
 
-    }
-}
+    } // body
+} // BalancesPendingRowView
 
-fileprivate struct NavigationLinksView: View {
+fileprivate struct BalancesNavigationLinksView: View {
     let stack: CallStack
     let balance: Balance
 //    let sectionCount: Int
@@ -232,6 +232,18 @@ fileprivate struct NavigationLinksView: View {
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     @State private var buttonSelected: Int? = nil
+
+    func selectAndUpdate(_ button: Int) {
+        buttonSelected = button      // will trigger NavigationLink
+        // while navigation animation runs, contact Exchange to update Fees
+//        Task { // runs on MainActor
+//            do {
+//                try await model.updateExchange(scopeInfo: balance.scopeInfo)
+//            } catch {    // TODO: error handling - couldn't updateExchange
+//                symLog.log("error: \(error)")
+//            }
+//        }
+    }
 
     var body: some View {
         let currency = balance.available.currencyStr
@@ -264,9 +276,9 @@ fileprivate struct NavigationLinksView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
             BalanceRowView(amount: balance.available, sendAction: {
-                buttonSelected = 1      // will trigger SendAmount NavigationLink
+                selectAndUpdate(1)      // will trigger SendAmount NavigationLink
             }, recvAction: {
-                buttonSelected = 2      // will trigger RequestPayment NavigationLink
+                selectAndUpdate(2)      // will trigger RequestPayment NavigationLink
             }, rowAction: {
                 buttonSelected = 3      // will trigger TransactionList NavigationLink
             })
