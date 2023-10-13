@@ -36,6 +36,10 @@ struct BalanceRowView: View {
     let recvAction: () -> Void
     let rowAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
+    let sendTitle1 = String(localized: "Send", comment: "Top of button <Send Money>")
+    let sendTitle2 = String(localized: "Money", comment: "Bottom of button <Send Money>")
+    let requestTitle1 = String(localized: "Request", comment: "Top of button <Request Payment>")
+    let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
     func needVStack(_ amount: Amount) -> Bool {
         // Sizes: 320 (SE), 375 (X, Xs, 12, 13 mini), 390 (12,13,14), 414 (Plus, Max), 428 (Pro Max)
@@ -61,19 +65,23 @@ struct BalanceRowView: View {
 
     var body: some View {
         Group {
+            let requestTitle = requestTitle1 + "\n" + requestTitle2
+            let sendTitle = sendTitle1 + "\n" + sendTitle2
             if needVStack(amount) {
                 VStack (alignment: .trailing) {
                     BalanceButton(amount: amount, rowAction: rowAction)
                     HStack {
-                        BalanceRowButtons(amount: amount, narrow: false, lineLimit: 5,
-                                          sendAction: sendAction, recvAction: recvAction)
                     }
+                    TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
+                                  lineLimit: 5, sendDisabled: amount.isZero,
+                                  sendAction: sendAction, recvAction: recvAction)
                 }
             } else {
                 HStack {
-                    BalanceRowButtons(amount: amount, narrow: true, lineLimit: 5,
-                                      sendAction: sendAction, recvAction: recvAction)
                     BalanceButton(amount: amount, rowAction: rowAction)
+                    TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
+                                  lineLimit: 5, sendDisabled: amount.isZero,
+                                  sendAction: sendAction, recvAction: recvAction)
                 }
 //                .fixedSize(horizontal: true, vertical: true)   // should make all buttons equal height - but doesn't
             }

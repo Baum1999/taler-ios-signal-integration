@@ -5,50 +5,50 @@
 import SwiftUI
 import taler_swift
 
-struct BalanceRowButtons: View {
-    let amount: Amount
-    let narrow: Bool
+struct TwoRowButtons: View {
+    let sendTitle: String
+    let recvTitle: String
     let lineLimit: Int
+    let sendDisabled: Bool
     let sendAction: () -> Void
     let recvAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
 
     var body: some View {
-        let currency = amount.currencyStr
         Group {
-            Button("Request\nPayment", action: recvAction)
+            Button(sendTitle, action: sendAction)
+                .lineLimit(lineLimit)
+                .disabled(sendDisabled)
+                .buttonStyle(TalerButtonStyle(type: .bordered,
+                                            dimmed: false,
+                                           aligned: .center))
+            Button(recvTitle, action: recvAction)
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
                                             dimmed: false,
-                                            narrow: narrow,
-                                           aligned: .center))
-            Button("Send\n\(currency)", action: sendAction)
-                .lineLimit(lineLimit)
-                .disabled(amount.isZero)
-                .buttonStyle(TalerButtonStyle(type: .bordered,
-                                            dimmed: false,
-                                            narrow: narrow,
                                            aligned: .center))
         }
     }
 }
 
-struct BalanceRowButtons_Previews: PreviewProvider {
+struct TwoRowButtons_Previews: PreviewProvider {
     static var previews: some View {
         List {
             VStack {
                 let amount = try! Amount(fromString: LONGCURRENCY + ":1234.56")
-                BalanceRowButtons(amount: Amount(currency: "TestKUDOS", value: 1234),
-                                  narrow: false, lineLimit: 0,
-                                  sendAction: {}, recvAction: {})
+                TwoRowButtons(sendTitle: "Send\n" + LONGCURRENCY,
+                              recvTitle: "Receive\n" + LONGCURRENCY,
+                              lineLimit: 0, sendDisabled: true,
+                             sendAction: {}, recvAction: {})
                 BalanceButton(amount: amount, rowAction: {})
             }
             HStack {
-                let amount = try! Amount(fromString: "KUDOS" + ":1234.56")
-                BalanceRowButtons(amount: amount,
-                                  narrow: true, lineLimit: 2,
-                                  sendAction: {}, recvAction: {})
+                let amount = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
+                TwoRowButtons(sendTitle: "Send\n" + DEMOCURRENCY,
+                              recvTitle: "Receive\n" + DEMOCURRENCY,
+                              lineLimit: 2, sendDisabled: true,
+                             sendAction: {}, recvAction: {})
                 BalanceButton(amount: amount, rowAction: {})
             }
         }

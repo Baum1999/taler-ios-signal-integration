@@ -12,6 +12,25 @@ struct ExchangeRowView: View {
     @Binding var centsToTransfer: UInt64
 
     @State private var buttonSelected: Int? = nil
+
+    func selectAndUpdate(_ button: Int) {
+        Task { // runs on MainActor
+            do {
+                buttonSelected = button      // will trigger NavigationLink
+//                try await model.updateExchange(scopeInfo: balance.scopeInfo)
+            } catch {    // TODO: error handling - couldn't updateExchange
+                //                symLog.log("error: \(error)")
+            }
+        }
+    }
+    let depositTitle = String(localized: "Deposit", comment: "Top of button <Deposit (currency)>")
+    let withdrawTitle = String(localized: "Withdraw", comment: "Top of button <Withdraw (currency)>")
+    func needVStack(_ currency: String) -> Bool {
+        // Sizes: 320 (SE), 375 (X, Xs, 12, 13 mini), 390 (12,13,14), 414 (Plus, Max), 428 (Pro Max)
+
+        return false
+    }
+
     var body: some View {
         let baseURL = exchange.exchangeBaseUrl
 
@@ -31,18 +50,26 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
 
-        HStack {        // buttons just set "buttonSelected" so the NavigationLink will trigger
-            Button("Deposit\n\(currency)") { buttonSelected = 1 }
-                .multilineTextAlignment(.center)
-                .buttonStyle(TalerButtonStyle(type: .bordered))
-                .disabled(true)     // TODO: after implementing Deposit check available
+        let sendTitle = depositTitle + "\n" + currency      // TODO:  amount.currencyStr
+        let recvTitle = withdrawTitle + "\n" + currency     // TODO:  amount.currencyStr
+        if needVStack(currency) {
+            VStack {
+                TwoRowButtons(sendTitle: sendTitle,
+                              recvTitle: recvTitle,
+                              lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
+                             sendAction: { selectAndUpdate(1) },
+                             recvAction: { selectAndUpdate(2) })
+            }
+        } else {
+            HStack {        // buttons just set "buttonSelected" so the NavigationLink will trigger
+                TwoRowButtons(sendTitle: sendTitle,
+                              recvTitle: recvTitle,
+                              lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
+                             sendAction: { selectAndUpdate(1) },
+                             recvAction: { selectAndUpdate(2) })
 
-            Button("Withdraw\n\(currency)") { buttonSelected = 2 }
-                .multilineTextAlignment(.center)
-                .buttonStyle(TalerButtonStyle(type: .bordered))
-        }.listRowSeparator(.visible)
-//        .listRowSeparatorTint(.red)
-        .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 }
 /// This view shows the currency name in an exchange section

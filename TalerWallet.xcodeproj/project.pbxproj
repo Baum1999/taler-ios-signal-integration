@@ -70,7 +70,7 @@
 		4E3EAE4C2A990778009F1BE8 /* AmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095492989CBFE0043A8A1 /* AmountView.swift */; };
 		4E3EAE4D2A990778009F1BE8 /* P2pAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC22A42252300CC88B8 /* P2pAcceptDone.swift */; };
 		4E3EAE4E2A990778009F1BE8 /* AnyTransition+backslide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */; };
-		4E3EAE4F2A990778009F1BE8 /* BalanceRowButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB065432A4CD1A80039B91D /* BalanceRowButtons.swift */; };
+		4E3EAE4F2A990778009F1BE8 /* TwoRowButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */; };
 		4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */; };
 		4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* Controller+playSound.swift */; };
 		4E3EAE522A990778009F1BE8 /* WalletEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */; };
@@ -170,7 +170,7 @@
 		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
 		4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */; };
 		4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */; };
-		4EB065442A4CD1A80039B91D /* BalanceRowButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB065432A4CD1A80039B91D /* BalanceRowButtons.swift */; };
+		4EB065442A4CD1A80039B91D /* TwoRowButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */; };
 		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
 		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
 		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
@@ -336,7 +336,7 @@
 		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
-		4EB065432A4CD1A80039B91D /* BalanceRowButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceRowButtons.swift; sourceTree = "<group>"; };
+		4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoRowButtons.swift; sourceTree = "<group>"; };
 		4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletTests.swift; sourceTree = "<group>"; };
 		4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
 		4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -683,7 +683,7 @@
 				4EB095372989CBFE0043A8A1 /* BalancesListView.swift */,
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */,
-				4EB065432A4CD1A80039B91D /* BalanceRowButtons.swift */,
+				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4EB095382989CBFE0043A8A1 /* PendingRowView.swift */,
 				4E87C8742A34B411001C6406 /* UncompletedRowView.swift */,
 			);
@@ -1071,7 +1071,7 @@
 				4E3EAE4D2A990778009F1BE8 /* P2pAcceptDone.swift in Sources */,
 				4E3EAE4E2A990778009F1BE8 /* AnyTransition+backslide.swift in Sources */,
 				4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */,
-				4E3EAE4F2A990778009F1BE8 /* BalanceRowButtons.swift in Sources */,
+				4E3EAE4F2A990778009F1BE8 /* TwoRowButtons.swift in Sources */,
 				4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */,
 				4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */,
 				4E3EAE522A990778009F1BE8 /* WalletEmptyView.swift in Sources */,
@@ -1174,7 +1174,7 @@
 				4E3B4BC32A42252300CC88B8 /* P2pAcceptDone.swift in Sources */,
 				4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */,
 				4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */,
-				4EB065442A4CD1A80039B91D /* BalanceRowButtons.swift in Sources */,
+				4EB065442A4CD1A80039B91D /* TwoRowButtons.swift in Sources */,
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
 				4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */,
 				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
