@@ -7,76 +7,77 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-fileprivate let APIBASEURL  = "/demobanks/default/access-api/"
 fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
 /// A request to add a test balance to the wallet.
-fileprivate struct WalletBackendWithdrawTestBalance: WalletBackendFormattedRequest {
+fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return "withdrawTestBalance" }
     func args() -> Args {
-        return Args(amount: amount, bankBaseUrl: bankBaseUrl,
-                    exchangeBaseUrl: exchangeBaseUrl, bankAccessApiBaseUrl: bankAccessApiBaseUrl)
+        return Args(amount: amount,
+//                    bankBaseUrl: bankBaseUrl,
+                    corebankApiBaseUrl: corebankApiBaseUrl,
+                    exchangeBaseUrl: exchangeBaseUrl)
     }
 
     var amount: Amount
-    var bankBaseUrl: String
+//    var bankBaseUrl: String
+    var corebankApiBaseUrl: String
     var exchangeBaseUrl: String
-    var bankAccessApiBaseUrl: String
 
     struct Args: Encodable {
         var amount: Amount
-        var bankBaseUrl: String
+//        var bankBaseUrl: String                         // <= this should be the correct parameter name
+        var corebankApiBaseUrl: String                // <= but currently this is used by wallet-core
         var exchangeBaseUrl: String
-        var bankAccessApiBaseUrl: String
     }
 }
 extension WalletModel {
     @MainActor func loadTestKudosM(test: Bool)
     async throws {          // M for MainActor
         let amount = Amount(currency:  test ? TESTCURRENCY : DEMOCURRENCY, integer: 11, fraction: 0)
-        let request = WalletBackendWithdrawTestBalance(amount: amount,
-                                                       bankBaseUrl: test ? TESTBANK : DEMOBANK,
-                                                       exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
-                                                       bankAccessApiBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL)
+        let request = WithdrawTestBalanceRequest(amount: amount,
+//                                                 bankBaseUrl: test ? TESTBANK : DEMOBANK,
+                                                 corebankApiBaseUrl: test ? TESTBANK : DEMOBANK,
+                                                 exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE)
         let response = try await sendRequest(request, ASYNCDELAY)
     }
 } // loadTestKudosM()
 // MARK: -
 /// A request to add a test balance to the wallet.
-fileprivate struct WalletBackendRunIntegration: WalletBackendFormattedRequest {
+fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { return newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
     func args() -> Args {
-        return Args(amountToWithdraw: amountToWithdraw,
-                    amountToSpend: amountToSpend,
-                    bankBaseUrl: bankBaseUrl,
-                    bankAccessApiBaseUrl: bankAccessApiBaseUrl,
-                    exchangeBaseUrl: exchangeBaseUrl,
+        return Args(exchangeBaseUrl: exchangeBaseUrl,
+//                    bankBaseUrl: bankBaseUrl,
+                    corebankApiBaseUrl: corebankApiBaseUrl,
                     merchantBaseUrl: merchantBaseUrl,
-                    merchantAuthToken: merchantAuthToken
+                    merchantAuthToken: merchantAuthToken,
+                    amountToWithdraw: amountToWithdraw,
+                    amountToSpend: amountToSpend
         )
     }
 
     let newVersion: Bool
 
-    var amountToWithdraw: Amount
-    var amountToSpend: Amount
-    var bankBaseUrl: String
-    var bankAccessApiBaseUrl: String
     var exchangeBaseUrl: String
+//    var bankBaseUrl: String
+    var corebankApiBaseUrl: String
     var merchantBaseUrl: String
     var merchantAuthToken: String
+    var amountToWithdraw: Amount
+    var amountToSpend: Amount
 
     struct Args: Encodable {
-        var amountToWithdraw: Amount
-        var amountToSpend: Amount
-        var bankBaseUrl: String
-        var bankAccessApiBaseUrl: String
         var exchangeBaseUrl: String
+//        var bankBaseUrl: String
+        var corebankApiBaseUrl: String
         var merchantBaseUrl: String
         var merchantAuthToken: String
+        var amountToWithdraw: Amount
+        var amountToSpend: Amount
     }
 }
 extension WalletModel {
@@ -84,14 +85,14 @@ extension WalletModel {
     async throws {               // M for MainActor
         let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 3, fraction: 0)
         let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 1, fraction: 0)
-        let request = WalletBackendRunIntegration(newVersion: newVersion,
-                                                  amountToWithdraw: amountW,
-                                                  amountToSpend: amountS,
-                                                  bankBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL,
-                                                  bankAccessApiBaseUrl: (test ? TESTBANK : DEMOBANK) + APIBASEURL,
-                                                  exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
-                                                  merchantBaseUrl: test ? TESTBACKEND : DEMOBACKEND,
-                                                  merchantAuthToken: MERCHANTAUTHTOKEN)
+        let request = RunIntegrationTest(newVersion: newVersion,
+                                         exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
+//                                         bankBaseUrl: (test ? TESTBANK : DEMOBANK),
+                                         corebankApiBaseUrl: (test ? TESTBANK : DEMOBANK),
+                                         merchantBaseUrl: test ? TESTBACKEND : DEMOBACKEND,
+                                         merchantAuthToken: MERCHANTAUTHTOKEN,
+                                         amountToWithdraw: amountW,
+                                         amountToSpend: amountS)
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 } // runIntegrationTestM()
