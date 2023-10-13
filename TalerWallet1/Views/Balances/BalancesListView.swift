@@ -36,9 +36,14 @@ struct BalancesListView: View {
     private var dismissAlertButton: some View {
         Button("Cancel", role: .cancel) {
             if #available(iOS 17.0, *) {
-//                AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+                AccessibilityNotification.Announcement(ClosingAnnouncement).post()
             }
             showCameraAlert = false
+        }
+    }
+    private func dismissingSheet() {
+        if #available(iOS 17.0, *) {
+            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
         }
     }
 
@@ -46,30 +51,29 @@ struct BalancesListView: View {
     var lowPriorityAnnouncement: AttributedString {
         var lowPriorityString = AttributedString ("Camera Loading")
         if #available(iOS 17.0, *) {
-//            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
+            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
         }
         return lowPriorityString
     }
     var highPriorityAnnouncement: AttributedString {
         var highPriorityString = AttributedString("Camera Active")
         if #available(iOS 17.0, *) {
-//            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
+            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
         }
         return highPriorityString
     }
     private func checkCameraAvailable() -> Void {
-        /// Open Camera Code
+        // Open Camera when QR-Button was tapped
         if #available(iOS 17.0, *) {
-//            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
+            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
         }
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
             if granted {
-                showQRScanner = true
-            } else {
-                // Camera Loaded Code
+                showQRScanner = true            // present sheet
                 if #available(iOS 17.0, *) {
-//                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
                 }
+            } else {
                 showCameraAlert = true
             }
         })
@@ -108,7 +112,7 @@ struct BalancesListView: View {
                        actions: {   openSettingsButton
                                     dismissAlertButton },
                        message: {   Text("Please allow camera access in settings.") })
-            .sheet(isPresented: $showQRScanner) {
+            .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
                 let sheet = AnyView(QRSheet(stack: stack.push()))
                 Sheet(sheetView: sheet)
             } // sheet
