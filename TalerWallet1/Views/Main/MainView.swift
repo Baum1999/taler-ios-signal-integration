@@ -122,6 +122,7 @@ extension MainView {
                     sysImage: "building.columns",
                         view: AnyView(ExchangeListView(stack: stack.push(exchangesTitle),
                                                     navTitle: exchangesTitle,
+                                                    balances: $balances,
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: settingsTitle,    // TODO: "About"?
@@ -157,7 +158,8 @@ extension MainView {
 
                 NavigationView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
-                                  navTitle: exchangesTitle)
+                                  navTitle: exchangesTitle,
+                                  balances: $balances)
                 }
                 .tabItem {
                     Image(systemName: "building.columns")

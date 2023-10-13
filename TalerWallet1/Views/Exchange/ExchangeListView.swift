@@ -11,6 +11,7 @@ struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle: String
+    @Binding var balances: [Balance]
 #if TABBAR  // Taler Wallet
 #else       // GNU Taler
     var hamburgerAction: () -> Void
@@ -59,6 +60,7 @@ struct ExchangeListView: View {
         //Text("Exchanges...")
         Content(symLog: symLog,
                  stack: stack.push(),
+              balances: $balances,
              exchanges: $exchanges,
        centsToTransfer: $centsToTransfer,
           reloadAction: reloadAction)
@@ -95,6 +97,7 @@ extension ExchangeListView {
         let symLog: SymLogV?
         let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+        @Binding var balances: [Balance]
         @Binding var exchanges: [Exchange]
         @Binding var centsToTransfer: UInt64
         var reloadAction: () async -> Void

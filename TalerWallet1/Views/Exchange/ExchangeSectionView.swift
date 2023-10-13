@@ -8,21 +8,25 @@ import taler_swift
 struct ExchangeRowView: View {
     let stack: CallStack
     let exchange: Exchange
+//    let amount: Amount
     let currency: String
     @Binding var centsToTransfer: UInt64
 
+    @Environment(\.sizeCategory) var sizeCategory
     @State private var buttonSelected: Int? = nil
 
     func selectAndUpdate(_ button: Int) {
-        Task { // runs on MainActor
-            do {
-                buttonSelected = button      // will trigger NavigationLink
+        buttonSelected = button      // will trigger NavigationLink
+        // while navigation animation runs, contact Exchange to update Fees
+//        Task { // runs on MainActor
+//            do {
 //                try await model.updateExchange(scopeInfo: balance.scopeInfo)
-            } catch {    // TODO: error handling - couldn't updateExchange
-                //                symLog.log("error: \(error)")
-            }
-        }
+//            } catch {    // TODO: error handling - couldn't updateExchange
+//                //                symLog.log("error: \(error)")
+//            }
+//        }
     }
+
     let depositTitle = String(localized: "Deposit", comment: "Top of button <Deposit (currency)>")
     let withdrawTitle = String(localized: "Withdraw", comment: "Top of button <Withdraw (currency)>")
     func needVStack(_ currency: String) -> Bool {
@@ -78,6 +82,7 @@ struct ExchangeRowView: View {
 struct ExchangeSectionView: View {
     let stack: CallStack
     let currency: String
+//    let amount: Amount
     let exchanges: [Exchange]
 
     @Binding var centsToTransfer: UInt64
@@ -92,11 +97,12 @@ struct ExchangeSectionView: View {
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
                              currency: currency,
+//                               amount: amount,
                       centsToTransfer: $centsToTransfer)
             }
             .accessibilityElement(children: .combine)
         } header: {
-            Text(currency)
+            Text(currency)          // TODO: amount.currencyStr
                 .accessibilityFont(.title)
         }
     }
@@ -106,6 +112,7 @@ struct ExchangeSectionView: View {
 struct ExchangeRow_Container : View {
     @State private var centsToTransfer: UInt64 = 100
 
+//    let amount = try! Amount(fromString: LONGCURRENCY + ":1234.56")
     var body: some View {
         let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
                                         currency: LONGCURRENCY,
@@ -121,8 +128,9 @@ struct ExchangeRow_Container : View {
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
-        ExchangeSectionView(stack: CallStack("Preview"), currency: LONGCURRENCY, exchanges: [exchange1, exchange2],
-                                centsToTransfer: $centsToTransfer)
+        ExchangeSectionView(stack: CallStack("Preview"), currency: LONGCURRENCY,
+                            exchanges: [exchange1, exchange2],
+                            centsToTransfer: $centsToTransfer)
     }
 }
 
