@@ -9,13 +9,14 @@ import os.log
 fileprivate let DATABASE = "talerwalletdb-v30"
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-
 // MARK: -
 /// The "virtual" base class for all models
 class WalletModel: ObservableObject {
     public static let shared = WalletModel()
     static func className() -> String {"\(self)"}
     let logger = Logger (subsystem: "net.taler.gnu", category: "WalletModel")
+    let semaphore = AsyncSemaphore(value: 1)
+    var cachedBalances: [Balance]? = nil
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
       async throws -> T.Response {    // T for any Thread

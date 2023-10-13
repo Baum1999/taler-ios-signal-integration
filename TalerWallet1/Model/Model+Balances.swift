@@ -45,13 +45,20 @@ extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
     @MainActor func balancesM(_ stack: CallStack)
       async -> [Balance] {          // M for MainActor
-        do {
-            let request = Balances()
-            let response = try await sendRequest(request, ASYNCDELAY)
-            return response.balances                // trigger view update in BalancesListView
-        } catch {
-            logger.error("balancesM failed: \(error)")
-            return []
+        await semaphore.wait()
+        defer { semaphore.signal() }
+        if cachedBalances == nil {
+            do {
+                let request = Balances()
+                let response = try await sendRequest(request, ASYNCDELAY)
+                cachedBalances = response.balances
+            } catch {
+                logger.error("balancesM failed: \(error)")
+                // TODO: show error
+            }
+        } else {
+            logger.trace("returning cached Balances")
         }
+        return cachedBalances ?? []
     }
 }
