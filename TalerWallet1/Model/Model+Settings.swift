@@ -8,8 +8,7 @@ import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 fileprivate let APIBASEURL  = "/demobanks/default/access-api/"
-//fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
-fileprivate let MERCHANTAUTHTOKEN = "secret-token:secret"
+fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
 // MARK: -
 /// A request to add a test balance to the wallet.
