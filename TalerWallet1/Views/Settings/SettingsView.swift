@@ -33,8 +33,12 @@ struct SettingsView: View {
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
+#if TABBAR  // Taler Wallet
+#else       // GNU Taler
     var hamburgerAction: () -> Void
+#endif
 
     @EnvironmentObject private var model: WalletModel
 
@@ -81,6 +85,11 @@ struct SettingsView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+#if TABBAR  // Taler Wallet
+        let hamburger: HamburgerButton? = nil
+#else       // GNU Taler
+        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
+#endif
         let walletCore = WalletCore.shared
         Group {
             List {
@@ -92,6 +101,8 @@ struct SettingsView: View {
                                 description: String(localized: "When a transaction finished"))
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
+                SettingsToggle(name: String(localized: "Icon Only"), value: $iconOnly,
+                               description: String(localized: "Omit text where possible"))
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,
                             description: String(localized: "More information intended for debugging")) {
@@ -250,10 +261,14 @@ struct SettingsView: View {
             .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
-        .navigationBarItems(leading: HamburgerButton(action: hamburgerAction))
+        .navigationBarItems(leading: hamburger)
         .onAppear() {
             showDevelopItems = developerMode
             DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
+        }
+        .onDisappear() {
+            checkDisabled = false    // reset
+            withDrawDisabled = false
         }
         .alert("Reset Wallet",
                isPresented: $showResetAlert,
@@ -287,7 +302,11 @@ extension Bundle {
 #if DEBUG
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
+#if TABBAR  // Taler Wallet
+        SettingsView(stack: CallStack("Preview"), navTitle: "Settings")
+#else       // GNU Taler
         SettingsView(stack: CallStack("Preview"), navTitle: "Settings") { }
+#endif
     }
 }
 #endif

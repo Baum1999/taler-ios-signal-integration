@@ -65,12 +65,41 @@ struct MainView: View {
         }
     } // body
 }
+// MARK: - TabBar
+enum Tab {
+    case balances, exchanges, settings
+}
+
 // MARK: - Content
 extension MainView {
     struct Content: View {
         let symLog: SymLogV?
         let stack: CallStack
         @Binding var talerFont: Int
+        @AppStorage("iconOnly") var iconOnly: Bool = false
+        let balancesTitle = String(localized: "Balances")
+        let exchangesTitle = String(localized: "Exchanges")
+        let settingsTitle = String(localized: "Settings")
+#if TABBAR  // Taler Wallet
+        @State private var selectedTab: Tab = .balances
+
+        private func tabSelection() -> Binding<Tab> {
+            Binding { //this is the get block
+                self.selectedTab
+            } set: { tappedTab in
+                if tappedTab == self.selectedTab {
+                    //User tapped on the tab twice == Pop to root view
+//                    if homeNavigationStack.isEmpty {
+                        //User already on home view, scroll to top
+//                    } else {
+//                        homeNavigationStack = []
+//                    }
+                }
+                //Set the tab to the tabbed tab
+                self.selectedTab = tappedTab
+            }
+        }
+#else       // GNU Taler
         @State var sidebarVisible: Bool = false
         func hamburgerAction() {
             withAnimation(.easeInOut(duration: 0.25)) {
@@ -78,10 +107,6 @@ extension MainView {
             }
         }
 
-        let balancesTitle = String(localized: "Balances")
-        let exchanges = String(localized: "Exchanges")
-        let settingsTitle = String(localized: "Settings")
-        let settings = String(localized: "Settings")
         var views: [SidebarItem] {[
             SidebarItem(name: balancesTitle,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
@@ -89,10 +114,10 @@ extension MainView {
                                                     navTitle: balancesTitle,
                                              hamburgerAction: hamburgerAction)
                                      )),
-            SidebarItem(name: exchanges,
+            SidebarItem(name: exchangesTitle,
                     sysImage: "building.columns",
-                        view: AnyView(ExchangeListView(stack: stack.push(exchanges),
-                                                    navTitle: exchanges,
+                        view: AnyView(ExchangeListView(stack: stack.push(exchangesTitle),
+                                                    navTitle: exchangesTitle,
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: settingsTitle,    // TODO: "About"?
@@ -103,12 +128,48 @@ extension MainView {
                                      ))
         ]}
         @State var currentView: Int = 0
+#endif
 
         var body: some View {
 #if DEBUG
             let _ = Self._printChanges()
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+          Group {
+#if TABBAR  // Taler Wallet
+//            let labelStyle = iconOnly ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
+            TabView(selection: tabSelection()) {
+                NavigationView {
+                    BalancesListView(stack: stack.push(balancesTitle),
+                                  navTitle: balancesTitle)
+                }
+                .tabItem {
+                    Image(systemName: "creditcard")             // system will automatically use filled variant
+                    if !iconOnly { Text(balancesTitle) }
+                }
+                .tag(Tab.balances)
+
+                NavigationView {
+                    ExchangeListView(stack: stack.push(exchangesTitle),
+                                  navTitle: exchangesTitle)
+                }
+                .tabItem {
+                    Image(systemName: "building.columns")
+                    if !iconOnly { Text(exchangesTitle) }
+                }
+                .tag(Tab.exchanges)
+
+                NavigationView {
+                    SettingsView(stack: stack.push(), navTitle: settingsTitle)
+                }
+                .tabItem {
+                    Image(systemName: "gear")                   // system will automatically use filled variant
+                    if !iconOnly { Text(settingsTitle) }
+                }
+                .tag(Tab.settings)
+            }
+//            .animation(.linear(duration: LAUNCHDURATION), value: selectedTab)     doesn't work. Needs CustomTabView
+#else       // GNU Taler
             ZStack(alignment: .leading) {
                 NavigationView {   // the one and only for all non-sheet views
                     VStack(alignment: .leading) {   // only needed for backslide transition
@@ -136,6 +197,8 @@ extension MainView {
                    sidebarVisible: sidebarVisible,
                   hamburgerAction: hamburgerAction)
             }
+#endif
+          }
         }
     } // Content
 }

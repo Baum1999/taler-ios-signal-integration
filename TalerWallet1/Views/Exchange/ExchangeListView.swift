@@ -11,7 +11,10 @@ struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle: String
+#if TABBAR  // Taler Wallet
+#else       // GNU Taler
     var hamburgerAction: () -> Void
+#endif
 
     @EnvironmentObject private var model: WalletModel
 
@@ -48,7 +51,11 @@ struct ExchangeListView: View {
 //        withAnimation { showAlert = true }
             showAlert = true
         }
-
+#if TABBAR  // Taler Wallet
+        let hamburger: HamburgerButton? = nil
+#else       // GNU Taler
+        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
+#endif
         //Text("Exchanges...")
         Content(symLog: symLog,
                  stack: stack.push(),
@@ -56,7 +63,7 @@ struct ExchangeListView: View {
        centsToTransfer: $centsToTransfer,
           reloadAction: reloadAction)
         .navigationTitle(navTitle)
-        .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
+        .navigationBarItems(leading: hamburger,
                             trailing: PlusButton(action: plusAction)
                                         .accessibilityLabel("Add Exchange"))
         .overlay {

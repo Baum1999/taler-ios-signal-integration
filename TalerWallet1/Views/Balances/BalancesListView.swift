@@ -12,7 +12,10 @@ struct BalancesListView: View {
     private let symLog = SymLogV()
     let stack: CallStack
     let navTitle: String
+#if TABBAR  // Taler Wallet
+#else       // GNU Taler
     let hamburgerAction: () -> Void
+#endif
 
     @EnvironmentObject private var model: WalletModel
     @State private var balances: [Balance] = []
@@ -84,11 +87,16 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+#if TABBAR  // Taler Wallet
+        let hamburger: HamburgerButton? = nil
+#else       // GNU Taler
+        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
+#endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 centsToTransfer: $centsToTransfer, summary: $summary,
                 reloadAction: reloadAction)
             .navigationTitle(navTitle)
-            .navigationBarItems(leading: HamburgerButton(action: hamburgerAction),
+            .navigationBarItems(leading: hamburger,
                                 trailing: QRButton(action: checkCameraAvailable))
             .overlay {
                 if balances.isEmpty {
