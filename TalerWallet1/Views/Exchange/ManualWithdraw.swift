@@ -62,9 +62,10 @@ struct ManualWithdraw: View {
                             .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
                         } else {
-                            ToSButtonView(exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                   viewID: VIEW_WITHDRAW_TOS,
-                                                      p2p: false)
+                            ToSButtonView(stack: stack.push(),
+                                exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                         viewID: VIEW_WITHDRAW_TOS,
+                                            p2p: false)
                         }
                     }
                 } // disabled
@@ -77,7 +78,7 @@ struct ManualWithdraw: View {
         .navigationTitle(navTitle)
         .onAppear {
             symLog.log("onAppear")
-            DebugViewC.shared.setViewID(VIEW_WITHDRAWAL)
+            DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
         }
         .task(id: centsToTransfer) { // re-run this whenever centsToTransfer changes
             let amount = Amount.amountFromCents(currency, centsToTransfer)

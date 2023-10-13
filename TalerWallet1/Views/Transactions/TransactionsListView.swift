@@ -68,11 +68,11 @@ struct TransactionsListView: View {
         }
         .overlay {
             if transactions.isEmpty {
-                TransactionsEmptyView(currency: currency)
+                TransactionsEmptyView(stack: stack.push(), currency: currency)
             }
         }
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST)
+            DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST, stack: stack.push())
         }
     }
 }

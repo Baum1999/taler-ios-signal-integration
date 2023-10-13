@@ -62,7 +62,7 @@ struct RequestPayment: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {   // make CurrencyField show the keyboard
-            DebugViewC.shared.setViewID(VIEW_RECEIVE_P2P)
+            DebugViewC.shared.setViewID(VIEW_RECEIVE_P2P, stack: stack.push())
             symLog.log("❗️Yikes \(navTitle) onAppear")
         }
         .onDisappear {

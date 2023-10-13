@@ -19,6 +19,7 @@ import SymLog
 
 struct SettingsView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
@@ -94,12 +95,12 @@ struct SettingsView: View {
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,
                             description: String(localized: "More information intended for debugging")) {
-                        DebugViewC.shared.setViewID(VIEW_SETTINGS)
+                        DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
                         withAnimation { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
                         NavigationLink {        // whole row like in a tableView
-                            LazyView { PendingOpsListView() }
+                            LazyView { PendingOpsListView(stack: stack.push()) }
                         } label: {
                             SettingsItem(name: String(localized: "Pending Operations"),
                                   description: String(localized: "Exchange not yet ready...")) {}
@@ -252,7 +253,7 @@ struct SettingsView: View {
         .navigationBarItems(leading: HamburgerButton(action: hamburgerAction))
         .onAppear() {
             showDevelopItems = developerMode
-            DebugViewC.shared.setViewID(VIEW_SETTINGS)
+            DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
         }
         .alert("Reset Wallet",
                isPresented: $showResetAlert,
@@ -286,7 +287,7 @@ extension Bundle {
 #if DEBUG
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(navTitle: "Settings") { }
+        SettingsView(stack: CallStack("Preview"), navTitle: "Settings") { }
     }
 }
 #endif

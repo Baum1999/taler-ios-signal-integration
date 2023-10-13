@@ -124,7 +124,7 @@ extension ExchangeListView {
                 .listStyle(myListStyle.style).anyView
             }
             .onAppear() {
-                DebugViewC.shared.setViewID(VIEW_EXCHANGES)
+                DebugViewC.shared.setViewID(VIEW_EXCHANGES, stack: stack.push())
             }
             .onNotification(.ExchangeAdded) { notification in
                 // doesn't need to be received on main thread because we just reload in the background anyway

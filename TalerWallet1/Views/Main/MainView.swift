@@ -33,7 +33,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(symLog: symLog, stack: stack.push(), talerFont: $talerFont)
+                Content(symLog: symLog, stack: stack.push("Content"), talerFont: $talerFont)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
@@ -78,14 +78,15 @@ extension MainView {
             }
         }
 
-        let balances = String(localized: "Balances")
+        let balancesTitle = String(localized: "Balances")
         let exchanges = String(localized: "Exchanges")
+        let settingsTitle = String(localized: "Settings")
         let settings = String(localized: "Settings")
         var views: [SidebarItem] {[
-            SidebarItem(name: balances,
+            SidebarItem(name: balancesTitle,
                     sysImage: "creditcard.fill",        // TODO: Wallet Icon
-                        view: AnyView(BalancesListView(stack: stack.push(balances),
-                                                    navTitle: balances,
+                        view: AnyView(BalancesListView(stack: stack.push(balancesTitle),
+                                                    navTitle: balancesTitle,
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchanges,
@@ -94,10 +95,11 @@ extension MainView {
                                                     navTitle: exchanges,
                                              hamburgerAction: hamburgerAction)
                                      )),
-            SidebarItem(name: settings,    // TODO: "About"?
+            SidebarItem(name: settingsTitle,    // TODO: "About"?
                     sysImage: "gearshape.fill",
-                        view: AnyView(SettingsView(navTitle: settings,
-                                            hamburgerAction: hamburgerAction)
+                        view: AnyView(SettingsView(stack: stack.push(settingsTitle),
+                                                navTitle: settingsTitle,
+                                         hamburgerAction: hamburgerAction)
                                      ))
         ]}
         @State var currentView: Int = 0

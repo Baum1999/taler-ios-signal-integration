@@ -7,6 +7,7 @@ import SymLog
 
 struct WithdrawTOSView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let navTitle = String(localized: "Terms of Service")
@@ -56,7 +57,7 @@ struct WithdrawTOSView: View {
             if viewID > SHEET_WITHDRAWAL {
                 DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS)
             } else {
-                DebugViewC.shared.setViewID(VIEW_WITHDRAW_TOS)
+                DebugViewC.shared.setViewID(VIEW_WITHDRAW_TOS, stack: stack.push())
             }
         }.task {
             do {

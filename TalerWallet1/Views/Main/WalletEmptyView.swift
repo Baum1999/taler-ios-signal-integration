@@ -10,6 +10,7 @@ import SymLog
 
 struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
@@ -31,13 +32,13 @@ struct WalletEmptyView: View {
         .accessibilityFont(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_EMPTY)     // 10
+            DebugViewC.shared.setViewID(VIEW_EMPTY, stack: stack.push("onAppear"))     // 10
         }
     }
 }
 
 struct WalletEmptyView_Previews: PreviewProvider {
     static var previews: some View {
-        WalletEmptyView()
+        WalletEmptyView(stack: CallStack("Preview"))
     }
 }

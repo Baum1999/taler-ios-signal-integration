@@ -146,7 +146,7 @@ class DebugViewC: ObservableObject {
     @Published var viewID: Int = 0
     @Published var sheetID: Int = 0
 
-    @MainActor func setViewID(_ newID: Int) -> Void {
+    @MainActor func setViewID(_ newID: Int, stack: CallStack) -> Void {
         if developerMode {
             if viewID == 0 {
                 symLog.log("switching ON, \(newID)")

@@ -50,9 +50,10 @@ struct P2pReceiveURIView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
                 } else {
-                    ToSButtonView(exchangeBaseUrl: nil,
-                                           viewID: SHEET_RCV_P2P_TOS,
-                                              p2p: true)
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: nil,
+                                 viewID: SHEET_RCV_P2P_TOS,
+                                    p2p: true)
                 }
             } else {
                 // Yikes no details or no baseURL

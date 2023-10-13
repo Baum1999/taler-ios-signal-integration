@@ -60,9 +60,10 @@ struct WithdrawURIView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
                 } else {
-                    ToSButtonView(exchangeBaseUrl: exchangeBaseUrl,
-                                           viewID: SHEET_WITHDRAW_TOS,
-                                              p2p: false)
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: exchangeBaseUrl,
+                                 viewID: SHEET_WITHDRAW_TOS,
+                                    p2p: false)
                 }
             } else {
                 // Yikes no details or no baseURL

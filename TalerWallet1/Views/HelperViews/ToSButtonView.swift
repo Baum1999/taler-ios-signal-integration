@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ToSButtonView: View {
+    let stack: CallStack
     let exchangeBaseUrl: String?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
     let p2p: Bool
@@ -21,9 +22,10 @@ struct ToSButtonView: View {
             .multilineTextAlignment(.leading)
             .padding()
         NavigationLink(destination: LazyView {
-            WithdrawTOSView(exchangeBaseUrl: exchangeBaseUrl,
-                                     viewID: viewID,
-                               acceptAction: nil)         // pop back to here
+            WithdrawTOSView(stack: stack.push(),
+                  exchangeBaseUrl: exchangeBaseUrl,
+                           viewID: viewID,
+                     acceptAction: nil)         // pop back to here
         }) {
             Text("Terms of Service")  // VIEW_WITHDRAW_TOS
         }.buttonStyle(TalerButtonStyle(type: .prominent))
@@ -32,5 +34,5 @@ struct ToSButtonView: View {
 }
 
 #Preview {
-    ToSButtonView(exchangeBaseUrl: nil, viewID: 0, p2p: false)
+    ToSButtonView(stack: CallStack("Preview"), exchangeBaseUrl: nil, viewID: 0, p2p: false)
 }

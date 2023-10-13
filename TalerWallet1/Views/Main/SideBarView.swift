@@ -97,10 +97,10 @@ struct SideBarView_Previews: PreviewProvider {
     static var views: [SidebarItem] {[
         SidebarItem(name: "Balances",
                 sysImage: "creditcard.fill",        // TODO: Wallet Icon
-                    view: AnyView(WalletEmptyView())),
+                    view: AnyView(WalletEmptyView(stack: CallStack("Preview")))),
         SidebarItem(name: "Settings",
                 sysImage: "gearshape.fill",
-                    view: AnyView(WalletEmptyView()))
+                    view: AnyView(WalletEmptyView(stack: CallStack("Preview"))))
     ]}
     static var previews: some View {
         BindingViewContainer(views: views)

@@ -50,7 +50,7 @@ struct ManualWithdrawDone: View {
             }
         }.onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT)
+            DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
             do {
                 let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)

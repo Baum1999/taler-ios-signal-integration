@@ -103,7 +103,7 @@ struct SendPurpose: View {
         .navigationTitle("Purpose")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE)
+            DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE, stack: stack.push())
             print("❗️ SendPurpose onAppear")
         }
         .onDisappear {

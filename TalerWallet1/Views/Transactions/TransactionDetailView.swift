@@ -158,7 +158,7 @@ struct TransactionDetailView: View {
         }
         .onAppear {
             symLog.log("onAppear")
-            DebugViewC.shared.setViewID(VIEW_TRANSACTIONDETAIL)
+            DebugViewC.shared.setViewID(VIEW_TRANSACTIONDETAIL, stack: stack.push())
         }
         .onDisappear {
             symLog.log("onDisappear")

@@ -86,7 +86,7 @@ struct PaymentPurpose: View {
         .navigationTitle("Request")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_RECEIVE_PURPOSE)
+            DebugViewC.shared.setViewID(VIEW_RECEIVE_PURPOSE, stack: stack.push())
             print("❗️ PaymentPurpose onAppear")
         }
         .onDisappear {

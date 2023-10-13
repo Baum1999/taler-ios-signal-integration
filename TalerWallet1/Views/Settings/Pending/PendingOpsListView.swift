@@ -7,6 +7,7 @@ import SymLog
 
 struct PendingOpsListView: View {
     let navTitle = String(localized: "Pending")
+    let stack: CallStack
 
     @EnvironmentObject private var model: WalletModel
 
@@ -14,7 +15,7 @@ struct PendingOpsListView: View {
 
     var body: some View {
         let reloadAction = model.getPendingOperationsM
-        Content(pendingOperations: $pendingOperations, reloadAction: reloadAction)
+        Content(stack: stack.push(), pendingOperations: $pendingOperations, reloadAction: reloadAction)
             .navigationTitle(navTitle)
             .task {
                 pendingOperations = await reloadAction()
@@ -24,6 +25,7 @@ struct PendingOpsListView: View {
 // MARK: -
 extension PendingOpsListView {
     struct Content: View {
+        let stack: CallStack
         @Binding var pendingOperations: [PendingOperation]
         var reloadAction: () async -> [PendingOperation]
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -34,7 +36,7 @@ extension PendingOpsListView {
                 }
                 .listStyle(myListStyle.style).anyView
                 .onAppear() {
-                    DebugViewC.shared.setViewID(VIEW_PENDING)
+                    DebugViewC.shared.setViewID(VIEW_PENDING, stack: stack.push())
                 }
                 .refreshable {
                     pendingOperations = await reloadAction()

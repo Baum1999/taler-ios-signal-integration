@@ -92,7 +92,7 @@ struct BalancesListView: View {
                                 trailing: QRButton(action: checkCameraAvailable))
             .overlay {
                 if balances.isEmpty {
-                    WalletEmptyView()
+                    WalletEmptyView(stack: stack.push())
                         .refreshable {  // already async
                             symLog.log("empty refreshing")
                             let count = await reloadAction(stack.push("empty refreshing"))
@@ -109,7 +109,7 @@ struct BalancesListView: View {
                                     dismissAlertButton },
                        message: {   Text("Please allow camera access in settings.") })
             .onAppear() {
-                DebugViewC.shared.setViewID(VIEW_BALANCES)
+                DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
             }
             .sheet(isPresented: $showQRScanner) {
                 let sheet = AnyView(QRSheet(stack: stack.push()))
