@@ -96,10 +96,9 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 }
 
 /// A request to get info about a currency
-
-fileprivate struct GetScopedCurrencyInfo: WalletBackendFormattedRequest {
-    typealias Response = ScopedCurrencyInfo
-    func operation() -> String { return "getScopedCurrencyInfo" }
+fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
+    typealias Response = CurrencySpecification
+    func operation() -> String { return "getCurrencySpecification" }
     func args() -> Args { return Args(scope: scope) }
 
     var scope: ScopeInfo
@@ -130,9 +129,9 @@ extension WalletModel {
         _ = try await sendRequest(request)
     }
 
-    @MainActor func getScopedCurrencyInfoM(scope: ScopeInfo)
-    async throws -> ScopedCurrencyInfo {   // M for MainActor
-        let request = GetScopedCurrencyInfo(scope: scope)
+    @MainActor func getCurrencySpecificationM(scope: ScopeInfo)
+      async throws -> CurrencySpecification {   // M for MainActor
+        let request = GetCurrencySpecification(scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }

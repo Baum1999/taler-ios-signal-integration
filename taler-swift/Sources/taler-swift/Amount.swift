@@ -38,11 +38,33 @@ enum AmountError: Error {
     case divideByZero
 }
 
-public struct ScopedCurrencyInfo: Codable, Sendable {
+public struct CurrencySpecification: Codable, Sendable {
+    enum CodingKeys: String, CodingKey {
+        case decimalSeparator = "decimal_separator"
+        case name = "name"
+        case fractionalInputDigits = "num_fractional_input_digits"
+        case fractionalNormalDigits = "num_fractional_normal_digits"
+        case fractionalTrailingZeroDigits = "num_fractional_trailing_zero_digits"
+        case isCurrencyNameLeading = "is_currency_name_leading"
+        case altUnitNames = "alt_unit_names"
+    }
+    /// e.g. “.” for $ and ¥;  “,” for €
     let decimalSeparator: String
-    let numFractionalDigits: Int        // 0 Yen, 2 €,$, 3 arabic
-    let numTinyDigits: Int              // SuperScriptDigits
+    /// some name for this CurrencySpecification
+    let name: String
+    /// how much digits the user may enter after the decimal separator
+    let fractionalInputDigits: Int
+    /// €,$,£: 2;  some arabic currencies: 3,  ¥: 0
+    let fractionalNormalDigits: Int
+    /// usually same as numFractionalNormalDigits, but e.g. might be 2 for ¥
+    let fractionalTrailingZeroDigits: Int
+    /// true for “$ 3.50”;  false for “3,50 €”
     let isCurrencyNameLeading: Bool
+    /// map of powers of 10 to alternative currency names / symbols
+    /// must always have an entry under "0" that defines the base name
+    /// e.g.  "0 => €" or "3 => k€". For BTC, would be "0 => BTC, -3 => mBTC".
+    /// This way, we can also communicate the currency symbol to be used.
+    let altUnitNames: [Int : String]
 }
 
 /// A value of some currency.
@@ -69,7 +91,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     var fraction: UInt32
 
     /// Additional info for formatting currency strings
-    var currencyInfo: ScopedCurrencyInfo?
+    var currencySpecification: CurrencySpecification?
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(currency)
@@ -96,8 +118,8 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The string representation of the value, formatted as "`integer`.`fraction`".
     public var valueStr: String {
         var decimalSeparator = "."
-        if let currencyInfo {
-            decimalSeparator = currencyInfo.decimalSeparator
+        if let currencySpecification {      // TODO: use locale
+            decimalSeparator = currencySpecification.decimalSeparator
         }
         if fraction == 0 {
             return "\(integer)"
