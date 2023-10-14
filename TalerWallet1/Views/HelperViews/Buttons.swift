@@ -23,6 +23,7 @@ struct HamburgerButton : View  {
     var body: some View {
         Button(action: action) {
             Image(systemName: "line.3.horizontal")
+//            Image(systemName: "sidebar.squares.leading")
         }
         .accessibilityFont(.title)
         .accessibilityLabel("Main Menu")
@@ -97,6 +98,7 @@ struct TalerButtonStyle: ButtonStyle {
 
     enum TalerButtonStyleType {
         case plain
+        case balance
         case bordered
         case prominent
     }
@@ -106,7 +108,7 @@ struct TalerButtonStyle: ButtonStyle {
     var aligned: TextAlignment = .center
 
     public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
-            MyBigButton(type: type,
+            MyBigButton(//type: type,
                    foreColor: foreColor(type: type, pressed: configuration.isPressed),
                    backColor: backColor(type: type, pressed: configuration.isPressed),
                       dimmed: dimmed,
@@ -124,10 +126,11 @@ struct TalerButtonStyle: ButtonStyle {
 //                                          disabled: disabled(),
 //                                         prominent: type == .prominent)
 //        }
-        return type == .plain ? WalletColors().fieldForeground :
+        return type == .plain ? WalletColors().fieldForeground :      // primary text color
             WalletColors().buttonForeColor(pressed: pressed,
-                                           disabled: disabled(),
-                                           prominent: type == .prominent)
+                                          disabled: disabled(),
+                                         prominent: type == .prominent,
+                                           balance: type == .balance)
     }
     func backColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
 //        return if type == .plain {
@@ -137,11 +140,13 @@ struct TalerButtonStyle: ButtonStyle {
 //                                           disabled: disabled(),
 //                                           prominent: type == .prominent)
 //        }
-        return type == .plain ? Color.clear :
+        return type == .plain && !pressed ? Color.clear :
             WalletColors().buttonBackColor(pressed: pressed,
-                                           disabled: disabled(),
-                                           prominent: type == .prominent)
+                                          disabled: disabled(),
+                                         prominent: type == .prominent,
+                                           balance: type == .balance)
     }
+
     struct BackgroundView: View {
         let color: Color
         let dimmed: Bool
@@ -156,7 +161,7 @@ struct TalerButtonStyle: ButtonStyle {
     }
 
     struct MyBigButton: View {
-        var type: TalerButtonStyleType
+//        var type: TalerButtonStyleType
         let foreColor: Color
         let backColor: Color
         let dimmed: Bool

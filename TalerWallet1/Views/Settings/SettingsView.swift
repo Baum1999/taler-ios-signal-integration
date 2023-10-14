@@ -101,7 +101,7 @@ struct SettingsView: View {
                                 description: String(localized: "When a transaction finished"))
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
-                SettingsToggle(name: String(localized: "Icon Only"), value: $iconOnly,
+                SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly,
                                description: String(localized: "Omit text where possible"))
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,

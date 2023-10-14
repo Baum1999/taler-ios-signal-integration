@@ -11,12 +11,14 @@ import taler_swift
 struct BalanceButton: View {
     let amount: Amount
     let rowAction: () -> Void
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     var body: some View {
         Button(action: rowAction) {
-            HStack() {
+            HStack(alignment: .lastTextBaseline) {
                 Text("Balance:", comment: "Balance in main view")
-                    .accessibilityFont(.title)
+                    .accessibilityFont(.title2)
+                    .foregroundColor(iconOnly ? .clear : .secondary)        // hide if iconOnly
                 Spacer()
                 Text(verbatim: "\(amount.valueStr)")  // TODO: CurrencyFormatter?
                     .accessibilityFont(.title)
@@ -26,7 +28,7 @@ struct BalanceButton: View {
         }   .disabled(false)
             .accessibilityElement(children: /*@START_MENU_TOKEN@*/.ignore/*@END_MENU_TOKEN@*/)
             .accessibilityLabel("Balance \(amount.readableDescription)")    // TODO: CurrencyFormatter!
-            .buttonStyle(TalerButtonStyle(type: .plain, aligned: .trailing))
+            .buttonStyle(TalerButtonStyle(type: iconOnly ? .plain : .balance, aligned: .trailing))
 //                .background(Color.yellow)
     }
 }

@@ -14,14 +14,18 @@ public struct WalletColors {
     let gray5 = Color(.systemGray5)
     let gray6 = Color(.systemGray6)
 
-    func buttonForeColor(pressed: Bool, disabled: Bool, prominent: Bool = false) -> Color {
-            disabled ? gray2
+    func buttonForeColor(pressed: Bool, disabled: Bool,
+                       prominent: Bool = false, balance: Bool = false) -> Color {
+             balance ? Color.primary
+          : disabled ? gray2
         : !prominent ? tint
            : pressed ? gray6 : gray5
     }
 
-    func buttonBackColor(pressed: Bool, disabled: Bool, prominent: Bool = false) -> Color {
-            disabled ? gray5
+    func buttonBackColor(pressed: Bool, disabled: Bool,
+                       prominent: Bool = false, balance: Bool = false) -> Color {
+             balance ? (pressed ? gray5 : gray6)
+          : disabled ? gray5
          : prominent ? tint
            : pressed ? gray5 : gray4
     }
