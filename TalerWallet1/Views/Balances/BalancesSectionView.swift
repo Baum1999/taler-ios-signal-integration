@@ -111,9 +111,9 @@ extension BalancesSectionView: View {
             }
         } header: {
             HStack (alignment: .center, spacing: 10) {
-                BarGraph(transactions: $completedTransactions, barHeight: 10)
                 Text(currency)
                     .accessibilityFont(.title2)
+                BarGraph(transactions: $completedTransactions, barHeight: 10)
             }
         }.id(sectionID)
         .task {
