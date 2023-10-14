@@ -63,7 +63,7 @@ struct SettingsFont: View {
     let action: (Int) -> Void
 
     @State private var selected = 0
-    let fonts = [String(localized: "Standard iOS Font"), "Atkinson-Hyperlegible", "Nunito", "Nunito Italic"]
+    let fonts = [String(localized: "Standard iOS Font"), "Atkinson-Hyperlegible", "Nunito"]
 
     var body: some View {
         Picker(title, selection: $selected, content: {

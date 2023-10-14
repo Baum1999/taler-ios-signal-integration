@@ -10,78 +10,122 @@ fileprivate let ATKINSON    = "AtkinsonHyperlegible-"
 fileprivate let NUNITO      = "Nunito-"
 
 fileprivate let REGULAR     = "Regular"
+fileprivate let ITALIC      = "Italic"
 fileprivate let BOLD        = "Bold"
+fileprivate let BOLDITALIC  = "BoldItalic"
 fileprivate let BLACK       = "Black"
 fileprivate let BLACKITALIC = "BlackItalic"
-fileprivate let BOLDITALIC  = "BoldItalic"
-fileprivate let ITALIC      = "Italic"
 
+extension UIFont {
+    /// scalable system font for style and weight (and italic)
+    /// https://stackoverflow.com/users/2145198/beebcon
+    static func preferredFont(for style: TextStyle, weight: Weight, italic: Bool = false) -> UIFont {
+        @Environment(\.sizeCategory) var sizeCategory
+
+        // Get the style's default pointSize
+        let traits = UITraitCollection(preferredContentSizeCategory: .large)
+        let desc = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style, compatibleWith: traits)
+
+        // Get the font at the default size and preferred weight
+        var font = UIFont.systemFont(ofSize: desc.pointSize, weight: weight)
+        if italic == true {
+            font = font.with([.traitItalic])
+        }
+
+        // Setup the font to be auto-scalable
+        let metrics = UIFontMetrics(forTextStyle: style)
+        return metrics.scaledFont(for: font)
+    }
+
+    private func with(_ traits: UIFontDescriptor.SymbolicTraits...) -> UIFont {
+        guard let descriptor = fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits(traits).union(fontDescriptor.symbolicTraits)) else {
+            return self
+        }
+        return UIFont(descriptor: descriptor, size: 0)
+    }
+}
+// Use it like this:
+//    UIFont.preferredFont(for: .largeTitle, weight: .regular)
+//    UIFont.preferredFont(for: .headline, weight: .semibold, italic: true)
+
+
+
+/// provides a (custom) scalable UIFont based on the first parameter: 0 = system, 1 = Atkinson, 2 = Nunito, 3 = NunitoItalic
 struct TalerFont {
-    static var atkinson: Font {
-        Font.custom(ATKINSON + REGULAR, size: 24, relativeTo: .title2)
-    }
-    static var nunito: Font {
-        Font.custom(NUNITO + REGULAR, size: 24, relativeTo: .title2)
-    }
-    static var nunitoItalic: Font {
-        Font.custom(NUNITO + ITALIC, size: 24, relativeTo: .title2)
+    @Environment(\.legibilityWeight) private var legibilityWeight: LegibilityWeight?
+
+    private static func scalableSystemFont(for style: UIFont.TextStyle, legibilityBold: Bool = false,
+                                           bold: Bool = false, italic: Bool = false) -> UIFont {
+        let black = bold && legibilityBold
+        return UIFont.preferredFont(for: style,
+                                 weight: black ? .heavy
+                                               : (bold || legibilityBold) ? .semibold : .regular,
+                                 italic: italic)
     }
 
-    static func atkinson(size: CGFloat, relativeTo style: UIFont.TextStyle) -> UIFont {
-        if let font = UIFont(name: ATKINSON + REGULAR, size: size) {
+    /// check wether a custom font for fontName is available
+    /// fontName already contains "Bold" (instead of "Regular") - the bold and italic params are only for the fallback
+    private static func scalableUIFont(_ fontName: String, size: CGFloat, relativeTo style: UIFont.TextStyle,
+                                       legibilityBold: Bool = false, bold: Bool = false, italic: Bool = false) -> UIFont {
+        @Environment(\.sizeCategory) var sizeCategory
+        if let font = UIFont(name: fontName, size: size) {
+            // return a scalable UIFont
             let fontMetrics = UIFontMetrics(forTextStyle: style)
             return fontMetrics.scaledFont(for: font)
         } else {
-            return UIFont.preferredFont(forTextStyle: style)
-        }
-    }
-    static func nunito(size: CGFloat, relativeTo: UIFont.TextStyle) -> UIFont {
-        if let font = UIFont(name: NUNITO + REGULAR, size: size) {
-            let fontMetrics = UIFontMetrics(forTextStyle: relativeTo)
-            return fontMetrics.scaledFont(for: font)
-        } else {
-            return UIFont.preferredFont(forTextStyle: relativeTo)
-        }
-    }
-    static func nunitoItalic(size: CGFloat, relativeTo: UIFont.TextStyle) -> UIFont {
-        if let font = UIFont(name: NUNITO + ITALIC, size: size) {
-            let fontMetrics = UIFontMetrics(forTextStyle: relativeTo)
-            return fontMetrics.scaledFont(for: font)
-        } else {
-            return UIFont.preferredFont(forTextStyle: relativeTo)
+            // fallback: return the system font
+            return scalableSystemFont(for: style, legibilityBold: legibilityBold, bold: bold, italic: italic)
         }
     }
 
-    static func talerFont(_ talerFont: Int, size: CGFloat, relativeTo style: UIFont.TextStyle) -> UIFont {
-        if talerFont != 0 {
-            let uiFont: UIFont = (talerFont == 1) ? TalerFont.atkinson(size: size, relativeTo: style)
-                               : (talerFont == 2) ? TalerFont.nunito(size: size, relativeTo: style)
-                                                  : TalerFont.nunitoItalic(size: size, relativeTo: style)
-            return uiFont
-        } else {
-            return UIFont.preferredFont(forTextStyle: style)
+    private static func atkinson(size: CGFloat, relativeTo style: UIFont.TextStyle,
+                                 legibilityBold: Bool = false, bold: Bool = false, italic: Bool = false) -> UIFont {
+        let useBold = bold || legibilityBold
+        let fontName = ATKINSON + (italic ? (useBold ? BOLDITALIC : ITALIC)
+                                          : (useBold ? BOLD : REGULAR))
+        return scalableUIFont(fontName, size: size, relativeTo: style,
+                              legibilityBold: legibilityBold, bold: bold, italic: italic)
+    }
+
+    private static func nunito(size: CGFloat, relativeTo style: UIFont.TextStyle,
+                               legibilityBold: Bool = false, bold: Bool = false, italic: Bool = false) -> UIFont {
+        let black = bold && legibilityBold
+        let fontName = NUNITO + (italic ? (black ? BLACKITALIC
+                                                 : (bold || legibilityBold) ? BOLDITALIC : ITALIC)
+                                        : (black ? BLACK
+                                                 : (bold || legibilityBold) ? BOLD : REGULAR))
+        return scalableUIFont(fontName, size: size, relativeTo: style,
+                              legibilityBold: legibilityBold, bold: bold, italic: italic)
+    }
+
+    static func uiFont(_ selectedFont: Int, size: CGFloat, relativeTo style: UIFont.TextStyle,
+                legibilityBold: Bool = false, bold: Bool = false, italic: Bool = false) -> UIFont {
+        switch selectedFont {
+            case 1: return TalerFont.atkinson(size: size, relativeTo: style,
+                                              legibilityBold: legibilityBold, bold: bold, italic: italic)
+            case 2: return TalerFont.nunito(size: size, relativeTo: style,
+                                            legibilityBold: legibilityBold, bold: bold, italic: italic)
+            default:
+//                return UIFont.preferredFont(forTextStyle: style)
+                return TalerFont.scalableSystemFont(for: style, legibilityBold: legibilityBold, bold: bold, italic: italic)
         }
+    }
+
+    static func uiFont(_ styleSize: StyleSizeBold) -> UIFont {
+        return uiFont(Controller.shared.talerFont, size: styleSize.size, relativeTo: styleSize.style)
     }
 }
 
-struct AccessibleFont {
+struct AccessibleFont {   // old running
     var regular: Font
     var bold: Font
-    static var talerFont: Int {
-        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            return 3
-        } else {
-            return Controller.shared.talerFont
-        }
-    }
+    static var talerFont: Int { return 2 }
 
     init(_ base: String, size: CGFloat, relativeTo: Font.TextStyle, isBold: Bool = false) {
         if AccessibleFont.talerFont == 0 {
             self.regular = .system(relativeTo)
-            self.bold = .system(relativeTo).bold()      // why is this allowed here (iOS-15) ??? should give compiler error
-                                                        // bold() for Font needs iOS-16
-                                                        // Text has a function bold(), needs iOS-13, but that shouldn't matter here
-        } else if isBold && AccessibleFont.talerFont >= 2 {
+            self.bold = .system(relativeTo).bold()
+        } else if isBold {
             // Nunito has Black Variants, but AtkinsonHyperlegible doesn't
             self.regular = Font.custom(base + (AccessibleFont.talerFont == 2 ? BOLD : BOLDITALIC), size: size, relativeTo: relativeTo)
             self.bold = Font.custom(base + (AccessibleFont.talerFont == 2 ? BLACK : BLACKITALIC), size: size, relativeTo: relativeTo)
@@ -98,26 +142,33 @@ struct AccessibleFont {
 
     func value(_ legibilityWeight: LegibilityWeight?) -> Font {
         switch legibilityWeight {
-            case .bold:     // should increase Font.Weight by 2
-                // ultraLight => light
-                // thin => regular
-                // light => medium
-                // regular => semibold
-                // medium => bold
-                // semibold => heavy
-                // bold => black
-                return bold
-            default:
-                return regular
+            case .bold: return bold
+            default:    return regular
         }
     }
 }
 
-extension AccessibleFont {
-    static var fontName: String {
-        (talerFont == 1) ? ATKINSON
-                         : NUNITO
-    }
+struct StyleSizeBold {
+    let style: UIFont.TextStyle
+    let size: CGFloat
+    let bold: Bool
+    let italic: Bool = false
+
+    static var largeTitle:  StyleSizeBold { StyleSizeBold(style: .largeTitle, size: 38, bold: false) }      // 34 -> 38
+    static var title:       StyleSizeBold { StyleSizeBold(style: .title1, size: 31, bold: false) }          // 28 -> 31
+    static var title2:      StyleSizeBold { StyleSizeBold(style: .title2, size: 25, bold: false) }          // 22 -> 25
+    static var title3:      StyleSizeBold { StyleSizeBold(style: .title3, size: 23, bold: false) }          // 20 -> 23
+    static var headline:    StyleSizeBold { StyleSizeBold(style: .headline, size: 19, bold: true) }         // 17 bold -> 19 bold
+    static var body:        StyleSizeBold { StyleSizeBold(style: .body, size: 19, bold: false) }            // 17 -> 19
+    static var callout:     StyleSizeBold { StyleSizeBold(style: .callout, size: 18, bold: false) }         // 16 -> 18
+    static var subheadline: StyleSizeBold { StyleSizeBold(style: .subheadline, size: 17, bold: false) }     // 15 -> 17
+    static var footnote:    StyleSizeBold { StyleSizeBold(style: .footnote, size: 15, bold: false) }        // 13 -> 15
+    static var caption:     StyleSizeBold { StyleSizeBold(style: .caption1, size: 13, bold: false) }        // 12 -> 13
+//    static var caption2:    AccessibleFont { AccessibleFont(fontName, size: 12, relativeTo: .caption2) }    // 11 -> 12
+}
+
+extension AccessibleFont {   // old running
+    static var fontName: String { NUNITO }
 
     static var largeTitle:  AccessibleFont { AccessibleFont(fontName, size: 38, relativeTo: .largeTitle) }  // 34 -> 38
     static var title:       AccessibleFont { AccessibleFont(fontName, size: 31, relativeTo: .title) }       // 28 -> 31
@@ -129,10 +180,30 @@ extension AccessibleFont {
     static var subheadline: AccessibleFont { AccessibleFont(fontName, size: 17, relativeTo: .subheadline) } // 15 -> 17
     static var footnote:    AccessibleFont { AccessibleFont(fontName, size: 15, relativeTo: .footnote) }    // 13 -> 15
     static var caption:     AccessibleFont { AccessibleFont(fontName, size: 13, relativeTo: .caption) }     // 12 -> 13
-//    static var caption2:    AccessibleFont { AccessibleFont(fontName, size: 12, relativeTo: .caption2) }    // 11 -> 12
 }
 
-struct AccessibilityFontViewModifier: ViewModifier {
+struct StyleSizeBoldViewModifier: ViewModifier {
+    @Environment(\.legibilityWeight) private var legibilityWeight
+    var legibilityBold: Bool { legibilityWeight == .bold }
+
+    let styleSize: StyleSizeBold
+
+    static var talerFont: Int {
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
+            return 2
+        } else {
+            return Controller.shared.talerFont
+        }
+    }
+
+    func body(content: Content) -> some View {      // TODO: italic
+        let uiFont = TalerFont.uiFont(Self.talerFont, size: styleSize.size, relativeTo: styleSize.style,
+                                      legibilityBold: legibilityBold, bold: styleSize.bold)
+        content.font(Font(uiFont))
+    }
+}
+
+struct AccessibilityFontViewModifier2: ViewModifier {   // old running
     @Environment(\.legibilityWeight) private var legibilityWeight
 
     var font: AccessibleFont
@@ -144,7 +215,10 @@ struct AccessibilityFontViewModifier: ViewModifier {
 
 extension View {
     func accessibilityFont(_ font: AccessibleFont) -> some View {
-        return self.modifier(AccessibilityFontViewModifier(font: font))
+        return self.modifier(AccessibilityFontViewModifier2(font: font))
+    }
+    func accessibilityFont1(_ styleSize: StyleSizeBold) -> some View {
+        return self.modifier(StyleSizeBoldViewModifier(styleSize: styleSize))
     }
 }
 // MARK: -
@@ -174,8 +248,8 @@ struct TalerNavBar: ViewModifier {
         navBarAppearance.titleTextAttributes = nil
         navBarAppearance.largeTitleTextAttributes = nil
         if talerFont != 0 {
-            navBarAppearance.titleTextAttributes = [.font: TalerFont.talerFont(talerFont, size: 24, relativeTo: .title2)]
-            navBarAppearance.largeTitleTextAttributes = [.font: TalerFont.talerFont(talerFont, size: 38, relativeTo: .largeTitle)]
+            navBarAppearance.titleTextAttributes = [.font: TalerFont.uiFont(talerFont, size: 24, relativeTo: .title2)]
+            navBarAppearance.largeTitleTextAttributes = [.font: TalerFont.uiFont(talerFont, size: 38, relativeTo: .largeTitle)]
         }
     }
 
@@ -221,6 +295,7 @@ struct NavigationBarConfigurator {
 }
 #endif
 // MARK: -
+#if DEBUG
 struct ContentViewFonts: View {
     //    let myWeight: Font.Weight
     var body: some View {
@@ -255,6 +330,7 @@ struct ContentViewFonts: View {
     }
 }
 
-//#Preview("Font View") {
-//    ContentViewFonts()
-//}
+#Preview("Font View") {
+    ContentViewFonts()
+}
+#endif
