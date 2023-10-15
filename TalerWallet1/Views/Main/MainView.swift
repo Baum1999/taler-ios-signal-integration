@@ -191,9 +191,9 @@ extension MainView {
                         .background(NavigationBarBuilder { navigationController in
                             //                            navigationController.navigationBar.barTintColor = .red
                             navigationController.navigationBar.titleTextAttributes =
-                                [.font: TalerFont.talerFont(talerFont, size: 24, relativeTo: .title2)]
+                                [.font: TalerFont.uiFont(talerFont, size: 24, relativeTo: .title2)]
                             navigationController.navigationBar.largeTitleTextAttributes =
-                                [.font: TalerFont.talerFont(talerFont, size: 38, relativeTo: .largeTitle)]
+                                [.font: TalerFont.uiFont(talerFont, size: 38, relativeTo: .largeTitle)]
                         })
                 }
                 .navigationViewStyle(.stack)
