@@ -3,9 +3,38 @@
  * See LICENSE.md
  */
 import SwiftUI
+import SymLog
 
+let MAXBARS = 10
+
+struct BarGraphHeader: View {
+    private let symLog = SymLogV(0)
+    let stack: CallStack
+    let currency: String
+
+    @EnvironmentObject private var model: WalletModel
+    @State private var completedTransactions: [Transaction] = []
+
+    var body: some View {
+        HStack (alignment: .center, spacing: 10) {
+            Text(currency)
+                .accessibilityFont(.title2)
+            BarGraph(transactions: $completedTransactions,
+                     maxBars: MAXBARS, barHeight: 10)       // TODO: barHeight relative to fontSize
+        }
+        .task {
+            symLog.log(".task for BarGraphHeader(\(currency)) - reload Transactions")
+            // TODO: only load the 10 most recent transactions
+            let response = await model.transactionsT(stack.push(".task - reload Transactions for \(currency)"),
+                                                     currency: currency)
+            completedTransactions = WalletModel.completedTransactions(response)
+        }
+    }
+}
+// MARK: -
 struct BarGraph: View {
     @Binding var transactions: [Transaction]
+    let maxBars: Int
     let barHeight : Double
 
     func maxValue(_ someTransactions: [Transaction]) -> Double {
@@ -20,7 +49,7 @@ struct BarGraph: View {
     }
 
     var body: some View {
-        let slice = transactions.prefix(10)
+        let slice = transactions.prefix(maxBars)
         let count = slice.count
         let tenTransactions: [Transaction] = Array(slice)
         let maxValue = maxValue(tenTransactions)

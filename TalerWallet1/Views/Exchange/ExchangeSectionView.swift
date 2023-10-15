@@ -95,8 +95,7 @@ struct ExchangeSectionView: View {
             }
             .accessibilityElement(children: .combine)
         } header: {
-            Text(currency)
-                .accessibilityFont(.title2)
+            BarGraphHeader(stack: stack.push(), currency: currency)
         }
     }
 }
