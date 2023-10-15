@@ -35,22 +35,16 @@ struct TwoRowButtons: View {
 struct TwoRowButtons_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            VStack {
-                let amount = try! Amount(fromString: LONGCURRENCY + ":1234.56")
-                TwoRowButtons(sendTitle: "Send\n" + LONGCURRENCY,
+                TwoRowButtons(sendTitle: "Send\n" + TESTCURRENCY,
                               recvTitle: "Receive\n" + LONGCURRENCY,
-                              lineLimit: 0, sendDisabled: true,
+                              lineLimit: 2, sendDisabled: true,
                              sendAction: {}, recvAction: {})
-                BalanceButton(amount: amount, rowAction: {})
-            }
-            HStack {
-                let amount = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
+                .listRowSeparator(.hidden)
                 TwoRowButtons(sendTitle: "Send\n" + DEMOCURRENCY,
                               recvTitle: "Receive\n" + DEMOCURRENCY,
                               lineLimit: 2, sendDisabled: true,
                              sendAction: {}, recvAction: {})
-                BalanceButton(amount: amount, rowAction: {})
-            }
+                .listRowSeparator(.hidden)
         }
     }
 }

@@ -29,11 +29,6 @@ struct ExchangeRowView: View {
 
     let depositTitle = String(localized: "Deposit", comment: "Top of button <Deposit (currency)>")
     let withdrawTitle = String(localized: "Withdraw", comment: "Top of button <Withdraw (currency)>")
-    func needVStack(_ currency: String) -> Bool {
-        // Sizes: 320 (SE), 375 (X, Xs, 12, 13 mini), 390 (12,13,14), 414 (Plus, Max), 428 (Pro Max)
-
-        return false
-    }
 
     var body: some View {
         let baseURL = exchange.exchangeBaseUrl
@@ -54,16 +49,23 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
 
-        let sendTitle = depositTitle + "\n" + currency                          // TODO:  amount.currencyStr
-        let recvTitle = withdrawTitle + "\n" + currency                         // TODO:  amount.currencyStr
-        let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: recvTitle,
-                                          lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
-                                         sendAction: { selectAndUpdate(1) },
-                                         recvAction: { selectAndUpdate(2) })
-        if needVStack(currency) {
-            VStack { twoRowButtons }
-        } else {
-            HStack { twoRowButtons }
+        SingleAxisGeometryReader { width in
+            Group {
+                let uiFont = TalerFont.uiFont(.title3)
+                let titles = [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
+                let sendTitle = depositTitle + "\n" + currency                          // TODO:  amount.currencyStr
+                let recvTitle = withdrawTitle + "\n" + currency                         // TODO:  amount.currencyStr
+                let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: recvTitle,
+                                                  lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
+                                                 sendAction: { selectAndUpdate(1) },
+                                                 recvAction: { selectAndUpdate(2) })
+                let spacing = CGFloat(10)                  // space between the two buttons
+                if Self.needVStack(titles, width: width, spacing: spacing) {
+                    VStack { twoRowButtons }
+                } else {
+                    HStack(spacing: spacing) { twoRowButtons }
+                }
+            }
         }
     }
 }
@@ -76,7 +78,6 @@ struct ExchangeSectionView: View {
 //    let amount: Amount
     let currency: String          // TODO: amount.currencyStr
     let exchanges: [Exchange]
-
     @Binding var centsToTransfer: UInt64
 
     var body: some View {
