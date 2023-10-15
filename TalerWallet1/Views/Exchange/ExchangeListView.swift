@@ -10,8 +10,8 @@ import SymLog
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+//    @Binding var balances: [Balance]
     let navTitle: String
-    @Binding var balances: [Balance]
 #if TABBAR  // Taler Wallet
 #else       // GNU Taler
     var hamburgerAction: () -> Void
@@ -24,7 +24,7 @@ struct ExchangeListView: View {
     // source of truth for the value the user enters in currencyField for exchange withdrawals
     @State private var centsToTransfer: UInt64 = 0        // TODO: different values for different currencies?
 
-    func reloadAction() async -> Void {
+    func reloadExchanges() async -> Void {
             exchanges = await model.listExchangesM()
     }
 
@@ -60,10 +60,10 @@ struct ExchangeListView: View {
         //Text("Exchanges...")
         Content(symLog: symLog,
                  stack: stack.push(),
-              balances: $balances,
+//              balances: $balances,
              exchanges: $exchanges,
        centsToTransfer: $centsToTransfer,
-          reloadAction: reloadAction)
+       reloadExchanges: reloadExchanges)
         .navigationTitle(navTitle)
         .navigationBarItems(leading: hamburger,
                             trailing: PlusButton(action: plusAction)
@@ -76,7 +76,7 @@ struct ExchangeListView: View {
         }
         .task {
             symLog.log(".task")
-            await reloadAction()
+            await reloadExchanges()
         }
         .textFieldAlert(isPresented: $showAlert, title: "Add Exchange",
                         doneText: "Add", text: $newExchange, action: addExchange)
@@ -97,10 +97,10 @@ extension ExchangeListView {
         let symLog: SymLogV?
         let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-        @Binding var balances: [Balance]
+//        @Binding var balances: [Balance]
         @Binding var exchanges: [Exchange]
         @Binding var centsToTransfer: UInt64
-        var reloadAction: () async -> Void
+        var reloadExchanges: () async -> Void
 
         func currenciesDict(_ exchanges: [Exchange]) -> [String : [Exchange]] {
             var currencies: [String : [Exchange]] = [:]
@@ -129,7 +129,7 @@ extension ExchangeListView {
                 }
                 .refreshable {
                     symLog?.log("refreshing")
-                    await reloadAction()
+                    await reloadExchanges()
                 }
                 .listStyle(myListStyle.style).anyView
             }
@@ -139,7 +139,7 @@ extension ExchangeListView {
             .onNotification(.ExchangeAdded) { notification in
                 // doesn't need to be received on main thread because we just reload in the background anyway
                 symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
-                Task { await reloadAction() } // runs on MainActor
+                Task { await reloadExchanges() } // runs on MainActor
             }
         } // body
     }

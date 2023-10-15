@@ -5,8 +5,6 @@
 import SwiftUI
 import Foundation
 
-
-
 extension ShapeStyle where Self == Color {
     static var random: Color {
         Color(

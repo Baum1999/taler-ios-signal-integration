@@ -73,8 +73,8 @@ struct ExchangeRowView: View {
 /// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
     let stack: CallStack
-    let currency: String
 //    let amount: Amount
+    let currency: String          // TODO: amount.currencyStr
     let exchanges: [Exchange]
 
     @Binding var centsToTransfer: UInt64
@@ -88,14 +88,14 @@ struct ExchangeSectionView: View {
             ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
-                             currency: currency,
 //                               amount: amount,
+                             currency: currency,            // TODO: (balance.available) amount.isZero to disable Deposit-button
                       centsToTransfer: $centsToTransfer)
             }
             .accessibilityElement(children: .combine)
         } header: {
-            Text(currency)          // TODO: amount.currencyStr
-                .accessibilityFont(.title)
+            Text(currency)
+                .accessibilityFont(.title2)
         }
     }
 }

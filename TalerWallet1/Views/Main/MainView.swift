@@ -111,7 +111,7 @@ extension MainView {
 
         var views: [SidebarItem] {[
             SidebarItem(name: balancesTitle,
-                    sysImage: "creditcard.fill",        // TODO: Wallet Icon
+                    sysImage: "chart.bar.xaxis",  // creditcard.fill     // TODO: Wallet Icon
                         view: AnyView(BalancesListView(stack: stack.push(balancesTitle),
                                                     navTitle: balancesTitle,
                                                     balances: $balances,
@@ -121,8 +121,8 @@ extension MainView {
             SidebarItem(name: exchangesTitle,
                     sysImage: "building.columns",
                         view: AnyView(ExchangeListView(stack: stack.push(exchangesTitle),
+//                                                    balances: $balances,
                                                     navTitle: exchangesTitle,
-                                                    balances: $balances,
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: settingsTitle,    // TODO: "About"?
@@ -151,7 +151,7 @@ extension MainView {
                       shouldReloadBalances: $shouldReloadBalances)
                 }
                 .tabItem {
-                    Image(systemName: "creditcard")             // system will automatically use filled variant
+                    Image(systemName: "chart.bar.xaxis")             // creditcard     system will automatically use filled variant
                     if !iconOnly { Text(balancesTitle) }
                 }
                 .tag(Tab.balances)
@@ -159,8 +159,8 @@ extension MainView {
 
                 NavigationView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
-                                  navTitle: exchangesTitle,
-                                  balances: $balances)
+//                                  balances: $balances,
+                                  navTitle: exchangesTitle)
                 }
                 .tabItem {
                     Image(systemName: "building.columns")

@@ -81,7 +81,7 @@ struct BalancesListView: View {
 
     /// runs on MainActor if called in some Task {}
     @discardableResult
-    private func reloadAction(_ stack: CallStack, _ invalidateCache: Bool) async -> Int {
+    private func reloadBalances(_ stack: CallStack, _ invalidateCache: Bool) async -> Int {
         if invalidateCache {
             model.cachedBalances = nil
         }
@@ -103,7 +103,7 @@ struct BalancesListView: View {
 #endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 centsToTransfer: $centsToTransfer, summary: $summary,
-                reloadAction: reloadAction)
+                reloadBalances: reloadBalances)
             .navigationTitle(navTitle)
             .navigationBarItems(leading: hamburger,
                                 trailing: QRButton(action: checkCameraAvailable))
@@ -120,7 +120,7 @@ struct BalancesListView: View {
                 symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
                 let invalidateCache = (lastReloadedBalances != shouldReloadBalances)
                 lastReloadedBalances = shouldReloadBalances
-                await reloadAction(stack.push(".task"), invalidateCache)
+                await reloadBalances(stack.push(".task"), invalidateCache)
             } // task
     }
 }
@@ -133,7 +133,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var centsToTransfer: UInt64
         @Binding var summary: String
-        var reloadAction: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
+        var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
 
         var body: some View {
 #if DEBUG
@@ -147,10 +147,10 @@ extension BalancesListView {
                 } else {
                     List(balances, id: \.self) { balance in
                         BalancesSectionView(stack: stack.push("\(balance.available.currencyStr)"),
-                                            balance: balance,
-                                            sectionCount: count,
-                                            centsToTransfer: $centsToTransfer,
-                                            summary: $summary)
+                                          balance: balance,
+                                     sectionCount: count,
+                                  centsToTransfer: $centsToTransfer,
+                                          summary: $summary)
                     }
                     .onAppear() {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
@@ -160,7 +160,7 @@ extension BalancesListView {
             }
             .refreshable {  // already async
                 symLog?.log("refreshing balances")
-                let count = await reloadAction(stack.push("refreshing balances"), true)
+                let count = await reloadBalances(stack.push("refreshing balances"), true)
                 if count > 0 {
                     NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
                 }
