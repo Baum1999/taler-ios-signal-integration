@@ -126,6 +126,7 @@ extension BalancesSectionView: View {
 //            }
         }
         let transactionCount = completedTransactions.count
+        /// if there is only one currency, then show recent transactions
         if sectionCount == 1 && transactionCount > 0 {
             let sortedTransactions = completedTransactions.sorted {
                 do {
@@ -226,6 +227,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     @Binding var completedTransactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+//    @EnvironmentObject private var model: WalletModel
 
     @State private var buttonSelected: Int? = nil
 
