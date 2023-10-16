@@ -97,7 +97,7 @@ struct BalanceRowView: View {
                 let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: requestTitle,
                                                   lineLimit: 5, sendDisabled: amount.isZero,
                                                   sendAction: sendAction, recvAction: recvAction)
-  let _ = print("Screenwidth: \(UIScreen.screenWidth)  Geometry: \(width)  \(sizeCategory): \(sizeCategory)")
+//  let _ = print("Screenwidth: \(UIScreen.screenWidth)  Geometry: \(width)  \(sizeCategory): \(sizeCategory)")
                 if Self.needVStack(titles, width: width, spacing: SPACING) {
                     VStack { twoRowButtons }
                 } else {

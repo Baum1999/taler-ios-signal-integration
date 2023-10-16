@@ -9,7 +9,7 @@ import AVFoundation
 
 /// This view shows the list of balances / currencies, each in its own section
 struct BalancesListView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle: String
     @Binding var balances: [Balance]

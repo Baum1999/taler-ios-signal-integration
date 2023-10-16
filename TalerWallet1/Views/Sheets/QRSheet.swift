@@ -15,14 +15,14 @@ struct QRSheet: View {
     var body: some View {
         Group {
             if scannedCode != nil {
-                let _ = print(scannedCode as Any)       // TODO: logging
+//                let _ = print(scannedCode as Any)       // TODO: logging
 
                 if let scannedURL = URL(string: scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme == "taler" {
                         URLSheet(stack: stack.push(), urlToOpen: scannedURL)
                     } else {
-                        let _ = print(scannedURL)       // TODO: logging
+//                        let _ = print(scannedURL)       // TODO: logging
                         ErrorView(errortext: scannedURL.absoluteString)
                     }
                 } else {
