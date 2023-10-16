@@ -37,13 +37,15 @@ extension WalletModel {
 fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     func operation() -> String { return "getTransactions" }
 //    func operation() -> String { return "testingGetSampleTransactions" }
-    func args() -> Args { return Args(currency: currency, search: search) }
+    func args() -> Args { return Args(currency: currency, search: search, sort: sort) }
 
     var currency: String?
     var search: String?
+    var sort: String?
     struct Args: Encodable {
         var currency: String?
         var search: String?
+        var sort: String?
     }
 
     struct Response: Decodable {                    // list of transactions
@@ -108,10 +110,10 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, currency: String? = nil, searchString: String? = nil)
+    func transactionsT(_ stack: CallStack, currency: String? = nil, searchString: String? = nil, sort: String = "descending")
     async -> [Transaction] {                                          // might be called from a background thread itself
         do {
-            let request = GetTransactions(currency: currency, search: searchString)
+            let request = GetTransactions(currency: currency, search: searchString, sort: sort)
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.transactions
         } catch {
@@ -119,9 +121,9 @@ extension WalletModel {
         }
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(_ stack: CallStack, currency: String? = nil, searchString: String? = nil)
+    @MainActor func transactionsMA(_ stack: CallStack, currency: String? = nil, searchString: String? = nil, sort: String = "descending")
     async -> [Transaction] {    // M for MainActor
-        return await transactionsT(stack.push(), currency: currency, searchString: searchString)
+        return await transactionsT(stack.push(), currency: currency, searchString: searchString, sort: sort)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved
