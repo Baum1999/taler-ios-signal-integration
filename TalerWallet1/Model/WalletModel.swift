@@ -3,12 +3,22 @@
  * See LICENSE.md
  */
 import Foundation
+import taler_swift
 import SymLog
 import os.log
 
 fileprivate let DATABASE = "talerwalletdb-v30"
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+struct HTTPError: Codable, Hashable {
+    var code: Int
+    var requestUrl: String?
+    var hint: String
+    var requestMethod: String?
+    var httpStatusCode: Int?
+    var when: Timestamp?
+    var stack: String?
+}
 // MARK: -
 /// The "virtual" base class for all models
 class WalletModel: ObservableObject {

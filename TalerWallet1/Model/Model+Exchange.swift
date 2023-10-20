@@ -60,15 +60,6 @@ struct ExchangeError: Codable, Hashable {
     var error: HTTPError
 }
 
-struct HTTPError: Codable, Hashable {
-    var code: Int
-    var requestUrl: String?
-    var hint: String
-    var requestMethod: String?
-    var httpStatusCode: Int?
-    var when: Timestamp?
-    var stack: String?
-}
 // MARK: -
 /// A request to list exchanges.
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
