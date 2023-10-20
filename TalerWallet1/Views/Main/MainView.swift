@@ -79,6 +79,8 @@ extension MainView {
         @State private var balances: [Balance] = []
         @Binding var talerFont: Int
         @AppStorage("iconOnly") var iconOnly: Bool = false
+        @EnvironmentObject private var controller: Controller
+        @EnvironmentObject private var model: WalletModel
         let balancesTitle = String(localized: "Balances")
         let exchangesTitle = String(localized: "Exchanges")
         let settingsTitle = String(localized: "Settings")
@@ -212,6 +214,23 @@ extension MainView {
               // reload balances on receiving BalanceChange notification ...
                 symLog?.log(".onNotification(.BalanceChange) ==> reload")
                 shouldReloadBalances += 1
+            }
+            .onChange(of: balances) { newArray in
+                for balance in newArray {
+                    let scope = balance.scopeInfo
+                    if controller.info(for: scope.currency) == nil {
+                        Task { // runs on MainActor
+                            symLog?.log("get info for: \(scope.currency)")
+                            do {
+                                let info = try await model.getCurrencyInfo(scope: scope)
+                                symLog?.log("added: \(scope.currency)")
+                                await controller.setInfo(info)
+                            } catch {    // TODO: error handling - couldn't get CurrencyInfo
+                                symLog?.log("error: \(error)")
+                            }
+                        }
+                    }
+                }
             }
         } // body
     } // Content

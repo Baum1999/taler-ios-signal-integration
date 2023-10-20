@@ -33,12 +33,14 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
+    @Published var currencyInfos: [CurrencyInfo]
     @AppStorage("useHaptics") var useHaptics: Bool = false  // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger (subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
+    let semaphore = AsyncSemaphore(value: 1)
 
     var messageForSheet: String? = nil
 
@@ -50,6 +52,34 @@ class Controller: ObservableObject {
 //            }
 //        }
         backendState = .instantiated
+        currencyInfos = []
+    }
+
+    func info(for currency: String) -> CurrencyInfo? {
+        for currencyInfo in currencyInfos {
+            if currencyInfo.scope.currency == currency {
+                return currencyInfo
+            }
+        }
+        return nil
+    }
+
+    @MainActor
+    func setInfo(_ info: CurrencyInfo) async {
+        await semaphore.wait()
+        defer { semaphore.signal() }
+        var existing: ScopeInfo? = nil
+        for currencyInfo in currencyInfos {
+            let scope = currencyInfo.scope
+            if scope.currency == info.scope.currency {
+                existing = scope
+                break
+            }
+        }
+        if existing != nil {
+            currencyInfos.removeAll(where: { $0.scope == existing })
+        }
+        currencyInfos.append(info)
     }
 
     @MainActor
