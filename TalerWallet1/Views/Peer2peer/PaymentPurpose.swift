@@ -19,12 +19,14 @@ struct PaymentPurpose: View {
 
     @FocusState private var isFocused: Bool
 
-    let formatter = CurrencyFormatter.shared    // TODO: based on currency
+//    let formatter = CurrencyFormatter.shared    // TODO: based on currency
 //    let buttonFont: Font = .talerTitle2
 
     private var label: String {
-        let mag = pow(10, formatter.maximumFractionDigits)
-        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
+//        let mag = pow(10, formatter.maximumFractionDigits)
+//        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
+
+        return String(centsToTransfer / 100)
     }
 
     var body: some View {

@@ -18,11 +18,13 @@ struct SendPurpose: View {
     @Binding var expireDays: UInt
 //    var deactivateAction: () -> Void
 
-    let formatter = CurrencyFormatter.shared    // TODO: based on currency
+//    let formatter = CurrencyFormatter.shared    // TODO: based on currency
 
     private var value: String {
-        let mag = pow(10, formatter.maximumFractionDigits)
-        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
+//        let mag = pow(10, formatter.maximumFractionDigits)
+//        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
+
+        return String(centsToTransfer / 100)
     }
 
     var body: some View {

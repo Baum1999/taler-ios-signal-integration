@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E16E12329F3BB99008B9C86 /* CurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */; };
+		4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */; };
 		4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254952A822B8100E41D29 /* payment_received.m4a */; };
 		4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254962A822B8100E41D29 /* payment_sent.m4a */; };
 		4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */; };
@@ -74,7 +74,7 @@
 		4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */; };
 		4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* Controller+playSound.swift */; };
 		4E3EAE522A990778009F1BE8 /* WalletEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */; };
-		4E3EAE532A990778009F1BE8 /* CurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */; };
+		4E3EAE532A990778009F1BE8 /* CurrencySpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */; };
 		4E3EAE542A990778009F1BE8 /* TalerDater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095062989CB7C0043A8A1 /* TalerDater.swift */; };
 		4E3EAE552A990778009F1BE8 /* Model+Balances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC42A428AF700CC88B8 /* Model+Balances.swift */; };
 		4E3EAE562A990778009F1BE8 /* LocalizedAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */; };
@@ -287,7 +287,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFormatter.swift; sourceTree = "<group>"; };
+		4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencySpecification.swift; sourceTree = "<group>"; };
 		4E2254952A822B8100E41D29 /* payment_received.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_received.m4a; sourceTree = "<group>"; };
 		4E2254962A822B8100E41D29 /* payment_sent.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_sent.m4a; sourceTree = "<group>"; };
 		4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncSemaphore.swift; sourceTree = "<group>"; };
@@ -569,7 +569,7 @@
 				4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */,
 				4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */,
 				4EDBDCD82AB787CB00925C02 /* CallStack.swift */,
-				4E16E12229F3BB99008B9C86 /* CurrencyFormatter.swift */,
+				4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
 				4E578E912A481D8600F21F1C /* Controller+playSound.swift */,
@@ -1084,7 +1084,7 @@
 				4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */,
 				4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */,
 				4E3EAE522A990778009F1BE8 /* WalletEmptyView.swift in Sources */,
-				4E3EAE532A990778009F1BE8 /* CurrencyFormatter.swift in Sources */,
+				4E3EAE532A990778009F1BE8 /* CurrencySpecification.swift in Sources */,
 				4E3EAE542A990778009F1BE8 /* TalerDater.swift in Sources */,
 				4E3EAE552A990778009F1BE8 /* Model+Balances.swift in Sources */,
 				4E3EAE562A990778009F1BE8 /* LocalizedAlertError.swift in Sources */,
@@ -1189,7 +1189,7 @@
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
 				4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */,
 				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
-				4E16E12329F3BB99008B9C86 /* CurrencyFormatter.swift in Sources */,
+				4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */,
 				4EB095092989CB7C0043A8A1 /* TalerDater.swift in Sources */,
 				4E3B4BC52A428AF700CC88B8 /* Model+Balances.swift in Sources */,
 				4E363CC22A2621C200D7E98C /* LocalizedAlertError.swift in Sources */,
