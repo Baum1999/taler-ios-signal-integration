@@ -14,23 +14,6 @@ struct WithdrawUriInfoResponse: Decodable {
     var defaultExchangeBaseUrl: String?             // TODO: might be nil ❗️Yikes
     var possibleExchanges: [ExchangeListItem]       // TODO: query these for fees?
 }
-struct ExchangeListItem: Codable, Hashable {
-    var exchangeBaseUrl: String
-    var currency: String
-    var paytoUris: [String]
-
-    public static func == (lhs: ExchangeListItem, rhs: ExchangeListItem) -> Bool {
-        return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl &&
-        lhs.currency == rhs.currency &&
-        lhs.paytoUris == rhs.paytoUris
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(exchangeBaseUrl)
-        hasher.combine(currency)
-        hasher.combine(paytoUris)
-    }
-}
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
     typealias Response = WithdrawUriInfoResponse
