@@ -156,11 +156,13 @@ extension WalletModel {
         _ = try await sendRequest(request)
     }
 
-    @MainActor func getCurrencySpecificationM(scope: ScopeInfo)
-      async throws -> CurrencySpecification {   // M for MainActor
+    func getCurrencyInfo(scope: ScopeInfo)
+      async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY)
-        return response
+        return CurrencyInfo(scope: scope, specs: response.currencySpecification,
+                        formatter: CurrencyFormatter.formatter(scope: scope,
+                                                               specs: response.currencySpecification))
     }
 
 }
