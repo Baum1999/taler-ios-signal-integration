@@ -75,7 +75,27 @@ struct ExchangeListItem: Codable, Hashable {
         hasher.combine(paytoUris)
     }
 }
+
+struct ExchangeUrlItem: Codable, Hashable, Identifiable {
+    var exchangeBaseUrl: String
+    var id: String { exchangeBaseUrl }
+}
 // MARK: -
+/// A request to list exchanges names for a currency
+fileprivate struct ListExchangesForScopedCurrency: WalletBackendFormattedRequest {
+    func operation() -> String { "listExchangesForScopedCurrency" }
+    func args() -> Args { Args(scope: scope) }
+
+    var scope: ScopeInfo
+
+    struct Args: Encodable {
+        var scope: ScopeInfo
+    }
+    struct Response: Decodable, Sendable {
+        var exchanges: [ExchangeUrlItem]              // list of Exchange names
+    }
+}
+
 /// A request to list exchanges.
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
     func operation() -> String { "listExchanges" }
@@ -128,6 +148,18 @@ fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
 }
 // MARK: -
 extension WalletModel {
+    /// ask wallet-core for its list of known exchanges
+    @MainActor func listExchangesForScopedCurrencyM(scope: ScopeInfo)
+      async -> [ExchangeUrlItem] {            // M for MainActor
+        do {
+            let request = ListExchangesForScopedCurrency(scope: scope)
+            let response = try await sendRequest(request, ASYNCDELAY)
+            return response.exchanges
+        } catch {
+            return []               // empty, but not nil
+        }
+    }
+
     /// ask wallet-core for its list of known exchanges
     @MainActor func listExchangesM()
       async -> [Exchange] {   // M for MainActor
