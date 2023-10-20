@@ -13,13 +13,12 @@ fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 /// A request to add a test balance to the wallet.
 fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "withdrawTestBalance" }
-    func args() -> Args {
-        return Args(amount: amount,
-//                    bankBaseUrl: bankBaseUrl,
-                    corebankApiBaseUrl: corebankApiBaseUrl,
-                    exchangeBaseUrl: exchangeBaseUrl)
-    }
+    func operation() -> String { "withdrawTestBalance" }
+    func args() -> Args { Args(amount: amount,
+//                        bankBaseUrl: bankBaseUrl,
+                   corebankApiBaseUrl: corebankApiBaseUrl,
+                      exchangeBaseUrl: exchangeBaseUrl)
+                        }
 
     var amount: Amount
 //    var bankBaseUrl: String
@@ -48,17 +47,15 @@ extension WalletModel {
 /// A request to add a test balance to the wallet.
 fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
-    func args() -> Args {
-        return Args(exchangeBaseUrl: exchangeBaseUrl,
-//                    bankBaseUrl: bankBaseUrl,
-                    corebankApiBaseUrl: corebankApiBaseUrl,
-                    merchantBaseUrl: merchantBaseUrl,
-                    merchantAuthToken: merchantAuthToken,
-                    amountToWithdraw: amountToWithdraw,
-                    amountToSpend: amountToSpend
-        )
-    }
+    func operation() -> String { newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
+//                                 bankBaseUrl: bankBaseUrl,
+                            corebankApiBaseUrl: corebankApiBaseUrl,
+                               merchantBaseUrl: merchantBaseUrl,
+                             merchantAuthToken: merchantAuthToken,
+                              amountToWithdraw: amountToWithdraw,
+                                 amountToSpend: amountToSpend)
+                        }
 
     let newVersion: Bool
 

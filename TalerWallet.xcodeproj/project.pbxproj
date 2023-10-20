@@ -794,7 +794,7 @@
 		D14AFD1E24D232B300C51073 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-                4E3EAE892A990778009F1BE8 /* GNU_Taler.app */,
+				4E3EAE892A990778009F1BE8 /* GNU_Taler.app */,
 				D14AFD1D24D232B300C51073 /* Taler_Wallet.app */,
 				D14AFD3324D232B500C51073 /* TalerTests.xctest */,
 				D14AFD3E24D232B500C51073 /* TalerUITests.xctest */,

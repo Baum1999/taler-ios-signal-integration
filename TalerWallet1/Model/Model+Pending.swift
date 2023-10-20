@@ -11,7 +11,7 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 // MARK: -
 /// A request to list the backend's currently pending operations.
 fileprivate struct GetPendingOperations: WalletBackendFormattedRequest {
-    func operation() -> String { return "getPendingOperations" }
+    func operation() -> String { "getPendingOperations" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}

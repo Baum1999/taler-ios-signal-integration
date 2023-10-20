@@ -146,7 +146,7 @@ extension BalancesListView {
                     WalletEmptyView(stack: stack.push("isEmpty"))
                 } else {
                     List(balances, id: \.self) { balance in
-                        BalancesSectionView(stack: stack.push("\(balance.available.currencyStr)"),
+                        BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                           balance: balance,
                                      sectionCount: count,
                                   centsToTransfer: $centsToTransfer,

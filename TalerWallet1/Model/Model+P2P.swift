@@ -22,8 +22,8 @@ struct AmountResponse: Codable {
 }
 fileprivate struct GetMaxPeerPushAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
-    func operation() -> String { return "GetMaxPeerPushAmount" }
-    func args() -> Args { return Args(currency: currency) }
+    func operation() -> String { "GetMaxPeerPushAmount" }
+    func args() -> Args { Args(currency: currency) }
 
     var currency: String
     struct Args: Encodable {
@@ -48,8 +48,8 @@ struct CheckPeerPushDebitResponse: Codable {
 }
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
-    func operation() -> String { return "checkPeerPushDebit" }
-    func args() -> Args { return Args(amount: amount) }
+    func operation() -> String { "checkPeerPushDebit" }
+    func args() -> Args { Args(amount: amount) }
 
     var amount: Amount
     struct Args: Encodable {
@@ -77,9 +77,9 @@ struct InitiatePeerPushDebitResponse: Codable {
 }
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPushDebitResponse
-    func operation() -> String { return "initiatePeerPushDebit" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
-                                      partialContractTerms: partialContractTerms) }
+    func operation() -> String { "initiatePeerPushDebit" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
+                          partialContractTerms: partialContractTerms) }
 
     var exchangeBaseUrl: String?
     var partialContractTerms: PeerContractTerms
@@ -109,8 +109,8 @@ struct CheckPeerPullCreditResponse: Codable {
 }
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
-    func operation() -> String { return "checkPeerPullCredit" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, scopeInfo: scopeInfo, amount: amount) }
+    func operation() -> String { "checkPeerPullCredit" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, scopeInfo: scopeInfo, amount: amount) }
 
     var exchangeBaseUrl: String?
     var scopeInfo: ScopeInfo?
@@ -138,8 +138,8 @@ struct InitiatePeerPullCreditResponse: Codable {
 }
 fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPullCreditResponse
-    func operation() -> String { return "initiatePeerPullCredit" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl,
+    func operation() -> String { "initiatePeerPullCredit" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
                                  partialContractTerms: partialContractTerms) }
 
     var exchangeBaseUrl: String?
@@ -170,8 +170,8 @@ struct PreparePeerPushCreditResponse: Codable {
 }
 fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPushCreditResponse
-    func operation() -> String { return "preparePeerPushCredit" }
-    func args() -> Args { return Args(talerUri: talerUri) }
+    func operation() -> String { "preparePeerPushCredit" }
+    func args() -> Args { Args(talerUri: talerUri) }
 
     var talerUri: String
     struct Args: Encodable {
@@ -191,8 +191,8 @@ extension WalletModel {
 /// Accept an incoming peer push payment
 fileprivate struct AcceptPeerPushCredit: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "confirmPeerPushCredit" } // should be "acceptPeerPushCredit"
-    func args() -> Args { return Args(transactionId: transactionId) }
+    func operation() -> String { "confirmPeerPushCredit" } // should be "acceptPeerPushCredit"
+    func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
     struct Args: Encodable {
@@ -219,8 +219,8 @@ struct PreparePeerPullDebitResponse: Codable {
 }
 fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPullDebitResponse
-    func operation() -> String { return "preparePeerPullDebit" }
-    func args() -> Args { return Args(talerUri: talerUri) }
+    func operation() -> String { "preparePeerPullDebit" }
+    func args() -> Args { Args(talerUri: talerUri) }
 
     var talerUri: String
     struct Args: Encodable {
@@ -240,8 +240,8 @@ extension WalletModel {
 /// Confirm incoming peer push request(invoice) and pay
 fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "confirmPeerPullDebit" }
-    func args() -> Args { return Args(transactionId: transactionId) }
+    func operation() -> String { "confirmPeerPullDebit" }
+    func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
     struct Args: Encodable {

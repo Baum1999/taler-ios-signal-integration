@@ -111,12 +111,15 @@ struct OrderShortInfo: Codable {
 // MARK: -
 /// A request to process a refund.
 struct WalletBackendApplyRefundRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "applyRefund" }
+    func args() -> Args { Args(talerRefundUri: talerRefundUri) }
+
     var talerRefundUri: String
-    
+
     struct Args: Encodable {
         var talerRefundUri: String
     }
-    
+
     struct Response: Decodable {
         var contractTermsHash: String
         var amountEffectivePaid: Amount
@@ -125,38 +128,27 @@ struct WalletBackendApplyRefundRequest: WalletBackendFormattedRequest {
         var pendingAtExchange: Bool
         var info: OrderShortInfo
     }
-    
-    func operation() -> String {
-        return "applyRefund"
-    }
-    
-    func args() -> Args {
-        return Args(talerRefundUri: talerRefundUri)
-    }
 }
 
 
 /// A request to force update an exchange.
 struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "addRequest" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
+
     var exchangeBaseUrl: String
-    
     struct Args: Encodable {
         var exchangeBaseUrl: String
     }
-    
+
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "addRequest"
-    }
-    
-    func args() -> Args {
-        return Args(exchangeBaseUrl: exchangeBaseUrl)
-    }
 }
 
 /// A request to deposit funds.
 struct WalletBackendCreateDepositGroupRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "createDepositGroup" }
+    func args() -> Args { Args(depositPayToUri: depositePayToUri, amount: amount) }
+
     var depositePayToUri: String
     var amount: Amount
     
@@ -168,52 +160,32 @@ struct WalletBackendCreateDepositGroupRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {
         var depositGroupId: String
     }
-    
-    func operation() -> String {
-        return "createDepositGroup"
-    }
-    
-    func args() -> Args {
-        return Args(depositPayToUri: depositePayToUri, amount: amount)
-    }
 }
 
 /// A request to get information about a payment request.
 struct WalletBackendPreparePayRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "preparePay" }
+    func args() -> Args { Args(talerPayUri: talerPayUri) }
     var talerPayUri: String
-    
+
     struct Args: Encodable {
         var talerPayUri: String
     }
-    
+
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "preparePay"
-    }
-    
-    func args() -> Args {
-        return Args(talerPayUri: talerPayUri)
-    }
 }
 
 /// A request to confirm a payment.
 struct WalletBackendConfirmPayRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "confirmPay" }
+    func args() -> Args { Args(proposalId: proposalId) }
     var proposalId: String
-    
+
     struct Args: Encodable {
         var proposalId: String
     }
-    
+
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "confirmPay"
-    }
-    
-    func args() -> Args {
-        return Args(proposalId: proposalId)
-    }
 }
 
 // MARK: -
@@ -229,8 +201,8 @@ struct PrepareRewardResponse: Decodable {
 /// A request to prepare a reward.
 struct PrepareRewardRequest: WalletBackendFormattedRequest {
     typealias Response = PrepareRewardResponse
-    func operation() -> String { return "prepareReward" }
-    func args() -> Args { return Args(talerRewardUri: talerRewardUri) }
+    func operation() -> String { "prepareReward" }
+    func args() -> Args { Args(talerRewardUri: talerRewardUri) }
 
     var talerRewardUri: String
     struct Args: Encodable {
@@ -241,8 +213,8 @@ struct PrepareRewardRequest: WalletBackendFormattedRequest {
 /// A request to accept a reward.
 struct AcceptRewardRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { return "acceptReward" }
-    func args() -> Args { return Args(walletRewardId: walletRewardId) }
+    func operation() -> String { "acceptReward" }
+    func args() -> Args { Args(walletRewardId: walletRewardId) }
 
     var walletRewardId: String
     struct Args: Encodable {
@@ -252,21 +224,16 @@ struct AcceptRewardRequest: WalletBackendFormattedRequest {
 // MARK: -
 /// A request to abort a failed payment.
 struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "abortFailedPayWithRefund" }
+    func args() -> Args { Args(proposalId: proposalId) }
+
     var proposalId: String
-    
     struct Args: Encodable {
         var proposalId: String
     }
     
     struct Response: Decodable {}
     
-    func operation() -> String {
-        return "abortFailedPayWithRefund"
-    }
-    
-    func args() -> Args {
-        return Args(proposalId: proposalId)
-    }
 }
 // MARK: -
 struct IntegrationTestArgs: Codable {
@@ -280,19 +247,13 @@ struct IntegrationTestArgs: Codable {
 
 /// A request to run a basic integration test.
 struct WalletBackendRunIntegrationTestRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "runIntegrationTest" }
+    func args() -> Args { integrationTestArgs }
     var integrationTestArgs: IntegrationTestArgs
     
     typealias Args = IntegrationTestArgs
     
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "runIntegrationTest"
-    }
-    
-    func args() -> Args {
-        return integrationTestArgs
-    }
 }
 
 struct TestPayArgs: Codable {
@@ -304,19 +265,13 @@ struct TestPayArgs: Codable {
 
 /// A request to make a test payment.
 struct WalletBackendTestPayRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "testPay" }
+    func args() -> Args { testPayArgs }
+
     var testPayArgs: TestPayArgs
-    
     typealias Args = TestPayArgs
     
     struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "testPay"
-    }
-    
-    func args() -> Args {
-        return testPayArgs
-    }
 }
 
 struct Coin: Codable {
@@ -333,41 +288,28 @@ struct Coin: Codable {
 
 /// A request to dump all coins to JSON.
 struct WalletBackendDumpCoinsRequest: WalletBackendFormattedRequest {
-    struct Args: Encodable {
-        
-    }
-    
+    func operation() -> String { "dumpCoins" }
+    func args() -> Args { Args() }
+    struct Args: Encodable { }
+
     struct Response: Decodable {
         var coins: [Coin]
     }
     
-    func operation() -> String {
-        return "dumpCoins"
-    }
-    
-    func args() -> Args {
-        return Args()
-    }
 }
 
 /// A request to suspend or unsuspend a coin.
 struct WalletBackendSuspendCoinRequest: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { "setCoinSuspended" }
+    func args() -> Args { Args(coinPub: coinPub, suspended: suspended) }
+
     var coinPub: String
     var suspended: Bool
     
     struct Args: Encodable {
         var coinPub: String
         var suspended: Bool
-    }
-    
-    struct Response: Decodable {}
-    
-    func operation() -> String {
-        return "setCoinSuspended"
-    }
-    
-    func args() -> Args {
-        return Args(coinPub: coinPub, suspended: suspended)
     }
 }
 

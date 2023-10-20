@@ -31,8 +31,8 @@ struct Balance: Decodable, Hashable, Sendable {
 // MARK: -
 /// A request to get the balances held in the wallet.
 fileprivate struct Balances: WalletBackendFormattedRequest {
-    func operation() -> String { return "getBalances" }
-    func args() -> Args { return Args() }
+    func operation() -> String { "getBalances" }
+    func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
 

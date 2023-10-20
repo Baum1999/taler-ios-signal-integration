@@ -139,8 +139,8 @@ struct PreparePayResult: Codable {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult
-    func operation() -> String { return "preparePayForUri" }
-    func args() -> Args { return Args(talerPayUri: talerPayUri) }
+    func operation() -> String { "preparePayForUri" }
+    func args() -> Args { Args(talerPayUri: talerPayUri) }
 
     var talerPayUri: String
     struct Args: Encodable {
@@ -150,8 +150,8 @@ fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForTemplate: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult
-    func operation() -> String { return "preparePayForTemplate" }
-    func args() -> Args { return Args(talerPayTemplateUri: talerPayTemplateUri) }
+    func operation() -> String { "preparePayForTemplate" }
+    func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri) }
 
     var talerPayTemplateUri: String
     struct Args: Encodable {
@@ -168,8 +168,8 @@ struct ConfirmPayResult: Decodable {
 /// A request to get an exchange's payment details.
 fileprivate struct confirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
-    func operation() -> String { return "confirmPay" }
-    func args() -> Args { return Args(transactionId: transactionId) }
+    func operation() -> String { "confirmPay" }
+    func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
     struct Args: Encodable {

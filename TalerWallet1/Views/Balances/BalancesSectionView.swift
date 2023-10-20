@@ -39,21 +39,21 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        let currency = balance.available.currencyStr
+        let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         completedTransactions = WalletModel.completedTransactions(transactions)
 //        sectionID = UUID()
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        let currency = balance.available.currencyStr
+        let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
 //        sectionID = UUID()
     }
 
     func reloadUncompleted(_ stack: CallStack) async -> () {
-        let currency = balance.available.currencyStr
+        let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
 //        sectionID = UUID()
@@ -66,7 +66,7 @@ extension BalancesSectionView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = balance.available.currencyStr
+        let currency = balance.scopeInfo.currency
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
@@ -244,7 +244,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     }
 
     var body: some View {
-        let currency = balance.available.currencyStr
+        let currency = balance.scopeInfo.currency
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),

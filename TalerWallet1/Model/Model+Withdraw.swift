@@ -17,8 +17,8 @@ struct WithdrawUriInfoResponse: Decodable {
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
     typealias Response = WithdrawUriInfoResponse
-    func operation() -> String { return "getWithdrawalDetailsForUri" }
-    func args() -> Args { return Args(talerWithdrawUri: talerWithdrawUri) }
+    func operation() -> String { "getWithdrawalDetailsForUri" }
+    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri) }
 
     var talerWithdrawUri: String
     struct Args: Encodable {
@@ -38,8 +38,8 @@ struct WithdrawalAmountDetails: Decodable {
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
     typealias Response = WithdrawalAmountDetails
-    func operation() -> String { return "getWithdrawalDetailsForAmount" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount) }
+    func operation() -> String { "getWithdrawalDetailsForAmount" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount) }
 
     var exchangeBaseUrl: String
     var amount: Amount
@@ -69,8 +69,8 @@ struct ExchangeTermsOfService: Decodable {
 /// A request to query an exchange's terms of service.
 fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     typealias Response = ExchangeTermsOfService
-    func operation() -> String { return "getExchangeTos" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat) }
+    func operation() -> String { "getExchangeTos" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat) }
 
     var exchangeBaseUrl: String
     var acceptedFormat: [String]?
@@ -82,8 +82,8 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
 /// A request to mark an exchange's terms of service as accepted.
 fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "setExchangeTosAccepted" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, etag: etag) }
+    func operation() -> String { "setExchangeTosAccepted" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, etag: etag) }
 
     var exchangeBaseUrl: String
     var etag: String
@@ -102,8 +102,8 @@ struct AcceptWithdrawalResponse: Decodable {
 /// A request to accept a bank-integrated withdrawl.
 fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptWithdrawalResponse
-    func operation() -> String { return "acceptBankIntegratedWithdrawal" }
-    func args() -> Args { return Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl) }
+    func operation() -> String { "acceptBankIntegratedWithdrawal" }
+    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl) }
 
     var talerWithdrawUri: String
     var exchangeBaseUrl: String
@@ -122,8 +122,8 @@ struct AcceptManualWithdrawalResult: Decodable {
 /// A request to accept a manual withdrawl.
 fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptManualWithdrawalResult
-    func operation() -> String { return "acceptManualWithdrawal" }
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge) }
+    func operation() -> String { "acceptManualWithdrawal" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge) }
 
     var exchangeBaseUrl: String
     var amount: Amount

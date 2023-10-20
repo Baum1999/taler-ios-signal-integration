@@ -68,8 +68,8 @@ class WalletModel: ObservableObject {
 /// A request to get a wallet transaction by ID.
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = Transaction
-    func operation() -> String { return "getTransactionById" }
-    func args() -> Args { return Args(transactionId: transactionId) }
+    func operation() -> String { "getTransactionById" }
+    func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
 
@@ -90,7 +90,7 @@ struct VersionInfo: Decodable {
 // MARK: -
 ///  A request to initialize Wallet-core
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
-    func operation() -> String { return "init" }
+    func operation() -> String { "init" }
     func args() -> Args {
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",
@@ -158,8 +158,8 @@ extension WalletModel {
 // MARK: -
 ///  A request to initialize Wallet-core
 fileprivate struct ResetRequest: WalletBackendFormattedRequest {
-    func operation() -> String { return "reset" }
-    func args() -> Args { return Args() }
+    func operation() -> String { "reset" }
+    func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
     struct Response: Decodable {}

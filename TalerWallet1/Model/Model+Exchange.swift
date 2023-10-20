@@ -7,6 +7,10 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+struct ExchangeError: Codable, Hashable {
+    var error: HTTPError
+}
+
 enum ExchangeEntryStatus: String, Codable {
     case preset
     case ephemeral
@@ -43,9 +47,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     var ageRestrictionOptions: [Int]
     var lastUpdateErrorInfo: ExchangeError?
 
-    var id: String {
-        exchangeBaseUrl
-    }
+    var id: String { exchangeBaseUrl }
     var name: String? {
         if let url = URL(string: exchangeBaseUrl) {
             if let host = url.host {
@@ -56,9 +58,6 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 }
 
-struct ExchangeError: Codable, Hashable {
-    var error: HTTPError
-}
 struct ExchangeListItem: Codable, Hashable {
     var exchangeBaseUrl: String
     var currency: String
@@ -79,8 +78,8 @@ struct ExchangeListItem: Codable, Hashable {
 // MARK: -
 /// A request to list exchanges.
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
-    func operation() -> String { return "listExchanges" }
-    func args() -> Args { return Args() }
+    func operation() -> String { "listExchanges" }
+    func args() -> Args { Args() }
 
     struct Args: Encodable {}           // no arguments needed
 
@@ -92,8 +91,8 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 /// A request to update a single exchange.
 fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "updateExchangeEntry" }
-    func args() -> Args { return Args(scopeInfo: scopeInfo) }
+    func operation() -> String { "updateExchangeEntry" }
+    func args() -> Args { Args(scopeInfo: scopeInfo) }
 
     var scopeInfo: ScopeInfo
 
@@ -105,8 +104,8 @@ fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { return "addExchange" }     // addExchangeEntry
-    func args() -> Args { return Args(exchangeBaseUrl: exchangeBaseUrl) }
+    func operation() -> String { "addExchange" }     // addExchangeEntry
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
     var exchangeBaseUrl: String
 
@@ -117,9 +116,9 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
-    typealias Response = CurrencySpecification
-    func operation() -> String { return "getCurrencySpecification" }
-    func args() -> Args { return Args(scope: scope) }
+    typealias Response = CurrencySpecification2
+    func operation() -> String { "getCurrencySpecification" }
+    func args() -> Args { Args(scope: scope) }
 
     var scope: ScopeInfo
 
