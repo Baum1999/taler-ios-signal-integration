@@ -9,6 +9,55 @@ public struct CurrencyInfo {
     let scope: ScopeInfo
     let specs: CurrencySpecification
     let formatter: CurrencyFormatter
+
+    func string(for value: Double, useSymbol: Bool = true) -> String {
+        formatter.setUseSymbol(useSymbol)
+        if let valueStr = formatter.string(for: value) {
+            let decimalSeparator = formatter.decimalSeparator ?? specs.decimalSeparator
+            if let decimalIndex = valueStr.endIndex(of: decimalSeparator) {
+                var fraction = 1
+                var integerStr = String(valueStr[..<decimalIndex])
+                let fractionStr = valueStr[decimalIndex...]
+                for character in fractionStr {
+                    let charStr = String(character)
+                    if let digit = Int(charStr) {
+                        let digitStr = fraction > specs.fractionalNormalDigits ?
+                                                    SuperScriptDigits(charStr) : charStr
+                        integerStr += digitStr
+                    } else { integerStr += charStr }
+                    fraction += 1
+                }
+                return integerStr
+            }
+            return valueStr
+        } else {        // formatter doesn't work - we need to format ourselves
+            var madeUpStr = ""
+            var currencyName = scope.currency
+            var hasSymbol = false
+            if useSymbol && formatter.hasAltUnitName0 {
+                if let symbol = specs.altUnitNames?[0] {
+                    currencyName = symbol
+                    hasSymbol = true
+                }
+            }
+            if specs.isCurrencyNameLeading {
+                madeUpStr = currencyName
+                if !hasSymbol {
+                    madeUpStr += " "
+                }
+            }
+            let integerPart = Int(value)
+            madeUpStr += String(integerPart)
+            madeUpStr += specs.decimalSeparator
+            if !specs.isCurrencyNameLeading {
+                if !hasSymbol {
+                    madeUpStr += " "
+                }
+                madeUpStr += currencyName
+            }
+            return madeUpStr
+        } // DIY
+    }
 }
 
 public struct CurrencySpecification2: Codable, Sendable {

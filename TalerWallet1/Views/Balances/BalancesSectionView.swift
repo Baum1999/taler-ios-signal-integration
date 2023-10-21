@@ -23,6 +23,7 @@ struct BalancesSectionView {
     @Binding var summary: String
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
     @State private var isShowingDetailView = false
 
@@ -67,6 +68,7 @@ extension BalancesSectionView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = balance.scopeInfo.currency
+        let currencyInfo = controller.info(for: currency)
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
@@ -76,6 +78,7 @@ extension BalancesSectionView: View {
             }
             BalancesNavigationLinksView(stack: stack.push(),
                                       balance: balance,
+                                 currencyInfo: currencyInfo,
                               centsToTransfer: $centsToTransfer,
                                       summary: $summary,
 //                             buttonSelected: $buttonSelected,
@@ -221,6 +224,7 @@ fileprivate struct BalancesPendingRowView: View {
 fileprivate struct BalancesNavigationLinksView: View {
     let stack: CallStack
     let balance: Balance
+    let currencyInfo: CurrencyInfo?
 //    let sectionCount: Int
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
@@ -273,13 +277,14 @@ fileprivate struct BalancesNavigationLinksView: View {
             }, tag: 3, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
-            BalanceRowView(amount: balance.available, sendAction: {
-                selectAndUpdate(1)      // will trigger SendAmount NavigationLink
-            }, recvAction: {
-                selectAndUpdate(2)      // will trigger RequestPayment NavigationLink
-            }, rowAction: {
-                buttonSelected = 3      // will trigger TransactionList NavigationLink
-            })
+            BalanceRowView(amount: balance.available, currencyInfo: currencyInfo,
+                sendAction: {
+                    selectAndUpdate(1)      // will trigger SendAmount NavigationLink
+                }, recvAction: {
+                    selectAndUpdate(2)      // will trigger RequestPayment NavigationLink
+                }, rowAction: {
+                    buttonSelected = 3      // will trigger TransactionList NavigationLink
+                })
         }
     }
 }

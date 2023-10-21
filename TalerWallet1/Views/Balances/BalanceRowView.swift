@@ -74,6 +74,7 @@ struct BalanceButton: View {
 /// [Send Coins]  [Receive Coins]     Balance
 struct BalanceRowView: View {
     let amount: Amount
+    let currencyInfo: CurrencyInfo?
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
@@ -86,9 +87,11 @@ struct BalanceRowView: View {
     let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
     var body: some View {
+
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
-                BalanceButton(amountStr: amount.valueStr,        // TODO: CurrencyFormatter?
+                let amountStr = currencyInfo?.string(for: amount.value)
+                BalanceButton(amountStr: amountStr ?? amount.valueStr,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
                 let titles = [(requestTitle1, uiFont), (requestTitle2, uiFont), (sendTitle1, uiFont), (sendTitle2, uiFont)]
@@ -109,7 +112,7 @@ struct BalanceRowView: View {
     }
 }
 // MARK: -
-#if DEBUG
+#if false // DEBUG
 struct BalanceRowView_Previews: PreviewProvider {
     static var previews: some View {
         let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
