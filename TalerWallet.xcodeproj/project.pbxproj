@@ -231,6 +231,8 @@
 		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
+		4EC400892AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
+		4EC4008A2AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
 		4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */; };
 		4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */; };
 		4ECB62822A0BB01D004ABBB7 /* SelectDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */; };
@@ -399,6 +401,7 @@
 		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
+		4EC400882AE3E7E800DF72C7 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeSectionView.swift; sourceTree = "<group>"; };
 		4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+P2P.swift"; sourceTree = "<group>"; };
 		4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDays.swift; sourceTree = "<group>"; };
@@ -643,6 +646,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB095252989CBFE0043A8A1 /* SettingsView.swift */,
+				4EC400882AE3E7E800DF72C7 /* AboutView.swift */,
 				4EB095262989CBFE0043A8A1 /* SettingsItem.swift */,
 				4EB0954B2989CBFE0043A8A1 /* Pending */,
 			);
@@ -1037,6 +1041,7 @@
 				4E605DB72AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2C2ADC416800FA9CC5 /* View+needVStack.swift in Sources */,
 				4E3EAE272A990778009F1BE8 /* WalletColors.swift in Sources */,
+				4EC400892AE3E7E800DF72C7 /* AboutView.swift in Sources */,
 				4E3EAE282A990778009F1BE8 /* BalancesListView.swift in Sources */,
 				4E3EAE292A990778009F1BE8 /* WalletBackendError.swift in Sources */,
 				4E3EAE2A2A990778009F1BE8 /* PendingRowView.swift in Sources */,
@@ -1142,6 +1147,7 @@
 				4E605DB82AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2D2ADC416800FA9CC5 /* View+needVStack.swift in Sources */,
 				4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */,
+				4EC4008A2AE3E7E800DF72C7 /* AboutView.swift in Sources */,
 				4EB0955D2989CBFE0043A8A1 /* BalancesListView.swift in Sources */,
 				4EB095212989CBCB0043A8A1 /* WalletBackendError.swift in Sources */,
 				4EB0955E2989CBFE0043A8A1 /* PendingRowView.swift in Sources */,

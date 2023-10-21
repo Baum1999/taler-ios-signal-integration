@@ -27,9 +27,10 @@ import os.log
 // MARK: - Main View
 public let VIEW_EMPTY = 10                                          // 10 WalletEmptyView
 public let VIEW_BALANCES = VIEW_EMPTY + 1                           // 11 BalancesListView
-public let VIEW_SETTINGS = VIEW_BALANCES + 1                        // 12 SettingsView
-public let VIEW_PENDING = VIEW_SETTINGS + 1                         // 13 PendingOpsListView
-public let VIEW_EXCHANGES = VIEW_PENDING + 1                        // 14 ExchangeListView
+public let VIEW_EXCHANGES = VIEW_BALANCES + 1                       // 12 ExchangeListView
+public let VIEW_SETTINGS = VIEW_EXCHANGES + 1                       // 13 SettingsView
+public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 14 AboutView
+public let VIEW_PENDING = VIEW_ABOUT + 1                            // 15 PendingOpsListView
 
 // MARK: Transactions
 public let VIEW_TRANSACTIONLIST = VIEW_EMPTY + 10                   // 20 TransactionsListView
