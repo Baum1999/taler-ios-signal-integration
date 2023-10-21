@@ -6,11 +6,13 @@ import SwiftUI
 
 struct SettingsItem<Content: View>: View {
     var name: String
+    var id1: String? = nil
     var description: String?
     var content: () -> Content
     
-    init(name: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    init(name: String, id1: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
         self.name = name
+        self.id1 = id1
         self.description = description
         self.content = content
     }
@@ -19,30 +21,35 @@ struct SettingsItem<Content: View>: View {
         HStack {
             VStack {
                 Text(name)
+                    .id(id1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityFont(.title2)
                     .padding([.bottom], 0.01)
                 if let desc = description {
                     Text(desc)
+                        .id(id1 == nil ? nil : id1! + "_T")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityFont(.caption)
                 }
-            }
+            }.id(id1 == nil ? nil : id1! + "_V")
             content()
                 .accessibilityFont(.body)
-        }.padding([.bottom], 4)
+        }.id(id1 == nil ? nil : id1! + "_H")
+        .padding([.bottom], 4)
     }
 }
 // MARK: -
 struct SettingsToggle: View {
     var name: String
     @Binding var value: Bool
+    var id1: String? = nil
     var description: String?
     var action: () -> Void = {}
 
     var body: some View {
         VStack {
             Toggle(name, isOn: $value.animation())
+                .id(id1)
                 .accessibilityFont(.title2)
                 .onChange(of: value) { value in
                     action()
@@ -50,10 +57,13 @@ struct SettingsToggle: View {
 
             if let desc = description {
                 Text(desc)
+                    .id(id1 == nil ? nil : id1! + "_T")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityFont(.caption)
             }
-        }.padding([.bottom], 4)
+        }
+        .padding([.bottom], 4)
+        .id(id1 == nil ? nil : id1! + "_V")
     }
 }
 // MARK: -
@@ -157,7 +167,7 @@ struct SettingsItemPreview : View {
 
     var body: some View {
         VStack {
-            SettingsToggle(name: "Developer Mode", value: $developerMode,
+            SettingsToggle(name: "Developer Mode", value: $developerMode, id1: "dev1",
                     description: "More information intended for debugging")
             SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
                      description: String(localized: "After a transaction finished"))
@@ -169,9 +179,9 @@ struct SettingsItemPreview : View {
 struct SettingsItem_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            SettingsItem (name: "Exchanges", description: "Manage list of exchanges known to this wallet") {}
+            SettingsItem (name: "Exchanges", id1: "list", description: "Manage list of exchanges known to this wallet") {}
             SettingsItemPreview()
-            SettingsItem(name: "Save Logfile", description: "Help debugging wallet-core") {
+            SettingsItem(name: "Save Logfile", id1: "save", description: "Help debugging wallet-core") {
                 Button("Save") {
                 }
                 .buttonStyle(.bordered)

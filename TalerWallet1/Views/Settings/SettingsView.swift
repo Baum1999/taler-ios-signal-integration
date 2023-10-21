@@ -50,6 +50,7 @@ struct SettingsView: View {
     @State private var diagnosticModeEnabled = UserDefaults.standard.bool(forKey: "diagnostic_mode_enabled")
 #endif
     @State private var showDevelopItems = false
+    @State private var hideDescriptions = false
     @State private var showResetAlert: Bool = false
     @State private var didReset: Bool = false
 
@@ -97,38 +98,40 @@ struct SettingsView: View {
                 NavigationLink {        // whole row like in a tableView
                     LazyView { AboutView(stack: stack.push(), navTitle: aboutStr) }
                 } label: {
-                    SettingsItem(name: aboutStr,
-                          description: String(localized: "More info about this app...")) {}
+                    SettingsItem(name: aboutStr, id1: "about",
+                          description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
                 if controller.hapticCapability.supportsHaptics {
-                    SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
-                                   description: String(localized: "Vibration Feedback"))
+                    SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
+                            description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
                 }
                 SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
-                                description: String(localized: "When a transaction finished"))
+                         description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
+                .id("playSounds")
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
-                SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly,
-                               description: String(localized: "Omit text where possible"))
+                SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly, id1: "minimal",
+                        description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
+                    hideDescriptions = iconOnly //withAnimation { hideDescriptions = iconOnly }
+                }
                 if diagnosticModeEnabled {
-                    SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode,
-                            description: String(localized: "More information intended for debugging")) {
-                        DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
+                    SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode, id1: "devMode",
+                            description: hideDescriptions ? nil : String(localized: "More information intended for debugging")) {
                         withAnimation { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
                         NavigationLink {        // whole row like in a tableView
                             LazyView { PendingOpsListView(stack: stack.push()) }
                         } label: {
-                            SettingsItem(name: String(localized: "Pending Operations"),
-                                  description: String(localized: "Exchange not yet ready...")) {}
-                        }
+                            SettingsItem(name: String(localized: "Pending Operations"), id1: "pending",
+                                  description: hideDescriptions ? nil : String(localized: "Exchange not yet ready...")) {}
+                        }.id("pending_L")
                         SettingsToggle(name: String(localized: "Set 2 seconds delay"),
                                       value: $developDelay.onChange({ delay in
-                                        walletCore.developDelay = delay}),
-                                description: String(localized: "After each wallet-core action"))
-                        SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"),
-                              description: String(localized: "Get money for testing")) {
+                                        walletCore.developDelay = delay}), id1: "delay",
+                                description: hideDescriptions ? nil : String(localized: "After each wallet-core action"))
+                        SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
+                              description: hideDescriptions ? nil : String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -142,9 +145,9 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
-                        }
-                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"),
-                              description: String(localized: "Get money for testing")) {
+                        }.id("demoWithdraw")
+                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"), id1: "test1with",
+                              description: hideDescriptions ? nil : String(localized: "Get money for testing")) {
                             Button("Withdraw") {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -158,9 +161,9 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
-                        }
-                        SettingsItem(name: String(localized: "Run Integration Test"),
-                              description: String(localized: "Perform basic test transactions")) {
+                        }.id("testWithdraw")
+                        SettingsItem(name: String(localized: "Run Integration Test"), id1: "demo1test",
+                              description: hideDescriptions ? nil : String(localized: "Perform basic test transactions")) {
                             Button("Demo 1") {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -175,8 +178,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test"),
-                              description: String(localized: "Perform basic test transactions")) {
+                        SettingsItem(name: String(localized: "Run Integration Test"), id1: "test1test",
+                              description: hideDescriptions ? nil : String(localized: "Perform basic test transactions")) {
                             Button("Test 1") {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -191,8 +194,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test V2"),
-                              description: String(localized: "Perform more test transactions")) {
+                        SettingsItem(name: String(localized: "Run Integration Test V2"), id1: "demo2test",
+                              description: hideDescriptions ? nil : String(localized: "Perform more test transactions")) {
                             Button("Demo 2") {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -207,8 +210,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test V2"),
-                              description: String(localized: "Perform more test transactions")) {
+                        SettingsItem(name: String(localized: "Run Integration Test V2"), id1: "test2test",
+                              description: hideDescriptions ? nil : String(localized: "Perform more test transactions")) {
                             Button("Test 2") {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
@@ -223,8 +226,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Save Logfile"),
-                              description: String(localized: "Help debugging wallet-core")) {
+                        SettingsItem(name: String(localized: "Save Logfile"), id1: "save",
+                              description: hideDescriptions ? nil : String(localized: "Help debugging wallet-core")) {
                             Button("Save") {
                                 symLog.log("Saving Log")
                                 // FIXME: Save Logfile
@@ -232,8 +235,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(true)
                         }
-                        SettingsItem(name: String(localized: "Reset Wallet"),
-                              description: String(localized: "Throw away all your money")) {
+                        SettingsItem(name: String(localized: "Reset Wallet"), id1: "reset",
+                              description: hideDescriptions ? nil : String(localized: "Throw away all your money")) {
                             Button("Reset") {
                                 showResetAlert = true
                             }
@@ -250,6 +253,7 @@ struct SettingsView: View {
         .navigationBarItems(leading: hamburger)
         .onAppear() {
             showDevelopItems = developerMode
+            hideDescriptions = iconOnly
             DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
         }
         .onDisappear() {
