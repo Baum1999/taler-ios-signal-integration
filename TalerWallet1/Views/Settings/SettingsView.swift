@@ -93,6 +93,13 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
+                let aboutStr = String(localized: "About GNU Taler")
+                NavigationLink {        // whole row like in a tableView
+                    LazyView { AboutView(stack: stack.push(), navTitle: aboutStr) }
+                } label: {
+                    SettingsItem(name: aboutStr,
+                          description: String(localized: "More info about this app...")) {}
+                }
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
                                    description: String(localized: "Vibration Feedback"))
@@ -235,27 +242,6 @@ struct SettingsView: View {
                         }
                     }
                 }
-
-                VStack {
-                    SettingsItem(name: "App Version") {
-                        Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
-                    }
-                    SettingsItem(name: "Wallet Core Version") {
-                        Text(verbatim: "\(walletCore.versionInfo!.version)")
-                    }
-                    SettingsItem(name: "Wallet Core DevMode") {
-                        Text(verbatim: "\(walletCore.versionInfo!.devMode ? "YES" : "NO")")
-                    }
-                    SettingsItem(name: "Supported Exchange Versions") {
-                        Text(verbatim: "\(walletCore.versionInfo!.exchange)")
-                    }
-                    SettingsItem(name: "Supported Merchant Versions") {
-                        Text(verbatim: "\(walletCore.versionInfo!.merchant)")
-                    }
-                    SettingsItem(name: "Used Bank") {
-                        Text(verbatim: "\(walletCore.versionInfo!.bank)")
-                    }
-                } // App version info
             }
             .id(listID)
             .listStyle(myListStyle.style).anyView
