@@ -94,13 +94,15 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
     func args() -> Args {
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",
-                                 logLevel: "info") // trace, info, warn, error, none
+                                 logLevel: "info", // trace, info, warn, error, none
+                         useNativeLogging: true)
     }
 
     struct Args: Encodable {
         var persistentStoragePath: String
 //        var cryptoWorkerType: String
         var logLevel: String
+        var useNativeLogging: Bool
     }
 
     var persistentStoragePath: String
