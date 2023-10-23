@@ -142,7 +142,7 @@ class DebugViewC: ObservableObject {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-    let logger = Logger (subsystem: "net.taler.gnu", category: "DebugView")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "DebugView")
 
     @Published var viewID: Int = 0
     @Published var sheetID: Int = 0

@@ -24,7 +24,7 @@ struct HTTPError: Codable, Hashable {
 class WalletModel: ObservableObject {
     public static let shared = WalletModel()
     static func className() -> String {"\(self)"}
-    let logger = Logger (subsystem: "net.taler.gnu", category: "WalletModel")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "WalletModel")
     let semaphore = AsyncSemaphore(value: 1)
     var cachedBalances: [Balance]? = nil
 

@@ -26,7 +26,7 @@ struct TalerWallet1App: App {
     private let controller = Controller.shared
     private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
-    let logger = Logger (subsystem: "net.taler.gnu", category: "Main App")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "Main App")
     let sqlite3 = true                                                          // true = SQLITE3, false = JSON
 
     func scheduleAppRefresh() {
@@ -103,7 +103,7 @@ struct TalerWallet1App: App {
 final class ViewState : ObservableObject {
     static let shared = ViewState()
     @Published var rootViewId = UUID()
-    let logger = Logger (subsystem: "net.taler.gnu", category: "ViewState")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "ViewState")
 
     public func popToRootView() -> Void {
         logger.info("popToRootView")

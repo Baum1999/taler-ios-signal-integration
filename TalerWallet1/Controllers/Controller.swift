@@ -38,7 +38,7 @@ class Controller: ObservableObject {
     @AppStorage("playSounds") var playSounds: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
-    let logger = Logger (subsystem: "net.taler.gnu", category: "Controller")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
 

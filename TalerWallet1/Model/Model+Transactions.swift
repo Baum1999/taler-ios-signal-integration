@@ -129,32 +129,32 @@ extension WalletModel {
     /// abort the specified transaction from Wallet-Core. No networking involved
     func abortTransaction(transactionId: String) async throws {
         let request = AbortTransaction(transactionId: transactionId)
-        logger.info("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        logger.notice("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 
     /// delete the specified transaction from Wallet-Core. No networking involved
     func deleteTransaction(transactionId: String) async throws {
         let request = DeleteTransaction(transactionId: transactionId)
-        logger.info("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        logger.notice("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 
     func failTransaction(transactionId: String) async throws {
         let request = FailTransaction(transactionId: transactionId)
-        logger.info("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        logger.notice("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 
     func suspendTransaction(transactionId: String) async throws {
         let request = SuspendTransaction(transactionId: transactionId)
-        logger.info("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        logger.notice("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 
     func resumeTransaction(transactionId: String) async throws {
         let request = ResumeTransaction(transactionId: transactionId)
-        logger.info("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
+        logger.notice("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 }

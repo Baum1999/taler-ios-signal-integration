@@ -14,7 +14,7 @@ struct Sheet: View {
 
     var sheetView: AnyView
 
-    let logger = Logger (subsystem: "net.taler.gnu", category: "Sheet")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "Sheet")
 
     var cancelButton: some View {
         Button("Cancel") {

@@ -30,7 +30,7 @@ class WalletCore: QuickjsMessageHandler {
 
     var versionInfo: VersionInfo?           // shown in SettingsView
     var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
-    let logger = Logger (subsystem: "net.taler.gnu", category: "wallet-core")
+    let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
     private struct FullRequest: Encodable {
         let operation: String
