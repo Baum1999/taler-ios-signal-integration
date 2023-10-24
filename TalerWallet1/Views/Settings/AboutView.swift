@@ -18,14 +18,6 @@ struct AboutView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-    @AppStorage("iconOnly") var iconOnly: Bool = false
-
-#if TABBAR  // Taler Wallet
-#else       // GNU Taler
-    var hamburgerAction: () -> Void
-#endif
-
-    @EnvironmentObject private var model: WalletModel
 
     @State private var rotationEnabled = false
 
