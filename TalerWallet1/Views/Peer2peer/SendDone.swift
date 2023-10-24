@@ -50,13 +50,12 @@ struct SendDone: View {
                                resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .navigationTitle(navTitle)
             } else {
                 WithdrawProgressView(message: "Loading...")
-                    .navigationTitle(navTitle)
             }
         }
 //        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .navigationTitle(navTitle)
         .task {
             symLog.log(".task")
             do {
@@ -69,6 +68,7 @@ struct SendDone: View {
                                         purse_expiration: timestamp)
                     // TODO: user might choose baseURL
                     let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
+                    // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId
                 } else if let amountToReceive {
                     let terms = PeerContractTerms(amount: amountToReceive,
@@ -76,6 +76,7 @@ struct SendDone: View {
                                         purse_expiration: timestamp)
                     // TODO: user might choose baseURL
                     let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
+                    // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId
                 } else { fatalError() }
             } catch {    // TODO: error
