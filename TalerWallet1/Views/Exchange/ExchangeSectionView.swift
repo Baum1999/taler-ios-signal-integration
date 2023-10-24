@@ -5,71 +5,6 @@
 import SwiftUI
 import taler_swift
 
-struct ExchangeRowView: View {
-    let stack: CallStack
-    let exchange: Exchange
-//    let amount: Amount
-    let currency: String
-    @Binding var centsToTransfer: UInt64
-
-    @Environment(\.sizeCategory) var sizeCategory
-    @State private var buttonSelected: Int? = nil
-
-    func selectAndUpdate(_ button: Int) {
-        buttonSelected = button      // will trigger NavigationLink
-        // while navigation animation runs, contact Exchange to update Fees
-//        Task { // runs on MainActor
-//            do {
-//                try await model.updateExchange(scopeInfo: balance.scopeInfo)
-//            } catch {    // TODO: error handling - couldn't updateExchange
-//                //                symLog.log("error: \(error)")
-//            }
-//        }
-    }
-
-    let depositTitle = String(localized: "Deposit", comment: "Top of button <Deposit (currency)>")
-    let withdrawTitle = String(localized: "Withdraw", comment: "Top of button <Withdraw (currency)>")
-
-    var body: some View {
-        let baseURL = exchange.exchangeBaseUrl
-
-        HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
-            Text(baseURL.trimURL())
-                .accessibilityFont(.body)
-
-            NavigationLink(destination: LazyView {
-                EmptyView()     // TODO: Deposit
-            }, tag: 1, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0)
-            NavigationLink(destination: LazyView {
-                ManualWithdraw(stack: stack.push(),
-                            exchange: exchange,
-                     centsToTransfer: $centsToTransfer)
-            }, tag: 2, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0)
-        }.listRowSeparator(.hidden)
-
-        SingleAxisGeometryReader { width in
-            Group {
-                let uiFont = TalerFont.uiFont(.title3)
-                let titles = [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
-                let sendTitle = depositTitle + "\n" + currency                          // TODO:  amount.currencyStr
-                let recvTitle = withdrawTitle + "\n" + currency                         // TODO:  amount.currencyStr
-                let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: recvTitle,
-                                                  lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
-                                                 sendAction: { selectAndUpdate(1) },
-                                                 recvAction: { selectAndUpdate(2) })
-                let spacing = CGFloat(10)                  // space between the two buttons
-                if Self.needVStack(titles, width: width, spacing: spacing) {
-                    VStack { twoRowButtons }
-                } else {
-                    HStack(spacing: spacing) { twoRowButtons }
-                }
-            }
-        }
-    }
-}
-// MARK: -
 /// This view shows the currency name in an exchange section
 ///         currency
 /// [Deposit Coins]  [Withdraw Coins]
@@ -101,7 +36,7 @@ struct ExchangeSectionView: View {
 }
 // MARK: -
 #if DEBUG
-struct ExchangeRow_Container : View {
+fileprivate struct ExchangeRow_Container : View {
     @State private var centsToTransfer: UInt64 = 100
 
 //    let amount = try! Amount(fromString: LONGCURRENCY + ":1234.56")
@@ -126,7 +61,7 @@ struct ExchangeRow_Container : View {
     }
 }
 
-struct ExchangeRow_Previews: PreviewProvider {
+fileprivate struct ExchangeSection_Previews: PreviewProvider {
     static var previews: some View {
         List {
             ExchangeRow_Container()
