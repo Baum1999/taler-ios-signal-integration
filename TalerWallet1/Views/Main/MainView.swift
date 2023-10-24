@@ -151,7 +151,7 @@ extension MainView {
                                   navTitle: balancesTitle,
                                   balances: $balances,
                       shouldReloadBalances: $shouldReloadBalances)
-                }
+                }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")             // creditcard     system will automatically use filled variant
                     if !iconOnly { Text(balancesTitle) }
@@ -163,7 +163,7 @@ extension MainView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
 //                                  balances: $balances,
                                   navTitle: exchangesTitle)
-                }
+                }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "building.columns")
                     if !iconOnly { Text(exchangesTitle) }
@@ -172,7 +172,7 @@ extension MainView {
 
                 NavigationView {
                     SettingsView(stack: stack.push(), navTitle: settingsTitle)
-                }
+                }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "gear")                   // system will automatically use filled variant
                     if !iconOnly { Text(settingsTitle) }
