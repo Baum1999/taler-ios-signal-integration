@@ -81,13 +81,15 @@ struct ManualWithdraw: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
         }
         .task(id: centsToTransfer) { // re-run this whenever centsToTransfer changes
-            let amount = Amount.amountFromCents(currency, centsToTransfer)
-            do {
-                withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
-//                agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                withdrawalAmountDetails = nil
+            if centsToTransfer > 0 {
+                let amount = Amount.amountFromCents(currency, centsToTransfer)
+                do {
+                    withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
+//                  agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    withdrawalAmountDetails = nil
+                }
             }
         }
     }
