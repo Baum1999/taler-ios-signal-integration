@@ -5,8 +5,6 @@
 import SwiftUI
 import taler_swift
 
-let SPACING = CGFloat(10)                  // space between the two buttons
-
 struct BalanceLabel: View {
     let balanceTitle: String
     let horizontal: Bool
@@ -50,7 +48,7 @@ struct BalanceButton: View {
                     let amountFont = TalerFont.uiFont(.title)
                     let titles = [(balanceTitle, balancesFont),
                                   (amountStr, amountFont)]
-                    let needVStack = !iconOnly && Self.needVStack(titles, width: width, spacing: SPACING, sameSize: false)
+                    let needVStack = !iconOnly && Self.needVStack(titles, width: width, spacing: HSPACING, sameSize: false)
                     if needVStack {
                         VStack(alignment: .leading, spacing: 0) {
                             BalanceLabel(balanceTitle: balanceTitle, horizontal: false, amountStr: amountStr, iconOnly: iconOnly)
@@ -87,10 +85,9 @@ struct BalanceRowView: View {
     let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
     var body: some View {
-
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
-                let amountStr = currencyInfo?.string(for: amount.value)
+                let amountStr = currencyInfo?.string(for: amount.valueAsTuple)
                 BalanceButton(amountStr: amountStr ?? amount.valueStr,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
@@ -101,10 +98,10 @@ struct BalanceRowView: View {
                                                   lineLimit: 5, sendDisabled: amount.isZero,
                                                   sendAction: sendAction, recvAction: recvAction)
 //  let _ = print("Screenwidth: \(UIScreen.screenWidth)  Geometry: \(width)  \(sizeCategory): \(sizeCategory)")
-                if Self.needVStack(titles, width: width, spacing: SPACING) {
+                if Self.needVStack(titles, width: width, spacing: HSPACING) {
                     VStack { twoRowButtons }
                 } else {
-                    HStack(spacing: SPACING) { twoRowButtons }
+                    HStack(spacing: HSPACING) { twoRowButtons }
                 }
             }
             .accessibilityElement(children: .combine)

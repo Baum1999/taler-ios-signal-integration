@@ -4,6 +4,8 @@
  */
 import Foundation
 
+public let HSPACING = CGFloat(10)                  // space between items in HStack
+
 public let LAUNCHDURATION: Double = 1.60
 public let SLIDEDURATION: Double = 0.45
 

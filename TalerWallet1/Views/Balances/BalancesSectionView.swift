@@ -89,7 +89,7 @@ extension BalancesSectionView: View {
             if hasPending {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
-                                     currency: currency,
+                                 currencyInfo: currencyInfo,
                           pendingTransactions: $pendingTransactions,
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
@@ -160,7 +160,8 @@ extension BalancesSectionView: View {
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currency: String
+    let currencyInfo: CurrencyInfo?
+//
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
@@ -187,6 +188,7 @@ fileprivate struct BalancesPendingRowView: View {
     }
 
     var body: some View {
+        let currency: String = currencyInfo?.scope.currency ?? ""
         let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
 
         NavigationLink {
@@ -204,11 +206,11 @@ fileprivate struct BalancesPendingRowView: View {
             VStack(spacing: 6) {
                 var rows = 0
                 if !pendingIncoming.isZero {
-                    PendingRowView(amount: pendingIncoming, incoming: true)
+                    PendingRowView(amount: pendingIncoming, currencyInfo: currencyInfo, incoming: true)
                     let _ = (rows+=1)
                 }
                 if !pendingOutgoing.isZero {
-                    PendingRowView(amount: pendingOutgoing, incoming: false)
+                    PendingRowView(amount: pendingOutgoing, currencyInfo: currencyInfo, incoming: false)
                     let _ = (rows+=1)
                 }
                 if rows == 0 {
