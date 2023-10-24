@@ -50,12 +50,12 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The size of `integer` in relation to `fraction`.
     private static let fractionalBase: UInt32 = 100000000
     
-    /// The greatest number of decimal digits that can be represented.
+    /// The greatest number of fractional digits that can be represented.
     private static let fractionalBaseDigits: UInt = 8
     
-    /// The currency of the amount.
-    var currency: String
-    
+    /// The currency of the amount. Cannot be changed later
+    private let currency: String
+
     /// The integer value of the amount (number to the left of the decimal point).
     var integer: UInt64
     
@@ -73,18 +73,34 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         }
     }
 
-    /// The floating point representation of the value
-    public var value: Double {
-        let value = Double(integer)
-        if fraction == 0 {
-            return value
-        } else {
-            let thousandths = Double(fraction / (Amount.fractionalBase / 1000))
-            return value + (thousandths / 1000.0)
-        }
+    /// The floating point representation of the integer.
+    public var intValue: Double {
+        Double(integer)
     }
 
-    /// The string representation of the value, formatted as "`integer`.`fraction`".
+    /// The floating point representation of the fraction.
+    public var fracValue: Double {
+        let oneThousand = 1000.0
+        let base = Double(Amount.fractionalBase) / oneThousand
+        let thousandths = Double(fraction) / base
+        return thousandths / oneThousand
+    }
+
+    /// The floating point representation of the value.
+    /// Be careful, the value might exceed 15 digits which is the limit for Double.
+    /// When more significant digits are needed, use valueAsTuple.
+    public var value: Double {
+        fraction == 0 ? intValue
+                      : intValue + fracValue
+    }
+
+    /// The tuple representation of the value.
+    public var valueAsTuple: (Double, Double) {
+        (intValue, fracValue)
+    }
+
+    /// The string representation of the value, formatted as "`integer`.`fraction`",
+    /// no trailing zeroes, no group separator.
     public var valueStr: String {
         var decimalSeparator = "."
 //        if let currencySpecification {      // TODO: use locale
