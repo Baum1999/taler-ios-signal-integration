@@ -35,6 +35,7 @@ struct BalanceLabel: View {
 
 struct BalanceButton: View {
     let amountStr: String
+    let correctForSize: CGFloat
     let rowAction: () -> Void
 
     @AppStorage("iconOnly") var iconOnly: Bool = false
@@ -44,11 +45,11 @@ struct BalanceButton: View {
         Button(action: rowAction) {
             SingleAxisGeometryReader { width in
                 Group {
-                    let balancesFont = TalerFont.uiFont(.title2)
-                    let amountFont = TalerFont.uiFont(.title)
-                    let titles = [(balanceTitle, balancesFont),
-                                  (amountStr, amountFont)]
-                    let needVStack = !iconOnly && Self.needVStack(titles, width: width, spacing: HSPACING, sameSize: false)
+                    let titles = [(balanceTitle, TalerFont.uiFont(.title2)),
+                                  (amountStr,    TalerFont.uiFont(.title))]
+                    let needVStack = !iconOnly && Self.needVStack(titles, width: width,
+                                                                  correctForSize: correctForSize,
+                                                                  spacing: HSPACING, sameSize: false)
                     if needVStack {
                         VStack(alignment: .leading, spacing: 0) {
                             BalanceLabel(balanceTitle: balanceTitle, horizontal: false, amountStr: amountStr, iconOnly: iconOnly)
@@ -85,10 +86,12 @@ struct BalanceRowView: View {
     let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
     var body: some View {
+        let correctForSize = Self.correctForSize(sizeCategory)
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
                 let amountStr = currencyInfo?.string(for: amount.valueAsTuple)
                 BalanceButton(amountStr: amountStr ?? amount.valueStr,
+                         correctForSize: correctForSize,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
                 let titles = [(requestTitle1, uiFont), (requestTitle2, uiFont), (sendTitle1, uiFont), (sendTitle2, uiFont)]
@@ -98,7 +101,7 @@ struct BalanceRowView: View {
                                                   lineLimit: 5, sendDisabled: amount.isZero,
                                                   sendAction: sendAction, recvAction: recvAction)
 //  let _ = print("Screenwidth: \(UIScreen.screenWidth)  Geometry: \(width)  \(sizeCategory): \(sizeCategory)")
-                if Self.needVStack(titles, width: width, spacing: HSPACING) {
+                if Self.needVStack(titles, width: width, correctForSize: correctForSize, spacing: HSPACING) {
                     VStack { twoRowButtons }
                 } else {
                     HStack(spacing: HSPACING) { twoRowButtons }
@@ -109,31 +112,42 @@ struct BalanceRowView: View {
     }
 }
 // MARK: -
-#if false // DEBUG
-struct BalanceRowView_Previews: PreviewProvider {
-    static var previews: some View {
+#if  DEBUG
+
+struct SomeBalanceRows: View {
+    @Environment(\.sizeCategory) var sizeCategory
+
+    var body: some View {
+        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
+        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
-        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
+        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.12")
+        let testStr = testInfo.string(for: test.valueAsTuple)
+        let demoStr = demoInfo.string(for: demo.valueAsTuple)
+
+        let correctForSize = Self.correctForSize(sizeCategory)
+
         List {
             Section {
-                HStack(alignment: .lastTextBaseline) {
-                    BalanceLabel(balanceTitle: "BalanceA:", horizontal: true, amountStr: test.valueStr, iconOnly: false)
-                        .listRowSeparator(.hidden)
-                }
-            }
-            Section {
-                BalanceLabel(balanceTitle: "Balance:", horizontal: false, amountStr: demo.valueStr, iconOnly: false)
+                BalanceLabel(balanceTitle: "Balance:", horizontal: false, amountStr: demoStr, iconOnly: false)
                     .listRowSeparator(.hidden)
             }
             Section {
-                BalanceButton(amountStr: demo.valueStr, rowAction: {})
+                BalanceButton(amountStr: testStr, correctForSize: correctForSize, rowAction: {})
                     .listRowSeparator(.hidden)
             }
             Section {
-                BalanceRowView(amount: demo, sendAction: {}, recvAction: {}, rowAction: {})
+                BalanceRowView(amount: demo, currencyInfo: demoInfo, sendAction: {}, recvAction: {}, rowAction: {})
             }
-            BalanceRowView(amount: test, sendAction: {}, recvAction: {}, rowAction: {})
+            BalanceRowView(amount: test, currencyInfo: testInfo, sendAction: {}, recvAction: {}, rowAction: {})
         }
+
+    }
+}
+
+struct BalanceRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        SomeBalanceRows()
     }
 }
 #endif

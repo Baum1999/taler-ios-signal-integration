@@ -11,33 +11,60 @@ extension View {
     /// if !sameSize then all titles are added with spacing
     static func needVStack(_ titles: [(String, UIFont)],
                               width: CGFloat,           // total width available
+                     correctForSize: CGFloat,
                             spacing: CGFloat,           // between titles
                            sameSize: Bool = true,
-                           numViews: Int = 2,
-                           currency: String = "")
+                           numViews: Int = 2)
     -> Bool {
         let padding: CGFloat = 20        // TODO: depend on myListStyle
-        var maxTitleWidth: CGFloat = 0
-        var totalWidth = padding
+        let totalSpacing = spacing * CGFloat(numViews - 1)
+        var totalWidth = padding + totalSpacing
 
+        var maxTitleWidth: CGFloat = 0
+        var minTitleWidth: CGFloat = 1000
         for (title, uiFont) in titles {
             let titleWidth = title.widthOfString(usingUIFont: uiFont)
-            if titleWidth > maxTitleWidth {
-                maxTitleWidth = titleWidth
+            let fixWidth = round(CGFloat(Int(20 * titleWidth * correctForSize))) / 20
+            if fixWidth > maxTitleWidth {
+                maxTitleWidth = fixWidth
             }
-            totalWidth += titleWidth
+            if fixWidth < minTitleWidth {
+                minTitleWidth = fixWidth
+            }
+            totalWidth += fixWidth
         }
 
-        let neededWidth = padding + maxTitleWidth
-        let totalSpacing = spacing * CGFloat(numViews - 1)
-        let availableWidth = (width / CGFloat(numViews)) - totalSpacing
-        totalWidth += totalSpacing
         if sameSize {
-            print("❗️\(currency) available: \(availableWidth)   needed: \(neededWidth)")
+            let availableWidth = (width / CGFloat(numViews)) - totalSpacing
+            let neededWidth = padding + maxTitleWidth
+//            if width > 20 {
+//                print("❗️ available: \(availableWidth)   needed: \(neededWidth)")
+//            }
+            return neededWidth > availableWidth
         } else {
-            print("❗️\(currency) width: \(width)   total: \(totalWidth)")
+//            if width > 20 {
+//                let (amount, font) = titles[1]
+//                print("❗️ view width: \(width)   total: \(totalWidth)  min: \(minTitleWidth)  max: \(maxTitleWidth)  \(amount)")
+//            }
+            return totalWidth > width
         }
-        return sameSize ? neededWidth > availableWidth
-                        : totalWidth > width
+    }
+
+    static func correctForSize(_ sizeCategory: ContentSizeCategory) -> CGFloat {
+        return switch sizeCategory {
+            case .extraSmall: 0.7
+            case .small: 0.8
+            case .medium: 0.9
+            case .large: 1.0
+            case .extraLarge: 1.15
+            case .extraExtraLarge: 1.25
+            case .extraExtraExtraLarge: 1.33
+            case .accessibilityMedium: 1.52
+            case .accessibilityLarge: 1.8
+            case .accessibilityExtraLarge: 2.0
+            case .accessibilityExtraExtraLarge: 2.2
+            case .accessibilityExtraExtraExtraLarge: 2.5
+            default: 1.0
+        }
     }
 }

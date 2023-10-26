@@ -59,7 +59,7 @@ struct ExchangeRowView: View {
                                                   lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
                                                  sendAction: { selectAndUpdate(1) },
                                                  recvAction: { selectAndUpdate(2) })
-                if Self.needVStack(titles, width: width, spacing: HSPACING + 4, currency: currency) {
+                if Self.needVStack(titles, width: width, correctForSize: 1.0, spacing: HSPACING + 4) {
                     VStack { twoRowButtons }
                 } else {
                     HStack(spacing: HSPACING) { twoRowButtons }

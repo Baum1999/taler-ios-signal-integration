@@ -139,24 +139,30 @@ struct PendingRowView: View {
 }
 // MARK: -
 #if DEBUG
+
+func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
+    let unitName = digits == 0 ? "¥" : "€"
+    let scope = ScopeInfo(type: .global, currency: currency)
+    let specs = CurrencySpecification(name: TESTCURRENCY,
+//                        decimalSeparator: ".", groupSeparator: "'",
+                     fractionalInputDigits: digits,
+                    fractionalNormalDigits: digits,
+              fractionalTrailingZeroDigits: digits,
+//                   isCurrencyNameLeading: true,
+                              altUnitNames: [0 : unitName])
+    let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+    return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
+}
+
 struct PendingRowView_Previews: PreviewProvider {
     static var previews: some View {
-        let scope = ScopeInfo(type: .global, currency: TESTCURRENCY)
-        let specs = CurrencySpecification(name: TESTCURRENCY,
-//                                          decimalSeparator: ".", groupSeparator: "'",
-                                          fractionalInputDigits: 0,
-                                          fractionalNormalDigits: 0,
-                                          fractionalTrailingZeroDigits: 0,
-//                                          isCurrencyNameLeading: true,
-                                          altUnitNames: [0 : "¥"])
-        let formatter = CurrencyFormatter.formatter(scope: scope,
-                                                    specs: specs)
-        let currencyInfo = CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
+        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
+        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
         let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
         List {
-            PendingRowView(amount: test, currencyInfo: currencyInfo, incoming: true)
-            PendingRowView(amount: demo, currencyInfo: currencyInfo, incoming: false)
+            PendingRowView(amount: test, currencyInfo: testInfo, incoming: true)
+            PendingRowView(amount: demo, currencyInfo: demoInfo, incoming: false)
         }
     }
 }
