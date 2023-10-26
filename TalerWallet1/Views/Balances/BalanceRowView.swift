@@ -104,7 +104,7 @@ struct BalanceRowView: View {
                     HStack(spacing: HSPACING) { twoRowButtons }
                 }
             }
-            .accessibilityElement(children: .combine)
+//            .accessibilityElement(children: .combine)
         }
     }
 }

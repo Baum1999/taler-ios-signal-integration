@@ -36,6 +36,7 @@ struct QRCodeDetailView: View {
                 HStack {
                     Spacer()
                     QRGeneratorView(text: talerURI)
+                        .accessibilityLabel("QR Code")
                     Spacer()
                 }
                 .listRowSeparator(.hidden)

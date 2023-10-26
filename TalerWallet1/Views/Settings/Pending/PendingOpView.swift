@@ -28,7 +28,7 @@ struct PendingOpView: View {
                 let isDue = "isDue"
                 Toggle(isDue, isOn: $isDue)
                     .disabled(true)
-                let dateString = TalerDater.dateString(from: pendingOp.timestampDue)
+                let (dateString, date) = TalerDater.dateString(from: pendingOp.timestampDue)
                 Text(dateString)
             }
             .accessibilityFont(.body)

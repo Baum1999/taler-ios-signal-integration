@@ -54,21 +54,29 @@ public class TalerDater: DateFormatter {
         }
     }
 
+//    public static func date(from: Timestamp) -> Date {
+//        let milliseconds = try from.milliseconds()
+//        let date = Date(milliseconds: milliseconds)
+//        return date
+//    }
+
     /// converts a timestamp into a formatted date string
-    public static func dateString(from: Timestamp, relative: Bool = false) -> String {
+    public static func dateString(from: Timestamp, relative: Bool = false) -> (String, Date?) {
         do {
             let milliseconds = try from.milliseconds()
             let date = Date(milliseconds: milliseconds)
+//            let date = date(from: from)
             if relative {
                 let now = Date.now
                 let timeInterval = now.timeIntervalSince(date)
                 if let relativeDate = relativeDate(from: timeInterval) {
-                    return relativeDate
+                    return (relativeDate, date)
                 }
             }
-            return shared.string(from: date)
+            return (shared.string(from: date), date)
         } catch {       // Never
-            return "Never"
+//            let never = LocalizedString("Never")
+            return ("Never", nil)
         }
     }
 

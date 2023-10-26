@@ -45,6 +45,20 @@ struct TransactionDetailView: View {
     @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
 
+    func accessibilityDate(_ date: Date?) -> String? {
+        if let date {
+            let dateString = DateFormatter.localizedString(from: date,
+                                                      dateStyle: .short,
+                                                      timeStyle: .none)
+            let hourComponents = Calendar.current.dateComponents([.hour, .minute], from: date)
+            if let timeString = DateComponentsFormatter.localizedString(from: hourComponents, unitsStyle: .spellOut) {
+                return dateString + ", " + timeString
+            }
+            return dateString
+        }
+        return nil
+    }
+
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
@@ -52,7 +66,10 @@ struct TransactionDetailView: View {
 #endif
         let common = transaction.common
         let pending = transaction.isPending
-        let dateString = TalerDater.dateString(from: common.timestamp)
+        let locale = TalerDater.shared.locale
+        let (dateString, date) = TalerDater.dateString(from: common.timestamp)
+        let accessibilityDate = accessibilityDate(date) ??
+                                    dateString
         let navTitle2 = transaction.localizedType
         Group {
             List {
@@ -68,6 +85,7 @@ struct TransactionDetailView: View {
                 } // Suspend + Resume buttons
                 Text(dateString)
                     .accessibilityFont(.body)
+                    .accessibilityLabel(accessibilityDate)
                     .foregroundColor(.secondary)
                     .listRowSeparator(.hidden)
                 HStack {

@@ -32,7 +32,7 @@ struct TransactionRowView: View {
         let details = transaction.detailsToShow()
         let keys = details.keys
 
-        let dateString = TalerDater.dateString(from: common.timestamp, relative: true)
+        let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
         let incoming = common.incoming()
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
