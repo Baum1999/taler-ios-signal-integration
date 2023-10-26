@@ -1,4 +1,9 @@
 
+Version 0.9.3 (22)
+
+- Fixed layout for Balances for dynamic font sizes
+
+
 Version 0.9.3 (21)
 
 - BugFix: P2P payments should work again
