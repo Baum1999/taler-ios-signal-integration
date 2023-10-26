@@ -7,8 +7,10 @@ import taler_swift
 
 struct ThreeAmountsSheet: View {
     var common: TransactionCommon
+    var topAbbrev: String
     var topTitle: String
     var bottomTitle: String?
+    var bottomAbbrev: String?
     let baseURL: String?
     let large: Bool               // set to false for QR or IBAN
 
@@ -22,8 +24,13 @@ struct ThreeAmountsSheet: View {
         let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending amount to obtain:")
                                                      : String(localized: "Obtained amount:") )
                                           :            String(localized: "Paid amount:")
-        ThreeAmountsView(topTitle: topTitle, topAmount: raw, fee: fee,
-                      bottomTitle: bottomTitle ?? defaultBottomTitle, bottomAmount: effective,
+        let defaultBottomAbbre = incoming ? (pending ? String(localized: "Pending:")
+                                                     : String(localized: "Obtained:") )
+                                          :            String(localized: "Paid:")
+        ThreeAmountsView(topTitle: topTitle, topAbbrev: topAbbrev, topAmount: raw, fee: fee,
+                      bottomTitle: bottomTitle ?? defaultBottomTitle,
+                     bottomAbbrev: bottomAbbrev ?? defaultBottomAbbre,
+                     bottomAmount: effective,
                             large: large, pending: pending, incoming: incoming,
                           baseURL: baseURL,
                            status: common.txState.major.localizedState)
@@ -32,9 +39,11 @@ struct ThreeAmountsSheet: View {
 // MARK: -
 struct ThreeAmountsView: View {
     var topTitle: String
+    var topAbbrev: String
     var topAmount: Amount
     var fee: Amount?
     var bottomTitle: String
+    var bottomAbbrev: String
     var bottomAmount: Amount
     let large: Bool
     let pending: Bool
@@ -42,30 +51,33 @@ struct ThreeAmountsView: View {
     let baseURL: String?
     var status: String?
 
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+    
     var body: some View {
         let labelColor = Color(UIColor.label)
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
         Section {
-            AmountView(title: topTitle,
+            AmountView(title: iconOnly ? topAbbrev : topTitle,
                        value: topAmount.readableDescription,
                        color: labelColor,
                        large: large)
                 .padding(.bottom, 4)
             if let fee {
-                AmountView(title: String(localized: "Exchange fee:"),
+                AmountView(title: iconOnly ? String(localized: "Fee:")
+                                           : String(localized: "Exchange fee:"),
                            value: fee.readableDescription,
                            color: labelColor,
                            large: false)
                 .padding(.bottom, 4)
             }
-            AmountView(title: bottomTitle,
+            AmountView(title: iconOnly ? bottomAbbrev : bottomTitle,
                        value: bottomAmount.readableDescription,
                        color: foreColor,
                        large: large)
             if let baseURL {
                 VStack(alignment: .leading) {
-                    Text("Using Exchange:")
+                    Text(iconOnly ? "Exchange:" : "Using Exchange:")
                         .multilineTextAlignment(.leading)
                         .accessibilityFont(.body)
                     HStack {
@@ -80,6 +92,11 @@ struct ThreeAmountsView: View {
                 .padding(.top, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)
+            }
+        } header: {
+            if !iconOnly {
+                Text("Summary")
+                    .accessibilityFont(.title3)
             }
         }
     }
@@ -96,7 +113,8 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                   txActions: [])
         Group {
             List {
-                ThreeAmountsSheet(common: common, topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==0)
+                ThreeAmountsSheet(common: common, topAbbrev: "Withdrawal",
+                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==0)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))

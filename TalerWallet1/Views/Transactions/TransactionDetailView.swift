@@ -188,6 +188,7 @@ struct TransactionDetailView: View {
     struct SwitchCase: View {
         @Binding var transaction: Transaction
         let hasDone: Bool
+        @AppStorage("iconOnly") var iconOnly: Bool = false
 
         var body: some View {
             let common = transaction.common
@@ -211,10 +212,12 @@ struct TransactionDetailView: View {
                                         if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                             if let destination = URL(string: confirmationUrl) {
                                                 VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
-                                                    Text("Waiting for bank confirmation")
-                                                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                                                        .multilineTextAlignment(.leading)                   // otherwise
-                                                        .listRowSeparator(.hidden)
+                                                    if !iconOnly {
+                                                        Text("Waiting for bank confirmation")
+                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                                                            .multilineTextAlignment(.leading)                   // otherwise
+                                                            .listRowSeparator(.hidden)
+                                                    }
                                                     Link("Confirm with bank", destination: destination)
                                                         .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
                                                         .padding(.horizontal)                                                    
@@ -224,7 +227,8 @@ struct TransactionDetailView: View {
                                     }
                             }
                         } // ManualDetails or Confirm with bank
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Chosen amount to withdraw:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:"),
+                                        topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: details.exchangeBaseUrl, large: false)
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
@@ -232,19 +236,23 @@ struct TransactionDetailView: View {
                             .accessibilityFont(.title2)
                             .lineLimit(4)
                             .padding(.bottom)
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Sum to be paid:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
+                                        topTitle: String(localized: "Sum to be paid:"),
                                          baseURL: nil, large: true)     // TODO: baseURL
                     case .refund(let refundTransaction):
                         let details = refundTransaction.details                 // TODO: more details
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Refunded amount:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:"),
+                                        topTitle: String(localized: "Refunded amount:"),
                                          baseURL: nil, large: true)     // TODO: baseURL
                     case .reward(let rewardTransaction):
                         let details = rewardTransaction.details                 // TODO: more details
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Received Reward:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:"),
+                                        topTitle: String(localized: "Received Reward:"),
                                          baseURL: details.exchangeBaseUrl, large: true)
                     case .refresh(let refreshTransaction):
                         let details = refreshTransaction.details                // TODO: details
-                        ThreeAmountsSheet(common: common, topTitle: String(localized: "Refreshed amount:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:"),
+                                        topTitle: String(localized: "Refreshed amount:"),
                                          baseURL: nil, large: true)     // TODO: baseURL
                     case .peer2peer(let p2pTransaction):
                         let details = p2pTransaction.details                    // TODO: details
@@ -262,7 +270,8 @@ struct TransactionDetailView: View {
                                     .padding(.top)
                             }
                         }
-                        ThreeAmountsSheet(common: common, topTitle: transaction.localizedType,
+                        ThreeAmountsSheet(common: common, topAbbrev: transaction.localizedType,
+                                        topTitle: transaction.localizedType,
                                          baseURL: details.exchangeBaseUrl, large: false)
                 } // switch
             } // Group

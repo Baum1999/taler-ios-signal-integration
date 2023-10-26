@@ -56,25 +56,30 @@ struct PayTemplateView: View {
                 let raw = preparePayResult.amountRaw
                 let currency = raw.currencyStr
                 let topTitle = String(localized: "Amount to pay:")
+                let topAbbrev = String(localized: "Pay:")
                 if let effective {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     ThreeAmountsView(topTitle: topTitle,
-                                     topAmount: raw, fee: fee,
-                                     bottomTitle: String(localized: "\(currency) to be spent:"),
-                                     bottomAmount: effective,
-                                     large: false, pending: false, incoming: false,
-                                     baseURL: baseURL)
+                                    topAbbrev: topAbbrev,
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "Amount to be spent:"),
+                                 bottomAbbrev: String(localized: "Effective:"),
+                                 bottomAmount: effective,
+                                        large: false, pending: false, incoming: false,
+                                      baseURL: baseURL)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
                         .accessibilityFont(.body)
                     ThreeAmountsView(topTitle: topTitle,
-                                     topAmount: raw, fee: nil,
-                                     bottomTitle: String(localized: "\(currency) available:"),
-                                     bottomAmount: balanceDetails.balanceAvailable,
-                                     large: false, pending: false, incoming: false,
-                                     baseURL: baseURL)
+                                    topAbbrev: topAbbrev,
+                                    topAmount: raw, fee: nil,
+                                  bottomTitle: String(localized: "Amount available:"),
+                                 bottomAbbrev: String(localized: "Available:"),
+                                 bottomAmount: balanceDetails.balanceAvailable,
+                                        large: false, pending: false, incoming: false,
+                                      baseURL: baseURL)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")

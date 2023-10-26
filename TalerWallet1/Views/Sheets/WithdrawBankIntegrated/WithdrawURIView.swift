@@ -37,8 +37,10 @@ struct WithdrawURIView: View {
                     let inColor = WalletColors().transactionColor(true)
 
                     ThreeAmountsView(topTitle: String(localized: "Chosen amount to withdraw:"),
+                                    topAbbrev: String(localized: "Chosen:"),
                                     topAmount: raw, fee: fee,
-                                  bottomTitle: String(localized: "\(currency) to be withdrawn:"),
+                                  bottomTitle: String(localized: "Amount to be withdrawn:"),
+                                 bottomAbbrev: String(localized: "Effective:"),
                                  bottomAmount: effective,
                                         large: false, pending: false, incoming: true,
                                       baseURL: exchangeBaseUrl)
