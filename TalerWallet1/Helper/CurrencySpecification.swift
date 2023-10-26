@@ -27,6 +27,15 @@ public struct CurrencyInfo {
         }
     }
 
+    func symbol() -> String? {
+        if formatter.hasAltUnitName0 {
+            if let symbol = specs.altUnitNames?[0] {
+                return symbol
+            }
+        }
+        return nil
+    }
+
     func string(for valueTuple: (Double, Double), useSymbol: Bool = true) -> String {
         formatter.setUseSymbol(useSymbol)
         let (integer, fraction) = valueTuple
@@ -70,10 +79,8 @@ public struct CurrencyInfo {
         // we need to format ourselves
         var currencyName = scope.currency
         if useSymbol {
-            if formatter.hasAltUnitName0 {
-                if let symbol = specs.altUnitNames?[0] {
-                    currencyName = symbol
-                }
+            if let symbol = symbol() {
+                currencyName = symbol
             }
         }
         var madeUpStr = currencyName + " " + String(integer)
