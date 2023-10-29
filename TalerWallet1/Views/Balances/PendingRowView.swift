@@ -19,13 +19,13 @@ struct InOrOutView: View {
         let imageWidth = image2.widthOfString(usingUIFont: imageFont) + 8.0     //.padding(.trailing)
         let title1Width = title1.widthOfString(usingUIFont: uiFont)
         let title2Width = title2.widthOfString(usingUIFont: uiFont)
-//    print("image: ", imageWidth, " title: ", max(title1Width, title2Width))
+    print("image: ", imageWidth, " title: ", max(title1Width, title2Width))
         return imageWidth + max(title1Width, title2Width)
     }
 
     var body: some View {
         let (title1, title2) = title
-        HStack(spacing: 0) {
+        HStack(spacing: 5) {
             let pendingColor = WalletColors().pendingColor(incoming)
             Image(systemName: imageName)
                 .foregroundColor(pendingColor)
@@ -46,9 +46,9 @@ struct PendingAmountView: View {
     let incoming: Bool
 
     public static func amountStr(amount: Amount, currencyInfo: CurrencyInfo?, incoming: Bool) -> String {
-        let sign = incoming ? "+ " : "- "
+//        let sign = incoming ? "+ " : "- "
         let amountStr = currencyInfo?.string(for: amount.valueAsTuple)
-        return sign + (amountStr ?? amount.valueStr)
+        return /*sign +*/ (amountStr ?? amount.valueStr)
     }
     
     public static func width(amount: Amount, currencyInfo: CurrencyInfo?, incoming: Bool) -> CGFloat {
@@ -105,8 +105,8 @@ struct PendingRowView: View {
     }
 
     var body: some View {
-        let imageName = incoming ? "text.badge.plus"
-                                 : "text.badge.minus"
+        let imageName = incoming ? "plus.circle.fill"
+                                 : "minus.circle.fill"
         let imageStr = String("\(Image(systemName: imageName))")
         SingleAxisGeometryReader { width in
             Group {

@@ -53,13 +53,14 @@ struct ExchangeRowView: View {
             Group {
                 let uiFont = TalerFont.uiFont(.title3)
                 let titles = [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
-                let sendTitle = depositTitle + "\n" + currency                          // TODO:  amount.currencyStr
-                let recvTitle = withdrawTitle + "\n" + currency                         // TODO:  amount.currencyStr
-                let twoRowButtons = TwoRowButtons(sendTitle: sendTitle, recvTitle: recvTitle,
-                                                  lineLimit: 5, sendDisabled: true,     // TODO: amount.isZero
-                                                 sendAction: { selectAndUpdate(1) },
-                                                 recvAction: { selectAndUpdate(2) })
-                if Self.needVStack(titles, width: width, correctForSize: 1.0, spacing: HSPACING + 4) {
+                let needVStack = Self.needVStack(titles, width: width, sizeCategory: sizeCategory, padding: 10)
+                let twoRowButtons = TwoRowButtons(sendTitles: (depositTitle, currency),     // TODO:  amount.currencyStr
+                                                  recvTitles: (withdrawTitle, currency),    // TODO:  amount.currencyStr
+                                                  horizontal: needVStack,
+                                                   lineLimit: 5, sendDisabled: true,         // TODO: amount.isZero
+                                                  sendAction: { selectAndUpdate(1) },
+                                                  recvAction: { selectAndUpdate(2) })
+                if needVStack {
                     VStack { twoRowButtons }
                 } else {
                     HStack(spacing: HSPACING) { twoRowButtons }

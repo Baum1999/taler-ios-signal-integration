@@ -6,8 +6,9 @@ import SwiftUI
 import taler_swift
 
 struct TwoRowButtons: View {
-    let sendTitle: String
-    let recvTitle: String
+    let sendTitles: (String, String)
+    let recvTitles: (String, String)
+    let horizontal:Bool
     let lineLimit: Int
     let sendDisabled: Bool
     let sendAction: () -> Void
@@ -15,14 +16,17 @@ struct TwoRowButtons: View {
     @Environment(\.sizeCategory) var sizeCategory
 
     var body: some View {
+        let delimiter = horizontal ? " " : "\n"
+        let (sendTitle1, sendTitle2) = sendTitles
+        let (recvTitle1, recvTitle2) = recvTitles
         Group {
-            Button(sendTitle, action: sendAction)
+            Button(sendTitle1 + delimiter + sendTitle2, action: sendAction)
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
                                             dimmed: false,
                                            aligned: .center))
-            Button(recvTitle, action: recvAction)
+            Button(recvTitle1 + delimiter + recvTitle2, action: recvAction)
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
@@ -35,13 +39,15 @@ struct TwoRowButtons: View {
 struct TwoRowButtons_Previews: PreviewProvider {
     static var previews: some View {
         List {
-                TwoRowButtons(sendTitle: "Send\n" + TESTCURRENCY,
-                              recvTitle: "Receive\n" + LONGCURRENCY,
+                TwoRowButtons(sendTitles: ("Send", TESTCURRENCY),
+                              recvTitles: ("Receive", LONGCURRENCY),
+                             horizontal: true,
                               lineLimit: 2, sendDisabled: true,
                              sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
-                TwoRowButtons(sendTitle: "Send\n" + DEMOCURRENCY,
-                              recvTitle: "Receive\n" + DEMOCURRENCY,
+                TwoRowButtons(sendTitles: ("Send", DEMOCURRENCY),
+                              recvTitles: ("Receive", DEMOCURRENCY),
+                             horizontal: true,
                               lineLimit: 2, sendDisabled: true,
                              sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
