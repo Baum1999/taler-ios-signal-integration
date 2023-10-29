@@ -11,6 +11,7 @@ struct ExchangeRowView: View {
 //    let amount: Amount
     let currency: String
     @Binding var centsToTransfer: UInt64
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @Environment(\.sizeCategory) var sizeCategory
     @State private var buttonSelected: Int? = nil
@@ -52,11 +53,13 @@ struct ExchangeRowView: View {
         SingleAxisGeometryReader { width in
             Group {
                 let uiFont = TalerFont.uiFont(.title3)
-                let titles = [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
+                let titles = iconOnly ? [(depositTitle, uiFont), (withdrawTitle, uiFont)]
+                                      : [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
                 let needVStack = Self.needVStack(titles, width: width, sizeCategory: sizeCategory, padding: 10)
-                let twoRowButtons = TwoRowButtons(sendTitles: (depositTitle, currency),     // TODO:  amount.currencyStr
-                                                  recvTitles: (withdrawTitle, currency),    // TODO:  amount.currencyStr
-                                                  horizontal: needVStack,
+                                                                                    // TODO:  amount.currencyStr
+                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (depositTitle, nil)  : (depositTitle, currency),
+                                                  recvTitles: iconOnly ? (withdrawTitle, nil) : (withdrawTitle, currency),
+                                                isHorizontal: needVStack,
                                                    lineLimit: 5, sendDisabled: true,         // TODO: amount.isZero
                                                   sendAction: { selectAndUpdate(1) },
                                                   recvAction: { selectAndUpdate(2) })

@@ -22,6 +22,7 @@ struct BalancesSectionView {
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
 
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
 
@@ -150,8 +151,10 @@ extension BalancesSectionView: View {
                                transactions: threeTransactions,
                             reloadOneAction: reloadOneAction)
             } header: {
-                Text("Recent transactions")
-                    .accessibilityFont(.callout)
+                if !iconOnly {
+                    Text("Recent transactions")
+                        .accessibilityFont(.callout)
+                }
             }
         }
     } // body

@@ -22,7 +22,8 @@ struct BalanceButton: View {
                     let needVStack = !iconOnly && Self.needVStack(titles, width: width,
                                                                   sizeCategory: sizeCategory,
                                                                   padding: 20, sameSize: false)
-                    AmountRowV(amountStr: amountStr, largeAmountFont: true, fitsHorizontal: !needVStack) {
+                    AmountRowV(amountStr: amountStr, largeAmountFont: true,
+                               fitsHorizontal: !needVStack) {
                         Text(iconOnly ? "" : balanceTitle)
                             .accessibilityFont(.title2)
                             .foregroundColor(.secondary)
@@ -38,7 +39,8 @@ struct BalanceButton: View {
 
 
 /// This view shows the currency row in a currency section
-/// [Send Coins]  [Receive Coins]     Balance
+///  Balance:                          amount
+/// [Send Money]  [Request Payment]
 struct BalanceRowView: View {
     let amount: Amount
     let currencyInfo: CurrencyInfo?
@@ -46,10 +48,13 @@ struct BalanceRowView: View {
     let recvAction: () -> Void
     let rowAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    let sendTitle0 = String(localized: "Send", comment: "Abbreviation <Send Money>")
     let sendTitle1 = String(localized: "Send", comment: "Top of button <Send Money>")
     let sendTitle2 = String(localized: "Money", comment: "Bottom of button <Send Money>")
+    let requestTitle0 = String(localized: "Request", comment: "Abbreviation <Request Payment>")
     let requestTitle1 = String(localized: "Request", comment: "Top of button <Request Payment>")
     let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
@@ -62,11 +67,12 @@ struct BalanceRowView: View {
                               sizeCategory: sizeCategory,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
-                let titles = [(requestTitle1, uiFont), (requestTitle2, uiFont), (sendTitle1, uiFont), (sendTitle2, uiFont)]
+                let titles = iconOnly ? [(sendTitle0, uiFont), (requestTitle0, uiFont)]
+                           : [(sendTitle1, uiFont), (sendTitle2, uiFont), (requestTitle1, uiFont), (requestTitle2, uiFont)]
                 let needVStack = Self.needVStack(titles, width: width, sizeCategory: sizeCategory, padding: 10)
-                let twoRowButtons = TwoRowButtons(sendTitles: (sendTitle1, sendTitle2),
-                                                  recvTitles: (requestTitle1, requestTitle2),
-                                                  horizontal: needVStack,
+                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (sendTitle0, nil) : (sendTitle1, sendTitle2),
+                                                  recvTitles: iconOnly ? (requestTitle0, nil) : (requestTitle1, requestTitle2),
+                                                isHorizontal: needVStack,
                                                    lineLimit: 5, sendDisabled: amount.isZero,
                                                   sendAction: sendAction,
                                                   recvAction: recvAction)
