@@ -57,8 +57,8 @@ struct BalanceRowView: View {
         let correctForSize = Self.correctForSize(sizeCategory)
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
-                let amountStr = currencyInfo?.string(for: amount.valueAsTuple)
-                BalanceButton(amountStr: amountStr ?? amount.valueStr,
+                let amountStr = amount.string(currencyInfo)
+                BalanceButton(amountStr: amountStr,
                               sizeCategory: sizeCategory,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
@@ -88,8 +88,8 @@ struct SomeBalanceRows: View {
         let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
         let demo = try! Amount(fromString: DEMOCURRENCY + ":123.12")
-        let testStr = testInfo.string(for: test.valueAsTuple)
-        let demoStr = demoInfo.string(for: demo.valueAsTuple)
+//        let testStr = test.string(testInfo)
+//        let demoStr = demo.string(demoInfo)
 
         List {
             Section {

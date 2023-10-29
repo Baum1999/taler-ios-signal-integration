@@ -5,6 +5,16 @@
 import Foundation
 import taler_swift
 
+extension Amount {
+    func string(_ currencyInfo: CurrencyInfo?) -> String {
+        if let currencyInfo {
+            return currencyInfo.string(for: valueAsTuple)
+        } else {
+            return valueStr
+        }
+    }
+}
+
 public struct CurrencyInfo {
     let scope: ScopeInfo
     let specs: CurrencySpecification

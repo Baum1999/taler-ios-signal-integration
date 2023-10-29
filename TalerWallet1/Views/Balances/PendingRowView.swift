@@ -45,14 +45,8 @@ struct PendingAmountView: View {
     let currencyInfo: CurrencyInfo?
     let incoming: Bool
 
-    public static func amountStr(amount: Amount, currencyInfo: CurrencyInfo?, incoming: Bool) -> String {
-//        let sign = incoming ? "+ " : "- "
-        let amountStr = currencyInfo?.string(for: amount.valueAsTuple)
-        return /*sign +*/ (amountStr ?? amount.valueStr)
-    }
-    
     public static func width(amount: Amount, currencyInfo: CurrencyInfo?, incoming: Bool) -> CGFloat {
-        let valueStr = Self.amountStr(amount: amount, currencyInfo: currencyInfo, incoming: incoming)
+        let valueStr = amount.string(currencyInfo)
         let uiFont = TalerFont.uiFont(.title)
         let width = valueStr.widthOfString(usingUIFont: uiFont)
 //    print("Amount width: ", width)
@@ -61,7 +55,7 @@ struct PendingAmountView: View {
 
     var body: some View {
         let pendingColor = WalletColors().pendingColor(incoming)
-        let valueStr = Self.amountStr(amount: amount, currencyInfo: currencyInfo, incoming: incoming)
+        let valueStr = amount.string(currencyInfo)
         Text(valueStr)
             .foregroundColor(pendingColor)
             .accessibilityFont(.title)

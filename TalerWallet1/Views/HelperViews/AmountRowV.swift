@@ -49,8 +49,8 @@ struct SectionWithAmountRow: View {
         let demoInfo = PreviewCurrencyInfo(DEMOCURRENCY, digits: 2)
         let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
         let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.12")
-        let testStr = testInfo.string(for: test.valueAsTuple)
-        let demoStr = demoInfo.string(for: demo.valueAsTuple)
+        let testStr = test.string(testInfo)
+        let demoStr = demo.string(demoInfo)
         List {
             Section {
                 AmountRowV(amountStr: demoStr, largeAmountFont: true, fitsHorizontal: true) {
