@@ -5,18 +5,17 @@
 import SwiftUI
 import taler_swift
 
-struct InOrOutView: View {
+struct PendingRowContentV: View {
     let titles: (String, String?)
     let isHorizontal: Bool
     let incoming: Bool
-    let imageName: String
 
-    public static func width(image1: String, titles: (String, String?), isHorizontal: Bool) -> CGFloat {
+    public static func width(titles: (String, String?), isHorizontal: Bool) -> CGFloat {
         let imageFont = TalerFont.uiFont(.largeTitle)
         let uiFont = TalerFont.uiFont(.body)
 
-        let image2 = "++"
-        let imageWidth = image2.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
+        let image = "++"
+        let imageWidth = image.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
         let (title1, title2) = titles
         let title1Width = title1.widthOfString(usingUIFont: uiFont)
         var title2Width = 0.0
@@ -29,16 +28,20 @@ struct InOrOutView: View {
 
 //    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
 //    print(logStr)
-        return imageWidth + max(title1Width, title2Width)
+        return imageWidth + (isHorizontal ? totalWidth
+                                          : max(title1Width, title2Width))
     }
 
     var body: some View {
+        let pendingColor = WalletColors().pendingColor(incoming)
+        let imageName = incoming ? "plus.circle"
+                                 : "minus.circle"
         HStack(spacing: 8) {
-            let pendingColor = WalletColors().pendingColor(incoming)
             Image(systemName: imageName)
                 .foregroundColor(pendingColor)
                 .accessibilityFont(.largeTitle)
                 .accessibility(hidden: true)
+
             Text(title(titles, isHorizontal))
                 .lineLimit(4)
                 .accessibilityFont(.body)
@@ -61,14 +64,11 @@ struct PendingRowView: View {
     let outTitle1 = String(localized: "Pending", comment: "Top of line <Pending outgoing>")
     let outTitle2 = String(localized: "outgoing", comment: "Bottom of line <pending outgoing>")
 
-    func needVStack(available: CGFloat, inOrOutWidth: CGFloat, valueWidth: CGFloat) -> Bool {
-        available < (inOrOutWidth + valueWidth + 40)
+    func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
+        available < (contentWidth + valueWidth + 40)
     }
 
     var body: some View {
-        let imageName = incoming ? "plus.circle"        // .fill
-                                 : "minus.circle"       // .fill
-        let imageStr = String("\(Image(systemName: imageName))")
         let pendingColor = WalletColors().pendingColor(incoming)
         SingleAxisGeometryReader { width in
             Group {
@@ -80,15 +80,14 @@ struct PendingRowView: View {
                                         : (outTitle1, outTitle2)
                 let title = incoming ? inTitle
                                      : outTitle
-                let inOrOutWidth = InOrOutView.width(image1: imageStr,
-                                                     titles: incoming ? inTitle : outTitle,
-                                                     isHorizontal: true)
+                let contentWidth = PendingRowContentV.width(titles: incoming ? inTitle : outTitle,
+                                                      isHorizontal: true)
 
-                let needVStack = needVStack(available: width, inOrOutWidth: inOrOutWidth, valueWidth: amountWidth)
+                let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
                 AmountRowV(amountStr: amountStr, amountColor: pendingColor, largeAmountFont: false,
                            fitsHorizontal: !needVStack, vertAlignment: .center) {
                     // isHorizontal=true to try to fit "- Pending outgoing" + amount in 1 line
-                    InOrOutView(titles: title, isHorizontal: true, incoming: incoming, imageName: imageName)
+                    PendingRowContentV(titles: title, isHorizontal: true, incoming: incoming)
                 }
             }
         }

@@ -73,7 +73,8 @@ extension BalancesSectionView: View {
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
-                Text("You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send them to another wallet.")
+                Text(iconOnly ? "Visit the [Demo Shop](https://shop.demo.taler.net)" :
+                        "You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send them to another wallet.")
                     .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
             }
@@ -102,7 +103,7 @@ extension BalancesSectionView: View {
                     LazyView {
                         TransactionsListView(stack: stack.push(),
                                           navTitle: String(localized: "Uncompleted"),
-                                          currency: currency,
+                                      currencyInfo: currencyInfo,
                                       transactions: uncompletedTransactions,
                                         showUpDown: false,
                                    reloadAllAction: reloadUncompleted,
@@ -147,7 +148,7 @@ extension BalancesSectionView: View {
                 let threeTransactions = Array(slice)
                 TransactionsRowsView(symLog: symLog,
                                       stack: stack.push(),
-                                   currency: currency,
+                               currencyInfo: currencyInfo,
                                transactions: threeTransactions,
                             reloadOneAction: reloadOneAction)
             } header: {
@@ -199,7 +200,7 @@ fileprivate struct BalancesPendingRowView: View {
             LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Pending"),
-                                  currency: currency,
+                              currencyInfo: currencyInfo,
                               transactions: pendingTransactions,
                                 showUpDown: false,
                            reloadAllAction: reloadPending,
@@ -274,7 +275,7 @@ fileprivate struct BalancesNavigationLinksView: View {
             NavigationLink(destination: LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Transactions"),
-                                  currency: currency,
+                              currencyInfo: currencyInfo,
                               transactions: completedTransactions,
                                 showUpDown: true,
                            reloadAllAction: reloadAllAction,

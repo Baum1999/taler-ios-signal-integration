@@ -5,24 +5,64 @@
 import SwiftUI
 import taler_swift
 
-struct TransactionRowCenter: View {
+struct TransactionRowContentV: View {
     var centerTop: String
     var centerBottom: String
+    let isHorizontal: Bool
+    let incoming: Bool
+    let foreColor:Color
+
+    public static func width(titles: (String, String?), isHorizontal: Bool) -> CGFloat {
+        let imageFont = TalerFont.uiFont(.largeTitle)
+        let uiFont1 = TalerFont.uiFont(.headline)
+        let uiFont2 = TalerFont.uiFont(.callout)
+
+        let image = "++"
+        let imageWidth = image.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
+        let (title1, title2) = titles
+        let title1Width = title1.widthOfString(usingUIFont: uiFont1)
+        var title2Width = 0.0
+        var totalWidth = title1Width
+        if let title2 {
+            title2Width = title2.widthOfString(usingUIFont: uiFont2)
+            let blankStr = " "
+            totalWidth += blankStr.widthOfString(usingUIFont: uiFont1) + title2Width
+        }
+
+//    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
+//    print(logStr)
+        return imageWidth + (isHorizontal ? totalWidth
+                                          : max(title1Width, title2Width))
+    }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(centerTop)
-                .accessibilityFont(.headline)
-//                .fontWeight(.medium)      iOS 16
-                .padding(.bottom, -2.0)
-            Text(centerBottom)
-                .accessibilityFont(.callout)
+        let imageName = incoming ? "plus.circle.fill"
+                                 : "minus.circle.fill"
+        HStack(spacing: 8) {
+            Image(systemName: imageName)
+                .foregroundColor(foreColor)
+                .accessibilityFont(.largeTitle)
+                .accessibility(hidden: true)
+
+            VStack(alignment: .leading) {
+                Text(centerTop)
+                    .accessibilityFont(.headline)
+//                  .fontWeight(.medium)      iOS 16
+                    .padding(.bottom, -2.0)
+                Text(centerBottom)
+                    .accessibilityFont(.callout)
+            }
         }
     }
 }
 
 struct TransactionRowView: View {
-    var transaction : Transaction
+    let transaction : Transaction
+    let currencyInfo: CurrencyInfo?
+
+    func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
+        available < (contentWidth + valueWidth + 40)
+    }
 
     var body: some View {
         let common = transaction.common
@@ -38,26 +78,23 @@ struct TransactionRowView: View {
                       : done ? WalletColors().transactionColor(incoming)
                              : WalletColors().uncompletedColor
 
-        HStack(spacing: 6) {
-            Image(systemName: incoming ? "text.badge.plus" : "text.badge.minus")
-                .foregroundColor(foreColor)
-                .accessibilityFont(.largeTitle)
-                .accessibility(hidden: true)
+        SingleAxisGeometryReader { width in
+            Group {
+                let amountStr = amount.string(currencyInfo)
+                let amountWidth = amountStr.width(largeAmountFont: false)
 
-            TransactionRowCenter(centerTop: transaction.localizedType,
-                                 centerBottom: dateString)
-            Spacer()
-            VStack(alignment: .trailing) {
-                let sign = incoming ? "+" : "-"
-                let valueStr = sign + amount.valueStr
-                Text(valueStr)
-                    .foregroundColor(foreColor)
-                    .accessibilityFont(.title)
-                    .monospacedDigit()
+                let contentWidth = PendingRowContentV.width(titles: (transaction.localizedType, dateString),
+                                                            isHorizontal: true)
+                let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
+
+                AmountRowV(amountStr: amountStr, amountColor: foreColor, largeAmountFont: false,
+                           fitsHorizontal: !needVStack, vertAlignment: .center) {
+
+                    TransactionRowContentV(centerTop: transaction.localizedType,
+                                           centerBottom: dateString, isHorizontal: true, incoming: incoming, foreColor: foreColor)
+                }
             }
         }
-        .accessibilityElement(children: .combine)
-        .padding(.top)
     }
 }
 // MARK: -
@@ -72,9 +109,13 @@ struct TransactionRow_Previews: PreviewProvider {
                                            id: "some payment ID",
                                          time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
+        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
+        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
+        let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
+        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
         List {
-            TransactionRowView(transaction: withdrawal)
-            TransactionRowView(transaction: payment)
+            TransactionRowView(transaction: withdrawal, currencyInfo: testInfo)
+            TransactionRowView(transaction: payment, currencyInfo: demoInfo)
         }
     }
 }

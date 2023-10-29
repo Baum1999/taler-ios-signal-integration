@@ -11,7 +11,7 @@ struct TransactionsListView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     let navTitle: String
 
-    let currency: String
+    let currencyInfo: CurrencyInfo?
     let transactions: [Transaction]
     let showUpDown: Bool
     let reloadAllAction: (_ stack: CallStack) async -> ()
@@ -30,7 +30,7 @@ struct TransactionsListView: View {
             List {
                 TransactionsRowsView(symLog: symLog,
                                       stack: stack.push(),
-                                   currency: currency,
+                               currencyInfo: currencyInfo,
                                transactions: transactions,
 //                          reloadAllAction: reloadAllAction,
                             reloadOneAction: reloadOneAction)
@@ -68,7 +68,8 @@ struct TransactionsListView: View {
         }
         .overlay {
             if transactions.isEmpty {
-                TransactionsEmptyView(stack: stack.push(), currency: currency)
+                let unknown = String(localized: "Unknown currency")
+                TransactionsEmptyView(stack: stack.push(), currency: currencyInfo?.scope.currency ?? unknown)
             }
         }
         .onAppear {
@@ -81,7 +82,7 @@ struct TransactionsListView: View {
 struct TransactionsRowsView: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currency: String
+    let currencyInfo: CurrencyInfo?
     let transactions: [Transaction]
 //  let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
@@ -112,7 +113,7 @@ struct TransactionsRowsView: View {
                                    resumeAction: resumeAction)
                 }
             } label: {
-                TransactionRowView(transaction: transaction)
+                TransactionRowView(transaction: transaction, currencyInfo: currencyInfo)
             }
             .id(Int(index))
         }
