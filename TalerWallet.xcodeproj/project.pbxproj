@@ -10,6 +10,8 @@
 		4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */; };
 		4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254952A822B8100E41D29 /* payment_received.m4a */; };
 		4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254962A822B8100E41D29 /* payment_sent.m4a */; };
+		4E2E5F7F2AEE30DA0027FA8A /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */; };
+		4E2E5F802AEE30DA0027FA8A /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */; };
 		4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */; };
 		4E3327BB2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */; };
 		4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */; };
@@ -296,6 +298,7 @@
 		4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencySpecification.swift; sourceTree = "<group>"; };
 		4E2254952A822B8100E41D29 /* payment_received.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_received.m4a; sourceTree = "<group>"; };
 		4E2254962A822B8100E41D29 /* payment_sent.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = payment_sent.m4a; sourceTree = "<group>"; };
+		4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountRowV.swift; sourceTree = "<group>"; };
 		4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncSemaphore.swift; sourceTree = "<group>"; };
 		4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+id+iban.swift"; sourceTree = "<group>"; };
 		4E363CBD2A23CB2100D7E98C /* AnyTransition+backslide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyTransition+backslide.swift"; sourceTree = "<group>"; };
@@ -734,6 +737,7 @@
 			isa = PBXGroup;
 			children = (
 				4E97968F2A3765ED006F73BC /* AgePicker.swift */,
+				4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */,
 				4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */,
 				4EB095472989CBFE0043A8A1 /* Buttons.swift */,
 				4EF840A62A0B85F400EE0D47 /* CopyShare.swift */,
@@ -1108,6 +1112,7 @@
 				4E3EAE592A990778009F1BE8 /* Model+Settings.swift in Sources */,
 				4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4E3EAE5A2A990778009F1BE8 /* ErrorView.swift in Sources */,
+				4E2E5F7F2AEE30DA0027FA8A /* AmountRowV.swift in Sources */,
 				4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */,
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
 				4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */,
@@ -1216,6 +1221,7 @@
 				4EB095152989CBB00043A8A1 /* Model+Settings.swift in Sources */,
 				4EC4008D2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */,
+				4E2E5F802AEE30DA0027FA8A /* AmountRowV.swift in Sources */,
 				4E3B4BC72A429F2A00CC88B8 /* View+Notification.swift in Sources */,
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
 				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,

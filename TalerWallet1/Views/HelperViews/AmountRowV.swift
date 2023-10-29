@@ -1,0 +1,82 @@
+/*
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
+ */
+import SwiftUI
+import taler_swift
+
+// calculate the width of the amountStr (with Font)
+// calculate the width of 'content' in compact form
+// if it fits side by side, then render HStack(content(compact), Spacer(), amountStr)
+// else render VStack(content(wide), HStack(Spacer(), amountStr))
+
+struct AmountRowV<Content: View>: View {
+    let amountStr: String
+    let largeAmountFont: Bool
+    let fitsHorizontal: Bool
+
+    var content: () -> Content
+
+    var body: some View {
+        if fitsHorizontal {
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                content()
+                Spacer(minLength: 0)
+                Text(amountStr)
+                    .accessibilityFont(largeAmountFont ? .title : .title2)
+                    .monospacedDigit()
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
+                content()
+                HStack {
+                    Spacer(minLength: 0)
+                    Text(amountStr)
+                        .accessibilityFont(largeAmountFont ? .title : .title2)
+                        .monospacedDigit()
+                }
+            }
+        }
+    }
+}
+// MARK: -
+#if  DEBUG
+
+struct SectionWithAmountRow: View {
+    @Environment(\.sizeCategory) var sizeCategory
+    var body: some View {
+        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
+        let demoInfo = PreviewCurrencyInfo(DEMOCURRENCY, digits: 2)
+        let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
+        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.12")
+        let testStr = testInfo.string(for: test.valueAsTuple)
+        let demoStr = demoInfo.string(for: demo.valueAsTuple)
+        List {
+            Section {
+                AmountRowV(amountStr: demoStr, largeAmountFont: true, fitsHorizontal: true) {
+                    Text("Balance")
+                        .accessibilityFont(.title2)
+                }
+                AmountRowV(amountStr: demoStr, largeAmountFont: true, fitsHorizontal: false) {
+                    Text("Balance")
+                        .accessibilityFont(.title2)
+                }
+            }
+            Section {
+                AmountRowV(amountStr: testStr, largeAmountFont: false, fitsHorizontal: true) {
+                    Text("Balance")
+                        .accessibilityFont(.title2)
+                }
+                AmountRowV(amountStr: testStr, largeAmountFont: false, fitsHorizontal: false) {
+                    Text("Balance")
+                        .accessibilityFont(.title2)
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    SectionWithAmountRow()
+}
+#endif
