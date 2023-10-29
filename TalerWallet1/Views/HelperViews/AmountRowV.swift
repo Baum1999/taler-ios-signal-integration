@@ -10,19 +10,30 @@ import taler_swift
 // if it fits side by side, then render HStack(content(compact), Spacer(), amountStr)
 // else render VStack(content(wide), HStack(Spacer(), amountStr))
 
+extension String {
+    public func width(largeAmountFont: Bool) -> CGFloat {
+        let uiFont = TalerFont.uiFont(largeAmountFont ? .title : .title2)
+        return widthOfString(usingUIFont: uiFont)
+    }
+}
+
 struct AmountRowV<Content: View>: View {
     let amountStr: String
+    let amountColor: Color
     let largeAmountFont: Bool
     let fitsHorizontal: Bool
+    let vertAlignment: VerticalAlignment
 
     var content: () -> Content
 
+
     var body: some View {
         if fitsHorizontal {
-            HStack(alignment: .lastTextBaseline, spacing: 0) {
+            HStack(alignment: vertAlignment, spacing: 0) {
                 content()
                 Spacer(minLength: 0)
                 Text(amountStr)
+                    .foregroundColor(amountColor)
                     .accessibilityFont(largeAmountFont ? .title : .title2)
                     .monospacedDigit()
             }
@@ -32,6 +43,7 @@ struct AmountRowV<Content: View>: View {
                 HStack {
                     Spacer(minLength: 0)
                     Text(amountStr)
+                        .foregroundColor(amountColor)
                         .accessibilityFont(largeAmountFont ? .title : .title2)
                         .monospacedDigit()
                 }
@@ -53,21 +65,25 @@ struct SectionWithAmountRow: View {
         let demoStr = demo.string(demoInfo)
         List {
             Section {
-                AmountRowV(amountStr: demoStr, largeAmountFont: true, fitsHorizontal: true) {
+                AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
+                           fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text("Balance")
                         .accessibilityFont(.title2)
                 }
-                AmountRowV(amountStr: demoStr, largeAmountFont: true, fitsHorizontal: false) {
+                AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
+                           fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text("Balance")
                         .accessibilityFont(.title2)
                 }
             }
             Section {
-                AmountRowV(amountStr: testStr, largeAmountFont: false, fitsHorizontal: true) {
+                AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
+                           fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text("Balance")
                         .accessibilityFont(.title2)
                 }
-                AmountRowV(amountStr: testStr, largeAmountFont: false, fitsHorizontal: false) {
+                AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
+                           fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text("Balance")
                         .accessibilityFont(.title2)
                 }

@@ -6,82 +6,45 @@ import SwiftUI
 import taler_swift
 
 struct InOrOutView: View {
-    let title: (String, String)
-    let horizontal: Bool
+    let titles: (String, String?)
+    let isHorizontal: Bool
     let incoming: Bool
     let imageName: String
 
-    public static func width(image1: String, title1: String, title2: String) -> CGFloat {
+    public static func width(image1: String, titles: (String, String?), isHorizontal: Bool) -> CGFloat {
         let imageFont = TalerFont.uiFont(.largeTitle)
         let uiFont = TalerFont.uiFont(.body)
 
         let image2 = "++"
-        let imageWidth = image2.widthOfString(usingUIFont: imageFont) + 8.0     //.padding(.trailing)
+        let imageWidth = image2.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
+        let (title1, title2) = titles
         let title1Width = title1.widthOfString(usingUIFont: uiFont)
-        let title2Width = title2.widthOfString(usingUIFont: uiFont)
-    print("image: ", imageWidth, " title: ", max(title1Width, title2Width))
+        var title2Width = 0.0
+        var totalWidth = title1Width
+        if let title2 {
+            title2Width = title2.widthOfString(usingUIFont: uiFont)
+            let totalStr = title1 + " " + title2
+            totalWidth = totalStr.widthOfString(usingUIFont: uiFont)
+        }
+
+//    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
+//    print(logStr)
         return imageWidth + max(title1Width, title2Width)
     }
 
     var body: some View {
-        let (title1, title2) = title
-        HStack(spacing: 5) {
+        HStack(spacing: 8) {
             let pendingColor = WalletColors().pendingColor(incoming)
             Image(systemName: imageName)
                 .foregroundColor(pendingColor)
                 .accessibilityFont(.largeTitle)
                 .accessibility(hidden: true)
-//                .padding(.trailing)
-            Text(horizontal ? (title1 + "\n" + title2)
-                            : (title1 + " " + title2))
-                .lineLimit(2)
+            Text(title(titles, isHorizontal))
+                .lineLimit(4)
                 .accessibilityFont(.body)
         }
     }
 }
-
-struct PendingAmountView: View {
-    let amount: Amount
-    let currencyInfo: CurrencyInfo?
-    let incoming: Bool
-
-    public static func width(amount: Amount, currencyInfo: CurrencyInfo?, incoming: Bool) -> CGFloat {
-        let valueStr = amount.string(currencyInfo)
-        let uiFont = TalerFont.uiFont(.title)
-        let width = valueStr.widthOfString(usingUIFont: uiFont)
-//    print("Amount width: ", width)
-        return width
-    }
-
-    var body: some View {
-        let pendingColor = WalletColors().pendingColor(incoming)
-        let valueStr = amount.string(currencyInfo)
-        Text(valueStr)
-            .foregroundColor(pendingColor)
-            .accessibilityFont(.title)
-            .monospacedDigit()
-    }
-}
-
-struct PendingLabel: View {
-    let amount: Amount
-    let currencyInfo: CurrencyInfo?
-    let incoming: Bool
-    let horizontal: Bool        // true: HStack{ image + pending Xcoming + amount }
-    let title: (String, String)
-    let imageName: String
-
-    var body: some View {
-        Group {         // can either be horizontal (preferred) or vertical (if doesn't fit horizontally)
-            InOrOutView(title: title, horizontal: horizontal, incoming: incoming, imageName: imageName)
-            if horizontal {     // Group is an HStack already => just add Spacer + Amount
-                Spacer(minLength: 0)
-                PendingAmountView(amount: amount, currencyInfo: currencyInfo, incoming: incoming)
-            } else {            // Group is a VStack => need HStack + Spacer to shift Amount to the trailing edge
-                HStack(spacing: 0) {
-                    Spacer(minLength: 0)
-                    PendingAmountView(amount: amount, currencyInfo: currencyInfo, incoming: incoming)
-}   }   }   }   }
 
 /// This view shows a pending transaction row in a currency section
 struct PendingRowView: View {
@@ -89,9 +52,13 @@ struct PendingRowView: View {
     let currencyInfo: CurrencyInfo?
     let incoming: Bool
 
-    let inTitle1 = String(localized: "pending", comment: "Top of line <pending incoming>")
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+
+    let inTitle0 = String(localized: "Incoming", comment: "Abbreviation <pending incoming>")
+    let inTitle1 = String(localized: "Pending", comment: "Top of line <Pending incoming>")
     let inTitle2 = String(localized: "incoming", comment: "Bottom of line <pending incoming>")
-    let outTitle1 = String(localized: "pending", comment: "Top of line <pending outgoing>")
+    let outTitle0 = String(localized: "Outgoing", comment: "Abbreviation <pending outgoing>")
+    let outTitle1 = String(localized: "Pending", comment: "Top of line <Pending outgoing>")
     let outTitle2 = String(localized: "outgoing", comment: "Bottom of line <pending outgoing>")
 
     func needVStack(available: CGFloat, inOrOutWidth: CGFloat, valueWidth: CGFloat) -> Bool {
@@ -99,35 +66,31 @@ struct PendingRowView: View {
     }
 
     var body: some View {
-        let imageName = incoming ? "plus.circle.fill"
-                                 : "minus.circle.fill"
+        let imageName = incoming ? "plus.circle"        // .fill
+                                 : "minus.circle"       // .fill
         let imageStr = String("\(Image(systemName: imageName))")
+        let pendingColor = WalletColors().pendingColor(incoming)
         SingleAxisGeometryReader { width in
             Group {
-                let title = incoming ? (inTitle1, inTitle2)
-                                     : (outTitle1, outTitle2)
+                let amountStr = amount.string(currencyInfo)
+                let amountWidth = amountStr.width(largeAmountFont: false)
+                let inTitle = iconOnly ? (inTitle0, nil)
+                                       : (inTitle1, inTitle2)
+                let outTitle = iconOnly ? (outTitle0, nil)
+                                        : (outTitle1, outTitle2)
+                let title = incoming ? inTitle
+                                     : outTitle
                 let inOrOutWidth = InOrOutView.width(image1: imageStr,
-                                                     title1: incoming ? inTitle1 : outTitle1,
-                                                     title2: incoming ? inTitle2 : outTitle2)
-                let valueWidth = PendingAmountView.width(amount: amount,
-                                                   currencyInfo: currencyInfo,
-                                                       incoming: incoming)
-//    let _ = print(width, " - ", inOrOutWidth + valueWidth, " = ", width - (inOrOutWidth + valueWidth))
-                if needVStack(available: width, inOrOutWidth: inOrOutWidth, valueWidth: valueWidth) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        PendingLabel(amount: amount, currencyInfo: currencyInfo,
-                                   incoming: incoming, horizontal: false,
-                                      title: title,     imageName: imageName)
-                    }
-                } else {
-                    HStack(spacing: 0) {
-                        PendingLabel(amount: amount, currencyInfo: currencyInfo,
-                                   incoming: incoming, horizontal: true,
-                                      title: title,     imageName: imageName)
-                    }
+                                                     titles: incoming ? inTitle : outTitle,
+                                                     isHorizontal: true)
+
+                let needVStack = needVStack(available: width, inOrOutWidth: inOrOutWidth, valueWidth: amountWidth)
+                AmountRowV(amountStr: amountStr, amountColor: pendingColor, largeAmountFont: false,
+                           fitsHorizontal: !needVStack, vertAlignment: .center) {
+                    // isHorizontal=true to try to fit "- Pending outgoing" + amount in 1 line
+                    InOrOutView(titles: title, isHorizontal: true, incoming: incoming, imageName: imageName)
                 }
             }
-            .accessibilityElement(children: .combine)
         }
     }
 }

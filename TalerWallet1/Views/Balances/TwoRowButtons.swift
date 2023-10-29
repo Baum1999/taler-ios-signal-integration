@@ -5,6 +5,17 @@
 import SwiftUI
 import taler_swift
 
+extension View {
+    func title(_ titles: (String, String?), _ horizontal: Bool) -> String {
+        let delimiter = horizontal ? " " : "\n"
+        let (title1, title2) = titles
+        if let title2 {
+            return title1 + delimiter + title2
+        } else {
+            return title1
+        }
+    }
+}
 struct TwoRowButtons: View {
     let sendTitles: (String, String?)
     let recvTitles: (String, String?)
@@ -15,15 +26,6 @@ struct TwoRowButtons: View {
     let recvAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
     
-    func title(_ titles: (String, String?), _ horizontal: Bool) -> String {
-        let delimiter = horizontal ? " " : "\n"
-        let (title1, title2) = titles
-        if let title2 {
-            return title1 + delimiter + title2
-        } else {
-            return title1
-        }
-    }
 
     var body: some View {
         Group {

@@ -22,8 +22,8 @@ struct BalanceButton: View {
                     let needVStack = !iconOnly && Self.needVStack(titles, width: width,
                                                                   sizeCategory: sizeCategory,
                                                                   padding: 20, sameSize: false)
-                    AmountRowV(amountStr: amountStr, largeAmountFont: true,
-                               fitsHorizontal: !needVStack) {
+                    AmountRowV(amountStr: amountStr, amountColor: .primary, largeAmountFont: true,
+                               fitsHorizontal: !needVStack, vertAlignment: .lastTextBaseline) {
                         Text(iconOnly ? "" : balanceTitle)
                             .accessibilityFont(.title2)
                             .foregroundColor(.secondary)
