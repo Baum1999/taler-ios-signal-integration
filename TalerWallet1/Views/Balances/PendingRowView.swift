@@ -34,8 +34,8 @@ struct PendingRowContentV: View {
 
     var body: some View {
         let pendingColor = WalletColors().pendingColor(incoming)
-        let imageName = incoming ? "plus.circle"
-                                 : "minus.circle"
+        let imageName = incoming ? "plus.diamond"       //  goforward.plus   circle
+                                 : "minus.diamond"      //
         HStack(spacing: 8) {
             Image(systemName: imageName)
                 .foregroundColor(pendingColor)
