@@ -49,8 +49,12 @@ extension String {
     func widthOfString(usingUIFont font: UIFont, _ sizeCategory: ContentSizeCategory) -> CGFloat {
         let width = widthOfString(usingUIFont: font)
         let correctForSize = correctForSize(sizeCategory)
-
         return width * correctForSize
+    }
+
+    public func width(largeAmountFont: Bool, _ sizeCategory: ContentSizeCategory) -> CGFloat {
+        let uiFont = TalerFont.uiFont(largeAmountFont ? .title : .title2)
+        return widthOfString(usingUIFont: uiFont, sizeCategory)
     }
 
     // This would be used like so:
@@ -59,6 +63,7 @@ extension String {
 
     ///
     fileprivate func correctForSize(_ sizeCategory: ContentSizeCategory) -> CGFloat {
+        // empirical values
         let corrValue = switch sizeCategory {
             case .extraSmall: 0.7
             case .small: 0.8
@@ -75,7 +80,7 @@ extension String {
             default: 1.0
         }
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            // empirical values
+            // directly return the empirical value
             return corrValue
         } else {
             // preview doesn't use ContentSizeCategory for widthOfString(usingUIFont)

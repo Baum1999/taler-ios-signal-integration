@@ -10,24 +10,25 @@ struct PendingRowContentV: View {
     let isHorizontal: Bool
     let incoming: Bool
 
-    public static func width(titles: (String, String?), isHorizontal: Bool) -> CGFloat {
+    public static func width(titles: (String, String?), isHorizontal: Bool,
+                             sizeCategory: ContentSizeCategory) -> CGFloat {
         let imageFont = TalerFont.uiFont(.largeTitle)
         let uiFont = TalerFont.uiFont(.body)
 
         let image = "++"
-        let imageWidth = image.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
+        let imageWidth = image.widthOfString(usingUIFont: imageFont, sizeCategory) + 8.0     // spacing: 8
         let (title1, title2) = titles
-        let title1Width = title1.widthOfString(usingUIFont: uiFont)
+        let title1Width = title1.widthOfString(usingUIFont: uiFont, sizeCategory)
         var title2Width = 0.0
         var totalWidth = title1Width
         if let title2 {
-            title2Width = title2.widthOfString(usingUIFont: uiFont)
+            title2Width = title2.widthOfString(usingUIFont: uiFont, sizeCategory)
             let totalStr = title1 + " " + title2
-            totalWidth = totalStr.widthOfString(usingUIFont: uiFont)
+            totalWidth = totalStr.widthOfString(usingUIFont: uiFont, sizeCategory)
         }
 
-//    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
-//    print(logStr)
+    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
+    print(logStr)
         return imageWidth + (isHorizontal ? totalWidth
                                           : max(title1Width, title2Width))
     }
@@ -55,6 +56,7 @@ struct PendingRowView: View {
     let currencyInfo: CurrencyInfo?
     let incoming: Bool
 
+    @Environment(\.sizeCategory) var sizeCategory
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     let inTitle0 = String(localized: "Incoming", comment: "Abbreviation <pending incoming>")
@@ -65,7 +67,12 @@ struct PendingRowView: View {
     let outTitle2 = String(localized: "outgoing", comment: "Bottom of line <pending outgoing>")
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
-        available < (contentWidth + valueWidth + 40)
+        if available > 20 {
+            let logStr = String(format: "available: %.2f   sum: %.2f = content: %.2f  + value: %.2f",
+                                available, contentWidth + valueWidth, contentWidth, valueWidth)
+            print(logStr)
+        }
+        return available < (contentWidth + valueWidth + 20)
     }
 
     var body: some View {
@@ -73,7 +80,7 @@ struct PendingRowView: View {
         SingleAxisGeometryReader { width in
             Group {
                 let amountStr = amount.string(currencyInfo)
-                let amountWidth = amountStr.width(largeAmountFont: false)
+                let amountWidth = amountStr.width(largeAmountFont: false, sizeCategory)
                 let inTitle = iconOnly ? (inTitle0, nil)
                                        : (inTitle1, inTitle2)
                 let outTitle = iconOnly ? (outTitle0, nil)
@@ -81,7 +88,7 @@ struct PendingRowView: View {
                 let title = incoming ? inTitle
                                      : outTitle
                 let contentWidth = PendingRowContentV.width(titles: incoming ? inTitle : outTitle,
-                                                      isHorizontal: true)
+                                                      isHorizontal: false, sizeCategory: sizeCategory)
 
                 let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
                 AmountRowV(amountStr: amountStr, amountColor: pendingColor, largeAmountFont: false,

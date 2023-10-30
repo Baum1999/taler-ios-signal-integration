@@ -10,13 +10,6 @@ import taler_swift
 // if it fits side by side, then render HStack(content(compact), Spacer(), amountStr)
 // else render VStack(content(wide), HStack(Spacer(), amountStr))
 
-extension String {
-    public func width(largeAmountFont: Bool) -> CGFloat {
-        let uiFont = TalerFont.uiFont(largeAmountFont ? .title : .title2)
-        return widthOfString(usingUIFont: uiFont)
-    }
-}
-
 struct AmountRowV<Content: View>: View {
     let amountStr: String
     let amountColor: Color

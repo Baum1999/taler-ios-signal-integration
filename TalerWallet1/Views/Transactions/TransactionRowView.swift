@@ -12,21 +12,22 @@ struct TransactionRowContentV: View {
     let incoming: Bool
     let foreColor:Color
 
-    public static func width(titles: (String, String?), isHorizontal: Bool) -> CGFloat {
+    public static func width(titles: (String, String?), isHorizontal: Bool,
+                             sizeCategory: ContentSizeCategory) -> CGFloat {
         let imageFont = TalerFont.uiFont(.largeTitle)
         let uiFont1 = TalerFont.uiFont(.headline)
         let uiFont2 = TalerFont.uiFont(.callout)
 
         let image = "++"
-        let imageWidth = image.widthOfString(usingUIFont: imageFont) + 8.0     // spacing: 8
+        let imageWidth = image.widthOfString(usingUIFont: imageFont, sizeCategory) + 8.0     // spacing: 8
         let (title1, title2) = titles
-        let title1Width = title1.widthOfString(usingUIFont: uiFont1)
+        let title1Width = title1.widthOfString(usingUIFont: uiFont1, sizeCategory)
         var title2Width = 0.0
         var totalWidth = title1Width
         if let title2 {
-            title2Width = title2.widthOfString(usingUIFont: uiFont2)
+            title2Width = title2.widthOfString(usingUIFont: uiFont2, sizeCategory)
             let blankStr = " "
-            totalWidth += blankStr.widthOfString(usingUIFont: uiFont1) + title2Width
+            totalWidth += blankStr.widthOfString(usingUIFont: uiFont1, sizeCategory) + title2Width
         }
 
 //    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
@@ -60,6 +61,8 @@ struct TransactionRowView: View {
     let transaction : Transaction
     let currencyInfo: CurrencyInfo?
 
+    @Environment(\.sizeCategory) var sizeCategory
+
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         available < (contentWidth + valueWidth + 40)
     }
@@ -81,10 +84,10 @@ struct TransactionRowView: View {
         SingleAxisGeometryReader { width in
             Group {
                 let amountStr = amount.string(currencyInfo)
-                let amountWidth = amountStr.width(largeAmountFont: false)
+                let amountWidth = amountStr.width(largeAmountFont: false, sizeCategory)
 
                 let contentWidth = TransactionRowContentV.width(titles: (transaction.localizedType, dateString),
-                                                            isHorizontal: false)
+                                                          isHorizontal: false, sizeCategory: sizeCategory)
                 let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
 
                 AmountRowV(amountStr: amountStr, amountColor: foreColor, largeAmountFont: false,
