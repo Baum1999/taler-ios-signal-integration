@@ -171,8 +171,8 @@
 		4E9796902A3765ED006F73BC /* AgePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E97968F2A3765ED006F73BC /* AgePicker.swift */; };
 		4E983C292ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */; };
 		4E983C2A2ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */; };
-		4E983C2C2ADC416800FA9CC5 /* View+needVStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+needVStack.swift */; };
-		4E983C2D2ADC416800FA9CC5 /* View+needVStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+needVStack.swift */; };
+		4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
+		4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
 		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
 		4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */; };
 		4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */; };
@@ -347,7 +347,7 @@
 		4E9320462A164BC700A87B0E /* PaymentPurpose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentPurpose.swift; sourceTree = "<group>"; };
 		4E97968F2A3765ED006F73BC /* AgePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgePicker.swift; sourceTree = "<group>"; };
 		4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleAxisGeometryReader.swift; sourceTree = "<group>"; };
-		4E983C2B2ADC416800FA9CC5 /* View+needVStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+needVStack.swift"; sourceTree = "<group>"; };
+		4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+fitsSideBySide.swift"; sourceTree = "<group>"; };
 		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
@@ -748,7 +748,7 @@
 				4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */,
 				4E6EDD862A363D8D0031D520 /* ListStyle.swift */,
 				4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */,
-				4E983C2B2ADC416800FA9CC5 /* View+needVStack.swift */,
+				4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */,
 				4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */,
 				4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */,
 				4EB095492989CBFE0043A8A1 /* AmountView.swift */,
@@ -1051,7 +1051,7 @@
 				4E3EAE252A990778009F1BE8 /* WithdrawAcceptDone.swift in Sources */,
 				4E3EAE262A990778009F1BE8 /* Transaction.swift in Sources */,
 				4E605DB72AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
-				4E983C2C2ADC416800FA9CC5 /* View+needVStack.swift in Sources */,
+				4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
 				4E3EAE272A990778009F1BE8 /* WalletColors.swift in Sources */,
 				4EC400892AE3E7E800DF72C7 /* AboutView.swift in Sources */,
 				4E3EAE282A990778009F1BE8 /* BalancesListView.swift in Sources */,
@@ -1160,7 +1160,7 @@
 				4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */,
 				4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */,
 				4E605DB82AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
-				4E983C2D2ADC416800FA9CC5 /* View+needVStack.swift in Sources */,
+				4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
 				4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */,
 				4EC4008A2AE3E7E800DF72C7 /* AboutView.swift in Sources */,
 				4EB0955D2989CBFE0043A8A1 /* BalancesListView.swift in Sources */,

@@ -15,15 +15,15 @@ struct BalanceButton: View {
     var body: some View {
         let balanceTitle = String(localized: "Balance:", comment: "Main view")
         Button(action: rowAction) {
-            SingleAxisGeometryReader { width in
+            SingleAxisGeometryReader { width in         // e.g. 301 instead of 313 => padding = 6
                 Group {
                     let titles = [(balanceTitle, TalerFont.uiFont(.title2)),
                                   (amountStr,    TalerFont.uiFont(.title))]
-                    let needVStack = !iconOnly && Self.needVStack(titles, width: width,
+                    let fitsSideBySide = iconOnly || Self.fitsSideBySide(titles, availableWidth: width,
                                                                   sizeCategory: sizeCategory,
                                                                   padding: 20, sameSize: false)
                     AmountRowV(amountStr: amountStr, amountColor: .primary, largeAmountFont: true,
-                               fitsHorizontal: !needVStack, vertAlignment: .lastTextBaseline) {
+                               fitsHorizontal: fitsSideBySide, vertAlignment: .lastTextBaseline) {
                         Text(iconOnly ? "" : balanceTitle)
                             .accessibilityFont(.title2)
                             .foregroundColor(.secondary)
@@ -38,8 +38,8 @@ struct BalanceButton: View {
 }
 
 
-/// This view shows the currency row in a currency section
-///  Balance:                          amount
+/// This view shows the currency row in a currency section, and two action buttons below
+///  Balance:               amount
 /// [Send Money]  [Request Payment]
 struct BalanceRowView: View {
     let amount: Amount
@@ -59,27 +59,27 @@ struct BalanceRowView: View {
     let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
 
     var body: some View {
-        let correctForSize = Self.correctForSize(sizeCategory)
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
                 let amountStr = amount.string(currencyInfo)
                 BalanceButton(amountStr: amountStr,
-                              sizeCategory: sizeCategory,
+                           sizeCategory: sizeCategory,
                               rowAction: rowAction)
                 let uiFont = TalerFont.uiFont(.title3)
                 let titles = iconOnly ? [(sendTitle0, uiFont), (requestTitle0, uiFont)]
                            : [(sendTitle1, uiFont), (sendTitle2, uiFont), (requestTitle1, uiFont), (requestTitle2, uiFont)]
-                let needVStack = Self.needVStack(titles, width: width, sizeCategory: sizeCategory, padding: 10)
+                let fitsSideBySide = Self.fitsSideBySide(titles, availableWidth: width, sizeCategory: sizeCategory, padding: 10)
                 let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (sendTitle0, nil) : (sendTitle1, sendTitle2),
                                                   recvTitles: iconOnly ? (requestTitle0, nil) : (requestTitle1, requestTitle2),
-                                                isHorizontal: needVStack,
-                                                   lineLimit: 5, sendDisabled: amount.isZero,
+                                              fitsSideBySide: fitsSideBySide,
+                                                   lineLimit: 5,
+                                                sendDisabled: amount.isZero,
                                                   sendAction: sendAction,
                                                   recvAction: recvAction)
-                if needVStack {
-                    VStack { twoRowButtons }
-                } else {
+                if fitsSideBySide {
                     HStack(spacing: HSPACING) { twoRowButtons }
+                } else {
+                    VStack { twoRowButtons }
                 }
             }
         }

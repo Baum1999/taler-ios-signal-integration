@@ -6,8 +6,8 @@ import SwiftUI
 import taler_swift
 
 extension View {
-    func title(_ titles: (String, String?), _ horizontal: Bool) -> String {
-        let delimiter = horizontal ? " " : "\n"
+    func title(_ titles: (String, String?), _ fitsSideBySide: Bool) -> String {
+        let delimiter = fitsSideBySide ? "\n" : " "
         let (title1, title2) = titles
         if let title2 {
             return title1 + delimiter + title2
@@ -19,7 +19,7 @@ extension View {
 struct TwoRowButtons: View {
     let sendTitles: (String, String?)
     let recvTitles: (String, String?)
-    let isHorizontal: Bool
+    let fitsSideBySide: Bool
     let lineLimit: Int
     let sendDisabled: Bool
     let sendAction: () -> Void
@@ -29,13 +29,13 @@ struct TwoRowButtons: View {
 
     var body: some View {
         Group {
-            Button(title(sendTitles, isHorizontal), action: sendAction)
+            Button(title(sendTitles, fitsSideBySide), action: sendAction)
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
                                             dimmed: false,
                                            aligned: .center))
-            Button(title(recvTitles, isHorizontal), action: recvAction)
+            Button(title(recvTitles, fitsSideBySide), action: recvAction)
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
@@ -50,13 +50,13 @@ struct TwoRowButtons_Previews: PreviewProvider {
         List {
                 TwoRowButtons(sendTitles: ("Send", TESTCURRENCY),
                               recvTitles: ("Receive", LONGCURRENCY),
-                            isHorizontal: true,
+                          fitsSideBySide: false,
                                lineLimit: 2, sendDisabled: true,
                               sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
                 TwoRowButtons(sendTitles: ("Send", DEMOCURRENCY),
                               recvTitles: ("Receive", DEMOCURRENCY),
-                            isHorizontal: true,
+                          fitsSideBySide: true,
                                lineLimit: 2, sendDisabled: true,
                               sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)

@@ -83,8 +83,8 @@ struct TransactionRowView: View {
                 let amountStr = amount.string(currencyInfo)
                 let amountWidth = amountStr.width(largeAmountFont: false)
 
-                let contentWidth = PendingRowContentV.width(titles: (transaction.localizedType, dateString),
-                                                            isHorizontal: true)
+                let contentWidth = TransactionRowContentV.width(titles: (transaction.localizedType, dateString),
+                                                            isHorizontal: false)
                 let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
 
                 AmountRowV(amountStr: amountStr, amountColor: foreColor, largeAmountFont: false,

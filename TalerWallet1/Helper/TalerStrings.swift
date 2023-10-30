@@ -2,6 +2,7 @@
  * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
  * See LICENSE.md
  */
+import SwiftUI
 import Foundation
 import UIKit
 
@@ -44,7 +45,42 @@ extension String {
         let size = self.size(withAttributes: fontAttributes)
         return size.width
     }
+
+    func widthOfString(usingUIFont font: UIFont, _ sizeCategory: ContentSizeCategory) -> CGFloat {
+        let width = widthOfString(usingUIFont: font)
+        let correctForSize = correctForSize(sizeCategory)
+
+        return width * correctForSize
+    }
+
+    // This would be used like so:
+    // let uiFont = UIFont.systemFont(ofSize: 17, weight: .bold)
+    // let width = "SomeString".widthOfString(usingUIFont: uiFont)
+
+    ///
+    fileprivate func correctForSize(_ sizeCategory: ContentSizeCategory) -> CGFloat {
+        let corrValue = switch sizeCategory {
+            case .extraSmall: 0.7
+            case .small: 0.8
+            case .medium: 0.9
+//            case .large: 1.0
+            case .extraLarge: 1.15
+            case .extraExtraLarge: 1.25
+            case .extraExtraExtraLarge: 1.33
+            case .accessibilityMedium: 1.52
+            case .accessibilityLarge: 1.8
+            case .accessibilityExtraLarge: 2.0
+            case .accessibilityExtraExtraLarge: 2.2
+            case .accessibilityExtraExtraExtraLarge: 2.5
+            default: 1.0
+        }
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
+            // empirical values
+            return corrValue
+        } else {
+            // preview doesn't use ContentSizeCategory for widthOfString(usingUIFont)
+            // thus the empirical values are the square of what's really needed
+            return sqrt(corrValue)
+        }
+    }
 }
-// This would be used like so:
-// let uiFont = UIFont.systemFont(ofSize: 17, weight: .bold)
-// let width = "SomeString".widthOfString(usingUIFont: uiFont)

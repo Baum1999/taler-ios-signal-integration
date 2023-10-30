@@ -28,10 +28,32 @@ struct ExchangeRowView: View {
 //        }
     }
 
-    let depositTitle = String(localized: "Deposit", comment: "Top of button <Deposit (currency)>")
-    let withdrawTitle = String(localized: "Withdraw", comment: "Top of button <Withdraw (currency)>")
+
+//    func
+    func titles(_ title: String) -> (String, String?) {
+        if let separatorIndex = title.firstIndex(of: "\n") {
+            let title1 = String(title[..<separatorIndex])
+            let title2 = String(title[title.index(separatorIndex, offsetBy: 1)...])
+            return (title1, title2)
+        }
+        return (title, nil)
+    }
+
+    func titles(_ titles: (String, String?), uiFont: UIFont) -> [(String, UIFont)] {
+        let (title1, title2) = titles
+        if let title2 {
+            return [(title1, uiFont), (title2, uiFont)]
+        }
+        return [(title1, uiFont)]
+    }
 
     var body: some View {
+        let depositTitle0 = String(localized: "Deposit", comment: "Abbreviation <Deposit (currency)>")
+        let depositTitle1 = String(localized: "Deposit\n\(currency)",
+                                   comment: "Button <Deposit (currency)>, must have ONE \n and ONE %s")
+        let withdrawTitle0 = String(localized: "Withdraw", comment: "Abbreviation <Withdraw (currency)>")
+        let withdrawTitle1 = String(localized: "Withdraw\n\(currency)",
+                                    comment: "Button <Withdraw (currency)>, must have ONE \n and ONE %s")
         let baseURL = exchange.exchangeBaseUrl
 
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
@@ -53,20 +75,25 @@ struct ExchangeRowView: View {
         SingleAxisGeometryReader { width in
             Group {
                 let uiFont = TalerFont.uiFont(.title3)
-                let titles = iconOnly ? [(depositTitle, uiFont), (withdrawTitle, uiFont)]
-                                      : [(depositTitle, uiFont), (withdrawTitle, uiFont), (currency, uiFont)]
-                let needVStack = Self.needVStack(titles, width: width, sizeCategory: sizeCategory, padding: 10)
+                let (deposit1, deposit2) = titles(depositTitle1)
+                let (withdraw1, withdraw2) = titles(withdrawTitle1)
+                let titles = iconOnly ? [(depositTitle0, uiFont), (withdrawTitle0, uiFont)]
+                                      : titles((deposit1, deposit2), uiFont: uiFont) +
+                                        titles((withdraw1, withdraw2), uiFont: uiFont)
+                let fitsSideBySide = Self.fitsSideBySide(titles, availableWidth: width,
+                                                         sizeCategory: sizeCategory, padding: 10)
                                                                                     // TODO:  amount.currencyStr
-                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (depositTitle, nil)  : (depositTitle, currency),
-                                                  recvTitles: iconOnly ? (withdrawTitle, nil) : (withdrawTitle, currency),
-                                                isHorizontal: needVStack,
-                                                   lineLimit: 5, sendDisabled: true,         // TODO: amount.isZero
+                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (depositTitle0, nil)  : (deposit1, deposit2),
+                                                  recvTitles: iconOnly ? (withdrawTitle0, nil) : (withdraw1, withdraw2),
+                                              fitsSideBySide: fitsSideBySide,
+                                                   lineLimit: 5,
+                                                sendDisabled: true,             // TODO: availableAmount.isZero
                                                   sendAction: { selectAndUpdate(1) },
                                                   recvAction: { selectAndUpdate(2) })
-                if needVStack {
-                    VStack { twoRowButtons }
-                } else {
+                if fitsSideBySide {
                     HStack(spacing: HSPACING) { twoRowButtons }
+                } else {
+                    VStack { twoRowButtons }
                 }
             }
         }
