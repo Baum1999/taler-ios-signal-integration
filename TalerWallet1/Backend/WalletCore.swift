@@ -248,7 +248,7 @@ extension WalletCore {
                      "refresh-revealed", "refresh-unwarranted":
                     break
                 default:
-print("\n❗️ WalletCore.swift:226 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
+print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {

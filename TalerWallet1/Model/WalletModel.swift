@@ -144,9 +144,9 @@ extension WalletModel {
             if !fileManager.fileExists(atPath: cachePath) {
                 let contents = Data()       /// Initialize an empty `Data`.
                 fileManager.createFile(atPath: cachePath, contents: contents)
-                print("File \(cachePath) created")
+                print("❗️ File \(cachePath) created")
             } else {
-                print("File \(cachePath) already exists")
+                print("❗️ File \(cachePath) already exists")
             }
 
             return cachePath

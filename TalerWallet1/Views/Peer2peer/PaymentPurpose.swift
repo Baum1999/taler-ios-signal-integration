@@ -15,18 +15,13 @@ struct PaymentPurpose: View {
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
-//    var deactivateAction: () -> Void
 
     @FocusState private var isFocused: Bool
-
-//    let formatter = CurrencyFormatter.shared    // TODO: based on currency
-//    let buttonFont: Font = .talerTitle2
 
     private var label: String {
 //        let mag = pow(10, formatter.maximumFractionDigits)
 //        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
-
-        return String(centsToTransfer / 100)
+        return String(centsToTransfer / 100)   // TODO: based on currency
     }
 
     var body: some View {
@@ -89,11 +84,10 @@ struct PaymentPurpose: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_RECEIVE_PURPOSE, stack: stack.push())
-            print("❗️ PaymentPurpose onAppear")
+//            print("❗️ PaymentPurpose onAppear")
         }
         .onDisappear {
-            print("❗️ PaymentPurpose onDisappear")
-//            deactivateAction()
+//            print("❗️ PaymentPurpose onDisappear")
         }
     }
 
@@ -110,7 +104,6 @@ struct PaymentPurpose: View {
 //                             fee: "fee",
 //                         summary: $summary,
 //                      expireDays: $expireDays)
-//        { print("deactivateAction") }
 //    }
 //}
 #endif

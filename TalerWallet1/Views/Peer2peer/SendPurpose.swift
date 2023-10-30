@@ -16,15 +16,11 @@ struct SendPurpose: View {
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
-//    var deactivateAction: () -> Void
-
-//    let formatter = CurrencyFormatter.shared    // TODO: based on currency
 
     private var value: String {
 //        let mag = pow(10, formatter.maximumFractionDigits)
 //        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
-
-        return String(centsToTransfer / 100)
+        return String(centsToTransfer / 100)    // TODO: based on currency
     }
 
     var body: some View {
@@ -106,11 +102,10 @@ struct SendPurpose: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE, stack: stack.push())
-            print("❗️ SendPurpose onAppear")
+//            print("❗️ SendPurpose onAppear")
         }
         .onDisappear {
-            print("❗️ SendPurpose onDisappear")
-//            deactivateAction()
+//            print("❗️ SendPurpose onDisappear")
         }
         .task {
             symLog.log(".task")
@@ -135,7 +130,6 @@ struct SendPurpose: View {
 //                                fee: "0,43",
 //                            summary: $summary,
 //                         expireDays: $expireDays)
-//        { print("deactivateAction") }
 //    }
 //}
 #endif
