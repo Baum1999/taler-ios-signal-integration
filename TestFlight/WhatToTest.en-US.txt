@@ -1,4 +1,9 @@
 
+Version 0.9.3 (23)
+
+- Fixed layout for Pending + Transactions for dynamic font sizes
+
+
 Version 0.9.3 (22)
 
 - Fixed layout for Balances for dynamic font sizes
