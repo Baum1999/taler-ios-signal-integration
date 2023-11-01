@@ -81,9 +81,9 @@ extension MainView {
         @AppStorage("iconOnly") var iconOnly: Bool = false
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
-        let balancesTitle = String(localized: "Balances")
-        let exchangesTitle = String(localized: "Exchanges")
-        let settingsTitle = String(localized: "Settings")
+        let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
+        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Exchanges")
+        let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
 #if TABBAR  // Taler Wallet
         @State private var selectedTab: Tab = .balances
 

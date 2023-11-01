@@ -27,7 +27,7 @@ struct ManualWithdraw: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
-        let navTitle = String(localized: "Withdraw \(currency)")
+        let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
         let currencyField = CurrencyField(value: $centsToTransfer, currency: currency) // becomeFirstResponder
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 

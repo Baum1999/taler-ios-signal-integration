@@ -59,12 +59,18 @@ struct PendingRowView: View {
     @Environment(\.sizeCategory) var sizeCategory
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
-    let inTitle0 = String(localized: "Incoming", comment: "Abbreviation <pending incoming>")
-    let inTitle1 = String(localized: "Pending", comment: "Top of line <Pending incoming>")
-    let inTitle2 = String(localized: "incoming", comment: "Bottom of line <pending incoming>")
-    let outTitle0 = String(localized: "Outgoing", comment: "Abbreviation <pending outgoing>")
-    let outTitle1 = String(localized: "Pending", comment: "Top of line <Pending outgoing>")
-    let outTitle2 = String(localized: "outgoing", comment: "Bottom of line <pending outgoing>")
+    let inTitle0 = String(localized: "TitleIncoming_Short", defaultValue: "Incoming",
+                            comment: "Abbreviation of `Pending incoming´ in Balances")
+    let inTitle1 = String(localized: "TitleIncoming_Top", defaultValue: "Pending",
+                            comment: "Top (first half) of line `Pending incoming´ in Balances")
+    let inTitle2 = String(localized: "TitleIncoming_Bottom", defaultValue: "incoming",
+                            comment: "Bottom (second half) of line `Pending incoming´ in Balances")
+    let outTitle0 = String(localized: "TitleOutgoing_Short", defaultValue: "Outgoing",
+                             comment: "Abbreviation of `Pending outgoing´ in Balances")
+    let outTitle1 = String(localized: "TitleOutgoing_Top", defaultValue: "Pending",
+                             comment: "Top (first half) of line `Pending outgoing´ in Balances")
+    let outTitle2 = String(localized: "TitleOutgoing_Bottom", defaultValue: "outgoing",
+                             comment: "Bottom (second half) of line `Pending outgoing´ in Balances")
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         if available > 20 {

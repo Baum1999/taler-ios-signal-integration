@@ -48,12 +48,14 @@ struct ExchangeRowView: View {
     }
 
     var body: some View {
-        let depositTitle0 = String(localized: "Deposit", comment: "Abbreviation <Deposit (currency)>")
-        let depositTitle1 = String(localized: "Deposit\n\(currency)",
-                                   comment: "Button <Deposit (currency)>, must have ONE \n and ONE %s")
-        let withdrawTitle0 = String(localized: "Withdraw", comment: "Abbreviation <Withdraw (currency)>")
-        let withdrawTitle1 = String(localized: "Withdraw\n\(currency)",
-                                    comment: "Button <Withdraw (currency)>, must have ONE \n and ONE %s")
+        let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
+                                   comment: "Abbreviation of `Deposit (currency)´")
+        let depositTitle1 = String(localized: "Deposit\t\(currency)",
+                                   comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
+        let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
+                                    comment: "Abbreviation of `Withdraw (currency)´")
+        let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
+                                    comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let baseURL = exchange.exchangeBaseUrl
 
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow

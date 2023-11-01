@@ -52,12 +52,18 @@ struct BalanceRowView: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    let sendTitle0 = String(localized: "Send", comment: "Abbreviation <Send Money>")
-    let sendTitle1 = String(localized: "Send", comment: "Top of button <Send Money>")
-    let sendTitle2 = String(localized: "Money", comment: "Bottom of button <Send Money>")
-    let requestTitle0 = String(localized: "Request", comment: "Abbreviation <Request Payment>")
-    let requestTitle1 = String(localized: "Request", comment: "Top of button <Request Payment>")
-    let requestTitle2 = String(localized: "Payment", comment: "Bottom of button <Request Payment>")
+    let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
+                              comment: "Abbreviation of button `Send Money´")
+    let sendTitle1 = String(localized: "SendButton_Top", defaultValue: "Send",
+                              comment: "Top (first half) of button `Send Money´")
+    let sendTitle2 = String(localized: "SendButton_Bottom", defaultValue: "Money",
+                              comment: "Bottom (second half) of button `Send Money´")
+    let requestTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
+                                 comment: "Abbreviation of button `Request Payment´")
+    let requestTitle1 = String(localized: "RequestButton_Top", defaultValue: "Request",
+                                 comment: "Top (first half) of button `Request Payment´")
+    let requestTitle2 = String(localized: "RequestButton_Bottom", defaultValue: "Payment",
+                                 comment: "Bottom (second half) of button `Request Payment´")
 
     var body: some View {
         SingleAxisGeometryReader { width in
