@@ -46,7 +46,7 @@ class WalletModel: ObservableObject {
             return response
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
-            logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error)")
+            logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
             throw error
         }
     }
