@@ -142,12 +142,12 @@ extension MainView {
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
             // identity of the view has changed (that is, that the persistent data associated with
             // the view has been recycled for a new instance of the same type)
-            if #available(iOS 17.1, *) {
-                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
-                let _ = Self._logChanges()
-            } else {
+//            if #available(iOS 17.1, *) {
+//                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
+//                let _ = Self._logChanges()
+//            } else {
                 let _ = Self._printChanges()
-            }
+//            }
             let _ = symLog?.vlog()       // just to get the identity # to compare with .onAppear & .onDisappear
 #endif
           Group {
