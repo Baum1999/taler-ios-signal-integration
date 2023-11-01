@@ -115,24 +115,25 @@ struct SettingsView: View {
                     hideDescriptions = iconOnly //withAnimation { hideDescriptions = iconOnly }
                 }
                 if diagnosticModeEnabled {
-                    SettingsToggle(name: String(localized: "Developer Mode"), value: $developerMode, id1: "devMode",
-                            description: hideDescriptions ? nil : String(localized: "More information intended for debugging")) {
+                    SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
+                            description: hideDescriptions ? nil : String("More information intended for debugging")) {
                         withAnimation { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
                         NavigationLink {        // whole row like in a tableView
                             LazyView { PendingOpsListView(stack: stack.push()) }
                         } label: {
-                            SettingsItem(name: String(localized: "Pending Operations"), id1: "pending",
-                                  description: hideDescriptions ? nil : String(localized: "Exchange not yet ready...")) {}
+                            SettingsItem(name: String("Pending Operations"), id1: "pending",
+                                  description: hideDescriptions ? nil : String("Transactions not yet done...")) {}
                         }.id("pending_L")
-                        SettingsToggle(name: String(localized: "Set 2 seconds delay"),
+                        SettingsToggle(name: String("Set 2 seconds delay"),
                                       value: $developDelay.onChange({ delay in
                                         walletCore.developDelay = delay}), id1: "delay",
-                                description: hideDescriptions ? nil : String(localized: "After each wallet-core action"))
-                        SettingsItem(name: String(localized: "Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
-                              description: hideDescriptions ? nil : String(localized: "Get money for testing")) {
-                            Button("Withdraw") {
+                                description: hideDescriptions ? nil : String("After each wallet-core action"))
+                        SettingsItem(name: String("Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
+                              description: hideDescriptions ? nil : String("Get money for testing")) {
+                            let title = "Withdraw"
+                            Button(title) {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw KUDOS")
@@ -146,9 +147,10 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("demoWithdraw")
-                        SettingsItem(name: String(localized: "Withdraw \(TESTCURRENCY)"), id1: "test1with",
-                              description: hideDescriptions ? nil : String(localized: "Get money for testing")) {
-                            Button("Withdraw") {
+                        SettingsItem(name: String("Withdraw \(TESTCURRENCY)"), id1: "test1with",
+                              description: hideDescriptions ? nil : String("Get money for testing")) {
+                            let title = "Withdraw"
+                            Button(title) {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
@@ -162,9 +164,10 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("testWithdraw")
-                        SettingsItem(name: String(localized: "Run Integration Test"), id1: "demo1test",
-                              description: hideDescriptions ? nil : String(localized: "Perform basic test transactions")) {
-                            Button("Demo 1") {
+                        SettingsItem(name: String("Run Integration Test"), id1: "demo1test",
+                              description: hideDescriptions ? nil : String("Perform basic test transactions")) {
+                            let title = "Demo 1"
+                            Button(title) {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on demo")
@@ -178,9 +181,10 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test"), id1: "test1test",
-                              description: hideDescriptions ? nil : String(localized: "Perform basic test transactions")) {
-                            Button("Test 1") {
+                        SettingsItem(name: String("Run Integration Test"), id1: "test1test",
+                              description: hideDescriptions ? nil : "Perform basic test transactions") {
+                            let title = "Test 1"
+                            Button(title) {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on test")
@@ -194,9 +198,10 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test V2"), id1: "demo2test",
-                              description: hideDescriptions ? nil : String(localized: "Perform more test transactions")) {
-                            Button("Demo 2") {
+                        SettingsItem(name: String("Run Integration Test V2"), id1: "demo2test",
+                              description: hideDescriptions ? nil : String("Perform more test transactions")) {
+                            let title = "Demo 2"
+                            Button(title) {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on demo")
@@ -210,9 +215,10 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Run Integration Test V2"), id1: "test2test",
-                              description: hideDescriptions ? nil : String(localized: "Perform more test transactions")) {
-                            Button("Test 2") {
+                        SettingsItem(name: String("Run Integration Test V2"), id1: "test2test",
+                              description: hideDescriptions ? nil : String("Perform more test transactions")) {
+                            let title = "Test 2"
+                            Button(title) {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on test")
@@ -226,8 +232,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }
-                        SettingsItem(name: String(localized: "Save Logfile"), id1: "save",
-                              description: hideDescriptions ? nil : String(localized: "Help debugging wallet-core")) {
+                        SettingsItem(name: String("Save Logfile"), id1: "save",
+                              description: hideDescriptions ? nil : String("Help debugging wallet-core")) {
                             Button("Save") {
                                 symLog.log("Saving Log")
                                 // FIXME: Save Logfile
@@ -235,8 +241,8 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(true)
                         }
-                        SettingsItem(name: String(localized: "Reset Wallet"), id1: "reset",
-                              description: hideDescriptions ? nil : String(localized: "Throw away all your money")) {
+                        SettingsItem(name: String("Reset Wallet"), id1: "reset",
+                              description: hideDescriptions ? nil : String("Throw away all your money")) {
                             Button("Reset") {
                                 showResetAlert = true
                             }
@@ -264,7 +270,7 @@ struct SettingsView: View {
                isPresented: $showResetAlert,
                actions: { dismissAlertButton
                           resetButton },
-               message: {   Text("Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
+               message: {   Text(verbatim: "Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
 
 #if !DEBUG
         .onReceive(
