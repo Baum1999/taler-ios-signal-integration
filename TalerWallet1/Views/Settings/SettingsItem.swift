@@ -131,7 +131,7 @@ struct SettingsSpeaker: View {
             HStack {
                 Text(name)
                     .accessibilityFont(.title2)
-                Text(" ")
+                Text(verbatim: " ")
                     .accessibilityFont(.largeTitle)
                 Spacer()
                 Image(systemName: image.0)

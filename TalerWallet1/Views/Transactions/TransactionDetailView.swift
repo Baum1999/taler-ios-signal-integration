@@ -196,7 +196,8 @@ struct TransactionDetailView: View {
             Group {
                 switch transaction {
                     case .dummy(_):
-                        Text("")
+                        let title = ""
+                        Text(title)
                             .accessibilityFont(.body)
                     case .withdrawal(let withdrawalTransaction):
                         let details = withdrawalTransaction.details

@@ -13,18 +13,19 @@ struct BalanceButton: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     var body: some View {
-        let balanceTitle = String(localized: "Balance:", comment: "Main view")
+        let balanceTitleStr = String(localized: "Balance:", comment: "Main view")
         Button(action: rowAction) {
             SingleAxisGeometryReader { width in         // e.g. 301 instead of 313 => padding = 6
                 Group {
-                    let titles = [(balanceTitle, TalerFont.uiFont(.title2)),
+                    let title = iconOnly ? "" : balanceTitleStr
+                    let titles = [(balanceTitleStr, TalerFont.uiFont(.title2)),
                                   (amountStr,    TalerFont.uiFont(.title))]
                     let fitsSideBySide = iconOnly || Self.fitsSideBySide(titles, availableWidth: width,
                                                                   sizeCategory: sizeCategory,
                                                                   padding: 20, sameSize: false)
                     AmountRowV(amountStr: amountStr, amountColor: .primary, largeAmountFont: true,
                                fitsHorizontal: fitsSideBySide, vertAlignment: .lastTextBaseline) {
-                        Text(iconOnly ? "" : balanceTitle)
+                        Text(title)
                             .accessibilityFont(.title2)
                             .foregroundColor(.secondary)
                     }
@@ -33,7 +34,7 @@ struct BalanceButton: View {
         }   .disabled(false)
             .buttonStyle(TalerButtonStyle(type: iconOnly ? .plain : .balance, aligned: .trailing))
             .accessibilityElement(children: /*@START_MENU_TOKEN@*/.ignore/*@END_MENU_TOKEN@*/)
-            .accessibilityLabel("\(balanceTitle) \(amountStr)")    // TODO: CurrencyFormatter!
+            .accessibilityLabel(balanceTitleStr + " " + amountStr)    // TODO: CurrencyFormatter!
     }
 }
 

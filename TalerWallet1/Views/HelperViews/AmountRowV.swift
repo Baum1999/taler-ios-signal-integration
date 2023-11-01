@@ -60,24 +60,24 @@ struct SectionWithAmountRow: View {
             Section {
                 AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
-                    Text("Balance")
+                    Text(verbatim: "Balance")
                         .accessibilityFont(.title2)
                 }
                 AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
-                    Text("Balance")
+                    Text(verbatim: "Balance")
                         .accessibilityFont(.title2)
                 }
             }
             Section {
                 AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
-                    Text("Balance")
+                    Text(verbatim: "Balance")
                         .accessibilityFont(.title2)
                 }
                 AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
-                    Text("Balance")
+                    Text(verbatim: "Balance")
                         .accessibilityFont(.title2)
                 }
             }
