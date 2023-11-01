@@ -92,7 +92,7 @@ struct SendNow_Previews: PreviewProvider {
             SendDone(stack: CallStack("Preview"),
               amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
            amountToReceive: nil,
-                   summary: "some purpose",
+                   summary: "some subject/purpose",
                 expireDays: 0)
         }
     }

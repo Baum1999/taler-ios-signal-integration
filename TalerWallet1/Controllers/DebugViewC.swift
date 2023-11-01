@@ -39,7 +39,7 @@ public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONLIST + 1        // 21 Transa
 
 
 // MARK: - Manual Withdrawal (from ExchangeList)
-// receive coins from bank ==> shows IBAN + Purpose for manual wire transfer
+// receive coins from bank ==> shows IBAN + Purpose/Subject for manual wire transfer
 public let VIEW_WITHDRAWAL = VIEW_TRANSACTIONLIST + 10              // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
 public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
@@ -47,27 +47,26 @@ public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
 // MARK: Manual Deposit (from ExchangeList)
 // send coins back to bank account ==> orders exchange to make the wire transfer
 public let VIEW_DEPOSIT = VIEW_WITHDRAWAL + 10                      // 40 Deposit Coins
-//public let VIEW_DEPOSIT_TOS                                       // 41 - user already accepted the ToS at withdrawal, invoice or receive
+//public let VIEW_DEPOSIT_TOS                                       // - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
 
 // MARK: P2P Send Coins (from Balances)
 // push debit to another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
 public let VIEW_SEND_P2P = VIEW_DEPOSIT + 10                        // 50 Send Coins
-//public let VIEW_SEND_TOS                                          // 51 - user already accepted the ToS at withdrawal, invoice or receive
-public let VIEW_SEND_PURPOSE = VIEW_SEND_P2P + 2                    // 52
+//public let VIEW_SEND_TOS                                          // - user already accepted the ToS at withdrawal, invoice or receive
+public let VIEW_SEND_PURPOSE = VIEW_SEND_P2P + 2                    // 52 Send Purpose
 
 // MARK: P2P Private Receive (from Balances)
 // pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_RECEIVE_P2P = VIEW_SEND_P2P + 10                    // 60 Receive Amount
-public let VIEW_RECEIVE_TOS = VIEW_RECEIVE_P2P + 1                  // 61 Receive ToS
-public let VIEW_RECEIVE_PURPOSE = VIEW_RECEIVE_TOS + 1              // 62 Receive Purpose
+public let VIEW_REQUEST_P2P = VIEW_SEND_P2P + 10                    // 60 Request Amount
+public let VIEW_REQUEST_TOS = VIEW_REQUEST_P2P + 1                  // 61 Request ToS
+public let VIEW_REQUEST_PURPOSE = VIEW_REQUEST_TOS + 1              // 62 Request Purpose
 
 // MARK: P2P Business Invoice (from Balances)
-// pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_INVOICE_P2P = VIEW_RECEIVE_P2P + 10                 // 70 Invoice Amount
-public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 71 Invoice ToS
-public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 72 Invoice Purpose
-
+// TBD
+//public let VIEW_INVOICE_P2P = VIEW_REQUEST_P2P + 10                 // 70 Invoice Amount
+//public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 71 Invoice ToS
+//public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 72 Invoice Purpose
 
 
 // MARK: - Bank-Integrated Withdrawal
@@ -82,22 +81,22 @@ public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiti
 public let SHEET_PAYMENT = SHEET_WITHDRAWAL + 10                    // 140 Pay Merchant
 public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 2                   // 142 Pay Merchant Template
 
-// MARK: Reward - Receive Coins (from merchant)
-// openURL (Link, NFC or scan QR) ==> receive coins from merchant
-public let SHEET_RCV_REWARD = SHEET_PAYMENT + 10                    // 150 Receive Reward
-
 // MARK: P2P Pay Invoice
 // p2p pull debit - openURL (Link or scan QR)
-public let SHEET_PAY_P2P = SHEET_RCV_REWARD + 10                    // 160 Pay P2P Invoice
-public let SHEET_PAY_P2P_ACCEPT = SHEET_PAY_P2P + 2                 // 162 Pay P2P AcceptView
+public let SHEET_PAY_P2P = SHEET_PAYMENT + 10                       // 150 Pay P2P Invoice
+public let SHEET_PAY_P2P_ACCEPT = SHEET_PAY_P2P + 2                 // 152 Pay P2P AcceptView
 
 // MARK: P2P Receive Coins
 // p2p push credit - openURL (Link or scan QR)
-public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 170 Receive P2P Coins
-public let SHEET_RCV_P2P_TOS = SHEET_RCV_P2P + 1                    // 171 Receive P2P TOSView
-public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 172 Receive P2P AcceptView
+public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 160 Receive P2P Coins
+public let SHEET_RCV_P2P_TOS = SHEET_RCV_P2P + 1                    // 161 Receive P2P TOSView
+public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 162 Receive P2P AcceptView
 
-//public let SHEET_REFUND =
+// MARK: Reward - Receive Coins (from merchant)
+// openURL (Link, NFC or scan QR) ==> receive coins from merchant
+public let SHEET_RCV_REWARD = SHEET_RCV_P2P + 10                    // 170 Receive Reward
+
+public let SHEET_REFUND = SHEET_RCV_REWARD + 10                     // 180 Receive Refunds
 
 extension UIDevice {
     var hasNotch: Bool {
@@ -150,25 +149,20 @@ class DebugViewC: ObservableObject {
     @MainActor func setViewID(_ newID: Int, stack: CallStack) -> Void {
         if developerMode {
             if viewID == 0 {
-                symLog.log("switching ON, \(newID)")
-                logger.info("switching ON, \(newID, privacy: .public)")
+                logger.log("switching ON, \(newID, privacy: .public)")
                 viewID = newID                              // publish ON
             } else if viewID != newID {
-                symLog.log("switching from \(viewID) to \(newID)")
-                logger.info("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
+                logger.log("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
                 viewID = newID                              // publish new viewID
             } else {
-                symLog.log("\(newID) stays")
-                logger.info("\(newID, privacy: .public) stays")
+                logger.log("\(newID, privacy: .public) stays")
                 // don't set viewID to the same value, it would just trigger an unneccessary redraw
             }
         } else if viewID > 0 {
-            symLog.log("switching OFF, will not use \(newID)")
-            logger.info("switching OFF, will not use \(newID, privacy: .public)")
+            logger.log("switching OFF, will not use \(newID, privacy: .public)")
             viewID = 0                                      // publish OFF
         } else {
-            symLog.log("off, will not use \(newID)")
-            logger.info("off, will not use \(newID, privacy: .public)")
+            logger.log("off, will not use \(newID, privacy: .public)")
             // don't set viewID from 0 to 0 again, it would just trigger an unneccessary redraw
         }
     }
@@ -176,24 +170,19 @@ class DebugViewC: ObservableObject {
     @MainActor func setSheetID(_ newID: Int) -> Void {
         if developerMode {
             if sheetID != newID {
-                symLog.log("switching from \(sheetID) to \(newID)")
-                logger.info("switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public) for sheet")
+                logger.log("switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public) for sheet")
                 sheetID = newID                             // publish new sheetID
             } else {
-                symLog.log("\(newID) stays")
-                logger.info("\(newID, privacy: .public) stays for sheet")
+                logger.log("\(newID, privacy: .public) stays for sheet")
                 // don't set sheetID to the same value, it would just trigger an unneccessary redraw
             }
         } else if sheetID > 0 {
             // might happen after switching DevMode off, if sheetID still has the old value of the last sheet
-            symLog.log("switching OFF, will not use \(newID)")
-            logger.info("switching OFF, will not use \(newID, privacy: .public) for sheet")
+            logger.log("switching OFF, will not use \(newID, privacy: .public) for sheet")
             sheetID = 0                                     // publish OFF
         } else {
-            symLog.log("off, will not use \(newID)")
-            logger.info("off, will not use \(newID, privacy: .public) for sheet")
+            logger.log("off, will not use \(newID, privacy: .public) for sheet")
             // don't set sheetID from 0 to 0 again, it would just trigger an unneccessary redraw
         }
     }
-
 }

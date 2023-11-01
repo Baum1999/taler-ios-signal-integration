@@ -16,6 +16,8 @@ struct SendPurpose: View {
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+    let navTitle = String(localized: "NavTitle_Send_Subject", defaultValue: "Subject", comment: "NavTitle for entering the subject for Send-Money")
 
     private var value: String {
 //        let mag = pow(10, formatter.maximumFractionDigits)
@@ -32,12 +34,13 @@ struct SendPurpose: View {
                 .accessibilityFont(.body)
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
-                Text("Purpose:")
-                    .accessibilityFont(.title2)
-                    .padding(.top)
-
+                if !iconOnly {
+                    Text("Subject:")    // Purpose
+                        .accessibilityFont(.title2)
+                        .padding(.top)
+                }
                 if #available(iOS 16.0, *) {
-                    TextField("Purpose", text: $summary, axis: .vertical)
+                    TextField("Subject", text: $summary, axis: .vertical)
                         .accessibilityFont(.title2)
                         .lineLimit(2...)
                         .foregroundColor(WalletColors().fieldForeground)     // text color
@@ -50,7 +53,7 @@ struct SendPurpose: View {
                             }
                         }
                 } else {
-                    TextField("Purpose", text: $summary)
+                    TextField("Subject", text: $summary)
                         .accessibilityFont(.title)
 //                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
                         .foregroundColor(WalletColors().fieldForeground)     // text color
@@ -62,7 +65,7 @@ struct SendPurpose: View {
                                 isFocused = true        // make first responder - raise keybord
                             }
                         }
-                }
+                } // #available
 
                 HStack{
                     Spacer()
@@ -98,7 +101,7 @@ struct SendPurpose: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }
-        .navigationTitle("Purpose")
+        .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE, stack: stack.push())

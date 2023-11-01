@@ -15,6 +15,8 @@ struct PaymentPurpose: View {
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+    let navTitle = String(localized: "NavTitle_Request_Subject", defaultValue: "Request", comment: "NavTitle for entering the subject for Request-Payment")
 
     @FocusState private var isFocused: Bool
 
@@ -32,11 +34,12 @@ struct PaymentPurpose: View {
             Text("+ \(fee) payment fee")
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
-                Text("Purpose:")
-                    .padding(.top)
-                    .accessibilityFont(.title3)
-
-                TextField("Purpose", text: $summary)
+                if !iconOnly {
+                    Text("Subject:")
+                        .accessibilityFont(.title3)
+                        .padding(.top)
+                }
+                TextField("Subject", text: $summary)
                     .accessibilityFont(.title)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
@@ -80,10 +83,10 @@ struct PaymentPurpose: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         }
-        .navigationTitle("Request")
+        .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_RECEIVE_PURPOSE, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_REQUEST_PURPOSE, stack: stack.push())
 //            print("❗️ PaymentPurpose onAppear")
         }
         .onDisappear {
