@@ -89,6 +89,19 @@ extension MainView {
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
 #if TABBAR  // Taler Wallet
         @State private var selectedTab: Tab = .balances
+        @State private var showKycAlert: Bool = false
+
+        private var openKycButton: some View {
+            Button("KYC") {
+                showKycAlert = false
+//                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }
+        }
+        private var dismissAlertButton: some View {
+            Button("Cancel", role: .cancel) {
+                showKycAlert = false
+            }
+        }
 
         private func tabSelection() -> Binding<Tab> {
             Binding { //this is the get block
@@ -220,7 +233,27 @@ extension MainView {
                   hamburgerAction: hamburgerAction)
             }
 #endif
-          }
+          } .onNotification(.TransactionStateTransition) { notification in
+              // show an alert with the KYC link (button) which opens in Safari
+                if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+                    if transition.newTxState.major == .pending {
+                        if let newMinor = transition.newTxState.minor {
+                            if newMinor == .kyc {       // user did confirm on bank website
+                                logger.log(".onNotification(): KYC required")
+                                showKycAlert = true
+                            }
+                        }
+                    }
+                } else { // should never happen
+                    logger.error("Yikes! TransactionStateTransition without transition")
+//                    symLog.log(notification.userInfo as Any)
+                }
+            }
+            .alert("You need to pass a KYC procedure",
+                 isPresented: $showKycAlert,
+                 actions: {   openKycButton
+                              dismissAlertButton },
+                 message: {   Text("Tap the button to go to the KYC website.") })
             .onNotification(.BalanceChange) { notification in
               // reload balances on receiving BalanceChange notification ...
                 logger.info(".onNotification(.BalanceChange) ==> reload")

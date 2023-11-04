@@ -150,6 +150,7 @@ struct TransactionCommon: Decodable, Sendable {
     var transactionId: String
     var timestamp: Timestamp
     var txActions: [TxAction]
+    var kycUrl: String?
 
     func localizedType(_ type: TransactionType) -> String {
         switch type {
