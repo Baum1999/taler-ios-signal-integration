@@ -73,17 +73,17 @@ enum TransactionMajorState: String, Codable {
     var localizedState: String {
         switch self {
             case .none:      return                   "none"
-            case .pending:   return String(localized: "Pending", comment: "TransactionMajorState")
-            case .done:      return String(localized: "Done", comment: "TransactionMajorState")
-            case .aborting:  return String(localized: "Aborting", comment: "TransactionMajorState")
-            case .aborted:   return String(localized: "Aborted", comment: "TransactionMajorState")
+            case .pending:   return String(localized: "MajorState.Pending", defaultValue: "Pending", comment: "TransactionMajorState")
+            case .done:      return String(localized: "MajorState.Done", defaultValue: "Done", comment: "TransactionMajorState")
+            case .aborting:  return String(localized: "MajorState.Aborting", defaultValue: "Aborting", comment: "TransactionMajorState")
+            case .aborted:   return String(localized: "MajorState.Aborted", defaultValue: "Aborted", comment: "TransactionMajorState")
             case .suspended: return                   "Suspended"
-            case .dialog:    return String(localized: "Dialog", comment: "TransactionMajorState")
+            case .dialog:    return String(localized: "MajorState.Dialog", defaultValue: "Dialog", comment: "TransactionMajorState")
             case .suspendedAborting: return           "AbortingSuspended"
-            case .failed:    return String(localized: "Failed", comment: "TransactionMajorState")
-            case .expired:   return String(localized: "Expired", comment: "TransactionMajorState")
-            case .deleted:   return String(localized: "Deleted", comment: "TransactionMajorState")
-            case .unknown:   return String(localized: "Unknown", comment: "TransactionMajorState")
+            case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Failed", comment: "TransactionMajorState")
+            case .expired:   return String(localized: "MajorState.Expired", defaultValue: "Expired", comment: "TransactionMajorState")
+            case .deleted:   return String(localized: "MajorState.Deleted", defaultValue: "Deleted", comment: "TransactionMajorState")
+            case .unknown:   return String(localized: "MajorState.Unknown", defaultValue: "Unknown", comment: "TransactionMajorState")
         }
     }
 }

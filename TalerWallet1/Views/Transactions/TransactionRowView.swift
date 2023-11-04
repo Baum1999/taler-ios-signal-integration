@@ -96,6 +96,8 @@ struct TransactionRowView: View {
                     TransactionRowContentV(centerTop: transaction.localizedType,
                                            centerBottom: dateString, isHorizontal: true, incoming: incoming, foreColor: foreColor)
                 }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint("will go to detail view")
             }
         }
     }

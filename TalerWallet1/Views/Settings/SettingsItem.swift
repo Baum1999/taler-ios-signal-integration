@@ -35,7 +35,8 @@ struct SettingsItem<Content: View>: View {
             content()
                 .accessibilityFont(.body)
         }.id(id1 == nil ? nil : id1! + "_H")
-        .padding([.bottom], 4)
+            .accessibilityElement(children: .combine)
+            .padding([.bottom], 4)
     }
 }
 // MARK: -
@@ -47,9 +48,16 @@ struct SettingsToggle: View {
     var action: () -> Void = {}
 
     var body: some View {
+        let accLabel: String = if let description {
+            name + ", " + description
+        } else {
+            name
+        }
         VStack {
             Toggle(name, isOn: $value.animation())
                 .id(id1)
+//                .accessibilityLabel(name)
+                .accessibility(sortPriority: 1)
                 .accessibilityFont(.title2)
                 .onChange(of: value) { value in
                     action()
@@ -59,9 +67,12 @@ struct SettingsToggle: View {
                 Text(desc)
                     .id(id1 == nil ? nil : id1! + "_T")
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibility(sortPriority: 0)
                     .accessibilityFont(.caption)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accLabel)
         .padding([.bottom], 4)
         .id(id1 == nil ? nil : id1! + "_V")
     }
@@ -111,6 +122,7 @@ struct SettingsStyle: View {
 //                .frame(alignment: .trailing)
 //                .background(WalletColors().buttonBackColor(pressed: false, disabled: false))  TODO: RoundRect
         }
+        .accessibilityElement(children: .combine)
     }
 }
 // MARK: -
@@ -126,37 +138,41 @@ struct SettingsSpeaker: View {
                             : ("speaker", String(localized:"Apple Sounds", comment: "Accessibility String for Payment Sounds"))
     }
     var body: some View {
+        let image = imageName(value)
+        let accLabel = name + ", " + image.1
+        let accHint = description ?? ""
+
         VStack {
-            let image = imageName(value)
             HStack {
                 Text(name)
                     .accessibilityFont(.title2)
                 Text(verbatim: " ")
                     .accessibilityFont(.largeTitle)
                 Spacer()
-                Image(systemName: image.0)
-                    .accessibilityFont(.largeTitle)
-                    .accessibilityLabel(image.1)
-                    .onTapGesture {
-                        if value > 0 {
-                            value = -1
-                            Controller.shared.playSound(1)
-                        } else {
-                            value = value + 1
-                            Controller.shared.playSound(value)
-                        }
+                Button {
+                    if value > 0 {
+                        value = -1
+                        Controller.shared.playSound(1)
+                    } else {
+                        value = value + 1
+                        Controller.shared.playSound(value)
                     }
+                } label: {
+                    Image(systemName: image.0)
+                        .accessibilityFont(.largeTitle)
+                }
             }
-//                .onChange(of: value) { value in
-//                    action(value)
-//                }
 
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityFont(.caption)
             }
-        }.padding([.bottom], 4)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accLabel)
+        .accessibilityHint(accHint)
+        .padding([.bottom], 4)
     }
 }
 // MARK: -

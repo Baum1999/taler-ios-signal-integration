@@ -23,11 +23,13 @@ struct CopyButton: View {
             if vertical {
                 VStack {
                     Image(systemName: "doc.on.doc")
+                        .accessibility(hidden: true)
                     Text("Copy", comment: "5 letters max, else abbreviate")
                 }
             } else {
                 HStack {
                     Image(systemName: "doc.on.doc")
+                        .accessibility(hidden: true)
                     Text("Copy", comment: "may be a bit longer")
                 }
             }
@@ -53,6 +55,7 @@ struct ShareButton: View {
         Button(action: shareAction) {
             HStack {
                 Image(systemName: "square.and.arrow.up")
+                    .accessibility(hidden: true)
                 Text("Share")
             }
         }

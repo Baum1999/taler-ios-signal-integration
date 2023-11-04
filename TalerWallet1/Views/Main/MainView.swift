@@ -178,6 +178,7 @@ extension MainView {
                 }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")             // creditcard     system will automatically use filled variant
+                        .accessibilityLabel(balancesTitle)
                     if !iconOnly { Text(balancesTitle) }
                 }
                 .tag(Tab.balances)
@@ -190,6 +191,7 @@ extension MainView {
                 }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "building.columns")
+                        .accessibilityLabel(exchangesTitle)
                     if !iconOnly { Text(exchangesTitle) }
                 }
                 .tag(Tab.exchanges)
@@ -199,6 +201,7 @@ extension MainView {
                 }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "gear")                   // system will automatically use filled variant
+                        .accessibilityLabel(settingsTitle)
                     if !iconOnly { Text(settingsTitle) }
                 }
                 .tag(Tab.settings)

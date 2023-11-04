@@ -35,6 +35,7 @@ struct AboutView: View {
                     HStack {
                         Spacer()
                         RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                            .accessibilityHint("will go to the taler.net website when long-pressed")
                             .onTapGesture(count: 2) {
                                 rotationEnabled.toggle()
                             }

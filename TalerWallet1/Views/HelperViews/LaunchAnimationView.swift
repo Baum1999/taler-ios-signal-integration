@@ -29,7 +29,7 @@ struct RotatingTaler: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-            .accessibilityHidden(true)          // decorative logo
+            .accessibilityLabel("Taler Logo")       // decorative logo - with button function
             .onReceive(animationTimer) { timerValue in
                 if rotationEnabled {
                     withAnimation(.easeInOut(duration: 1.9)) {
