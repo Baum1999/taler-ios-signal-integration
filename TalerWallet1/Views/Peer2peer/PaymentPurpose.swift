@@ -56,15 +56,12 @@ struct PaymentPurpose: View {
                     Text(verbatim: "\(summary.count)/100")
                 } // maximum 100 characters
 
-                Text("Expires in:")
-                    .accessibilityFont(.title3)
-
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
                     .disabled(false)
                     .padding(.bottom)
 
+                let emptyStr = ""
                 let disabled = (expireDays == 0) || (summary.count < 1)
-
                 NavigationLink(destination: LazyView {
                     SendDone(stack: stack.push(),
                       amountToSend: nil,
@@ -77,6 +74,7 @@ struct PaymentPurpose: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
+                .accessibilityHint(disabled ? "enabled when subject and expiration are set" : emptyStr)
 
                 Spacer()
             }

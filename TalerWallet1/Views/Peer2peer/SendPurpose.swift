@@ -73,16 +73,13 @@ struct SendPurpose: View {
                         .accessibilityFont(.body)
                 } // maximum 100 characters
 
-                Text("Expires in:")
-                    .accessibilityFont(.title3)
-
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
                     .disabled(false)
                     .padding(.bottom)
 
+                let emptyStr = ""
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
-
                 NavigationLink(destination: LazyView {
                     SendDone(stack: stack.push(),
                       amountToSend: amount,
@@ -94,6 +91,8 @@ struct SendPurpose: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
+                .accessibilityHint(disabled ? "enabled when subject and expiration are set" : emptyStr)
+
 
                 Spacer()
             }

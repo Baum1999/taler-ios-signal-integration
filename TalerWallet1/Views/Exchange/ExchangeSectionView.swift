@@ -28,7 +28,6 @@ struct ExchangeSectionView: View {
                              currency: currency,            // TODO: (balance.available) amount.isZero to disable Deposit-button
                       centsToTransfer: $centsToTransfer)
             }
-            .accessibilityElement(children: .combine)
         } header: {
             BarGraphHeader(stack: stack.push(), currency: currency)
         }

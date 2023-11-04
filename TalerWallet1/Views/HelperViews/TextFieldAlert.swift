@@ -19,6 +19,7 @@ struct TextFieldAlert: ViewModifier {
                 VStack {
                     Text(title)
                         .accessibilityFont(.headline)
+                        .accessibilityAddTraits(.isHeader)
                         .padding()
                     TextField(placeholder, text: $text).textFieldStyle(.roundedBorder).padding()
                     Divider()
