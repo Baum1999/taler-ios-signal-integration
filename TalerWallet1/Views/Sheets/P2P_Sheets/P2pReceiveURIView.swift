@@ -29,14 +29,14 @@ struct P2pReceiveURIView: View {
                     let effective = peerPushCreditResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsView(topTitle: String(localized: "Amount to receive:"),
-                                    topAbbrev: String(localized: "Receive:"),
-                                    topAmount: raw, fee: fee,
-                                  bottomTitle: String(localized: "Amount to be obtained:"),
-                                 bottomAbbrev: String(localized: "Effective:"),
-                                 bottomAmount: effective,
-                                        large: false, pending: false, incoming: true,
-                                      baseURL: nil)
+                    ThreeAmountsV(topTitle: String(localized: "Amount to receive:"),
+                                 topAbbrev: String(localized: "Receive:"),
+                                 topAmount: raw, fee: fee,
+                               bottomTitle: String(localized: "Amount to obtain:"),
+                              bottomAbbrev: String(localized: "Effective:"),
+                              bottomAmount: effective,
+                                     large: false, pending: false, incoming: true,
+                                   baseURL: nil)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

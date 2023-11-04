@@ -36,14 +36,14 @@ struct WithdrawURIView: View {
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)
 
-                    ThreeAmountsView(topTitle: String(localized: "Chosen amount to withdraw:"),
-                                    topAbbrev: String(localized: "Chosen:"),
-                                    topAmount: raw, fee: fee,
-                                  bottomTitle: String(localized: "Amount to be withdrawn:"),
-                                 bottomAbbrev: String(localized: "Effective:"),
-                                 bottomAmount: effective,
-                                        large: false, pending: false, incoming: true,
-                                      baseURL: exchangeBaseUrl)
+                    ThreeAmountsV(topTitle: String(localized: "Chosen amount to withdraw:"),
+                                 topAbbrev: String(localized: "Chosen:"),
+                                 topAmount: raw, fee: fee,
+                               bottomTitle: String(localized: "Amount to be withdrawn:"),
+                              bottomAbbrev: String(localized: "Effective:"),
+                              bottomAmount: effective,
+                                     large: false, pending: false, incoming: true,
+                                   baseURL: exchangeBaseUrl)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins, shouldShowFee: false,
                                    currency: raw.currencyStr, amountEffective: effective)

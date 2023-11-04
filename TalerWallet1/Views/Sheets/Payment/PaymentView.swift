@@ -53,26 +53,26 @@ struct PaymentView: View {
                 if let effective {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-                    ThreeAmountsView(topTitle: topTitle,
-                                    topAbbrev: topAbbrev,
-                                    topAmount: raw, fee: fee,
-                                  bottomTitle: String(localized: "Amount to be spent:"),
-                                 bottomAbbrev: String(localized: "Effective:"),
-                                 bottomAmount: effective,
-                                        large: false, pending: false, incoming: false,
-                                      baseURL: baseURL)
+                    ThreeAmountsV(topTitle: topTitle,
+                                 topAbbrev: topAbbrev,
+                                 topAmount: raw, fee: fee,
+                               bottomTitle: String(localized: "Amount to spend:"),
+                              bottomAbbrev: String(localized: "Effective:"),
+                              bottomAmount: effective,
+                                     large: false, pending: false, incoming: false,
+                                   baseURL: baseURL)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
                         .accessibilityFont(.body)
-                    ThreeAmountsView(topTitle: topTitle,
-                                    topAbbrev: topAbbrev,
-                                    topAmount: raw, fee: nil,
-                                  bottomTitle: String(localized: "Available:"),
-                                 bottomAbbrev: String(localized: "Available:"),
-                                 bottomAmount: balanceDetails.balanceAvailable,
-                                        large: false, pending: false, incoming: false,
-                                      baseURL: baseURL)
+                    ThreeAmountsV(topTitle: topTitle,
+                                 topAbbrev: topAbbrev,
+                                 topAmount: raw, fee: nil,
+                               bottomTitle: String(localized: "Amount available:"),
+                              bottomAbbrev: String(localized: "Available:"),
+                              bottomAmount: balanceDetails.balanceAvailable,
+                                     large: false, pending: false, incoming: false,
+                                   baseURL: baseURL)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")

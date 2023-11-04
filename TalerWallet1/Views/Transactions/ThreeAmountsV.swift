@@ -19,7 +19,9 @@ struct ThreeAmountsSheet: View {
         let effective = common.amountEffective
         let fee = common.fee()
         let incoming = common.incoming()
-        let pending = (common.txState.major == TransactionMajorState.pending)
+        let pending = (common.txState.major == .pending)
+        let isDone = (common.txState.major == .done)
+        let incomplete = !(isDone || pending)
 
         let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending amount to obtain:")
                                                      : String(localized: "Obtained amount:") )
@@ -27,24 +29,24 @@ struct ThreeAmountsSheet: View {
         let defaultBottomAbbre = incoming ? (pending ? String(localized: "Pending:")
                                                      : String(localized: "Obtained:") )
                                           :            String(localized: "Paid:")
-        ThreeAmountsView(topTitle: topTitle, topAbbrev: topAbbrev, topAmount: raw, fee: fee,
-                      bottomTitle: bottomTitle ?? defaultBottomTitle,
-                     bottomAbbrev: bottomAbbrev ?? defaultBottomAbbre,
-                     bottomAmount: effective,
-                            large: large, pending: pending, incoming: incoming,
-                          baseURL: baseURL,
-                           status: common.txState.major.localizedState)
+        ThreeAmountsV(topTitle: topTitle, topAbbrev: topAbbrev, topAmount: raw, fee: fee,
+                   bottomTitle: bottomTitle ?? defaultBottomTitle,
+                  bottomAbbrev: bottomAbbrev ?? defaultBottomAbbre,
+                  bottomAmount: incomplete ? nil : effective,
+                         large: large, pending: pending, incoming: incoming,
+                       baseURL: baseURL,
+                        status: common.txState.major.localizedState)
     }
 }
 // MARK: -
-struct ThreeAmountsView: View {
+struct ThreeAmountsV: View {
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
     var fee: Amount?
     var bottomTitle: String
     var bottomAbbrev: String
-    var bottomAmount: Amount
+    var bottomAmount: Amount?
     let large: Bool
     let pending: Bool
     let incoming: Bool
@@ -71,10 +73,12 @@ struct ThreeAmountsView: View {
                            large: false)
                 .padding(.bottom, 4)
             }
-            AmountView(title: iconOnly ? bottomAbbrev : bottomTitle,
-                       value: bottomAmount.readableDescription,
-                       color: foreColor,
-                       large: large)
+            if let bottomAmount {
+                AmountView(title: iconOnly ? bottomAbbrev : bottomTitle,
+                           value: bottomAmount.readableDescription,
+                           color: foreColor,
+                           large: large)
+            }
             if let baseURL {
                 VStack(alignment: .leading) {
                     Text(iconOnly ? "Exchange:" : "Using Exchange:")
