@@ -16,6 +16,65 @@ struct ExchangeListView: View {
 #else       // GNU Taler
     var hamburgerAction: () -> Void
 #endif
+    @EnvironmentObject private var model: WalletModel
+    @State var showAlert: Bool = false
+    @State var newExchange: String = TESTEXCHANGE
+
+    func addExchange(_ exchange: String) -> Void {
+        Task { // runs on MainActor
+            symLog.log("adding: \(exchange)")
+            do {
+                try await model.addExchange(url: exchange)
+                symLog.log("added: \(exchange)")
+            } catch {    // TODO: error handling - couldn't add exchangeURL
+                symLog.log("error: \(error)")
+            }
+        }
+    }
+
+    var body: some View {
+#if TABBAR  // Taler Wallet
+        let hamburger: HamburgerButton? = nil
+#else       // GNU Taler
+        let hamburger = HamburgerButton(action: hamburgerAction)
+#endif
+        let accessibilityLabelStr = String(localized: "Add Exchange", comment: "accessibilityLabel for the + button")
+        let plusButton = PlusButton(accessibilityLabelStr: accessibilityLabelStr) {
+            showAlert = true
+        }
+        let addTitleStr = String(localized: "Add Exchange", comment: "title of the addExchange alert")
+        let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
+        if #available(iOS 16.0, *) {
+            ExchangeListCommonV(symLog: symLog, stack: stack.push())
+                .navigationTitle(navTitle)
+                .navigationBarItems(leading: hamburger, trailing: plusButton)
+                .alert(addTitleStr, isPresented: $showAlert) {
+                    TextField("Exchange address", text: $newExchange)
+                    Button(addButtonStr) {
+                        addExchange(newExchange)
+                    }.buttonStyle(.borderedProminent)
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("Please enter the exchange URL")
+                }
+        } else {    // iOS 15 cannot have a textfield in an alert, so we must
+            ExchangeListCommonV(symLog: symLog, stack: stack.push())
+                .navigationTitle(navTitle)
+                .navigationBarItems(leading: hamburger, trailing: plusButton)
+                .textFieldAlert(isPresented: $showAlert,
+                                      title: addTitleStr,
+                                   doneText: addButtonStr,
+                                       text: $newExchange) { text in
+                    addExchange(text)
+                }
+        }
+    }
+}
+
+struct ExchangeListCommonV: View {
+    let symLog: SymLogV?
+    let stack: CallStack
+//    @Binding var balances: [Balance]
 
     @EnvironmentObject private var model: WalletModel
 
@@ -25,37 +84,13 @@ struct ExchangeListView: View {
     @State private var centsToTransfer: UInt64 = 0        // TODO: different values for different currencies?
 
     func reloadExchanges() async -> Void {
-            exchanges = await model.listExchangesM()
+        exchanges = await model.listExchangesM()
     }
-
-    func addExchange(_ exUrl: String) -> Void {
-        Task { // runs on MainActor
-            symLog.log("adding: \(exUrl)")
-            do {
-                try await model.addExchange(url: exUrl)
-                symLog.log("added: \(exUrl)")
-            } catch {    // TODO: error handling - couldn't add exchangeURL
-                symLog.log("error: \(error)")
-            }
-        }
-    }
-
-    @State var showAlert: Bool = false
-    @State var newExchange: String = TESTEXCHANGE
 
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-#endif
-        let plusAction: () -> Void = {
-//        withAnimation { showAlert = true }
-            showAlert = true
-        }
-#if TABBAR  // Taler Wallet
-        let hamburger: HamburgerButton? = nil
-#else       // GNU Taler
-        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
+        let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         //Text("Exchanges...")
         Content(symLog: symLog,
@@ -64,10 +99,6 @@ struct ExchangeListView: View {
              exchanges: $exchanges,
        centsToTransfer: $centsToTransfer,
        reloadExchanges: reloadExchanges)
-        .navigationTitle(navTitle)
-        .navigationBarItems(leading: hamburger,
-                            trailing: PlusButton(action: plusAction)
-                                        .accessibilityLabel("Add Exchange"))
         .overlay {
             if exchanges.isEmpty {
                 Text("No Exchanges yet...")
@@ -75,24 +106,13 @@ struct ExchangeListView: View {
             }
         }
         .task {
-            symLog.log(".task")
+            symLog?.log(".task")
             await reloadExchanges()
         }
-        .textFieldAlert(isPresented: $showAlert, title: "Add Exchange",
-                        doneText: "Add", text: $newExchange, action: addExchange)
     }
 }
 // MARK: -
-//struct ExchangeAmount: Identifiable {
-//    let exchange: Exchange
-//    let amountAvailable: Amount
-//
-//    var id: String {    // needed for Identifiable
-//        exchange.exchangeBaseUrl
-//    }
-//}
-// MARK: -
-extension ExchangeListView {
+extension ExchangeListCommonV {
     struct Content: View {
         let symLog: SymLogV?
         let stack: CallStack

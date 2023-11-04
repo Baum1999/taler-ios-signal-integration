@@ -41,6 +41,7 @@ struct QRButton : View  {
 }
 
 struct PlusButton : View  {
+    let accessibilityLabelStr: String
     let action: () -> Void
 
     var body: some View {
@@ -48,7 +49,7 @@ struct PlusButton : View  {
             Image(systemName: "plus")
         }
         .accessibilityFont(.title)
-        .accessibilityLabel("Add...")
+        .accessibilityLabel(accessibilityLabelStr)
     }
 }
 
