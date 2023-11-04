@@ -3,6 +3,7 @@
  * See LICENSE.md
  */
 import SwiftUI
+import os.log
 import SymLog
 
 // Use this to delay instantiation when using `NavigationLink`, etc...
@@ -15,6 +16,7 @@ struct LazyView<Content: View>: View {
 
 struct MainView: View {
     private let symLog = SymLogV(0)
+    let logger: Logger
     let stack: CallStack
     @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
@@ -33,7 +35,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(symLog: symLog, stack: stack.push("Content"), talerFont: $talerFont)
+                Content(symLog: symLog, logger: logger, stack: stack.push("Content"), talerFont: $talerFont)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
@@ -74,6 +76,7 @@ enum Tab {
 extension MainView {
     struct Content: View {
         let symLog: SymLogV?
+        let logger: Logger
         let stack: CallStack
         @State private var shouldReloadBalances = 0
         @State private var balances: [Balance] = []
@@ -220,7 +223,7 @@ extension MainView {
           }
             .onNotification(.BalanceChange) { notification in
               // reload balances on receiving BalanceChange notification ...
-                symLog?.log(".onNotification(.BalanceChange) ==> reload")
+                logger.info(".onNotification(.BalanceChange) ==> reload")
                 shouldReloadBalances += 1
             }
             .onChange(of: balances) { newArray in

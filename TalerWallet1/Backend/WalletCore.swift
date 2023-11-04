@@ -190,14 +190,19 @@ extension WalletCore {
                     if let type = TransactionType(rawValue: components[1]) {
                         guard type != .refresh else { return }
                         if decoded.newTxState.major == .done {
+                            logger.log("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(type.isIncoming ? 2 : 1)
                         } else if decoded.newTxState.major == .expired {
+                            logger.log("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(0)
                         }
                         postNotification(.TransactionStateTransition,
                                          userInfo: [TRANSACTIONTRANSITION: decoded])
                     }
                 }
+            } else {
+                // TODO: Same state usually means that an error is transmitted
+                logger.log("No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
             }
         } catch {       // rethrows
             symLog.log(jsonData)       // TODO: .error

@@ -10,8 +10,8 @@
  */
 import BackgroundTasks
 import SwiftUI
-import SymLog
 import os.log
+import SymLog
 
 @main
 struct TalerWallet1App: App {
@@ -37,7 +37,7 @@ struct TalerWallet1App: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView(stack: CallStack("App"), soundPlayed: $soundPlayed)
+            MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(controller)

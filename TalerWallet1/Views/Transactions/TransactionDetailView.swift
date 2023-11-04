@@ -121,20 +121,21 @@ struct TransactionDetailView: View {
                 }
         }.onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-                if transition.transactionId == common.transactionId {
+                if transition.transactionId == common.transactionId {       // is the transition for THIS transaction?
                     let newMajor = transition.newTxState.major
                     let newMinor = transition.newTxState.minor
                     if let doneAction {
                         if newMajor == .done {
                             symLog.log("newTxState.major == done  => dismiss sheet")
+// TODO:                           logger.info("newTxState.major == done  => dismiss sheet")
                             doneAction()        // if this view is in a sheet this action will dissmiss it
                         } else if newMajor == .expired {
                             symLog.log("newTxState.major == expired  => dismiss sheet")
+// TODO:                           logger.info("newTxState.major == expired  => dismiss sheet")
                             doneAction()        // if this view is in a sheet this action will dissmiss it
                         } else if newMajor == .pending {
                             if let newMinor {
                                 if newMinor == .exchangeWaitReserve { // user did confirm on bank website
-//                                    symLog.log("newTxState.minor == exchangeWaitReserve  => change Buttons")
                                     symLog.log("newTxState.minor == exchangeWaitReserve => dismiss sheet")
                                     doneAction()        // if this view is in a sheet this action will dissmiss it
                                 } else if newMinor == .withdrawCoins { // coin-withdrawal has started
@@ -158,8 +159,8 @@ struct TransactionDetailView: View {
                           symLog.log(error.localizedDescription)
                     }}}
                 }
-            } else {
-                // Yikes - should never happen
+            } else { // Yikes - should never happen
+// TODO:                logger.warning("Can't get notification.userInfo as TransactionTransition")
                 symLog.log(notification.userInfo as Any)
             }
         }
