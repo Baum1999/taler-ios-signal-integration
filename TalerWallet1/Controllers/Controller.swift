@@ -34,8 +34,8 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyInfos: [CurrencyInfo]
-    @AppStorage("useHaptics") var useHaptics: Bool = false  // extension mustn't define this, so it must be here
-    @AppStorage("playSounds") var playSounds: Int = 0       // extension mustn't define this, so it must be here
+    @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
+    @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")

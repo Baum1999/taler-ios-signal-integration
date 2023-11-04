@@ -28,8 +28,8 @@ struct SettingsView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-    @AppStorage("useHaptics") var useHaptics: Bool = false
-    @AppStorage("playSounds") var playSounds: Int = 0
+    @AppStorage("useHaptics") var useHaptics: Bool = true
+    @AppStorage("playSounds") var playSounds: Int = 1
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
