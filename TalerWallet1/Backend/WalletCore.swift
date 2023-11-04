@@ -242,16 +242,9 @@ extension WalletCore {
                     postNotification(.ProposalDownloaded, userInfo: nil)
 
                     // TODO: remove these once wallet-core doesn't send them anymore
-//                case "reserve-registered-with-bank":
-//                    symLog.log(anyPayload)
-//                case "withdraw-group-finished",
-//                     "pay-operation-success",
-//                     "withdrawal-group-bank-confirmed",          // replaced by transaction-state-transition
-//                     "withdrawal-group-reserve-ready",
-//                     "waiting-for-retry",                        // Bla Bla Bla
-                case "refresh-started", "refresh-melted",
-                     "refresh-revealed", "refresh-unwarranted":
-                    break
+//                case "refresh-started", "refresh-melted",
+//                     "refresh-revealed", "refresh-unwarranted":
+//                    break
                 default:
 print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
