@@ -131,18 +131,8 @@ extension BalancesSectionView: View {
         let transactionCount = completedTransactions.count
         /// if there is only one currency, then show recent transactions
         if sectionCount == 1 && transactionCount > 0 {
-            let sortedTransactions = completedTransactions.sorted {
-                do {
-                    let first = try $0.common.timestamp.milliseconds()
-                    let second = try $1.common.timestamp.milliseconds()
-                    return first > second
-                } catch {
-                    symLog.log(error)
-                    return false        // should never happen
-                }
-            }
             Section {
-                let slice = sortedTransactions.prefix(3)
+                let slice = completedTransactions.prefix(3)         // already sorted
                 let threeTransactions = Array(slice)
                 TransactionsRowsView(symLog: symLog,
                                       stack: stack.push(),
