@@ -55,7 +55,7 @@
 		4E3EAE3B2A990778009F1BE8 /* TalerWallet1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094EC298979620043A8A1 /* TalerWallet1App.swift */; };
 		4E3EAE3C2A990778009F1BE8 /* WithdrawTOSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */; };
 		4E3EAE3D2A990778009F1BE8 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
-		4E3EAE3E2A990778009F1BE8 /* ManualDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetails.swift */; };
+		4E3EAE3E2A990778009F1BE8 /* ManualDetailsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */; };
 		4E3EAE3F2A990778009F1BE8 /* View+dismissTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */; };
 		4E3EAE402A990778009F1BE8 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0952F2989CBFE0043A8A1 /* TransactionsListView.swift */; };
 		4E3EAE412A990778009F1BE8 /* WalletBackendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951B2989CBCB0043A8A1 /* WalletBackendRequest.swift */; };
@@ -153,7 +153,7 @@
 		4E605DB82AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E605DB62AB05E48002FB9A7 /* View+flippedDirection.swift */; };
 		4E605DBA2AB05FB6002FB9A7 /* BarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */; };
 		4E605DBB2AB05FB6002FB9A7 /* BarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */; };
-		4E6EDD852A3615BE0031D520 /* ManualDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetails.swift */; };
+		4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */; };
 		4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD862A363D8D0031D520 /* ListStyle.swift */; };
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
 		4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
@@ -328,7 +328,7 @@
 		4E605DAE2AADDD13002FB9A7 /* UIScreen+screenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen+screenSize.swift"; sourceTree = "<group>"; };
 		4E605DB62AB05E48002FB9A7 /* View+flippedDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+flippedDirection.swift"; sourceTree = "<group>"; };
 		4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarGraph.swift; sourceTree = "<group>"; };
-		4E6EDD842A3615BE0031D520 /* ManualDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetails.swift; sourceTree = "<group>"; };
+		4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetailsV.swift; sourceTree = "<group>"; };
 		4E6EDD862A363D8D0031D520 /* ListStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListStyle.swift; sourceTree = "<group>"; };
 		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
 		4E753A052A0952F7002D9328 /* DebugViewC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewC.swift; sourceTree = "<group>"; };
@@ -692,7 +692,7 @@
 				4EB095302989CBFE0043A8A1 /* TransactionRowView.swift */,
 				4EB095312989CBFE0043A8A1 /* TransactionDetailView.swift */,
 				4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */,
-				4E6EDD842A3615BE0031D520 /* ManualDetails.swift */,
+				4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */,
 				4ED2F94A2A278F5100453B40 /* ThreeAmounts.swift */,
 			);
 			path = Transactions;
@@ -1078,7 +1078,7 @@
 				4E3EAE3B2A990778009F1BE8 /* TalerWallet1App.swift in Sources */,
 				4E3EAE3C2A990778009F1BE8 /* WithdrawTOSView.swift in Sources */,
 				4E3EAE3D2A990778009F1BE8 /* Sheet.swift in Sources */,
-				4E3EAE3E2A990778009F1BE8 /* ManualDetails.swift in Sources */,
+				4E3EAE3E2A990778009F1BE8 /* ManualDetailsV.swift in Sources */,
 				4E3EAE3F2A990778009F1BE8 /* View+dismissTop.swift in Sources */,
 				4E3EAE402A990778009F1BE8 /* TransactionsListView.swift in Sources */,
 				4E3EAE412A990778009F1BE8 /* WalletBackendRequest.swift in Sources */,
@@ -1187,7 +1187,7 @@
 				4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */,
 				4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */,
 				4EEC157829F9032900D46A03 /* Sheet.swift in Sources */,
-				4E6EDD852A3615BE0031D520 /* ManualDetails.swift in Sources */,
+				4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */,
 				4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */,
 				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
 				4EB0951F2989CBCB0043A8A1 /* WalletBackendRequest.swift in Sources */,

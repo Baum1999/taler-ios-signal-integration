@@ -206,7 +206,7 @@ struct TransactionDetailView: View {
                             let withdrawalDetails = details.withdrawalDetails
                             switch withdrawalDetails.type {
                                 case .manual:               // "Make a wire transfer of \(amount) to"
-                                    ManualDetails(common: common, details: withdrawalDetails)
+                                    ManualDetailsV(common: common, details: withdrawalDetails)
                                     
                                 case .bankIntegrated:       // "Confirm with bank"
                                     let confirmed = withdrawalDetails.confirmed ?? false

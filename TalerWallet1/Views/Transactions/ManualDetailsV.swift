@@ -5,9 +5,12 @@
 import SwiftUI
 import taler_swift
 
-struct ManualDetails: View {
+struct ManualDetailsV: View {
     var common : TransactionCommon
     var details : WithdrawalDetails
+
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+
     var body: some View {
         if let paytoUris = details.exchangePaytoUris {
             let payto = paytoUris[0]
@@ -15,10 +18,18 @@ struct ManualDetails: View {
             let iban = payURL?.iban ?? "unknown IBAN"
             let amount = common.amountRaw.readableDescription
             Group {
-                Text("You need to transfer \(amount) from your regular bank account to the Exchange.")
-                Text("Step 1: Copy this code and paste it into the subject/purpose field in your banking app or bank website.\nThis is mandatory, otherwise your money will not arrive in this wallet.")
-                    .multilineTextAlignment(.leading)
-                    .listRowSeparator(.hidden)
+                Text(iconOnly ? "Transfer \(amount) to the Exchange."
+                              : "You need to transfer \(amount) from your regular bank account to the Exchange.")
+                Text(iconOnly ? "Step 1: Copy+Paste this subject:"
+                              : "Step 1: Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+                        .multilineTextAlignment(.leading)
+                        .listRowSeparator(.hidden)
+                if !iconOnly {
+                    Text("This is mandatory, otherwise your money will not arrive in this wallet.")
+                        .bold()
+                        .multilineTextAlignment(.leading)
+                        .listRowSeparator(.hidden)
+                }
                 HStack {
                     Text(details.reservePub)
                         .monospacedDigit()
@@ -29,7 +40,8 @@ struct ManualDetails: View {
                         .disabled(false)
                 }   .padding(.leading)
                     .listRowSeparator(.hidden)
-                Text("Step 2: If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website:")
+                Text(iconOnly ? "Step 2: Copy+Paste this IBAN:"
+                              : "Step 2: If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website:")
                     .multilineTextAlignment(.leading)
                     .listRowSeparator(.hidden)
                 HStack {
@@ -42,10 +54,12 @@ struct ManualDetails: View {
                 }   .padding(.leading)
                     .padding(.top, -8)
                     .listRowSeparator(.hidden)
-                Text("Step 3: Finish the wire transfer of \(amount) in your banking app or website, then this withdrawal will proceed automatically.")
+                Text(iconOnly ? "Step 3: Transfer \(amount)."
+                              : "Step 3: Finish the wire transfer of \(amount) in your banking app or website, then this withdrawal will proceed automatically.")
                     .multilineTextAlignment(.leading)
                     .listRowSeparator(.visible)
-                Text("Alternative: If your bank already supports PayTo, you can use this PayTo-Link instead:")
+                Text(iconOnly ? "Or use this PayTo-Link:"
+                              : "Alternative: If your bank already supports PayTo, you can use this PayTo-Link instead:")
                     .multilineTextAlignment(.leading)
                     .padding(.top, 2)
                     .listRowSeparator(.hidden)
@@ -78,7 +92,7 @@ struct ManualDetails_Previews: PreviewProvider {
         let details = WithdrawalDetails(type: .manual, reservePub: "ReSeRvEpUbLiC_KeY_FoR_WiThDrAwAl", reserveIsReady: false,
                                         exchangePaytoUris:["payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company"])
         List {
-            ManualDetails(common: common, details: details)
+            ManualDetailsV(common: common, details: details)
         }
     }
 }
