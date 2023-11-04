@@ -31,7 +31,7 @@ struct BalancesSectionView {
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
-    @State private var uncompletedTransactions: [Transaction] = []
+    @State private var incompleteTransactions: [Transaction] = []
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -54,10 +54,10 @@ struct BalancesSectionView {
 //        sectionID = UUID()
     }
 
-    func reloadUncompleted(_ stack: CallStack) async -> () {
+    func reloadIncomplete(_ stack: CallStack) async -> () {
         let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
-        uncompletedTransactions = WalletModel.uncompletedTransactions(transactions)
+        incompleteTransactions = WalletModel.incompleteTransactions(transactions)
 //        sectionID = UUID()
     }
 }
@@ -87,8 +87,7 @@ extension BalancesSectionView: View {
                         completedTransactions: $completedTransactions,
                               reloadAllAction: reloadCompleted,
                               reloadOneAction: reloadOneAction)
-            let hasPending = pendingTransactions.count > 0
-            if hasPending {
+            if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
                                  currencyInfo: currencyInfo,
@@ -96,21 +95,20 @@ extension BalancesSectionView: View {
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
             }
-            let hasUncompleted = uncompletedTransactions.count > 0
-            if hasUncompleted {
+            if incompleteTransactions.count > 0 {
                 NavigationLink {
-//let _ = print("button: Uncompleted Transactions: \(currency)")
+//let _ = print("button: Incomplete Transactions: \(currency)")
                     LazyView {
                         TransactionsListView(stack: stack.push(),
-                                          navTitle: String(localized: "Uncompleted"),
+                                          navTitle: String(localized: "Incomplete", comment: "ViewTitle of TransactionList"),
                                       currencyInfo: currencyInfo,
-                                      transactions: uncompletedTransactions,
+                                      transactions: incompleteTransactions,
                                         showUpDown: false,
-                                   reloadAllAction: reloadUncompleted,
+                                   reloadAllAction: reloadIncomplete,
                                    reloadOneAction: reloadOneAction)
                     }
                 } label: {
-                    UncompletedRowView(uncompletedTransactions: $uncompletedTransactions)
+                    IncompleteRowV(incompleteTransactions: $incompleteTransactions)
                 }
 
             }
@@ -123,7 +121,7 @@ extension BalancesSectionView: View {
                 let response = await model.transactionsT(stack.push(".task - reload Transactions"), currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
-                uncompletedTransactions = WalletModel.uncompletedTransactions(response)
+                incompleteTransactions = WalletModel.incompleteTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
                 shownSectionID = sectionID
 //            } else {
@@ -199,7 +197,7 @@ fileprivate struct BalancesPendingRowView: View {
             //let _ = print("button: Pending Transactions: \(currency)")
             LazyView {
                 TransactionsListView(stack: stack.push(),
-                                  navTitle: String(localized: "Pending"),
+                                  navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                               currencyInfo: currencyInfo,
                               transactions: pendingTransactions,
                                 showUpDown: false,
@@ -274,7 +272,7 @@ fileprivate struct BalancesNavigationLinksView: View {
 
             NavigationLink(destination: LazyView {
                 TransactionsListView(stack: stack.push(),
-                                  navTitle: String(localized: "Transactions"),
+                                  navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                               currencyInfo: currencyInfo,
                               transactions: completedTransactions,
                                 showUpDown: true,

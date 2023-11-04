@@ -79,7 +79,7 @@ struct TransactionRowView: View {
         let incoming = common.incoming()
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
-                             : WalletColors().uncompletedColor
+                             : WalletColors().incompleteColor
 
         SingleAxisGeometryReader { width in
             Group {

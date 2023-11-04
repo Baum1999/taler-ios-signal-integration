@@ -25,7 +25,7 @@ extension WalletModel {
             transaction.isPending
         }
     }
-    static func uncompletedTransactions(_ transactions: [Transaction]) -> [Transaction] {
+    static func incompleteTransactions(_ transactions: [Transaction]) -> [Transaction] {
         transactions.filter { transaction in
             !transaction.isDone && !transaction.isPending
         }

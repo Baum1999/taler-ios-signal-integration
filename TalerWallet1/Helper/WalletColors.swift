@@ -45,7 +45,7 @@ public struct WalletColors {
         Color(.systemBackground)
     }
 
-    var uncompletedColor: Color {
+    var incompleteColor: Color {
         gray1
     }
     func pendingColor(_ incoming: Bool) -> Color {
