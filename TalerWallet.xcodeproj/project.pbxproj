@@ -62,7 +62,7 @@
 		4E3EAE422A990778009F1BE8 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */; };
 		4E3EAE432A990778009F1BE8 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095302989CBFE0043A8A1 /* TransactionRowView.swift */; };
 		4E3EAE442A990778009F1BE8 /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
-		4E3EAE452A990778009F1BE8 /* SendDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDone.swift */; };
+		4E3EAE452A990778009F1BE8 /* SendDoneV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDoneV.swift */; };
 		4E3EAE462A990778009F1BE8 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */; };
 		4E3EAE472A990778009F1BE8 /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
 		4E3EAE482A990778009F1BE8 /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
@@ -227,7 +227,7 @@
 		4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */; };
 		4EB0956F2989CBFE0043A8A1 /* PendingOpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */; };
 		4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
-		4EB3136129FEE79B007D68BC /* SendDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDone.swift */; };
+		4EB3136129FEE79B007D68BC /* SendDoneV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDoneV.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
 		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
 		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
@@ -402,7 +402,7 @@
 		4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Pending.swift"; sourceTree = "<group>"; };
 		4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpView.swift; sourceTree = "<group>"; };
 		4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpsListView.swift; sourceTree = "<group>"; };
-		4EB3136029FEE79B007D68BC /* SendDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendDone.swift; sourceTree = "<group>"; };
+		4EB3136029FEE79B007D68BC /* SendDoneV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendDoneV.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
 		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
 		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
@@ -773,7 +773,7 @@
 			children = (
 				4E40E0BD29F25ABB00B85369 /* SendAmount.swift */,
 				4E7940DD29FC307C00A9AEA1 /* SendPurpose.swift */,
-				4EB3136029FEE79B007D68BC /* SendDone.swift */,
+				4EB3136029FEE79B007D68BC /* SendDoneV.swift */,
 				4E9320442A1645B600A87B0E /* RequestPayment.swift */,
 				4E9320462A164BC700A87B0E /* PaymentPurpose.swift */,
 			);
@@ -1085,7 +1085,7 @@
 				4E3EAE422A990778009F1BE8 /* KeyboardResponder.swift in Sources */,
 				4E3EAE432A990778009F1BE8 /* TransactionRowView.swift in Sources */,
 				4E3EAE442A990778009F1BE8 /* PublicConstants.swift in Sources */,
-				4E3EAE452A990778009F1BE8 /* SendDone.swift in Sources */,
+				4E3EAE452A990778009F1BE8 /* SendDoneV.swift in Sources */,
 				4E3EAE462A990778009F1BE8 /* TextFieldAlert.swift in Sources */,
 				4E3EAE472A990778009F1BE8 /* QuiteSomeCoins.swift in Sources */,
 				4E3EAE482A990778009F1BE8 /* PayTemplateView.swift in Sources */,
@@ -1194,7 +1194,7 @@
 				4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */,
 				4EB095572989CBFE0043A8A1 /* TransactionRowView.swift in Sources */,
 				4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */,
-				4EB3136129FEE79B007D68BC /* SendDone.swift in Sources */,
+				4EB3136129FEE79B007D68BC /* SendDoneV.swift in Sources */,
 				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
 				4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */,
 				4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */,

@@ -7,8 +7,8 @@ import taler_swift
 import SymLog
 
 // Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
-struct SendDone: View {
-    private let symLog = SymLogV(0)
+struct SendDoneV: View {
+    private let symLog = SymLogV()
     let stack: CallStack
     let navTitle = String(localized: "P2P Ready")
 #if DEBUG
@@ -22,10 +22,11 @@ struct SendDone: View {
     let amountToReceive: Amount?
     let summary: String
     let expireDays: UInt
+    @Binding var transactionStarted: Bool
 
     @EnvironmentObject private var model: WalletModel
 
-    @State private var transactionId: String?
+    @State private var transactionId: String? = nil
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -59,6 +60,12 @@ struct SendDone: View {
         .task {
             symLog.log(".task")
             do {
+                guard transactionStarted == false else {
+// TODO:               logger.warning("Try to start P2P a second time")
+                    symLog.log("Yikes❗️ Try to start P2P a second time")
+                    return
+                }
+                transactionStarted = true
                 let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
                                                                       : expireDays > 5 ? 60 : 3)
                                               : Timestamp.inSomeDays(expireDays)
@@ -86,14 +93,14 @@ struct SendDone: View {
     }
 }
 // MARK: -
-struct SendNow_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            SendDone(stack: CallStack("Preview"),
-              amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
-           amountToReceive: nil,
-                   summary: "some subject/purpose",
-                expireDays: 0)
-        }
-    }
-}
+//struct SendNow_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            SendDoneV(stack: CallStack("Preview"),
+//              amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
+//           amountToReceive: nil,
+//                   summary: "some subject/purpose",
+//                expireDays: 0)
+//        }
+//    }
+//}

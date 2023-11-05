@@ -19,6 +19,8 @@ struct SendPurpose: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
     let navTitle = String(localized: "NavTitle_Send_Subject", defaultValue: "Subject", comment: "NavTitle for entering the subject for Send-Money")
 
+    @State private var transactionStarted: Bool = false
+
     private var value: String {
 //        let mag = pow(10, formatter.maximumFractionDigits)
 //        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
@@ -81,11 +83,12 @@ struct SendPurpose: View {
                 let emptyStr = ""
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
-                    SendDone(stack: stack.push(),
-                      amountToSend: amount,
-                   amountToReceive: nil,
-                           summary: summary,
-                        expireDays: expireDays)
+                    SendDoneV(stack: stack.push(),
+                       amountToSend: amount,
+                    amountToReceive: nil,
+                            summary: summary,
+                         expireDays: expireDays,
+                 transactionStarted: $transactionStarted)
                 }) {
                     Text("Send \(value) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")  // TODO: currency formatter
                 }

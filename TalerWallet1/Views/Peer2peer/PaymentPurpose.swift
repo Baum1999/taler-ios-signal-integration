@@ -18,6 +18,7 @@ struct PaymentPurpose: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
     let navTitle = String(localized: "NavTitle_Request_Subject", defaultValue: "Request", comment: "NavTitle for entering the subject for Request-Payment")
 
+    @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool
 
     private var label: String {
@@ -63,11 +64,12 @@ struct PaymentPurpose: View {
                 let emptyStr = ""
                 let disabled = (expireDays == 0) || (summary.count < 1)
                 NavigationLink(destination: LazyView {
-                    SendDone(stack: stack.push(),
-                      amountToSend: nil,
-                   amountToReceive: amount,
-                           summary: summary,
-                        expireDays: expireDays)
+                    SendDoneV(stack: stack.push(),
+                       amountToSend: nil,
+                    amountToReceive: amount,
+                            summary: summary,
+                         expireDays: expireDays,
+                 transactionStarted: $transactionStarted)
                 }) {
                     Text("Request \(label) \(scopeInfo.currency)")
 //                        .accessibilityFont(buttonFont)
