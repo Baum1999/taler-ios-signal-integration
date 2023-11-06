@@ -6,6 +6,15 @@ import SwiftUI
 import UIKit
 
 extension View {
+    @MainActor
+    public func announce(this: String) {
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .screenChanged, argument: this)
+        }
+    }
+}
+
+extension View {
     /// if sameSize then this searches for the longest title
     /// returns true if any of the strings in 'titles' wouldn't fit in a view 1/'numViews' of the size of 'width', with 'spacing'
     /// if !sameSize then all titles are added with spacing

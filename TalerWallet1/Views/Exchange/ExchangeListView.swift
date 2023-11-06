@@ -26,6 +26,7 @@ struct ExchangeListView: View {
             do {
                 try await model.addExchange(url: exchange)
                 symLog.log("added: \(exchange)")
+                announce(this: "added: \(exchange)")
             } catch {    // TODO: error handling - couldn't add exchangeURL
                 symLog.log("error: \(error)")
             }
@@ -50,9 +51,10 @@ struct ExchangeListView: View {
                 .navigationBarItems(leading: hamburger, trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
                     TextField("Exchange address", text: $newExchange)
+//                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
                     Button(addButtonStr) {
                         addExchange(newExchange)
-                    }.buttonStyle(.borderedProminent)
+                    }
                     Button("Cancel", role: .cancel) { }
                 } message: {
                     Text("Please enter the exchange URL")
