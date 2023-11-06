@@ -18,7 +18,8 @@ struct ExchangeRowView: View {
 
     func selectAndUpdate(_ button: Int) {
         buttonSelected = button      // will trigger NavigationLink
-        // TODO: while navigation animation runs, contact Exchange to update Fees
+        // TODO: after user tapped a button, while navigation animation runs, contact Exchange to update Fees
+        // cannot be uncommented yet since there is no scopeInfo
 //        Task { // runs on MainActor
 //            do {
 //                try await model.updateExchange(scopeInfo: balance.scopeInfo)
@@ -28,8 +29,6 @@ struct ExchangeRowView: View {
 //        }
     }
 
-
-//    func
     func titles(_ title: String) -> (String, String?) {
         if let separatorIndex = title.firstIndex(of: "\n") {
             let title1 = String(title[..<separatorIndex])
@@ -50,6 +49,7 @@ struct ExchangeRowView: View {
     var body: some View {
         let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
                                    comment: "Abbreviation of `Deposit (currency)´")
+                    // TODO: deal with \t
         let depositTitle1 = String(localized: "Deposit\t\(currency)",
                                    comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
         let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",

@@ -27,8 +27,8 @@ struct PendingRowContentV: View {
             totalWidth = totalStr.widthOfString(usingUIFont: uiFont, sizeCategory)
         }
 
-    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
-    print(logStr)
+//    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
+//    print(logStr)
         return imageWidth + (isHorizontal ? totalWidth
                                           : max(title1Width, title2Width))
     }
