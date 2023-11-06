@@ -65,7 +65,7 @@ public class TalerDater: DateFormatter {
         do {
             let milliseconds = try from.milliseconds()
             let date = Date(milliseconds: milliseconds)
-//            let date = date(from: from)
+
             if relative {
                 let now = Date.now
                 let timeInterval = now.timeIntervalSince(date)
@@ -75,8 +75,8 @@ public class TalerDater: DateFormatter {
             }
             return (shared.string(from: date), date)
         } catch {       // Never
-//            let never = LocalizedString("Never")
-            return ("Never", nil)
+            let never = String(localized: "No date", comment: "Timestamp missing or invalid")
+            return (never, nil)
         }
     }
 

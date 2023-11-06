@@ -57,8 +57,8 @@ struct QuiteSomeCoins: View {
         if !someCoins.invalid {
             if !someCoins.tooMany {
                 if someCoins.manyCoins {
-                    Text(someCoins.quiteSome ? "Warning: It will take quite some time to withdraw this amount!"
-                                             : "Warning: It will take some time to withdraw this amount.")
+                    Text(someCoins.quiteSome ? "Note: It will take quite some time to withdraw this amount! Be more patient..."
+                                             : "Note: It will take some time to withdraw this amount. Be patient...")
                     .foregroundColor(someCoins.quiteSome ? .red : .primary)
                     .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)

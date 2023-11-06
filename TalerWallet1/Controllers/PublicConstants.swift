@@ -13,6 +13,7 @@ public let ONEDAY: UInt = 1         // 1..3
 public let SEVENDAYS: UInt = 7      // 3..9
 public let THIRTYDAYS: UInt = 30    // 10..30
 
+public let EMPTYSTRING = ""                        // avoid automatic translation of empty "" textLiterals in Text()
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
 //public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"

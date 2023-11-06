@@ -48,8 +48,7 @@ extension View {
                 error.wrappedValue = nil
             }
         } message: { error in
-            let emptyStr = ""
-            Text(error.failureReason ?? error.recoverySuggestion ?? emptyStr)
+            Text(error.failureReason ?? error.recoverySuggestion ?? EMPTYSTRING)
         }
     }
 }

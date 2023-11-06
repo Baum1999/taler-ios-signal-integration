@@ -22,15 +22,17 @@ struct CopyButton: View {
         Button(action: copyAction) {
             if vertical {
                 VStack {
+                    let shortCopy = String(localized: "Copy.short", defaultValue: "Copy", comment: "5 letters max, else abbreviate")
                     Image(systemName: "doc.on.doc")
                         .accessibility(hidden: true)
-                    Text("Copy", comment: "5 letters max, else abbreviate")
+                    Text(shortCopy)
                 }
             } else {
+                let longCopy = String(localized: "Copy.long", defaultValue: "Copy", comment: "may be a bit longer")
                 HStack {
                     Image(systemName: "doc.on.doc")
                         .accessibility(hidden: true)
-                    Text("Copy", comment: "may be a bit longer")
+                    Text(longCopy)
                 }
             }
         }

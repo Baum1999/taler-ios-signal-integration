@@ -61,7 +61,6 @@ struct PaymentPurpose: View {
                     .disabled(false)
                     .padding(.bottom)
 
-                let emptyStr = ""
                 let disabled = (expireDays == 0) || (summary.count < 1)
                 NavigationLink(destination: LazyView {
                     SendDoneV(stack: stack.push(),
@@ -76,7 +75,7 @@ struct PaymentPurpose: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-                .accessibilityHint(disabled ? "enabled when subject and expiration are set" : emptyStr)
+                .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
 
                 Spacer()
             }
