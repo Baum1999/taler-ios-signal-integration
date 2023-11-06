@@ -11,6 +11,8 @@ struct BalanceButton: View {
     let rowAction: () -> Void
 
     @AppStorage("iconOnly") var iconOnly: Bool = false
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
 
     var body: some View {
         let balanceTitleStr = String(localized: "Balance:", comment: "Main view")
@@ -27,7 +29,8 @@ struct BalanceButton: View {
                                fitsHorizontal: fitsSideBySide, vertAlignment: .lastTextBaseline) {
                         Text(title)
                             .accessibilityFont(.title2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+//                            .foregroundColor(moreContrast ? .primary : .secondary)
                     }
                 }
             }

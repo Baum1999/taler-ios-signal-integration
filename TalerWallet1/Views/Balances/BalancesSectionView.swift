@@ -22,6 +22,7 @@ struct BalancesSectionView {
     @Binding var centsToTransfer: UInt64
     @Binding var summary: String
 
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
     @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -143,6 +144,7 @@ extension BalancesSectionView: View {
                 if !iconOnly {
                     Text("Recent transactions")
                         .accessibilityFont(.callout)
+//                        .foregroundColor(moreContrast ? .primary : .secondary)
                 }
             }
         }

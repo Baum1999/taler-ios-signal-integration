@@ -12,6 +12,7 @@ struct BarGraphHeader: View {
     let stack: CallStack
     let currency: String
 
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
     @EnvironmentObject private var model: WalletModel
     @State private var completedTransactions: [Transaction] = []
 
@@ -19,6 +20,7 @@ struct BarGraphHeader: View {
         HStack (alignment: .center, spacing: 10) {
             Text(currency)
                 .accessibilityFont(.title2)
+//                .foregroundColor(moreContrast ? .primary : .secondary)
             BarGraph(transactions: $completedTransactions,
                      maxBars: MAXBARS, barHeight: 10)       // TODO: barHeight relative to fontSize
         }

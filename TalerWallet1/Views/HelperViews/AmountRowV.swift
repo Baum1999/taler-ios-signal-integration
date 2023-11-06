@@ -49,6 +49,8 @@ struct AmountRowV<Content: View>: View {
 
 struct SectionWithAmountRow: View {
     @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
     var body: some View {
         let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
         let demoInfo = PreviewCurrencyInfo(DEMOCURRENCY, digits: 2)
@@ -61,23 +63,27 @@ struct SectionWithAmountRow: View {
                 AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
+                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
                 AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
+                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
             }
             Section {
-                AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
+                AmountRowV(amountStr: testStr, amountColor: .primary, largeAmountFont: false,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
+                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
                 AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
+                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
             }

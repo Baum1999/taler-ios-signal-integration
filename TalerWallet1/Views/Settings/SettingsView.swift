@@ -28,6 +28,7 @@ struct SettingsView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true
     @AppStorage("playSounds") var playSounds: Int = 1
     @AppStorage("talerFont") var talerFont: Int = 0
@@ -101,6 +102,8 @@ struct SettingsView: View {
                     SettingsItem(name: aboutStr, id1: "about",
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
+//                SettingsToggle(name: String(localized: "More Contrast"), value: $moreContrast, id1: "contrast",
+//                               description: hideDescriptions ? nil : String(localized: "If you don't like grey"))
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))

@@ -25,11 +25,13 @@ struct TransactionDetailView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)
@@ -80,7 +82,8 @@ struct TransactionDetailView: View {
                 Text(dateString)
                     .accessibilityFont(.body)
                     .accessibilityLabel(accessibilityDate)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+//                    .foregroundColor(moreContrast ? .primary : .secondary)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
