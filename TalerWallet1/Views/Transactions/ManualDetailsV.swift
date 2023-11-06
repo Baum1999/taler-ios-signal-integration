@@ -47,6 +47,7 @@ struct ManualDetailsV: View {
                 HStack {
                     Text(iban)
                         .monospacedDigit()
+                        .accessibilityLabel("IBAN of the exchange")
                     Spacer()
                     CopyButton(textToCopy: iban, vertical: true)
                         .accessibilityLabel("Copy the IBAN")

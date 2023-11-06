@@ -45,8 +45,10 @@ struct WithdrawURIView: View {
                                      large: false, pending: false, incoming: true,
                                    baseURL: exchangeBaseUrl)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
-                    QuiteSomeCoins(someCoins: someCoins, shouldShowFee: false,
-                                   currency: raw.currencyStr, amountEffective: effective)
+                    QuiteSomeCoins(someCoins: someCoins,
+                               shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                                    currency: raw.currencyStr,
+                             amountEffective: effective)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

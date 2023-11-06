@@ -65,6 +65,7 @@ struct ThreeAmountsV: View {
                        color: labelColor,
                        large: large)
                 .padding(.bottom, 4)
+                .accessibilityElement(children: .combine)
             if let fee {
                 AmountView(title: iconOnly ? String(localized: "Fee:")
                                            : String(localized: "Exchange fee:"),
@@ -72,12 +73,14 @@ struct ThreeAmountsV: View {
                            color: labelColor,
                            large: false)
                 .padding(.bottom, 4)
+                .accessibilityElement(children: .combine)
             }
             if let bottomAmount {
                 AmountView(title: iconOnly ? bottomAbbrev : bottomTitle,
                            value: bottomAmount.readableDescription,
                            color: foreColor,
                            large: large)
+                .accessibilityElement(children: .combine)
             }
             if let baseURL {
                 VStack(alignment: .leading) {
@@ -96,6 +99,7 @@ struct ThreeAmountsV: View {
                 .padding(.top, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)
+                .accessibilityElement(children: .combine)
             }
         } header: {
             if !iconOnly {

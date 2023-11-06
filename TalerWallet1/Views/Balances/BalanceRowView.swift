@@ -34,7 +34,7 @@ struct BalanceButton: View {
         }   .disabled(false)
             .buttonStyle(TalerButtonStyle(type: iconOnly ? .plain : .balance, aligned: .trailing))
             .accessibilityElement(children: .combine)
-            .accessibilityHint("will go to main transactions list")
+            .accessibilityHint("Will go to main transactions list.")
 //            .accessibilityLabel(balanceTitleStr + " " + amountStr)    // TODO: CurrencyFormatter!
     }
 }

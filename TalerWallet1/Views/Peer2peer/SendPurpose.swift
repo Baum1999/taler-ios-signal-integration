@@ -73,6 +73,7 @@ struct SendPurpose: View {
                     Spacer()
                     Text(verbatim: "\(summary.count)/100")
                         .accessibilityFont(.body)
+                        .accessibilityValue("\(summary.count) characters of 100")
                 } // maximum 100 characters
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)

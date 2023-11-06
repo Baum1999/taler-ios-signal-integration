@@ -133,14 +133,13 @@ struct SettingsSpeaker: View {
     var action: (_ value: Int) -> Void = {value in }
 
     func imageName(_ value: Int) -> (String, String) {
-        return (value == 0) ? ("speaker.slash", String(localized:"off", comment: "Accessibility String for Payment Sounds Off"))
-             : (value == 1) ? ("speaker.fill", String(localized:"Taler Sounds", comment: "Accessibility String for Payment Sounds"))
-                            : ("speaker", String(localized:"Apple Sounds", comment: "Accessibility String for Payment Sounds"))
+        return (value == 0) ? ("speaker.slash", String(localized:"Off",          comment: "Accessibility String for Payment Sounds."))
+             : (value == 1) ? ("speaker.fill",  String(localized:"Taler Sounds", comment: "Accessibility String for Payment Sounds."))
+                            : ("speaker",       String(localized:"Apple Sounds", comment: "Accessibility String for Payment Sounds."))
     }
     var body: some View {
         let image = imageName(value)
-        let accLabel = name + ", " + image.1
-        let accHint = description ?? ""
+        let accHint = description ?? ""         // avoid automatic translation of "" in accessibilityHint
 
         VStack {
             HStack {
@@ -170,7 +169,8 @@ struct SettingsSpeaker: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(accLabel)
+        .accessibilityLabel(name)
+        .accessibility(value: Text(image.1))
         .accessibilityHint(accHint)
         .padding([.bottom], 4)
     }

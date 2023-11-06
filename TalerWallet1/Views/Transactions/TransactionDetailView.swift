@@ -47,14 +47,9 @@ struct TransactionDetailView: View {
 
     func accessibilityDate(_ date: Date?) -> String? {
         if let date {
-            let dateString = DateFormatter.localizedString(from: date,
-                                                      dateStyle: .short,
-                                                      timeStyle: .none)
-            let hourComponents = Calendar.current.dateComponents([.hour, .minute], from: date)
-            if let timeString = DateComponentsFormatter.localizedString(from: hourComponents, unitsStyle: .spellOut) {
-                return dateString + ", " + timeString
-            }
-            return dateString
+            let formatted = date.formatted(date: .long, time: .shortened)
+//            print(formatted)
+            return formatted
         }
         return nil
     }
@@ -68,8 +63,7 @@ struct TransactionDetailView: View {
         let pending = transaction.isPending
         let locale = TalerDater.shared.locale
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
-        let accessibilityDate = accessibilityDate(date) ??
-                                    dateString
+        let accessibilityDate = accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.localizedType
         Group {
             List {
@@ -272,8 +266,9 @@ struct TransactionDetailView: View {
                                     .padding(.top)
                             }
                         }
-                        ThreeAmountsSheet(common: common, topAbbrev: transaction.localizedType,
-                                        topTitle: transaction.localizedType,
+                        let colon = ":"
+                        ThreeAmountsSheet(common: common, topAbbrev: transaction.localizedType + colon,
+                                        topTitle: transaction.localizedType + colon,
                                          baseURL: details.exchangeBaseUrl, large: false)
                 } // switch
             } // Group

@@ -42,6 +42,8 @@ struct Sheet: View {
                 .monospacedDigit()
                 .edgesIgnoringSafeArea(.top)
                 .id("sheetID")
+                .accessibilityLabel(Text("Sheet.ID.", comment: "AccessibilityLabel"))
+                .accessibilityValue(idString)
         }
     }
 }

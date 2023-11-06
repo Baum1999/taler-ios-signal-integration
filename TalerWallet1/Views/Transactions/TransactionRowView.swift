@@ -97,7 +97,7 @@ struct TransactionRowView: View {
                                            centerBottom: dateString, isHorizontal: true, incoming: incoming, foreColor: foreColor)
                 }
                     .accessibilityElement(children: .combine)
-                    .accessibilityHint("will go to detail view")
+                    .accessibilityHint("Will go to detail view.")
             }
         }
     }

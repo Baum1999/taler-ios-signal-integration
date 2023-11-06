@@ -15,11 +15,13 @@ struct TextFieldAlert: ViewModifier {
         ZStack(alignment: .center) {
             content
                 .disabled(isPresented)
+                .accessibilityElement(children: isPresented ? .ignore : .contain)
             if isPresented {
                 VStack {
                     Text(title)
                         .accessibilityFont(.headline)
                         .accessibilityAddTraits(.isHeader)
+                        .accessibilityRemoveTraits(.isStaticText)
                         .padding()
                     TextField(placeholder, text: $text).textFieldStyle(.roundedBorder).padding()
                     Divider()
@@ -41,6 +43,7 @@ struct TextFieldAlert: ViewModifier {
                         Spacer()
                     }
                 }
+                    .accessibility(addTraits: .isModal)
                     .background(.background)
                     .frame(width: 300, height: 200)
                     .cornerRadius(20)
