@@ -24,6 +24,7 @@ struct MainView: View {
     @State private var urlToOpen: URL? = nil
     @Binding var soundPlayed: Bool
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
+    @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
 
     func sheetDismissed() -> Void {
         symLog.log("sheet dismiss")
@@ -39,7 +40,9 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        controller.playSound(1008)     // Startup chime
+                        if playSounds != 0 {
+                            controller.playSound(1008)     // Startup chime
+                        }
                         soundPlayed = true
                     }
             } else if controller.backendState == .error {
