@@ -15,58 +15,29 @@ struct TransactionButton: View {
     @State var executed: Bool = false
     var body: some View {
         let isDestructive = (command == .delete) || (command == .fail)
-        let role: ButtonRole? = (command == .abort) ? .cancel
-                              :  isDestructive ? .destructive
-                                               : nil
+        let isCancel = (command == .abort)
+        let role: ButtonRole? = isDestructive ? .destructive
+                              : isCancel      ? .cancel
+                                              : nil
         Button(role: role, action: {
-            Task { // runs on MainActor
+            if !disabled {
                 disabled = true     // don't try this more than once
-                do {
-                    try await action(transactionId)
+                Task { // runs on MainActor
+                    do {
+                        try await action(transactionId)
 //                    symLog.log("\(executed) \(transactionId)")
-                    executed = true
-                } catch {    // TODO: error
+                        executed = true
+                    } catch {    // TODO: error
 //                    symLog.log(error.localizedDescription)
+                    }
                 }
             }
         }, label: {
-            HStack {
-                if executed {
-                    switch command {
-                        case .delete:
-                            Text("Deleted from list")
-                        case .abort:
-                            Text("Abort pending...")
-                        case .fail:
-                            Text("Failing...")
-                        case .suspend:
-                            Text("Suspending...")
-                        case .resume:
-                            Text("Resuming...")
-                    }
-                } else {
-                    let spaces = "        "
-                    switch command {
-                        case .delete:
-                            Text("Delete from list" + spaces)
-                            Image(systemName: "trash")                          // 􀈑
-                        case .abort:
-                            Text("Abort" + spaces)
-                            Image(systemName: "x.circle")                       // 􀀲
-                        case .fail:
-                            Text("Fail" + spaces)
-                            Image(systemName: "play.slash")                     // 􀪅
-                        case .suspend:
-                            Text("Suspend" + spaces)
-                            if #available(iOS 16.0, *) {
-                                Image(systemName: "clock.badge.xmark")          // 􁜒
-                            } else {
-                                Image(systemName: "clock.badge.exclamationmark")// 􀹶
-                            }
-                        case .resume:
-                            Text("Resume" + spaces)
-                            Image(systemName: "clock.arrow.circlepath")         // 􀣔
-                    }
+            HStack(spacing: 50) {
+                Text(executed ? command.localizedActionExecuted
+                              : command.localizedActionTitle)
+                if let imageName = command.localizedActionImage {
+                    Image(systemName: imageName)
                 }
             }
             .accessibilityFont(.title2)
@@ -76,16 +47,18 @@ struct TransactionButton: View {
         .controlSize(.large)
         .disabled(disabled)
     }
-
 }
-
-
+// MARK: -
 #if DEBUG
 struct TransactionButton_Previews: PreviewProvider {
 
+    static func action(_ transactionId: String) async throws {
+        print(transactionId)
+    }
+
     static var previews: some View {
         List {
-            TransactionButton(transactionId: "String", command: .abort, action: {transactionId in })
+            TransactionButton(transactionId: "Button pressed", command: .abort, action: action)
         }
     }
 }

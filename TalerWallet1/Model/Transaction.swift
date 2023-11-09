@@ -23,7 +23,7 @@ enum TransactionMinorState: String, Codable {
     case aml        // AmlRequired
     case mergeKycRequired = "merge-kyc"
     case track
-    case pay
+    case submitPayment = "submit-payment"
     case rebindSession = "rebind-session"
     case refresh
     case pickup
@@ -40,17 +40,16 @@ enum TransactionMinorState: String, Codable {
     case repurchase
     case bankRegisterReserve = "bank-register-reserve"
     case bankConfirmTransfer = "bank-confirm-transfer"
-    case exchangeWaitReserve = "exchange-wait-reserve"
     case withdrawCoins = "withdraw-coins"
+    case exchangeWaitReserve = "exchange-wait-reserve"
     case abortingBank = "aborting-bank"
+    case aborting
     case refused
     case withdraw
     case merchantOrderProposed = "merchant-order-proposed"
     case proposed
     case refundAvailable = "refund-available"
     case acceptRefund = "accept-refund"
-
-    case submitPayment = "submit-payment"
 }
 
 enum TransactionMajorState: String, Codable {
@@ -67,23 +66,20 @@ enum TransactionMajorState: String, Codable {
     case expired
       // Only used for the notification, never in the transaction history
     case deleted
-      // Placeholder until D37 is fully implemented
-    case unknown
 
     var localizedState: String {
         switch self {
             case .none:      return                   "none"
-            case .pending:   return String(localized: "MajorState.Pending", defaultValue: "Pending", comment: "TransactionMajorState")
-            case .done:      return String(localized: "MajorState.Done", defaultValue: "Done", comment: "TransactionMajorState")
-            case .aborting:  return String(localized: "MajorState.Aborting", defaultValue: "Aborting", comment: "TransactionMajorState")
-            case .aborted:   return String(localized: "MajorState.Aborted", defaultValue: "Aborted", comment: "TransactionMajorState")
+            case .pending:   return String(localized: "MajorState.Pending", defaultValue: "Pending", comment: "TxMajorState heading")
+            case .done:      return String(localized: "MajorState.Done", defaultValue: "Done", comment: "TxMajorState heading")
+            case .aborting:  return String(localized: "MajorState.Aborting", defaultValue: "Aborting", comment: "TxMajorState heading")
+            case .aborted:   return String(localized: "MajorState.Aborted", defaultValue: "Aborted", comment: "TxMajorState heading")
             case .suspended: return                   "Suspended"
-            case .dialog:    return String(localized: "MajorState.Dialog", defaultValue: "Dialog", comment: "TransactionMajorState")
+            case .dialog:    return String(localized: "MajorState.Dialog", defaultValue: "Dialog", comment: "TxMajorState heading")
             case .suspendedAborting: return           "AbortingSuspended"
-            case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Failed", comment: "TransactionMajorState")
-            case .expired:   return String(localized: "MajorState.Expired", defaultValue: "Expired", comment: "TransactionMajorState")
-            case .deleted:   return String(localized: "MajorState.Deleted", defaultValue: "Deleted", comment: "TransactionMajorState")
-            case .unknown:   return String(localized: "MajorState.Unknown", defaultValue: "Unknown", comment: "TransactionMajorState")
+            case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Failed", comment: "TxMajorState heading")
+            case .expired:   return String(localized: "MajorState.Expired", defaultValue: "Expired", comment: "TxMajorState heading")
+            case .deleted:   return String(localized: "MajorState.Deleted", defaultValue: "Deleted", comment: "TxMajorState heading")
         }
     }
 }
@@ -104,12 +100,52 @@ struct TransactionTransition: Codable {             // Notification
 }
 
 enum TxAction: String, Codable {
-    case abort      // pending,dialog,suspended -> aborting
-//  case revive     // aborting -> pending ?? maybe post 1.0
-    case fail       // aborting -> failed
     case delete     // dialog,done,expired,aborted,failed -> ()
     case suspend    // pending -> suspended; aborting -> ab_suspended
     case resume     // suspended -> pending; ab_suspended -> aborting
+    case abort      // pending,dialog,suspended -> aborting
+//  case revive     // aborting -> pending ?? maybe post 1.0
+    case fail       // aborting -> failed
+    case retry      //
+
+    var localizedActionTitle: String {
+        return switch self {
+            case .delete:   String(localized: "TxAction.Delete", defaultValue: "Delete from list", comment: "TxAction button")
+            case .suspend:  String("Suspend")
+            case .resume:   String("Resume")
+            case .abort:    String(localized: "TxAction.Abort", defaultValue: "Abort", comment: "TxAction button")
+//            case .revive:   String(localized: "TxAction.Revive", defaultValue: "Revive", comment: "TxAction button")
+            case .fail:     String(localized: "TxAction.Fail", defaultValue: "Fail", comment: "TxAction button")
+            case .retry:    String(localized: "TxAction.Retry", defaultValue: "Retry", comment: "TxAction button")
+        }
+    }
+    var localizedActionImage: String? {
+        return switch self {
+            case .delete:   "trash"                     // 􀈑
+            case .suspend:
+                if #available(iOS 16.0, *) {
+                    "clock.badge.xmark"                 // 􁜒
+                } else {
+                    "clock.badge.exclamationmark"       // 􀹶
+                }
+            case .resume:   "clock.arrow.circlepath"    // 􀣔
+            case .abort:    "x.circle"                  // 􀀲
+//            case .revive:   "clock.arrow.circlepath"    // 􀣔
+            case .fail:     "play.slash"                // 􀪅
+            case .retry:    "arrow.circlepath"          // 􁹠
+        }
+    }
+    var localizedActionExecuted: String {
+        switch self {
+            case .delete:   return String(localized: "TxActionDone.Delete", defaultValue: "Deleted from list", comment: "TxAction button")
+            case .suspend:  return String("Suspending...")
+            case .resume:   return String("Resuming...")
+            case .abort:    return String(localized: "TxActionDone.Abort", defaultValue: "Abort pending...", comment: "TxAction button")
+//            case .revive:   return String(localized: "TxActionDone.Revive", defaultValue: "Revive", comment: "TxAction button")
+            case .fail:     return String(localized: "TxActionDone.Fail", defaultValue: "Failing...", comment: "TxAction button")
+            case .retry:    return String(localized: "TxActionDone.Retry", defaultValue: "Retrying...", comment: "TxAction button")
+        }
+    }
 }
 
 enum TransactionType: String, Codable {
