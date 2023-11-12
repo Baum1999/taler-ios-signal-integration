@@ -161,8 +161,8 @@ fileprivate struct BalancesPendingRowView: View {
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     func computePending(currency: String) -> (Amount, Amount) {
-        var incoming = Amount(currency: currency, value: 0)
-        var outgoing = Amount(currency: currency, value: 0)
+        var incoming = Amount(currency: currency, cent: 0)
+        var outgoing = Amount(currency: currency, cent: 0)
         for transaction in pendingTransactions {
             let effective = transaction.common.amountEffective
             if currency == effective.currencyStr {

@@ -47,14 +47,32 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The largest possible value that can be represented.
     private static let maxValue: UInt64 = 1 << 52
     
-    /// The size of `integer` in relation to `fraction`.
-    private static let fractionalBase: UInt32 = 100000000
-    
     /// The greatest number of fractional digits that can be represented.
     private static let fractionalBaseDigits: UInt = 8
-    
-    /// The currency of the amount. Cannot be changed later
-    private let currency: String
+
+    /// The size of `integer` in relation to `fraction`.
+    static func fractionalBase(_ power: UInt = Amount.fractionalBaseDigits) -> UInt32 {
+        var exponent = power < Amount.fractionalBaseDigits
+                     ? power : Amount.fractionalBaseDigits
+        var base: UInt32 = 1
+        for _ in 0..<exponent { base *= 10 }
+        return base
+    }
+
+    /// Convenience re-definition
+    func fractionalBase(_ power: UInt = Amount.fractionalBaseDigits) -> UInt32 {
+        Self.fractionalBase(power)
+    }
+
+    public static let decimalSeparator = "."
+
+    /// The currency of the amount. Cannot be changed later, except...
+    private var currency: String
+
+    /// ... with this function
+    public func setCurrency(_ newCurrency: String) {
+        currency = newCurrency
+    }
 
     /// The integer value of the amount (number to the left of the decimal point).
     var integer: UInt64
@@ -81,7 +99,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The floating point representation of the fraction.
     public var fracValue: Double {
         let oneThousand = 1000.0
-        let base = Double(Amount.fractionalBase) / oneThousand
+        let base = Double(fractionalBase()) / oneThousand
         let thousandths = Double(fraction) / base
         return thousandths / oneThousand
     }
@@ -102,36 +120,46 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The string representation of the value, formatted as "`integer`.`fraction`",
     /// no trailing zeroes, no group separator.
     public var valueStr: String {
-        var decimalSeparator = "."
-//        if let currencySpecification {      // TODO: use locale
-//            decimalSeparator = currencySpecification.decimalSeparator
-//        }
         if fraction == 0 {
-            return "\(integer)"
+            return String(integer)
         } else {
             var frac = fraction
             var fracStr = ""
             while (frac > 0) {
-                fracStr += "\(frac / (Amount.fractionalBase / 10))"
-                frac = (frac * 10) % Amount.fractionalBase
+                fracStr += String(frac / (fractionalBase() / 10))
+                frac = (frac * 10) % fractionalBase()
             }
-            return "\(integer)\(decimalSeparator)\(fracStr)"
+            return "\(integer)\(Self.decimalSeparator)\(fracStr)"
         }
+    }
+
+    /// The string representation of the value, formatted as "`integer``fraction`",
+    /// no group separator, no decimalSeparator, #inputDigits digits from fraction, padded with trailing zeroes
+    public func plainString(inputDigits: UInt) -> String {
+        var frac = fraction
+        var fracStr = ""
+        var i = inputDigits
+        while (i > 0) {
+            fracStr += String(frac / (fractionalBase() / 10))
+            frac = (frac * 10) % fractionalBase()
+            i -= 1
+        }
+        return "\(integer)\(fracStr)"
     }
 
     /// read-only getter
     public var currencyStr: String {
-        return currency
+        currency
     }
 
-    /// The string representation of the amount, formatted as "`currency`:`integer`.`fraction`".
+    /// The string representation of the amount, formatted as "`currency`:`integer`.`fraction`" (without space).
     public var description: String {
-        return "\(currency):\(valueStr)"
+        "\(currency):\(valueStr)"
     }
     
-    /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`".
+    /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`" (with space).
     public var readableDescription: String {
-        return "\(valueStr) \(currency)"
+        "\(valueStr) \(currency)"
     }
     
     /// Whether the value is valid. An amount is valid if and only if the currency is not empty and the value is less than the maximum allowed value.
@@ -144,7 +172,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     
     /// Whether this amount is zero or not.
     public var isZero: Bool {
-        return integer == 0 && fraction == 0
+        integer == 0 && fraction == 0
     }
     
     /// Initializes an amount by parsing a string representing the amount. The string should be formatted as "`currency`:`integer`.`fraction`".
@@ -160,13 +188,13 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
             if let dotIndex = amountStr.firstIndex(of: ".") {
                 let integerStr = String(amountStr[..<dotIndex])
                 let fractionStr = String(amountStr[string.index(dotIndex, offsetBy: 1)...])
-                if (fractionStr.count > Amount.fractionalBaseDigits) {
+                if (fractionStr.count > Self.fractionalBaseDigits) {
                     throw AmountError.invalidStringRepresentation
                 }
                 guard let intValue = UInt64(integerStr) else { throw AmountError.invalidStringRepresentation }
                 self.integer = intValue
                 self.fraction = 0
-                var digitValue = Amount.fractionalBase / 10
+                var digitValue = fractionalBase() / 10
                 for char in fractionStr {
                     guard let digit = char.wholeNumberValue else { throw AmountError.invalidStringRepresentation }
                     self.fraction += digitValue * UInt32(digit)
@@ -195,10 +223,10 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         self.integer = integer
         self.fraction = fraction
     }
-    public init(currency: String, value: UInt64) {
+    public init(currency: String, cent: UInt64) {
         self.currency = currency
-        self.integer = value / 100          // TODO: fractional digits can be 0, 2 or 3
-        self.fraction = UInt32(value - (self.integer * 100))
+        self.integer = cent / 100   // For existing currencies, fractional digits could be 0, 2 or 3
+        self.fraction = UInt32(cent - (self.integer * 100))
     }
 
     /// Initializes an amount from a decoder.
@@ -216,7 +244,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// Copies an amount.
     /// - Returns: A copy of the amount.
     func copy() -> Amount {
-        return Amount(currency: currency, integer: integer, fraction: fraction)
+        Amount(currency: currency, integer: integer, fraction: fraction)
     }
     
     /// Creates a normalized copy of an amount (the fractional part is strictly less than one unit of currency).
@@ -235,20 +263,54 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         try container.encode(description)
     }
     
-    /// Normalizes an amount by reducing `fraction` until it is less than `Amount.fractionalBase`, increasing `integer` appropriately.
+    /// Normalizes an amount by reducing `fraction` until it is less than `fractionalBase()`, increasing `integer` appropriately.
     /// - Throws:
     ///   - `AmountError.invalidAmount` if the amount is invalid either before or after normalization.
     func normalize() throws {
         if !valid {
             throw AmountError.invalidAmount
         }
-        integer += UInt64(fraction / Amount.fractionalBase)
-        fraction = fraction % Amount.fractionalBase
+        integer += UInt64(fraction / fractionalBase())
+        fraction = fraction % fractionalBase()
         if !valid {
             throw AmountError.invalidAmount
         }
     }
     
+    /// Divides by ten
+    public func shiftRight() {
+        var remainder = integer % 10
+        self.integer = integer / 10
+
+        let fractionalBase64 = UInt64(fractionalBase())
+        remainder = (remainder * fractionalBase64) + UInt64(fraction)
+        self.fraction = UInt32(remainder / 10)
+    }
+
+    /// Multiplies by ten, then adds digit
+    public func shiftLeft(add digit: UInt8, _ inputDigits: UInt) {
+        let mask = fractionalBase(Self.fractionalBaseDigits - inputDigits)
+        let shiftedInt = integer * 10
+                       + UInt64(fraction / (fractionalBase() / 10))
+
+        if shiftedInt < Self.maxValue {
+            self.integer = shiftedInt
+            let remainder = (fraction % mask) * 10 + UInt32(digit)
+            self.fraction = remainder * fractionalBase(inputDigits)
+        } else { // will get too big
+            // Just swap the last significant digit for the one the user typed last
+            let remainder = (fraction % (mask / 10)) * 10 + UInt32(digit)
+            self.fraction = remainder * fractionalBase(inputDigits)
+        }
+    }
+
+    /// Sets all fractional digits after inputDigits to 0
+    public func mask(_ inputDigits: UInt) {
+        let mask = fractionalBase(Self.fractionalBaseDigits - inputDigits)
+        let remainder = fraction % mask
+        self.fraction = remainder * fractionalBase(inputDigits)
+    }
+
     /// Adds two amounts together.
     /// - Parameters:
     ///   - left: The amount on the left.
@@ -285,7 +347,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         if (leftNormalized.fraction < rightNormalized.fraction) {
             guard leftNormalized.integer != 0 else { throw AmountError.negativeAmount }
             leftNormalized.integer -= 1
-            leftNormalized.fraction += Amount.fractionalBase
+            leftNormalized.fraction += fractionalBase()
         }
         guard leftNormalized.integer >= rightNormalized.integer else { throw AmountError.negativeAmount }
         let diff = Amount.zero(currency: left.currency)
@@ -314,8 +376,8 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         var remainder = result.integer % UInt64(divisor)
         result.integer = result.integer / UInt64(divisor)
 
-        let fractionalBase = UInt64(Amount.fractionalBase)
-        remainder = (remainder * fractionalBase) + UInt64(result.fraction)
+        let fractionalBase64 = UInt64(fractionalBase())
+        remainder = (remainder * fractionalBase64) + UInt64(result.fraction)
         result.fraction = UInt32(remainder / UInt64(divisor))
         try result.normalize()
         return result
@@ -330,8 +392,8 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         let result = try amount.normalizedCopy()
         result.integer = result.integer * UInt64(factor)
         let fraction_tmp = UInt64(result.fraction) * UInt64(factor)
-        result.integer += fraction_tmp / UInt64(Amount.fractionalBase)
-        result.fraction = UInt32(fraction_tmp % UInt64(Amount.fractionalBase))
+        result.integer += fraction_tmp / UInt64(fractionalBase())
+        result.fraction = UInt32(fraction_tmp % UInt64(fractionalBase()))
         return result
     }
     
