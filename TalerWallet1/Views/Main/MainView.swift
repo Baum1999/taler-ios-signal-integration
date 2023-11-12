@@ -252,7 +252,7 @@ extension MainView {
                         }
                     }
                 } else { // should never happen
-                    logger.error("Yikes! TransactionStateTransition without transition")
+                    logger.error("Yikes❗️ TransactionStateTransition without transition")
                 }
             }
             .alert("You need to pass a KYC procedure",

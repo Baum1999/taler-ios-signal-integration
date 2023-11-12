@@ -71,8 +71,8 @@ struct WithdrawURIView: View {
                 }
             } else {
                 // Yikes no details or no baseURL
-//                WithdrawProgressView(message: url.host ?? badURL)
-//                    .navigationTitle("Contacting Exchange")
+                WithdrawProgressView(message: url.host ?? badURL)
+                    .navigationTitle("Contacting Exchange")
             }
         }
         .onAppear() {

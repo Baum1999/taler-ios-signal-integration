@@ -68,7 +68,7 @@ class Controller: ObservableObject {
 
     func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
         if ticker != currencyTicker {
-            print("Yikes")
+            print("❗️Yikes")
         }
         for info in currencyInfos {
             if info.scope.currency == currency {

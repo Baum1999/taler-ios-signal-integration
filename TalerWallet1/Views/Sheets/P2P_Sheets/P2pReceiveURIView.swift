@@ -22,6 +22,7 @@ struct P2pReceiveURIView: View {
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse?
 
     var body: some View {
+        let badURL = "Error in URL: \(url)"
         VStack {
             if let peerPushCreditResponse {
                 List {
@@ -59,8 +60,8 @@ struct P2pReceiveURIView: View {
                 }
             } else {
                 // Yikes no details or no baseURL
-//                WithdrawProgressView(message: url.host ?? badURL)
-//                    .navigationTitle("Contacting Exchange")
+                WithdrawProgressView(message: url.host ?? badURL)
+                    .navigationTitle("Contacting Exchange")
             }
         }
         .onAppear() {

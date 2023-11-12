@@ -51,7 +51,7 @@ struct P2pPayURIView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
             } else {
-                WithdrawProgressView(message: url.host ?? "Yikes - no valid URL")
+                WithdrawProgressView(message: url.host ?? "Yikes❗️ no valid URL")
                     .navigationTitle("Contacting Exchange")
             }
         }
