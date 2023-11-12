@@ -12,7 +12,7 @@ struct ManualWithdrawDone: View {
     let navTitle = String(localized: "Wire Transfer")
 
     let exchange: Exchange
-    let centsToTransfer: UInt64
+    let amountToTransfer: Amount
 //    let restrictAge: Int?
 
     @EnvironmentObject private var model: WalletModel
@@ -53,9 +53,8 @@ struct ManualWithdrawDone: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
             do {
-                let amount = Amount.amountFromCents(exchange.currency!, centsToTransfer)
                 let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                         amount: amount, restrictAge: 0)
+                                                                         amount: amountToTransfer, restrictAge: 0)
                 transactionId = result!.transactionId
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
@@ -67,7 +66,7 @@ struct ManualWithdrawDone: View {
 // MARK: -
 #if DEBUG
 struct ManualWithdrawDone_Container : View {
-    @State private var centsToTransfer: UInt64 = 510
+    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
 
     var body: some View {
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
@@ -79,7 +78,7 @@ struct ManualWithdrawDone_Container : View {
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
                         exchange: exchange,
-                 centsToTransfer: centsToTransfer)
+                amountToTransfer: amountToTransfer)
     }
 }
 

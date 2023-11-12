@@ -12,7 +12,7 @@ struct ManualWithdraw: View {
     let stack: CallStack
 
     let exchange: Exchange
-    @Binding var centsToTransfer: UInt64
+    @Binding var amountToTransfer: Amount
 
     @EnvironmentObject private var model: WalletModel
 
@@ -28,7 +28,7 @@ struct ManualWithdraw: View {
 #endif
         let currency = exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
-        let currencyField = CurrencyField(value: $centsToTransfer, currency: currency) // becomeFirstResponder
+        let currencyField = CurrencyField(amount: $amountToTransfer) // becomeFirstResponder
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
         ScrollView {
@@ -42,7 +42,7 @@ struct ManualWithdraw: View {
                     .multilineTextAlignment(.center)
                     .accessibilityFont(.body)
 
-                let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
+                let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
                 if !disabled {
 //                    agePicker
 
@@ -54,7 +54,7 @@ struct ManualWithdraw: View {
                             NavigationLink(destination: LazyView {
                                 ManualWithdrawDone(stack: stack.push(),
                                                 exchange: exchange,
-                                         centsToTransfer: centsToTransfer)
+                                        amountToTransfer: amountToTransfer)
 //                                              restrictAge: restrictAge)
                             }) {
                                 Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
@@ -80,11 +80,11 @@ struct ManualWithdraw: View {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
         }
-        .task(id: centsToTransfer) { // re-run this whenever centsToTransfer changes
-            if centsToTransfer > 0 {
-                let amount = Amount.amountFromCents(currency, centsToTransfer)
+        .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
+            if !amountToTransfer.isZero {
                 do {
-                    withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl, amount: amount)
+                    withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
+                                                                                              amount: amountToTransfer)
 //                  agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
@@ -98,7 +98,7 @@ struct ManualWithdraw: View {
 #if DEBUG
 struct ManualWithdraw_Previews: PreviewProvider {
   struct StateContainer : View {
-    @State private var centsToTransfer: UInt64 = 510
+    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
     @State private var details = WithdrawalAmountDetails(tosAccepted: false,
                                                            amountRaw: Amount(currency: LONGCURRENCY, cent: 510),
                                                      amountEffective: Amount(currency: LONGCURRENCY, cent: 500),
@@ -115,7 +115,7 @@ struct ManualWithdraw_Previews: PreviewProvider {
                           ageRestrictionOptions: [])
         ManualWithdraw(stack: CallStack("Preview"),
                     exchange: exchange,
-             centsToTransfer: $centsToTransfer,
+            amountToTransfer: $amountToTransfer,
      withdrawalAmountDetails: details)
     }
   }
