@@ -53,7 +53,6 @@ struct PendingRowContentV: View {
 /// This view shows a pending transaction row in a currency section
 struct PendingRowView: View {
     let amount: Amount
-    let currencyInfo: CurrencyInfo?
     let incoming: Bool
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -124,13 +123,11 @@ func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
 
 struct PendingRowView_Previews: PreviewProvider {
     static var previews: some View {
-        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
-        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         List {
-            PendingRowView(amount: test, currencyInfo: testInfo, incoming: true)
-            PendingRowView(amount: demo, currencyInfo: demoInfo, incoming: false)
+            PendingRowView(amount: test, incoming: true)
+            PendingRowView(amount: demo, incoming: false)
         }
     }
 }
