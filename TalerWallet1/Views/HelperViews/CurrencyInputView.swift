@@ -3,13 +3,18 @@
  * See LICENSE.md
  */
 import SwiftUI
+import taler_swift
 
 struct CurrencyInputView: View {
-    let currencyField: CurrencyField
+    @Binding var amount: Amount         // the `value´
     let title: String
 
+    @EnvironmentObject private var controller: Controller
     @State var hasBeenShown = false
+
     var body: some View {
+        let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
+        let currencyField = CurrencyField(amount: $amount, currencyInfo: currencyInfo)
         VStack (alignment: .leading) {
             Text(title)
 //                .padding(.top)
@@ -22,9 +27,9 @@ struct CurrencyInputView: View {
                 .textFieldStyle(.roundedBorder)
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
-                print("❗️Yikes: CurrencyInputView hasBeenShown")
+//                print("❗️Yikes: CurrencyInputView hasBeenShown")
             } else {
-                print("❗️Yikes: First CurrencyInputView❗️")
+//                print("❗️Yikes: First CurrencyInputView❗️")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     hasBeenShown = true
                     currencyField.becomeFirstResponder()
@@ -37,20 +42,19 @@ struct CurrencyInputView: View {
 }
 // MARK: -
 #if DEBUG
-fileprivate struct BindingViewContainer : View {
-    @State var centsToTransfer: UInt64 = 0
+struct CurrencyInputView_Previews: PreviewProvider {
+  struct StateContainer : View {
+    @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
 
     var body: some View {
-        let currencyField = CurrencyField(value: $centsToTransfer, currency: LONGCURRENCY)
-        CurrencyInputView(currencyField: currencyField,
-                                  title: "Amount to withdraw:")
+        CurrencyInputView(amount: $amountToTransfer,
+                           title: "Amount to withdraw:")
     }
-}
+  }
 
-struct CurrencyInputView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            BindingViewContainer()
+            StateContainer()
         }
     }
 }

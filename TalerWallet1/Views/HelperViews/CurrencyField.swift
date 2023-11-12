@@ -22,10 +22,14 @@
 import SwiftUI
 import UIKit
 import taler_swift
+import SymLog
 
 @MainActor
-public struct CurrencyField: View {
+struct CurrencyField: View {
+    private let symLog = SymLogV(0)
     @Binding var amount: Amount         // the `value´
+    let currencyInfo: CurrencyInfo
+
     private var currencyInputField: CurrencyInputField! = nil
 
     public func becomeFirstResponder() -> Void {
@@ -36,34 +40,22 @@ public struct CurrencyField: View {
         currencyInputField.resignFirstResponder()
     }
 
-    private var label: String {
-        let mag = pow(10, formatter.maximumFractionDigits)
-        return formatter.string(for: Decimal(value) / mag) ?? ""
+    public init(amount: Binding<Amount>, currencyInfo: CurrencyInfo) {
+        self._amount = amount
+        self.currencyInfo = currencyInfo
+        self.currencyInputField = CurrencyInputField(amount: self.$amount,
+                                               currencyInfo: currencyInfo)
     }
 
-    public init(value: Binding<UInt64>, currency: String, formatter: NumberFormatter) {
-        self._value = value
-        self.currency = currency
-        self.formatter = formatter
-        self.currencyInputField = CurrencyInputField(value: $value, formatter: formatter)
-    }
-
-    public init(value: Binding<UInt64>, currency: String) {
-        let formatter = NumberFormatter()
-        formatter.locale = .current
-        formatter.numberStyle = .currency
-        formatter.currencySymbol = currency
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-
-        self.init(value: value, currency: currency, formatter: formatter)
-    }
-
-    public var body: some View {
+    var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog(amount.description)       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         ZStack {
             // Text view to display the formatted currency
             // Set as priority so CurrencyInputField size doesn't affect parent
-            Text(label)
+            Text(amount.string(currencyInfo))
                 .layoutPriority(1)
 
             // Input text field to handle UI
@@ -90,8 +82,8 @@ class NoCaretTextField: UITextField {
 
 @MainActor
 struct CurrencyInputField: UIViewRepresentable {
-    @Binding var value: UInt64
-    var formatter: NumberFormatter
+    @Binding var amount: Amount
+    let currencyInfo: CurrencyInfo
     private let textField = NoCaretTextField(frame: .zero)
 
     func makeCoordinator() -> Coordinator {
@@ -126,7 +118,7 @@ struct CurrencyInputField: UIViewRepresentable {
         )
 
         // Set initial textfield text
-        context.coordinator.updateText(value, textField: textField)
+        context.coordinator.updateText(amount, textField: textField)
 
         return textField
     }
@@ -144,30 +136,33 @@ struct CurrencyInputField: UIViewRepresentable {
             self.input = currencyTextField
         }
 
-        func setValue(_ value: UInt64, textField: UITextField) {
+        func setValue(_ amount: Amount, textField: UITextField) {
+            // Update hidden textfield text
+            updateText(amount, textField: textField)
             // Update input value
-            input.value = value
-
-            // Update textfield text
-            updateText(value, textField: textField)
+//    print(input.amount.description, " := ", amount.description)
+            input.amount = amount
         }
 
-        func updateText(_ value: UInt64, textField: UITextField) {
+        func updateText(_ amount: Amount, textField: UITextField) {
             // Update field text and last valid input text
-            textField.text = String(value)
-            lastValidInput = String(value)
+            lastValidInput = amount.plainString(input.currencyInfo)
+//    print(lastValidInput)
+            textField.text = lastValidInput
         }
 
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             // If replacement string is empty, we can assume the backspace key was hit
             if string.isEmpty {
                 // Resign first responder when delete is hit when value is 0
-                if input.value == 0 {
+                if input.amount.isZero {
                     textField.resignFirstResponder()
+                } else {
+                    // Remove trailing digit: divide value by 10
+                    let amount = input.amount.copy()
+                    amount.removeDigit(input.currencyInfo)
+                    setValue(amount, textField: textField)
                 }
-
-                // Remove trailing digit
-                setValue(UInt64(input.value / 10), textField: textField)
             }
             return true
         }
@@ -189,7 +184,7 @@ struct CurrencyInputField: UIViewRepresentable {
             }
 
             // Find new character and try to get an Int value from it
-            guard let char = char, let digit = Int(String(char)) else {
+            guard let char, let digit = UInt8(String(char)), digit <= 9 else {
                 // New character could not be converted to Int
                 // Revert to last valid text
                 textField.text = lastValidInput
@@ -197,27 +192,18 @@ struct CurrencyInputField: UIViewRepresentable {
             }
 
             // Multiply by 10 to shift numbers one position to the left, revert if an overflow occurs
-            let (multValue, multOverflow) = input.value.multipliedReportingOverflow(by: 10)
-            if multOverflow {
-                textField.text = lastValidInput
-                return
-            }
-
             // Add the new trailing digit, revert if an overflow occurs
-            let (addValue, addOverflow) = multValue.addingReportingOverflow(UInt64(digit))
-            if addOverflow {
-                textField.text = lastValidInput
-                return
-            }
+            let amount = input.amount.copy()
+            amount.addDigit(digit, currencyInfo: input.currencyInfo)
 
             // If new value has more digits than allowed by formatter, revert
-            if input.formatter.maximumFractionDigits + input.formatter.maximumIntegerDigits < String(addValue).count {
-                textField.text = lastValidInput
-                return
-            }
+//            if input.formatter.maximumFractionDigits + input.formatter.maximumIntegerDigits < String(addValue).count {
+//                textField.text = lastValidInput
+//                return
+//            }
 
             // Update new value
-            setValue(addValue, textField: textField)
+            setValue(amount, textField: textField)
         }
     }
 }

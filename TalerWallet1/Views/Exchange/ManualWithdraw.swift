@@ -28,13 +28,12 @@ struct ManualWithdraw: View {
 #endif
         let currency = exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
-        let currencyField = CurrencyField(amount: $amountToTransfer) // becomeFirstResponder
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
         ScrollView {
             VStack {
-                CurrencyInputView(currencyField: currencyField,
-                                  title: String(localized: "Amount to withdraw:"))
+                CurrencyInputView(amount: $amountToTransfer,
+                                   title: String(localized: "Amount to withdraw:"))
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)
                 QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)

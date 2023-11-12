@@ -26,10 +26,9 @@ struct RequestPayment: View {
 #endif
         let currency = amountToTransfer.currencyStr
         let navTitle = String(localized: "Request Money", comment: "Dialog Title")
-        let currencyField = CurrencyField(amount: $amountToTransfer)
 
         ScrollView { VStack {
-            CurrencyInputView(currencyField: currencyField,
+            CurrencyInputView(amount: $amountToTransfer,
                               title: String(localized: "Amount to request:"))
 
             let someCoins = SomeCoins(details: peerPullCheck)

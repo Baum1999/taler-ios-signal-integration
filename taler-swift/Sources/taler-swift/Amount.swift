@@ -247,7 +247,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     
     /// Copies an amount.
     /// - Returns: A copy of the amount.
-    func copy() -> Amount {
+    public func copy() -> Amount {
         Amount(currency: currency, integer: integer, fraction: fraction)
     }
     
@@ -283,36 +283,49 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     
     /// Divides by ten
     public func shiftRight() {
-        var remainder = integer % 10
+        var remainder = UInt32(integer % 10)
         self.integer = integer / 10
 
-        let fractionalBase64 = UInt64(fractionalBase())
-        remainder = (remainder * fractionalBase64) + UInt64(fraction)
-        self.fraction = UInt32(remainder / 10)
+        remainder = remainder * fractionalBase() + fraction
+        self.fraction = remainder / 10
     }
 
     /// Multiplies by ten, then adds digit
     public func shiftLeft(add digit: UInt8, _ inputDigits: UInt) {
-        let mask = fractionalBase(Self.fractionalBaseDigits - inputDigits)
-        let shiftedInt = integer * 10
-                       + UInt64(fraction / (fractionalBase() / 10))
+        // how many digits to shift right (e.g. inputD=2 ==> shift:=6)
+        let shift = Self.fractionalBaseDigits - inputDigits
+        // mask to zero out fractions smaller than inputDigits
+        let shiftMask = fractionalBase(shift)
 
+        let carryMask = fractionalBase(Self.fractionalBaseDigits - 1)
+        // get biggest fractional digit
+        let carry = fraction / carryMask
+        var remainder = fraction % carryMask
+//        print("fraction: \(fraction) = \(carry) + \(remainder)")
+
+        let shiftedInt = integer * 10 + UInt64(carry)
         if shiftedInt < Self.maxValue {
             self.integer = shiftedInt
-            let remainder = (fraction % mask) * 10 + UInt32(digit)
-            self.fraction = remainder * fractionalBase(inputDigits)
+//            print("remainder: \(remainder) / shiftMask \(shiftMask) = \(remainder / shiftMask)")
+            remainder = (remainder / shiftMask) * 10
         } else { // will get too big
             // Just swap the last significant digit for the one the user typed last
-            let remainder = (fraction % (mask / 10)) * 10 + UInt32(digit)
-            self.fraction = remainder * fractionalBase(inputDigits)
+            if shiftMask >= 10 {
+                remainder = (remainder / (shiftMask / 10)) * 10
+            } else {
+                remainder = (remainder / 10) * 10
+            }
         }
+        let sum = remainder + UInt32(digit)
+        self.fraction = sum * shiftMask
+//        print("(remainder: \(remainder) + \(digit)) * base(shift) \(shiftMask) = fraction \(fraction)")
     }
 
     /// Sets all fractional digits after inputDigits to 0
     public func mask(_ inputDigits: UInt) {
         let mask = fractionalBase(Self.fractionalBaseDigits - inputDigits)
         let remainder = fraction % mask
-        self.fraction = remainder * fractionalBase(inputDigits)
+        self.fraction -= remainder
     }
 
     /// Adds two amounts together.

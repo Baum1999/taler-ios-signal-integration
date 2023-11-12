@@ -38,7 +38,6 @@ struct SendAmount: View {
 #endif
         let currency = amountAvailable.currencyStr
         let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
-        let currencyField = CurrencyField(amount: $amountToTransfer)
         let fee = fee(ppCheck: peerPushCheck)
         ScrollView {
             VStack(alignment: .trailing) {
@@ -46,7 +45,7 @@ struct SendAmount: View {
                 Text("Available: \(available)")
                     .accessibilityFont(.title3)
                     .padding(.bottom, 2)
-                CurrencyInputView(currencyField: currencyField,
+                CurrencyInputView(amount: $amountToTransfer,
                                   title: String(localized: "Amount to send:"))
                 Text("+ \(fee) payment fee")
                     .accessibilityFont(.body)
