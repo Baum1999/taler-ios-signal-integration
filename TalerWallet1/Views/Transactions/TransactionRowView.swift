@@ -59,7 +59,7 @@ struct TransactionRowContentV: View {
 
 struct TransactionRowView: View {
     let transaction : Transaction
-    let currencyInfo: CurrencyInfo?
+    let currency: String
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -81,7 +81,7 @@ struct TransactionRowView: View {
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
                              : WalletColors().incompleteColor
-//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         SingleAxisGeometryReader { width in
             Group {
                 let amountStr = amount.string(currencyInfo)
@@ -115,11 +115,9 @@ struct TransactionRow_Previews: PreviewProvider {
                                            id: "some payment ID",
                                          time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
-        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
-        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         List {
-            TransactionRowView(transaction: withdrawal, currencyInfo: testInfo)
-            TransactionRowView(transaction: payment, currencyInfo: demoInfo)
+            TransactionRowView(transaction: withdrawal, currency: TESTCURRENCY)
+            TransactionRowView(transaction: payment, currency: DEMOCURRENCY)
         }
     }
 }

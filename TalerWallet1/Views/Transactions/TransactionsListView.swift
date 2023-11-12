@@ -11,7 +11,7 @@ struct TransactionsListView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     let navTitle: String
 
-    let currencyInfo: CurrencyInfo?
+    let currency: String
     let transactions: [Transaction]
     let showUpDown: Bool
     let reloadAllAction: (_ stack: CallStack) async -> ()
@@ -29,11 +29,10 @@ struct TransactionsListView: View {
         ScrollViewReader { scrollView in
             List {
                 TransactionsArraySliceV(symLog: symLog,
-                                      stack: stack.push(),
-                               currencyInfo: currencyInfo,
-                               transactions: transactions,
-//                          reloadAllAction: reloadAllAction,
-                            reloadOneAction: reloadOneAction)
+                                         stack: stack.push(),
+                                      currency: currency,
+                                  transactions: transactions,
+                               reloadOneAction: reloadOneAction)
             }
             .id(viewId)
             .listStyle(myListStyle.style).anyView
@@ -69,8 +68,7 @@ struct TransactionsListView: View {
         }
         .overlay {
             if transactions.isEmpty {
-                let unknown = String(localized: "Unknown currency")
-                TransactionsEmptyView(stack: stack.push(), currency: currencyInfo?.scope.currency ?? unknown)
+                TransactionsEmptyView(stack: stack.push(), currency: currency)
             }
         }
         .onAppear {
@@ -83,9 +81,8 @@ struct TransactionsListView: View {
 struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currencyInfo: CurrencyInfo?
+    let currency: String
     let transactions: [Transaction]
-//  let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
     @EnvironmentObject private var model: WalletModel
@@ -114,7 +111,8 @@ struct TransactionsArraySliceV: View {
                                    resumeAction: resumeAction)
                 }
             } label: {
-                TransactionRowView(transaction: transaction, currencyInfo: currencyInfo)
+                TransactionRowView(transaction: transaction,
+                                      currency: currency)
             }
             .id(Int(index))
         }
