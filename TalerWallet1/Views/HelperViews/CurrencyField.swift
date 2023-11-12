@@ -24,9 +24,7 @@ import UIKit
 
 @MainActor
 public struct CurrencyField: View {
-    @Binding var value: UInt64
-    var currency: String
-    var formatter: NumberFormatter
+    @Binding var amount: Amount         // the `value´
     private var currencyInputField: CurrencyInputField! = nil
 
     public func becomeFirstResponder() -> Void {

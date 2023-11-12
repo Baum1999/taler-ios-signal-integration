@@ -11,8 +11,7 @@ struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
-    var scopeInfo: ScopeInfo
-    @Binding var centsToTransfer: UInt64
+    @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
     @EnvironmentObject private var model: WalletModel
@@ -25,9 +24,9 @@ struct RequestPayment: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = scopeInfo.currency
+        let currency = amountToTransfer.currencyStr
         let navTitle = String(localized: "Request Money", comment: "Dialog Title")
-        let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
+        let currencyField = CurrencyField(amount: $amountToTransfer)
 
         ScrollView { VStack {
             CurrencyInputView(currencyField: currencyField,
@@ -35,22 +34,21 @@ struct RequestPayment: View {
 
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
-                           currency: currency, amountEffective: peerPullCheck?.amountEffective)
+                            currency: currency,
+                     amountEffective: peerPullCheck?.amountEffective)
 
             HStack {
-                let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
+                let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
 
                 NavigationLink(destination: LazyView {
                     RequestPurpose(stack: stack.push(),
-                               scopeInfo: scopeInfo,
-                         centsToTransfer: centsToTransfer,
+                        amountToTransfer: amountToTransfer,
                                      fee: someCoins.fee,
                                  summary: $summary,
                               expireDays: $expireDays)
 //                        { deactivateAction() }
                 }) {
-                    let amount = Amount.amountFromCents(currency, centsToTransfer)
-                    Text("Request \(amount.readableDescription)")
+                    Text("Request \(amountToTransfer.readableDescription)")     // TODO: formatter
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
@@ -68,16 +66,17 @@ struct RequestPayment: View {
         .onDisappear {
             symLog.log("❗️Yikes \(navTitle) onDisappear")
         }
-        .task(id: centsToTransfer) {
-            let amount = Amount.amountFromCents(currency, centsToTransfer)
-            do {
-                let ppCheck = try await model.checkPeerPullCreditM(amount, exchangeBaseUrl: nil)
-                peerPullCheck = ppCheck
-                // TODO: set from exchange
-//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                peerPullCheck = nil
+        .task(id: amountToTransfer.value) {
+            if !amountToTransfer.isZero {
+                do {
+                    let ppCheck = try await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
+                    peerPullCheck = ppCheck
+                    // TODO: set from exchange
+//                  agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    peerPullCheck = nil
+                }
             }
         }
     }

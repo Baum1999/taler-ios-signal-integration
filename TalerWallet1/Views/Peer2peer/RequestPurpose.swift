@@ -10,28 +10,21 @@ struct RequestPurpose: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
-    let scopeInfo: ScopeInfo
-    let centsToTransfer: UInt64
+    let amountToTransfer: Amount
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
     @AppStorage("iconOnly") var iconOnly: Bool = false
     let navTitle = String(localized: "NavTitle_Request_Subject", defaultValue: "Request", comment: "NavTitle for entering the subject for Request-Payment")
+    @EnvironmentObject private var controller: Controller
 
     @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool
 
-    private var label: String {
-//        let mag = pow(10, formatter.maximumFractionDigits)
-//        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
-        return String(centsToTransfer / 100)   // TODO: based on currency
-    }
-
     var body: some View {
-        let amount = Amount.amountFromCents(scopeInfo.currency, centsToTransfer)
-
+        let currencyInfo = controller.info(for: amountToTransfer.currencyStr, controller.currencyTicker)
         VStack (spacing: 6) {
-            Text(amount.readableDescription)
+            Text(amountToTransfer.string(currencyInfo))
             Text("+ \(fee) payment fee")
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
@@ -65,12 +58,12 @@ struct RequestPurpose: View {
                 NavigationLink(destination: LazyView {
                     SendDoneV(stack: stack.push(),
                        amountToSend: nil,
-                    amountToReceive: amount,
+                    amountToReceive: amountToTransfer,
                             summary: summary,
                          expireDays: expireDays,
                  transactionStarted: $transactionStarted)
                 }) {
-                    Text("Request \(label) \(scopeInfo.currency)")
+                    Text("Request \(amountToTransfer.readableDescription)")     // TODO: formatter
 //                        .accessibilityFont(buttonFont)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -86,23 +79,23 @@ struct RequestPurpose: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_REQUEST_PURPOSE, stack: stack.push())
-//            print("❗️ PaymentPurpose onAppear")
+//            print("❗️ RequestPurpose onAppear")
         }
         .onDisappear {
-//            print("❗️ PaymentPurpose onDisappear")
+//            print("❗️ RequestPurpose onDisappear")
         }
     }
 
 }
 // MARK: -
 #if DEBUG
-//struct PaymentPurpose_Previews: PreviewProvider {
+//struct RequestPurpose_Previews: PreviewProvider {
 //    static var previews: some View {
-//        let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
+//        let scopeInfo = ScopeInfo(type: .exchange, exchangeBaseUrl: DEMOEXCHANGE, currency: LONGCURRENCY)
 //        @State var summary: String = "pUrPoSe"
 //        @State var expireDays: UInt = 0
-//        PaymentPurpose(scopeInfo: scopeInfo,
-//                 centsToTransfer: 5,
+//        RequestPurpose(scopeInfo: scopeInfo,
+//                 amountToReceive: 5,
 //                             fee: "fee",
 //                         summary: $summary,
 //                      expireDays: $expireDays)
