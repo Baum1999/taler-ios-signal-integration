@@ -18,6 +18,7 @@ struct AboutView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State private var rotationEnabled = false
 
@@ -31,38 +32,45 @@ struct AboutView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-//                VStack {
-                    HStack {
-                        Spacer()
-                        RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
-                            .accessibilityHint("Will go to the taler.net website when long-pressed.")
-                            .onTapGesture(count: 2) {
-                                rotationEnabled.toggle()
-                            }
-                            .onLongPressGesture(minimumDuration: 0.3) {
-                                UIApplication.shared.open(URL(string:"https://taler.net")!, options: [:])
-                            }
-                        Spacer()
+                HStack {
+                    Spacer()
+                    RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                        .onTapGesture(count: 2) {
+                            rotationEnabled.toggle()
+                        }
+                    Spacer()
+                }
+                SettingsItem(name: "Visit the taler.net website", id1: "web",
+                             description: iconOnly ? nil : String(localized: "More info about Gnu Taler in general...")) { }
+                    .accessibilityAddTraits(.isLink)
+                    .accessibilityRemoveTraits(.isStaticText)
+                    .onTapGesture() {
+                        UIApplication.shared.open(URL(string:"https://taler.net")!, options: [:])
                     }
-                    SettingsItem(name: "App Version", id1: "app") {
-                        Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
-                    }
-                    SettingsItem(name: "Wallet Core Version", id1: "wallet-core") {
-                        Text(verbatim: "\(walletCore.versionInfo!.version)")
-                    }
+
+                SettingsItem(name: "App Version", id1: "app") {
+                    Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
+                }
+                SettingsItem(name: "Wallet Core Version", id1: "wallet-core") {
+                    Text(verbatim: "\(walletCore.versionInfo?.version ?? "unknown")")
+                }
+                if developerMode {
                     SettingsItem(name: "Wallet Core DevMode", id1: "devMode") {
-                        Text(verbatim: "\(walletCore.versionInfo!.devMode ? "YES" : "NO")")
+                        let modeStr = if let devMode = walletCore.versionInfo?.devMode {
+                            devMode ? "YES" : "NO"
+                        } else { "unknown" }
+                        Text(modeStr)
                     }
-                    SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
-                        Text(verbatim: "\(walletCore.versionInfo!.exchange)")
-                    }
-                    SettingsItem(name: "Supported Merchant Versions", id1: "merchant") {
-                        Text(verbatim: "\(walletCore.versionInfo!.merchant)")
-                    }
-                    SettingsItem(name: "Used Bank", id1: "bank") {
-                        Text(verbatim: "\(walletCore.versionInfo!.bank)")
-                    }
-//                } // App version info
+                }
+                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
+                    Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
+                }
+                SettingsItem(name: "Supported Merchant Versions", id1: "merchant") {
+                    Text(verbatim: "\(walletCore.versionInfo?.merchant ?? "unknown")")
+                }
+                SettingsItem(name: "Used Bank", id1: "bank") {
+                    Text(verbatim: "\(walletCore.versionInfo?.bank ?? "unknown")")
+                }
             }
             .id(listID)
             .listStyle(myListStyle.style).anyView
