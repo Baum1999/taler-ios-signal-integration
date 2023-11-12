@@ -20,6 +20,18 @@ public struct CurrencyInfo {
     let specs: CurrencySpecification
     let formatter: CurrencyFormatter
 
+    public static func zero(_ currency: String) -> CurrencyInfo {
+        let scope = ScopeInfo(type: .global, currency: currency)
+        let specs = CurrencySpecification(name: currency,
+                         fractionalInputDigits: 0,
+                        fractionalNormalDigits: 0,
+                  fractionalTrailingZeroDigits: 0,
+                                  altUnitNames: [0 : "テ"])
+        return CurrencyInfo(scope: scope, specs: specs,
+                        formatter: CurrencyFormatter.formatter(scope: scope,
+                                                               specs: specs))
+    }
+
     /// returns all characters left from the decimalSeparator
     func integerPartStr(_ integerStr: String, decimalSeparator: String) -> String {
         if let integerIndex = integerStr.endIndex(of: decimalSeparator) {
@@ -119,18 +131,12 @@ public struct CurrencySpecification: Codable, Sendable {
     }
     /// some name for this CurrencySpecification
     let name: String
-    /// e.g. “.” for $, and “,” for €
-//    let decimalSeparator: String      taken from Locale.current
-    /// e.g. “,” for $, and “.” or “ ” for €     (France uses a narrow space character, Hungaria a normal one)
-//    let groupSeparator: String?       taken from Locale.current
     /// how much digits the user may enter after the decimal separator
     let fractionalInputDigits: Int
     /// €,$,£: 2;  some arabic currencies: 3,  ¥: 0
     let fractionalNormalDigits: Int
     /// usually same as numFractionalNormalDigits, but e.g. might be 2 for ¥
     let fractionalTrailingZeroDigits: Int
-    /// true for “$ 3.50”;  false for “3,50 €”
-//    let isCurrencyNameLeading: Bool
     /// map of powers of 10 to alternative currency names / symbols
     /// must always have an entry under "0" that defines the base name
     /// e.g.  "0 => €" or "3 => k€". For BTC, would be "0 => BTC, -3 => mBTC".
