@@ -40,7 +40,7 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        if playSounds != 0 {
+                        if playSounds != 0  && !soundPlayed {
                             controller.playSound(1008)     // Startup chime
                         }
                         soundPlayed = true
