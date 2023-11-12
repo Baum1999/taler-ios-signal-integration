@@ -8,10 +8,30 @@ import taler_swift
 extension Amount {
     func string(_ currencyInfo: CurrencyInfo?) -> String {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsTuple)
+            return currencyInfo.string(for: valueAsFloatTuple)
         } else {
             return valueStr
         }
+    }
+
+    func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
+        let inputDigits = currencyInfo.specs.fractionalInputDigits
+        if inputDigits < 0 { return 0 }
+        if inputDigits > 8 { return 8}
+        return UInt(inputDigits)
+    }
+
+    func addDigit(_ digit: UInt8, currencyInfo: CurrencyInfo) {
+        shiftLeft(add: digit, inputDigits(currencyInfo))
+    }
+
+    func removeDigit(_ currencyInfo: CurrencyInfo) {
+        shiftRight()                        // divide by 10
+        mask(inputDigits(currencyInfo))     // replace all digits after #inputDigit with 0
+    }
+
+    func plainString(_ currencyInfo: CurrencyInfo) -> String {
+        return plainString(inputDigits: inputDigits(currencyInfo))
     }
 }
 

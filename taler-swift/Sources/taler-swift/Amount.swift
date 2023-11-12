@@ -113,7 +113,11 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     }
 
     /// The tuple representation of the value.
-    public var valueAsTuple: (Double, Double) {
+    public var valueAsDecimalTuple: (UInt64, UInt32) {
+        (integer, fraction)
+    }
+    /// The tuple representation of the value.
+    public var valueAsFloatTuple: (Double, Double) {
         (intValue, fracValue)
     }
 
