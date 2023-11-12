@@ -10,31 +10,31 @@ class AmountTests: XCTestCase {
         var str = "TESTKUDOS:23.42"
         var amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
-        XCTAssert("TESTKUDOS" == amt.currency)
+        XCTAssert("TESTKUDOS" == amt.currencyStr)
         XCTAssert(23 == amt.value)
         XCTAssert(UInt64(0.42 * 1e8) == amt.fraction)
         
         str = "EUR:500000000.00000001"
         amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
-        XCTAssert("EUR" == amt.currency)
+        XCTAssert("EUR" == amt.currencyStr)
         XCTAssert(500000000 == amt.value)
         XCTAssert(1 == amt.fraction)
         
         str = "EUR:1500000000.00000003"
         amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
-        XCTAssert("EUR" == amt.currency)
+        XCTAssert("EUR" == amt.currencyStr)
         XCTAssert(1500000000 == amt.value)
         XCTAssert(3 == amt.fraction)
         
-        let maxValue = 4503599627370496
+        let maxValue = 4503599627370496                 // 16 significant digits are 1 too many for double
         str = "TESTKUDOS123:\(maxValue).99999999"
         amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
-        XCTAssert("TESTKUDOS123" == amt.currency)
-        XCTAssert(maxValue == amt.value)
-        
+        XCTAssert("TESTKUDOS123" == amt.currencyStr)
+        XCTAssert(Double(maxValue) == amt.value)
+
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS1234:\(maxValue).99999999"))
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS123:\(maxValue + 1).99999999"))
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS123:\(maxValue).999999990"))
