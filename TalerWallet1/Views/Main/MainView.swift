@@ -27,7 +27,7 @@ struct MainView: View {
     @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
 
     func sheetDismissed() -> Void {
-        symLog.log("sheet dismiss")
+        logger.info("sheet dismiss")
     }
     var body: some View {
 #if DEBUG
@@ -36,7 +36,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(symLog: symLog, logger: logger, stack: stack.push("Content"), talerFont: $talerFont)
+                Content(logger: logger, stack: stack.push("Content"), talerFont: $talerFont)
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
@@ -78,7 +78,6 @@ enum Tab {
 // MARK: - Content
 extension MainView {
     struct Content: View {
-        let symLog: SymLogV?
         let logger: Logger
         let stack: CallStack
         @State private var shouldReloadBalances = 0
@@ -167,7 +166,6 @@ extension MainView {
 //            } else {
                 let _ = Self._printChanges()
 //            }
-            let _ = symLog?.vlog()       // just to get the identity # to compare with .onAppear & .onDisappear
 #endif
           Group {
 #if TABBAR  // Taler Wallet
@@ -252,7 +250,6 @@ extension MainView {
                     }
                 } else { // should never happen
                     logger.error("Yikes! TransactionStateTransition without transition")
-//                    symLog.log(notification.userInfo as Any)
                 }
             }
             .alert("You need to pass a KYC procedure",
@@ -268,15 +265,16 @@ extension MainView {
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
+                    logger.info("balance changed: \(scope.currency, privacy: .public)")
                     if !controller.hasInfo(for: scope.currency) {
                         Task { // runs on MainActor
-                            symLog?.log("get info for: \(scope.currency)")
+                            logger.info("Task to get info for: \(scope.currency, privacy: .public)")
                             do {
                                 let info = try await model.getCurrencyInfo(scope: scope)
-                                symLog?.log("added: \(scope.currency)")
+                                logger.info("got info: \(scope.currency, privacy: .public)")
                                 await controller.setInfo(info)
                             } catch {    // TODO: error handling - couldn't get CurrencyInfo
-                                symLog?.log("error: \(error)")
+                                logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
                             }
                         }
                     }

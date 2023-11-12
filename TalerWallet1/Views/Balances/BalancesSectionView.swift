@@ -147,9 +147,9 @@ extension BalancesSectionView: View {
 //                        .foregroundColor(moreContrast ? .primary : .secondary)
                 }
             }
-        }
+        } // recent transactions
     } // body
-} // extension BalancesSectionView
+} // BalancesSectionView
 
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
