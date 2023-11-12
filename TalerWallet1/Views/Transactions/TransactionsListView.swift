@@ -28,7 +28,7 @@ struct TransactionsListView: View {
         let count = transactions.count
         ScrollViewReader { scrollView in
             List {
-                TransactionsRowsView(symLog: symLog,
+                TransactionsArraySliceV(symLog: symLog,
                                       stack: stack.push(),
                                currencyInfo: currencyInfo,
                                transactions: transactions,
@@ -79,8 +79,8 @@ struct TransactionsListView: View {
     }
 }
 // MARK: -
-// used by TransactionsListView, and by Balances to show the last 3 transactions
-struct TransactionsRowsView: View {
+// used by TransactionsListView, and by BalancesSectionView to show the last 3 transactions
+struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
     let currencyInfo: CurrencyInfo?

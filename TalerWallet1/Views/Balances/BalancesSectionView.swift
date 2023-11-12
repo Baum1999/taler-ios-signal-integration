@@ -135,11 +135,12 @@ extension BalancesSectionView: View {
             Section {
                 let slice = completedTransactions.prefix(3)         // already sorted
                 let threeTransactions = Array(slice)
-                TransactionsRowsView(symLog: symLog,
-                                      stack: stack.push(),
-                               currencyInfo: currencyInfo,
-                               transactions: threeTransactions,
-                            reloadOneAction: reloadOneAction)
+                TransactionsArraySliceV(symLog: symLog,
+                                         stack: stack.push(),
+                                  currencyInfo: currencyInfo,
+//                                    currency: currency,
+                                  transactions: threeTransactions,
+                               reloadOneAction: reloadOneAction)
             } header: {
                 if !iconOnly {
                     Text("Recent transactions")
