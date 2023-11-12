@@ -8,12 +8,11 @@ import taler_swift
 struct ExchangeRowView: View {
     let stack: CallStack
     let exchange: Exchange
-//    let amount: Amount
     let currency: String
-    @Binding var centsToTransfer: UInt64
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @Binding var amountToTransfer: Amount
 
     @Environment(\.sizeCategory) var sizeCategory
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @State private var buttonSelected: Int? = nil
 
     func selectAndUpdate(_ button: Int) {
@@ -69,7 +68,7 @@ struct ExchangeRowView: View {
             NavigationLink(destination: LazyView {
                 ManualWithdraw(stack: stack.push(),
                             exchange: exchange,
-                     centsToTransfer: $centsToTransfer)
+                    amountToTransfer: $amountToTransfer)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
@@ -105,7 +104,7 @@ struct ExchangeRowView: View {
 // MARK: -
 #if DEBUG
 fileprivate struct ExchangeRow_Container : View {
-    @State private var centsToTransfer: UInt64 = 100
+    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 1234)
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
@@ -126,7 +125,7 @@ fileprivate struct ExchangeRow_Container : View {
         ExchangeRowView(stack: CallStack("Preview"),
                      exchange: exchange1,
                      currency: LONGCURRENCY,
-              centsToTransfer: $centsToTransfer)
+             amountToTransfer: $amountToTransfer)
     }
 }
 

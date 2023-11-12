@@ -83,7 +83,7 @@ struct ExchangeListCommonV: View {
     @State private var exchanges: [Exchange] = []
 
     // source of truth for the value the user enters in currencyField for exchange withdrawals
-    @State private var centsToTransfer: UInt64 = 0        // TODO: different values for different currencies?
+    @State private var amountToTransfer = Amount.zero(currency: "")     // TODO: Hold different values for different currencies?
 
     func reloadExchanges() async -> Void {
         exchanges = await model.listExchangesM()
@@ -99,7 +99,7 @@ struct ExchangeListCommonV: View {
                  stack: stack.push(),
 //              balances: $balances,
              exchanges: $exchanges,
-       centsToTransfer: $centsToTransfer,
+      amountToTransfer: $amountToTransfer,
        reloadExchanges: reloadExchanges)
         .overlay {
             if exchanges.isEmpty {
@@ -121,7 +121,7 @@ extension ExchangeListCommonV {
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 //        @Binding var balances: [Balance]
         @Binding var exchanges: [Exchange]
-        @Binding var centsToTransfer: UInt64
+        @Binding var amountToTransfer: Amount           // does still have the wrong currency
         var reloadExchanges: () async -> Void
 
         func currenciesDict(_ exchanges: [Exchange]) -> [String : [Exchange]] {
@@ -147,7 +147,7 @@ extension ExchangeListCommonV {
                 List(sortedDict, id: \.key) { key, value in
                     ExchangeSectionView(stack: stack.push(),
                                      currency: key, exchanges: value,
-                              centsToTransfer: $centsToTransfer)
+                             amountToTransfer: $amountToTransfer)               // does still have the wrong currency
                 }
                 .refreshable {
                     symLog?.log("refreshing")
