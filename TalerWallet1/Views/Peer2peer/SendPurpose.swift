@@ -11,7 +11,7 @@ struct SendPurpose: View {
     let stack: CallStack
 
     let amountAvailable: Amount
-    let centsToTransfer: UInt64
+    let amountToTransfer: Amount
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
@@ -19,19 +19,11 @@ struct SendPurpose: View {
     let navTitle = String(localized: "NavTitle_Send_Subject", defaultValue: "Subject", comment: "NavTitle for entering the subject for Send-Money")
 
     @State private var transactionStarted: Bool = false
-
-    private var value: String {
-//        let mag = pow(10, formatter.maximumFractionDigits)
-//        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
-        return String(centsToTransfer / 100)    // TODO: based on currency
-    }
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        let amount = Amount.amountFromCents(amountAvailable.currencyStr, centsToTransfer)
-
         VStack (spacing: 6) {
-            Text(amount.readableDescription)
+            Text(amountToTransfer.readableDescription)              // TODO: curreny formatter
             Text("+ \(fee) payment fee")
                 .accessibilityFont(.body)
                 .foregroundColor(.red)
@@ -84,13 +76,13 @@ struct SendPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
                     SendDoneV(stack: stack.push(),
-                       amountToSend: amount,
+                       amountToSend: amountToTransfer,
                     amountToReceive: nil,
                             summary: summary,
                          expireDays: expireDays,
                  transactionStarted: $transactionStarted)
                 }) {
-                    Text("Send \(value) \(amountAvailable.currencyStr) now", comment: "first is value, second currencyString")  // TODO: currency formatter
+                    Text("Send \(amountToTransfer.readableDescription) now", comment: "amountToTransfer")  // TODO: currency formatter
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
@@ -130,7 +122,7 @@ struct SendPurpose: View {
 //        @State var expireDays: UInt = 0
 //        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
 //        SendPurpose(amountAvailable: amount,
-//                    centsToTransfer: 543,
+//                   amountToTransfer: 543,
 //                                fee: "0,43",
 //                            summary: $summary,
 //                         expireDays: $expireDays)

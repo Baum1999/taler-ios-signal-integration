@@ -21,6 +21,7 @@
  */
 import SwiftUI
 import UIKit
+import taler_swift
 
 @MainActor
 public struct CurrencyField: View {

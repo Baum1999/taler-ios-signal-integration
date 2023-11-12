@@ -12,7 +12,7 @@ struct SendAmount: View {
     let stack: CallStack
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
-    @Binding var centsToTransfer: UInt64
+    @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
     @EnvironmentObject private var model: WalletModel
@@ -38,12 +38,11 @@ struct SendAmount: View {
 #endif
         let currency = amountAvailable.currencyStr
         let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
-        let currencyField = CurrencyField(value: $centsToTransfer, currency: currency)
-
+        let currencyField = CurrencyField(amount: $amountToTransfer)
         let fee = fee(ppCheck: peerPushCheck)
         ScrollView {
             VStack(alignment: .trailing) {
-                let available = amountAvailable.readableDescription
+                let available = amountAvailable.readableDescription // TODO: formatter
                 Text("Available: \(available)")
                     .accessibilityFont(.title3)
                     .padding(.bottom, 2)
@@ -54,12 +53,12 @@ struct SendAmount: View {
                     .foregroundColor(.red)
                     .padding(4)
 
-                let disabled = centsToTransfer == 0    // TODO: check amountAvailable
+                let disabled = amountToTransfer.isZero    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
                     SendPurpose(stack: stack.push(),
                       amountAvailable: amountAvailable,
-                      centsToTransfer: centsToTransfer,
+                     amountToTransfer: amountToTransfer,
                                   fee: fee,
                               summary: $summary,
                            expireDays: $expireDays)
@@ -81,11 +80,10 @@ struct SendAmount: View {
         .onDisappear {
             symLog.log("❗️Yikes SendAmount onDisappear")
         }
-        .task(id: centsToTransfer) {
-            if centsToTransfer > 0 {
-                let amount = Amount.amountFromCents(currency, centsToTransfer)
+        .task(id: amountToTransfer.value) {
+            if !amountToTransfer.isZero {
                 do {
-                    let ppCheck = try await model.checkPeerPushDebitM(amount)
+                    let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
                     peerPushCheck = ppCheck
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
@@ -100,14 +98,14 @@ struct SendAmount: View {
 // MARK: -
 #if DEBUG
 struct SendAmount_Container : View {
-    @State private var centsToTransfer: UInt64 = 510
+    @State private var amountToTransfer = Amount(currency: DEMOCURRENCY, cent: 510)
     @State private var summary: String = ""
 
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
-         centsToTransfer: $centsToTransfer,
+        amountToTransfer: $amountToTransfer,
                  summary: $summary)
     }
 }
