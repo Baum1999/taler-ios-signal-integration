@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-struct PaymentPurpose: View {
+struct RequestPurpose: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 

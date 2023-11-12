@@ -41,7 +41,7 @@ struct RequestPayment: View {
                 let disabled = (centsToTransfer == 0) || someCoins.invalid || someCoins.tooMany
 
                 NavigationLink(destination: LazyView {
-                    PaymentPurpose(stack: stack.push(),
+                    RequestPurpose(stack: stack.push(),
                                scopeInfo: scopeInfo,
                          centsToTransfer: centsToTransfer,
                                      fee: someCoins.fee,
