@@ -166,6 +166,9 @@ extension MainView {
 //            } else {
                 let _ = Self._printChanges()
 //            }
+            let delay: UInt = 5
+#else
+            let delay: UInt = 0
 #endif
           Group {
 #if TABBAR  // Taler Wallet
@@ -270,7 +273,7 @@ extension MainView {
                         Task { // runs on MainActor
                             logger.info("Task to get info for: \(scope.currency, privacy: .public)")
                             do {
-                                let info = try await model.getCurrencyInfo(scope: scope)
+                                let info = try await model.getCurrencyInfo(scope: scope, delay: delay)
                                 logger.info("got info: \(scope.currency, privacy: .public)")
                                 await controller.setInfo(info)
                             } catch {    // TODO: error handling - couldn't get CurrencyInfo
