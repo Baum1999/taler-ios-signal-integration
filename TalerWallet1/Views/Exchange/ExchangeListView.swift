@@ -10,7 +10,7 @@ import SymLog
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-//    @Binding var balances: [Balance]
+    @Binding var balances: [Balance]
     let navTitle: String
 #if TABBAR  // Taler Wallet
 #else       // GNU Taler
@@ -46,7 +46,7 @@ struct ExchangeListView: View {
         let addTitleStr = String(localized: "Add Exchange", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         if #available(iOS 16.0, *) {
-            ExchangeListCommonV(symLog: symLog, stack: stack.push())
+            ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
                 .navigationBarItems(leading: hamburger, trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
@@ -60,7 +60,7 @@ struct ExchangeListView: View {
                     Text("Please enter the exchange URL")
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
-            ExchangeListCommonV(symLog: symLog, stack: stack.push())
+            ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
                 .navigationBarItems(leading: hamburger, trailing: plusButton)
                 .textFieldAlert(isPresented: $showAlert,
@@ -76,7 +76,7 @@ struct ExchangeListView: View {
 struct ExchangeListCommonV: View {
     let symLog: SymLogV?
     let stack: CallStack
-//    @Binding var balances: [Balance]
+    @Binding var balances: [Balance]
 
     @EnvironmentObject private var model: WalletModel
 
@@ -97,7 +97,7 @@ struct ExchangeListCommonV: View {
         //Text("Exchanges...")
         Content(symLog: symLog,
                  stack: stack.push(),
-//              balances: $balances,
+              balances: $balances,
              exchanges: $exchanges,
       amountToTransfer: $amountToTransfer,
        reloadExchanges: reloadExchanges)
@@ -119,7 +119,7 @@ extension ExchangeListCommonV {
         let symLog: SymLogV?
         let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-//        @Binding var balances: [Balance]
+        @Binding var balances: [Balance]
         @Binding var exchanges: [Exchange]
         @Binding var amountToTransfer: Amount           // does still have the wrong currency
         var reloadExchanges: () async -> Void
@@ -142,6 +142,7 @@ extension ExchangeListCommonV {
 
         var body: some View {
             let dict = currenciesDict(exchanges)
+            // TODO: Balances for amountAvailable for Deposit
             let sortedDict = dict.sorted{ $0.key < $1.key}
             Group { // necessary for .backslide transition (bug in SwiftUI)
                 List(sortedDict, id: \.key) { key, value in

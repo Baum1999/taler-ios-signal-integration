@@ -190,7 +190,7 @@ extension MainView {
 
                 NavigationView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
-//                                  balances: $balances,
+                                  balances: $balances,
                                   navTitle: exchangesTitle)
                 }.navigationViewStyle(.stack)
                 .tabItem {
