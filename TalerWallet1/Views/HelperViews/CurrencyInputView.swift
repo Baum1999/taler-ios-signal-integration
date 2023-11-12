@@ -1,10 +1,7 @@
-//
-//  CurrencyInputView.swift
-//  TalerWalletT
-//
-//  Created by Marc Stibane on 2023-06-04.
-//  Copyright © 2023 Taler. All rights reserved.
-//
+/*
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
+ */
 import SwiftUI
 
 struct CurrencyInputView: View {

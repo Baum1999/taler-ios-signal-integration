@@ -9,7 +9,6 @@ import SymLog
 struct SendPurpose: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @FocusState private var isFocused: Bool
 
     let amountAvailable: Amount
     let centsToTransfer: UInt64
@@ -26,6 +25,7 @@ struct SendPurpose: View {
 //        return formatter.string(for: Decimal(centsToTransfer) / mag) ?? ""
         return String(centsToTransfer / 100)    // TODO: based on currency
     }
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         let amount = Amount.amountFromCents(amountAvailable.currencyStr, centsToTransfer)

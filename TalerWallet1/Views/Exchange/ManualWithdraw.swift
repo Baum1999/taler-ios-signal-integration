@@ -96,7 +96,8 @@ struct ManualWithdraw: View {
 }
 // MARK: -
 #if DEBUG
-struct ManualWithdraw_Container : View {
+struct ManualWithdraw_Previews: PreviewProvider {
+  struct StateContainer : View {
     @State private var centsToTransfer: UInt64 = 510
     @State private var details = WithdrawalAmountDetails(tosAccepted: false,
                                                            amountRaw: Amount(currency: LONGCURRENCY, cent: 510),
@@ -117,11 +118,10 @@ struct ManualWithdraw_Container : View {
              centsToTransfer: $centsToTransfer,
      withdrawalAmountDetails: details)
     }
-}
+  }
 
-struct ManualWithdraw_Previews: PreviewProvider {
     static var previews: some View {
-        ManualWithdraw_Container()
+        StateContainer()
     }
 }
 #endif

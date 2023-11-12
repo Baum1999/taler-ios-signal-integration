@@ -94,11 +94,7 @@ extension Bundle {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-#if TABBAR  // Taler Wallet
         AboutView(stack: CallStack("Preview"), navTitle: "About")
-#else       // GNU Taler
-        SettingsView(stack: CallStack("Preview"), navTitle: "About") { }
-#endif
     }
 }
 #endif

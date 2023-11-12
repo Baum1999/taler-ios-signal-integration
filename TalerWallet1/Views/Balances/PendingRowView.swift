@@ -108,16 +108,13 @@ struct PendingRowView: View {
 }
 // MARK: -
 #if DEBUG
-
 func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
     let unitName = digits == 0 ? "¥" : "€"
     let scope = ScopeInfo(type: .global, currency: currency)
-    let specs = CurrencySpecification(name: TESTCURRENCY,
-//                        decimalSeparator: ".", groupSeparator: "'",
+    let specs = CurrencySpecification(name: currency,
                      fractionalInputDigits: digits,
                     fractionalNormalDigits: digits,
               fractionalTrailingZeroDigits: digits,
-//                   isCurrencyNameLeading: true,
                               altUnitNames: [0 : unitName])
     let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
     return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)

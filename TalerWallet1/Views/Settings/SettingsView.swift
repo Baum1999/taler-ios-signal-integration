@@ -13,8 +13,6 @@ import SymLog
  * Debug log
  * View/send internal log
  *
- * Reset Wallet (dangerous!)
- * Throws away your money
  */
 
 struct SettingsView: View {

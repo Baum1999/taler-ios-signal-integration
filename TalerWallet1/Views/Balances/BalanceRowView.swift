@@ -99,7 +99,8 @@ struct BalanceRowView: View {
 // MARK: -
 #if  DEBUG
 
-struct SomeBalanceRows: View {
+struct BalanceRowView_Previews: PreviewProvider {
+  struct StateContainer: View {
     var body: some View {
         let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
         let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
@@ -114,13 +115,11 @@ struct SomeBalanceRows: View {
             }
             BalanceRowView(amount: test, currencyInfo: testInfo, sendAction: {}, recvAction: {}, rowAction: {})
         }
-
     }
-}
+  }
 
-struct BalanceRowView_Previews: PreviewProvider {
     static var previews: some View {
-        SomeBalanceRows()
+        StateContainer()
 //            .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
     }
 }

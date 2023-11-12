@@ -54,6 +54,7 @@ class Controller: ObservableObject {
         backendState = .instantiated
         currencyInfos = []
     }
+// MARK: -
 
     func info(for currency: String) -> CurrencyInfo? {
         for currencyInfo in currencyInfos {
@@ -81,7 +82,7 @@ class Controller: ObservableObject {
         }
         currencyInfos.append(info)
     }
-
+// MARK: -
     @MainActor
     func initWalletCore(_ model: WalletModel, sqlite3: Bool)
       async throws {
