@@ -127,8 +127,8 @@ struct PendingRowView_Previews: PreviewProvider {
     static var previews: some View {
         let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
         let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
-        let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
-        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
+        let test = Amount(currency: TESTCURRENCY, cent: 123)
+        let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         List {
             PendingRowView(amount: test, currencyInfo: testInfo, incoming: true)
             PendingRowView(amount: demo, currencyInfo: demoInfo, incoming: false)

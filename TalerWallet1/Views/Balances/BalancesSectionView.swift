@@ -292,7 +292,7 @@ fileprivate struct BindingViewContainer: View {
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, url: DEMOEXCHANGE, currency: LONGCURRENCY)
-        let balance = Balance(available: try! Amount(fromString: LONGCURRENCY + ":0.1"),
+        let balance = Balance(available: Amount(currency: LONGCURRENCY, cent:1),
                               scopeInfo: scopeInfo,
                       requiresUserInput: false,
                  hasPendingTransactions: true)

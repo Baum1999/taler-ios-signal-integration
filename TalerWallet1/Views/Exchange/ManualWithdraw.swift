@@ -99,8 +99,8 @@ struct ManualWithdraw: View {
 struct ManualWithdraw_Container : View {
     @State private var centsToTransfer: UInt64 = 510
     @State private var details = WithdrawalAmountDetails(tosAccepted: false,
-                                                           amountRaw: try! Amount(fromString: LONGCURRENCY + ":5.1"),
-                                                     amountEffective: try! Amount(fromString: LONGCURRENCY + ":5.0"),
+                                                           amountRaw: Amount(currency: LONGCURRENCY, cent: 510),
+                                                     amountEffective: Amount(currency: LONGCURRENCY, cent: 500),
                                                            paytoUris: [],
                                                ageRestrictionOptions: [],
                                                             numCoins: 6)

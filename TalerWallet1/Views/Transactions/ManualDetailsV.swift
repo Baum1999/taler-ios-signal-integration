@@ -85,8 +85,8 @@ struct ManualDetails_Previews: PreviewProvider {
     static var previews: some View {
         let common = TransactionCommon(type: .withdrawal,
                                     txState: TransactionState(major: .done),
-                            amountEffective: try! Amount(fromString: LONGCURRENCY + ":1.1"),
-                                  amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
+                            amountEffective: Amount(currency: LONGCURRENCY, cent: 110),
+                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 220),
                               transactionId: "someTxID",
                                   timestamp: Timestamp(from: 1_666_666_000_000),
                                   txActions: [])

@@ -123,9 +123,9 @@ struct PaymentURIView_Previews: PreviewProvider {
                                           summary: "summary",
                                             summaryI18n: nil,
                                           nonce: "nonce",
-                                          amount: try! Amount(fromString: LONGCURRENCY + ":2.2"),
+                                          amount: Amount(currency: LONGCURRENCY, cent: 220),
                                           payDeadline: Timestamp.tomorrow(),
-                                          maxFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                          maxFee: Amount(currency: LONGCURRENCY, cent: 20),
                                           merchant: merchant,
                                           merchantPub: "merchantPub",
                                             deliveryDate: nil,
@@ -142,7 +142,7 @@ struct PaymentURIView_Previews: PreviewProvider {
                                             fulfillmentMessage: nil,
                                             fulfillmentMessageI18n: nil,
                                           wireFeeAmortization: 0,
-                                          maxWireFee: try! Amount(fromString: LONGCURRENCY + ":0.2"),
+                                          maxWireFee: Amount(currency: LONGCURRENCY, cent: 20),
                                           minimumAge: nil
 //                                          extra: extra,
 //                                          auditors: [],
@@ -152,8 +152,8 @@ struct PaymentURIView_Previews: PreviewProvider {
             transactionId: "txn:payment:012345",
             contractTerms: terms,
             contractTermsHash: "termsHash",
-            amountRaw: try! Amount(fromString: LONGCURRENCY + ":2.2"),
-            amountEffective: try! Amount(fromString: LONGCURRENCY + ":2.4"),
+            amountRaw: Amount(currency: LONGCURRENCY, cent: 220),
+            amountEffective: Amount(currency: LONGCURRENCY, cent: 240),
             balanceDetails: nil,
             paid: nil
 //        ,   talerUri: "talerURI"

@@ -54,8 +54,8 @@ struct SectionWithAmountRow: View {
     var body: some View {
         let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
         let demoInfo = PreviewCurrencyInfo(DEMOCURRENCY, digits: 2)
-        let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
-        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.12")
+        let test = Amount(currency: TESTCURRENCY, cent: 123)
+        let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         let testStr = test.string(testInfo)
         let demoStr = demo.string(demoInfo)
         List {

@@ -8,7 +8,7 @@ import SymLog
 
 extension Transaction {             // for Dummys
     init(dummyCurrency: String) {
-        let amount = try! Amount(fromString: "\(dummyCurrency):0")
+        let amount = Amount.zero(currency: dummyCurrency)
         let now = Timestamp.now()
         let common = TransactionCommon(type: .dummy,
                                        txState: TransactionState(major: .pending),

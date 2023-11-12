@@ -97,7 +97,7 @@ struct SendDoneV: View {
 //    static var previews: some View {
 //        Group {
 //            SendDoneV(stack: CallStack("Preview"),
-//              amountToSend: try! Amount(fromString: LONGCURRENCY + ":4.8"),
+//               amountToSend: Amount(currency: LONGCURRENCY, cent: 480),
 //           amountToReceive: nil,
 //                   summary: "some subject/purpose",
 //                expireDays: 0)

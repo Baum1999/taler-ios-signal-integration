@@ -38,7 +38,7 @@ struct ExchangeSectionView: View {
 fileprivate struct ExchangeRow_Container : View {
     @State private var centsToTransfer: UInt64 = 100
 
-//    let amount = try! Amount(fromString: LONGCURRENCY + ":1234.56")
+//    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
         let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
                                         currency: LONGCURRENCY,

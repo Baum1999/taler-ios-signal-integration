@@ -116,8 +116,6 @@ struct TransactionRow_Previews: PreviewProvider {
     static var previews: some View {
         let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
         let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
-        let test = try! Amount(fromString: TESTCURRENCY + ":1.23")
-        let demo = try! Amount(fromString: DEMOCURRENCY + ":1234.56")
         List {
             TransactionRowView(transaction: withdrawal, currencyInfo: testInfo)
             TransactionRowView(transaction: payment, currencyInfo: demoInfo)
@@ -127,17 +125,12 @@ struct TransactionRow_Previews: PreviewProvider {
 // MARK: -
 extension Transaction {             // for PreViews
     init(incoming: Bool, pending: Bool, id: String, time: Timestamp) {
-        let currency = LONGCURRENCY
-        let raw = currency + ":5"
-        let effective = currency + (incoming ? ":4.8"
-                                             : ":5.2")
-        let refRaw = currency + ":3"
-        let refEff = currency + ":2.8"
+        let effective = incoming ? 480 : 520
         let common = TransactionCommon(type: incoming ? .withdrawal : .payment,
                                     txState: TransactionState(major: pending ? TransactionMajorState.pending
                                                                              : TransactionMajorState.done),
-                            amountEffective: try! Amount(fromString: effective),
-                                  amountRaw: try! Amount(fromString: raw),
+                            amountEffective: Amount(currency: LONGCURRENCY, cent: UInt64(effective)),
+                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 5),
                               transactionId: id,
                                   timestamp: time,
                                   txActions: [.abort])
@@ -159,8 +152,8 @@ extension Transaction {             // for PreViews
                                       summary: "some product summary",
                                      products: [])
             let pDetails = PaymentTransactionDetails(proposalId: "some proposal ID",
-                                                 totalRefundRaw: try! Amount(fromString: refRaw),
-                                           totalRefundEffective: try! Amount(fromString: refEff),
+                                                 totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
+                                           totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),
                                                            info: info)
             self = .payment(PaymentTransaction(common: common, details: pDetails))
         }
