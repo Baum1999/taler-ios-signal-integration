@@ -268,7 +268,7 @@ extension MainView {
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
-                    if controller.info(for: scope.currency) == nil {
+                    if !controller.hasInfo(for: scope.currency) {
                         Task { // runs on MainActor
                             symLog?.log("get info for: \(scope.currency)")
                             do {

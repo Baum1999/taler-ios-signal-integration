@@ -53,6 +53,7 @@ struct BalanceRowView: View {
     let recvAction: () -> Void
     let rowAction: () -> Void
     @Environment(\.sizeCategory) var sizeCategory
+    @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -72,6 +73,7 @@ struct BalanceRowView: View {
     var body: some View {
         SingleAxisGeometryReader { width in
             VStack (alignment: .trailing) {
+                let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
                 let amountStr = amount.string(currencyInfo)
                 BalanceButton(amountStr: amountStr,
                            sizeCategory: sizeCategory,

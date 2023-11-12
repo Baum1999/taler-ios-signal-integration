@@ -62,6 +62,7 @@ struct TransactionRowView: View {
     let currencyInfo: CurrencyInfo?
 
     @Environment(\.sizeCategory) var sizeCategory
+    @EnvironmentObject private var controller: Controller
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         available < (contentWidth + valueWidth + 40)
@@ -80,7 +81,7 @@ struct TransactionRowView: View {
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
                              : WalletColors().incompleteColor
-
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         SingleAxisGeometryReader { width in
             Group {
                 let amountStr = amount.string(currencyInfo)

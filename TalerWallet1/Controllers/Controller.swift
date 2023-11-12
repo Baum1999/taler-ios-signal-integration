@@ -33,7 +33,7 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
-    @Published var currencyInfos: [CurrencyInfo]
+    @Published var currencyTicker: Int = 0
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
@@ -41,6 +41,7 @@ class Controller: ObservableObject {
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
+    var currencyInfos: [CurrencyInfo]
 
     var messageForSheet: String? = nil
 
@@ -52,35 +53,50 @@ class Controller: ObservableObject {
 //            }
 //        }
         backendState = .instantiated
+        currencyTicker = 0
         currencyInfos = []
     }
 // MARK: -
-
-    func info(for currency: String) -> CurrencyInfo? {
-        for currencyInfo in currencyInfos {
-            if currencyInfo.scope.currency == currency {
-                return currencyInfo
+    func hasInfo(for currency: String) -> Bool {
+        for info in currencyInfos {
+            if info.scope.currency == currency {
+                return true
             }
         }
-        return nil
+        return false
+    }
+
+    func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
+        if ticker != currencyTicker {
+            print("Yikes")
+        }
+        for info in currencyInfos {
+            if info.scope.currency == currency {
+                return info
+            }
+        }
+        return CurrencyInfo.zero(currency)
     }
 
     @MainActor
-    func setInfo(_ info: CurrencyInfo) async {
+    func setInfo(_ newInfo: CurrencyInfo) async {
         await semaphore.wait()
         defer { semaphore.signal() }
-        var existing: ScopeInfo? = nil
-        for currencyInfo in currencyInfos {
-            let scope = currencyInfo.scope
-            if scope.currency == info.scope.currency {
-                existing = scope
-                break
+
+        var replaced = false
+        var newInfos = currencyInfos.map { currencyInfo in
+            if currencyInfo.scope.currency == newInfo.scope.currency {
+                replaced = true
+                return newInfo
+            } else {
+                return currencyInfo
             }
         }
-        if existing != nil {
-            currencyInfos.removeAll(where: { $0.scope == existing })
+        if !replaced {
+            newInfos.append(newInfo)
         }
-        currencyInfos.append(info)
+        currencyInfos = newInfos
+        currencyTicker += 1         // triggers published view update
     }
 // MARK: -
     @MainActor

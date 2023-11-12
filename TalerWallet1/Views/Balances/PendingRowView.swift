@@ -57,6 +57,7 @@ struct PendingRowView: View {
     let incoming: Bool
 
     @Environment(\.sizeCategory) var sizeCategory
+    @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     let inTitle0 = String(localized: "TitleIncoming_Short", defaultValue: "Incoming",
@@ -85,6 +86,7 @@ struct PendingRowView: View {
         let pendingColor = WalletColors().pendingColor(incoming)
         SingleAxisGeometryReader { width in
             Group {
+                let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
                 let amountStr = amount.string(currencyInfo)
                 let amountWidth = amountStr.width(largeAmountFont: false, sizeCategory)
                 let inTitle = iconOnly ? (inTitle0, nil)

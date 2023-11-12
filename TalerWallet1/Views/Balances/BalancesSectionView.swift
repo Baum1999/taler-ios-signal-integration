@@ -70,7 +70,7 @@ extension BalancesSectionView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = balance.scopeInfo.currency
-        let currencyInfo = controller.info(for: currency)
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
 
         Section {
             if "KUDOS" == currency && !balance.available.isZero {
