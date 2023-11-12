@@ -17,9 +17,9 @@ import SymLog
 struct BalancesSectionView {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let balance: Balance
+    let balance: Balance                            // this is the currency to be used
     let sectionCount: Int
-    @Binding var centsToTransfer: UInt64
+    @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
 
 //    @AppStorage("moreContrast") var moreContrast: Bool = false
@@ -81,17 +81,15 @@ extension BalancesSectionView: View {
             }
             BalancesNavigationLinksView(stack: stack.push(),
                                       balance: balance,
-                                 currencyInfo: currencyInfo,
-                              centsToTransfer: $centsToTransfer,
+                             amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                       summary: $summary,
-//                             buttonSelected: $buttonSelected,
                         completedTransactions: $completedTransactions,
                               reloadAllAction: reloadCompleted,
                               reloadOneAction: reloadOneAction)
             if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                     currency: currency,
                           pendingTransactions: $pendingTransactions,
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
@@ -102,7 +100,7 @@ extension BalancesSectionView: View {
                     LazyView {
                         TransactionsListView(stack: stack.push(),
                                           navTitle: String(localized: "Incomplete", comment: "ViewTitle of TransactionList"),
-                                      currencyInfo: currencyInfo,
+                                          currency: currency,
                                       transactions: incompleteTransactions,
                                         showUpDown: false,
                                    reloadAllAction: reloadIncomplete,
@@ -137,8 +135,7 @@ extension BalancesSectionView: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: currencyInfo,
-//                                    currency: currency,
+                                      currency: currency,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)
             } header: {
@@ -155,8 +152,7 @@ extension BalancesSectionView: View {
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currencyInfo: CurrencyInfo?
-//
+    let currency: String // = currencyInfo.scope.currency
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
@@ -183,7 +179,6 @@ fileprivate struct BalancesPendingRowView: View {
     }
 
     var body: some View {
-        let currency: String = currencyInfo?.scope.currency ?? ""
         let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
 
         NavigationLink {
@@ -191,7 +186,7 @@ fileprivate struct BalancesPendingRowView: View {
             LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
-                              currencyInfo: currencyInfo,
+                                  currency: currency,
                               transactions: pendingTransactions,
                                 showUpDown: false,
                            reloadAllAction: reloadPending,
@@ -201,11 +196,11 @@ fileprivate struct BalancesPendingRowView: View {
             VStack(spacing: 6) {
                 var rows = 0
                 if !pendingIncoming.isZero {
-                    PendingRowView(amount: pendingIncoming, currencyInfo: currencyInfo, incoming: true)
+                    PendingRowView(amount: pendingIncoming, incoming: true)
                     let _ = (rows+=1)
                 }
                 if !pendingOutgoing.isZero {
-                    PendingRowView(amount: pendingOutgoing, currencyInfo: currencyInfo, incoming: false)
+                    PendingRowView(amount: pendingOutgoing, incoming: false)
                     let _ = (rows+=1)
                 }
                 if rows == 0 {
@@ -221,9 +216,8 @@ fileprivate struct BalancesPendingRowView: View {
 fileprivate struct BalancesNavigationLinksView: View {
     let stack: CallStack
     let balance: Balance
-    let currencyInfo: CurrencyInfo?
 //    let sectionCount: Int
-    @Binding var centsToTransfer: UInt64
+    @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
     @Binding var completedTransactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
@@ -244,21 +238,26 @@ fileprivate struct BalancesNavigationLinksView: View {
 //        }
     }
 
-    var body: some View {
+    func setCurrency() -> String {
         let currency = balance.scopeInfo.currency
+        amountToTransfer.setCurrency(currency)
+        return currency
+    }
+
+    var body: some View {
+        let currency = setCurrency()                        // update currency in amountToTransfer
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),
                  amountAvailable: balance.available,
-                 centsToTransfer: $centsToTransfer,
+                amountToTransfer: $amountToTransfer,        // with correct currency
                          summary: $summary)
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
             NavigationLink(destination: LazyView {
                 RequestPayment(stack: stack.push(),
-                           scopeInfo: balance.scopeInfo,
-                     centsToTransfer: $centsToTransfer,
+                    amountToTransfer: $amountToTransfer,    // with correct currency
                              summary: $summary)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
@@ -266,7 +265,7 @@ fileprivate struct BalancesNavigationLinksView: View {
             NavigationLink(destination: LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
-                              currencyInfo: currencyInfo,
+                                  currency: currency,
                               transactions: completedTransactions,
                                 showUpDown: true,
                            reloadAllAction: reloadAllAction,
@@ -274,21 +273,22 @@ fileprivate struct BalancesNavigationLinksView: View {
             }, tag: 3, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
-            BalanceRowView(amount: balance.available, currencyInfo: currencyInfo,
-                sendAction: {
-                    selectAndUpdate(1)      // will trigger SendAmount NavigationLink
-                }, recvAction: {
-                    selectAndUpdate(2)      // will trigger RequestPayment NavigationLink
-                }, rowAction: {
-                    buttonSelected = 3      // will trigger TransactionList NavigationLink
-                })
+            BalanceRowView(amount: balance.available,
+                       sendAction: {
+                            selectAndUpdate(1)      // trigger SendAmount NavigationLink
+                    }, recvAction: {
+                            selectAndUpdate(2)      // trigger RequestPayment NavigationLink
+                     }, rowAction: {
+                            buttonSelected = 3      // trigger TransactionList NavigationLink
+                     })
         }
     }
 }
 // MARK: -
 #if false   // model crashes
+struct BalancesSectionView_Previews: PreviewProvider {
 fileprivate struct BindingViewContainer: View {
-    @State var centsToTransfer: UInt64 = 333
+    @State var amountToTransfer: UInt64 = 333
     @State private var summary: String = "bla-bla"
 
     var body: some View {
@@ -299,12 +299,11 @@ fileprivate struct BindingViewContainer: View {
                  hasPendingTransactions: true)
         BalancesSectionView(balance: balance,
                        sectionCount: 2,
-                    centsToTransfer: $centsToTransfer,
+                   amountToTransfer: $amountToTransfer,
                             summary: $summary)
     }
 }
 
-struct BalancesSectionView_Previews: PreviewProvider {
     static var previews: some View {
         List {
             BindingViewContainer()

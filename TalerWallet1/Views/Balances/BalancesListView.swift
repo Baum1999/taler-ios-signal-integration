@@ -21,7 +21,7 @@ struct BalancesListView: View {
 #endif
 
     @EnvironmentObject private var model: WalletModel
-    @State private var centsToTransfer: UInt64 = 0
+    @State private var amountToTransfer = Amount.zero(currency: "")             // Update when used
     @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
@@ -102,7 +102,7 @@ struct BalancesListView: View {
         let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
 #endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
-                centsToTransfer: $centsToTransfer, summary: $summary,
+                amountToTransfer: $amountToTransfer, summary: $summary,
                 reloadBalances: reloadBalances)
             .navigationTitle(navTitle)
             .navigationBarItems(leading: hamburger,
@@ -131,7 +131,7 @@ extension BalancesListView {
         let stack: CallStack
         @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         @Binding var balances: [Balance]
-        @Binding var centsToTransfer: UInt64
+        @Binding var amountToTransfer: Amount
         @Binding var summary: String
         var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
 
@@ -147,9 +147,9 @@ extension BalancesListView {
                 } else {
                     List(balances, id: \.self) { balance in
                         BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
-                                          balance: balance,
+                                          balance: balance,                     // this is the currency to be used
                                      sectionCount: count,
-                                  centsToTransfer: $centsToTransfer,
+                                 amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                           summary: $summary)
                     }
                     .onAppear() {

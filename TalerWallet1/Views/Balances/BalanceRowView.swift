@@ -48,7 +48,6 @@ struct BalanceButton: View {
 /// [Send Money]  [Request Payment]
 struct BalanceRowView: View {
     let amount: Amount
-    let currencyInfo: CurrencyInfo?
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
@@ -104,8 +103,6 @@ struct BalanceRowView: View {
 struct BalanceRowView_Previews: PreviewProvider {
   struct StateContainer: View {
     var body: some View {
-        let testInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 0)
-        let demoInfo = PreviewCurrencyInfo(TESTCURRENCY, digits: 2)
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
 //        let testStr = test.string(testInfo)
@@ -113,9 +110,9 @@ struct BalanceRowView_Previews: PreviewProvider {
 
         List {
             Section {
-                BalanceRowView(amount: demo, currencyInfo: demoInfo, sendAction: {}, recvAction: {}, rowAction: {})
+                BalanceRowView(amount: demo, sendAction: {}, recvAction: {}, rowAction: {})
             }
-            BalanceRowView(amount: test, currencyInfo: testInfo, sendAction: {}, recvAction: {}, rowAction: {})
+            BalanceRowView(amount: test, sendAction: {}, recvAction: {}, rowAction: {})
         }
     }
   }
