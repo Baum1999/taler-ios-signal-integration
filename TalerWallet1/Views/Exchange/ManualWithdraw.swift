@@ -14,6 +14,7 @@ struct ManualWithdraw: View {
     let exchange: Exchange
     @Binding var amountToTransfer: Amount
 
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
 
     @State var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
@@ -33,7 +34,8 @@ struct ManualWithdraw: View {
         ScrollView {
             VStack {
                 CurrencyInputView(amount: $amountToTransfer,
-                                   title: String(localized: "Amount to withdraw:"))
+                                   title: iconOnly ? String(localized: "How much:")
+                                                   : String(localized: "Amount to withdraw:"))
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)
                 QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)

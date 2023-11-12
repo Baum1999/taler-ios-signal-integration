@@ -14,6 +14,7 @@ struct RequestPayment: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
@@ -29,7 +30,8 @@ struct RequestPayment: View {
 
         ScrollView { VStack {
             CurrencyInputView(amount: $amountToTransfer,
-                              title: String(localized: "Amount to request:"))
+                               title: iconOnly ? String(localized: "How much:")
+                                               : String(localized: "Amount to request:"))
 
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,

@@ -15,6 +15,7 @@ struct SendAmount: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
+    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
@@ -46,7 +47,8 @@ struct SendAmount: View {
                     .accessibilityFont(.title3)
                     .padding(.bottom, 2)
                 CurrencyInputView(amount: $amountToTransfer,
-                                  title: String(localized: "Amount to send:"))
+                                   title: iconOnly ? String(localized: "How much:")
+                                                   : String(localized: "Amount to send:"))
                 Text("+ \(fee) payment fee")
                     .accessibilityFont(.body)
                     .foregroundColor(.red)
