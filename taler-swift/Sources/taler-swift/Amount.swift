@@ -140,15 +140,34 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// The string representation of the value, formatted as "`integer``fraction`",
     /// no group separator, no decimalSeparator, #inputDigits digits from fraction, padded with trailing zeroes
     public func plainString(inputDigits: UInt) -> String {
+        let base = fractionalBase()
         var frac = fraction
         var fracStr = ""
         var i = inputDigits
-        while (i > 0) {
-            fracStr += String(frac / (fractionalBase() / 10))
-            frac = (frac * 10) % fractionalBase()
-            i -= 1
+
+        var nextchar: UInt32 {
+            let fracChar = frac / (base / 10)
+            frac = (frac * 10) % base
+            return fracChar
         }
-        return "\(integer)\(fracStr)"
+
+        if integer > 0 {
+            while (i > 0) {
+                fracStr += String(nextchar)
+                i -= 1
+            }
+            return "\(integer)\(fracStr)"
+        } else {
+            while (i > 0) {
+                let fracChar = nextchar
+                // skip leading zeroes
+                if fracStr.count > 0 || fracChar > 0 {
+                    fracStr += String(fracChar)
+                }
+                i -= 1
+            }
+            return fracStr.count > 0 ? fracStr : "0"
+        }
     }
 
     /// read-only getter
