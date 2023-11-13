@@ -9,7 +9,7 @@ extension View {
     @MainActor
     public func announce(this: String) {
         if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .screenChanged, argument: this)
+            UIAccessibility.post(notification: .announcement, argument: this)
         }
     }
 }
