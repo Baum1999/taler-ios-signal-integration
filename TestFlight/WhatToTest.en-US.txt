@@ -1,4 +1,15 @@
 
+Version 0.9.3 (25)
+
+• New feature: Shortcuts Buttons (50,25,10,5) for P2P + Withdrawal
+
+- CurrencyFormatter for P2P + Withdrawal
+- BugFix: Accessibility announcements always did reset the focus to start of view
+
+A/B test result: Nobody liked GNU Taler (with SideView & Hamburger-button) better,
+thus we concentrate on Taler Wallet (with TabBar)
+
+
 Version 0.9.3 (24)
 
 • Sound & Haptics ON by default
