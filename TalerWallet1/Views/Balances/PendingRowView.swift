@@ -121,14 +121,29 @@ func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
     return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
 }
 
-struct PendingRowView_Previews: PreviewProvider {
-    static var previews: some View {
+@MainActor
+fileprivate struct Preview_Content: View {
+    var body: some View {
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         List {
             PendingRowView(amount: test, incoming: true)
             PendingRowView(amount: demo, incoming: false)
         }
+    }
+}
+fileprivate struct Previews: PreviewProvider {
+    @MainActor
+    struct StateContainer: View {
+//        @StateObject private var controller = Controller.shared
+        var body: some View {
+            Text("Hello")
+//            Preview_Content()
+//                .environmentObject(controller)
+        }
+    }
+    static var previews: some View {
+        StateContainer()
     }
 }
 #endif

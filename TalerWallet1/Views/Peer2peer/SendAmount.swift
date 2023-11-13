@@ -100,12 +100,12 @@ struct SendAmount: View {
 }
 // MARK: -
 #if DEBUG
-struct SendAmount_Container : View {
-    @State private var amountToTransfer = Amount(currency: DEMOCURRENCY, cent: 510)
+fileprivate struct Preview_Content: View {
+    @State private var amountToTransfer = Amount(currency: TESTCURRENCY, cent: 510)
     @State private var summary: String = ""
 
     var body: some View {
-        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
+        let amount = Amount(currency: TESTCURRENCY, integer: 10, fraction: 0)
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
         amountToTransfer: $amountToTransfer,
@@ -113,9 +113,17 @@ struct SendAmount_Container : View {
     }
 }
 
-//struct SendAmount_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SendAmount_Container()
-//    }
-//}
+fileprivate struct Previews: PreviewProvider {
+    @MainActor
+    struct StateContainer: View {
+        @StateObject private var controller = Controller.shared
+        var body: some View {
+            Preview_Content()
+                .environmentObject(controller)
+        }
+    }
+    static var previews: some View {
+        StateContainer()
+    }
+}
 #endif

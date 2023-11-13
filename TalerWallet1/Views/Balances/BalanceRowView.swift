@@ -101,6 +101,7 @@ struct BalanceRowView: View {
 #if  DEBUG
 
 struct BalanceRowView_Previews: PreviewProvider {
+    @MainActor
   struct StateContainer: View {
     var body: some View {
         let test = Amount(currency: TESTCURRENCY, cent: 123)
