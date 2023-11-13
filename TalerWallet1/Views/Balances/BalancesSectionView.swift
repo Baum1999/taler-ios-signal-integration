@@ -22,13 +22,12 @@ struct BalancesSectionView {
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
 
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
-    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
 
     @State private var isShowingDetailView = false
-
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []

@@ -17,6 +17,7 @@ struct ExchangeListView: View {
     var hamburgerAction: () -> Void
 #endif
     @EnvironmentObject private var model: WalletModel
+
     @State var showAlert: Bool = false
     @State var newExchange: String = TESTEXCHANGE
 

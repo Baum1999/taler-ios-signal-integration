@@ -14,9 +14,11 @@ struct RequestPurpose: View {
     let fee: String
     @Binding var summary: String
     @Binding var expireDays: UInt
-    @AppStorage("iconOnly") var iconOnly: Bool = false
-    let navTitle = String(localized: "NavTitle_Request_Subject", defaultValue: "Request", comment: "NavTitle for entering the subject for Request-Payment")
+
     @EnvironmentObject private var controller: Controller
+    @AppStorage("iconOnly") var iconOnly: Bool = false
+    let navTitle = String(localized: "NavTitle_Request_Subject",
+                       defaultValue: "Request", comment: "NavTitle for entering the subject for Request-Payment")
 
     @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool

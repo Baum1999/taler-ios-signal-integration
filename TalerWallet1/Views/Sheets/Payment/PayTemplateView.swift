@@ -13,13 +13,12 @@ struct PayTemplateView: View {
     let stack: CallStack
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
-    @EnvironmentObject private var controller: Controller
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-
     // the scanned URL
     let url: URL
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     func acceptAction(preparePayResult: PreparePayResult) {
         Task { // runs on MainActor

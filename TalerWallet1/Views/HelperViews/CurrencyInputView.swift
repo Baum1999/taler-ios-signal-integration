@@ -10,6 +10,7 @@ struct CurrencyInputView: View {
     let title: String
 
     @EnvironmentObject private var controller: Controller
+    
     @State var hasBeenShown = false
 
     var body: some View {

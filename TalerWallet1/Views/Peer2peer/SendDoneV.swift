@@ -11,6 +11,7 @@ struct SendDoneV: View {
     private let symLog = SymLogV()
     let stack: CallStack
     let navTitle = String(localized: "P2P Ready")
+    @EnvironmentObject private var model: WalletModel
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
@@ -23,8 +24,6 @@ struct SendDoneV: View {
     let summary: String
     let expireDays: UInt
     @Binding var transactionStarted: Bool
-
-    @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
 

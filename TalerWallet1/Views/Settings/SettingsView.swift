@@ -21,6 +21,7 @@ struct SettingsView: View {
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
@@ -38,8 +39,6 @@ struct SettingsView: View {
 #else       // GNU Taler
     var hamburgerAction: () -> Void
 #endif
-
-    @EnvironmentObject private var model: WalletModel
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false

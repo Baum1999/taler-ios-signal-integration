@@ -14,8 +14,8 @@ struct RequestPayment: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0

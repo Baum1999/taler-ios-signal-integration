@@ -8,19 +8,18 @@ import SymLog
 struct WithdrawTOSView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let navTitle = String(localized: "Terms of Service")
 
     let exchangeBaseUrl: String?
+    let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
+    let acceptAction: (() -> Void)?
 
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State var exchangeTOS: ExchangeTermsOfService?
-    let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
-
-    let acceptAction: (() -> Void)?
-    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         VStack {

@@ -14,11 +14,10 @@ struct ManualWithdraw: View {
     let exchange: Exchange
     @Binding var amountToTransfer: Amount
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
-
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
 

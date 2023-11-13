@@ -14,8 +14,8 @@ struct WithdrawAcceptDone: View {
     let exchangeBaseUrl: String?
     let url: URL
 
-    @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
 

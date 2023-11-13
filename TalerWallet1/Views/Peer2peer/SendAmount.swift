@@ -15,8 +15,9 @@ struct SendAmount: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays: UInt = SEVENDAYS

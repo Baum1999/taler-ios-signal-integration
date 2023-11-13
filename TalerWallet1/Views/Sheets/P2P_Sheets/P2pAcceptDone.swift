@@ -14,8 +14,8 @@ struct P2pAcceptDone: View {
     let transactionId: String
     let incoming: Bool
 
-    @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
 
     @State private var finished: Bool = false
 

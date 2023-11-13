@@ -14,14 +14,15 @@ struct BalancesListView: View {
     let navTitle: String
     @Binding var balances: [Balance]
     @Binding var shouldReloadBalances: Int
-    @State private var lastReloadedBalances = 0
 #if TABBAR  // Taler Wallet
 #else       // GNU Taler
     let hamburgerAction: () -> Void
 #endif
 
     @EnvironmentObject private var model: WalletModel
-    @State private var amountToTransfer = Amount.zero(currency: "")             // Update when used
+
+    @State private var lastReloadedBalances = 0
+    @State private var amountToTransfer = Amount.zero(currency: "")             // Update currency when used
     @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false

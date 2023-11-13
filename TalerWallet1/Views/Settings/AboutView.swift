@@ -21,7 +21,6 @@ struct AboutView: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State private var rotationEnabled = false
-
     @State private var listID = UUID()
 
     var body: some View {

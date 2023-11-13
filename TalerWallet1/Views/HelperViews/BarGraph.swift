@@ -12,8 +12,9 @@ struct BarGraphHeader: View {
     let stack: CallStack
     let currency: String
 
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
     @EnvironmentObject private var model: WalletModel
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
+
     @State private var completedTransactions: [Transaction] = []
 
     var body: some View {

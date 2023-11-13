@@ -10,6 +10,7 @@ struct URLSheet: View {
     let stack: CallStack
     let navTitle = String(localized: "Checking Link")
     var urlToOpen: URL
+
     @EnvironmentObject private var controller: Controller
 
     var body: some View {

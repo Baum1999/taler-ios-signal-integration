@@ -18,13 +18,15 @@ struct MainView: View {
     private let symLog = SymLogV(0)
     let logger: Logger
     let stack: CallStack
+    @Binding var soundPlayed: Bool
+
     @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
-    @State private var sheetPresented = false
-    @State private var urlToOpen: URL? = nil
-    @Binding var soundPlayed: Bool
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
+
+    @State private var sheetPresented = false
+    @State private var urlToOpen: URL? = nil
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")

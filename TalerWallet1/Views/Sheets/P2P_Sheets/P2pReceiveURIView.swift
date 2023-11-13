@@ -12,12 +12,12 @@ struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle = String(localized: "P2P Receive")
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     // the scanned URL
     let url: URL
     
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse?
 
