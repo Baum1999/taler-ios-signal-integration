@@ -21,17 +21,21 @@ struct SendAmount: View {
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays: UInt = SEVENDAYS
+    @State private var insufficient: Bool = false
+    @State private var fee: String = ""
 
-    private func fee(ppCheck: CheckPeerPushDebitResponse?) -> String {
+    private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
             if let ppCheck {
                 // Outgoing: fee = effective - raw
                 let fee = try ppCheck.amountEffective - ppCheck.amountRaw
-                return fee.readableDescription
+                return fee
             }
         } catch {}
-        return ""
+        return nil
     }
+    
+    var feeLabel: String { String(localized: " + \(fee) payment fee") }
 
     var body: some View {
 #if DEBUG
@@ -39,24 +43,28 @@ struct SendAmount: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountAvailable.currencyStr
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
-        let fee = fee(ppCheck: peerPushCheck)
+        let available = amountAvailable.string(currencyInfo)
+        let current = amountToTransfer.string(currencyInfo)
+        let insufficientLabel = String(localized: "You don't have enough \(currency).")
+        let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
         ScrollView {
             VStack(alignment: .trailing) {
-                let available = amountAvailable.readableDescription // TODO: formatter
-                Text("Available: \(available)")
+//                let _ = print("available: \(available)")
+                Text("Available:\t\(available)")
                     .accessibilityFont(.title3)
                     .padding(.bottom, 2)
                 CurrencyInputView(amount: $amountToTransfer,
                                    title: iconOnly ? String(localized: "How much:")
                                                    : String(localized: "Amount to send:"),
                            shortcutLabel: String(localized: "Send", comment: "VoiceOver: Send $50,$25,$10,$5 shortcut buttons"))
-                Text("+ \(fee) payment fee")
+                let disabled = insufficient || amountToTransfer.isZero
+                Text(insufficient ? insufficientLabel
+                                  : feeLabel)
                     .accessibilityFont(.body)
                     .foregroundColor(.red)
                     .padding(4)
-
-                let disabled = amountToTransfer.isZero    // TODO: check amountAvailable
 
                 NavigationLink(destination: LazyView {
                     SendPurpose(stack: stack.push(),
@@ -84,12 +92,26 @@ struct SendAmount: View {
             symLog.log("❗️Yikes SendAmount onDisappear")
         }
         .task(id: amountToTransfer.value) {
-            if !amountToTransfer.isZero {
+            do {
+                insufficient = try amountToTransfer > amountAvailable
+                print("current: \(current)")
+            } catch {
+                print("Yikes❗️ insufficient failed❗️")
+                insufficient = true
+            }
+
+            if insufficient {
+                announce(this: "\(current), \(insufficientLabel2)")
+            } else if !amountToTransfer.isZero {
                 do {
                     let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
                     peerPushCheck = ppCheck
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                    if let feeAmount = fee(ppCheck: peerPushCheck) {
+                        fee = feeAmount.string(currencyInfo)
+                    } else { fee = "" }
+                    announce(this: "\(current), \(feeLabel)")
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
                     peerPushCheck = nil
