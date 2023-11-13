@@ -34,7 +34,8 @@ struct ManualWithdraw: View {
             VStack {
                 CurrencyInputView(amount: $amountToTransfer,
                                    title: iconOnly ? String(localized: "How much:")
-                                                   : String(localized: "Amount to withdraw:"))
+                                                   : String(localized: "Amount to withdraw:"),
+                           shortcutLabel: String(localized: "Withdraw", comment: "VoiceOver: Withdraw $50,$25,$10,$5 shortcut buttons"))
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)
                 QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
                                currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)

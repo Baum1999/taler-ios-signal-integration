@@ -31,7 +31,8 @@ struct RequestPayment: View {
         ScrollView { VStack {
             CurrencyInputView(amount: $amountToTransfer,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to request:"))
+                                               : String(localized: "Amount to request:"),
+                       shortcutLabel: String(localized: "Request", comment: "VoiceOver: Request $50,$25,$10,$5 shortcut buttons"))
 
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,

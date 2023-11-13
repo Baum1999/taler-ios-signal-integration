@@ -8,24 +8,43 @@ import taler_swift
 struct CurrencyInputView: View {
     @Binding var amount: Amount         // the `value´
     let title: String
+    let shortcutLabel: String
 
     @EnvironmentObject private var controller: Controller
     
     @State var hasBeenShown = false
 
     var body: some View {
-        let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
+        let shortcuts = [50,25,10,5]
+        let currency = amount.currencyStr
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let currencyField = CurrencyField(amount: $amount, currencyInfo: currencyInfo)
-        VStack (alignment: .leading) {
-            Text(title)
-//                .padding(.top)
-                .accessibilityFont(.title3)
+        VStack (alignment: .center) {
+            HStack {
+                Text(title)
+//                  .padding(.top)
+                    .accessibilityFont(.title3)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityRemoveTraits(.isStaticText)
+                Spacer()
+            }
             currencyField
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .accessibilityFont(.title2)
                 .textFieldStyle(.roundedBorder)
+            HStack {
+                ForEach(shortcuts, id: \.self) { shortcut in
+                    let shortie = Amount(currency: currency, integer: UInt64(shortcut), fraction: 0)
+                    let title = shortie.string(currencyInfo)
+                    Button(title) {
+                        currencyField.updateText(amount: shortie)
+                        amount = shortie
+                    }.buttonStyle(.bordered)
+                        .accessibilityLabel("\(shortcutLabel) \(title)")
+                }
+            }
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
 //                print("❗️Yikes: CurrencyInputView hasBeenShown")
@@ -43,20 +62,21 @@ struct CurrencyInputView: View {
 }
 // MARK: -
 #if DEBUG
-struct CurrencyInputView_Previews: PreviewProvider {
-  struct StateContainer : View {
-    @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
-
-    var body: some View {
-        CurrencyInputView(amount: $amountToTransfer,
-                           title: "Amount to withdraw:")
-    }
-  }
-
-    static var previews: some View {
-        List {
-            StateContainer()
+fileprivate struct Previews: PreviewProvider {
+    @MainActor
+    struct StateContainer: View {
+        @StateObject private var controller = Controller.shared
+        @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
+        var body: some View {
+//            Preview_Content()
+            CurrencyInputView(amount: $amountToTransfer,
+                               title: "Amount to withdraw:",
+                       shortcutLabel: "Withdraw")
+                .environmentObject(controller)
         }
+    }
+    static var previews: some View {
+        StateContainer()
     }
 }
 #endif

@@ -40,6 +40,10 @@ struct CurrencyField: View {
         currencyInputField.resignFirstResponder()
     }
 
+    func updateText(amount: Amount) {
+        currencyInputField.updateText(amount: amount)
+    }
+
     public init(amount: Binding<Amount>, currencyInfo: CurrencyInfo) {
         self._amount = amount
         self.currencyInfo = currencyInfo
@@ -60,6 +64,7 @@ struct CurrencyField: View {
 
             // Input text field to handle UI
             currencyInputField
+                .accessibilityHidden(true)
 //                .textFieldStyle(.roundedBorder)
         }
     }
@@ -84,6 +89,7 @@ class NoCaretTextField: UITextField {
 struct CurrencyInputField: UIViewRepresentable {
     @Binding var amount: Amount
     let currencyInfo: CurrencyInfo
+
     private let textField = NoCaretTextField(frame: .zero)
 
     func makeCoordinator() -> Coordinator {
@@ -96,6 +102,14 @@ struct CurrencyInputField: UIViewRepresentable {
 
     @MainActor public func resignFirstResponder() -> Void {
         textField.resignFirstResponder()
+    }
+
+    func updateText(amount: Amount) {
+        let plain = amount.plainString(currencyInfo)
+        print("Setting textfield to: \(plain)")
+        textField.text = plain
+        let endPosition = textField.endOfDocument
+        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
     }
 
     func makeUIView(context: Context) -> NoCaretTextField {
@@ -147,8 +161,10 @@ struct CurrencyInputField: UIViewRepresentable {
         func updateText(_ amount: Amount, textField: UITextField) {
             // Update field text and last valid input text
             lastValidInput = amount.plainString(input.currencyInfo)
-//    print(lastValidInput)
+//    print("lastValidInput: `\(lastValidInput)´")
             textField.text = lastValidInput
+            let endPosition = textField.endOfDocument
+            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
         }
 
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

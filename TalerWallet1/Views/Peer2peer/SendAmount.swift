@@ -49,7 +49,8 @@ struct SendAmount: View {
                     .padding(.bottom, 2)
                 CurrencyInputView(amount: $amountToTransfer,
                                    title: iconOnly ? String(localized: "How much:")
-                                                   : String(localized: "Amount to send:"))
+                                                   : String(localized: "Amount to send:"),
+                           shortcutLabel: String(localized: "Send", comment: "VoiceOver: Send $50,$25,$10,$5 shortcut buttons"))
                 Text("+ \(fee) payment fee")
                     .accessibilityFont(.body)
                     .foregroundColor(.red)
