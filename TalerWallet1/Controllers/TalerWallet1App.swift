@@ -22,7 +22,6 @@ struct TalerWallet1App: App {
     @State private var soundPlayed = false
 
     private let walletCore = WalletCore.shared
-    // our main controller
     private let controller = Controller.shared
     private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
