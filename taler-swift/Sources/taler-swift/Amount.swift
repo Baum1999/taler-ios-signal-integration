@@ -127,11 +127,12 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         if fraction == 0 {
             return String(integer)
         } else {
-            var frac = fraction
+            var frac = UInt64(fraction)
+            let base = UInt64(fractionalBase())
             var fracStr = ""
             while (frac > 0) {
-                fracStr += String(frac / (fractionalBase() / 10))
-                frac = (frac * 10) % fractionalBase()
+                fracStr += String(frac / ( base / 10))
+                frac = (frac * 10) % base
             }
             return "\(integer)\(Self.decimalSeparator)\(fracStr)"
         }
