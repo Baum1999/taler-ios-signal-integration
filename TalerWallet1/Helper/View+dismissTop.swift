@@ -42,3 +42,10 @@ extension View {
         }
     }
 }
+// MARK: -
+extension View {
+    @MainActor
+    static func endEditing() {
+        UIApplication.shared.windows.forEach { $0.endEditing(true) }
+    }
+}
