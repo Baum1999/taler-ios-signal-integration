@@ -46,7 +46,7 @@ public struct CurrencyInfo {
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
                   fractionalTrailingZeroDigits: 0,
-                                  altUnitNames: [0 : "テ"])
+                                  altUnitNames: [0 : "ヌ"])  // `nu´
         return CurrencyInfo(scope: scope, specs: specs,
                         formatter: CurrencyFormatter.formatter(scope: scope,
                                                                specs: specs))
