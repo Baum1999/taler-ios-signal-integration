@@ -271,6 +271,11 @@ extension MainView {
                 logger.info(".onNotification(.BalanceChange) ==> reload")
                 shouldReloadBalances += 1
             }
+            .onNotification(.TransactionExpired) { notification in
+                // reload balances on receiving BalanceChange notification ...
+                logger.info(".onNotification(.TransactionExpired) ==> reload")
+                shouldReloadBalances += 1
+            }
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
