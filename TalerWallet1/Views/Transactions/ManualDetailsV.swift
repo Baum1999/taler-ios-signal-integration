@@ -16,10 +16,10 @@ struct ManualDetailsV: View {
             let payto = paytoUris[0]
             let payURL = URL(string: payto)
             let iban = payURL?.iban ?? "unknown IBAN"
-            let amount = common.amountRaw.readableDescription
+            let amountStr = common.amountRaw.readableDescription        // TODO: formatter
             Group {
-                Text(iconOnly ? "Transfer \(amount) to the Exchange."
-                              : "You need to transfer \(amount) from your regular bank account to the Exchange.")
+                Text(iconOnly ? "Transfer \(amountStr) to the Exchange."
+                              : "You need to transfer \(amountStr) from your regular bank account to the Exchange.")
                 Text(iconOnly ? "Step 1: Copy+Paste this subject:"
                               : "Step 1: Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                         .multilineTextAlignment(.leading)
@@ -55,8 +55,8 @@ struct ManualDetailsV: View {
                 }   .padding(.leading)
                     .padding(.top, -8)
                     .listRowSeparator(.hidden)
-                Text(iconOnly ? "Step 3: Transfer \(amount)."
-                              : "Step 3: Finish the wire transfer of \(amount) in your banking app or website, then this withdrawal will proceed automatically.")
+                Text(iconOnly ? "Step 3: Transfer \(amountStr)."
+                              : "Step 3: Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
                     .multilineTextAlignment(.leading)
                     .listRowSeparator(.visible)
                 Text(iconOnly ? "Or use this PayTo-Link:"

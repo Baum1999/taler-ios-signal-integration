@@ -35,7 +35,8 @@ struct RequestPayment: View {
                        shortcutLabel: String(localized: "Request", comment: "VoiceOver: Request $50,$25,$10,$5 shortcut buttons"))
 
             let someCoins = SomeCoins(details: peerPullCheck)
-            QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
+            QuiteSomeCoins(someCoins: someCoins,
+                       shouldShowFee: true,     // always true since the requester pays fees
                             currency: currency,
                      amountEffective: peerPullCheck?.amountEffective)
 
@@ -72,7 +73,7 @@ struct RequestPayment: View {
             if !amountToTransfer.isZero {
                 do {
                     let ppCheck = try await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
-                    peerPullCheck = ppCheck
+                    peerPullCheck = ppCheck     // redraw
                     // TODO: set from exchange
 //                  agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
                 } catch {    // TODO: error

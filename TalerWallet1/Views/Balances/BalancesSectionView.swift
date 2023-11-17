@@ -44,21 +44,18 @@ struct BalancesSectionView {
         let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         completedTransactions = WalletModel.completedTransactions(transactions)
-//        sectionID = UUID()
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
         let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
-//        sectionID = UUID()
     }
 
     func reloadIncomplete(_ stack: CallStack) async -> () {
         let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         incompleteTransactions = WalletModel.incompleteTransactions(transactions)
-//        sectionID = UUID()
     }
 }
 
@@ -78,13 +75,14 @@ extension BalancesSectionView: View {
                     .accessibilityFont(.body)
                     .multilineTextAlignment(.leading)
             }
-            BalancesNavigationLinksView(stack: stack.push(),
-                                      balance: balance,
-                             amountToTransfer: $amountToTransfer,           // does still have the wrong currency
-                                      summary: $summary,
-                        completedTransactions: $completedTransactions,
-                              reloadAllAction: reloadCompleted,
-                              reloadOneAction: reloadOneAction)
+            BalancesNavigationLinksView(symLog: symLog,
+                                         stack: stack.push(),
+                                       balance: balance,
+                              amountToTransfer: $amountToTransfer,      // does still have the wrong currency
+                                       summary: $summary,
+                         completedTransactions: $completedTransactions,
+                               reloadAllAction: reloadCompleted,
+                               reloadOneAction: reloadOneAction)
             if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
@@ -213,6 +211,7 @@ fileprivate struct BalancesPendingRowView: View {
 } // BalancesPendingRowView
 
 fileprivate struct BalancesNavigationLinksView: View {
+    let symLog: SymLogV?
     let stack: CallStack
     let balance: Balance
 //    let sectionCount: Int

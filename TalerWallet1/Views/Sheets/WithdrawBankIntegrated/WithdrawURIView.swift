@@ -46,7 +46,7 @@ struct WithdrawURIView: View {
                                    baseURL: exchangeBaseUrl)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins,
-                               shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                               shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                                     currency: raw.currencyStr,
                              amountEffective: effective)
                 }

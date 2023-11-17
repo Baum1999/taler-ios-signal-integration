@@ -99,6 +99,9 @@ struct SettingsView: View {
                     SettingsItem(name: aboutStr, id1: "about",
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
+#if DEBUG
+                Text("https://bank.taler.grothoff.org/")
+#endif
 //                SettingsToggle(name: String(localized: "More Contrast"), value: $moreContrast, id1: "contrast",
 //                               description: hideDescriptions ? nil : String(localized: "If you don't like grey"))
                 if controller.hapticCapability.supportsHaptics {

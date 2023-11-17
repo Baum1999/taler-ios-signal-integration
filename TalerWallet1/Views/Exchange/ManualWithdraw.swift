@@ -37,8 +37,10 @@ struct ManualWithdraw: View {
                                                    : String(localized: "Amount to withdraw:"),
                            shortcutLabel: String(localized: "Withdraw", comment: "VoiceOver: Withdraw $50,$25,$10,$5 shortcut buttons"))
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)
-                QuiteSomeCoins(someCoins: someCoins, shouldShowFee: true,
-                               currency: currency, amountEffective: withdrawalAmountDetails?.amountEffective)
+                QuiteSomeCoins(someCoins: someCoins,
+                           shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                                currency: currency,
+                         amountEffective: withdrawalAmountDetails?.amountEffective)
                 Text(exchange.exchangeBaseUrl.trimURL())
                     .multilineTextAlignment(.center)
                     .accessibilityFont(.body)

@@ -43,9 +43,11 @@ struct SendAmount: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountAvailable.currencyStr
+        let _ = symLog.log("currency: \(currency)")
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
         let available = amountAvailable.string(currencyInfo)
+        let _ = symLog.log("available: \(available)")
         let current = amountToTransfer.string(currencyInfo)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
