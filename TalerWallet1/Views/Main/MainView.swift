@@ -94,11 +94,16 @@ extension MainView {
 #if TABBAR  // Taler Wallet
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
+        @State private var kycURI: URL?
 
         private var openKycButton: some View {
             Button("KYC") {
                 showKycAlert = false
-//                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                if let kycURI {
+                    UIApplication.shared.open(kycURI)
+                } else {
+                    // YIKES!
+                }
             }
         }
         private var dismissAlertButton: some View {
@@ -242,19 +247,18 @@ extension MainView {
                   hamburgerAction: hamburgerAction)
             }
 #endif
-          } .onNotification(.TransactionStateTransition) { notification in
+          } .onNotification(.KYCrequired) { notification in
               // show an alert with the KYC link (button) which opens in Safari
                 if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-                    if transition.newTxState.major == .pending {
-                        if let newMinor = transition.newTxState.minor {
-                            if newMinor == .kyc {       // user did confirm on bank website
-                                logger.log(".onNotification(): KYC required")
-                                showKycAlert = true
-                            }
+                    if let kycString = transition.experimentalUserData {
+                        if let urlForKYC = URL(string: kycString) {
+                            logger.log(".onNotification(.KYCrequired): \(kycString)")
+                            kycURI = urlForKYC
+                            showKycAlert = true
                         }
+                    } else {
+                        // TODO: no KYC URI
                     }
-                } else { // should never happen
-                    logger.error("Yikes❗️ TransactionStateTransition without transition")
                 }
             }
             .alert("You need to pass a KYC procedure",

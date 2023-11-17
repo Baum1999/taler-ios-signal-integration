@@ -225,6 +225,22 @@ struct TransactionDetailView: View {
                                                 }
                                             }
                                         }
+                                    } else if transaction.isPendingKYC {
+                                        if let kycUrl = common.kycUrl {
+                                            if let destination = URL(string: kycUrl) {
+                                                VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
+                                                    if !iconOnly {
+                                                        Text("You need to pass a KYC procedure")
+                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                                                            .multilineTextAlignment(.leading)                   // otherwise
+                                                            .listRowSeparator(.hidden)
+                                                    }
+                                                    Link("Open KYC website", destination: destination)
+                                                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+                                                        .padding(.horizontal)
+                                                }
+                                            }
+                                        }
                                     }
                             } // switch
                         } // ManualDetails or Confirm with bank

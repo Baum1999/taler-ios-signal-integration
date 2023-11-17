@@ -97,6 +97,7 @@ struct TransactionTransition: Codable {             // Notification
     var oldTxState: TransactionState
     var newTxState: TransactionState
     var transactionId: String
+    var experimentalUserData: String?       // KYC
 }
 
 enum TxAction: String, Codable {
@@ -436,6 +437,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
 
     var isPending    : Bool { common.txState.major == .pending }
+    var isPendingReady : Bool { common.txState.minor == .ready }
+    var isPendingKYC   : Bool { common.txState.minor == .kyc }
     var isDone       : Bool { common.txState.major == .done }
     var isAborting   : Bool { common.txState.major == .aborting }
     var isAborted    : Bool { common.txState.major == .aborted }
