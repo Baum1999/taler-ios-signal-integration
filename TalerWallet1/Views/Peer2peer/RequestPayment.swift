@@ -57,7 +57,7 @@ struct RequestPayment: View {
                 .disabled(disabled)
             }
             Spacer()
-        } }
+        } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))

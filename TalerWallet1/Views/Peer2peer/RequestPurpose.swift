@@ -25,7 +25,7 @@ struct RequestPurpose: View {
 
     var body: some View {
         let currencyInfo = controller.info(for: amountToTransfer.currencyStr, controller.currencyTicker)
-        VStack (spacing: 6) {
+        ScrollView { VStack (spacing: 6) {
             Text(amountToTransfer.string(currencyInfo))
             Text("+ \(fee) payment fee")
                 .foregroundColor(.red)
@@ -76,7 +76,7 @@ struct RequestPurpose: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
-        }
+        } } // ScrollVStack
         .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {

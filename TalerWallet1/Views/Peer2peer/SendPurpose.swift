@@ -22,7 +22,7 @@ struct SendPurpose: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        VStack (spacing: 6) {
+        ScrollView { VStack (spacing: 6) {
             Text(amountToTransfer.readableDescription)              // TODO: curreny formatter
             Text("+ \(fee) payment fee")
                 .accessibilityFont(.body)
@@ -33,34 +33,26 @@ struct SendPurpose: View {
                         .accessibilityFont(.title2)
                         .padding(.top)
                 }
-                if #available(iOS 16.0, *) {
+                Group { if #available(iOS 16.0, *) {
                     TextField("Subject", text: $summary, axis: .vertical)
-                        .accessibilityFont(.title2)
-                        .lineLimit(2...)
-                        .foregroundColor(WalletColors().fieldForeground)     // text color
-                        .background(WalletColors().fieldBackground)
-                        .textFieldStyle(.roundedBorder)
                         .focused($isFocused)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                isFocused = true        // make first responder - raise keybord
-                            }
-                        }
+                        .lineLimit(2...)
                 } else {
                     TextField("Subject", text: $summary)
-                        .accessibilityFont(.title)
-//                        .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
-                        .foregroundColor(WalletColors().fieldForeground)     // text color
-                        .background(WalletColors().fieldBackground)
-                        .textFieldStyle(.roundedBorder)
                         .focused($isFocused)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                isFocused = true        // make first responder - raise keybord
-                            }
+//                      .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
+                } }
+                    .accessibilityFont(.title2)
+                    .foregroundColor(WalletColors().fieldForeground)     // text color
+                    .background(WalletColors().fieldBackground)
+                    .textFieldStyle(.roundedBorder)
+                    .onAppear {
+                        symLog.log("dispatching kbd...")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                            isFocused = true        // make first responder - raise keybord
+                            symLog.log("...kbd isFocused")
                         }
-                } // #available
-
+                    }
                 HStack{
                     Spacer()
                     Text(verbatim: "\(summary.count)/100")
@@ -93,7 +85,7 @@ struct SendPurpose: View {
             .textFieldStyle(.roundedBorder)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
-        }
+        } } // ScrollVStack
         .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {

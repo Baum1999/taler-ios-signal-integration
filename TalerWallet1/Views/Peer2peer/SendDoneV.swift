@@ -36,7 +36,7 @@ struct SendDoneV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        VStack {
+        ScrollView { VStack {
             if let transactionId {
                 TransactionDetailView(stack: stack.push(),
                               transactionId: transactionId,
@@ -53,7 +53,7 @@ struct SendDoneV: View {
             } else {
                 WithdrawProgressView(message: "Loading...")
             }
-        }
+        } } // ScrollVStack
 //        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .task {
