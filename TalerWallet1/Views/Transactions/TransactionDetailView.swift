@@ -56,6 +56,31 @@ struct TransactionDetailView: View {
         return nil
     }
 
+    func loadTransaction(_ txId: String) async {
+        do {
+            let reloadedTransaction = try await reloadAction(txId)
+            symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
+            withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
+        } catch {
+            symLog.log(error.localizedDescription)
+            withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+        }
+    }
+
+    @discardableResult
+    func checkDismiss(_ notification: Notification, _ logStr: String = "") -> Bool {
+        if let doneAction {
+            if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+                if transition.transactionId == transaction.common.transactionId {       // is the transition for THIS transaction?
+                    symLog.log(logStr)
+                    doneAction()        // if this view is in a sheet then dissmiss the sheet
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
@@ -116,45 +141,28 @@ struct TransactionDetailView: View {
                             .padding(.horizontal)
                     }
                 }
-        }.onNotification(.TransactionStateTransition) { notification in
+        }
+        .onNotification(.TransactionExpired) { notification in
+            if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {
+    // TODO:                  logger.info("newTxState.major == expired  => dismiss sheet")
+            }
+        }
+        .onNotification(.TransactionDone) { notification in
+            checkDismiss(notification, "newTxState.major == done  => dismiss sheet")
+        }
+        .onNotification(.DismissSheet) { notification in
+            checkDismiss(notification, "exchangeWaitReserve or withdrawCoins  => dismiss sheet")
+        }
+        .onNotification(.TransactionStateTransition) { notification in
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == common.transactionId {       // is the transition for THIS transaction?
                     let newMajor = transition.newTxState.major
-                    let newMinor = transition.newTxState.minor
-                    if let doneAction {
-                        if newMajor == .done {
-                            symLog.log("newTxState.major == done  => dismiss sheet")
-// TODO:                           logger.info("newTxState.major == done  => dismiss sheet")
-                            doneAction()        // if this view is in a sheet this action will dissmiss it
-                        } else if newMajor == .expired {
-                            symLog.log("newTxState.major == expired  => dismiss sheet")
-// TODO:                           logger.info("newTxState.major == expired  => dismiss sheet")
-                            doneAction()        // if this view is in a sheet this action will dissmiss it
-                        } else if newMajor == .pending {
-                            if let newMinor {
-                                if newMinor == .exchangeWaitReserve { // user did confirm on bank website
-                                    symLog.log("newTxState.minor == exchangeWaitReserve => dismiss sheet")
-                                    doneAction()        // if this view is in a sheet this action will dissmiss it
-                                } else if newMinor == .withdrawCoins { // coin-withdrawal has started
-                                    symLog.log("newTxState.minor == withdrawCoins => dismiss sheet")
-                                    doneAction()        // if this view is in a sheet this action will dissmiss it
-                                } else {
-                                    symLog.log("ignoring newTxState: \(newMajor):\(newMinor)")
-                                }
-                            }
-                        } else {
-                            symLog.log("ignoring newTxState.major: \(newMajor)")
-                        }
-                    } else { Task { // runs on MainActor
-                        do {
-                            symLog.log("newState: \(newMajor), reloading transaction")
-                            withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
-                            let reloadedTransaction = try await reloadAction(common.transactionId)
-                            symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
-                            withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
-                      } catch {
-                          symLog.log(error.localizedDescription)
-                    }}}
+                    Task { // runs on MainActor
+                        // flush the screen first, then reload
+                        withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                        symLog.log("newState: \(newMajor), reloading transaction")
+                        await loadTransaction(common.transactionId)
+                    }
                 }
             } else { // Yikes - should never happen
 // TODO:                logger.warning("Can't get notification.userInfo as TransactionTransition")
@@ -163,14 +171,8 @@ struct TransactionDetailView: View {
         }
         .navigationTitle(navTitle ?? navTitle2)
         .task {
-            do {
-                symLog.log("task - load transaction")
-                let reloadedTransaction = try await reloadAction(transactionId)
-                withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
-            } catch {
-                symLog.log(error)
-                withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
-            }
+            symLog.log("task - load transaction")
+            await loadTransaction(transactionId)
         }
         .onAppear {
             symLog.log("onAppear")
@@ -224,7 +226,7 @@ struct TransactionDetailView: View {
                                             }
                                         }
                                     }
-                            }
+                            } // switch
                         } // ManualDetails or Confirm with bank
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),

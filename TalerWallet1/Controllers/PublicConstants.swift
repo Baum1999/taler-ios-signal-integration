@@ -46,12 +46,20 @@ public let EXCHANGEBASEURL = "exchangeBaseUrl"
 public let TALERURI = "talerUri"
 
 public let TRANSACTIONTRANSITION = "transactionTransition"
+public let TRANSACTIONID = "transactionID"
 
 /// Notifications sent by wallet-core
 extension Notification.Name {
     static let BalanceChange = Notification.Name("balance-change")
-    static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
     static let ExchangeAdded = Notification.Name("exchange-added")
+    static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
+    static let TransactionDone = Notification.Name("transaction-done")
+    static let TransactionExpired = Notification.Name("transaction-expired")
+    static let PendingReady = Notification.Name("pending-ready")
+    static let WaitReserve = Notification.Name("wait-reserve")
+    static let WithdrawCoins = Notification.Name("withdraw-coins")
+    static let KYCrequired = Notification.Name("kyc-required")
+    static let DismissSheet = Notification.Name("dismiss-sheet")
     static let PendingOperationProcessed = Notification.Name("pending-operation-processed")
     static let ReserveNotYetFound = Notification.Name("reserve-not-yet-found")
 //    static let WithdrawalGroupBankConfirmed = Notification.Name("withdrawal-group-bank-confirmed")

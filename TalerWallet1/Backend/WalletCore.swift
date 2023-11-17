@@ -184,26 +184,46 @@ extension WalletCore {
     @MainActor private func handleStateTransition(_ jsonData: Data) throws {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
-            if decoded.newTxState != decoded.oldTxState {
-                let components = decoded.transactionId.components(separatedBy: ":")
-                if components.count >= 3 {  // txn:$txtype:$uid
-                    if let type = TransactionType(rawValue: components[1]) {
-                        guard type != .refresh else { return }
-                        if decoded.newTxState.major == .done {
-                            logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                            Controller.shared.playSound(type.isIncoming ? 2 : 1)
-                        } else if decoded.newTxState.major == .expired {
-                            logger.log("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                            Controller.shared.playSound(0)
-                        }
-                        postNotification(.TransactionStateTransition,
-                                         userInfo: [TRANSACTIONTRANSITION: decoded])
-                    }
-                }
-            } else {
+            guard decoded.newTxState != decoded.oldTxState else {
                 // TODO: Same state usually means that an error is transmitted
                 logger.info("No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                return
             }
+            let components = decoded.transactionId.components(separatedBy: ":")
+            if components.count >= 3 {  // txn:$txtype:$uid
+                if let type = TransactionType(rawValue: components[1]) {
+                    guard type != .refresh else { return }
+                    switch decoded.newTxState.major {
+                        case .done:
+                            logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            Controller.shared.playSound(type.isIncoming ? 2 : 1)
+                            postNotification(.TransactionDone,
+                                             userInfo: [TRANSACTIONTRANSITION: decoded])
+                        case .expired:
+                            logger.log("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            Controller.shared.playSound(0)
+                            postNotification(.TransactionExpired,
+                                             userInfo: [TRANSACTIONTRANSITION: decoded])
+                        case .pending:
+                            if let newMinor = decoded.newTxState.minor {
+                                if newMinor == .ready {
+                                    postNotification(.PendingReady,
+                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                } else if newMinor == .exchangeWaitReserve      // user did confirm on bank website
+                                       || newMinor == .withdrawCoins {          // coin-withdrawal has started
+                                    postNotification(.DismissSheet,
+                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                } else if newMinor == .kyc {       // user did confirm on bank website, but KYC is needed
+                                    postNotification(.KYCrequired,
+                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                }
+                            }
+                        default: break
+                    } // switch
+                    postNotification(.TransactionStateTransition,
+                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                } // type
+            } // 3 components
         } catch {       // rethrows
             symLog.log(jsonData)       // TODO: .error
             throw WalletBackendError.deserializationError
