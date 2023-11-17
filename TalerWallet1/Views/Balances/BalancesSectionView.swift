@@ -225,6 +225,10 @@ fileprivate struct BalancesNavigationLinksView: View {
     @State private var buttonSelected: Int? = nil
 
     func selectAndUpdate(_ button: Int) {
+        let currency = balance.scopeInfo.currency
+        amountToTransfer.setCurrency(currency)
+        symLog?.log("balance.scopeInfo.currency: \(currency)")
+
         buttonSelected = button      // will trigger NavigationLink
         // while navigation animation runs, contact Exchange to update Fees
 //        Task { // runs on MainActor
@@ -236,14 +240,8 @@ fileprivate struct BalancesNavigationLinksView: View {
 //        }
     }
 
-    func setCurrency() -> String {
-        let currency = balance.scopeInfo.currency
-        amountToTransfer.setCurrency(currency)
-        return currency
-    }
-
     var body: some View {
-        let currency = setCurrency()                        // update currency in amountToTransfer
+        let currency = balance.scopeInfo.currency
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),
