@@ -459,27 +459,23 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
         switch self {
             case .withdrawal(let withdrawalTransaction):
                 let details = withdrawalTransaction.details.withdrawalDetails
-                return details.type == .bankIntegrated // && details.bankConfirmationUrl != nil
-            default:
-                return false
+                guard details.bankConfirmationUrl != nil else { return false }
+                if let confirmed = details.confirmed {
+                    return details.type == .bankIntegrated && confirmed == false
+                }
+            default: break
         }
+        return false
     }
     var common: TransactionCommon {
-        switch self {
-            case .dummy(let dummyTransaction):
-                return dummyTransaction.common
-            case .withdrawal(let withdrawalTransaction):
-                return withdrawalTransaction.common
-            case .payment(let paymentTransaction):
-                return paymentTransaction.common
-            case .refund(let refundTransaction):
-                return refundTransaction.common
-            case .reward(let rewardTransaction):
-                return rewardTransaction.common
-            case .refresh(let refreshTransaction):
-                return refreshTransaction.common
-            case .peer2peer(let p2pTransaction):
-                return p2pTransaction.common
+        return switch self {
+            case .dummy(let dummyTransaction):           dummyTransaction.common
+            case .withdrawal(let withdrawalTransaction): withdrawalTransaction.common
+            case .payment(let paymentTransaction):       paymentTransaction.common
+            case .refund(let refundTransaction):         refundTransaction.common
+            case .reward(let rewardTransaction):         rewardTransaction.common
+            case .refresh(let refreshTransaction):       refreshTransaction.common
+            case .peer2peer(let p2pTransaction):         p2pTransaction.common
         }
     }
 
@@ -505,7 +501,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 result["summary"] = p2pTransaction.details.info.summary
                 result[TALERURI] = p2pTransaction.details.talerUri ?? ""
         }
-
         return result
     }
 }
