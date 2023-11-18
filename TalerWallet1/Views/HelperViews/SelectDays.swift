@@ -34,8 +34,6 @@ struct SelectDays: View {
     }
 
     var body: some View {
-        let selectedStr = String(localized: "selected", comment: "VoiceOver hint which button is selected")
-
         Section {   // (alignment: .leading)
             Text("Expires in:")
                 .accessibilityLabel("Choose the expiration duration")
@@ -50,7 +48,7 @@ struct SelectDays: View {
                         Text("\(ONEDAY) Day", comment: "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer")     // TODO: Plural
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == ONEDAY) ? .prominent : .bordered, dimmed: true))
-                    .accessibilityValue((selected == ONEDAY) ? selectedStr : EMPTYSTRING)
+                    .accessibilityAddTraits(selected == ONEDAY ? .isSelected : [])
                     .disabled(!isEnabled)
 
                 Button(action: sevenDayAction) {
@@ -60,7 +58,7 @@ struct SelectDays: View {
                         Text("\(SEVENDAYS) Days", comment: "7 Days, always plural (3..9), 4 letters max., abbreviate if longer")
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == SEVENDAYS) ? .prominent : .bordered, dimmed: true))
-                    .accessibilityValue((selected == SEVENDAYS) ? selectedStr : EMPTYSTRING)
+                    .accessibilityAddTraits(selected == SEVENDAYS ? .isSelected : [])
                     .disabled(!isEnabled || maxExpiration < SEVENDAYS)
 
                 Button(action: thirtyDayAction) {
@@ -70,7 +68,7 @@ struct SelectDays: View {
                         Text("\(THIRTYDAYS) Days", comment: "30 Days, always plural (10..30), 4 letters max., abbreviate if longer")
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == THIRTYDAYS) ? .prominent : .bordered, dimmed: true))
-                    .accessibilityValue((selected == THIRTYDAYS) ? selectedStr : EMPTYSTRING)
+                    .accessibilityAddTraits(selected == THIRTYDAYS ? .isSelected : [])
                     .disabled(!isEnabled || maxExpiration < THIRTYDAYS)
             } // 3 buttons
         }
