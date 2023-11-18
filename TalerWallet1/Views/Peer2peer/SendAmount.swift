@@ -59,8 +59,7 @@ struct SendAmount: View {
                 .padding(.bottom, 2)
             CurrencyInputView(amount: $amountToTransfer,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to send:"),
-                       shortcutLabel: String(localized: "Send", comment: "VoiceOver: Send $50,$25,$10,$5 shortcut buttons"))
+                                               : String(localized: "Amount to send:"))
             let disabled = insufficient || amountToTransfer.isZero
             Text(insufficient ? insufficientLabel
                               : feeLabel)
@@ -73,6 +72,7 @@ struct SendAmount: View {
                   amountAvailable: amountAvailable,
                  amountToTransfer: amountToTransfer,
                               fee: fee,
+                     currencyInfo: currencyInfo,
                           summary: $summary,
                        expireDays: $expireDays)
             }) { Text("Next") }

@@ -13,6 +13,7 @@ struct SendPurpose: View {
     let amountAvailable: Amount
     let amountToTransfer: Amount
     let fee: String
+    let currencyInfo: CurrencyInfo
     @Binding var summary: String
     @Binding var expireDays: UInt
     @AppStorage("iconOnly") var iconOnly: Bool = false
@@ -22,15 +23,23 @@ struct SendPurpose: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let currency = amountAvailable.currencyStr
+        let current = amountToTransfer.string(currencyInfo)
         ScrollView { VStack (spacing: 6) {
-            Text(amountToTransfer.readableDescription)              // TODO: curreny formatter
+            Text(current)
             Text("+ \(fee) payment fee")
                 .accessibilityFont(.body)
                 .foregroundColor(.red)
             VStack(alignment: .leading, spacing: 6) {
                 if !iconOnly {
-                    Text("Subject:")    // Purpose
+                    Text("Enter subject:")    // Purpose
                         .accessibilityFont(.title2)
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityRemoveTraits(.isStaticText)
                         .padding(.top)
                 }
                 Group { if #available(iOS 16.0, *) {
@@ -74,7 +83,7 @@ struct SendPurpose: View {
                          expireDays: expireDays,
                  transactionStarted: $transactionStarted)
                 }) {
-                    Text("Send \(amountToTransfer.readableDescription) now", comment: "amountToTransfer")  // TODO: currency formatter
+                    Text("Send \(current) now", comment: "amountToTransfer")  // TODO: currency formatter
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
@@ -82,7 +91,6 @@ struct SendPurpose: View {
 
                 Spacer()
             }
-            .textFieldStyle(.roundedBorder)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         } } // ScrollVStack

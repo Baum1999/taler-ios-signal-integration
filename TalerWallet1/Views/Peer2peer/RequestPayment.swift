@@ -31,8 +31,7 @@ struct RequestPayment: View {
         ScrollView { VStack {
             CurrencyInputView(amount: $amountToTransfer,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to request:"),
-                       shortcutLabel: String(localized: "Request", comment: "VoiceOver: Request $50,$25,$10,$5 shortcut buttons"))
+                                               : String(localized: "Amount to request:"))
 
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins,
@@ -40,29 +39,24 @@ struct RequestPayment: View {
                             currency: currency,
                      amountEffective: peerPullCheck?.amountEffective)
 
-            HStack {
-                let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
+            let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
 
-                NavigationLink(destination: LazyView {
-                    RequestPurpose(stack: stack.push(),
-                        amountToTransfer: amountToTransfer,
-                                     fee: someCoins.fee,
-                                 summary: $summary,
-                              expireDays: $expireDays)
-//                        { deactivateAction() }
-                }) {
-                    Text("Request \(amountToTransfer.readableDescription)")     // TODO: formatter
-                }
+            NavigationLink(destination: LazyView {
+                RequestPurpose(stack: stack.push(),
+                    amountToTransfer: amountToTransfer,
+                                 fee: someCoins.fee,
+                             summary: $summary,
+                          expireDays: $expireDays)
+            }) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-            }
             Spacer()
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
-        .onAppear {   // make CurrencyField show the keyboard
+        .onAppear {
             DebugViewC.shared.setViewID(VIEW_REQUEST_P2P, stack: stack.push())
             symLog.log("❗️Yikes \(navTitle) onAppear")
         }
@@ -70,7 +64,9 @@ struct RequestPayment: View {
             symLog.log("❗️Yikes \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) {
-            if !amountToTransfer.isZero {
+            if amountToTransfer.isZero {
+//                fee = EMPTYSTRING
+            } else {
                 do {
                     let ppCheck = try await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
                     peerPullCheck = ppCheck     // redraw

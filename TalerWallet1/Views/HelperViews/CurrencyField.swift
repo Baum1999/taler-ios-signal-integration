@@ -30,25 +30,25 @@ struct CurrencyField: View {
     @Binding var amount: Amount         // the `value´
     let currencyInfo: CurrencyInfo
 
-    private var currencyInputField: CurrencyInputField! = nil
+    private var currencyFieldRepresentable: CurrencyTextfieldRepresentable! = nil
 
-    public func becomeFirstResponder() -> Void {
-        currencyInputField.becomeFirstResponder()
+    public func becomeFirstResponder() -> Bool {
+        currencyFieldRepresentable.becomeFirstResponder()
     }
 
     public func resignFirstResponder() -> Void {
-        currencyInputField.resignFirstResponder()
+        currencyFieldRepresentable.resignFirstResponder()
     }
 
     func updateText(amount: Amount) {
-        currencyInputField.updateText(amount: amount)
+        currencyFieldRepresentable.updateText(amount: amount)
     }
 
     public init(amount: Binding<Amount>, currencyInfo: CurrencyInfo) {
         self._amount = amount
         self.currencyInfo = currencyInfo
-        self.currencyInputField = CurrencyInputField(amount: self.$amount,
-                                               currencyInfo: currencyInfo)
+        self.currencyFieldRepresentable = CurrencyTextfieldRepresentable(amount: self.$amount,
+                                                                   currencyInfo: currencyInfo)
     }
 
     var body: some View {
@@ -61,11 +61,13 @@ struct CurrencyField: View {
             // Set as priority so CurrencyInputField size doesn't affect parent
             Text(amount.string(currencyInfo))
                 .layoutPriority(1)
+                // make the textfield use the whole width for tapping inside to become active
+                .frame(maxWidth: .infinity, alignment: .trailing)
+//                .background(.clear) this is not the problem of the white corners
 
             // Input text field to handle UI
-            currencyInputField
-                .accessibilityHidden(true)
-//                .textFieldStyle(.roundedBorder)
+            currencyFieldRepresentable
+//                .accessibilityHidden(true)
         }
     }
 }
@@ -86,7 +88,7 @@ class NoCaretTextField: UITextField {
 }
 
 @MainActor
-struct CurrencyInputField: UIViewRepresentable {
+struct CurrencyTextfieldRepresentable: UIViewRepresentable {
     @Binding var amount: Amount
     let currencyInfo: CurrencyInfo
 
@@ -96,12 +98,13 @@ struct CurrencyInputField: UIViewRepresentable {
         Coordinator(self)
     }
 
-    @MainActor public func becomeFirstResponder() -> Void {
+    @MainActor public func becomeFirstResponder() -> Bool {
         textField.becomeFirstResponder()
     }
 
     @MainActor public func resignFirstResponder() -> Void {
         textField.resignFirstResponder()
+        Self.endEditing()
     }
 
     func updateText(amount: Amount) {
@@ -113,17 +116,29 @@ struct CurrencyInputField: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> NoCaretTextField {
+        textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
         // Assign delegate
         textField.delegate = context.coordinator
 
         // Set keyboard type
         textField.keyboardType = .numberPad
 
-        // Make visual components invisible
+        // Make visual components invisible...
         textField.tintColor = .clear
         textField.textColor = .clear
         textField.backgroundColor = .clear
+        // ... except for the bezel around the textfield
+        textField.borderStyle = .roundedRect
+//        textField.textFieldStyle(.roundedBorder)
 
+#if DEBUG
+        // Debugging: add a red border around the textfield
+        let myColor = UIColor(red: 0.9, green: 0.1, blue:0, alpha: 1.0)
+        textField.layer.masksToBounds = true
+        textField.layer.borderColor = myColor.cgColor
+    //    textField.layer.borderWidth = 2.0      //    <-   uncomment to show the border
+#endif
         // Add editingChanged event handler
         textField.addTarget(
             context.coordinator,
@@ -141,13 +156,13 @@ struct CurrencyInputField: UIViewRepresentable {
 
     class Coordinator: NSObject, UITextFieldDelegate {
         // Reference to currency input field
-        private var input: CurrencyInputField
+        private var textfieldRepresentable: CurrencyTextfieldRepresentable
 
         // Last valid text input string to be displayed
         private var lastValidInput: String? = ""
 
-        init(_ currencyTextField: CurrencyInputField) {
-            self.input = currencyTextField
+        init(_ representable: CurrencyTextfieldRepresentable) {
+            self.textfieldRepresentable = representable
         }
 
         func setValue(_ amount: Amount, textField: UITextField) {
@@ -155,12 +170,12 @@ struct CurrencyInputField: UIViewRepresentable {
             updateText(amount, textField: textField)
             // Update input value
 //    print(input.amount.description, " := ", amount.description)
-            input.amount = amount
+            textfieldRepresentable.amount = amount
         }
 
         func updateText(_ amount: Amount, textField: UITextField) {
             // Update field text and last valid input text
-            lastValidInput = amount.plainString(input.currencyInfo)
+            lastValidInput = amount.plainString(textfieldRepresentable.currencyInfo)
 //    print("lastValidInput: `\(lastValidInput)´")
             textField.text = lastValidInput
             let endPosition = textField.endOfDocument
@@ -171,15 +186,24 @@ struct CurrencyInputField: UIViewRepresentable {
             // If replacement string is empty, we can assume the backspace key was hit
             if string.isEmpty {
                 // Resign first responder when delete is hit when value is 0
-                if input.amount.isZero {
+                if textfieldRepresentable.amount.isZero {
                     textField.resignFirstResponder()
+//                    Self.endEditing()
                 } else {
                     // Remove trailing digit: divide value by 10
-                    let amount = input.amount.copy()
-                    amount.removeDigit(input.currencyInfo)
+                    let amount = textfieldRepresentable.amount.copy()
+                    amount.removeDigit(textfieldRepresentable.currencyInfo)
                     setValue(amount, textField: textField)
                 }
             }
+            return true
+        }
+
+        func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            return true
+        }
+
+        func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
             return true
         }
 
@@ -209,8 +233,8 @@ struct CurrencyInputField: UIViewRepresentable {
 
             // Multiply by 10 to shift numbers one position to the left, revert if an overflow occurs
             // Add the new trailing digit, revert if an overflow occurs
-            let amount = input.amount.copy()
-            amount.addDigit(digit, currencyInfo: input.currencyInfo)
+            let amount = textfieldRepresentable.amount.copy()
+            amount.addDigit(digit, currencyInfo: textfieldRepresentable.currencyInfo)
 
             // If new value has more digits than allowed by formatter, revert
 //            if input.formatter.maximumFractionDigits + input.formatter.maximumIntegerDigits < String(addValue).count {
