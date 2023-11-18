@@ -5,6 +5,19 @@
 import Foundation
 import taler_swift
 
+extension Locale {
+    func leadingCurrencySymbol() -> Bool {
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = self
+
+        let positiveFormat = currencyFormatter.positiveFormat as NSString
+        let currencySymbolLocation = positiveFormat.range(of: "¤").location
+
+        return currencySymbolLocation == 0
+    }
+}
+
 extension Amount {
     func string(_ currencyInfo: CurrencyInfo?) -> String {
         if let currencyInfo {
@@ -46,10 +59,9 @@ public struct CurrencyInfo {
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
                   fractionalTrailingZeroDigits: 0,
-                                  altUnitNames: [0 : "ヌ"])  // `nu´
-        return CurrencyInfo(scope: scope, specs: specs,
-                        formatter: CurrencyFormatter.formatter(scope: scope,
-                                                               specs: specs))
+                                  altUnitNames: [0 : "ヌ"])  // use `nu´ for Null
+        let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+        return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
     }
 
     /// returns all characters left from the decimalSeparator
@@ -58,7 +70,7 @@ public struct CurrencyInfo {
             // decimalSeparator was found ==> return all characters left of it
             return String(integerStr[..<integerIndex])
         }
-        guard let firstChar = integerStr.first else { return "" }    // TODO: should NEVER happen! Show error
+        guard let firstChar = integerStr.first else { return "0" }    // TODO: should NEVER happen! Show error
         let digitSet = CharacterSet.decimalDigits
         if digitSet.contains(firstChar) {
             // Currency Symbol is after the amount ==> return only the digits
@@ -168,6 +180,7 @@ public struct CurrencySpecification: Codable, Sendable {
 public class CurrencyFormatter: NumberFormatter {
 
     var hasAltUnitName0: Bool   // specs.altUnitNames[0] should have the Symbol ($,€,¥)
+    var leadingCurrencySymbol: Bool
     /// factory
     static func formatter(scope: ScopeInfo, specs: CurrencySpecification) -> CurrencyFormatter {
         let formatter = CurrencyFormatter()
@@ -182,6 +195,7 @@ public class CurrencyFormatter: NumberFormatter {
 
     public override init() {
         self.hasAltUnitName0 = false
+        self.leadingCurrencySymbol = false
         super.init()
         self.locale = Locale.current
         self.usesGroupingSeparator = true
@@ -196,6 +210,9 @@ public class CurrencyFormatter: NumberFormatter {
 //        self.groupingSize = 3                 // thousands
 //        self.groupingSeparator = ","
 //        self.decimalSeparator = "."
+        let positiveFormat = self.positiveFormat as NSString
+        let currencySymbolLocation = positiveFormat.range(of: "¤").location
+        self.leadingCurrencySymbol = currencySymbolLocation == 0
     }
 
     func setUseSymbol(_ useSymbol: Bool) {
