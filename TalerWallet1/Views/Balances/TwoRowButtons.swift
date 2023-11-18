@@ -6,13 +6,14 @@ import SwiftUI
 import taler_swift
 
 extension View {
-    func title(_ titles: (String, String?), _ fitsSideBySide: Bool) -> String {
-        let delimiter = fitsSideBySide ? "\n" : " "
+    func accessTitles(_ titles: (String, String?), _ fitsSideBySide: Bool) -> (String, String) {
+        let space = " "
+        let delimiter = fitsSideBySide ? "\n" : space
         let (title1, title2) = titles
         if let title2 {
-            return title1 + delimiter + title2
+            return (title1 + delimiter + title2, title1 + space + title2)
         } else {
-            return title1
+            return (title1, title1)
         }
     }
 }
@@ -29,13 +30,17 @@ struct TwoRowButtons: View {
 
     var body: some View {
         Group {
-            Button(title(sendTitles, fitsSideBySide), action: sendAction)
+            let sendAccTitles = accessTitles(sendTitles, fitsSideBySide)
+            Button(sendAccTitles.0, action: sendAction)
+                .accessibilityLabel(Text(sendAccTitles.1))
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
                                             dimmed: false,
                                            aligned: .center))
-            Button(title(recvTitles, fitsSideBySide), action: recvAction)
+            let recvAccTitles = accessTitles(recvTitles, fitsSideBySide)
+            Button(recvAccTitles.0, action: recvAction)
+                .accessibilityLabel(Text(recvAccTitles.1))
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,

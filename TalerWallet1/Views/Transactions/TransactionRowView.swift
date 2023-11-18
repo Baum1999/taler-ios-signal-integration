@@ -10,6 +10,8 @@ struct TransactionRowContentV: View {
     var centerBottom: String
     let isHorizontal: Bool
     let incoming: Bool
+    let shouldConfirm: Bool
+    let needsKYC: Bool
     let foreColor:Color
 
     public static func width(titles: (String, String?), isHorizontal: Bool,
@@ -39,11 +41,18 @@ struct TransactionRowContentV: View {
     var body: some View {
         let imageName = incoming ? "plus.circle.fill"
                                  : "minus.circle.fill"
+        let badgeName = needsKYC ? "star.fill"
+                                 : "circle.fill"
         HStack(spacing: 8) {
-            Image(systemName: imageName)
-                .foregroundColor(foreColor)
-                .accessibilityFont(.largeTitle)
-                .accessibility(hidden: true)
+            HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
+                Image(systemName: imageName)
+                    .foregroundColor(foreColor)
+                    .accessibilityFont(.largeTitle)
+                    .accessibility(hidden: true)
+                Image(systemName: badgeName)
+                    .accessibilityFont(.caption)
+                    .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
+            }.accessibilityHidden(true)
 
             VStack(alignment: .leading) {
                 Text(centerTop)
@@ -72,6 +81,8 @@ struct TransactionRowView: View {
         let common = transaction.common
         let amount = common.amountEffective
         let pending = transaction.isPending
+        let needsKYC = transaction.isPendingKYC
+        let shouldConfirm = transaction.shouldConfirm
         let done = transaction.isDone
         let details = transaction.detailsToShow()
         let keys = details.keys
@@ -95,9 +106,13 @@ struct TransactionRowView: View {
                            fitsHorizontal: !needVStack, vertAlignment: .center) {
 
                     TransactionRowContentV(centerTop: transaction.localizedType,
-                                           centerBottom: dateString, isHorizontal: true, incoming: incoming, foreColor: foreColor)
+                                        centerBottom: dateString, isHorizontal: true,
+                                            incoming: incoming,  shouldConfirm: shouldConfirm,
+                                            needsKYC: needsKYC,      foreColor: foreColor)
                 }
                     .accessibilityElement(children: .combine)
+                    .accessibilityValue(needsKYC ? ". Needs K Y C" :
+                                   shouldConfirm ? ". Needs bank confirmation" : EMPTYSTRING)
                     .accessibilityHint("Will go to detail view.")
             }
         }

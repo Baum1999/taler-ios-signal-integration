@@ -193,11 +193,11 @@ fileprivate struct BalancesPendingRowView: View {
             VStack(spacing: 6) {
                 var rows = 0
                 if !pendingIncoming.isZero {
-                    PendingRowView(amount: pendingIncoming, incoming: true)
+                    PendingRowView(amount: pendingIncoming, incoming: true, shouldConfirm: false, needsKYC: false)     // TODO: !!!
                     let _ = (rows+=1)
                 }
                 if !pendingOutgoing.isZero {
-                    PendingRowView(amount: pendingOutgoing, incoming: false)
+                    PendingRowView(amount: pendingOutgoing, incoming: false, shouldConfirm: false, needsKYC: false)
                     let _ = (rows+=1)
                 }
                 if rows == 0 {

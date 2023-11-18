@@ -9,6 +9,8 @@ struct PendingRowContentV: View {
     let titles: (String, String?)
     let isHorizontal: Bool
     let incoming: Bool
+    let shouldConfirm: Bool
+    let needsKYC: Bool
 
     public static func width(titles: (String, String?), isHorizontal: Bool,
                              sizeCategory: ContentSizeCategory) -> CGFloat {
@@ -37,16 +39,29 @@ struct PendingRowContentV: View {
         let pendingColor = WalletColors().pendingColor(incoming)
         let imageName = incoming ? "plus.diamond"       //  goforward.plus   circle
                                  : "minus.diamond"      //
+        let badgeName = needsKYC ? "star.fill"
+                                 : "circle.fill"
         HStack(spacing: 8) {
-            Image(systemName: imageName)
-                .foregroundColor(pendingColor)
-                .accessibilityFont(.largeTitle)
-                .accessibility(hidden: true)
-
-            Text(title(titles, isHorizontal))
+            HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
+                Image(systemName: imageName)
+                    .foregroundColor(pendingColor)
+                    .accessibilityFont(.largeTitle)
+                    .accessibility(hidden: true)
+                Image(systemName: badgeName)
+                    .accessibilityFont(.caption)
+                    .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
+            }
+            let pendingAccTitles = accessTitles(titles, isHorizontal)
+            Text(pendingAccTitles.0)
+                .accessibilityLabel(Text(pendingAccTitles.1))
                 .lineLimit(4)
                 .accessibilityFont(.body)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityValue(needsKYC ? ". Needs K Y C" :
+                       shouldConfirm ? ". Needs bank confirmation" : EMPTYSTRING)
+        .accessibilityHint("Will go to pending transaction list.")
+
     }
 }
 
@@ -54,6 +69,8 @@ struct PendingRowContentV: View {
 struct PendingRowView: View {
     let amount: Amount
     let incoming: Bool
+    let shouldConfirm: Bool
+    let needsKYC: Bool
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -88,20 +105,21 @@ struct PendingRowView: View {
                 let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
                 let amountStr = amount.string(currencyInfo)
                 let amountWidth = amountStr.width(largeAmountFont: false, sizeCategory)
-                let inTitle = iconOnly ? (inTitle0, nil)
-                                       : (inTitle1, inTitle2)
-                let outTitle = iconOnly ? (outTitle0, nil)
-                                        : (outTitle1, outTitle2)
-                let title = incoming ? inTitle
-                                     : outTitle
-                let contentWidth = PendingRowContentV.width(titles: incoming ? inTitle : outTitle,
-                                                      isHorizontal: false, sizeCategory: sizeCategory)
-
+                let inTitles = iconOnly ? (inTitle0, nil)
+                                        : (inTitle1, inTitle2)
+                let outTitles = iconOnly ? (outTitle0, nil)
+                                         : (outTitle1, outTitle2)
+                let titles = incoming ? inTitles
+                                      : outTitles
+                let contentWidth = PendingRowContentV.width(titles: titles,
+                                                      isHorizontal: false,
+                                                      sizeCategory: sizeCategory)
                 let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
                 AmountRowV(amountStr: amountStr, amountColor: pendingColor, largeAmountFont: false,
                            fitsHorizontal: !needVStack, vertAlignment: .center) {
                     // isHorizontal=true to try to fit "- Pending outgoing" + amount in 1 line
-                    PendingRowContentV(titles: title, isHorizontal: true, incoming: incoming)
+                    PendingRowContentV(titles: titles, isHorizontal: true, incoming: incoming,
+                                       shouldConfirm: shouldConfirm, needsKYC: needsKYC)
                 }
             }
         }
@@ -117,8 +135,8 @@ func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
                     fractionalNormalDigits: digits,
               fractionalTrailingZeroDigits: digits,
                               altUnitNames: [0 : unitName])
-    let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
-    return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
+    let previewFormatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+    return CurrencyInfo(scope: scope, specs: specs, formatter: previewFormatter)
 }
 
 @MainActor
@@ -127,8 +145,8 @@ fileprivate struct Preview_Content: View {
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         List {
-            PendingRowView(amount: test, incoming: true)
-            PendingRowView(amount: demo, incoming: false)
+            PendingRowView(amount: test, incoming: true, shouldConfirm: true, needsKYC: false)
+            PendingRowView(amount: demo, incoming: false, shouldConfirm: false, needsKYC: true)
         }
     }
 }
