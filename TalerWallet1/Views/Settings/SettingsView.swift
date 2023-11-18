@@ -107,12 +107,15 @@ struct SettingsView: View {
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
+                    .id("playHaptics")
                 }
                 SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
                          description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
                 .id("playSounds")
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
+                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
+                    .id("liststyle")
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly, id1: "minimal",
                         description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
                     hideDescriptions = iconOnly //withAnimation { hideDescriptions = iconOnly }
@@ -123,10 +126,6 @@ struct SettingsView: View {
                         withAnimation { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
-                        SettingsToggle(name: String("Set 2 seconds delay"),
-                                      value: $developDelay.onChange({ delay in
-                                        walletCore.developDelay = delay}), id1: "delay",
-                                description: hideDescriptions ? nil : String("After each wallet-core action"))
                         SettingsItem(name: String("Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
@@ -143,7 +142,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
-                        }.id("demoWithdraw")
+                        }.id("demo1withdraw")
                         SettingsItem(name: String("Withdraw \(TESTCURRENCY)"), id1: "test1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
@@ -160,7 +159,12 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
-                        }.id("testWithdraw")
+                        }.id("test1withdraw")
+                        SettingsToggle(name: String("Set 2 seconds delay"),
+                                       value: $developDelay.onChange({ delay in
+                            walletCore.developDelay = delay}), id1: "delay",
+                                       description: hideDescriptions ? nil : String("After each wallet-core action"))
+                            .id("delay")
                         SettingsItem(name: String("Run Integration Test"), id1: "demo1test",
                               description: hideDescriptions ? nil : String("Perform basic test transactions")) {
                             let title = "Demo 1"
@@ -177,7 +181,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
-                        }
+                        }.id("demo1runTest")
                         SettingsItem(name: String("Run Integration Test"), id1: "test1test",
                               description: hideDescriptions ? nil : "Perform basic test transactions") {
                             let title = "Test 1"
@@ -194,7 +198,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
-                        }
+                        }.id("test1runTest")
                         SettingsItem(name: String("Run Integration Test V2"), id1: "demo2test",
                               description: hideDescriptions ? nil : String("Perform more test transactions")) {
                             let title = "Demo 2"
@@ -211,7 +215,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
-                        }
+                        }.id("demo2runTest")
                         SettingsItem(name: String("Run Integration Test V2"), id1: "test2test",
                               description: hideDescriptions ? nil : String("Perform more test transactions")) {
                             let title = "Test 2"
@@ -228,7 +232,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
-                        }
+                        }.id("test2runTest")
                         SettingsItem(name: String("Save Logfile"), id1: "save",
                               description: hideDescriptions ? nil : String("Help debugging wallet-core")) {
                             Button("Save") {
@@ -237,7 +241,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(true)
-                        }
+                        }.id("saveLog")
                         SettingsItem(name: String("Reset Wallet"), id1: "reset",
                               description: hideDescriptions ? nil : String("Throw away all your money")) {
                             Button("Reset") {
@@ -245,7 +249,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                             .disabled(didReset)
-                        }
+                        }.id("resetWallet")
                     }
                 }
             }

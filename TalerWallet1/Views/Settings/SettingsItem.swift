@@ -83,11 +83,11 @@ struct SettingsFont: View {
     let value: Int
     let action: (Int) -> Void
 
-    @State private var selected = 0
+    @State private var selectedFont = 0
     let fonts = [String(localized: "Standard iOS Font"), "Atkinson-Hyperlegible", "Nunito"]
 
     var body: some View {
-        Picker(title, selection: $selected, content: {
+        Picker(title, selection: $selectedFont, content: {
             ForEach(0..<fonts.count, id: \.self, content: { index in
                 Text(fonts[index]).tag(index)
             })
@@ -95,10 +95,10 @@ struct SettingsFont: View {
             .accessibilityFont(.title2)
             .pickerStyle(.menu)
             .onAppear() {
-                withAnimation { selected = value }
+                withAnimation { selectedFont = value }
             }
-            .onChange(of: selected) { selected in
-                action(selected)
+            .onChange(of: selectedFont) { selectedF in
+                action(selectedF)
             }
     }
 }
