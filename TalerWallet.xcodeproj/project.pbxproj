@@ -95,8 +95,6 @@
 		4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */; };
 		4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
 		4E3EAE652A990778009F1BE8 /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095422989CBFE0043A8A1 /* SideBarView.swift */; };
-		4E3EAE662A990778009F1BE8 /* PendingOpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */; };
-		4E3EAE672A990778009F1BE8 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
 		4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095112989CBB00043A8A1 /* WalletModel.swift */; };
 		4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095332989CBFE0043A8A1 /* URLSheet.swift */; };
 		4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */; };
@@ -225,8 +223,6 @@
 		4EB0956C2989CBFE0043A8A1 /* AmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095492989CBFE0043A8A1 /* AmountView.swift */; };
 		4EB0956D2989CBFE0043A8A1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */; };
 		4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */; };
-		4EB0956F2989CBFE0043A8A1 /* PendingOpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */; };
-		4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */; };
 		4EB3136129FEE79B007D68BC /* SendDoneV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* SendDoneV.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
 		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
@@ -400,8 +396,6 @@
 		4EB095492989CBFE0043A8A1 /* AmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountView.swift; sourceTree = "<group>"; };
 		4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Pending.swift"; sourceTree = "<group>"; };
-		4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpView.swift; sourceTree = "<group>"; };
-		4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOpsListView.swift; sourceTree = "<group>"; };
 		4EB3136029FEE79B007D68BC /* SendDoneV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendDoneV.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
 		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
@@ -762,8 +756,6 @@
 		4EB0954B2989CBFE0043A8A1 /* Pending */ = {
 			isa = PBXGroup;
 			children = (
-				4EB0954E2989CBFE0043A8A1 /* PendingOpsListView.swift */,
-				4EB0954D2989CBFE0043A8A1 /* PendingOpView.swift */,
 			);
 			path = Pending;
 			sourceTree = "<group>";
@@ -1124,8 +1116,6 @@
 				4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */,
 				4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */,
 				4E3EAE652A990778009F1BE8 /* SideBarView.swift in Sources */,
-				4E3EAE662A990778009F1BE8 /* PendingOpView.swift in Sources */,
-				4E3EAE672A990778009F1BE8 /* PendingOpsListView.swift in Sources */,
 				4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */,
 				4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */,
 				4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */,
@@ -1233,8 +1223,6 @@
 				4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */,
 				4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */,
 				4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */,
-				4EB0956F2989CBFE0043A8A1 /* PendingOpView.swift in Sources */,
-				4EB095702989CBFE0043A8A1 /* PendingOpsListView.swift in Sources */,
 				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
 				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
 				4ED2F94B2A278F5100453B40 /* ThreeAmountsV.swift in Sources */,

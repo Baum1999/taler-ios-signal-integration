@@ -123,12 +123,6 @@ struct SettingsView: View {
                         withAnimation { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
-                        NavigationLink {        // whole row like in a tableView
-                            LazyView { PendingOpsListView(stack: stack.push()) }
-                        } label: {
-                            SettingsItem(name: String("Pending Operations"), id1: "pending",
-                                  description: hideDescriptions ? nil : String("Transactions not yet done...")) {}
-                        }.id("pending_L")
                         SettingsToggle(name: String("Set 2 seconds delay"),
                                       value: $developDelay.onChange({ delay in
                                         walletCore.developDelay = delay}), id1: "delay",
