@@ -51,42 +51,40 @@ struct SendAmount: View {
         let current = amountToTransfer.string(currencyInfo)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
-        ScrollView {
-            VStack(alignment: .trailing) {
-//                let _ = print("available: \(available)")
-                Text("Available:\t\(available)")
-                    .accessibilityFont(.title3)
-                    .padding(.bottom, 2)
-                CurrencyInputView(amount: $amountToTransfer,
-                                   title: iconOnly ? String(localized: "How much:")
-                                                   : String(localized: "Amount to send:"),
-                           shortcutLabel: String(localized: "Send", comment: "VoiceOver: Send $50,$25,$10,$5 shortcut buttons"))
-                let disabled = insufficient || amountToTransfer.isZero
-                Text(insufficient ? insufficientLabel
-                                  : feeLabel)
-                    .accessibilityFont(.body)
-                    .foregroundColor(.red)
-                    .padding(4)
 
-                NavigationLink(destination: LazyView {
-                    SendPurpose(stack: stack.push(),
-                      amountAvailable: amountAvailable,
-                     amountToTransfer: amountToTransfer,
-                                  fee: fee,
-                              summary: $summary,
-                           expireDays: $expireDays)
-                }) {
-                    Text("Next")
-                }   .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .disabled(disabled)
-                Spacer()
-            }
-        }
+        ScrollView { VStack(alignment: .trailing) {
+//          let _ = print("available: \(available)")
+            Text("Available:\t\(available)")
+                .accessibilityFont(.title3)
+                .padding(.bottom, 2)
+            CurrencyInputView(amount: $amountToTransfer,
+                               title: iconOnly ? String(localized: "How much:")
+                                               : String(localized: "Amount to send:"),
+                       shortcutLabel: String(localized: "Send", comment: "VoiceOver: Send $50,$25,$10,$5 shortcut buttons"))
+            let disabled = insufficient || amountToTransfer.isZero
+            Text(insufficient ? insufficientLabel
+                              : feeLabel)
+                .accessibilityFont(.body)
+                .foregroundColor(.red)
+                .padding(4)
+
+            NavigationLink(destination: LazyView {
+                SendPurpose(stack: stack.push(),
+                  amountAvailable: amountAvailable,
+                 amountToTransfer: amountToTransfer,
+                              fee: fee,
+                          summary: $summary,
+                       expireDays: $expireDays)
+            }) { Text("Next") }
+                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .disabled(disabled)
+            Spacer()
+        } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
-        .onAppear {   // make CurrencyField show the keyboard
+        .onAppear {
             DebugViewC.shared.setViewID(VIEW_SEND_P2P, stack: stack.push())
             symLog.log("❗️Yikes SendAmount onAppear")
         }
@@ -104,7 +102,9 @@ struct SendAmount: View {
 
             if insufficient {
                 announce(this: "\(current), \(insufficientLabel2)")
-            } else if !amountToTransfer.isZero {
+            } else if amountToTransfer.isZero {
+                fee = EMPTYSTRING
+            } else {
                 do {
                     let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
                     peerPushCheck = ppCheck
@@ -112,7 +112,7 @@ struct SendAmount: View {
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
                     if let feeAmount = fee(ppCheck: peerPushCheck) {
                         fee = feeAmount.string(currencyInfo)
-                    } else { fee = "" }
+                    } else { fee = EMPTYSTRING }
                     announce(this: "\(current), \(feeLabel)")
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
