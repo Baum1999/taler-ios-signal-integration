@@ -14,8 +14,7 @@ struct SomeCoins {
     var quiteSome: Bool { numCoins > 199 }
     var tooMany:   Bool { numCoins > 999 }
 
-    let fee: String
-    var hasFee:    Bool { fee.count > 0 }
+    let fee: Amount?
 }
 
 extension SomeCoins {
@@ -23,26 +22,26 @@ extension SomeCoins {
         do {
             if let details {
                 // Incoming: fee = raw - effective
-                let fee = try details.amountRaw - details.amountEffective
+                let aFee = try details.amountRaw - details.amountEffective
                 self.init(numCoins: details.numCoins ?? -1,    // either the number of coins, or unknown
-                               fee: fee.isZero ? "" : fee.readableDescription)
+                               fee: aFee)
                 return
             }
         } catch {}
-        self.init(numCoins: 0, fee:"")      // invalid
+        self.init(numCoins: 0, fee: nil)      // invalid
     }
 
     init(details: CheckPeerPullCreditResponse?) {
         do {
             if let details {
                 // Incoming: fee = raw - effective
-                let fee = try details.amountRaw - details.amountEffective
+                let aFee = try details.amountRaw - details.amountEffective
                 self.init(numCoins: details.numCoins ?? -1,    // either the number of coins, or unknown
-                               fee: fee.isZero ? "" : fee.readableDescription)
+                               fee: aFee)
                 return
             }
         } catch {}
-        self.init(numCoins: 0, fee:"")      // invalid
+        self.init(numCoins: 0, fee: nil)      // invalid
     }
 }
 // MARK: -
@@ -51,6 +50,7 @@ struct QuiteSomeCoins: View {
     let someCoins: SomeCoins
     let shouldShowFee: Bool
     let currency: String
+    let currencyInfo: CurrencyInfo?
     let amountEffective: Amount?
 
     var body: some View {
@@ -67,22 +67,24 @@ struct QuiteSomeCoins: View {
             }
         }
         if shouldShowFee {
-            Text(someCoins.invalid ? "Amount too small!"
-               : someCoins.tooMany ? "Amount too big for a single withdrawal!"
-                : someCoins.hasFee ? "- \(someCoins.fee) fee"
-                                   : "No withdrawal fee")
-            .foregroundColor((someCoins.invalid || someCoins.tooMany || someCoins.hasFee) ? .red : .primary)
-            .accessibilityFont(.body)
-//            .padding(4)
+            if let fee = someCoins.fee {
+                Text(someCoins.invalid ? "Amount too small!"
+                   : someCoins.tooMany ? "Amount too big for a single withdrawal!"
+                          : fee.isZero ? "No withdrawal fee"
+                                       : "- \(fee.string(currencyInfo)) fee")
+                .foregroundColor((someCoins.invalid || someCoins.tooMany || !fee.isZero) ? .red : .primary)
+                .accessibilityFont(.body)
+            }
         }
     }
 }
 // MARK: -
 struct QuiteSomeCoins_Previews: PreviewProvider {
     static var previews: some View {
-        QuiteSomeCoins(someCoins: SomeCoins(numCoins: 4, fee: "20 " + LONGCURRENCY),
+        QuiteSomeCoins(someCoins: SomeCoins(numCoins: 4, fee: Amount(currency: LONGCURRENCY, cent: 20) ),
                    shouldShowFee: true,
                         currency: LONGCURRENCY,
+                    currencyInfo: nil,
                  amountEffective: nil)
     }
 }

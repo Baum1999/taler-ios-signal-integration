@@ -17,6 +17,7 @@ struct WithdrawURIView: View {
     // the URL from the bank website
     let url: URL
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -32,6 +33,7 @@ struct WithdrawURIView: View {
                     let raw = withdrawalAmountDetails.amountRaw
                     let effective = withdrawalAmountDetails.amountEffective
                     let currency = raw.currencyStr
+                    let currencyInfo = controller.info(for: currency, controller.currencyTicker)
                     let fee = try! Amount.diff(raw, effective)
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)
@@ -47,7 +49,8 @@ struct WithdrawURIView: View {
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins,
                                shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
-                                    currency: raw.currencyStr,
+                                    currency: currency,
+                                currencyInfo: currencyInfo,
                              amountEffective: effective)
                 }
                 .listStyle(myListStyle.style).anyView
@@ -83,13 +86,10 @@ struct WithdrawURIView: View {
             do { // TODO: cancelled
                 symLog.log(".task")
                 let withdrawUriInfo = try await model.loadWithdrawalDetailsForUriM(url.absoluteString)
-                let amount = withdrawUriInfo.amount
-                if let baseURL = withdrawUriInfo.defaultExchangeBaseUrl {
-                    exchangeBaseUrl = baseURL
-                } else if let first = withdrawUriInfo.possibleExchanges.first {
-                    exchangeBaseUrl = first.exchangeBaseUrl
-                }
+                exchangeBaseUrl = withdrawUriInfo.defaultExchangeBaseUrl ??
+                                  withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
                 if let exchangeBaseUrl {
+                    let amount = withdrawUriInfo.amount
                     let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
                     withdrawalAmountDetails = details
 //                  agePicker.setAges(ages: details?.ageRestrictionOptions)

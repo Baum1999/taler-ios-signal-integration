@@ -14,6 +14,7 @@ struct RequestPayment: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
@@ -26,18 +27,20 @@ struct RequestPayment: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountToTransfer.currencyStr
-        let navTitle = String(localized: "Request Money", comment: "Dialog Title")
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let navTitle = String(localized: "Request \(currency)", comment: "Dialog Title")
 
-        ScrollView { VStack {
+        ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
                                title: iconOnly ? String(localized: "How much:")
                                                : String(localized: "Amount to request:"))
-
+            .padding(.top)
             let someCoins = SomeCoins(details: peerPullCheck)
             QuiteSomeCoins(someCoins: someCoins,
                        shouldShowFee: true,     // always true since the requester pays fees
                             currency: currency,
+                        currencyInfo: currencyInfo,
                      amountEffective: peerPullCheck?.amountEffective)
 
             let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany

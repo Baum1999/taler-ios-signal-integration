@@ -14,6 +14,7 @@ struct ManualWithdraw: View {
     let exchange: Exchange
     @Binding var amountToTransfer: Amount
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
@@ -27,6 +28,7 @@ struct ManualWithdraw: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = exchange.scopeInfo?.currency ?? exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
@@ -40,6 +42,7 @@ struct ManualWithdraw: View {
                 QuiteSomeCoins(someCoins: someCoins,
                            shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
                                 currency: currency,
+                            currencyInfo: currencyInfo,
                          amountEffective: withdrawalAmountDetails?.amountEffective)
                 Text(exchange.exchangeBaseUrl.trimURL())
                     .multilineTextAlignment(.center)

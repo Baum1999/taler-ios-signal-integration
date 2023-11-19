@@ -11,7 +11,7 @@ struct RequestPurpose: View {
     let stack: CallStack
 
     let amountToTransfer: Amount
-    let fee: String
+    let fee: Amount?
     @Binding var summary: String
     @Binding var expireDays: UInt
 
@@ -27,8 +27,11 @@ struct RequestPurpose: View {
         let currencyInfo = controller.info(for: amountToTransfer.currencyStr, controller.currencyTicker)
         ScrollView { VStack (spacing: 6) {
             Text(amountToTransfer.string(currencyInfo))
-            Text("+ \(fee) payment fee")
-                .foregroundColor(.red)
+            if let fee {
+                let feeStr = fee.string(currencyInfo)
+                Text("+ \(feeStr) payment fee")
+                    .foregroundColor(.red)
+            }
             VStack(alignment: .leading, spacing: 6) {
                 if !iconOnly {
                     Text("Subject:")
