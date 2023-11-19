@@ -40,6 +40,15 @@ extension StringProtocol {
 }
 
 extension String {
+    func tabbed(oneLine: Bool) -> String {
+        let fragments = self.components(separatedBy: "\t")
+        if fragments.count > 1 {
+            let separator = oneLine ? " " : "\n"
+            return fragments.joined(separator: separator)
+        }
+        return self
+    }
+
     func widthOfString(usingUIFont font: UIFont) -> CGFloat {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: fontAttributes)
