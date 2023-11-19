@@ -197,31 +197,36 @@ extension WalletCore {
                         case .done:
                             logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(type.isIncoming ? 2 : 1)
-                            postNotification(.TransactionDone,
-                                             userInfo: [TRANSACTIONTRANSITION: decoded])
+                            postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
+                            return
                         case .expired:
                             logger.log("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(0)
-                            postNotification(.TransactionExpired,
-                                             userInfo: [TRANSACTIONTRANSITION: decoded])
+                            postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
+                            return
                         case .pending:
                             if let newMinor = decoded.newTxState.minor {
                                 if newMinor == .ready {
-                                    postNotification(.PendingReady,
-                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    logger.log("PendingReady: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    postNotification(.PendingReady, userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    return
                                 } else if newMinor == .exchangeWaitReserve      // user did confirm on bank website
                                        || newMinor == .withdrawCoins {          // coin-withdrawal has started
-                                    postNotification(.DismissSheet,
-                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    logger.log("DismissSheet: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    postNotification(.DismissSheet, userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    return
                                 } else if newMinor == .kyc {       // user did confirm on bank website, but KYC is needed
-                                    postNotification(.KYCrequired,
-                                                     userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    logger.log("KYCrequired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    postNotification(.KYCrequired, userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    return
                                 }
                             }
-                        default: break
+                            logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
+                        default:
+                            logger.log("Yikes: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                     } // switch
-                    postNotification(.TransactionStateTransition,
-                                     userInfo: [TRANSACTIONTRANSITION: decoded])
                 } // type
             } // 3 components
         } catch {       // rethrows

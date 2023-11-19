@@ -10,8 +10,8 @@ struct BalanceButton: View {
     let sizeCategory: ContentSizeCategory
     let rowAction: () -> Void
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 //    @AppStorage("moreContrast") var moreContrast: Bool = false
 
     var body: some View {
@@ -51,6 +51,7 @@ struct BalanceRowView: View {
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
+
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false

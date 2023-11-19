@@ -24,15 +24,6 @@ extension Transaction {             // for Dummys
 struct TransactionDetailView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
-#if DEBUG
-    @AppStorage("developerMode") var developerMode: Bool = true
-#else
-    @AppStorage("developerMode") var developerMode: Bool = false
-#endif
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)
 
@@ -43,6 +34,15 @@ struct TransactionDetailView: View {
     let failAction: ((_ transactionId: String) async throws -> Void)?
     let suspendAction: ((_ transactionId: String) async throws -> Void)?
     let resumeAction: ((_ transactionId: String) async throws -> Void)?
+
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+//    @AppStorage("moreContrast") var moreContrast: Bool = false
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()

@@ -11,8 +11,8 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 /// The result from getWithdrawalDetailsForUri
 struct WithdrawUriInfoResponse: Decodable {
     var amount: Amount
-    var defaultExchangeBaseUrl: String?             // TODO: might be nil ❗️Yikes
-    var possibleExchanges: [ExchangeListItem]       // TODO: query these for fees?
+    var defaultExchangeBaseUrl: String?
+    var possibleExchanges: [Exchange]       // TODO: query these for fees?
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {

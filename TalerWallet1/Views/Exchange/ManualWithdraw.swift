@@ -26,7 +26,7 @@ struct ManualWithdraw: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
+        let currency = exchange.scopeInfo?.currency ?? exchange.currency ?? String(localized: "Unknown", comment: "unknown currency")
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 

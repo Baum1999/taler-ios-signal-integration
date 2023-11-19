@@ -25,8 +25,8 @@ struct TwoRowButtons: View {
     let sendDisabled: Bool
     let sendAction: () -> Void
     let recvAction: () -> Void
+
     @Environment(\.sizeCategory) var sizeCategory
-    
 
     var body: some View {
         Group {

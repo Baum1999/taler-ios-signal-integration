@@ -107,6 +107,7 @@ struct TalerButtonStyle: ButtonStyle {
     var aligned: TextAlignment = .center
 
     public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
+//        configuration.role = type == .prominent ? .primary : .normal          Only on macOS
             MyBigButton(//type: type,
                    foreColor: foreColor(type: type, pressed: configuration.isPressed),
                    backColor: backColor(type: type, pressed: configuration.isPressed),

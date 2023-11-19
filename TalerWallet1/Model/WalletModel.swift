@@ -122,8 +122,9 @@ extension WalletModel {
     }
 
     private func docPath (sqlite3: Bool) throws -> String {
-        if let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let documentUrl = documentsUrl.appendingPathComponent(DATABASE, isDirectory: false)
+//        if let documentsDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+        if let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let documentUrl = documentsDir.appendingPathComponent(DATABASE, isDirectory: false)
                                           .appendingPathExtension(sqlite3 ? "sqlite3" : "json")
             let docPath = documentUrl.path
             logger.debug("\(docPath)")
@@ -174,3 +175,4 @@ extension WalletModel {
         _ = try await sendRequest(request, 0)
     }
 }
+// MARK: -
