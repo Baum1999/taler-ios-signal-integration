@@ -649,7 +649,6 @@
 				4EB095252989CBFE0043A8A1 /* SettingsView.swift */,
 				4EC400882AE3E7E800DF72C7 /* AboutView.swift */,
 				4EB095262989CBFE0043A8A1 /* SettingsItem.swift */,
-				4EB0954B2989CBFE0043A8A1 /* Pending */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -748,13 +747,6 @@
 				4EFA395F2AA7946B00742548 /* ToSButtonView.swift */,
 			);
 			path = HelperViews;
-			sourceTree = "<group>";
-		};
-		4EB0954B2989CBFE0043A8A1 /* Pending */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pending;
 			sourceTree = "<group>";
 		};
 		4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */ = {
