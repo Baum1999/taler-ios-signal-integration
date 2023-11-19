@@ -19,9 +19,9 @@ extension Locale {
 }
 
 extension Amount {
-    func string(_ currencyInfo: CurrencyInfo?) -> String {
+    func string(_ currencyInfo: CurrencyInfo?, useSymbol: Bool = true) -> String {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsFloatTuple)
+            return currencyInfo.string(for: valueAsFloatTuple, useSymbol: useSymbol)
         } else {
             return valueStr
         }

@@ -15,6 +15,16 @@ struct SomeCoins {
     var tooMany:   Bool { numCoins > 999 }
 
     let fee: Amount?
+    func feeLabel(_ currencyInfo: CurrencyInfo?) -> String {
+       return if let fee {
+                invalid ? "Amount too small!"
+              : tooMany ? "Amount too big for a single withdrawal!"
+           : fee.isZero ? "No withdrawal fee"
+                        : "- \(fee.string(currencyInfo)) fee"
+       } else {
+           EMPTYSTRING
+       }
+    }
 }
 
 extension SomeCoins {
@@ -68,12 +78,9 @@ struct QuiteSomeCoins: View {
         }
         if shouldShowFee {
             if let fee = someCoins.fee {
-                Text(someCoins.invalid ? "Amount too small!"
-                   : someCoins.tooMany ? "Amount too big for a single withdrawal!"
-                          : fee.isZero ? "No withdrawal fee"
-                                       : "- \(fee.string(currencyInfo)) fee")
-                .foregroundColor((someCoins.invalid || someCoins.tooMany || !fee.isZero) ? .red : .primary)
-                .accessibilityFont(.body)
+                Text(someCoins.feeLabel(currencyInfo))
+                    .foregroundColor((someCoins.invalid || someCoins.tooMany || !fee.isZero) ? .red : .primary)
+                    .accessibilityFont(.body)
             }
         }
     }

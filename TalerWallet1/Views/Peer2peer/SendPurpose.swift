@@ -10,14 +10,17 @@ struct SendPurpose: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
-    let amountAvailable: Amount
-    let amountToTransfer: Amount
-    let fee: String
+    let amountToSend: Amount?
+    let amountToReceive: Amount?
+//    let amountToTransfer: Amount
+    let navTitle: String
+    let buttonTitle: String
+    let feeLabel: String
     let currencyInfo: CurrencyInfo
     @Binding var summary: String
     @Binding var expireDays: UInt
+
     @AppStorage("iconOnly") var iconOnly: Bool = false
-    let navTitle = String(localized: "NavTitle_Send_Subject", defaultValue: "Subject", comment: "NavTitle for entering the subject for Send-Money")
 
     @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool
@@ -27,30 +30,31 @@ struct SendPurpose: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amountAvailable.currencyStr
-        let current = amountToTransfer.string(currencyInfo)
-        ScrollView { VStack (spacing: 6) {
-            Text(current)
-            Text("+ \(fee) payment fee")
-                .accessibilityFont(.body)
-                .foregroundColor(.red)
-            VStack(alignment: .leading, spacing: 6) {
+        ScrollView { VStack (alignment: .leading, spacing: 6) {
+            if feeLabel.count > 0 {
+                HStack {
+                    Spacer()
+                    Text(feeLabel)
+                        .foregroundColor(.red)
+                        .accessibilityFont(.body)
+                }
+            }
                 if !iconOnly {
                     Text("Enter subject:")    // Purpose
-                        .accessibilityFont(.title2)
+                        .accessibilityFont(.title3)
                         .accessibilityAddTraits(.isHeader)
                         .accessibilityRemoveTraits(.isStaticText)
                         .padding(.top)
                 }
                 Group { if #available(iOS 16.0, *) {
-                    TextField("Subject", text: $summary, axis: .vertical)
+                    TextField(iconOnly ? "Subject" : EMPTYSTRING, text: $summary, axis: .vertical)
                         .focused($isFocused)
                         .lineLimit(2...)
                 } else {
                     TextField("Subject", text: $summary)
                         .focused($isFocused)
 //                      .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
-                } }
+                } } // Group for iOS16+ & iOS15
                     .accessibilityFont(.title2)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
@@ -77,23 +81,18 @@ struct SendPurpose: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
                     SendDoneV(stack: stack.push(),
-                       amountToSend: amountToTransfer,
-                    amountToReceive: nil,
+                       amountToSend: amountToSend,
+                    amountToReceive: amountToReceive,
                             summary: summary,
                          expireDays: expireDays,
                  transactionStarted: $transactionStarted)
                 }) {
-                    Text("Send \(current) now", comment: "amountToTransfer")  // TODO: currency formatter
+                    Text(buttonTitle)
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
-
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-        } } // ScrollVStack
+        }.padding(.horizontal) } // ScrollVStack
         .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {

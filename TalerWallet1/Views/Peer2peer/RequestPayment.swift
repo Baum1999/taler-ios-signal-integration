@@ -28,8 +28,18 @@ struct RequestPayment: View {
 #endif
         let currency = amountToTransfer.currencyStr
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let navTitle = String(localized: "Request \(currency)", comment: "Dialog Title")
+        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+        let navTitle = String(localized: "NavTitle_Request_Currency",
+                           defaultValue: "Request \(currencySymbol)",
+                                comment: "NavTitle: Request 'currencySymbol'")
+        let amountStr = amountToTransfer.string(currencyInfo)
+        let amountWithCurrency = amountToTransfer.string(currencyInfo, useSymbol: false)
+        let buttonTitle = String(localized: "Request \(amountWithCurrency)", comment: "amount with currency")
+        let navTitle2 = String(localized: "NavTitle_Request_AmountStr",
+                            defaultValue: "Request \(amountStr)",
+                                 comment: "NavTitle: Request 'amountStr'")
 
+        let _ = symLog.log("currency: \(currency)")
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
@@ -46,15 +56,19 @@ struct RequestPayment: View {
             let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
 
             NavigationLink(destination: LazyView {
-                RequestPurpose(stack: stack.push(),
-                    amountToTransfer: amountToTransfer,
-                                 fee: someCoins.fee,
-                             summary: $summary,
-                          expireDays: $expireDays)
+                SendPurpose(stack: stack.push(),
+                     amountToSend: nil,
+                  amountToReceive: amountToTransfer,
+                         navTitle: navTitle2,
+                      buttonTitle: buttonTitle,
+                         feeLabel: someCoins.feeLabel(currencyInfo),
+                     currencyInfo: currencyInfo,
+                          summary: $summary,
+                       expireDays: $expireDays)
             }) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-            Spacer()
+//            Spacer()
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)

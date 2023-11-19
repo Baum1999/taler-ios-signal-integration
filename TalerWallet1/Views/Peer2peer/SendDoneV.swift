@@ -10,7 +10,12 @@ import SymLog
 struct SendDoneV: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    let navTitle = String(localized: "P2P Ready")
+    let amountToSend: Amount?
+    let amountToReceive: Amount?
+    let summary: String
+    let expireDays: UInt
+    @Binding var transactionStarted: Bool
+
     @EnvironmentObject private var model: WalletModel
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -19,12 +24,7 @@ struct SendDoneV: View {
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    let amountToSend: Amount?
-    let amountToReceive: Amount?
-    let summary: String
-    let expireDays: UInt
-    @Binding var transactionStarted: Bool
-
+    let navTitle = String(localized: "P2P Ready")
     @State private var transactionId: String? = nil
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
@@ -72,7 +72,7 @@ struct SendDoneV: View {
                     let terms = PeerContractTerms(amount: amountToSend,
                                                  summary: summary,
                                         purse_expiration: timestamp)
-                    // TODO: user might choose baseURL
+                    // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
                     // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId
@@ -80,7 +80,7 @@ struct SendDoneV: View {
                     let terms = PeerContractTerms(amount: amountToReceive,
                                                  summary: summary,
                                         purse_expiration: timestamp)
-                    // TODO: user might choose baseURL
+                    // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
                     // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId

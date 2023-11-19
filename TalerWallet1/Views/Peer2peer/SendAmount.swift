@@ -22,7 +22,7 @@ struct SendAmount: View {
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays: UInt = SEVENDAYS
     @State private var insufficient: Bool = false
-    @State private var fee: String = ""
+    @State private var feeStr: String = EMPTYSTRING
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
@@ -35,20 +35,29 @@ struct SendAmount: View {
         return nil
     }
     
-    var feeLabel: String { String(localized: " + \(fee) payment fee") }
+    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) send fee") : EMPTYSTRING }
 
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amountAvailable.currencyStr
-        let _ = symLog.log("currency: \(currency)")
+        let currency = amountToTransfer.currencyStr
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let navTitle = String(localized: "Send \(currency)", comment: "Dialog Title")
+        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+        let navTitle = String(localized: "NavTitle_Send_Currency",
+                           defaultValue: "Send \(currencySymbol)",
+                                comment: "NavTitle: Send 'currencySymbol'")
+        let amountStr = amountToTransfer.string(currencyInfo)
+        let amountWithCurrency = amountToTransfer.string(currencyInfo, useSymbol: false)
+        let buttonTitle = String(localized: "Send \(amountWithCurrency) now", comment: "amount with currency")
+        let navTitle2 = String(localized: "NavTitle_Send_AmountStr",
+                            defaultValue: "Send \(amountStr)",
+                                 comment: "NavTitle: Send 'amountStr'")
+
         let available = amountAvailable.string(currencyInfo)
-        let _ = symLog.log("available: \(available)")
-        let current = amountToTransfer.string(currencyInfo)
+        let _ = symLog.log("currency: \(currency), available: \(available)")
+        let amountVoiceOver = amountToTransfer.string(currencyInfo)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
@@ -70,16 +79,18 @@ struct SendAmount: View {
 
             NavigationLink(destination: LazyView {
                 SendPurpose(stack: stack.push(),
-                  amountAvailable: amountAvailable,
-                 amountToTransfer: amountToTransfer,
-                              fee: fee,
+                     amountToSend: amountToTransfer,
+                  amountToReceive: nil,
+                         navTitle: navTitle2,
+                      buttonTitle: buttonTitle,
+                         feeLabel: feeLabel,
                      currencyInfo: currencyInfo,
                           summary: $summary,
                        expireDays: $expireDays)
             }) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-            Spacer()
+//            Spacer()
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
@@ -95,16 +106,16 @@ struct SendAmount: View {
         .task(id: amountToTransfer.value) {
             do {
                 insufficient = try amountToTransfer > amountAvailable
-                print("current: \(current)")
+                print("amountStr: \(amountVoiceOver)")
             } catch {
                 print("Yikes❗️ insufficient failed❗️")
                 insufficient = true
             }
 
             if insufficient {
-                announce(this: "\(current), \(insufficientLabel2)")
+                announce(this: "\(amountVoiceOver), \(insufficientLabel2)")
             } else if amountToTransfer.isZero {
-                fee = EMPTYSTRING
+                feeStr = EMPTYSTRING
             } else {
                 do {
                     let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
@@ -112,9 +123,9 @@ struct SendAmount: View {
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
                     if let feeAmount = fee(ppCheck: peerPushCheck) {
-                        fee = feeAmount.string(currencyInfo)
-                    } else { fee = EMPTYSTRING }
-                    announce(this: "\(current), \(feeLabel)")
+                        feeStr = feeAmount.string(currencyInfo)
+                    } else { feeStr = EMPTYSTRING }
+                    announce(this: "\(amountVoiceOver), \(feeLabel)")
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
                     peerPushCheck = nil
