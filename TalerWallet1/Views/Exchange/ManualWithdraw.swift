@@ -32,8 +32,7 @@ struct ManualWithdraw: View {
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
-        ScrollView {
-            VStack {
+        ScrollView { VStack {
                 CurrencyInputView(amount: $amountToTransfer,
                                available: nil,
                                    title: iconOnly ? String(localized: "How much:")
@@ -75,9 +74,7 @@ struct ManualWithdraw: View {
                         }
                     }
                 } // disabled
-                Spacer()
-            }
-        }
+        } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))

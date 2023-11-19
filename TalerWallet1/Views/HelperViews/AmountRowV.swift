@@ -19,26 +19,23 @@ struct AmountRowV<Content: View>: View {
 
     var content: () -> Content
 
-
     var body: some View {
+        let text = Text(amountStr)
+            .foregroundColor(amountColor)
+            .accessibilityFont(largeAmountFont ? .title : .title2)
+            .monospacedDigit()
         if fitsHorizontal {
             HStack(alignment: vertAlignment, spacing: 0) {
                 content()
                 Spacer(minLength: 0)
-                Text(amountStr)
-                    .foregroundColor(amountColor)
-                    .accessibilityFont(largeAmountFont ? .title : .title2)
-                    .monospacedDigit()
+                text
             }
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 content()
                 HStack {
                     Spacer(minLength: 0)
-                    Text(amountStr)
-                        .foregroundColor(amountColor)
-                        .accessibilityFont(largeAmountFont ? .title : .title2)
-                        .monospacedDigit()
+                    text
                 }
             }
         }
@@ -47,7 +44,7 @@ struct AmountRowV<Content: View>: View {
 // MARK: -
 #if  DEBUG
 
-struct SectionWithAmountRow: View {
+struct PreviewSectionWithAmountRow: View {
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
@@ -92,6 +89,6 @@ struct SectionWithAmountRow: View {
 }
 
 #Preview {
-    SectionWithAmountRow()
+    PreviewSectionWithAmountRow()
 }
 #endif

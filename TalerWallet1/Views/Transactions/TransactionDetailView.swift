@@ -26,7 +26,6 @@ struct TransactionDetailView: View {
     let stack: CallStack
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)
-
     let navTitle: String?
     let doneAction: (() -> Void)?
     let abortAction: ((_ transactionId: String) async throws -> Void)?

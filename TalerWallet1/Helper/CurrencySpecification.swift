@@ -90,11 +90,12 @@ public struct CurrencyInfo {
         return nil
     }
 
+    // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
     func string(for valueTuple: (Double, Double), useSymbol: Bool = true) -> String {
         formatter.setUseSymbol(useSymbol)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: integer) {
-            if fraction == 0 { return integerStr }              // TODO: add trailing zeroes
+            if fraction == 0 { return integerStr }              // formatter already added trailing zeroes
             if let fractionStr = formatter.string(for: fraction) {
                 if let decimalSeparator = formatter.currencyDecimalSeparator {
                     if let fractionIndex = fractionStr.endIndex(of: decimalSeparator) {
