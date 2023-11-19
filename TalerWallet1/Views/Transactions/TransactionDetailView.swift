@@ -219,8 +219,7 @@ struct TransactionDetailView: View {
                                                             .listRowSeparator(.hidden)
                                                     }
                                                     Link("Confirm with bank", destination: destination)
-                                                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                                                        .padding(.horizontal)                                                    
+                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
                                                 }
                                             }
                                         }
@@ -235,8 +234,7 @@ struct TransactionDetailView: View {
                                                             .listRowSeparator(.hidden)
                                                     }
                                                     Link("Open KYC website", destination: destination)
-                                                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                                                        .padding(.horizontal)
+                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
                                                 }
                                             }
                                         }

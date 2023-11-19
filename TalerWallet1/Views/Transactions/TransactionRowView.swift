@@ -12,8 +12,8 @@ struct IconBadge: View {
     let needsKYC: Bool
 
     var body: some View {
-        let badgeName = needsKYC ? "star.fill"
-                                 : "circle.fill"
+        let badgeName = needsKYC ? NEEDS_KYC
+                                 : CONFIRM_BANK
         HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
             Image(systemName: imageName)
                 .foregroundColor(foreColor)
