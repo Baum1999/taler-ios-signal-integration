@@ -36,7 +36,7 @@ struct P2PReadyV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        ScrollView { VStack {
+        Group {
             if let transactionId {
                 TransactionDetailView(stack: stack.push(),
                               transactionId: transactionId,
@@ -53,7 +53,7 @@ struct P2PReadyV: View {
             } else {
                 WithdrawProgressView(message: "Loading...")
             }
-        } } // ScrollVStack
+        }
         .navigationTitle(navTitle)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_READY, stack: stack.push())
