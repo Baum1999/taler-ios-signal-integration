@@ -22,7 +22,7 @@ extension Transaction {             // for Dummys
 }
 // MARK: -
 struct TransactionDetailView: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     let stack: CallStack
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)
@@ -55,9 +55,9 @@ struct TransactionDetailView: View {
         return nil
     }
 
-    func loadTransaction(_ txId: String) async {
+    func loadTransaction() async {
         do {
-            let reloadedTransaction = try await reloadAction(txId)
+            let reloadedTransaction = try await reloadAction(transactionId)
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
             withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
         } catch {
@@ -78,6 +78,23 @@ struct TransactionDetailView: View {
             }
         }
         return false
+    }
+
+    func checkReload(_ notification: Notification, _ logStr: String = "") {
+        if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
+            if transition.transactionId == transactionId {       // is the transition for THIS transaction?
+                let newMajor = transition.newTxState.major
+                Task { // runs on MainActor
+                       // flush the screen first, then reload
+                    withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                    symLog.log("newState: \(newMajor), reloading transaction")
+                    await loadTransaction()
+                }
+            }
+        } else { // Yikes - should never happen
+// TODO:      logger.warning("Can't get notification.userInfo as TransactionTransition")
+            symLog.log(notification.userInfo as Any)
+        }
     }
 
     var body: some View {
@@ -133,15 +150,16 @@ struct TransactionDetailView: View {
                 } } // Delete button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
-                .safeAreaInset(edge: .bottom) {
-                    if let doneAction {
-                        Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
-                            .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
-                            .padding(.horizontal)
-                    }
+            .safeAreaInset(edge: .bottom) {
+                if let doneAction {
+                    Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
+                        .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
+                        .padding(.horizontal)
                 }
-        }
+            }
+        } // Group
         .onNotification(.TransactionExpired) { notification in
+            // TODO: Alert user that this tx just expired
             if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {
     // TODO:                  logger.info("newTxState.major == expired  => dismiss sheet")
             }
@@ -152,26 +170,16 @@ struct TransactionDetailView: View {
         .onNotification(.DismissSheet) { notification in
             checkDismiss(notification, "exchangeWaitReserve or withdrawCoins  => dismiss sheet")
         }
+        .onNotification(.PendingReady) { notification in
+            checkReload(notification, "pending ready ==> reload for talerURI")
+        }
         .onNotification(.TransactionStateTransition) { notification in
-            if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-                if transition.transactionId == common.transactionId {       // is the transition for THIS transaction?
-                    let newMajor = transition.newTxState.major
-                    Task { // runs on MainActor
-                        // flush the screen first, then reload
-                        withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
-                        symLog.log("newState: \(newMajor), reloading transaction")
-                        await loadTransaction(common.transactionId)
-                    }
-                }
-            } else { // Yikes - should never happen
-// TODO:                logger.warning("Can't get notification.userInfo as TransactionTransition")
-                symLog.log(notification.userInfo as Any)
-            }
+            checkReload(notification, "some transition ==> reload")
         }
         .navigationTitle(navTitle ?? navTitle2)
         .task {
             symLog.log("task - load transaction")
-            await loadTransaction(transactionId)
+            await loadTransaction()
         }
         .onAppear {
             symLog.log("onAppear")
@@ -276,12 +284,18 @@ struct TransactionDetailView: View {
                             .padding(.bottom)
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
-                            QRCodeDetails(transaction: transaction)
-                            if hasDone {
-                                Text("QR code and link can also be scanned or copied / shared from Transactions later.")
+                            if transaction.isPendingReady {
+                                QRCodeDetails(transaction: transaction)
+                                if hasDone {
+                                    Text("QR code and link can also be scanned or copied / shared from Transactions later.")
+                                        .multilineTextAlignment(.leading)
+                                        .accessibilityFont(.subheadline)
+                                        .padding(.top)
+                                }
+                            } else {
+                                Text("This transaction is not yet ready...")
                                     .multilineTextAlignment(.leading)
                                     .accessibilityFont(.subheadline)
-                                    .padding(.top)
                             }
                         }
                         let colon = ":"
