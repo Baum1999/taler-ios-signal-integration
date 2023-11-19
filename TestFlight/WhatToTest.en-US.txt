@@ -1,4 +1,25 @@
 
+Version 0.9.3 (27)
+
+• New feature: Badges for KYC and Confirm with bank (for bank-integrated withdrawals)
+    start a withdrawal from the bank website, but then don't "Confirm with bank" immediately but press "Confirm later"
+    request some money, tap on Done without sharing or scanning the talerURI QR.
+    Notice the difference in the Pending list
+• KYC in pending transactions accessible from details
+
+- BugFix: after P2P no QR code was shown
+- Layout improvements iOS16+. We'll continue to support iOS15, it just won't look so nice as on iOS 16+.
+
+
+Version 0.9.3 (26)
+
+• New feature: KYC Support. But you won't get a second chance if you don't use the first one.
+    (KYC will be added to pending transactions in the next version)
+
+- BugFix: With more than one exchange currencies were mixed in P2P
+- The whole textfield can now be used to bring up the keyboard in P2P
+
+
 Version 0.9.3 (25)
 
 • New feature: Shortcuts Buttons (50,25,10,5) for P2P + Withdrawal

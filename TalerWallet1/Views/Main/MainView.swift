@@ -173,7 +173,7 @@ extension MainView {
 //            } else {
                 let _ = Self._printChanges()
 //            }
-            let delay: UInt = 5
+            let delay: UInt = 0     // set to 5 to test delayed currency information
 #else
             let delay: UInt = 0
 #endif
