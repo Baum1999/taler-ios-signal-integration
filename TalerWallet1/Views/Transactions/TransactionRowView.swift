@@ -5,6 +5,26 @@
 import SwiftUI
 import taler_swift
 
+struct IconBadge: View {
+    let imageName: String
+    let foreColor:Color
+    let shouldConfirm: Bool
+    let needsKYC: Bool
+
+    var body: some View {
+        let badgeName = needsKYC ? "star.fill"
+                                 : "circle.fill"
+        HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
+            Image(systemName: imageName)
+                .foregroundColor(foreColor)
+                .accessibilityFont(.largeTitle)
+                .accessibility(hidden: true)
+            Image(systemName: badgeName)
+                .accessibilityFont(.caption)
+                .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
+        }.accessibilityHidden(true)
+    }
+}
 struct TransactionRowContentV: View {
     var centerTop: String
     var centerBottom: String
@@ -41,19 +61,9 @@ struct TransactionRowContentV: View {
     var body: some View {
         let imageName = incoming ? "plus.circle.fill"
                                  : "minus.circle.fill"
-        let badgeName = needsKYC ? "star.fill"
-                                 : "circle.fill"
+        let iconBadge = IconBadge(imageName: imageName, foreColor: foreColor, shouldConfirm: shouldConfirm, needsKYC: needsKYC)
         HStack(spacing: 8) {
-            HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
-                Image(systemName: imageName)
-                    .foregroundColor(foreColor)
-                    .accessibilityFont(.largeTitle)
-                    .accessibility(hidden: true)
-                Image(systemName: badgeName)
-                    .accessibilityFont(.caption)
-                    .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
-            }.accessibilityHidden(true)
-
+            iconBadge
             VStack(alignment: .leading) {
                 Text(centerTop)
                     .accessibilityFont(.headline)
