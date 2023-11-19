@@ -56,7 +56,7 @@ struct RequestPayment: View {
             let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
 
             NavigationLink(destination: LazyView {
-                SendPurpose(stack: stack.push(),
+                P2PSubjectV(stack: stack.push(),
                      amountToSend: nil,
                   amountToReceive: amountToTransfer,
                          navTitle: navTitle2,
@@ -75,7 +75,7 @@ struct RequestPayment: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_REQUEST_P2P, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_P2P_REQUEST, stack: stack.push())
             symLog.log("❗️Yikes \(navTitle) onAppear")
         }
         .onDisappear {

@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-struct SendPurpose: View {
+struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
@@ -80,7 +80,7 @@ struct SendPurpose: View {
 
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
-                    SendDoneV(stack: stack.push(),
+                    P2PReadyV(stack: stack.push(),
                        amountToSend: amountToSend,
                     amountToReceive: amountToReceive,
                             summary: summary,
@@ -96,22 +96,13 @@ struct SendPurpose: View {
         .navigationTitle(navTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_SEND_PURPOSE, stack: stack.push())
-//            print("❗️ SendPurpose onAppear")
+            DebugViewC.shared.setViewID(VIEW_P2P_SUBJECT, stack: stack.push())
+//            print("❗️ P2PSubjectV onAppear")
         }
         .onDisappear {
-//            print("❗️ SendPurpose onDisappear")
-        }
-        .task {
-            symLog.log(".task")
-            do {
-
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-            }
+//            print("❗️ P2PSubjectV onDisappear")
         }
     }
-
 }
 // MARK: -
 #if DEBUG

@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 // Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
-struct SendDoneV: View {
+struct P2PReadyV: View {
     private let symLog = SymLogV()
     let stack: CallStack
     let amountToSend: Amount?
@@ -54,8 +54,14 @@ struct SendDoneV: View {
                 WithdrawProgressView(message: "Loading...")
             }
         } } // ScrollVStack
-//        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
+        .onAppear {
+            DebugViewC.shared.setViewID(VIEW_P2P_READY, stack: stack.push())
+//            print("❗️ P2PReadyV onAppear")
+        }
+        .onDisappear {
+//            print("❗️ P2PReadyV onDisappear")
+        }
         .task {
             symLog.log(".task")
             do {

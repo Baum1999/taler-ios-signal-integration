@@ -78,7 +78,7 @@ struct SendAmount: View {
                 .padding(4)
 
             NavigationLink(destination: LazyView {
-                SendPurpose(stack: stack.push(),
+                P2PSubjectV(stack: stack.push(),
                      amountToSend: amountToTransfer,
                   amountToReceive: nil,
                          navTitle: navTitle2,
@@ -97,7 +97,7 @@ struct SendAmount: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
-            DebugViewC.shared.setViewID(VIEW_SEND_P2P, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
             symLog.log("❗️Yikes SendAmount onAppear")
         }
         .onDisappear {

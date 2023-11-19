@@ -52,15 +52,15 @@ public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
 
 // MARK: P2P Send Coins (from Balances)
 // push debit to another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_SEND_P2P = VIEW_DEPOSIT + 10                        // 50 Send Coins
+public let VIEW_P2P_SEND = VIEW_DEPOSIT + 10                        // 50 Send Coins
 //public let VIEW_SEND_TOS                                          // - user already accepted the ToS at withdrawal, invoice or receive
-public let VIEW_SEND_PURPOSE = VIEW_SEND_P2P + 2                    // 52 Send Purpose
+public let VIEW_P2P_SUBJECT = VIEW_P2P_SEND + 2                     // 52 Send / Request Subject
+public let VIEW_P2P_READY = VIEW_P2P_SEND + 3                       // 53 Send / Request Ready 
 
 // MARK: P2P Private Receive (from Balances)
 // pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
-public let VIEW_REQUEST_P2P = VIEW_SEND_P2P + 10                    // 60 Request Amount
-public let VIEW_REQUEST_TOS = VIEW_REQUEST_P2P + 1                  // 61 Request ToS
-public let VIEW_REQUEST_PURPOSE = VIEW_REQUEST_TOS + 1              // 62 Request Purpose
+public let VIEW_P2P_REQUEST = VIEW_P2P_SEND + 10                    // 60 Request Amount
+public let VIEW_P2P_TOS = VIEW_P2P_REQUEST + 1                      // 61 Request ToS
 
 // MARK: P2P Business Invoice (from Balances)
 // TBD
