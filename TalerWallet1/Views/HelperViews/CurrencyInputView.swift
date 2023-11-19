@@ -12,6 +12,7 @@ struct ShortcutButton: View {
     let currency: String
     let currencyInfo: CurrencyInfo
     let currencyField: CurrencyField
+    let available: Amount?
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {
@@ -19,7 +20,19 @@ struct ShortcutButton: View {
                        currency: currency,
                    currencyInfo: currencyInfo,
                   currencyField: currencyField,
+                      available: available,
                          action: action)
+    }
+
+    func isDisabled(shortie: Amount) -> Bool {
+        if let available {
+            do {
+                return try available < shortie
+            } catch {
+                return true
+            }
+        }
+        return false
     }
 
     var body: some View {
@@ -28,14 +41,19 @@ struct ShortcutButton: View {
         let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
         Button(action: { action(shortcut, currencyField)} ) {
             Text(title)
+                .lineLimit(1)
                 .accessibilityFont(.callout)
-        }.buttonStyle(.bordered)
+        }
+//            .frame(maxWidth: .infinity)
+            .disabled(isDisabled(shortie: shortie))
+            .buttonStyle(.bordered)
             .accessibilityLabel("\(shortcutLabel) \(title)")
     }
 }
 // MARK: -
 struct CurrencyInputView: View {
     @Binding var amount: Amount         // the `value´
+    let available: Amount?
     let title: String
 
     @EnvironmentObject private var controller: Controller
@@ -56,7 +74,7 @@ struct CurrencyInputView: View {
         let currency = amount.currencyStr
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let currencyField = CurrencyField(amount: $amount, currencyInfo: currencyInfo)
-        VStack (alignment: .center) {
+        VStack (alignment: .center) {   // center shortcut buttons
             HStack {
                 Text(title)
                     .accessibilityFont(.title3)
@@ -82,6 +100,7 @@ struct CurrencyInputView: View {
                                                     currency: currency,
                                                 currencyInfo: currencyInfo,
                                                currencyField: currencyField,
+                                                   available: available,
                                                       action: action)
                 ViewThatFits(in: .horizontal) {
                     HStack {
@@ -94,17 +113,21 @@ struct CurrencyInputView: View {
                         let count = shortcuts.count
                         let half = count / 2
                         HStack {
+                            Spacer()
                             ForEach(0..<half, id: \.self) { index in
                                 let thisShortcut = shortcuts[index]
                                 shortcutButton.makeButton(with: thisShortcut)
                                     .accessibilityAddTraits(thisShortcut == useShortcut ? .isSelected : [])
+                                Spacer()
                             }
                         }
                         HStack {
+                            Spacer()
                             ForEach(half..<count, id: \.self) { index in
                                 let thisShortcut = shortcuts[index]
                                 shortcutButton.makeButton(with: thisShortcut)
                                     .accessibilityAddTraits(thisShortcut == useShortcut ? .isSelected : [])
+                                Spacer()
                             }
                         }
                     }
@@ -144,6 +167,7 @@ fileprivate struct Previews: PreviewProvider {
         var body: some View {
 //            Preview_Content()
             CurrencyInputView(amount: $amountToTransfer,
+                           available: nil,
                                title: "Amount to withdraw:")
                 .environmentObject(controller)
         }

@@ -30,6 +30,7 @@ struct RequestPayment: View {
 
         ScrollView { VStack {
             CurrencyInputView(amount: $amountToTransfer,
+                           available: nil,
                                title: iconOnly ? String(localized: "How much:")
                                                : String(localized: "Amount to request:"))
 

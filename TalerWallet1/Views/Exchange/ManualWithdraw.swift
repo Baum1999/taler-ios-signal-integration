@@ -33,6 +33,7 @@ struct ManualWithdraw: View {
         ScrollView {
             VStack {
                 CurrencyInputView(amount: $amountToTransfer,
+                               available: nil,
                                    title: iconOnly ? String(localized: "How much:")
                                                    : String(localized: "Amount to withdraw:"))
                 let someCoins = SomeCoins(details: withdrawalAmountDetails)

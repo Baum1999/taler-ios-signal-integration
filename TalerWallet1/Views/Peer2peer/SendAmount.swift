@@ -45,7 +45,7 @@ struct SendAmount: View {
         let currency = amountAvailable.currencyStr
         let _ = symLog.log("currency: \(currency)")
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let navTitle = String(localized: "Send \(currency)", comment: "Send currency, Dialog Title")
+        let navTitle = String(localized: "Send \(currency)", comment: "Dialog Title")
         let available = amountAvailable.string(currencyInfo)
         let _ = symLog.log("available: \(available)")
         let current = amountToTransfer.string(currencyInfo)
@@ -58,6 +58,7 @@ struct SendAmount: View {
                 .accessibilityFont(.title3)
                 .padding(.bottom, 2)
             CurrencyInputView(amount: $amountToTransfer,
+                           available: amountAvailable,
                                title: iconOnly ? String(localized: "How much:")
                                                : String(localized: "Amount to send:"))
             let disabled = insufficient || amountToTransfer.isZero
