@@ -25,7 +25,7 @@ struct BalanceButton: View {
                     let fitsSideBySide = iconOnly || Self.fitsSideBySide(titles, availableWidth: width,
                                                                   sizeCategory: sizeCategory,
                                                                   padding: 20, sameSize: false)
-                    AmountRowV(amountStr: amountStr, amountColor: .primary, largeAmountFont: true,
+                    AmountRowV(amountStr: amountStr, amountColor: .primary, doneOrPending: true, largeAmountFont: true,
                                fitsHorizontal: fitsSideBySide, vertAlignment: .lastTextBaseline) {
                         Text(title)
                             .accessibilityFont(.title2)

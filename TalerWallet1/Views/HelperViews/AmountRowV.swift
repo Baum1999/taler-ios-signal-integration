@@ -13,6 +13,7 @@ import taler_swift
 struct AmountRowV<Content: View>: View {
     let amountStr: String
     let amountColor: Color
+    let doneOrPending: Bool
     let largeAmountFont: Bool
     let fitsHorizontal: Bool
     let vertAlignment: VerticalAlignment
@@ -21,6 +22,7 @@ struct AmountRowV<Content: View>: View {
 
     var body: some View {
         let text = Text(amountStr)
+            .strikethrough(!doneOrPending)
             .foregroundColor(amountColor)
             .accessibilityFont(largeAmountFont ? .title : .title2)
             .monospacedDigit()
@@ -57,13 +59,13 @@ struct PreviewSectionWithAmountRow: View {
         let demoStr = demo.string(demoInfo)
         List {
             Section {
-                AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
+                AmountRowV(amountStr: demoStr, amountColor: .primary, doneOrPending: true, largeAmountFont: true,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
                         .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
-                AmountRowV(amountStr: demoStr, amountColor: .primary, largeAmountFont: true,
+                AmountRowV(amountStr: demoStr, amountColor: .primary, doneOrPending: true, largeAmountFont: true,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
                         .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
@@ -71,13 +73,13 @@ struct PreviewSectionWithAmountRow: View {
                 }
             }
             Section {
-                AmountRowV(amountStr: testStr, amountColor: .primary, largeAmountFont: false,
+                AmountRowV(amountStr: testStr, amountColor: .primary, doneOrPending: false, largeAmountFont: false,
                            fitsHorizontal: true, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
                         .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         .accessibilityFont(.title2)
                 }
-                AmountRowV(amountStr: testStr, amountColor: .secondary, largeAmountFont: false,
+                AmountRowV(amountStr: testStr, amountColor: .secondary, doneOrPending: false, largeAmountFont: false,
                            fitsHorizontal: false, vertAlignment: .lastTextBaseline) {
                     Text(verbatim: "Balance")
                         .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)

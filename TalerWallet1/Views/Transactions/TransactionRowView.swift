@@ -73,14 +73,17 @@ struct TransactionRowContentV: View {
     var body: some View {
         let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
                               shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+        let doneOrPending = done || pending
         HStack(spacing: 8) {
             iconBadge
             VStack(alignment: .leading) {
                 Text(centerTop)
+                    .strikethrough(!doneOrPending)
                     .accessibilityFont(.headline)
 //                  .fontWeight(.medium)      iOS 16
                     .padding(.bottom, -2.0)
                 Text(centerBottom)
+                    .strikethrough(!doneOrPending)
                     .accessibilityFont(.callout)
             }
         }
@@ -123,8 +126,8 @@ struct TransactionRowView: View {
                                                           isHorizontal: false, sizeCategory: sizeCategory)
                 let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
 
-                AmountRowV(amountStr: amountStr, amountColor: foreColor, largeAmountFont: false,
-                           fitsHorizontal: !needVStack, vertAlignment: .center) {
+                AmountRowV(amountStr: amountStr, amountColor: foreColor, doneOrPending: done || pending,
+                     largeAmountFont: false, fitsHorizontal: !needVStack, vertAlignment: .center) {
 
                     TransactionRowContentV(centerTop: transaction.localizedType,
                                         centerBottom: dateString, isHorizontal: true,
