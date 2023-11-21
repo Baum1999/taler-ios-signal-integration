@@ -6,19 +6,29 @@ import SwiftUI
 import taler_swift
 
 struct IconBadge: View {
-    let imageName: String
     let foreColor:Color
+    let done: Bool
+//    let pending: Bool
+    let incoming: Bool
     let shouldConfirm: Bool
     let needsKYC: Bool
 
     var body: some View {
+        let imageName = incoming && done ? DONE_INCOMING
+                              : incoming ? PENDING_INCOMING
+                // since the money already left the wallet, show DONE
+                                         : DONE_OUTGOING        // PENDING_OUTGOING
         let badgeName = needsKYC ? NEEDS_KYC
                                  : CONFIRM_BANK
         HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
-            Image(systemName: imageName)
-                .foregroundColor(foreColor)
-                .accessibilityFont(.largeTitle)
-                .accessibility(hidden: true)
+            ZStack {
+                // "plus.diamond" is wider than "plus.circle.fill"
+                // ZStack centers the main icon, and the badge will always be at the same position
+                Image(systemName: PENDING_INCOMING)
+                    .foregroundColor(.clear)
+                Image(systemName: imageName)
+                    .foregroundColor(foreColor)
+            }.accessibilityFont(.largeTitle)
             Image(systemName: badgeName)
                 .accessibilityFont(.caption)
                 .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
@@ -29,9 +39,11 @@ struct TransactionRowContentV: View {
     var centerTop: String
     var centerBottom: String
     let isHorizontal: Bool
+    let pending: Bool
     let incoming: Bool
     let shouldConfirm: Bool
     let needsKYC: Bool
+    let done: Bool
     let foreColor:Color
 
     public static func width(titles: (String, String?), isHorizontal: Bool,
@@ -59,9 +71,8 @@ struct TransactionRowContentV: View {
     }
 
     var body: some View {
-        let imageName = incoming ? "plus.circle.fill"
-                                 : "minus.circle.fill"
-        let iconBadge = IconBadge(imageName: imageName, foreColor: foreColor, shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+        let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
+                              shouldConfirm: shouldConfirm, needsKYC: needsKYC)
         HStack(spacing: 8) {
             iconBadge
             VStack(alignment: .leading) {
@@ -117,8 +128,9 @@ struct TransactionRowView: View {
 
                     TransactionRowContentV(centerTop: transaction.localizedType,
                                         centerBottom: dateString, isHorizontal: true,
-                                            incoming: incoming,  shouldConfirm: shouldConfirm,
-                                            needsKYC: needsKYC,      foreColor: foreColor)
+                                             pending: pending, incoming: incoming,
+                                       shouldConfirm: shouldConfirm, needsKYC: needsKYC,
+                                                done: done, foreColor: foreColor)
                 }
                     .accessibilityElement(children: .combine)
                     .accessibilityValue(needsKYC ? ". Needs K Y C" :

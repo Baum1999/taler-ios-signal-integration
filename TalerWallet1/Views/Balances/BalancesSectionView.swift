@@ -190,6 +190,10 @@ fileprivate struct BalancesPendingRowView: View {
                            reloadOneAction: reloadOneAction)
             }
         } label: {
+            let needsKYC = true
+            let shouldConfirm = false
+            let needsKYCStr = String(localized: ". Needs K Y C", comment: "VoiceOver")
+            let needsConfStr = String(localized: ". Needs bank confirmation", comment: "VoiceOver")
             VStack(spacing: 6) {
                 var rows = 0
                 if !pendingIncoming.isZero {
@@ -205,6 +209,13 @@ fileprivate struct BalancesPendingRowView: View {
                         .accessibilityFont(.body)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityValue(needsKYC && shouldConfirm ? needsKYCStr + needsConfStr :
+                                                 needsKYC ? needsKYCStr :
+                                            shouldConfirm ? needsConfStr
+                                                          : EMPTYSTRING)
+            .accessibilityHint("Will go to Pending transactions.")
+
         }
 
     } // body

@@ -16,6 +16,11 @@ public let THIRTYDAYS: UInt = 30    // 10..30
 public let EMPTYSTRING = ""                         // avoid automatic translation of empty "" textLiterals in Text()
 public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionDetail
 public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionDetail
+public let PENDING_INCOMING = "plus.diamond"
+public let PENDING_OUTGOING = "minus.diamond"
+public let DONE_INCOMING = "plus.circle.fill"
+public let DONE_OUTGOING = "minus.circle.fill"
+
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
 //public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"

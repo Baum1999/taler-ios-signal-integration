@@ -212,8 +212,25 @@ struct TransactionDetailView: View {
                             let withdrawalDetails = details.withdrawalDetails
                             switch withdrawalDetails.type {
                                 case .manual:               // "Make a wire transfer of \(amount) to"
+                                    if transaction.isPendingKYC {
+                                        if let kycUrl = common.kycUrl {
+                                            if let destination = URL(string: kycUrl) {
+                                                VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
+                                                    if !iconOnly {
+                                                        Text("You need to pass a KYC procedure")
+                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                                                            .multilineTextAlignment(.leading)                   // otherwise
+                                                            .listRowSeparator(.hidden)
+                                                    }
+                                                    Link("Open KYC website", destination: destination)
+                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
+                                                        .accessibilityHint("Will go to KYC website to confirm this withdrawal.")
+                                                }
+                                            }
+                                        }
+                                    }
                                     ManualDetailsV(common: common, details: withdrawalDetails)
-                                    
+
                                 case .bankIntegrated:       // "Confirm with bank"
                                     let confirmed = withdrawalDetails.confirmed ?? false
                                     if !confirmed {
@@ -228,21 +245,7 @@ struct TransactionDetailView: View {
                                                     }
                                                     Link("Confirm with bank", destination: destination)
                                                         .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
-                                                }
-                                            }
-                                        }
-                                    } else if transaction.isPendingKYC {
-                                        if let kycUrl = common.kycUrl {
-                                            if let destination = URL(string: kycUrl) {
-                                                VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
-                                                    if !iconOnly {
-                                                        Text("You need to pass a KYC procedure")
-                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                                                            .multilineTextAlignment(.leading)                   // otherwise
-                                                            .listRowSeparator(.hidden)
-                                                    }
-                                                    Link("Open KYC website", destination: destination)
-                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
+                                                        .accessibilityHint("Will go to bank website to confirm this withdrawal.")
                                                 }
                                             }
                                         }

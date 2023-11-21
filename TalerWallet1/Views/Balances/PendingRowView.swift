@@ -28,10 +28,8 @@ struct PendingRowView: View {
 
     var body: some View {
         let pendingColor = WalletColors().pendingColor(incoming)
-        let imageName = incoming ? "plus.diamond"       //  goforward.plus   circle
-                                 : "minus.diamond"      //
-        let iconBadge = IconBadge(imageName: imageName, foreColor: pendingColor, shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-
+        let iconBadge = IconBadge(foreColor: pendingColor, done: false, incoming: incoming,
+                                  shouldConfirm: shouldConfirm, needsKYC: needsKYC)
         let inTitle = iconOnly ? inTitle0 : inTitle1
         let outTitle = iconOnly ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
