@@ -1,4 +1,11 @@
 
+Version 0.9.3 (28)
+
+• Unsuccessful (Incomplete) transactions no longer have their own list, but are now
+  included in the main transaction list.
+  But they still show the original amount instead of the real cost (fees) only. tbc
+
+
 Version 0.9.3 (27)
 
 • New feature: Badges for KYC and Confirm with bank (for bank-integrated withdrawals)
