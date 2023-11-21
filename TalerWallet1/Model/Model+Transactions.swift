@@ -9,25 +9,14 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 extension WalletModel {
-    static func specialTransactions(_ transactions: [Transaction]) -> [Transaction] {
-        transactions.filter { transaction in
-            transaction.isSpecial
-        }
-    }
-
     static func completedTransactions(_ transactions: [Transaction]) -> [Transaction] {
         transactions.filter { transaction in
-            transaction.isDone
+            !transaction.isPending
         }
     }
     static func pendingTransactions(_ transactions: [Transaction]) -> [Transaction] {
         transactions.filter { transaction in
             transaction.isPending
-        }
-    }
-    static func incompleteTransactions(_ transactions: [Transaction]) -> [Transaction] {
-        transactions.filter { transaction in
-            !transaction.isDone && !transaction.isPending
         }
     }
 }

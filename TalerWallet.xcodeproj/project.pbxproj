@@ -42,7 +42,6 @@
 		4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC82A42BC4800CC88B8 /* Model+Exchange.swift */; };
 		4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
-		4E3EAE302A990778009F1BE8 /* IncompleteRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8742A34B411001C6406 /* IncompleteRowV.swift */; };
 		4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
 		4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
 		4E3EAE342A990778009F1BE8 /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
@@ -156,7 +155,6 @@
 		4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
 		4E7940DE29FC307C00A9AEA1 /* P2PSubjectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */; };
 		4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
-		4E87C8752A34B411001C6406 /* IncompleteRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8742A34B411001C6406 /* IncompleteRowV.swift */; };
 		4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171C2A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf */; };
 		4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171D2A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf */; };
 		4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */; };
@@ -330,7 +328,6 @@
 		4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P2PSubjectV.swift; sourceTree = "<group>"; };
 		4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
 		4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsEmptyView.swift; sourceTree = "<group>"; };
-		4E87C8742A34B411001C6406 /* IncompleteRowV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IncompleteRowV.swift; sourceTree = "<group>"; };
 		4E8C171C2A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Regular-102.otf"; sourceTree = "<group>"; };
 		4E8C171D2A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Italic-102.otf"; sourceTree = "<group>"; };
 		4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Bold-102.otf"; sourceTree = "<group>"; };
@@ -696,7 +693,6 @@
 				4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */,
 				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4EB095382989CBFE0043A8A1 /* PendingRowView.swift */,
-				4E87C8742A34B411001C6406 /* IncompleteRowV.swift */,
 			);
 			path = Balances;
 			sourceTree = "<group>";
@@ -1044,7 +1040,6 @@
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
 				4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */,
 				4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */,
-				4E3EAE302A990778009F1BE8 /* IncompleteRowV.swift in Sources */,
 				4E605DAF2AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
 				4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */,
 				4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */,
@@ -1150,7 +1145,6 @@
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
 				4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */,
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
-				4E87C8752A34B411001C6406 /* IncompleteRowV.swift in Sources */,
 				4E605DB02AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,

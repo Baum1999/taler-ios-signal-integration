@@ -25,13 +25,11 @@ struct BalancesSectionView {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
 
     @State private var isShowingDetailView = false
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
-    @State private var incompleteTransactions: [Transaction] = []
 
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
@@ -50,12 +48,6 @@ struct BalancesSectionView {
         let currency = balance.scopeInfo.currency
         transactions = await model.transactionsT(stack.push(), currency: currency)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
-    }
-
-    func reloadIncomplete(_ stack: CallStack) async -> () {
-        let currency = balance.scopeInfo.currency
-        transactions = await model.transactionsT(stack.push(), currency: currency)
-        incompleteTransactions = WalletModel.incompleteTransactions(transactions)
     }
 }
 
@@ -91,23 +83,6 @@ extension BalancesSectionView: View {
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
             }
-            if incompleteTransactions.count > 0 {
-                NavigationLink {
-//let _ = print("button: Incomplete Transactions: \(currency)")
-                    LazyView {
-                        TransactionsListView(stack: stack.push(),
-                                          navTitle: String(localized: "Incomplete", comment: "ViewTitle of TransactionList"),
-                                          currency: currency,
-                                      transactions: incompleteTransactions,
-                                        showUpDown: false,
-                                   reloadAllAction: reloadIncomplete,
-                                   reloadOneAction: reloadOneAction)
-                    }
-                } label: {
-                    IncompleteRowV(incompleteTransactions: $incompleteTransactions)
-                }
-
-            }
         } header: {
             BarGraphHeader(stack: stack.push(), currency: currency)
         }.id(sectionID)
@@ -117,7 +92,6 @@ extension BalancesSectionView: View {
                 let response = await model.transactionsT(stack.push(".task - reload Transactions"), currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
-                incompleteTransactions = WalletModel.incompleteTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
                 shownSectionID = sectionID
 //            } else {

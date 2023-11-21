@@ -447,7 +447,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isAbSuspended: Bool { common.txState.major == .suspendedAborting }
     var isFailed     : Bool { common.txState.major == .failed }
     var isExpired    : Bool { common.txState.major == .expired }
-    var isSpecial    : Bool { !(isDone || isPending) }
 
     var isAbortable  : Bool { common.txActions.contains(.abort) }
     var isFailable   : Bool { common.txActions.contains(.fail) }
