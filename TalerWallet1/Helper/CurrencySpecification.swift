@@ -164,7 +164,7 @@ public struct CurrencySpecification: Codable, Sendable {
     /// some name for this CurrencySpecification
     let name: String
     /// 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
-    let code: String
+    let code: String?
     /// how much digits the user may enter after the decimal separator
     let fractionalInputDigits: Int
     /// €,$,£: 2;  some arabic currencies: 3,  ¥: 0
