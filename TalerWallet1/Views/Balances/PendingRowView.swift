@@ -76,6 +76,7 @@ func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
     let unitName = digits == 0 ? "テ" : "ク"  // do not use real currency symbols like "¥" : "€"
     let scope = ScopeInfo(type: .global, currency: currency)
     let specs = CurrencySpecification(name: currency,
+                                      code: currency,
                      fractionalInputDigits: digits,
                     fractionalNormalDigits: digits,
               fractionalTrailingZeroDigits: digits,

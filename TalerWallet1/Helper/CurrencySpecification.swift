@@ -56,6 +56,7 @@ public struct CurrencyInfo {
     public static func zero(_ currency: String) -> CurrencyInfo {
         let scope = ScopeInfo(type: .global, currency: currency)
         let specs = CurrencySpecification(name: currency,
+                                          code: currency,
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
                   fractionalTrailingZeroDigits: 0,
@@ -154,16 +155,16 @@ public struct CurrencySpecification2: Codable, Sendable {
 public struct CurrencySpecification: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
         case name = "name"
-//        case decimalSeparator = "decimal_separator"
-//        case groupSeparator = "group_separator"
+        case code = "code"
         case fractionalInputDigits = "num_fractional_input_digits"
         case fractionalNormalDigits = "num_fractional_normal_digits"
         case fractionalTrailingZeroDigits = "num_fractional_trailing_zero_digits"
-//        case isCurrencyNameLeading = "is_currency_name_leading"
         case altUnitNames = "alt_unit_names"
     }
     /// some name for this CurrencySpecification
     let name: String
+    /// 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
+    let code: String
     /// how much digits the user may enter after the decimal separator
     let fractionalInputDigits: Int
     /// €,$,£: 2;  some arabic currencies: 3,  ¥: 0
