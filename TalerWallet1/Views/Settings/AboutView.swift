@@ -53,14 +53,6 @@ struct AboutView: View {
                 SettingsItem(name: "Wallet Core Version", id1: "wallet-core") {
                     Text(verbatim: "\(walletCore.versionInfo?.version ?? "unknown")")
                 }
-                if developerMode {
-                    SettingsItem(name: "Wallet Core DevMode", id1: "devMode") {
-                        let modeStr = if let devMode = walletCore.versionInfo?.devMode {
-                            devMode ? "YES" : "NO"
-                        } else { "unknown" }
-                        Text(modeStr)
-                    }
-                }
                 SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
                     Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
                 }
