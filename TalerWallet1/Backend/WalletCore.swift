@@ -153,7 +153,7 @@ extension WalletCore {
                                  userInfo: [AnyHashable: Any]? = nil) {
         Task { // runs on MainActor
             await postNotificationM(aName, object: anObject, userInfo: userInfo)
-            logger.log("Notification sent: \(aName.rawValue)")
+            logger.info("Notification sent: \(aName.rawValue)")
         }
     }
 
@@ -200,7 +200,7 @@ extension WalletCore {
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .expired:
-                            logger.log("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(0)
                             postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
@@ -224,7 +224,7 @@ extension WalletCore {
                             logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
-                            logger.log("Yikes: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.warning("Unknow transition: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                     } // switch
                 } // type

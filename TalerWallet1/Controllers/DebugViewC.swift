@@ -170,31 +170,29 @@ class DebugViewC: ObservableObject {
                 logger.log("\(newID, privacy: .public) stays")
                 // don't set viewID to the same value, it would just trigger an unneccessary redraw
             }
-        } else if viewID > 0 {
-            logger.log("switching OFF, will not use \(newID, privacy: .public)")
-            viewID = 0                                      // publish OFF
         } else {
-            logger.log("off, will not use \(newID, privacy: .public)")
-            // don't set viewID from 0 to 0 again, it would just trigger an unneccessary redraw
+            logger.log("view \(newID, privacy: .public)")
+            if viewID > 0 {
+                viewID = 0                                      // publish OFF
+            }
         }
     }
     
     @MainActor func setSheetID(_ newID: Int) -> Void {
         if developerMode {
             if sheetID != newID {
-                logger.log("switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public) for sheet")
+                logger.log("sheet switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public)")
                 sheetID = newID                             // publish new sheetID
             } else {
-                logger.log("\(newID, privacy: .public) stays for sheet")
+                logger.log("sheet \(newID, privacy: .public) stays")
                 // don't set sheetID to the same value, it would just trigger an unneccessary redraw
             }
-        } else if sheetID > 0 {
-            // might happen after switching DevMode off, if sheetID still has the old value of the last sheet
-            logger.log("switching OFF, will not use \(newID, privacy: .public) for sheet")
-            sheetID = 0                                     // publish OFF
         } else {
-            logger.log("off, will not use \(newID, privacy: .public) for sheet")
-            // don't set sheetID from 0 to 0 again, it would just trigger an unneccessary redraw
+            logger.log("sheet \(newID, privacy: .public)")
+            if sheetID > 0 {
+                // might happen after switching DevMode off, if sheetID still has the old value of the last sheet
+                sheetID = 0                                     // publish OFF
+            }
         }
     }
 }
