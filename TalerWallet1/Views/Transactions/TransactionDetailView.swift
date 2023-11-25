@@ -76,6 +76,8 @@ struct TransactionDetailView: View {
                     return true
                 }
             }
+        } else { // no sheet but the details view -> reload
+            checkReload(notification, logStr)
         }
         return false
     }
@@ -134,7 +136,7 @@ struct TransactionDetailView: View {
                     Text("Status: \(common.txState.major.localizedState)")
                 }    .listRowSeparator(.automatic)
                     .accessibilityFont(.title)
-                SwitchCase(transaction: $transaction, hasDone: doneAction != nil)
+                TypeDetail(transaction: $transaction, hasDone: doneAction != nil)
 
                 if transaction.isAbortable { if let abortAction {
                     TransactionButton(transactionId: common.transactionId,
@@ -192,10 +194,47 @@ struct TransactionDetailView: View {
 //}
 //
 //extension TransactionDetail {
-    struct SwitchCase: View {
+    struct KycButton: View {
+        let destination: URL
+        @AppStorage("iconOnly") var iconOnly: Bool = false
+
+        var body: some View {
+            VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
+                if !iconOnly {
+                    Text("You need to pass a KYC procedure")
+                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                        .multilineTextAlignment(.leading)                   // otherwise
+                        .listRowSeparator(.hidden)
+                }
+                Link("Open KYC website", destination: destination)
+                    .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
+                    .accessibilityHint("Will go to KYC website to confirm this withdrawal.")
+            }
+        }
+    }
+
+    struct ConfirmationButton: View {
+        let destination: URL
+        @AppStorage("iconOnly") var iconOnly: Bool = false
+
+        var body: some View {
+            VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
+                if !iconOnly {
+                    Text("Waiting for bank confirmation")
+                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                        .multilineTextAlignment(.leading)                   // otherwise
+                        .listRowSeparator(.hidden)
+                }
+                Link("Confirm with bank", destination: destination)
+                    .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
+                    .accessibilityHint("Will go to bank website to confirm this withdrawal.")
+            }
+        }
+    }
+
+    struct TypeDetail: View {
         @Binding var transaction: Transaction
         let hasDone: Bool
-        @AppStorage("iconOnly") var iconOnly: Bool = false
 
         var body: some View {
             let common = transaction.common
@@ -209,43 +248,25 @@ struct TransactionDetailView: View {
                     case .withdrawal(let withdrawalTransaction):
                         let details = withdrawalTransaction.details
                         if pending {
+                            if transaction.isPendingKYC {
+                                if let kycUrl = common.kycUrl {
+                                    if let destination = URL(string: kycUrl) {
+                                        KycButton(destination: destination)
+                                    }
+                                }
+                            }
                             let withdrawalDetails = details.withdrawalDetails
                             switch withdrawalDetails.type {
                                 case .manual:               // "Make a wire transfer of \(amount) to"
-                                    if transaction.isPendingKYC {
-                                        if let kycUrl = common.kycUrl {
-                                            if let destination = URL(string: kycUrl) {
-                                                VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
-                                                    if !iconOnly {
-                                                        Text("You need to pass a KYC procedure")
-                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                                                            .multilineTextAlignment(.leading)                   // otherwise
-                                                            .listRowSeparator(.hidden)
-                                                    }
-                                                    Link("Open KYC website", destination: destination)
-                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
-                                                        .accessibilityHint("Will go to KYC website to confirm this withdrawal.")
-                                                }
-                                            }
-                                        }
-                                    }
                                     ManualDetailsV(common: common, details: withdrawalDetails)
 
                                 case .bankIntegrated:       // "Confirm with bank"
-                                    let confirmed = withdrawalDetails.confirmed ?? false
-                                    if !confirmed {
-                                        if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
-                                            if let destination = URL(string: confirmationUrl) {
-                                                VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
-                                                    if !iconOnly {
-                                                        Text("Waiting for bank confirmation")
-                                                            .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                                                            .multilineTextAlignment(.leading)                   // otherwise
-                                                            .listRowSeparator(.hidden)
-                                                    }
-                                                    Link("Confirm with bank", destination: destination)
-                                                        .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
-                                                        .accessibilityHint("Will go to bank website to confirm this withdrawal.")
+                                    if !transaction.isPendingKYC {              // both should never happen, but...
+                                        let confirmed = withdrawalDetails.confirmed ?? false
+                                        if !confirmed {
+                                            if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
+                                                if let destination = URL(string: confirmationUrl) {
+                                                    ConfirmationButton(destination: destination)
                                                 }
                                             }
                                         }
