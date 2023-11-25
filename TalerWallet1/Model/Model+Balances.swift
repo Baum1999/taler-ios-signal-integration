@@ -7,25 +7,36 @@ import taler_swift
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
+
+enum BalanceFlag: String, Codable {
+    case incomingAml = "incoming-aml"
+    case incomingConfirmation = "incoming-confirmation"
+    case incomingKyc = "incoming-kyc"
+    case outgoingKyc = "outgoing-kyc"
+}
+
 /// A currency balance
 struct Balance: Decodable, Hashable, Sendable {
-    var available: Amount
     var scopeInfo: ScopeInfo
-    var requiresUserInput: Bool
-    var hasPendingTransactions: Bool
+    var available: Amount
+    var pendingIncoming: Amount
+    var pendingOutgoing: Amount
+    var flags: [BalanceFlag]
 
     public static func == (lhs: Balance, rhs: Balance) -> Bool {
-        return lhs.available == rhs.available &&
-        lhs.scopeInfo == rhs.scopeInfo &&
-        lhs.requiresUserInput == rhs.requiresUserInput &&
-        lhs.hasPendingTransactions == rhs.hasPendingTransactions
+        lhs.scopeInfo == rhs.scopeInfo
+        && lhs.available == rhs.available
+        && lhs.pendingIncoming == rhs.pendingIncoming
+        && lhs.pendingOutgoing == rhs.pendingOutgoing
+        && lhs.flags == rhs.flags
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(available)
         hasher.combine(scopeInfo)
-        hasher.combine(requiresUserInput)
-        hasher.combine(hasPendingTransactions)
+        hasher.combine(available)
+        hasher.combine(pendingIncoming)
+        hasher.combine(pendingOutgoing)
+        hasher.combine(flags)
     }
 }
 // MARK: -

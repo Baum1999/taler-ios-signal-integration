@@ -78,7 +78,7 @@ extension BalancesSectionView: View {
             if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
-                                     currency: currency,
+                                      balance: balance,
                           pendingTransactions: $pendingTransactions,
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
@@ -123,62 +123,46 @@ extension BalancesSectionView: View {
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currency: String // = currencyInfo.scope.currency
+//    let currency: String // = currencyInfo.scope.currency
+    let balance: Balance                            // this is the currency to be used
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
 
-    func computePending(currency: String) -> (Amount, Amount) {
-        var incoming = Amount(currency: currency, cent: 0)
-        var outgoing = Amount(currency: currency, cent: 0)
-        for transaction in pendingTransactions {
-            let effective = transaction.common.amountEffective
-            if currency == effective.currencyStr {
-                do {
-                    if transaction.common.incoming() {
-                        incoming = try incoming + effective
-                    } else {
-                        outgoing = try outgoing + effective
-                    }
-                } catch {
-                    // TODO: log error
-                    symLog?.log(error.localizedDescription)
-                }
-            }
-        }
-        return (incoming, outgoing)
-    }
-
     var body: some View {
-        let (pendingIncoming, pendingOutgoing) = computePending(currency: currency)
+        let pendingIncoming = balance.pendingIncoming
+        let pendingOutgoing = balance.pendingOutgoing
+        let needsKYCin = balance.flags.contains(.incomingKyc)
+        let needsKYCout = balance.flags.contains(.outgoingKyc)
+        let shouldConfirm = balance.flags.contains(.incomingConfirmation)
 
         NavigationLink {
             //let _ = print("button: Pending Transactions: \(currency)")
             LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
-                                  currency: currency,
+                                  currency: balance.scopeInfo.currency,
                               transactions: pendingTransactions,
                                 showUpDown: false,
                            reloadAllAction: reloadPending,
                            reloadOneAction: reloadOneAction)
             }
         } label: {
-            let needsKYC = true
-            let shouldConfirm = false
+            let needsKYC =  needsKYCin || needsKYCout
             let needsKYCStr = String(localized: ". Needs K Y C", comment: "VoiceOver")
             let needsConfStr = String(localized: ". Needs bank confirmation", comment: "VoiceOver")
             VStack(spacing: 6) {
-                var rows = 0
-                if !pendingIncoming.isZero {
-                    PendingRowView(amount: pendingIncoming, incoming: true, shouldConfirm: false, needsKYC: false)     // TODO: !!!
-                    let _ = (rows+=1)
+                let hasIncoming = !pendingIncoming.isZero
+                if hasIncoming {
+                    PendingRowView(amount: pendingIncoming, incoming: true,
+                            shouldConfirm: shouldConfirm, needsKYC: needsKYCin)
                 }
-                if !pendingOutgoing.isZero {
-                    PendingRowView(amount: pendingOutgoing, incoming: false, shouldConfirm: false, needsKYC: false)
-                    let _ = (rows+=1)
+                let hasOutgoing = !pendingOutgoing.isZero
+                if hasOutgoing {
+                    PendingRowView(amount: pendingOutgoing, incoming: false,
+                            shouldConfirm: false, needsKYC: needsKYCout)
                 }
-                if rows == 0 {
+                if !hasIncoming && !hasOutgoing {           // should never happen
                     Text("Some pending transactions")
                         .accessibilityFont(.body)
                 }
@@ -189,9 +173,7 @@ fileprivate struct BalancesPendingRowView: View {
                                             shouldConfirm ? needsConfStr
                                                           : EMPTYSTRING)
             .accessibilityHint("Will go to Pending transactions.")
-
-        }
-
+        } // NavLinkLabel
     } // body
 } // BalancesPendingRowView
 
@@ -211,7 +193,7 @@ fileprivate struct BalancesNavigationLinksView: View {
 
     func selectAndUpdate(_ button: Int) {
         let currency = balance.scopeInfo.currency
-        amountToTransfer.setCurrency(currency)
+        amountToTransfer.setCurrency(currency)      // replace wrong currency here
         symLog?.log("balance.scopeInfo.currency: \(currency)")
 
         buttonSelected = button      // will trigger NavigationLink
@@ -274,10 +256,9 @@ fileprivate struct BindingViewContainer: View {
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, url: DEMOEXCHANGE, currency: LONGCURRENCY)
-        let balance = Balance(available: Amount(currency: LONGCURRENCY, cent:1),
-                              scopeInfo: scopeInfo,
-                      requiresUserInput: false,
-                 hasPendingTransactions: true)
+        let balance = Balance(scopeInfo: scopeInfo,
+                              available: Amount(currency: LONGCURRENCY, cent:1),
+                              hasPendingTransactions: true)
         BalancesSectionView(balance: balance,
                        sectionCount: 2,
                    amountToTransfer: $amountToTransfer,
