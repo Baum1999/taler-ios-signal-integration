@@ -59,48 +59,45 @@ struct BalanceRowView: View {
 
     let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
                               comment: "Abbreviation of button `Send Money´")
-    let sendTitle1 = String(localized: "SendButton_Top", defaultValue: "Send",
-                              comment: "Top (first half) of button `Send Money´")
-    let sendTitle2 = String(localized: "SendButton_Bottom", defaultValue: "Money",
-                              comment: "Bottom (second half) of button `Send Money´")
+    let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\tMoney",
+                              comment: "`Send Money´ in Balances - set exactly 1 \\t for line break")
+
     let requestTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
                                  comment: "Abbreviation of button `Request Payment´")
-    let requestTitle1 = String(localized: "RequestButton_Top", defaultValue: "Request",
-                                 comment: "Top (first half) of button `Request Payment´")
-    let requestTitle2 = String(localized: "RequestButton_Bottom", defaultValue: "Payment",
-                                 comment: "Bottom (second half) of button `Request Payment´")
-
+    let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\tPayment",
+                                 comment: "`Request Payment´ in Balances - set exactly 1 \\t for line break")
     var body: some View {
-        SingleAxisGeometryReader { width in
-            VStack (alignment: .trailing) {
-                let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
-                let amountStr = amount.string(currencyInfo)
-                BalanceButton(amountStr: amountStr,
-                           sizeCategory: sizeCategory,
-                              rowAction: rowAction)
-                let uiFont = TalerFont.uiFont(.title3)
-                let titles = iconOnly ? [(sendTitle0, uiFont), (requestTitle0, uiFont)]
-                           : [(sendTitle1, uiFont), (sendTitle2, uiFont), (requestTitle1, uiFont), (requestTitle2, uiFont)]
-                let fitsSideBySide = Self.fitsSideBySide(titles, availableWidth: width, sizeCategory: sizeCategory, padding: 10)
-                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (sendTitle0, nil) : (sendTitle1, sendTitle2),
-                                                  recvTitles: iconOnly ? (requestTitle0, nil) : (requestTitle1, requestTitle2),
-                                              fitsSideBySide: fitsSideBySide,
-                                                   lineLimit: 5,
-                                                sendDisabled: amount.isZero,
-                                                  sendAction: sendAction,
-                                                  recvAction: recvAction)
-                if fitsSideBySide {
-                    HStack(spacing: HSPACING) { twoRowButtons }
-                } else {
+        VStack (alignment: .trailing) {
+            let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
+            let amountStr = amount.string(currencyInfo)
+            BalanceButton(amountStr: amountStr,
+                       sizeCategory: sizeCategory,
+                          rowAction: rowAction)
+
+            let sendTitle = iconOnly ? sendTitle0 : sendTitle1
+            let requTitle = iconOnly ? requestTitle0 : requestTitle1
+            let twoRowButtons = TwoRowButtons(sendTitle: sendTitle,
+                                              recvTitle: requTitle,
+                                         fitsSideBySide: false,
+                                              lineLimit: 5,
+                                           sendDisabled: amount.isZero,
+                                             sendAction: sendAction,
+                                             recvAction: recvAction)
+            if #available(iOS 16.0, *) {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: HSPACING) {
+                        twoRowButtons.makeCopy(fitsSideBySide: true)
+                    }
                     VStack { twoRowButtons }
                 }
+            } else { // view for iOS 15
+                VStack { twoRowButtons }
             }
         }
     }
 }
 // MARK: -
 #if  DEBUG
-
 struct BalanceRowView_Previews: PreviewProvider {
     @MainActor
   struct StateContainer: View {

@@ -5,42 +5,41 @@
 import SwiftUI
 import taler_swift
 
-extension View {
-    func accessTitles(_ titles: (String, String?), _ fitsSideBySide: Bool) -> (String, String) {
-        let space = " "
-        let delimiter = fitsSideBySide ? "\n" : space
-        let (title1, title2) = titles
-        if let title2 {
-            return (title1 + delimiter + title2, title1 + space + title2)
-        } else {
-            return (title1, title1)
-        }
-    }
-}
 struct TwoRowButtons: View {
-    let sendTitles: (String, String?)
-    let recvTitles: (String, String?)
+    let sendTitle: String
+    let recvTitle: String
     let fitsSideBySide: Bool
     let lineLimit: Int
     let sendDisabled: Bool
     let sendAction: () -> Void
     let recvAction: () -> Void
 
-    @Environment(\.sizeCategory) var sizeCategory
+//    @Environment(\.sizeCategory) var sizeCategory
+    func makeCopy(fitsSideBySide: Bool) -> TwoRowButtons {
+        TwoRowButtons(sendTitle: sendTitle,
+                      recvTitle: recvTitle,
+                 fitsSideBySide: fitsSideBySide,
+                      lineLimit: lineLimit,
+                   sendDisabled: sendDisabled,
+                     sendAction: sendAction,
+                     recvAction: recvAction)
+    }
 
     var body: some View {
         Group {
-            let sendAccTitles = accessTitles(sendTitles, fitsSideBySide)
-            Button(sendAccTitles.0, action: sendAction)
-                .accessibilityLabel(Text(sendAccTitles.1))
+            let sendButtonTitle = sendTitle.tabbed(oneLine: !fitsSideBySide)
+            let sendVoiceOverTitle = sendTitle.tabbed(oneLine: true)
+            Button(sendButtonTitle, action: sendAction)
+                .accessibilityLabel(Text(sendVoiceOverTitle))
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
                                             dimmed: false,
                                            aligned: .center))
-            let recvAccTitles = accessTitles(recvTitles, fitsSideBySide)
-            Button(recvAccTitles.0, action: recvAction)
-                .accessibilityLabel(Text(recvAccTitles.1))
+            let recvButtonTitle = recvTitle.tabbed(oneLine: !fitsSideBySide)
+            let recvVoiceOverTitle = recvTitle.tabbed(oneLine: true)
+            Button(recvButtonTitle, action: recvAction)
+                .accessibilityLabel(Text(recvVoiceOverTitle))
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
@@ -49,18 +48,19 @@ struct TwoRowButtons: View {
         }
     }
 }
-
+// MARK: -
+#if  DEBUG
 struct TwoRowButtons_Previews: PreviewProvider {
     static var previews: some View {
         List {
-                TwoRowButtons(sendTitles: ("Send", TESTCURRENCY),
-                              recvTitles: ("Receive", LONGCURRENCY),
+                TwoRowButtons(sendTitle: "Send " + TESTCURRENCY,
+                              recvTitle: "Request" + LONGCURRENCY,
                           fitsSideBySide: false,
                                lineLimit: 2, sendDisabled: true,
                               sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
-                TwoRowButtons(sendTitles: ("Send", DEMOCURRENCY),
-                              recvTitles: ("Receive", DEMOCURRENCY),
+                TwoRowButtons(sendTitle: "Send" + DEMOCURRENCY,
+                              recvTitle: "Request" + DEMOCURRENCY,
                           fitsSideBySide: true,
                                lineLimit: 2, sendDisabled: true,
                               sendAction: {}, recvAction: {})
@@ -68,3 +68,4 @@ struct TwoRowButtons_Previews: PreviewProvider {
         }
     }
 }
+#endif

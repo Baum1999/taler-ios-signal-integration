@@ -28,29 +28,12 @@ struct ExchangeRowView: View {
 //        }
     }
 
-    func titles(_ title: String) -> (String, String?) {
-        if let separatorIndex = title.firstIndex(of: "\n") {
-            let title1 = String(title[..<separatorIndex])
-            let title2 = String(title[title.index(separatorIndex, offsetBy: 1)...])
-            return (title1, title2)
-        }
-        return (title, nil)
-    }
-
-    func titles(_ titles: (String, String?), uiFont: UIFont) -> [(String, UIFont)] {
-        let (title1, title2) = titles
-        if let title2 {
-            return [(title1, uiFont), (title2, uiFont)]
-        }
-        return [(title1, uiFont)]
-    }
-
     var body: some View {
         let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
                                    comment: "Abbreviation of `Deposit (currency)´")
-                    // TODO: deal with \t
         let depositTitle1 = String(localized: "Deposit\t\(currency)",
                                    comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
+
         let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
                                     comment: "Abbreviation of `Withdraw (currency)´")
         let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
@@ -60,7 +43,6 @@ struct ExchangeRowView: View {
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
             Text(baseURL.trimURL())
                 .accessibilityFont(.body)
-
             NavigationLink(destination: LazyView {
                 EmptyView()     // TODO: Deposit
             }, tag: 1, selection: $buttonSelected
@@ -73,34 +55,27 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
         }.listRowSeparator(.hidden)
 
-        SingleAxisGeometryReader { width in
-            Group {
-                let uiFont = TalerFont.uiFont(.title3)
-                let (deposit1, deposit2) = titles(depositTitle1)
-                let (withdraw1, withdraw2) = titles(withdrawTitle1)
-                let titles = iconOnly ? [(depositTitle0, uiFont), (withdrawTitle0, uiFont)]
-                                      : titles((deposit1, deposit2), uiFont: uiFont) +
-                                        titles((withdraw1, withdraw2), uiFont: uiFont)
-                let fitsSideBySide = Self.fitsSideBySide(titles, availableWidth: width,
-                                                         sizeCategory: sizeCategory, padding: 10)
-                                                                                    // TODO:  amount.currencyStr
-                let twoRowButtons = TwoRowButtons(sendTitles: iconOnly ? (depositTitle0, nil)  : (deposit1, deposit2),
-                                                  recvTitles: iconOnly ? (withdrawTitle0, nil) : (withdraw1, withdraw2),
-                                              fitsSideBySide: fitsSideBySide,
-                                                   lineLimit: 5,
-                                                sendDisabled: true,             // TODO: availableAmount.isZero
-                                                  sendAction: { selectAndUpdate(1) },
-                                                  recvAction: { selectAndUpdate(2) })
-                if fitsSideBySide {
-                    HStack(spacing: HSPACING) { twoRowButtons }
-                } else {
-                    VStack { twoRowButtons }
+        let depositTitle = iconOnly ? depositTitle0 : depositTitle1
+        let withdrawTitle = iconOnly ? withdrawTitle0 : withdrawTitle1
+        let twoRowButtons = TwoRowButtons(sendTitle: depositTitle,
+                                          recvTitle: withdrawTitle,
+                                     fitsSideBySide: false,
+                                          lineLimit: 5,
+                                       sendDisabled: true,             // TODO: availableAmount.isZero
+                                         sendAction: { selectAndUpdate(1) },
+                                         recvAction: { selectAndUpdate(2) })
+        if #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: HSPACING) {
+                    twoRowButtons.makeCopy(fitsSideBySide: true)
                 }
+                VStack { twoRowButtons }
             }
+        } else { // view for iOS 15
+            VStack { twoRowButtons }
         }
     }
 }
-
 // MARK: -
 #if DEBUG
 fileprivate struct ExchangeRow_Container : View {
