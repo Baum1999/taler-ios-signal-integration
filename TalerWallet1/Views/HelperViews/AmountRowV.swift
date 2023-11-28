@@ -22,7 +22,7 @@ struct AmountRowV<Content: View>: View {
 
     var body: some View {
         let text = Text(amountStr)
-            .strikethrough(!doneOrPending)
+//            .strikethrough(!doneOrPending)
             .foregroundColor(amountColor)
             .accessibilityFont(largeAmountFont ? .title : .title2)
             .monospacedDigit()

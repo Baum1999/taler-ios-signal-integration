@@ -83,7 +83,7 @@ struct TransactionRowContentV: View {
 //                  .fontWeight(.medium)      iOS 16
                     .padding(.bottom, -2.0)
                 Text(centerBottom)
-                    .strikethrough(!doneOrPending)
+//                    .strikethrough(!doneOrPending)
                     .accessibilityFont(.callout)
             }
         }
