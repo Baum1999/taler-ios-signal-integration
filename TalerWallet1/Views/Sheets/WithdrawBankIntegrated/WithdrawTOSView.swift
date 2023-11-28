@@ -110,9 +110,15 @@ extension WithdrawTOSView {
                         }
                     }
                 }.safeAreaInset(edge: .bottom) {
-                    Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
+                    let currentEtag = tos.currentEtag
+                    let showButton = tos.acceptedEtag == nil ? true
+                                   : tos.acceptedEtag! == tos.currentEtag ? false
+                                                                          : true
+                    if showButton {
+                        Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                    }
                 }
                 .listStyle(myListStyle.style).anyView
             } else {

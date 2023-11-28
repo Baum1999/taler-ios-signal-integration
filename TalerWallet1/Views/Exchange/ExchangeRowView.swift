@@ -42,7 +42,7 @@ struct ExchangeRowView: View {
 
         HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
             Text(baseURL.trimURL())
-                .accessibilityFont(.body)
+                .accessibilityFont(.headline)
             NavigationLink(destination: LazyView {
                 EmptyView()     // TODO: Deposit
             }, tag: 1, selection: $buttonSelected
@@ -53,6 +53,15 @@ struct ExchangeRowView: View {
                     amountToTransfer: $amountToTransfer)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0)
+        }.listRowSeparator(.hidden)
+        NavigationLink(destination: LazyView {
+            WithdrawTOSView(stack: stack.push(),
+                            exchangeBaseUrl: baseURL,
+                            viewID: VIEW_WITHDRAW_TOS,
+                            acceptAction: nil)         // pop back to here
+        }) {
+            Text("Terms of Service")  // VIEW_WITHDRAW_TOS
+                .accessibilityFont(.body)
         }.listRowSeparator(.hidden)
 
         let depositTitle = iconOnly ? depositTitle0 : depositTitle1
