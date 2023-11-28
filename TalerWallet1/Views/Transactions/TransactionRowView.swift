@@ -190,10 +190,10 @@ extension Transaction {             // for PreViews
                                      merchant: merchant,
                                       summary: "some product summary",
                                      products: [])
-            let pDetails = PaymentTransactionDetails(proposalId: "some proposal ID",
-                                                 totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
-                                           totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),
-                                                           info: info)
+            let pDetails = PaymentTransactionDetails(info: info,
+                                               proposalId: "some proposal ID",
+                                           totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
+                                     totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280))
             self = .payment(PaymentTransaction(common: common, details: pDetails))
         }
     }

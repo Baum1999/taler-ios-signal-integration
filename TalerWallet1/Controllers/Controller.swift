@@ -24,6 +24,7 @@ enum UrlCommand {
     case payPull
     case payPush
     case payTemplate
+    case refund
     case reward
 }
 
@@ -166,6 +167,8 @@ extension Controller {
                 return UrlCommand.payPush
             case "pay-template":
                 return UrlCommand.payTemplate
+            case "refund":
+                return UrlCommand.refund
             default:
                 symLog.log("unknown command taler://\(command)")
         }

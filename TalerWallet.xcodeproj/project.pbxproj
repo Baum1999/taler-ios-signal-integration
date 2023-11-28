@@ -246,6 +246,10 @@
 		4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
 		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
+		E37AA62A2AF197E5003850CF /* Model+Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA6292AF197E5003850CF /* Model+Refund.swift */; };
+		E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA6292AF197E5003850CF /* Model+Refund.swift */; };
+		E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA62D2AF19BE0003850CF /* RefundURIView.swift */; };
+		E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA62D2AF19BE0003850CF /* RefundURIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -413,6 +417,8 @@
 		D14AFD1D24D232B300C51073 /* Taler_Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E37AA6292AF197E5003850CF /* Model+Refund.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+Refund.swift"; sourceTree = "<group>"; };
+		E37AA62D2AF19BE0003850CF /* RefundURIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundURIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -607,6 +613,7 @@
 				4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */,
 				4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */,
 				4EB0952C2989CBFE0043A8A1 /* Model+Payment.swift */,
+                E37AA6292AF197E5003850CF /* Model+Refund.swift */,
 				4EB095102989CBB00043A8A1 /* Model+Settings.swift */,
 				4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */,
 				4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */,
@@ -765,6 +772,7 @@
 				4EB095332989CBFE0043A8A1 /* URLSheet.swift */,
 				4EB0953B2989CBFE0043A8A1 /* WithdrawBankIntegrated */,
 				4EB0952A2989CBFE0043A8A1 /* Payment */,
+                E37AA62C2AF19BA6003850CF /* Refund */,
 				4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */,
 			);
 			path = Sheets;
@@ -811,6 +819,14 @@
 				4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */,
 			);
 			path = TalerUITests;
+			sourceTree = "<group>";
+		};
+		E37AA62C2AF19BA6003850CF /* Refund */ = {
+			isa = PBXGroup;
+			children = (
+				E37AA62D2AF19BE0003850CF /* RefundURIView.swift */,
+			);
+			path = Refund;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1091,6 +1107,7 @@
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
 				4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */,
 				4E3EAE5E2A990778009F1BE8 /* WithdrawProgressView.swift in Sources */,
+				E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */,
 				4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */,
 				4E3EAE612A990778009F1BE8 /* ListStyle.swift in Sources */,
@@ -1098,6 +1115,7 @@
 				4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */,
 				4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */,
 				4E3EAE652A990778009F1BE8 /* SideBarView.swift in Sources */,
+				E37AA62A2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */,
 				4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */,
 				4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */,
@@ -1196,6 +1214,7 @@
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
 				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,
 				4EB095642989CBFE0043A8A1 /* WithdrawProgressView.swift in Sources */,
+				E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */,
 				4E3B4BC12A41E6C200CC88B8 /* P2pReceiveURIView.swift in Sources */,
 				4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */,
@@ -1203,6 +1222,7 @@
 				4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */,
 				4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */,
 				4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */,
+				E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
 				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
 				4ED2F94B2A278F5100453B40 /* ThreeAmountsV.swift in Sources */,

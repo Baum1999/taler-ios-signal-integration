@@ -266,13 +266,14 @@ struct WithdrawalTransaction : Sendable{
 }
 
 struct PaymentTransactionDetails: Decodable {
+    var info: OrderShortInfo
     var proposalId: String
     var totalRefundRaw: Amount
     var totalRefundEffective: Amount
     var refundPending: Amount?
+    var refunds: [String]?           // array of refund txIDs for this payment
     var refundQueryActive: Bool?
-    var refunds: [String]?           // TODO: array type?
-    var info: OrderShortInfo
+    var posConfirmation: String?
 }
 
 struct PaymentTransaction : Sendable{

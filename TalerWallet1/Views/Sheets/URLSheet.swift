@@ -32,6 +32,8 @@ struct URLSheet: View {
                     P2pReceiveURIView(stack: stack.push(), url: urlToOpen)
                 case .payTemplate:
                     PayTemplateView(stack: stack.push(), url: urlToOpen)
+                case .refund:
+                    RefundURIView(stack: stack.push(), url: urlToOpen)
 //                case .reward:
 //                    RewardURIView(url: urlToOpen)
                 default:        // Error view
