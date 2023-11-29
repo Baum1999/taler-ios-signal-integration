@@ -46,6 +46,8 @@ struct TransactionRowContentV: View {
     let done: Bool
     let foreColor:Color
 
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
     public static func width(titles: (String, String?), isHorizontal: Bool,
                              sizeCategory: ContentSizeCategory) -> CGFloat {
         let imageFont = TalerFont.uiFont(.largeTitle)
@@ -74,16 +76,21 @@ struct TransactionRowContentV: View {
         let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
                               shouldConfirm: shouldConfirm, needsKYC: needsKYC)
         let doneOrPending = done || pending
+        let increasedContrast = colorSchemeContrast == .increased
+        let textColor = doneOrPending ? .primary :
+                    increasedContrast ? .secondary : WalletColors().gray3
         HStack(spacing: 8) {
             iconBadge
             VStack(alignment: .leading) {
                 Text(centerTop)
-                    .strikethrough(!doneOrPending)
+                    .foregroundColor(textColor)
+                    .strikethrough(!doneOrPending, color: .red)
                     .accessibilityFont(.headline)
 //                  .fontWeight(.medium)      iOS 16
                     .padding(.bottom, -2.0)
+                    .accessibilityLabel(doneOrPending ? centerTop : centerTop +  ", canceled")
                 Text(centerBottom)
-//                    .strikethrough(!doneOrPending)
+                    .foregroundColor(textColor)
                     .accessibilityFont(.callout)
             }
         }
