@@ -126,7 +126,6 @@ struct TransactionDetailView: View {
                     .accessibilityFont(.body)
                     .accessibilityLabel(accessibilityDate)
                     .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
-//                    .foregroundColor(moreContrast ? .primary : .secondary)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
@@ -279,9 +278,7 @@ struct TransactionDetailView: View {
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
                         Text(details.info.summary)
-                            .accessibilityFont(.title2)
-                            .lineLimit(4)
-                            .padding(.bottom)
+                            .accessibilityFont(.title3)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
                                         topTitle: String(localized: "Sum to be paid:"),
                                          baseURL: nil, large: true)     // TODO: baseURL

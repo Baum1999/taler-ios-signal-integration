@@ -88,7 +88,7 @@ struct ExchangeRowView: View {
 // MARK: -
 #if DEBUG
 fileprivate struct ExchangeRow_Container : View {
-    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 1234)
+    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
@@ -109,7 +109,7 @@ fileprivate struct ExchangeRow_Container : View {
         ExchangeRowView(stack: CallStack("Preview"),
                      exchange: exchange1,
                      currency: LONGCURRENCY,
-             amountToTransfer: $amountToTransfer)
+             amountToTransfer: $amountToPreview)
     }
 }
 

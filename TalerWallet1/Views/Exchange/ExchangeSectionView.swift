@@ -41,7 +41,7 @@ struct ExchangeSectionView: View {
 #if DEBUG
 fileprivate struct ExchangeSection_Previews: PreviewProvider {
 fileprivate struct ExchangeRow_Container : View {
-    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 1234)
+    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
@@ -61,7 +61,7 @@ fileprivate struct ExchangeRow_Container : View {
                            ageRestrictionOptions: [])
         ExchangeSectionView(stack: CallStack("Preview"), currency: LONGCURRENCY,
                             exchanges: [exchange1, exchange2],
-                            amountToTransfer: $amountToTransfer)
+                            amountToTransfer: $amountToPreview)
     }
 }
 

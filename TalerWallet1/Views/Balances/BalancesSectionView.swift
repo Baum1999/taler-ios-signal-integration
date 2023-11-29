@@ -113,7 +113,7 @@ extension BalancesSectionView: View {
                 if !iconOnly {
                     Text("Recent transactions")
                         .accessibilityFont(.callout)
-//                        .foregroundColor(moreContrast ? .primary : .secondary)
+//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 }
             }
         } // recent transactions

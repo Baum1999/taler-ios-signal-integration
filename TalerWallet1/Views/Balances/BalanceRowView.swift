@@ -30,7 +30,6 @@ struct BalanceButton: View {
                         Text(title)
                             .accessibilityFont(.title2)
                             .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
-//                            .foregroundColor(moreContrast ? .primary : .secondary)
                     }
                 }
             }
