@@ -72,7 +72,7 @@ struct InitiatePeerPushDebitResponse: Codable {
     let mergePriv: String
     let pursePub: String
     let exchangeBaseUrl: String
-    let talerUri: String
+    let talerUri: String?
     let transactionId: String
 }
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
