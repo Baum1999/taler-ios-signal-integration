@@ -43,7 +43,10 @@ struct PaymentView: View {
     var body: some View {
         if let preparePayResult {
             let effective = preparePayResult.amountEffective
+            let terms = preparePayResult.contractTerms
             List {
+                Text(terms.summary)
+                    .accessibilityFont(.title3)
                 let baseURL = preparePayResult.contractTerms.exchanges.first?.url
                 let raw = preparePayResult.amountRaw
                 let currency = raw.currencyStr
