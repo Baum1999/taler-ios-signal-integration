@@ -1,4 +1,10 @@
 
+Version 0.9.3 (29)
+
+• New feature: ToS in Exchanges Tab
+- BugFix: P2P Send works again (was broken in 28)
+
+
 Version 0.9.3 (28)
 
 • Unsuccessful (Incomplete) transactions no longer have their own list, but are now
