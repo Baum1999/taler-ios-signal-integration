@@ -146,7 +146,7 @@ extension MainView {
                                              hamburgerAction: hamburgerAction)
                                      )),
             SidebarItem(name: exchangesTitle,
-                    sysImage: "building.columns",
+                    sysImage: "arrow.triangle.2.circlepath",
                         view: AnyView(ExchangeListView(stack: stack.push(exchangesTitle),
 //                                                    balances: $balances,
                                                     navTitle: exchangesTitle,
@@ -201,7 +201,7 @@ extension MainView {
                                   navTitle: exchangesTitle)
                 }.navigationViewStyle(.stack)
                 .tabItem {
-                    Image(systemName: "building.columns")
+                    Image(systemName: "arrow.triangle.2.circlepath")
                         .accessibilityLabel(exchangesTitle)
                     if !iconOnly { Text(exchangesTitle) }
                 }
