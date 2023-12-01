@@ -49,6 +49,7 @@ struct ExchangeRowView: View {
             ) { EmptyView() }.frame(width: 0).opacity(0)
             NavigationLink(destination: LazyView {
                 ManualWithdraw(stack: stack.push(),
+//                                 url: nil,
                             exchange: exchange,
                     amountToTransfer: $amountToTransfer)
             }, tag: 2, selection: $buttonSelected

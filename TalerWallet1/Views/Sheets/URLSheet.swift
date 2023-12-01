@@ -3,6 +3,7 @@
  * See LICENSE.md
  */
 import SwiftUI
+import taler_swift
 import SymLog
 
 struct URLSheet: View {
@@ -12,6 +13,7 @@ struct URLSheet: View {
     var urlToOpen: URL
 
     @EnvironmentObject private var controller: Controller
+    @State private var amountToTransfer = Amount.zero(currency: "")
 
     var body: some View {
 #if DEBUG
@@ -24,6 +26,8 @@ struct URLSheet: View {
             switch urlCommand {
                 case .withdraw:
                     WithdrawURIView(stack: stack.push(), url: urlToOpen)
+//                case .withdrawExchange:
+//                    ManualWithdraw(stack: stack.push(), url: urlToOpen, exchange: nil, amountToTransfer: $amountToTransfer)
                 case .pay:
                     PaymentView(stack: stack.push(), url: urlToOpen)
                 case .payPull:

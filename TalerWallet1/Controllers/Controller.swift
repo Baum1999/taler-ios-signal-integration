@@ -20,6 +20,7 @@ enum BackendState {
 enum UrlCommand {
     case unknown
     case withdraw
+    case withdrawExchange
     case pay
     case payPull
     case payPush
@@ -158,20 +159,22 @@ extension Controller {
         }
         switch command {
             case "withdraw":
-                return UrlCommand.withdraw
+                return .withdraw
+            case "withdraw-exchange":
+                return .withdrawExchange
             case "pay":
-                return UrlCommand.pay
+                return .pay
             case "pay-pull":
-                return UrlCommand.payPull
+                return .payPull
             case "pay-push":
-                return UrlCommand.payPush
+                return .payPush
             case "pay-template":
-                return UrlCommand.payTemplate
+                return .payTemplate
             case "refund":
-                return UrlCommand.refund
+                return .refund
             default:
                 symLog.log("unknown command taler://\(command)")
         }
-        return UrlCommand.unknown
+        return .unknown
     }
 }

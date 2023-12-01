@@ -7,6 +7,21 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+enum AccountRestrictionType: String, Decodable {
+    case deny
+    case regex
+}
+struct AccountRestriction: Decodable {
+    var type: AccountRestrictionType
+    var payto_regex: String?
+    var human_hint: String?
+    var human_hint_i18n: String?
+}
+struct WithdrawalExchangeAccountDetails: Decodable {
+    var paytoUri: String
+    var transferAmount: Amount
+    var creditRestrictions: [AccountRestriction]?
+}
 // MARK: -
 /// The result from getWithdrawalDetailsForUri
 struct WithdrawUriInfoResponse: Decodable {
@@ -31,9 +46,10 @@ struct WithdrawalAmountDetails: Decodable {
     var tosAccepted: Bool               // Did the user accept the current version of the exchange's terms of service?
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
-    var paytoUris: [String]             // Ways to pay the exchange
-    var ageRestrictionOptions: [Int]?   // Array of ages
     var numCoins: Int?                  // Number of coins this amountEffective will create
+    var withdrawalAccountsList: [WithdrawalExchangeAccountDetails]?
+    var ageRestrictionOptions: [Int]?   // Array of ages
+    var scopeInfo: ScopeInfo
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
@@ -117,6 +133,7 @@ fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest
 struct AcceptManualWithdrawalResult: Decodable {
     var reservePub: String
     var exchangePaytoUris: [String]
+    var withdrawalAccountsList: [WithdrawalExchangeAccountDetails]
     var transactionId: String
 }
 /// A request to accept a manual withdrawl.

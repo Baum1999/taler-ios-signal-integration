@@ -11,6 +11,8 @@ struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
+//    let url: URL?
+//    let exchange: Exchange?
     let exchange: Exchange
     @Binding var amountToTransfer: Amount
 
@@ -102,13 +104,9 @@ struct ManualWithdraw: View {
 struct ManualWithdraw_Previews: PreviewProvider {
   struct StateContainer : View {
     @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
-    @State private var details = WithdrawalAmountDetails(tosAccepted: false,
-                                                           amountRaw: Amount(currency: LONGCURRENCY, cent: 510),
-                                                     amountEffective: Amount(currency: LONGCURRENCY, cent: 500),
-                                                           paytoUris: [],
-                                               ageRestrictionOptions: [],
-                                                            numCoins: 6)
-    var body: some View {
+
+      var body: some View {
+        let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, url: DEMOEXCHANGE, currency: LONGCURRENCY)
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
                                        currency: LONGCURRENCY,
                                       paytoUris: [],
@@ -116,7 +114,16 @@ struct ManualWithdraw_Previews: PreviewProvider {
                             exchangeEntryStatus: .preset,
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
+        let details = WithdrawalAmountDetails(tosAccepted: false,
+                                                amountRaw: Amount(currency: LONGCURRENCY, cent: 510),
+                                          amountEffective: Amount(currency: LONGCURRENCY, cent: 500),
+                                                 numCoins: 6,
+//                                              paytoUris: [],
+                                   withdrawalAccountsList: [],
+                                    ageRestrictionOptions: [],
+                                                scopeInfo: scopeInfo)
         ManualWithdraw(stack: CallStack("Preview"),
+//                         url: nil,
                     exchange: exchange,
             amountToTransfer: $amountToTransfer,
      withdrawalAmountDetails: details)
