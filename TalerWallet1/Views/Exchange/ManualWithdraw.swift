@@ -20,6 +20,7 @@ struct ManualWithdraw: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
+    @State var tosAccepted = false
     @State var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
@@ -34,67 +35,74 @@ struct ManualWithdraw: View {
         let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
 //        let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
-        ScrollView { VStack {
-                CurrencyInputView(amount: $amountToTransfer,
-                               available: nil,
-                                   title: iconOnly ? String(localized: "How much:")
-                                                   : String(localized: "Amount to withdraw:"))
-                let someCoins = SomeCoins(details: withdrawalAmountDetails)
-                QuiteSomeCoins(someCoins: someCoins,
-                           shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
-                                currency: currency,
-                            currencyInfo: currencyInfo,
-                         amountEffective: withdrawalAmountDetails?.amountEffective)
-                Text(exchange.exchangeBaseUrl.trimURL())
-                    .multilineTextAlignment(.center)
-                    .accessibilityFont(.body)
-
-                let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
-                if !disabled {
-//                    agePicker
-
-                    if let tosAccepted = withdrawalAmountDetails?.tosAccepted {
-                        if tosAccepted {
-//                            let restrictAge: Int? = (selectedAge == 0) ? nil
-//                                                                       : selectedAge
-//let _ = print(selectedAge, restrictAge)
-                            NavigationLink(destination: LazyView {
-                                ManualWithdrawDone(stack: stack.push(),
-                                                exchange: exchange,
-                                        amountToTransfer: amountToTransfer)
-//                                              restrictAge: restrictAge)
-                            }) {
-                                Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
-                            }
-                            .buttonStyle(TalerButtonStyle(type: .prominent))
-                            .padding(.horizontal)
-                        } else {
-                            ToSButtonView(stack: stack.push(),
-                                exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                         viewID: VIEW_WITHDRAW_TOS,
-                                            p2p: false)
-                        }
-                    }
-                } // disabled
+        let someCoins = SomeCoins(details: withdrawalAmountDetails)
+//      let restrictAge: Int? = (selectedAge == 0) ? nil
+//                                                 : selectedAge
+//  let _ = print(selectedAge, restrictAge)
+        let destination = LazyView {
+            ManualWithdrawDone(stack: stack.push(),
+                            exchange: exchange,
+                    amountToTransfer: amountToTransfer)
+//                       restrictAge: restrictAge)
+        }
+        let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
+        ScrollView { VStack(alignment: .trailing) {
+            Text("via \(exchange.exchangeBaseUrl.trimURL())")
+                .multilineTextAlignment(.center)
+                .accessibilityFont(.body)
+            CurrencyInputView(amount: $amountToTransfer,
+                           available: nil,
+                               title: iconOnly ? String(localized: "How much:")
+                                               : String(localized: "Amount to withdraw:"))
+                .padding(.top)
+            QuiteSomeCoins(someCoins: someCoins,
+                       shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                            currency: currency,
+                        currencyInfo: currencyInfo,
+                     amountEffective: withdrawalAmountDetails?.amountEffective)
+//          agePicker
+            if tosAccepted {
+                NavigationLink(destination: destination) {
+                    Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
+                }
+                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .disabled(disabled)
+                .padding(.top)
+            } else {
+                ToSButtonView(stack: stack.push(),
+                    exchangeBaseUrl: exchange.exchangeBaseUrl,
+                             viewID: VIEW_WITHDRAW_TOS,
+                                p2p: false)
+                .padding(.top)
+            }
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
-            symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
+            symLog.log("❗️ \(navTitle) onAppear")
+        }
+        .onDisappear {
+            symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
-            if !amountToTransfer.isZero {
-                do {
-                    withdrawalAmountDetails = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
-                                                                                              amount: amountToTransfer)
+            do {
+                let amount = amountToTransfer.isZero ? Amount(currency: currency, cent: 100)
+                                                     : amountToTransfer
+//              if amountToTransfer.isZero {
+//                  tosAccepted = GetTosStatus(exchange.exchangeBaseUrl)
+//              } else {
+                    let details = try await model.loadWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
+                                                                                  amount: amount)
+                    tosAccepted = details.tosAccepted
+                    withdrawalAmountDetails = amountToTransfer.isZero ? nil : details
 //                  agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
-                    withdrawalAmountDetails = nil
-                }
+//              }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+                withdrawalAmountDetails = nil
             }
         }
     }
