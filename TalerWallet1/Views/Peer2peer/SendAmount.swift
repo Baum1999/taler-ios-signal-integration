@@ -61,6 +61,7 @@ struct SendAmount: View {
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
+        let disabled = insufficient || amountToTransfer.isZero
         ScrollView { VStack(alignment: .trailing) {
 //          let _ = print("available: \(available)")
             Text("Available:\t\(available)")
@@ -70,13 +71,11 @@ struct SendAmount: View {
                            available: amountAvailable,
                                title: iconOnly ? String(localized: "How much:")
                                                : String(localized: "Amount to send:"))
-            let disabled = insufficient || amountToTransfer.isZero
             Text(insufficient ? insufficientLabel
                               : feeLabel)
                 .accessibilityFont(.body)
                 .foregroundColor(.red)
                 .padding(4)
-
             NavigationLink(destination: LazyView {
                 P2PSubjectV(stack: stack.push(),
                      amountToSend: amountToTransfer,
@@ -98,10 +97,10 @@ struct SendAmount: View {
         .navigationTitle(navTitle)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-            symLog.log("❗️Yikes SendAmount onAppear")
+            symLog.log("❗️ \(navTitle) onAppear")
         }
         .onDisappear {
-            symLog.log("❗️Yikes SendAmount onDisappear")
+            symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) {
             do {

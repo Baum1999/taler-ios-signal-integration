@@ -26,13 +26,15 @@ struct WithdrawTOSView: View {
             Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
                 Task { // runs on MainActor
                     do {
-                        if let exchangeBaseUrl {
-                            _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS!.currentEtag)
+                        if let exchangeBaseUrl, let exchangeTOS {
+                            _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
                             if acceptAction != nil {
                                 acceptAction!()
                             } else { // just go back - caller will reload
                                 self.presentationMode.wrappedValue.dismiss()
                             }
+                        } else {
+                            // TODO: error
                         }
                     } catch {    // TODO: Show Error
                         symLog.log(error.localizedDescription)

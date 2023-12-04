@@ -39,47 +39,45 @@ struct RequestPayment: View {
                             defaultValue: "Request \(amountStr)",
                                  comment: "NavTitle: Request 'amountStr'")
 
+        let someCoins = SomeCoins(details: peerPullCheck)
+        let p2pSubjectV = LazyView {
+            P2PSubjectV(stack: stack.push(),
+                 amountToSend: nil,
+              amountToReceive: amountToTransfer,
+                     navTitle: navTitle2,
+                  buttonTitle: buttonTitle,
+                     feeLabel: someCoins.feeLabel(currencyInfo),
+                 currencyInfo: currencyInfo,
+                      summary: $summary,
+                   expireDays: $expireDays)
+        }
         let _ = symLog.log("currency: \(currency)")
+        let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
                                title: iconOnly ? String(localized: "How much:")
                                                : String(localized: "Amount to request:"))
-            .padding(.top)
-            let someCoins = SomeCoins(details: peerPullCheck)
+                .padding(.top)
             QuiteSomeCoins(someCoins: someCoins,
                        shouldShowFee: true,     // always true since the requester pays fees
                             currency: currency,
                         currencyInfo: currencyInfo,
                      amountEffective: peerPullCheck?.amountEffective)
-
-            let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
-
-            NavigationLink(destination: LazyView {
-                P2PSubjectV(stack: stack.push(),
-                     amountToSend: nil,
-                  amountToReceive: amountToTransfer,
-                         navTitle: navTitle2,
-                      buttonTitle: buttonTitle,
-                         feeLabel: someCoins.feeLabel(currencyInfo),
-                     currencyInfo: currencyInfo,
-                          summary: $summary,
-                       expireDays: $expireDays)
-            }) { Text("Next") }
+            NavigationLink(destination: p2pSubjectV) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-//            Spacer()
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal)
+        .padding(.horizontal)   // Lists do this automatically, but this is a VStack
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_REQUEST, stack: stack.push())
-            symLog.log("❗️Yikes \(navTitle) onAppear")
+            symLog.log("❗️ \(navTitle) onAppear")
         }
         .onDisappear {
-            symLog.log("❗️Yikes \(navTitle) onDisappear")
+            symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) {
             if amountToTransfer.isZero {
