@@ -14,23 +14,17 @@ struct ExchangeSectionView: View {
     let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
 
-    func setCurrency() -> String {
-        amountToTransfer.setCurrency(currency)
-        return currency
-    }
-
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency2 = setCurrency()           // update currency in amountToTransfer
         Section {
             ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
-                             currency: currency2,            // TODO: (balance.available) amount.isZero to disable Deposit-button
-                     amountToTransfer: $amountToTransfer)
+                             currency: currency,            // TODO: (balance.available) amount.isZero to disable Deposit-button
+                     amountToTransfer: $amountToTransfer)   // does still have the wrong currency
             }
         } header: {
             BarGraphHeader(stack: stack.push(), currency: currency)

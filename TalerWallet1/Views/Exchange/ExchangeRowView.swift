@@ -4,18 +4,23 @@
  */
 import SwiftUI
 import taler_swift
+import SymLog
 
 struct ExchangeRowView: View {
+    private let symLog = SymLogV()
     let stack: CallStack
     let exchange: Exchange
-    let currency: String
-    @Binding var amountToTransfer: Amount
+    let currency: String                        // this is the currency to be used
+    @Binding var amountToTransfer: Amount       // does still have the wrong currency
 
     @Environment(\.sizeCategory) var sizeCategory
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("iconOnly") var iconOnly: Bool = false
     @State private var buttonSelected: Int? = nil
 
     func selectAndUpdate(_ button: Int) {
+        amountToTransfer.setCurrency(currency)
         buttonSelected = button      // will trigger NavigationLink
         // TODO: after user tapped a button, while navigation animation runs, contact Exchange to update Fees
         // cannot be uncommented yet since there is no scopeInfo
@@ -29,6 +34,13 @@ struct ExchangeRowView: View {
     }
 
     var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+        let delay: UInt = 0     // set to 5 to test delayed currency information
+#else
+        let delay: UInt = 0
+#endif
         let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
                                    comment: "Abbreviation of `Deposit (currency)´")
         let depositTitle1 = String(localized: "Deposit\t\(currency)",
@@ -39,50 +51,65 @@ struct ExchangeRowView: View {
         let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
                                     comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let baseURL = exchange.exchangeBaseUrl
-
-        HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
-            Text(baseURL.trimURL())
-                .accessibilityFont(.headline)
-            NavigationLink(destination: LazyView {
-                EmptyView()     // TODO: Deposit
-            }, tag: 1, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0)
-            NavigationLink(destination: LazyView {
-                ManualWithdraw(stack: stack.push(),
-//                                 url: nil,
-                            exchange: exchange,
-                    amountToTransfer: $amountToTransfer)
-            }, tag: 2, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0)
-        }.listRowSeparator(.hidden)
-        NavigationLink(destination: LazyView {
+        let deposit = LazyView {
+            EmptyView()     // TODO: Deposit
+        }
+        let manualWithdraw = LazyView {
+            ManualWithdraw(stack: stack.push(),
+//                           url: nil,
+                        exchange: exchange,
+                amountToTransfer: $amountToTransfer)
+        }
+        let showToS = LazyView {
             WithdrawTOSView(stack: stack.push(),
-                            exchangeBaseUrl: baseURL,
-                            viewID: VIEW_WITHDRAW_TOS,
-                            acceptAction: nil)         // pop back to here
-        }) {
-            Text("Terms of Service")  // VIEW_WITHDRAW_TOS
-                .accessibilityFont(.body)
-        }.listRowSeparator(.hidden)
-
-        let depositTitle = iconOnly ? depositTitle0 : depositTitle1
-        let withdrawTitle = iconOnly ? withdrawTitle0 : withdrawTitle1
-        let twoRowButtons = TwoRowButtons(sendTitle: depositTitle,
-                                          recvTitle: withdrawTitle,
+                  exchangeBaseUrl: baseURL,
+                           viewID: VIEW_WITHDRAW_TOS,
+                     acceptAction: nil)         // pop back to here
+        }
+        let twoRowButtons = TwoRowButtons(sendTitle: iconOnly ? depositTitle0 : depositTitle1,
+                                          recvTitle: iconOnly ? withdrawTitle0 : withdrawTitle1,
                                      fitsSideBySide: false,
                                           lineLimit: 5,
                                        sendDisabled: true,             // TODO: availableAmount.isZero
                                          sendAction: { selectAndUpdate(1) },
                                          recvAction: { selectAndUpdate(2) })
-        if #available(iOS 16.0, *) {
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: HSPACING) {
-                    twoRowButtons.makeCopy(fitsSideBySide: true)
+        Group {
+            HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
+                Text(baseURL.trimURL())
+                    .accessibilityFont(.headline)
+                NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
+                { EmptyView() }.frame(width: 0).opacity(0)
+                NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
+                { EmptyView() }.frame(width: 0).opacity(0)
+            }.listRowSeparator(.hidden)
+            NavigationLink(destination: showToS) {
+                Text("Terms of Service")  // VIEW_WITHDRAW_TOS
+                    .accessibilityFont(.body)
+            }.listRowSeparator(.hidden)
+            if #available(iOS 16.0, *) {
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: HSPACING) {
+                        twoRowButtons.makeCopy(fitsSideBySide: true)
+                    }
+                    VStack { twoRowButtons }
                 }
+            } else { // view for iOS 15
                 VStack { twoRowButtons }
             }
-        } else { // view for iOS 15
-            VStack { twoRowButtons }
+        }
+        .task {
+            if !controller.hasInfo(for: currency) {
+                symLog.log("fetching info for \(currency)")
+                // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
+                let scopeInfo = exchange.scopeInfo ?? ScopeInfo(type: .global, currency: currency)
+                do {
+                    let info = try await model.getCurrencyInfo(scope: scopeInfo, delay: delay)
+//                    logger.info("got info: \(scope.currency, privacy: .public)")
+                    await controller.setInfo(info)
+                } catch {    // TODO: error handling - couldn't get CurrencyInfo
+//                    logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
+                }
+            }
         }
     }
 }
