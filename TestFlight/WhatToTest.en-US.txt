@@ -1,8 +1,15 @@
 
+Version 0.9.3 (30)
+
+• New feature: 
+- Bugfix: Manual withdrawal works again (was broken in 29)
+- Bugfix: Currency input with zero fractional digits (test.taler.net)
+
+
 Version 0.9.3 (29)
 
 • New feature: ToS in Exchanges Tab
-- BugFix: P2P Send works again (was broken in 28)
+- Bugfix: P2P Send works again (was broken in 28)
 
 
 Version 0.9.3 (28)
@@ -20,7 +27,7 @@ Version 0.9.3 (27)
     Notice the difference in the Pending list
 • KYC in pending transactions accessible from details
 
-- BugFix: after P2P no QR code was shown
+- Bugfix: after P2P no QR code was shown
 - Layout improvements iOS16+. We'll continue to support iOS15, it just won't look so nice as on iOS 16+.
 
 
@@ -29,7 +36,7 @@ Version 0.9.3 (26)
 • New feature: KYC Support. But you won't get a second chance if you don't use the first one.
     (KYC will be added to pending transactions in the next version)
 
-- BugFix: With more than one exchange currencies were mixed in P2P
+- Bugfix: With more than one exchange currencies were mixed in P2P
 - The whole textfield can now be used to bring up the keyboard in P2P
 
 
@@ -38,7 +45,7 @@ Version 0.9.3 (25)
 • New feature: Shortcuts Buttons (50,25,10,5) for P2P + Withdrawal
 
 - CurrencyFormatter for P2P + Withdrawal
-- BugFix: Accessibility announcements always did reset the focus to start of view
+- Bugfix: Accessibility announcements always did reset the focus to start of view
 
 A/B test result: Nobody liked GNU Taler (with SideView & Hamburger-button) better,
 thus we concentrate on Taler Wallet (with TabBar)
@@ -49,7 +56,7 @@ Version 0.9.3 (24)
 • Sound & Haptics ON by default
 • Blue Taler Logo
 - Lots of Accessibility improvements
-- BugFix: P2P Transactions were started twice
+- Bugfix: P2P Transactions were started twice
 - Incomplete Transactions no longer show "Obtained" or "Paid"
 
 
@@ -66,7 +73,7 @@ Version 0.9.3 (22)
 
 Version 0.9.3 (21)
 
-- BugFix: P2P payments should work again
+- Bugfix: P2P payments should work again
 - CurrencyFormatter for Balance
 
 
