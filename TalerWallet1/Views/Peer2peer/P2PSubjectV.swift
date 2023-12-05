@@ -9,14 +9,12 @@ import SymLog
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-
-    let amountToSend: Amount?
-    let amountToReceive: Amount?
-//    let amountToTransfer: Amount
     let navTitle: String
     let buttonTitle: String
     let feeLabel: String
     let currencyInfo: CurrencyInfo
+    let amountToSend: Bool
+    @Binding var amountToTransfer: Amount
     @Binding var summary: String
     @Binding var expireDays: UInt
 
@@ -81,10 +79,10 @@ struct P2PSubjectV: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
                     P2PReadyV(stack: stack.push(),
-                       amountToSend: amountToSend,
-                    amountToReceive: amountToReceive,
                             summary: summary,
                          expireDays: expireDays,
+                       amountToSend: amountToSend,
+                   amountToTransfer: amountToTransfer,
                  transactionStarted: $transactionStarted)
                 }) {
                     Text(buttonTitle)

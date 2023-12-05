@@ -78,12 +78,12 @@ struct SendAmount: View {
                 .padding(4)
             NavigationLink(destination: LazyView {
                 P2PSubjectV(stack: stack.push(),
-                     amountToSend: amountToTransfer,
-                  amountToReceive: nil,
                          navTitle: navTitle2,
                       buttonTitle: buttonTitle,
                          feeLabel: feeLabel,
                      currencyInfo: currencyInfo,
+                     amountToSend: true,
+                 amountToTransfer: $amountToTransfer,
                           summary: $summary,
                        expireDays: $expireDays)
             }) { Text("Next") }

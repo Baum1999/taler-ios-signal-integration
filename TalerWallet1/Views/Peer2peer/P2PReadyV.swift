@@ -10,10 +10,10 @@ import SymLog
 struct P2PReadyV: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    let amountToSend: Amount?
-    let amountToReceive: Amount?
     let summary: String
     let expireDays: UInt
+    let amountToSend: Bool
+    let amountToTransfer: Amount
     @Binding var transactionStarted: Bool
 
     @EnvironmentObject private var model: WalletModel
@@ -74,23 +74,23 @@ struct P2PReadyV: View {
                 let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
                                                                       : expireDays > 5 ? 60 : 3)
                                               : Timestamp.inSomeDays(expireDays)
-                if let amountToSend {
-                    let terms = PeerContractTerms(amount: amountToSend,
+                if amountToSend {
+                    let terms = PeerContractTerms(amount: amountToTransfer,
                                                  summary: summary,
                                         purse_expiration: timestamp)
                     // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
                     // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId
-                } else if let amountToReceive {
-                    let terms = PeerContractTerms(amount: amountToReceive,
+                } else {
+                    let terms = PeerContractTerms(amount: amountToTransfer,
                                                  summary: summary,
                                         purse_expiration: timestamp)
                     // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
                     // will switch from WithdrawProgressView to TransactionDetailView
                     transactionId = response.transactionId
-                } else { fatalError() }
+                }
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
             }
