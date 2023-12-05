@@ -62,7 +62,7 @@ struct P2PReadyV: View {
         .onDisappear {
 //            print("❗️ P2PReadyV onDisappear")
         }
-        .task {
+        .task(id: amountToTransfer.value) {
             symLog.log(".task")
             do {
                 guard transactionStarted == false else {

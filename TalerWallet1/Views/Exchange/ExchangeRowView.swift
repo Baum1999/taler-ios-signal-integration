@@ -78,9 +78,9 @@ struct ExchangeRowView: View {
                 Text(baseURL.trimURL())
                     .accessibilityFont(.headline)
                 NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0)
+                    { EmptyView() }.frame(width: 0).opacity(0)
                 NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0)
+                    { EmptyView() }.frame(width: 0).opacity(0)
             }.listRowSeparator(.hidden)
             NavigationLink(destination: showToS) {
                 Text("Terms of Service")  // VIEW_WITHDRAW_TOS

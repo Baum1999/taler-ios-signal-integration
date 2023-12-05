@@ -20,8 +20,8 @@ struct SendAmount: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
-    @State private var expireDays: UInt = SEVENDAYS
-    @State private var insufficient: Bool = false
+    @State private var expireDays = SEVENDAYS
+    @State private var insufficient = false
     @State private var feeStr: String = EMPTYSTRING
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
@@ -56,6 +56,7 @@ struct SendAmount: View {
                                  comment: "NavTitle: Send 'amountStr'")
 
         let available = amountAvailable.string(currencyInfo)
+//        let _ = print("available: \(available)")
         let _ = symLog.log("currency: \(currency), available: \(available)")
         let amountVoiceOver = amountToTransfer.string(currencyInfo)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
@@ -63,7 +64,6 @@ struct SendAmount: View {
 
         let disabled = insufficient || amountToTransfer.isZero
         ScrollView { VStack(alignment: .trailing) {
-//          let _ = print("available: \(available)")
             Text("Available:\t\(available)")
                 .accessibilityFont(.title3)
                 .padding(.bottom, 2)
@@ -105,7 +105,6 @@ struct SendAmount: View {
         .task(id: amountToTransfer.value) {
             do {
                 insufficient = try amountToTransfer > amountAvailable
-                print("amountStr: \(amountVoiceOver)")
             } catch {
                 print("Yikes❗️ insufficient failed❗️")
                 insufficient = true
@@ -136,14 +135,14 @@ struct SendAmount: View {
 // MARK: -
 #if DEBUG
 fileprivate struct Preview_Content: View {
-    @State private var amountToTransfer = Amount(currency: TESTCURRENCY, cent: 510)
+    @State private var amountToPreview = Amount(currency: TESTCURRENCY, cent: 510)
     @State private var summary: String = ""
 
     var body: some View {
         let amount = Amount(currency: TESTCURRENCY, integer: 10, fraction: 0)
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
-        amountToTransfer: $amountToTransfer,
+        amountToTransfer: $amountToPreview,
                  summary: $summary)
     }
 }

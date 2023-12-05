@@ -22,7 +22,7 @@ struct BalancesListView: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var lastReloadedBalances = 0
-    @State private var amountToTransfer = Amount.zero(currency: "")             // Update currency when used
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary: String = ""
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
