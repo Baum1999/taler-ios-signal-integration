@@ -9,7 +9,7 @@ import SymLog
 // Will be called either by the user scanning a QR code or tapping the provided link,
 // both from the shop's website. We show the payment details
 struct PayTemplateView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 

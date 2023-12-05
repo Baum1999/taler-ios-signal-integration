@@ -22,7 +22,7 @@ extension Transaction {             // for Dummys
 }
 // MARK: -
 struct TransactionDetailView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)

@@ -8,7 +8,7 @@ import SymLog
 
 // Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
 struct P2PReadyV: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let summary: String
     let expireDays: UInt

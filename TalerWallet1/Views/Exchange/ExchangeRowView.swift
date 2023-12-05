@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 struct ExchangeRowView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let exchange: Exchange
     let currency: String                        // this is the currency to be used
