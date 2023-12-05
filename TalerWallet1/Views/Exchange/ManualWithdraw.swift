@@ -53,7 +53,8 @@ struct ManualWithdraw: View {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to withdraw:"))
+                                               : String(localized: "Amount to withdraw:"),
+                      shortcutAction: nil)
                 .padding(.top)
             QuiteSomeCoins(someCoins: someCoins,
                        shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees

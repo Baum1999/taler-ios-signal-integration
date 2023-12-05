@@ -6,33 +6,61 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
+    do {
+        // Outgoing: fee = effective - raw
+        let fee = try ppCheck.amountEffective - ppCheck.amountRaw
+        return fee
+    } catch {}
+    return nil
+}
+
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle: String
-    let buttonTitle: String
-    let feeLabel: String
+    let feeLabel: String?
     let currencyInfo: CurrencyInfo
     let amountToSend: Bool
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     @Binding var expireDays: UInt
 
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
+    @State private var myFeeLabel: String = EMPTYSTRING
     @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool
+
+    private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+        let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        return amountToSend ? String(localized: "Send \(amountWithCurrency) now",
+                                       comment: "amount with currency")
+                            : String(localized: "Request \(amountWithCurrency)",
+                                       comment: "amount with currency")
+    }
+
+    private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+        let amountStr = amount.string(currencyInfo)
+        return amountToSend ? String(localized: "NavTitle_Send_AmountStr",
+                                  defaultValue: "Send \(amountStr)",
+                                       comment: "NavTitle: Send 'amountStr'")
+                            : String(localized: "NavTitle_Request_AmountStr",
+                                  defaultValue: "Request \(amountStr)",
+                                       comment: "NavTitle: Request 'amountStr'")
+    }
 
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+        let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         ScrollView { VStack (alignment: .leading, spacing: 6) {
-            if feeLabel.count > 0 {
+            let label = feeLabel ?? myFeeLabel
+            if label.count > 0 {
                 HStack {
                     Spacer()
-                    Text(feeLabel)
+                    Text(label)
                         .foregroundColor(.red)
                         .accessibilityFont(.body)
                 }
@@ -85,13 +113,13 @@ struct P2PSubjectV: View {
                    amountToTransfer: amountToTransfer,
                  transactionStarted: $transactionStarted)
                 }) {
-                    Text(buttonTitle)
+                    Text(buttonTitle(amountToTransfer, currencyInfo))
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
-        .navigationTitle(navTitle)
+        .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SUBJECT, stack: stack.push())
@@ -99,6 +127,19 @@ struct P2PSubjectV: View {
         }
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
+        }
+        .task(id: amountToTransfer.value) {
+            if feeLabel == nil {
+                do {
+                    let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
+                    if let feeAmount = p2pFee(ppCheck: ppCheck) {
+                        let feeStr = feeAmount.string(currencyInfo)
+                        myFeeLabel = String(localized: "+ \(feeStr) send fee")
+                    } else { myFeeLabel = EMPTYSTRING }
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                }
+            }
         }
     }
 }

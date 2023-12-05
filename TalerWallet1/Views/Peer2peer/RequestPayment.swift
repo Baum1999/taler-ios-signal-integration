@@ -20,6 +20,13 @@ struct RequestPayment: View {
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
+    @State private var buttonSelected = false
+    @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+
+    private func shortcutAction(_ shortcut: Amount) {
+        amountShortcut = shortcut
+        buttonSelected = true
+    }
 
     var body: some View {
 #if DEBUG
@@ -32,41 +39,45 @@ struct RequestPayment: View {
         let navTitle = String(localized: "NavTitle_Request_Currency",
                            defaultValue: "Request \(currencySymbol)",
                                 comment: "NavTitle: Request 'currencySymbol'")
-        let amountStr = amountToTransfer.string(currencyInfo)
-        let amountWithCurrency = amountToTransfer.string(currencyInfo, useSymbol: false)
-        let buttonTitle = String(localized: "Request \(amountWithCurrency)", comment: "amount with currency")
-        let navTitle2 = String(localized: "NavTitle_Request_AmountStr",
-                            defaultValue: "Request \(amountStr)",
-                                 comment: "NavTitle: Request 'amountStr'")
-
         let someCoins = SomeCoins(details: peerPullCheck)
-        let p2pSubjectV = LazyView {
+        let _ = symLog.log("currency: \(currency)")
+        let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                 amountToSend: nil,
-              amountToReceive: amountToTransfer,
-                     navTitle: navTitle2,
-                  buttonTitle: buttonTitle,
                      feeLabel: someCoins.feeLabel(currencyInfo),
                  currencyInfo: currencyInfo,
+                 amountToSend: false,
+             amountToTransfer: $amountToTransfer,
                       summary: $summary,
                    expireDays: $expireDays)
         }
-        let _ = symLog.log("currency: \(currency)")
+        let shortcutDestination = LazyView {
+            P2PSubjectV(stack: stack.push(),
+                     feeLabel: nil,
+                 currencyInfo: currencyInfo,
+                 amountToSend: false,
+             amountToTransfer: $amountShortcut,
+                      summary: $summary,
+                   expireDays: $expireDays)
+        }
         let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to request:"))
+                                               : String(localized: "Amount to request:"),
+                      shortcutAction: shortcutAction)
                 .padding(.top)
             QuiteSomeCoins(someCoins: someCoins,
                        shouldShowFee: true,     // always true since the requester pays fees
                             currency: currency,
                         currencyInfo: currencyInfo,
                      amountEffective: peerPullCheck?.amountEffective)
-            NavigationLink(destination: p2pSubjectV) { Text("Next") }
+            NavigationLink(destination: inputDestination) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
+                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                )
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)   // Lists do this automatically, but this is a VStack

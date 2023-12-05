@@ -23,6 +23,8 @@ struct SendAmount: View {
     @State private var expireDays = SEVENDAYS
     @State private var insufficient = false
     @State private var feeStr: String = EMPTYSTRING
+    @State private var buttonSelected = false
+    @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
@@ -37,6 +39,11 @@ struct SendAmount: View {
     
     var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) send fee") : EMPTYSTRING }
 
+    private func shortcutAction(_ shortcut: Amount) {
+        amountShortcut = shortcut
+        buttonSelected = true
+    }
+
     var body: some View {
 #if DEBUG
         let _ = Self._printChanges()
@@ -48,13 +55,6 @@ struct SendAmount: View {
         let navTitle = String(localized: "NavTitle_Send_Currency",
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")
-        let amountStr = amountToTransfer.string(currencyInfo)
-        let amountWithCurrency = amountToTransfer.string(currencyInfo, useSymbol: false)
-        let buttonTitle = String(localized: "Send \(amountWithCurrency) now", comment: "amount with currency")
-        let navTitle2 = String(localized: "NavTitle_Send_AmountStr",
-                            defaultValue: "Send \(amountStr)",
-                                 comment: "NavTitle: Send 'amountStr'")
-
         let available = amountAvailable.string(currencyInfo)
 //        let _ = print("available: \(available)")
         let _ = symLog.log("currency: \(currency), available: \(available)")
@@ -62,6 +62,24 @@ struct SendAmount: View {
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
+        let inputDestination = LazyView {
+            P2PSubjectV(stack: stack.push(),
+                     feeLabel: feeLabel,
+                 currencyInfo: currencyInfo,
+                 amountToSend: true,
+             amountToTransfer: $amountToTransfer,
+                      summary: $summary,
+                   expireDays: $expireDays)
+        }
+        let shortcutDestination = LazyView {
+            P2PSubjectV(stack: stack.push(),
+                     feeLabel: nil,
+                 currencyInfo: currencyInfo,
+                 amountToSend: true,
+             amountToTransfer: $amountShortcut,
+                      summary: $summary,
+                   expireDays: $expireDays)
+        }
         let disabled = insufficient || amountToTransfer.isZero
         ScrollView { VStack(alignment: .trailing) {
             Text("Available:\t\(available)")
@@ -70,26 +88,19 @@ struct SendAmount: View {
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
                                title: iconOnly ? String(localized: "How much:")
-                                               : String(localized: "Amount to send:"))
+                                               : String(localized: "Amount to send:"),
+                      shortcutAction: shortcutAction)
             Text(insufficient ? insufficientLabel
                               : feeLabel)
                 .accessibilityFont(.body)
                 .foregroundColor(.red)
                 .padding(4)
-            NavigationLink(destination: LazyView {
-                P2PSubjectV(stack: stack.push(),
-                         navTitle: navTitle2,
-                      buttonTitle: buttonTitle,
-                         feeLabel: feeLabel,
-                     currencyInfo: currencyInfo,
-                     amountToSend: true,
-                 amountToTransfer: $amountToTransfer,
-                          summary: $summary,
-                       expireDays: $expireDays)
-            }) { Text("Next") }
+            NavigationLink(destination: inputDestination) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
                 .disabled(disabled)
-//            Spacer()
+                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
+                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                )
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)

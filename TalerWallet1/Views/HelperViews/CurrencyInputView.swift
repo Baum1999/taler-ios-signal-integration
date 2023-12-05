@@ -55,6 +55,7 @@ struct CurrencyInputView: View {
     @Binding var amount: Amount         // the `value´
     let available: Amount?
     let title: String
+    let shortcutAction: ((_ amount: Amount) -> Void)?
 
     @EnvironmentObject private var controller: Controller
     
@@ -63,11 +64,15 @@ struct CurrencyInputView: View {
     @State private var useShortcut = 0
 
     func action(shortcut: Int, currencyField: CurrencyField) {
-        useShortcut = shortcut
         let shortie = Amount(currency: amount.currencyStr, cent: UInt64(shortcut))      // TODO: adapt for ¥
-        currencyField.updateText(amount: shortie)
-        amount = shortie
-        currencyField.resignFirstResponder()
+        if let shortcutAction {
+            shortcutAction(shortie)
+        } else {
+            useShortcut = shortcut
+            currencyField.updateText(amount: shortie)
+            amount = shortie
+            currencyField.resignFirstResponder()
+        }
     }
 
     var body: some View {
@@ -168,7 +173,8 @@ fileprivate struct Previews: PreviewProvider {
 //            Preview_Content()
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
-                               title: "Amount to withdraw:")
+                               title: "Amount to withdraw:",
+                      shortcutAction: nil)
                 .environmentObject(controller)
         }
     }
