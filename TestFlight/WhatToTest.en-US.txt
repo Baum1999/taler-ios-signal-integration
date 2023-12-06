@@ -1,7 +1,14 @@
 
+Version 0.9.3 (31)
+
+• New feature: Shortcuts in P2P directly advance to subject
+• New feature: ToS in P2P receive
+
+- improved withdrawal UI
+
+
 Version 0.9.3 (30)
 
-• New feature: 
 - Bugfix: Manual withdrawal works again (was broken in 29)
 - Bugfix: Currency input with zero fractional digits (test.taler.net)
 
