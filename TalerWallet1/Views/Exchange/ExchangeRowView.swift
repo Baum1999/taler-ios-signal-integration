@@ -56,8 +56,7 @@ struct ExchangeRowView: View {
         }
         let manualWithdraw = LazyView {
             ManualWithdraw(stack: stack.push(),
-//                           url: nil,
-                        exchange: exchange,
+                 exchangeBaseUrl: baseURL,
                 amountToTransfer: $amountToTransfer)
         }
         let showToS = LazyView {

@@ -21,14 +21,13 @@ struct WithdrawURIView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    // the exchange used for this withdrawal.
-    @State private var exchangeBaseUrl: String? = nil
-    @State private var withdrawalAmountDetails: WithdrawalAmountDetails?
+    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
+    @State private var exchange: Exchange? = nil
 
     var body: some View {
         let badURL = "Error in URL: \(url)"
         VStack {
-            if let withdrawalAmountDetails, let exchangeBaseUrl {
+            if let withdrawalAmountDetails, let exchange {
                 List {
                     let raw = withdrawalAmountDetails.amountRaw
                     let effective = withdrawalAmountDetails.amountEffective
@@ -45,7 +44,7 @@ struct WithdrawURIView: View {
                               bottomAbbrev: String(localized: "Effective:"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
-                                   baseURL: exchangeBaseUrl)
+                                   baseURL: exchange.exchangeBaseUrl)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins,
                                shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
@@ -55,11 +54,10 @@ struct WithdrawURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                let tosAccepted = withdrawalAmountDetails.tosAccepted
-                if tosAccepted {
+                if exchange.tosStatus == .accepted {
                     NavigationLink(destination: LazyView {
                         WithdrawAcceptDone(stack: stack.push(),
-                                 exchangeBaseUrl: exchangeBaseUrl,
+                                 exchangeBaseUrl: exchange.exchangeBaseUrl,
                                              url: url)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
@@ -68,12 +66,12 @@ struct WithdrawURIView: View {
                     .padding(.horizontal)
                 } else {
                     ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: exchangeBaseUrl,
+                        exchangeBaseUrl: exchange.exchangeBaseUrl,
                                  viewID: SHEET_WITHDRAW_TOS,
                                     p2p: false)
                 }
             } else {
-                // Yikes no details or no baseURL
+                // Yikes no details or no exchange
                 WithdrawProgressView(message: url.host ?? badURL)
                     .navigationTitle("Contacting Exchange")
             }
@@ -86,15 +84,16 @@ struct WithdrawURIView: View {
             do { // TODO: cancelled
                 symLog.log(".task")
                 let withdrawUriInfo = try await model.loadWithdrawalDetailsForUriM(url.absoluteString)
-                exchangeBaseUrl = withdrawUriInfo.defaultExchangeBaseUrl ??
-                                  withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
-                if let exchangeBaseUrl {
-                    let amount = withdrawUriInfo.amount
-                    let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
+                let amount = withdrawUriInfo.amount
+                let baseUrl = withdrawUriInfo.defaultExchangeBaseUrl
+                           ?? withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
+                if let baseUrl, let exc = await model.getExchangeByUrl(url: baseUrl) {
+                    exchange = exc
+                    let details = try await model.loadWithdrawalDetailsForAmountM(baseUrl, amount: amount)
                     withdrawalAmountDetails = details
-//                  agePicker.setAges(ages: details?.ageRestrictionOptions)
+//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
                 } else {    // TODO: error
-                    symLog.log("no exchangeBaseUrl")
+                    symLog.log("no exchangeBaseUrl or no exchange")
                     withdrawalAmountDetails = nil
                 }
             } catch {    // TODO: error

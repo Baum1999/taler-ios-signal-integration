@@ -19,7 +19,8 @@ struct P2pReceiveURIView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var peerPushCreditResponse: PreparePeerPushCreditResponse?
+    @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
+    @State private var exchange: Exchange? = nil
 
     var body: some View {
         let badURL = "Error in URL: \(url)"
@@ -41,7 +42,7 @@ struct P2pReceiveURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                let tosAccepted = true  // TODO: https://bugs.gnunet.org/view.php?id=7869
+                let tosAccepted = exchange?.tosStatus == .accepted
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         P2pAcceptDone(stack: stack.push(),
@@ -54,7 +55,7 @@ struct P2pReceiveURIView: View {
                     .padding(.horizontal)
                 } else {
                     ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: nil,
+                        exchangeBaseUrl: peerPushCreditResponse.exchangeBaseUrl,
                                  viewID: SHEET_RCV_P2P_TOS,
                                     p2p: true)
                 }
@@ -71,8 +72,9 @@ struct P2pReceiveURIView: View {
         .task {
             do { // TODO: cancelled
                 symLog.log(".task")
-                let ppCreditResponse = try await model.preparePeerPushCreditM(url.absoluteString)
-                peerPushCreditResponse = ppCreditResponse
+                let ppResponse = try await model.preparePeerPushCreditM(url.absoluteString)
+                exchange = await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
+                peerPushCreditResponse = ppResponse
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 peerPushCreditResponse = nil
