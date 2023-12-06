@@ -93,6 +93,19 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
     }
 }
 
+/// A request to get info for one exchange.
+fileprivate struct GetExchangeByUrl: WalletBackendFormattedRequest {
+    typealias Response = Exchange
+    func operation() -> String { "getExchangeEntryByUrl" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
+
+    var exchangeBaseUrl: String
+
+    struct Args: Encodable {
+        var exchangeBaseUrl: String
+    }
+}
+
 /// A request to update a single exchange.
 fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
@@ -158,8 +171,21 @@ extension WalletModel {
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
+    func getExchangeByUrl(url: String)
+      async -> Exchange? {
+        do {
+            let request = GetExchangeByUrl(exchangeBaseUrl: url)
+            logger.info("query for exchange: \(url, privacy: .public)")
+            let response = try await sendRequest(request)
+            return response
+        } catch {
+            return nil
+        }
+    }
+
+    /// add a new exchange with URL to the wallet's list of known exchanges
     func addExchange(url: String)
-      async throws  {
+    async throws {
         let request = AddExchange(exchangeBaseUrl: url)
         logger.info("adding exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request)

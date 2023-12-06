@@ -18,8 +18,10 @@ struct AccountRestriction: Decodable {
     var human_hint_i18n: String?
 }
 struct WithdrawalExchangeAccountDetails: Decodable {
+    var bankName: String?
     var paytoUri: String
     var transferAmount: Amount
+    var currencySpecification: CurrencySpecification?
     var creditRestrictions: [AccountRestriction]?
 }
 // MARK: -

@@ -165,6 +165,8 @@ struct PreparePeerPushCreditResponse: Codable {
     let contractTerms: PeerContractTerms
     let amountRaw: Amount
     let amountEffective: Amount
+    let exchangeBaseUrl: String
+//    let peerPushCreditId: String
     // the dialog transaction is already created in the local DB - must either accept or delete
     let transactionId: String
 }
