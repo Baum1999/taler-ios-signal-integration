@@ -63,7 +63,7 @@ struct RequestPayment: View {
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
-                               title: iconOnly ? String(localized: "How much:")
+                               title: iconOnly ? String(localized: "Amount:")
                                                : String(localized: "Amount to request:"),
                       shortcutAction: shortcutAction)
                 .padding(.top)

@@ -52,7 +52,7 @@ struct ManualWithdraw: View {
                 .accessibilityFont(.body)
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
-                               title: iconOnly ? String(localized: "How much:")
+                               title: iconOnly ? String(localized: "Amount:")
                                                : String(localized: "Amount to withdraw:"),
                       shortcutAction: nil)
                 .padding(.top)

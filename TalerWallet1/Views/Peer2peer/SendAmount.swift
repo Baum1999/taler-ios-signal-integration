@@ -87,7 +87,7 @@ struct SendAmount: View {
                 .padding(.bottom, 2)
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
-                               title: iconOnly ? String(localized: "How much:")
+                               title: iconOnly ? String(localized: "Amount:")
                                                : String(localized: "Amount to send:"),
                       shortcutAction: shortcutAction)
             Text(insufficient ? insufficientLabel
