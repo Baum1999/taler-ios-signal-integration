@@ -100,7 +100,13 @@ struct SettingsView: View {
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
 #if DEBUG
-                Text("https://bank.taler.grothoff.org/")
+                Group {
+                    Text("https://bank.taler.grothoff.org/")
+                    Text("https://bank.taler.fdold.eu/")
+                    Text("https://bank.head.taler.net/")
+                    Text("https://bank.test.taler.net/")
+                    Text("https://bank.demo.taler.net/")
+                }
 #endif
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
