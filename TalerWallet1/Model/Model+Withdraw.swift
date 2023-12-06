@@ -45,7 +45,6 @@ fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
 // MARK: -
 /// The result from getWithdrawalDetailsForAmount
 struct WithdrawalAmountDetails: Decodable {
-    var tosAccepted: Bool               // Did the user accept the current version of the exchange's terms of service?
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
     var numCoins: Int?                  // Number of coins this amountEffective will create
@@ -68,14 +67,9 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
 }
 // MARK: -
 enum ExchangeTosStatus: String, Codable {
-    case new = "new"                                                            // deprecated
-//    case accepted = "accepted"                                                  // old == new
-    case changed = "changed"                                                    // deprecated
-    case notFound = "not-found"                                                 // deprecated
-    case unknown = "unknown"                                                    // deprecated
-    case pending                                                // new, but not yet deployed in demo.taler.net
-    case proposed                                               // new, but not yet deployed in demo.taler.net
-    case accepted                                               // new == old
+    case pending
+    case proposed
+    case accepted
 }
 struct ExchangeTermsOfService: Decodable {
     var currentEtag: String
