@@ -109,7 +109,7 @@ struct TransactionDetailView: View {
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
         let accessibilityDate = accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.localizedType
-        Group {
+        VStack {
             List {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
@@ -148,15 +148,14 @@ struct TransactionDetailView: View {
                     TransactionButton(transactionId: common.transactionId,
                                       command: .delete, action: deleteAction)
                 } } // Delete button
-            }.id(viewId)    // change viewId to enforce a draw update
-            .listStyle(myListStyle.style).anyView
-            .safeAreaInset(edge: .bottom) {
                 if let doneAction {
                     Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
                         .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
-                        .padding(.horizontal)
-                }
-            }
+                } // Done button
+            }.id(viewId)    // change viewId to enforce a draw update
+            .listStyle(myListStyle.style).anyView
+//            .safeAreaInset(edge: .bottom) {
+//            }
         } // Group
         .onNotification(.TransactionExpired) { notification in
             // TODO: Alert user that this tx just expired

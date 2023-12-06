@@ -20,8 +20,8 @@ struct ManualDetailsV: View {
             Group {
                 Text(iconOnly ? "Transfer \(amountStr) to the Exchange."
                               : "You need to transfer \(amountStr) from your regular bank account to the Exchange.")
-                Text(iconOnly ? "Step 1: Copy+Paste this subject:"
-                              : "Step 1: Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+                Text(iconOnly ? "**Step 1:** Copy+Paste this subject:"
+                              : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
                 if !iconOnly {
@@ -40,9 +40,10 @@ struct ManualDetailsV: View {
                         .disabled(false)
                 }   .padding(.leading)
                     .listRowSeparator(.hidden)
-                Text(iconOnly ? "Step 2: Copy+Paste this IBAN:"
-                              : "Step 2: If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website:")
+                Text(iconOnly ? "**Step 2:** Copy+Paste this IBAN:"
+                              : "**Step 2:** If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website (and save it as favourite for the next time):")
                     .multilineTextAlignment(.leading)
+                    .padding(.top)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(iban)
@@ -55,14 +56,15 @@ struct ManualDetailsV: View {
                 }   .padding(.leading)
                     .padding(.top, -8)
                     .listRowSeparator(.hidden)
-                Text(iconOnly ? "Step 3: Transfer \(amountStr)."
-                              : "Step 3: Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
+                Text(iconOnly ? "**Step 3:** Transfer \(amountStr)."
+                              : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
                     .multilineTextAlignment(.leading)
+                    .padding(.top)
                     .listRowSeparator(.visible)
-                Text(iconOnly ? "Or use this PayTo-Link:"
-                              : "Alternative: If your bank already supports PayTo, you can use this PayTo-Link instead:")
+                Text(iconOnly ? "**Alternative:** Use this PayTo-Link:"
+                              : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
                     .multilineTextAlignment(.leading)
-                    .padding(.top, 2)
+                    .padding(.top)
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
