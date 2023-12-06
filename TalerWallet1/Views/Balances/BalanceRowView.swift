@@ -12,7 +12,6 @@ struct BalanceButton: View {
 
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("iconOnly") var iconOnly: Bool = false
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
 
     var body: some View {
         let balanceTitleStr = String(localized: "Balance:", comment: "Main view")

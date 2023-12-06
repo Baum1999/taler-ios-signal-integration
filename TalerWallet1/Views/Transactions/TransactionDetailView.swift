@@ -36,7 +36,6 @@ struct TransactionDetailView: View {
 
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-//    @AppStorage("moreContrast") var moreContrast: Bool = false
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
