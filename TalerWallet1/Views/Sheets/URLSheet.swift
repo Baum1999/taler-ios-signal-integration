@@ -26,8 +26,8 @@ struct URLSheet: View {
             switch urlCommand {
                 case .withdraw:
                     WithdrawURIView(stack: stack.push(), url: urlToOpen)
-//                case .withdrawExchange:
-//                    ManualWithdraw(stack: stack.push(), url: urlToOpen, exchange: nil, amountToTransfer: $amountToTransfer)
+                case .withdrawExchange:
+                    WithdrawExchangeV(stack: stack.push(), url: urlToOpen)
                 case .pay:
                     PaymentView(stack: stack.push(), url: urlToOpen)
                 case .payPull:

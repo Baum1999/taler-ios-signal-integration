@@ -43,6 +43,23 @@ fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+/// The result from prepareWithdrawExchange
+struct WithdrawExchangeResponse: Decodable {
+    var exchangeBaseUrl: String
+    var amount: Amount?
+}
+/// A request to get an exchange's withdrawal details.
+fileprivate struct PrepareWithdrawExchange: WalletBackendFormattedRequest {
+    typealias Response = WithdrawExchangeResponse
+    func operation() -> String { "prepareWithdrawExchange" }
+    func args() -> Args { Args(talerUri: talerUri) }
+
+    var talerUri: String
+    struct Args: Encodable {
+        var talerUri: String
+    }
+}
+// MARK: -
 /// The result from getWithdrawalDetailsForAmount
 struct WithdrawalAmountDetails: Decodable {
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
@@ -150,6 +167,14 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
 }
 // MARK: -
 extension WalletModel {
+    /// load withdraw-exchange details. Networking involved
+    @MainActor
+    func loadWithdrawalExchangeForUriM(_ talerUri: String)               // M for MainActor
+      async throws -> WithdrawExchangeResponse {
+        let request = PrepareWithdrawExchange(talerUri: talerUri)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response
+    }
     /// load withdrawal details. Networking involved
     @MainActor
     func loadWithdrawalDetailsForUriM(_ talerWithdrawUri: String)               // M for MainActor

@@ -241,6 +241,8 @@
 		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
 		4EEC157829F9032900D46A03 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
 		4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157929F9427F00D46A03 /* QRSheet.swift */; };
+		4EEC3A712B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */; };
+		4EEC3A722B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */; };
 		4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF840A62A0B85F400EE0D47 /* CopyShare.swift */; };
 		4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
@@ -411,6 +413,7 @@
 		4EEC157229F8242800D46A03 /* QRGeneratorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRGeneratorView.swift; sourceTree = "<group>"; };
 		4EEC157729F9032900D46A03 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
+		4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawExchangeV.swift; sourceTree = "<group>"; };
 		4EF840A62A0B85F400EE0D47 /* CopyShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyShare.swift; sourceTree = "<group>"; };
 		4EFA395F2AA7946B00742548 /* ToSButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSButtonView.swift; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
@@ -613,7 +616,7 @@
 				4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */,
 				4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */,
 				4EB0952C2989CBFE0043A8A1 /* Model+Payment.swift */,
-                E37AA6292AF197E5003850CF /* Model+Refund.swift */,
+				E37AA6292AF197E5003850CF /* Model+Refund.swift */,
 				4EB095102989CBB00043A8A1 /* Model+Settings.swift */,
 				4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */,
 				4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */,
@@ -770,9 +773,10 @@
 				4EEC157929F9427F00D46A03 /* QRSheet.swift */,
 				4E753A072A0B6A5F002D9328 /* ShareSheet.swift */,
 				4EB095332989CBFE0043A8A1 /* URLSheet.swift */,
+				4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */,
 				4EB0953B2989CBFE0043A8A1 /* WithdrawBankIntegrated */,
 				4EB0952A2989CBFE0043A8A1 /* Payment */,
-                E37AA62C2AF19BA6003850CF /* Refund */,
+				E37AA62C2AF19BA6003850CF /* Refund */,
 				4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */,
 			);
 			path = Sheets;
@@ -1126,6 +1130,7 @@
 				4E3EAE6F2A990778009F1BE8 /* TalerStrings.swift in Sources */,
 				4E3EAE702A990778009F1BE8 /* CurrencyInputView.swift in Sources */,
 				4E3EAE712A990778009F1BE8 /* URL+id+iban.swift in Sources */,
+				4EEC3A712B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */,
 				4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E3EAE722A990778009F1BE8 /* RequestPayment.swift in Sources */,
 				4E3EAE732A990778009F1BE8 /* SettingsItem.swift in Sources */,
@@ -1233,6 +1238,7 @@
 				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
 				4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */,
 				4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */,
+				4EEC3A722B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */,
 				4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */,
 				4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */,
