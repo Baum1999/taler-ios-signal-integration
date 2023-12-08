@@ -22,11 +22,11 @@ struct WithdrawTOSView: View {
     @State var exchangeTOS: ExchangeTermsOfService?
 
     var body: some View {
-        VStack {
+        if let exchangeTOS {
             Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
                 Task { // runs on MainActor
                     do {
-                        if let exchangeBaseUrl, let exchangeTOS {
+                        if let exchangeBaseUrl {
                             _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
                             if acceptAction != nil {
                                 acceptAction!()
@@ -42,35 +42,32 @@ struct WithdrawTOSView: View {
                 }
             }
             .navigationTitle(navTitle)
-            .overlay {
-                if exchangeTOS == nil {
+            .onAppear() {
+                if viewID > SHEET_WITHDRAWAL {
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS)
+                } else {
+                    DebugViewC.shared.setViewID(VIEW_WITHDRAW_TOS, stack: stack.push())
+                }
+            }
+        } else {
+            LoadingView(url: nil, message: exchangeBaseUrl?.trimURL() ?? "No exchangeBaseUrl!")
+//            ContactingExchangeV(url: nil, message: exchangeBaseUrl?.trimURL()
+//                                                ?? "No exchangeBaseUrl!")
+                .task { do {
                     if let exchangeBaseUrl {
-                        WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                            .navigationTitle("Loading " + navTitle)
+                        let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]
+                        let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
+                                                                   acceptedFormat: acceptedFormat)
+                        exchangeTOS = someTOS
                     } else {
-                        // Yikes!
-                        WithdrawProgressView(message: "No exchangeBaseUrl!")
-                            .navigationTitle("Loading " + navTitle)
+                        // TODO: Yikes! No baseURL
+
+
+
                     }
-                }
-            }
-        }.onAppear() {
-            if viewID > SHEET_WITHDRAWAL {
-                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS)
-            } else {
-                DebugViewC.shared.setViewID(VIEW_WITHDRAW_TOS, stack: stack.push())
-            }
-        }.task {
-            do {
-                if let exchangeBaseUrl {
-                    let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]
-                    let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
-                                                                acceptedFormat: acceptedFormat)
-                    exchangeTOS = someTOS
-                }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-            }
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                } }
         }
     }
 }

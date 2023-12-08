@@ -34,9 +34,7 @@ struct RefundURIView: View {
                           suspendAction: model.suspendTransaction,
                            resumeAction: model.resumeTransaction)
         } else {
-            let badURL = "Error in Link: \(url)"
-            WithdrawProgressView(message: url.host ?? badURL)
-                .navigationTitle("Find Exchange")
+            LoadingView(url: url, message: nil)
                 .task {
                     do {
                         symLog.log(".task")

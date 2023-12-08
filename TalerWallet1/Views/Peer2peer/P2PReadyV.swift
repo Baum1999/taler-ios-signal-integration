@@ -51,7 +51,7 @@ struct P2PReadyV: View {
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             } else {
-                WithdrawProgressView(message: "Loading...")
+                LoadingView(url: nil, message: "for \(amountToTransfer.currencyStr)")
             }
         }
         .navigationTitle(navTitle)

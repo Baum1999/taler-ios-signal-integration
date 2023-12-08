@@ -90,8 +90,7 @@ struct ManualWithdraw: View {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
         } else {
-            WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                .navigationTitle("Contacting Exchange")
+            LoadingView(url: nil, message: exchangeBaseUrl.trimURL())
         }
       } .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
           symLog.log("getExchangeByUrl(\(exchangeBaseUrl))")

@@ -60,9 +60,7 @@ struct P2pReceiveURIView: View {
                                     p2p: true)
                 }
             } else {
-                // Yikes no details or no baseURL
-                WithdrawProgressView(message: url.host ?? badURL)
-                    .navigationTitle("Contacting Exchange")
+                LoadingView(url: url, message: nil)
             }
         }
         .onAppear() {

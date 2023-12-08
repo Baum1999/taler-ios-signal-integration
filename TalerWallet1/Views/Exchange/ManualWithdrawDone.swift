@@ -45,8 +45,7 @@ struct ManualWithdrawDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
             } else {
-                WithdrawProgressView(message: exchange.exchangeBaseUrl.trimURL())
-                    .navigationTitle("Loading " + navTitle)
+                LoadingView(url: nil, message: exchange.exchangeBaseUrl.trimURL())
             }
         }.onAppear() {
             symLog.log("onAppear")

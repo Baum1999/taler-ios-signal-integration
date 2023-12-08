@@ -85,7 +85,6 @@
 		4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC62A429F2A00CC88B8 /* View+Notification.swift */; };
 		4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */; };
 		4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */; };
-		4E3EAE5E2A990778009F1BE8 /* WithdrawProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */; };
 		4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157929F9427F00D46A03 /* QRSheet.swift */; };
 		4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC02A41E6C200CC88B8 /* P2pReceiveURIView.swift */; };
 		4E3EAE612A990778009F1BE8 /* ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD862A363D8D0031D520 /* ListStyle.swift */; };
@@ -208,7 +207,6 @@
 		4EB095602989CBFE0043A8A1 /* BalancesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */; };
 		4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */; };
 		4EB095622989CBFE0043A8A1 /* Model+Withdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */; };
-		4EB095642989CBFE0043A8A1 /* WithdrawProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */; };
 		4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */; };
 		4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095422989CBFE0043A8A1 /* SideBarView.swift */; };
 		4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
@@ -385,7 +383,6 @@
 		4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesSectionView.swift; sourceTree = "<group>"; };
 		4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawURIView.swift; sourceTree = "<group>"; };
 		4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Withdraw.swift"; sourceTree = "<group>"; };
-		4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawProgressView.swift; sourceTree = "<group>"; };
 		4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawTOSView.swift; sourceTree = "<group>"; };
 		4EB095422989CBFE0043A8A1 /* SideBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
 		4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchAnimationView.swift; sourceTree = "<group>"; };
@@ -712,7 +709,6 @@
 			children = (
 				4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */,
 				4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */,
-				4EB0953F2989CBFE0043A8A1 /* WithdrawProgressView.swift */,
 				4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */,
 			);
 			path = WithdrawBankIntegrated;
@@ -1110,7 +1106,6 @@
 				4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */,
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
 				4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */,
-				4E3EAE5E2A990778009F1BE8 /* WithdrawProgressView.swift in Sources */,
 				E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */,
 				4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */,
@@ -1218,7 +1213,6 @@
 				4E3B4BC72A429F2A00CC88B8 /* View+Notification.swift in Sources */,
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
 				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,
-				4EB095642989CBFE0043A8A1 /* WithdrawProgressView.swift in Sources */,
 				E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */,
 				4E3B4BC12A41E6C200CC88B8 /* P2pReceiveURIView.swift in Sources */,

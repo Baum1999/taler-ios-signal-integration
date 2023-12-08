@@ -7,22 +7,49 @@ import SymLog
 
 struct LoadingView: View {
     private let symLog = SymLogV(0)
-    let navTitle = String(localized: "Loading...")
-    let backButtonHidden: Bool
+    let url:URL?
+    let message: String?
+
+//    let backButtonHidden: Bool
+    let navTitle = String(localized: "Loading…")
+
+    @State private var rotationEnabled = true
 
     var body: some View {
-        LaunchAnimationView()
-            .navigationBarBackButtonHidden(backButtonHidden)
-            .navigationTitle(navTitle)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-//            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        VStack(alignment: .center) {
+            Spacer()
+            RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                .onTapGesture(count: 2) {
+                    rotationEnabled.toggle()
+                }
+            Spacer()
+            if let url {
+                if let urlStr = url.host {
+                    Text(urlStr)
+                } else {
+                    Text("Error in URL: \(url)")
+                }
+                Spacer()
+            }
+            if let message {
+                Text(message)
+            } else {
+                Text(EMPTYSTRING)
+            }
+            Spacer()
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityFont(.title)
+        .navigationTitle("Loading…")
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
     }
 }
 // MARK: -
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            LoadingView(backButtonHidden: true)
+            LoadingView(url: nil, message: "test message")  // , backButtonHidden: true)
                 .navigationBarTitleDisplayMode(.automatic)
         }.navigationViewStyle(.stack)
     }

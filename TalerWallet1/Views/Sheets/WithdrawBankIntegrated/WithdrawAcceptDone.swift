@@ -44,8 +44,8 @@ struct WithdrawAcceptDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
             } else {
-                WithdrawProgressView(message: "Bank Confirmation")
-                    .navigationTitle("Loading...")
+                LoadingView(url: nil, message: exchangeBaseUrl?.trimURL()
+                                                    ?? "Bank Confirmation")
             }
         }.onAppear() {
             symLog.log("onAppear")

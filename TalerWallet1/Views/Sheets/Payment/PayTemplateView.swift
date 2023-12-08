@@ -103,9 +103,7 @@ struct PayTemplateView: View {
                 DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
             }
         } else {
-            let badURL = "Error in Link: \(url)"
-            WithdrawProgressView(message: url.host ?? badURL)
-                .navigationTitle("Find Exchange")
+            LoadingView(url: url, message: nil)
                 .task {
                     do {
                         symLog.log(".task")

@@ -51,25 +51,21 @@ struct P2pPayURIView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
             } else {
-                WithdrawProgressView(message: url.host ?? "Yikes❗️ no valid URL")
-                    .navigationTitle("Contacting Exchange")
+                LoadingView(url: url, message: nil)
+                    .task { do {
+                        symLog.log(".task")
+                        let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)
+                        peerPullDebitResponse = ppDebitResponse
+                    } catch {    // TODO: error
+                        symLog.log(error.localizedDescription)
+                        peerPullDebitResponse = nil
+                    } }
             }
         }
         .onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_PAY_P2P)
         }
-        .task {
-            do { // TODO: cancelled
-                symLog.log(".task")
-                let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)
-                peerPullDebitResponse = ppDebitResponse
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                peerPullDebitResponse = nil
-            }
-        }
-
     }
 }
 // MARK: -

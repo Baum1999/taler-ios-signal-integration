@@ -25,7 +25,6 @@ struct WithdrawURIView: View {
     @State private var exchange: Exchange? = nil
 
     var body: some View {
-        let badURL = "Error in URL: \(url)"
         VStack {
             if let withdrawalAmountDetails, let exchange {
                 List {
@@ -70,10 +69,8 @@ struct WithdrawURIView: View {
                                  viewID: SHEET_WITHDRAW_TOS,
                                     p2p: false)
                 }
-            } else {
-                // Yikes no details or no exchange
-                WithdrawProgressView(message: url.host ?? badURL)
-                    .navigationTitle("Contacting Exchange")
+            } else {        // no details or no exchange
+                LoadingView(url: url, message: nil)
             }
         }
         .onAppear() {

@@ -28,8 +28,7 @@ struct WithdrawExchangeV: View {
                      exchangeBaseUrl: exchangeBaseUrl,
                     amountToTransfer: $amountToTransfer)
             } else {
-                WithdrawProgressView(message: exchangeBaseUrl?.trimURL() ?? "No exchangeBaseUrl!")
-//                ContactingExchangeV(url: url, message: nil)
+                LoadingView(url: url, message: "No exchangeBaseUrl!")
             }
         }
         .task {
