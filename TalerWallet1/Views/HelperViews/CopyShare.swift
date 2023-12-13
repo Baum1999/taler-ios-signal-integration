@@ -8,12 +8,15 @@ import SymLog
 
 struct CopyButton: View {
     private let symLog = SymLogV(0)
-    @Environment(\.isEnabled) private var isEnabled: Bool
     let textToCopy: String
     let vertical: Bool
 
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    @EnvironmentObject private var controller: Controller
+
     func copyAction() -> Void {
         symLog.log(textToCopy)
+        controller.hapticFeedback(.medium)
         UIPasteboard.general.setValue(textToCopy,
                                       forPasteboardType: UTType.plainText.identifier)
     }
@@ -44,12 +47,14 @@ struct CopyButton: View {
 @MainActor
 struct ShareButton: View {
     private let symLog = SymLogV(0)
-    @Environment(\.isEnabled) private var isEnabled: Bool
-
     let textToShare: String
+
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    @EnvironmentObject private var controller: Controller
 
     func shareAction() -> Void {
         symLog.log(textToShare)
+        controller.hapticFeedback(.soft)
         ShareSheet.shareSheet(url: textToShare)
     }
 
