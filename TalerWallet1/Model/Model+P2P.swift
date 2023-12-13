@@ -41,10 +41,10 @@ extension WalletModel {
 } // getMaxPeerPushAmountM
 // - - - - - -
 struct CheckPeerPushDebitResponse: Codable {
-    let exchangeBaseUrl: String?
+    let exchangeBaseUrl: String?                // API "2:0:1"
     let amountRaw: Amount
     let amountEffective: Amount
-    let maxExpirationDate: Timestamp?          // TODO: limit expiration (30 days or 7 days)
+    let maxExpirationDate: Timestamp?           // API "2:0:1" TODO: limit expiration (30 days or 7 days)
 }
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
