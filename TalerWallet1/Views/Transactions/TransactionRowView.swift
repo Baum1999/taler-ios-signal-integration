@@ -187,7 +187,7 @@ extension Transaction {             // for PreViews
                                                                     : WithdrawalDetails.WithdrawalType.bankIntegrated,
                                                 reservePub: "PuBlIc_KeY_oF_tHe_ReSeRvE",
                                             reserveIsReady: false,
-                                         exchangePaytoUris: pending ? [payto] : nil)
+                                                 confirmed: false)
             let wDetails = WithdrawalTransactionDetails(exchangeBaseUrl: DEMOEXCHANGE,
                                                       withdrawalDetails: withdrawalDetails)
             self = .withdrawal(WithdrawalTransaction(common: common, details: wDetails))

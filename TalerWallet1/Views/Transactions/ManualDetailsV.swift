@@ -5,21 +5,64 @@
 import SwiftUI
 import taler_swift
 
+struct AccountPicker: View {
+    let title: String
+    let value: Int
+    let accountDetails: [WithdrawalExchangeAccountDetails]
+    let action: (Int) -> Void
+
+    @State private var selectedAccount = 0
+
+    var body: some View {
+        Picker(title, selection: $selectedAccount, content: {
+            ForEach(0..<accountDetails.count, id: \.self, content: { index in
+                let detail = accountDetails[index]
+                let bankName = detail.bankName ?? "BankName " + String(index)
+                let amountStr = detail.transferAmount.readableDescription
+                Text(bankName + ":   " + amountStr)
+                    .tag(index)
+            })
+        })
+        .accessibilityFont(.title3)
+        .pickerStyle(.menu)
+        .onAppear() {
+            withAnimation { selectedAccount = value }
+        }
+        .onChange(of: selectedAccount) { selected in
+            action(selected)
+        }
+    }
+}
+
+
 struct ManualDetailsV: View {
     var common : TransactionCommon
     var details : WithdrawalDetails
 
     @AppStorage("iconOnly") var iconOnly: Bool = false
+    @State private var accountID = 0
+    @State private var listID = UUID()
+
+    func redraw(_ newAccount: Int) -> Void {
+        if newAccount != accountID {
+            accountID = newAccount
+            withAnimation { listID = UUID() }
+        }
+    }
 
     var body: some View {
-        if let paytoUris = details.exchangePaytoUris {
-            let payto = paytoUris[0]
+        if let accountDetails = details.exchangeCreditAccountDetails {
+            AccountPicker(title: String(localized: "Bank"), value: accountID,
+                          accountDetails: accountDetails, action: redraw)
+            let account = accountDetails[accountID]
+            let payto = account.paytoUri
             let payURL = URL(string: payto)
             let iban = payURL?.iban ?? "unknown IBAN"
-            let amountStr = common.amountRaw.readableDescription        // TODO: formatter
+            let amountStr = account.transferAmount.readableDescription        // TODO: formatter
+            let obtainStr = common.amountRaw.readableDescription
             Group {
                 Text(iconOnly ? "Transfer \(amountStr) to the Exchange."
-                              : "You need to transfer \(amountStr) from your regular bank account to the Exchange.")
+                              : "You need to transfer \(amountStr) from your regular bank account to the Exchange to receive \(obtainStr) as electronic cash in this wallet.")
                 Text(iconOnly ? "**Step 1:** Copy+Paste this subject:"
                               : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                         .multilineTextAlignment(.leading)
@@ -76,7 +119,7 @@ struct ManualDetailsV: View {
                         .disabled(false)
                     Spacer()
                 }   .listRowSeparator(.automatic)
-            }
+            }.id(listID)
                 .accessibilityFont(.body)
         }
     }
@@ -92,8 +135,11 @@ struct ManualDetails_Previews: PreviewProvider {
                               transactionId: "someTxID",
                                   timestamp: Timestamp(from: 1_666_666_000_000),
                                   txActions: [])
-        let details = WithdrawalDetails(type: .manual, reservePub: "ReSeRvEpUbLiC_KeY_FoR_WiThDrAwAl", reserveIsReady: false,
-                                        exchangePaytoUris:["payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company"])
+        let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company"
+        let details = WithdrawalDetails(type: .manual, 
+                                  reservePub: "ReSeRvEpUbLiC_KeY_FoR_WiThDrAwAl",
+                              reserveIsReady: false,
+                                   confirmed: false)
         List {
             ManualDetailsV(common: common, details: details)
         }

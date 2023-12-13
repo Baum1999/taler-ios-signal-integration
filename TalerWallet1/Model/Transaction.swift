@@ -245,8 +245,7 @@ struct WithdrawalDetails: Decodable {
     var reserveIsReady: Bool
 
   /// Details for manual withdrawals:
-    /// The payto URIs that the exchange supports.
-    var exchangePaytoUris: [String]?
+    var exchangeCreditAccountDetails: [WithdrawalExchangeAccountDetails]?
 
   /// Details for bank-integrated withdrawals:
     /// Whether the bank has confirmed the withdrawal.
