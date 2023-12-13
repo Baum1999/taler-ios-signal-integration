@@ -8,6 +8,19 @@ import UIKit
 
 extension Controller {
 
+    @MainActor
+    func hapticNotification(_ feedbackType: UINotificationFeedbackGenerator.FeedbackType) {
+        if useHaptics {
+            UINotificationFeedbackGenerator().notificationOccurred(feedbackType)
+        }
+    }
+
+    @MainActor
+    func hapticFeedback(_ feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
+        UIImpactFeedbackGenerator(style: feedbackStyle).impactOccurred()
+    }
+
+
     /// 0 = failure, 1 = received, 2 = sent
     @MainActor func playSound(_ number: Int) {
         let sysVolume = AVAudioSession.sharedInstance().outputVolume
@@ -31,7 +44,6 @@ extension Controller {
 //        logger.log("❗️sys:\(sysVolume)  vol:\(volume)")
 
         var soundID: SystemSoundID = 0
-        let notificationGenerator = useHaptics ? UINotificationFeedbackGenerator() : nil
         if number > 9 {
             soundID = UInt32(number)
         } else {
@@ -58,9 +70,6 @@ extension Controller {
                 AudioServicesPlaySystemSound(soundID);
             }
         }
-        if let notificationGenerator {
-            notificationGenerator.notificationOccurred(number == 0 ? .error : .success)
-        }
-
+        hapticNotification(number == 0 ? .error : .success)
     }
 }

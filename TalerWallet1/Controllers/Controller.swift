@@ -35,7 +35,7 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
-    @Published var currencyTicker: Int = 0
+    @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
@@ -59,13 +59,13 @@ class Controller: ObservableObject {
         currencyInfos = []
     }
 // MARK: -
-    func hasInfo(for currency: String) -> Bool {
+    func hasInfo(for currency: String) -> CurrencyInfo? {
         for info in currencyInfos {
             if info.scope.currency == currency {
-                return true
+                return info
             }
         }
-        return false
+        return nil
     }
 
     func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
@@ -78,6 +78,29 @@ class Controller: ObservableObject {
             }
         }
         return CurrencyInfo.zero(currency)
+    }
+
+    @MainActor
+    func getInfo(from exchangeBaseUrl: String, model: WalletModel) async -> CurrencyInfo? {
+        if let exchange = await model.getExchangeByUrl(url: exchangeBaseUrl) {
+            if let scopeInfo = exchange.scopeInfo {
+                if let info = hasInfo(for: scopeInfo.currency) {
+                    return info
+                }
+                do {
+                    let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
+                    await setInfo(info)
+                    return info
+                } catch {
+                    return nil
+                }
+            } else {
+                // TODO: Error "Can't get scopeInfo"
+            }
+        } else {
+            // TODO: Error "Can't get Exchange Info"
+        }
+        return nil
     }
 
     @MainActor
