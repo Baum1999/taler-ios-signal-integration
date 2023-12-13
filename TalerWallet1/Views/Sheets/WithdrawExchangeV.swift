@@ -36,13 +36,14 @@ struct WithdrawExchangeV: View {
                 symLog.log(".task")
                 let withdrawExchange = try await model.loadWithdrawalExchangeForUriM(url.absoluteString)
                 let baseUrl = withdrawExchange.exchangeBaseUrl
-//                let exc = await model.getExchangeByUrl(url: baseUrl)
                 exchangeBaseUrl = baseUrl
                 if let amount = withdrawExchange.amount {
                     amountToTransfer = amount
                 } else {
-
+                    // is already Amount.zero(currency: "")
                 }
+                // let the controller collect CurrencyInfo from this formerly unknown exchange
+                let _ = await controller.getInfo(from: baseUrl, model: model)
             } catch {    // TODO: error
                 symLog.log(error.localizedDescription)
                 exchangeBaseUrl = nil

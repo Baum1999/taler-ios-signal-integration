@@ -129,7 +129,7 @@ struct P2PSubjectV: View {
 //            print("❗️ P2PSubjectV onDisappear")
         }
         .task(id: amountToTransfer.value) {
-            if feeLabel == nil {
+            if amountToSend && feeLabel == nil {
                 do {
                     let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
