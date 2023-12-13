@@ -6,6 +6,20 @@ import Foundation
 import taler_swift
 
 extension Locale {
+    static var preferredLanguageCode: String {
+        guard let preferredLanguage = preferredLanguages.first,
+              let code = Locale(identifier: preferredLanguage).languageCode else {
+            return "en"
+        }
+        return code
+    }
+
+    static var preferredLanguageCodes: [String] {
+        return Locale.preferredLanguages.compactMap({Locale(identifier: $0).languageCode})
+    }
+}
+
+extension Locale {
     func leadingCurrencySymbol() -> Bool {
         let currencyFormatter = NumberFormatter()
         currencyFormatter.numberStyle = .currency

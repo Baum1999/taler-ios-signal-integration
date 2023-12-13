@@ -73,18 +73,23 @@ struct ExchangeRowView: View {
                                          sendAction: { selectAndUpdate(1) },
                                          recvAction: { selectAndUpdate(2) })
         Group {
-            HStack(spacing: 0) {    // can't use the built in Label because it adds the accessory arrow
-                Text(baseURL.trimURL())
-                    .accessibilityFont(.headline)
-                NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
-                    { EmptyView() }.frame(width: 0).opacity(0)
-                NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
-                    { EmptyView() }.frame(width: 0).opacity(0)
-            }.listRowSeparator(.hidden)
             NavigationLink(destination: showToS) {
-                Text("Terms of Service")  // VIEW_WITHDRAW_TOS
-                    .accessibilityFont(.body)
-            }.listRowSeparator(.hidden)
+                VStack(alignment: .leading) {
+                    Text(baseURL.trimURL())
+                        .accessibilityFont(.headline)
+                    if !iconOnly {
+                        Text("Terms of Service")  // VIEW_WITHDRAW_TOS
+                            .accessibilityFont(.body)
+                    }
+                }
+            }
+            .background( Group {
+                NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
+                { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
+                { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            })
+            .listRowSeparator(.hidden)
             if #available(iOS 16.0, *) {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: HSPACING) {

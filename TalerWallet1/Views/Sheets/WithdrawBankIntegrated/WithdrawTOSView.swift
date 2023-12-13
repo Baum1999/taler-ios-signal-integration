@@ -21,9 +21,30 @@ struct WithdrawTOSView: View {
 
     @State var exchangeTOS: ExchangeTermsOfService?
 
+    func loadToS(_ language: String) async {
+        do {
+            if let exchangeBaseUrl {
+                let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]
+                let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
+                                                           acceptedFormat: acceptedFormat,
+                                                           acceptLanguage: language)
+                exchangeTOS = someTOS
+            } else {
+                // TODO: Yikes! No baseURL
+
+
+
+            }
+        } catch {    // TODO: error
+            symLog.log(error.localizedDescription)
+        }
+    }
+
     var body: some View {
+        let language = Locale.preferredLanguageCode
         if let exchangeTOS {
-            Content(symLog: symLog, exchangeTOS: exchangeTOS, myListStyle: $myListStyle) {
+            Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
+                  language: language, languageAction: loadToS) {
                 Task { // runs on MainActor
                     do {
                         if let exchangeBaseUrl {
@@ -51,23 +72,9 @@ struct WithdrawTOSView: View {
             }
         } else {
             LoadingView(url: nil, message: exchangeBaseUrl?.trimURL() ?? "No exchangeBaseUrl!")
-//            ContactingExchangeV(url: nil, message: exchangeBaseUrl?.trimURL()
-//                                                ?? "No exchangeBaseUrl!")
-                .task { do {
-                    if let exchangeBaseUrl {
-                        let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]
-                        let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
-                                                                   acceptedFormat: acceptedFormat)
-                        exchangeTOS = someTOS
-                    } else {
-                        // TODO: Yikes! No baseURL
-
-
-
-                    }
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
-                } }
+                .task {
+                    await loadToS(language)
+                }
         }
     }
 }
@@ -75,15 +82,37 @@ struct WithdrawTOSView: View {
 extension WithdrawTOSView {
     struct Content: View {
         let symLog: SymLogV
-        var exchangeTOS: ExchangeTermsOfService?
+        var tos: ExchangeTermsOfService
         @Binding var myListStyle: MyListStyle
+        let language: String
+        var languageAction: (String) async -> ()
         var acceptAction: () -> ()
 
+        @State private var selectedLanguage = "en"
+
         var body: some View {
-            if let tos = exchangeTOS {
+            let title = String(localized: "Language:", comment: "title of ToS language selection")
+            List {
+            if tos.tosAvailableLanguages.count > 1 {
+                Picker(title, selection: $selectedLanguage) {
+                    ForEach(tos.tosAvailableLanguages, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .accessibilityFont(.title3)
+                .pickerStyle(.menu)
+                .onAppear() {
+                    withAnimation { selectedLanguage = language }
+                }
+                .onChange(of: selectedLanguage) { selected in
+                    Task {
+                        await languageAction(selected)
+                    }
+                }
+            }
                 let components = tos.content.components(separatedBy: "\n\n")
 
-                List (components, id: \.self) { term0 in
+                ForEach (components, id: \.self) { term0 in
                     if tos.contentType == PLAINTEXT {
                         let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
                         let term2 = term1.replacingOccurrences(of: "\n"     , with: " ")    // remove all other linebreaks
@@ -108,7 +137,8 @@ extension WithdrawTOSView {
                                 .accessibilityFont(.body)
                         }
                     }
-                }.safeAreaInset(edge: .bottom) {
+                }
+            }.safeAreaInset(edge: .bottom) {
                     let currentEtag = tos.currentEtag
                     let showButton = tos.acceptedEtag == nil ? true
                                    : tos.acceptedEtag! == tos.currentEtag ? false
@@ -118,11 +148,8 @@ extension WithdrawTOSView {
                             .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
                     }
-                }
-                .listStyle(myListStyle.style).anyView
-            } else {
-                ErrorView(errortext: String(localized: "unknown ToS"))     // TODO: ???
             }
+            .listStyle(myListStyle.style).anyView
         }
     }
 }

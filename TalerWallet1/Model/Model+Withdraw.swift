@@ -18,6 +18,7 @@ struct AccountRestriction: Decodable {
     var human_hint_i18n: String?
 }
 struct WithdrawalExchangeAccountDetails: Decodable {
+    var status: String
     var bankName: String?
     var paytoUri: String
     var transferAmount: Amount
@@ -92,20 +93,24 @@ struct ExchangeTermsOfService: Decodable {
     var currentEtag: String
     var acceptedEtag: String?
     var tosStatus: ExchangeTosStatus
+    var tosAvailableLanguages: [String]
     var contentType: String
+    var contentLanguage: String?
     var content: String
 }
 /// A request to query an exchange's terms of service.
 fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     typealias Response = ExchangeTermsOfService
     func operation() -> String { "getExchangeTos" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat) }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat, acceptLanguage: acceptLanguage) }
 
     var exchangeBaseUrl: String
     var acceptedFormat: [String]?
+    var acceptLanguage: String?
     struct Args: Encodable {
         var exchangeBaseUrl: String
         var acceptedFormat: [String]?
+        var acceptLanguage: String?
     }
 }
 /// A request to mark an exchange's terms of service as accepted.
@@ -192,9 +197,12 @@ extension WalletModel {
         return response
     }
     @MainActor
-    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String])             // M for MainActor
+    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String], acceptLanguage: String)
+                                // M for MainActor
       async throws -> ExchangeTermsOfService {
-        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat)
+        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl,
+                                                 acceptedFormat: acceptedFormat,
+                                                 acceptLanguage: acceptLanguage)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
