@@ -6,7 +6,8 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called by the user tapping "Withdraw Coins" in the exchange list
+// Will be called by either the user tapping "Withdraw Coins" in the exchange list
+// or from WithdrawExchangeV after a withdraw-exchange QR was scanned
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -93,20 +94,24 @@ struct ManualWithdraw: View {
             LoadingView(url: nil, message: exchangeBaseUrl.trimURL())
         }
       } .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
-          symLog.log("getExchangeByUrl(\(exchangeBaseUrl))")
-            do {
+            symLog.log("getExchangeByUrl(\(exchangeBaseUrl))")
+          if exchange == nil || exchange?.tosStatus != .accepted {
                 if let exc = await model.getExchangeByUrl(url: exchangeBaseUrl) {
                     exchange = exc
-                    if !amountToTransfer.isZero {
-                        let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl,
-                                                                                      amount: amountToTransfer)
-                        withdrawalAmountDetails = details
-//                    agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
-                    }
+                } else {
+                    // TODO: Error "Can't get Exchange Info"
                 }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                withdrawalAmountDetails = nil
+            }
+            if !amountToTransfer.isZero {
+                do {
+                    let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl,
+                                                                           amount: amountToTransfer)
+                    withdrawalAmountDetails = details
+//                    agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    withdrawalAmountDetails = nil
+                }
             }
         }
     }
