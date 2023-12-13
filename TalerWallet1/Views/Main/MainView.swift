@@ -89,7 +89,7 @@ extension MainView {
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
         let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
-        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Exchanges")
+        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
 #if TABBAR  // Taler Wallet
         @State private var selectedTab: Tab = .balances
@@ -201,7 +201,7 @@ extension MainView {
                                   navTitle: exchangesTitle)
                 }.navigationViewStyle(.stack)
                 .tabItem {
-                    Image(systemName: "arrow.triangle.2.circlepath")
+                    Image(systemName: "building.columns")    //  "arrow.triangle.2.circlepath")
                         .accessibilityLabel(exchangesTitle)
                     if !iconOnly { Text(exchangesTitle) }
                 }
