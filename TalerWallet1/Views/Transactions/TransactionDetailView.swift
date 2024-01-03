@@ -272,29 +272,29 @@ struct TransactionDetailView: View {
                         } // ManualDetails or Confirm with bank
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         baseURL: details.exchangeBaseUrl, large: false)
+                                         baseURL: details.exchangeBaseUrl, large: false, summary: nil)
                     case .payment(let paymentTransaction):
                         let details = paymentTransaction.details
                         Text(details.info.summary)
                             .accessibilityFont(.title3)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
                                         topTitle: String(localized: "Sum to be paid:"),
-                                         baseURL: nil, large: true)     // TODO: baseURL
+                                          baseURL: nil, large: true, summary: details.info.summary)     // TODO: baseURL
                     case .refund(let refundTransaction):
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:"),
                                         topTitle: String(localized: "Refunded amount:"),
-                                         baseURL: nil, large: true)     // TODO: baseURL
+                                         baseURL: nil, large: true, summary: nil)     // TODO: baseURL, summary
                     case .reward(let rewardTransaction):
                         let details = rewardTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:"),
                                         topTitle: String(localized: "Received Reward:"),
-                                         baseURL: details.exchangeBaseUrl, large: true)
+                                         baseURL: details.exchangeBaseUrl, large: true, summary: nil)       // TODO: summary
                     case .refresh(let refreshTransaction):
                         let details = refreshTransaction.details                // TODO: details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:"),
                                         topTitle: String(localized: "Refreshed amount:"),
-                                         baseURL: nil, large: true)     // TODO: baseURL
+                                         baseURL: nil, large: true, summary: nil)     // TODO: baseURL
                     case .peer2peer(let p2pTransaction):
                         let details = p2pTransaction.details                    // TODO: details
                         Text(details.info.summary)
@@ -320,7 +320,8 @@ struct TransactionDetailView: View {
                         let colon = ":"
                         ThreeAmountsSheet(common: common, topAbbrev: transaction.localizedType + colon,
                                         topTitle: transaction.localizedType + colon,
-                                         baseURL: details.exchangeBaseUrl, large: false)
+                                         baseURL: details.exchangeBaseUrl, large: false,
+                                         summary: details.info.summary)
                 } // switch
             } // Group
         }
