@@ -23,9 +23,15 @@ struct P2pReceiveURIView: View {
     @State private var exchange: Exchange? = nil
 
     var body: some View {
-        let badURL = "Error in URL: \(url)"
         VStack {
             if let peerPushCreditResponse {
+                let tosAccepted = exchange?.tosStatus == .accepted
+                if !tosAccepted {
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: peerPushCreditResponse.exchangeBaseUrl,
+                                 viewID: SHEET_RCV_P2P_TOS,
+                                    p2p: true)
+                }
                 List {
                     let raw = peerPushCreditResponse.amountRaw
                     let effective = peerPushCreditResponse.amountEffective
@@ -44,7 +50,6 @@ struct P2pReceiveURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                let tosAccepted = exchange?.tosStatus == .accepted
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         P2pAcceptDone(stack: stack.push(),
@@ -55,11 +60,6 @@ struct P2pReceiveURIView: View {
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
-                } else {
-                    ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: peerPushCreditResponse.exchangeBaseUrl,
-                                 viewID: SHEET_RCV_P2P_TOS,
-                                    p2p: true)
                 }
             } else {
                 LoadingView(url: url, message: nil)

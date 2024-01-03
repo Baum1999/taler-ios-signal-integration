@@ -48,23 +48,24 @@ struct ManualWithdraw: View {
 //                           restrictAge: restrictAge)
             }
             let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
+            let tosAccepted = exchange.tosStatus == .accepted
             ScrollView { VStack(alignment: .trailing) {
                 Text("via \(exchange.exchangeBaseUrl.trimURL())")
                     .multilineTextAlignment(.center)
                     .accessibilityFont(.body)
-                CurrencyInputView(amount: $amountToTransfer,
-                               available: nil,
-                                   title: iconOnly ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to withdraw:"),
-                          shortcutAction: nil)
-                    .padding(.top)
-                QuiteSomeCoins(someCoins: someCoins,
-                           shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
-                                currency: currency,
-                            currencyInfo: currencyInfo,
-                         amountEffective: withdrawalAmountDetails?.amountEffective)
-//              agePicker
-                if exchange.tosStatus == .accepted {
+                if !tosAccepted {
+                    CurrencyInputView(amount: $amountToTransfer,
+                                   available: nil,
+                                       title: iconOnly ? String(localized: "Amount:")
+                                                       : String(localized: "Amount to withdraw:"),
+                              shortcutAction: nil)
+                        .padding(.top)
+                    QuiteSomeCoins(someCoins: someCoins,
+                               shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                                    currency: currency,
+                                currencyInfo: currencyInfo,
+                             amountEffective: withdrawalAmountDetails?.amountEffective)
+//                  agePicker
                     NavigationLink(destination: destination) {
                         Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
                     }

@@ -27,6 +27,13 @@ struct WithdrawURIView: View {
     var body: some View {
         VStack {
             if let withdrawalAmountDetails, let exchange {
+                let tosAccepted = exchange.tosStatus == .accepted
+                if !tosAccepted {
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                 viewID: SHEET_WITHDRAW_TOS,
+                                    p2p: false)
+                }
                 List {
                     let raw = withdrawalAmountDetails.amountRaw
                     let effective = withdrawalAmountDetails.amountEffective
@@ -55,7 +62,7 @@ struct WithdrawURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                if exchange.tosStatus == .accepted {
+                if tosAccepted {
                     NavigationLink(destination: LazyView {
                         WithdrawAcceptDone(stack: stack.push(),
                                  exchangeBaseUrl: exchange.exchangeBaseUrl,
@@ -65,11 +72,6 @@ struct WithdrawURIView: View {
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
-                } else {
-                    ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                 viewID: SHEET_WITHDRAW_TOS,
-                                    p2p: false)
                 }
             } else {        // no details or no exchange
                 LoadingView(url: url, message: nil)
