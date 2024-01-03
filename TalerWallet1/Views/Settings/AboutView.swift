@@ -44,7 +44,7 @@ struct AboutView: View {
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {
-                        UIApplication.shared.open(URL(string:"https://taler.net")!, options: [:])
+                        UIApplication.shared.open(URL(string:TALER_NET)!, options: [:])
                     }
 
                 SettingsItem(name: "App Version", id1: "app") {
@@ -53,15 +53,15 @@ struct AboutView: View {
                 SettingsItem(name: "Wallet Core Version", id1: "wallet-core") {
                     Text(verbatim: "\(walletCore.versionInfo?.version ?? "unknown")")
                 }
-                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
-                    Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
-                }
-                SettingsItem(name: "Supported Merchant Versions", id1: "merchant") {
-                    Text(verbatim: "\(walletCore.versionInfo?.merchant ?? "unknown")")
-                }
-                SettingsItem(name: "Used Bank", id1: "bank") {
-                    Text(verbatim: "\(walletCore.versionInfo?.bank ?? "unknown")")
-                }
+//                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
+//                    Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
+//                }
+//                SettingsItem(name: "Supported Merchant Versions", id1: "merchant") {
+//                    Text(verbatim: "\(walletCore.versionInfo?.merchant ?? "unknown")")
+//                }
+//                SettingsItem(name: "Used Bank", id1: "bank") {
+//                    Text(verbatim: "\(walletCore.versionInfo?.bank ?? "unknown")")
+//                }
             }
             .id(listID)
             .listStyle(myListStyle.style).anyView
