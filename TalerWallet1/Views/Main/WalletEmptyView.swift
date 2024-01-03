@@ -19,7 +19,7 @@ struct WalletEmptyView: View {
                 Text("There is no digital cash in your wallet.")
                     .accessibilityFont(.title3)
                     .listRowSeparator(.hidden)
-                let title = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Get some test money")
+                let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get some test money")
                 Link(title, destination: URL(string: DEMOBANK)!)
                     .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
                     .padding(.vertical)
