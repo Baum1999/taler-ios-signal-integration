@@ -29,7 +29,8 @@ struct SettingsView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("useHaptics") var useHaptics: Bool = true
-    @AppStorage("playSounds") var playSounds: Int = 1
+    @AppStorage("playSoundsI") var playSoundsI: Int = 1
+    @AppStorage("playSoundsB") var playSoundsB: Bool = true
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -113,11 +114,20 @@ struct SettingsView: View {
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
                     .id("playHaptics")
                 }
-                SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
+                let playToggle = SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB,
+                                         description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
+                                    .id("playSounds")
+#if DEBUG
+                if Double.random(in: -100.0...100.0) > 0 {
+                    SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSoundsI,
                          description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
                 .id("playSounds")
                 SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
                     .id("font")
+                } else { playToggle }
+#else
+                playToggle
+#endif
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly, id1: "minimal",

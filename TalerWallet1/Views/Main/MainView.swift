@@ -23,7 +23,8 @@ struct MainView: View {
     @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
-    @AppStorage("playSounds") var playSounds: Int = 1       // extension mustn't define this, so it must be here
+    @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
+    @AppStorage("playSoundsB") var playSoundsB: Bool = true
 
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
@@ -42,9 +43,11 @@ struct MainView: View {
                 // any change to rootViewId triggers popToRootView behaviour
                     .id(viewState.rootViewId)
                     .onAppear() {
-                        if playSounds != 0  && !soundPlayed {
+#if DEBUG
+                        if playSoundsI != 0  && playSoundsB && !soundPlayed {
                             controller.playSound(1008)     // Startup chime
                         }
+#endif
                         soundPlayed = true
                     }
             } else if controller.backendState == .error {
