@@ -20,7 +20,6 @@ struct MainView: View {
     let stack: CallStack
     @Binding var soundPlayed: Bool
 
-    @EnvironmentObject private var viewState: ViewState         // popToRootView()
     @EnvironmentObject private var controller: Controller
     @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
@@ -40,8 +39,6 @@ struct MainView: View {
         Group {
             if controller.backendState == .ready {
                 Content(logger: logger, stack: stack.push("Content"), talerFont: $talerFont)
-                // any change to rootViewId triggers popToRootView behaviour
-                    .id(viewState.rootViewId)
                     .onAppear() {
 #if DEBUG
                         if playSoundsI != 0  && playSoundsB && !soundPlayed {
@@ -91,6 +88,7 @@ extension MainView {
         @AppStorage("iconOnly") var iconOnly: Bool = false
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
+        @EnvironmentObject private var viewState: ViewState     // popToRootView()
         let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
         let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
@@ -170,15 +168,15 @@ extension MainView {
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
             // identity of the view has changed (that is, that the persistent data associated with
             // the view has been recycled for a new instance of the same type)
-//            if #available(iOS 17.1, *) {
-//                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
-//                let _ = Self._logChanges()
-//            } else {
+            if #available(iOS 17.1, *) {
+                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
+                let _ = Self._logChanges()
+            } else {
                 let _ = Self._printChanges()
-//            }
+            }
             let delay: UInt = 0     // set to 5 to test delayed currency information
 #else
-            let delay: UInt = 0
+            let delay: UInt = 0     // no delay for release builds
 #endif
           Group {
 #if TABBAR  // Taler Wallet
@@ -189,9 +187,10 @@ extension MainView {
                                   navTitle: balancesTitle,
                                   balances: $balances,
                       shouldReloadBalances: $shouldReloadBalances)
-                }.navigationViewStyle(.stack)
+                }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
+                .navigationViewStyle(.stack)
                 .tabItem {
-                    Image(systemName: "chart.bar.xaxis")             // creditcard     system will automatically use filled variant
+                    Image(systemName: "chart.bar.xaxis")             // iOS will automatically use filled variant
                         .accessibilityLabel(balancesTitle)
                     if !iconOnly { Text(balancesTitle) }
                 }
@@ -238,7 +237,7 @@ extension MainView {
                             navigationController.navigationBar.largeTitleTextAttributes =
                                 [.font: TalerFont.uiFont(talerFont, size: 38, relativeTo: .largeTitle)]
                         })
-                }
+                }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                 .navigationViewStyle(.stack)
                 .talerNavBar(talerFont: talerFont)
 
@@ -279,16 +278,24 @@ extension MainView {
                 logger.info(".onNotification(.TransactionExpired) ==> reload")
                 shouldReloadBalances += 1
             }
+            .onNotification(.TransactionDone) {
+#if TABBAR  // Taler Wallet
+                shouldReloadBalances += 1
+                selectedTab = .balances
+#else       // GNU Taler
+
+#endif
+            }
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
                     logger.info("balance changed: \(scope.currency, privacy: .public)")
                     if controller.hasInfo(for: scope.currency) == nil {
                         Task { // runs on MainActor
-                            logger.info("Task to get info for: \(scope.currency, privacy: .public)")
+//                            logger.info("Task to get info for: \(scope.currency, privacy: .public)")
                             do {
                                 let info = try await model.getCurrencyInfoM(scope: scope, delay: delay)
-                                logger.info("got info: \(scope.currency, privacy: .public)")
+//                                logger.info("got info: \(scope.currency, privacy: .public)")
                                 await controller.setInfo(info)
                             } catch {    // TODO: error handling - couldn't get CurrencyInfo
                                 logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
