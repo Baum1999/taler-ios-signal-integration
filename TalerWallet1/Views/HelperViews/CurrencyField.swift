@@ -52,7 +52,7 @@ struct CurrencyField: View {
     }
 
     var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog(amount.description)       // just to get the # to compare it with .onAppear & onDisappear
 #endif

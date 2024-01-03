@@ -32,7 +32,7 @@ struct MainView: View {
         logger.info("sheet dismiss")
     }
     var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
@@ -163,7 +163,7 @@ extension MainView {
 #endif
 
         var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
             // identity of the view has changed (that is, that the persistent data associated with
             // the view has been recycled for a new instance of the same type)

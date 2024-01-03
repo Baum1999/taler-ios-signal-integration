@@ -34,7 +34,7 @@ struct ExchangeRowView: View {
     }
 
     var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
         let delay: UInt = 0     // set to 5 to test delayed currency information

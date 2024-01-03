@@ -51,7 +51,7 @@ struct P2PSubjectV: View {
     }
 
     var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif

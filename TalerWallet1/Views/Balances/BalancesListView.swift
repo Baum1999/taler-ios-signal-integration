@@ -93,7 +93,7 @@ struct BalancesListView: View {
     }
 
     var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
@@ -137,7 +137,7 @@ extension BalancesListView {
         var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
 
         var body: some View {
-#if DEBUG
+#if PRINT_CHANGES
             let _ = Self._printChanges()
             let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
