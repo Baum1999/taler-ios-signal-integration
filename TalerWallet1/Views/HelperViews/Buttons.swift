@@ -110,8 +110,8 @@ struct TalerButtonStyle: ButtonStyle {
     public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
 //        configuration.role = type == .prominent ? .primary : .normal          Only on macOS
             MyBigButton(//type: type,
-                   foreColor: foreColor(type: type, pressed: configuration.isPressed),
-                   backColor: backColor(type: type, pressed: configuration.isPressed),
+                   foreColor: foreColor(type: type, pressed: configuration.isPressed, disabled: disabled),
+                   backColor: backColor(type: type, pressed: configuration.isPressed, disabled: disabled),
                       dimmed: dimmed,
                configuration: configuration,
                     disabled: disabled,
@@ -120,14 +120,14 @@ struct TalerButtonStyle: ButtonStyle {
                        badge: badge)
     }
 
-    func foreColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
+    func foreColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
         return type == .plain ? WalletColors().fieldForeground :      // primary text color
             WalletColors().buttonForeColor(pressed: pressed,
                                           disabled: disabled,
                                          prominent: type == .prominent,
                                            balance: type == .balance)
     }
-    func backColor(type: TalerButtonStyleType, pressed: Bool) -> Color {
+    func backColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
         return type == .plain && !pressed ? Color.clear :
             WalletColors().buttonBackColor(pressed: pressed,
                                           disabled: disabled,
