@@ -13,6 +13,7 @@ struct ThreeAmountsSheet: View {
     var bottomAbbrev: String?
     let baseURL: String?
     let large: Bool               // set to false for QR or IBAN
+    let summary: String?
 
     var body: some View {
         let raw = common.amountRaw
@@ -35,7 +36,8 @@ struct ThreeAmountsSheet: View {
                   bottomAmount: incomplete ? nil : effective,
                          large: large, pending: pending, incoming: incoming,
                        baseURL: baseURL,
-                        status: common.txState.major.localizedState)
+                        status: common.txState.major.localizedState,
+                       summary: summary)
     }
 }
 // MARK: -
@@ -51,7 +53,8 @@ struct ThreeAmountsV: View {
     let pending: Bool
     let incoming: Bool
     let baseURL: String?
-    var status: String?
+    let status: String?
+    let summary: String?
 
     @AppStorage("iconOnly") var iconOnly: Bool = false
     
@@ -60,6 +63,12 @@ struct ThreeAmountsV: View {
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
         Section {
+            if let summary {
+                Text(summary)
+                    .accessibilityFont(.title2)
+                    .lineLimit(4)
+                    .padding(.bottom)
+            }
             AmountView(title: iconOnly ? topAbbrev : topTitle,
                        value: topAmount.readableDescription,
                        color: labelColor,
@@ -122,7 +131,8 @@ struct ThreeAmounts_Previews: PreviewProvider {
         Group {
             List {
                 ThreeAmountsSheet(common: common, topAbbrev: "Withdrawal",
-                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, large: 1==0)
+                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE,
+                                   large: 1==0, summary: nil)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))

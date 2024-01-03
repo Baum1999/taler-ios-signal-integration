@@ -36,7 +36,9 @@ struct P2pPayURIView: View {
                               bottomAbbrev: String(localized: "Effective:"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: false,
-                                   baseURL: nil)
+                                   baseURL: nil,
+                                    status: nil,
+                                   summary: peerPullDebitResponse.contractTerms.summary)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

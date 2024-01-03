@@ -43,7 +43,9 @@ struct WithdrawURIView: View {
                               bottomAbbrev: String(localized: "Effective:"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
-                                   baseURL: exchange.exchangeBaseUrl)
+                                   baseURL: exchange.exchangeBaseUrl,
+                                    status: nil,        // common.txState.major.localizedState
+                                   summary: nil)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)
                     QuiteSomeCoins(someCoins: someCoins,
                                shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees

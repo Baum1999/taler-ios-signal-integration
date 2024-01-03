@@ -62,7 +62,9 @@ struct PaymentView: View {
                               bottomAbbrev: String(localized: "Effective:"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: false,
-                                   baseURL: baseURL)
+                                   baseURL: baseURL,
+                                    status: nil,
+                                   summary: terms.summary)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
@@ -74,7 +76,9 @@ struct PaymentView: View {
                               bottomAbbrev: String(localized: "Available:"),
                               bottomAmount: balanceDetails.balanceAvailable,
                                      large: false, pending: false, incoming: false,
-                                   baseURL: baseURL)
+                                   baseURL: baseURL,
+                                    status: nil,
+                                   summary: terms.summary)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")

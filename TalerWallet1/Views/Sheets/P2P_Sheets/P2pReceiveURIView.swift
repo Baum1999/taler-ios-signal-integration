@@ -38,7 +38,9 @@ struct P2pReceiveURIView: View {
                               bottomAbbrev: String(localized: "Effective:"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
-                                   baseURL: nil)
+                                   baseURL: nil,
+                                    status: nil,
+                                   summary: peerPushCreditResponse.contractTerms.summary)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
