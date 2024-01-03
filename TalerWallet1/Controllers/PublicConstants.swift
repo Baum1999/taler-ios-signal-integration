@@ -24,8 +24,10 @@ public let DONE_OUTGOING = "minus.circle.fill"
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
 //public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"
-public let DEMO = ".demo.taler.net"
-public let TEST = ".test.taler.net"
+public let TALER = "taler.net"
+public let TALER_NET = HTTPS + TALER
+public let DEMO = ".demo." + TALER
+public let TEST = ".test." + TALER
 
 public let DEMOBANK = HTTPS + "bank" + DEMO
 public let DEMOSHOP = HTTPS + "shop" + DEMO
