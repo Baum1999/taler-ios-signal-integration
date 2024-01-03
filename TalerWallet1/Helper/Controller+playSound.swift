@@ -11,15 +11,28 @@ extension Controller {
     @MainActor
     func hapticNotification(_ feedbackType: UINotificationFeedbackGenerator.FeedbackType) {
         if useHaptics {
+            /// call when a notification is displayed, passing the corresponding type
             UINotificationFeedbackGenerator().notificationOccurred(feedbackType)
         }
     }
 
     @MainActor
     func hapticFeedback(_ feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
+        /// call when your UI element impacts something else
         UIImpactFeedbackGenerator(style: feedbackStyle).impactOccurred()
     }
 
+    @MainActor
+    func hapticFeedback(intensity: CGFloat) {
+        /// call when your UI element impacts something else with a specific intensity [0.0, 1.0]
+        UIImpactFeedbackGenerator().impactOccurred(intensity: intensity)
+    }
+
+    @MainActor
+    func hapticFeedback() {
+        /// call when the selection changes (not on initial selection)
+        UISelectionFeedbackGenerator().selectionChanged()
+    }
 
     /// 0 = failure, 1 = received, 2 = sent
     @MainActor func playSound(_ number: Int) {
