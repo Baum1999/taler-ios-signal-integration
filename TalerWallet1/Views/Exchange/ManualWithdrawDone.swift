@@ -51,12 +51,14 @@ struct ManualWithdrawDone: View {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
-            do {
-                let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                         amount: amountToTransfer, restrictAge: 0)
-                transactionId = result!.transactionId
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
+            if transactionId == nil {
+                do {
+                    let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
+                                                                             amount: amountToTransfer, restrictAge: 0)
+                    transactionId = result!.transactionId
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                }
             }
         }
     }
