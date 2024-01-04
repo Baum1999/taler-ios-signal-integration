@@ -223,7 +223,7 @@ extension WalletCore {
                                     return
                                 } else if newMinor == .exchangeWaitReserve      // user did confirm on bank website
                                        || newMinor == .withdrawCoins {          // coin-withdrawal has started
-                                    logger.log("DismissSheet: \(decoded.transactionId, privacy: .private(mask: .hash))")
+//                                    logger.log("DismissSheet: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     postNotification(.DismissSheet, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 } else if newMinor == .kyc {       // user did confirm on bank website, but KYC is needed
