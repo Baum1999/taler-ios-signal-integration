@@ -4,15 +4,21 @@
  */
 import SwiftUI
 
+fileprivate let grouped = true
+
 public struct WalletColors {
 
     let tint = Color(.tintColor)
-    let gray1 = Color(.systemGray)
-    let gray2 = Color(.systemGray2)
+    let gray1 = Color(.systemGray)          // uncompleted
+    let gray2 = Color(.systemGray2)         // disabled Fore
     let gray3 = Color(.systemGray3)
     let gray4 = Color(.systemGray4)
     let gray5 = Color(.systemGray5)
     let gray6 = Color(.systemGray6)
+    let gray7 = grouped ? Color(.tertiarySystemGroupedBackground)
+                        : Color(.tertiarySystemBackground)        // enabled Back
+    let gray8 = grouped ? Color(.secondarySystemGroupedBackground)
+                        : Color(.secondarySystemBackground)       // disabled Back
 
     func buttonForeColor(pressed: Bool, disabled: Bool,
                        prominent: Bool = false, balance: Bool = false) -> Color {
@@ -25,27 +31,29 @@ public struct WalletColors {
     func buttonBackColor(pressed: Bool, disabled: Bool,
                        prominent: Bool = false, balance: Bool = false) -> Color {
              balance ? (pressed ? gray5 : gray6)
-          : disabled ? gray5
+          : disabled ? gray7
          : prominent ? tint
-           : pressed ? gray5 : gray4
+           : pressed ? gray4 : gray5
     }
 
     var backgroundColor: Color {
-        gray6
+        grouped ? Color(.systemGroupedBackground)
+                : Color(.systemBackground)
     }
 
     var sideBackground: Color {
-        gray5
+        gray6
     }
 
     var fieldForeground: Color {              // text color
         Color.primary
     }
     var fieldBackground: Color {
-        Color(.systemBackground)
+        gray8
     }
 
-    var incompleteColor: Color {
+    var uncompletedColor: Color {
+        // used in TransactionRowView
         gray1
     }
     func pendingColor(_ incoming: Bool) -> Color {
