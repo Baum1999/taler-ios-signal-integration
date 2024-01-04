@@ -158,7 +158,7 @@ extension WalletModel {
 // MARK: -
 ///  A request to initialize Wallet-core
 fileprivate struct ResetRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "reset" }
+    func operation() -> String { "clearDb" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
