@@ -4,6 +4,7 @@
  */
 import SwiftUI
 import SymLog
+import MarkdownUI
 
 struct WithdrawTOSView: View {
     private let symLog = SymLogV(0)
@@ -41,10 +42,11 @@ struct WithdrawTOSView: View {
     }
 
     var body: some View {
-        let language = Locale.preferredLanguageCode
+        let languageCode = Locale.preferredLanguageCode
+//        let languageName = Locale.current.localizedString(forLanguageCode: languageCode)
         if let exchangeTOS {
             Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
-                  language: language, languageAction: loadToS) {
+                  language: languageCode, languageAction: loadToS) {
                 Task { // runs on MainActor
                     do {
                         if let exchangeBaseUrl {
@@ -73,13 +75,38 @@ struct WithdrawTOSView: View {
         } else {
             LoadingView(url: nil, message: exchangeBaseUrl?.trimURL() ?? "No exchangeBaseUrl!")
                 .task {
-                    await loadToS(language)
+                    await loadToS(languageCode)
                 }
         }
     }
 }
 // MARK: -
 extension WithdrawTOSView {
+    struct plaintextToSV: View {
+        let plaintext: String
+
+        var body: some View {
+            let components = plaintext.components(separatedBy: "\n\n")
+
+            ForEach (components, id: \.self) { term0 in
+                let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
+                let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
+                let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks
+                let term4 = term3.replacingOccurrences(of: "\n  ", with: " ")       // newline + 2 blanks
+                let term5 = term4.replacingOccurrences(of: "\n ", with: " ")        // newline + 1 blank
+                let term6 = term5.replacingOccurrences(of: "\n", with: " ")         // remove all other linebreaks
+                let term7 = term6.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
+                let term8 = term7.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
+                let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
+                Section {
+                    Text(term9)
+                        .accessibilityFont(.footnote)
+                        .foregroundColor(Color(UIColor.label))
+                }
+            } // for
+        }
+    }
+
     struct Content: View {
         let symLog: SymLogV
         var tos: ExchangeTermsOfService
@@ -95,8 +122,9 @@ extension WithdrawTOSView {
             List {
             if tos.tosAvailableLanguages.count > 1 {
                 Picker(title, selection: $selectedLanguage) {
-                    ForEach(tos.tosAvailableLanguages, id: \.self) {
-                        Text($0)
+                        ForEach(tos.tosAvailableLanguages, id: \.self) { code in
+                            let languageName = Locale.current.localizedString(forLanguageCode: code)
+                            Text(languageName ?? code)
                     }
                 }
                 .accessibilityFont(.title3)
@@ -110,34 +138,30 @@ extension WithdrawTOSView {
                     }
                 }
             }
+                if tos.contentType == MARKDOWN {
+                    Section {
+                        let content = MarkdownContent(tos.content)
+                        Markdown(content)
+                    }
+                } else {
                 let components = tos.content.components(separatedBy: "\n\n")
-
                 ForEach (components, id: \.self) { term0 in
-                    if tos.contentType == PLAINTEXT {
                         let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
-                        let term2 = term1.replacingOccurrences(of: "\n"     , with: " ")    // remove all other linebreaks
-                        let term3 = term2.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
-                        let term4 = term3.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
-                        let term5 = term4.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
-//                        Text("term0")
-                        if #available(iOS 16.0, *) {
+                        let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
+                        let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks
+                        let term4 = term3.replacingOccurrences(of: "\n  ", with: " ")       // newline + 2 blanks
+                        let term5 = term4.replacingOccurrences(of: "\n ", with: " ")        // newline + 1 blank
+                        let term6 = term5.replacingOccurrences(of: "\n", with: " ")         // remove all other linebreaks
+                        let term7 = term6.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
+                        let term8 = term7.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
+                        let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
                             Section {
-                                Text(term5)
-                                    .accessibilityFont(.footnote)
-                                    .foregroundColor(Color(UIColor.label))
-                            }
-                        } else {
-                            Text(term5)
+                            Text(term9)
                                 .accessibilityFont(.footnote)
                                 .foregroundColor(Color(UIColor.label))
                         }
-                    } else {        // MarkDown
-                        Section {
-                            Text(term0)
-                                .accessibilityFont(.body)
-                        }
-                    }
-                }
+                    } // for
+                } // plain text
             }.safeAreaInset(edge: .bottom) {
                     let currentEtag = tos.currentEtag
                     let showButton = tos.acceptedEtag == nil ? true

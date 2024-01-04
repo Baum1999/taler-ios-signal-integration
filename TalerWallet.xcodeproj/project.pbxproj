@@ -12,6 +12,7 @@
 		4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254962A822B8100E41D29 /* payment_sent.m4a */; };
 		4E2E5F7F2AEE30DA0027FA8A /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */; };
 		4E2E5F802AEE30DA0027FA8A /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2E5F7E2AEE30DA0027FA8A /* AmountRowV.swift */; };
+		4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2D8DD22B3F513800234039 /* MarkdownUI */; };
 		4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */; };
 		4E3327BB2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3327B92AD1635100BF5AD6 /* AsyncSemaphore.swift */; };
 		4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */; };
@@ -441,6 +442,7 @@
 				ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */,
 				4EB094FD29897D280043A8A1 /* SymLog in Frameworks */,
 				4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */,
+				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
 				ABC13AA32859962800D23185 /* taler-swift in Frameworks */,
 				4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */,
 			);
@@ -875,6 +877,7 @@
 				ABE97B1C286D82BF00580772 /* AnyCodable */,
 				4EB094FC29897D280043A8A1 /* SymLog */,
 				4EEC157529F8ECBF00D46A03 /* CodeScanner */,
+				4E2D8DD22B3F513800234039 /* MarkdownUI */,
 			);
 			productName = Taler;
 			productReference = D14AFD1D24D232B300C51073 /* Taler_Wallet.app */;
@@ -955,6 +958,7 @@
 				ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */,
 				4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */,
 				4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */,
 			);
 			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
 			projectDirPath = "";
@@ -1703,6 +1707,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-markdown-ui-standalone";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Flight-School/AnyCodable";
@@ -1754,6 +1766,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4E2D8DD22B3F513800234039 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
+			productName = MarkdownUI;
+		};
 		4E3EAE152A990778009F1BE8 /* taler-swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "taler-swift";
