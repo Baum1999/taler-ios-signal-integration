@@ -1,4 +1,28 @@
 
+Version 0.9.3 (34)
+
+• New feature: Demo Bank Website button in Banking
+- Balances is shown after a transaction finished
+
+
+Version 0.9.3 (33)
+
+• New feature: ToS with Markdown
+- background colors adapted for WCAG AA
+
+
+Version 0.9.3 (32)
+
+• New feature: Currency Conversion
+• New feature: ToS with multiple languages
+• New feature: Landscape
+• New feature: Warnings for Delete, Fail & Abort
+
+- Bugfix: Manual withdrawals no longer create multiple identical transactions
+- "Banking" instead of "Exchanges" - withdraw and deposit
+- Haptic feedback for Copy/Share buttons
+
+
 Version 0.9.3 (31)
 
 • New feature: Shortcuts in P2P directly advance to subject
