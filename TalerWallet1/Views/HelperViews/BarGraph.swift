@@ -16,6 +16,7 @@ struct BarGraphHeader: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     @State private var completedTransactions: [Transaction] = []
+    @ScaledMetric var barHeight = 9       // relative to fontSize
 
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
@@ -23,7 +24,7 @@ struct BarGraphHeader: View {
                 .accessibilityFont(.title2)
 //                .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
             BarGraph(transactions: $completedTransactions,
-                     maxBars: MAXBARS, barHeight: 10)       // TODO: barHeight relative to fontSize
+                     maxBars: MAXBARS, barHeight: barHeight)
         }
         .task {
             symLog.log(".task for BarGraphHeader(\(currency)) - reload Transactions")
@@ -38,7 +39,7 @@ struct BarGraphHeader: View {
 struct BarGraph: View {
     @Binding var transactions: [Transaction]
     let maxBars: Int
-    let barHeight : Double
+    let barHeight: Double
 
     func maxValue(_ someTransactions: [Transaction]) -> Double {
         var maxValue = 0.0
@@ -67,15 +68,16 @@ struct BarGraph: View {
                     let valueTransparent = barHeight - valueColored
 //                    let _ = print("max: \(maxValue), ", incoming ? "+" : "-", netto)
                     VStack(spacing: 0) {
+                        let width = barHeight / 3
                         Rectangle()
                             .opacity(0.001)
-                            .frame (width: 3, height: incoming ? valueTransparent : barHeight )
+                            .frame (width: width, height: incoming ? valueTransparent : barHeight )
                         Rectangle()
                             .foregroundColor(incoming ? .green : .red)
-                            .frame (width: 3, height: valueColored )
+                            .frame (width: width, height: valueColored )
                         Rectangle()
                             .opacity(0.001)
-                            .frame (width: 3, height: incoming ? barHeight : valueTransparent)
+                            .frame (width: width, height: incoming ? barHeight : valueTransparent)
                     }
                 }
             }
