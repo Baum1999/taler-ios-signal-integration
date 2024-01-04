@@ -13,6 +13,7 @@ struct ExchangeSectionView: View {
     let currency: String                        // this is the currency to be used
     let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
+    @AppStorage("iconOnly") var iconOnly: Bool = false
 
     var body: some View {
 #if PRINT_CHANGES
@@ -25,6 +26,21 @@ struct ExchangeSectionView: View {
                              exchange: exchange,
                              currency: currency,            // TODO: (balance.available) amount.isZero to disable Deposit-button
                      amountToTransfer: $amountToTransfer)   // does still have the wrong currency
+                .listRowSeparator(.hidden)
+            }
+            if "KUDOS" == currency {
+                let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
+                let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
+                VStack {
+                    if !iconOnly {
+                        Text(bankingHint)
+                    }
+                    Link(linkTitle, destination: URL(string: DEMOBANK)!)
+                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(bankingHint + " " + linkTitle)
+                .padding(.top)
             }
         } header: {
             BarGraphHeader(stack: stack.push(), currency: currency)
