@@ -199,6 +199,17 @@ extension WalletCore {
                             Controller.shared.playSound(type.isIncoming ? 2 : 1)
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
+                        case .aborting:
+                            if let newMinor = decoded.newTxState.minor {
+                                if newMinor == .refreshExpired {
+                                    logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    Controller.shared.playSound(0)
+                                    postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
+                                    return
+                                }
+                            }
+                            logger.warning("Unknow aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         case .expired:
                             logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             Controller.shared.playSound(0)
