@@ -114,11 +114,11 @@ struct TransactionDetailView: View {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
                         TransactionButton(transactionId: common.transactionId,
-                                          command: .suspend, action: suspendAction)
+                                          command: .suspend, warning: nil, action: suspendAction)
                     } }
                     if transaction.isResumable { if let resumeAction {
                         TransactionButton(transactionId: common.transactionId,
-                                          command: .resume, action: resumeAction)
+                                          command: .resume, warning: nil, action: resumeAction)
                     } }
                 } // Suspend + Resume buttons
                 Text(dateString)
@@ -126,27 +126,38 @@ struct TransactionDetailView: View {
                     .accessibilityLabel(accessibilityDate)
                     .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                     .listRowSeparator(.hidden)
-                HStack {
-                    Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-                        .accessibilityHidden(true)
-                        .foregroundColor(Color.clear)
-                    Spacer()
-                    Text("Status: \(common.txState.major.localizedState)")
+                VStack(alignment: .trailing) {
+                    let minorState = common.txState.minor?.localizedState ?? nil
+                    HStack {
+                        Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                            .accessibilityHidden(true)
+                            .foregroundColor(Color.clear)
+                        Spacer()
+                        Text("Status: \(minorState ?? common.txState.major.localizedState)")
+                            .multilineTextAlignment(.trailing)
+                    }
                 }    .listRowSeparator(.automatic)
                     .accessibilityFont(.title)
                 TypeDetail(transaction: $transaction, hasDone: doneAction != nil)
 
+//                if transaction.isRetryable { if let retryAction {
+//                    TransactionButton(transactionId: common.transactionId, command: .retry,
+//                                      warning: nil, action: abortAction)
+//                } } // Retry button
                 if transaction.isAbortable { if let abortAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                      command: .abort, action: abortAction)
+                    TransactionButton(transactionId: common.transactionId, command: .abort,
+                                      warning: String(localized: "Are you sure you want to abort this transaction?"),
+                                      action: abortAction)
                 } } // Abort button
                 if transaction.isFailable { if let failAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                      command: .fail, action: failAction)
+                    TransactionButton(transactionId: common.transactionId, command: .fail,
+                                      warning: String(localized: "Are you sure you want to fail this transaction?"),
+                                      action: failAction)
                 } } // Fail button
                 if transaction.isDeleteable { if let deleteAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                      command: .delete, action: deleteAction)
+                    TransactionButton(transactionId: common.transactionId, command: .delete,
+                                      warning: String(localized: "Are you sure you want to delete this transaction?"),
+                                      action: deleteAction)
                 } } // Delete button
                 if let doneAction {
                     Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
@@ -154,8 +165,6 @@ struct TransactionDetailView: View {
                 } // Done button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
-//            .safeAreaInset(edge: .bottom) {
-//            }
         } // Group
         .onNotification(.TransactionExpired) { notification in
             // TODO: Alert user that this tx just expired
@@ -217,12 +226,12 @@ struct TransactionDetailView: View {
         var body: some View {
             VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
                 if !iconOnly {
-                    Text("Waiting for bank confirmation")
-                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                    Text("The bank is waiting for your confirmation.")
+//                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise
                         .listRowSeparator(.hidden)
                 }
-                Link("Confirm with bank", destination: destination)
+                Link("Confirm now", destination: destination)
                     .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
                     .accessibilityHint("Will go to bank website to confirm this withdrawal.")
             }
@@ -239,10 +248,10 @@ struct TransactionDetailView: View {
             Group {
                 switch transaction {
                     case .dummy(_):
-                        let title = ""
+                        let title = EMPTYSTRING
                         Text(title)
                             .accessibilityFont(.body)
-                    case .withdrawal(let withdrawalTransaction):
+                    case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {
                             if transaction.isPendingKYC {
@@ -257,50 +266,49 @@ struct TransactionDetailView: View {
                                 case .manual:               // "Make a wire transfer of \(amount) to"
                                     ManualDetailsV(common: common, details: withdrawalDetails)
 
-                                case .bankIntegrated:       // "Confirm with bank"
-                                    if !transaction.isPendingKYC {              // both should never happen, but...
+                                case .bankIntegrated:       // "Confirm now" (with bank)
+                                    if !transaction.isPendingKYC {              // cannot confirm if KYC is needed first
                                         let confirmed = withdrawalDetails.confirmed ?? false
                                         if !confirmed {
                                             if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                                 if let destination = URL(string: confirmationUrl) {
                                                     ConfirmationButton(destination: destination)
-                                                }
-                                            }
-                                        }
-                                    }
+                                    }   }   }   }
                             } // switch
-                        } // ManualDetails or Confirm with bank
+                        } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: details.exchangeBaseUrl, large: false, summary: nil)
-                    case .payment(let paymentTransaction):
+                    }
+                    case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
                         Text(details.info.summary)
                             .accessibilityFont(.title3)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
                                         topTitle: String(localized: "Sum to be paid:"),
                                           baseURL: nil, large: true, summary: details.info.summary)     // TODO: baseURL
-                    case .refund(let refundTransaction):
+                    }
+                    case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:"),
                                         topTitle: String(localized: "Refunded amount:"),
                                          baseURL: nil, large: true, summary: nil)     // TODO: baseURL, summary
-                    case .reward(let rewardTransaction):
-                        let details = rewardTransaction.details                 // TODO: more details
+                    }
+                    case .reward(let rewardTransaction): Group {
+                        let details = rewardTransaction.details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:"),
                                         topTitle: String(localized: "Received Reward:"),
                                          baseURL: details.exchangeBaseUrl, large: true, summary: nil)       // TODO: summary
-                    case .refresh(let refreshTransaction):
+                    }
+                    case .refresh(let refreshTransaction): Group {
                         let details = refreshTransaction.details                // TODO: details
+                        Text(details.refreshReason.rawValue)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:"),
                                         topTitle: String(localized: "Refreshed amount:"),
                                          baseURL: nil, large: true, summary: nil)     // TODO: baseURL
-                    case .peer2peer(let p2pTransaction):
-                        let details = p2pTransaction.details                    // TODO: details
-                        Text(details.info.summary)
-                            .accessibilityFont(.title2)
-                            .lineLimit(4)
-                            .padding(.bottom)
+                    }
+                    case .peer2peer(let p2pTransaction): Group {
+                        let details = p2pTransaction.details
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {
@@ -322,6 +330,7 @@ struct TransactionDetailView: View {
                                         topTitle: transaction.localizedType + colon,
                                          baseURL: details.exchangeBaseUrl, large: false,
                                          summary: details.info.summary)
+                    } // p2p
                 } // switch
             } // Group
         }

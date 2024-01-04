@@ -16,7 +16,7 @@ enum TransactionDecodingError: Error {
 }
 
 enum TransactionMinorState: String, Codable {
-      // Placeholder until D37 is fully implemented
+    // Placeholder until D37 is fully implemented
     case unknown
     case deposit
     case kyc        // KycRequired
@@ -26,6 +26,7 @@ enum TransactionMinorState: String, Codable {
     case submitPayment = "submit-payment"
     case rebindSession = "rebind-session"
     case refresh
+    case refreshExpired = "refresh-expired"
     case pickup
     case autoRefund = "auto-refund"
     case user
@@ -50,6 +51,46 @@ enum TransactionMinorState: String, Codable {
     case proposed
     case refundAvailable = "refund-available"
     case acceptRefund = "accept-refund"
+
+    var localizedState: String? {
+        switch self {
+            case .unknown:                  return self.rawValue
+            case .deposit:                  return self.rawValue
+            case .kyc:                      return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
+            case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
+            case .mergeKycRequired:         return String(localized: "MinorState.mergekyc", defaultValue: "KYC merge", comment: "TxMinorState heading")
+            case .track:                    return self.rawValue
+            case .submitPayment:            return self.rawValue
+            case .rebindSession:            return self.rawValue
+            case .refresh:                  return self.rawValue
+            case .refreshExpired:           return self.rawValue
+            case .pickup:                   return self.rawValue
+            case .autoRefund:               return self.rawValue
+            case .user:                     return self.rawValue
+            case .bank:                     return self.rawValue
+            case .exchange:                 return self.rawValue
+            case .claimProposal:            return self.rawValue
+            case .checkRefund:              return self.rawValue
+            case .createPurse:              return self.rawValue
+            case .deletePurse:              return self.rawValue
+            case .ready:                    return self.rawValue
+            case .merge:                    return self.rawValue
+            case .repurchase:               return self.rawValue
+            case .bankRegisterReserve:      return self.rawValue
+            case .bankConfirmTransfer:      return String(localized: "MinorState.bankConfirmTransfer", defaultValue: "Waiting for bank", comment: "TxMinorState heading")
+            case .withdrawCoins:            return self.rawValue
+            case .exchangeWaitReserve:      return self.rawValue
+            case .abortingBank:             return self.rawValue
+            case .aborting:                 return self.rawValue
+            case .refused:                  return self.rawValue
+            case .withdraw:                 return self.rawValue
+            case .merchantOrderProposed:    return self.rawValue
+            case .proposed:                 return self.rawValue
+            case .refundAvailable:          return self.rawValue
+            case .acceptRefund:             return self.rawValue
+//            default: return nil
+        }
+    }
 }
 
 enum TransactionMajorState: String, Codable {
@@ -264,13 +305,20 @@ struct WithdrawalTransaction : Sendable{
     var details: WithdrawalTransactionDetails
 }
 
+struct RefundInfo: Decodable {
+    var amountEffective: Amount
+    var amountRaw: Amount
+    var transactionId: String
+    var timestamp: Timestamp
+}
+
 struct PaymentTransactionDetails: Decodable {
     var info: OrderShortInfo
     var proposalId: String
     var totalRefundRaw: Amount
     var totalRefundEffective: Amount
     var refundPending: Amount?
-    var refunds: [String]?           // array of refund txIDs for this payment
+    var refunds: [RefundInfo]?           // array of refund txIDs for this payment
     var refundQueryActive: Bool?
     var posConfirmation: String?
 }
@@ -312,15 +360,24 @@ enum RefreshReason: String, Decodable {
     case refund
     case abortPay = "abort-pay"
     case abortDeposit = "abort-deposit"
+    case abortPeerPushDebit = "abort-peer-push-debit"
     case recoup
     case backupRestored = "backup-restored"
     case scheduled
+}
+struct RefreshError: Decodable {
+    var code: Int
+    var when: Timestamp
+    var hint: String
+    var numErrors: Int
+    var errors: [HTTPError]
 }
 struct RefreshTransactionDetails: Decodable {
     var refreshReason: RefreshReason
     var originatingTransactionId: String?
     var refreshInputAmount: Amount
     var refreshOutputAmount: Amount
+    var error: RefreshError?
 }
 
 struct RefreshTransaction : Sendable{
@@ -451,6 +508,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isAbortable  : Bool { common.txActions.contains(.abort) }
     var isFailable   : Bool { common.txActions.contains(.fail) }
     var isDeleteable : Bool { common.txActions.contains(.delete) }
+    var isRetryable  : Bool { common.txActions.contains(.retry) }
     var isResumable  : Bool { common.txActions.contains(.resume) }
     var isSuspendable: Bool { common.txActions.contains(.suspend) }
 
