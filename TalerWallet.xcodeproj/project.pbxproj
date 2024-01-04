@@ -637,7 +637,7 @@
 				4EB095412989CBFE0043A8A1 /* Main */,
 				4EB095342989CBFE0043A8A1 /* Balances */,
 				4EB0952E2989CBFE0043A8A1 /* Transactions */,
-				4EB095272989CBFE0043A8A1 /* Exchange */,
+				4EB095272989CBFE0043A8A1 /* Banking */,
 				4EB095242989CBFE0043A8A1 /* Settings */,
 				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
@@ -656,7 +656,7 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		4EB095272989CBFE0043A8A1 /* Exchange */ = {
+		4EB095272989CBFE0043A8A1 /* Banking */ = {
 			isa = PBXGroup;
 			children = (
 				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
@@ -666,7 +666,7 @@
 				4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */,
 				4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */,
 			);
-			path = Exchange;
+			path = Banking;
 			sourceTree = "<group>";
 		};
 		4EB0952A2989CBFE0043A8A1 /* Payment */ = {
