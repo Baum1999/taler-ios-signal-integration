@@ -26,6 +26,7 @@ struct BalancesSectionView {
     @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
+    @State private var showSpendingHint = true
     @State private var isShowingDetailView = false
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
@@ -61,11 +62,14 @@ extension BalancesSectionView: View {
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
 
         Section {
-            if "KUDOS" == currency && !balance.available.isZero {
-                Text(iconOnly ? "Visit the [Demo Shop](https://shop.demo.taler.net)" :
-                        "You can spend these KUDOS in the [Demo Shop](https://shop.demo.taler.net), or send them to another wallet.")
-                    .accessibilityFont(.body)
-                    .multilineTextAlignment(.leading)
+            let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
+            if showSpendingButton {
+                if !iconOnly && showSpendingHint {
+                    Text("You can spend these KUDOS in the Demo Shop, or send them to another wallet.")
+                        .accessibilityFont(.body)
+                        .multilineTextAlignment(.leading)
+                        .listRowSeparator(.hidden)
+                }
             }
             BalancesNavigationLinksView(symLog: symLog,
                                          stack: stack.push(),
@@ -75,6 +79,16 @@ extension BalancesSectionView: View {
                          completedTransactions: $completedTransactions,
                                reloadAllAction: reloadCompleted,
                                reloadOneAction: reloadOneAction)
+            if showSpendingButton {
+                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend test money")
+                Button(title) {
+                    showSpendingHint = false
+                    UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
+                }
+                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+                .accessibilityHint("Will go to the demo shop website.")
+                .listRowSeparator(.hidden)
+            }
             if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
@@ -225,7 +239,7 @@ fileprivate struct BalancesNavigationLinksView: View {
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 
-            NavigationLink(destination: LazyView {
+            let balanceDest = LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                   currency: currency,
@@ -233,17 +247,19 @@ fileprivate struct BalancesNavigationLinksView: View {
                                 showUpDown: true,
                            reloadAllAction: reloadAllAction,
                            reloadOneAction: reloadOneAction)
-            }, tag: 3, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
+            }
+            NavigationLink(destination: balanceDest, tag: 3, selection: $buttonSelected)
+                { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
-            BalanceRowView(amount: balance.available,
-                       sendAction: {
+            BalanceRowView(stack: stack.push(),
+                          amount: balance.available,
+                      sendAction: {
                             selectAndUpdate(1)      // trigger SendAmount NavigationLink
-                    }, recvAction: {
+                   }, recvAction: {
                             selectAndUpdate(2)      // trigger RequestPayment NavigationLink
-                     }, rowAction: {
+                    }, rowAction: {
                             buttonSelected = 3      // trigger TransactionList NavigationLink
-                     })
+                  }, balanceDest: balanceDest)
         }
     }
 }

@@ -9,34 +9,60 @@ struct BalanceButton: View {
     let amountStr: String
     let sizeCategory: ContentSizeCategory
     let rowAction: () -> Void
+    let balanceDest: LazyView<TransactionsListView>?
 
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
+    /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
+    /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let balanceTitleStr = String(localized: "Balance:", comment: "Main view")
-        Button(action: rowAction) {
-            SingleAxisGeometryReader { width in         // e.g. 301 instead of 313 => padding = 6
-                Group {
-                    let title = iconOnly ? "" : balanceTitleStr
-                    let titles = [(balanceTitleStr, TalerFont.uiFont(.title2)),
-                                  (amountStr,    TalerFont.uiFont(.title))]
-                    let fitsSideBySide = iconOnly || Self.fitsSideBySide(titles, availableWidth: width,
-                                                                  sizeCategory: sizeCategory,
-                                                                  padding: 20, sameSize: false)
-                    AmountRowV(amountStr: amountStr, amountColor: .primary, doneOrPending: true, largeAmountFont: true,
-                               fitsHorizontal: fitsSideBySide, vertAlignment: .lastTextBaseline) {
-                        Text(title)
-                            .accessibilityFont(.title2)
-                            .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
-                    }
-                }
+        let amountText = Text(amountStr)
+            .accessibilityFont(.title)
+            .foregroundColor(.primary)
+            .monospacedDigit()
+        let hLayout = HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                amountText
             }
+        let balanceCell = Group {
+            if iconOnly {
+                hLayout
+            } else {
+                let balanceText = Text("Balance:", comment: "Main view")
+                    .accessibilityFont(.title2)
+                    .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                let vLayout = VStack(alignment: .leading, spacing: 0) {
+                    balanceText
+                    hLayout
+                }
+
+                if #available(iOS 16.0, *) {
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: HSPACING) {
+                            balanceText
+                            hLayout
+                        }
+                        vLayout
+                    }
+                } else { vLayout } // view for iOS 15
+            }
+        }
+#if TABBAR  // Taler Wallet
+        NavigationLink { balanceDest } label: {
+            balanceCell
+                .accessibilityElement(children: .combine)
+                .accessibilityHint("Will go to main transactions list.")
+        }
+#else       // GNU Taler
+        Button(action: rowAction) {
+            balanceCell
         }   .disabled(false)
             .buttonStyle(TalerButtonStyle(type: iconOnly ? .plain : .balance, aligned: .trailing))
             .accessibilityElement(children: .combine)
             .accessibilityHint("Will go to main transactions list.")
 //            .accessibilityLabel(balanceTitleStr + " " + amountStr)    // TODO: CurrencyFormatter!
+#endif
     }
 }
 
@@ -45,10 +71,12 @@ struct BalanceButton: View {
 ///  Balance:               amount
 /// [Send Money]  [Request Payment]
 struct BalanceRowView: View {
+    let stack: CallStack
     let amount: Amount
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
+    let balanceDest: LazyView<TransactionsListView>?
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -65,12 +93,14 @@ struct BalanceRowView: View {
     let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\tPayment",
                                  comment: "`Request Payment´ in Balances - set exactly 1 \\t for line break")
     var body: some View {
-        VStack (alignment: .trailing) {
+        VStack (alignment: .trailing, spacing: 6) {
             let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
             let amountStr = amount.string(currencyInfo)
             BalanceButton(amountStr: amountStr,
                        sizeCategory: sizeCategory,
-                          rowAction: rowAction)
+                          rowAction: rowAction,
+                        balanceDest: balanceDest)
+//            .border(.red)
 
             let sendTitle = iconOnly ? sendTitle0 : sendTitle1
             let requTitle = iconOnly ? requestTitle0 : requestTitle1
@@ -86,7 +116,9 @@ struct BalanceRowView: View {
                     HStack(spacing: HSPACING) {
                         twoRowButtons.makeCopy(fitsSideBySide: true)
                     }
+//                        .border(.red)
                     VStack { twoRowButtons }
+//                        .border(.red)
                 }
             } else { // view for iOS 15
                 VStack { twoRowButtons }
@@ -107,9 +139,11 @@ struct BalanceRowView_Previews: PreviewProvider {
 
         List {
             Section {
-                BalanceRowView(amount: demo, sendAction: {}, recvAction: {}, rowAction: {})
+                BalanceRowView(stack: CallStack("Preview"), amount: demo,
+                          sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
             }
-            BalanceRowView(amount: test, sendAction: {}, recvAction: {}, rowAction: {})
+            BalanceRowView(stack: CallStack("Preview"), amount: test, 
+                      sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
         }
     }
   }
