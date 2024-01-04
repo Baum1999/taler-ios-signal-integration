@@ -20,9 +20,13 @@ struct SettingsItem<Content: View>: View {
     var body: some View {
         HStack {
             VStack {
+                let isWeb = id1?.hasPrefix("web") ?? false
+                let foreColor = isWeb ? WalletColors().tint
+                                      : .primary
                 Text(name)
                     .id(id1)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(foreColor)
                     .accessibilityFont(.title2)
                     .padding([.bottom], 0.01)
                 if let desc = description {
