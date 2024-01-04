@@ -7,12 +7,30 @@ import taler_swift
 import AVFoundation
 
 struct TransactionButton: View {
-    let transactionId : String
-    let command : TxAction
+    let transactionId: String
+    let command: TxAction
+    let warning: String?
     let action: (_ transactionId: String) async throws -> Void
 
-    @State var disabled: Bool = false
-    @State var executed: Bool = false
+    @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
+
+    @State private var disabled: Bool = false
+    @State private var executed: Bool = false
+    @State private var showAlert: Bool = false
+
+    private func doAction() {
+        disabled = true     // don't try this more than once
+        Task { // runs on MainActor
+            do {
+                try await action(transactionId)
+//                symLog.log("\(executed) \(transactionId)")
+                executed = true
+            } catch {    // TODO: error
+//                symLog.log(error.localizedDescription)
+            }
+        }
+    }
+
     var body: some View {
         let isDestructive = (command == .delete) || (command == .fail)
         let isCancel = (command == .abort)
@@ -21,15 +39,10 @@ struct TransactionButton: View {
                                               : nil
         Button(role: role, action: {
             if !disabled {
-                disabled = true     // don't try this more than once
-                Task { // runs on MainActor
-                    do {
-                        try await action(transactionId)
-//                    symLog.log("\(executed) \(transactionId)")
-                        executed = true
-                    } catch {    // TODO: error
-//                    symLog.log(error.localizedDescription)
-                    }
+                if shouldShowWarning && (isDestructive || isCancel) {
+                    showAlert = true
+                } else {
+                    doAction()
                 }
             }
         }, label: {
@@ -46,6 +59,16 @@ struct TransactionButton: View {
         .buttonStyle(.bordered)
         .controlSize(.large)
         .disabled(disabled)
+        .alert(warning ?? EMPTYSTRING, isPresented: $showAlert, actions: {
+                Button("Cancel", role: .cancel) {
+                    showAlert = false
+                }
+                Button(command.localizedActionTitle) {
+                    showAlert = false
+                    doAction()
+                }
+            }, message: { Text("This operation cannot be undone") }
+        )
     }
 }
 // MARK: -
@@ -58,7 +81,9 @@ struct TransactionButton_Previews: PreviewProvider {
 
     static var previews: some View {
         List {
-            TransactionButton(transactionId: "Button pressed", command: .abort, action: action)
+            TransactionButton(transactionId: "Button pressed", command: .abort,
+                              warning: "Are you sure you want to abort this transaction?",
+                              action: action)
         }
     }
 }

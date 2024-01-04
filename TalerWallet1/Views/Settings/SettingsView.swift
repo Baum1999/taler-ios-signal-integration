@@ -31,6 +31,8 @@ struct SettingsView: View {
     @AppStorage("useHaptics") var useHaptics: Bool = true
     @AppStorage("playSoundsI") var playSoundsI: Int = 1
     @AppStorage("playSoundsB") var playSoundsB: Bool = true
+    @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
+//    @AppStorage("increaseContrast") var increaseContrast: Bool = false
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -101,12 +103,13 @@ struct SettingsView: View {
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
 #if DEBUG
-                Group {
+                if showDevelopItems {
                     Text("https://bank.taler.grothoff.org/")
                     Text("https://bank.taler.fdold.eu/")
                     Text("https://bank.head.taler.net/")
                     Text("https://bank.test.taler.net/")
                     Text("https://bank.demo.taler.net/")
+                    Text("https://bank.taler.ar/")
                 }
 #endif
                 if controller.hapticCapability.supportsHaptics {
@@ -120,14 +123,20 @@ struct SettingsView: View {
 #if DEBUG
                 if Double.random(in: -100.0...100.0) > 0 {
                     SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSoundsI,
-                         description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
-                .id("playSounds")
-                SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
-                    .id("font")
+                                    description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
+                    .id("playSounds")
                 } else { playToggle }
 #else
                 playToggle
 #endif
+//                SettingsToggle(name: String(localized: "Increase Contrast"), value: $increaseContrast, id1: "contrast",
+//                               description: hideDescriptions ? nil : String(localized: "If you don't want to set it globally in Settings.app"))
+//                .id("increaseContrast")
+                SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
+                               description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
+                .id("showWarnings")
+//                SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
+//                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly, id1: "minimal",
