@@ -35,73 +35,13 @@ struct IconBadge: View {
         }.accessibilityHidden(true)
     }
 }
-struct TransactionRowContentV: View {
-    var centerTop: String
-    var centerBottom: String
-    let isHorizontal: Bool
-    let pending: Bool
-    let incoming: Bool
-    let shouldConfirm: Bool
-    let needsKYC: Bool
-    let done: Bool
-    let foreColor:Color
-
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-
-    public static func width(titles: (String, String?), isHorizontal: Bool,
-                             sizeCategory: ContentSizeCategory) -> CGFloat {
-        let imageFont = TalerFont.uiFont(.largeTitle)
-        let uiFont1 = TalerFont.uiFont(.headline)
-        let uiFont2 = TalerFont.uiFont(.callout)
-
-        let image = "++"
-        let imageWidth = image.widthOfString(usingUIFont: imageFont, sizeCategory) + 8.0     // spacing: 8
-        let (title1, title2) = titles
-        let title1Width = title1.widthOfString(usingUIFont: uiFont1, sizeCategory)
-        var title2Width = 0.0
-        var totalWidth = title1Width
-        if let title2 {
-            title2Width = title2.widthOfString(usingUIFont: uiFont2, sizeCategory)
-            let blankStr = " "
-            totalWidth += blankStr.widthOfString(usingUIFont: uiFont1, sizeCategory) + title2Width
-        }
-
-//    let logStr = String(format: "image: %.2f   title: %.2f   total: %.2f", imageWidth, max(title1Width, title2Width), totalWidth)
-//    print(logStr)
-        return imageWidth + (isHorizontal ? totalWidth
-                                          : max(title1Width, title2Width))
-    }
-
-    var body: some View {
-        let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
-                              shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let doneOrPending = done || pending
-        let increasedContrast = colorSchemeContrast == .increased
-        let textColor = doneOrPending ? .primary :
-                    increasedContrast ? .secondary : WalletColors().gray3
-        HStack(spacing: 8) {
-            iconBadge
-            VStack(alignment: .leading) {
-                Text(centerTop)
-                    .foregroundColor(textColor)
-                    .strikethrough(!doneOrPending, color: .red)
-                    .accessibilityFont(.headline)
-//                  .fontWeight(.medium)      iOS 16
-                    .padding(.bottom, -2.0)
-                    .accessibilityLabel(doneOrPending ? centerTop : centerTop +  ", canceled")
-                Text(centerBottom)
-                    .foregroundColor(textColor)
-                    .accessibilityFont(.callout)
-            }
-        }
-    }
-}
 
 struct TransactionRowView: View {
     let transaction : Transaction
     let currency: String
 
     @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @EnvironmentObject private var controller: Controller
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
@@ -110,11 +50,12 @@ struct TransactionRowView: View {
 
     var body: some View {
         let common = transaction.common
-        let amount = common.amountEffective
         let pending = transaction.isPending
         let needsKYC = transaction.isPendingKYC
         let shouldConfirm = transaction.shouldConfirm
         let done = transaction.isDone
+        let doneOrPending = done || pending
+        let increasedContrast = colorSchemeContrast == .increased
         let details = transaction.detailsToShow()
         let keys = details.keys
 
@@ -122,32 +63,98 @@ struct TransactionRowView: View {
         let incoming = common.incoming()
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
-                             : WalletColors().incompleteColor
+                             : WalletColors().uncompletedColor
+        let textColor = doneOrPending ? .primary :
+                    increasedContrast ? .secondary : Color(.tertiaryLabel)
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        SingleAxisGeometryReader { width in
-            Group {
-                let amountStr = amount.string(currencyInfo)
-                let amountWidth = amountStr.width(largeAmountFont: false, sizeCategory)
 
-                let contentWidth = TransactionRowContentV.width(titles: (transaction.localizedType, dateString),
-                                                          isHorizontal: false, sizeCategory: sizeCategory)
-                let needVStack = needVStack(available: width, contentWidth: contentWidth, valueWidth: amountWidth)
-
-                AmountRowV(amountStr: amountStr, amountColor: foreColor, doneOrPending: done || pending,
-                     largeAmountFont: false, fitsHorizontal: !needVStack, vertAlignment: .center) {
-
-                    TransactionRowContentV(centerTop: transaction.localizedType,
-                                        centerBottom: dateString, isHorizontal: true,
-                                             pending: pending, incoming: incoming,
-                                       shouldConfirm: shouldConfirm, needsKYC: needsKYC,
-                                                done: done, foreColor: foreColor)
-                }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityValue(needsKYC ? ". Needs K Y C" :
-                                   shouldConfirm ? ". Needs bank confirmation" : EMPTYSTRING)
-                    .accessibilityHint("Will go to detail view.")
+        let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
+                                  shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+        let amountStr = common.amountEffective.string(currencyInfo)
+        let amountText = Text(amountStr)
+            .accessibilityFont(.title2)
+            .foregroundColor(foreColor)
+            .monospacedDigit()
+        let amount = HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                amountText
             }
+        let topString = transaction.localizedType
+        let centerTop = Text(topString)
+            .foregroundColor(textColor)
+            .strikethrough(!doneOrPending, color: .red)
+            .accessibilityFont(.headline)
+//            .fontWeight(.medium)      iOS 16
+            .padding(.bottom, -2.0)
+            .accessibilityLabel(doneOrPending ? topString : topString +  ", canceled")
+        let centerBottom = Text(dateString)
+            .foregroundColor(textColor)
+            .accessibilityFont(.callout)
+
+        let layout1 = HStack(spacing: 0) {
+            HStack(spacing: -4) {
+                iconBadge
+                Spacer(minLength: 0)
+                VStack(alignment: .leading) {
+                    centerTop
+                    centerBottom
+                }
+                Spacer(minLength: 2)
+            }
+            amountText
         }
+
+        let layout2 = VStack(spacing: 0) {
+            centerTop
+            HStack(spacing: 8) {
+                HStack(spacing: 0) {
+                    iconBadge//.border(.blue)
+                    Spacer(minLength: 0)
+                    centerBottom
+                    Spacer(minLength: 2)
+                }//.border(.green)
+                amountText//.border(.red)
+            }//.border(.orange)
+        }
+
+        let layout3 = VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                HStack(spacing: 0) {
+                    iconBadge
+                    Spacer(minLength: 0)
+                    centerTop
+                    Spacer(minLength: 2)
+                }
+                amountText
+            }
+            centerBottom
+        }
+
+        let layout4 = VStack(spacing: 0) {
+            centerTop
+            HStack(spacing: -4) {
+                iconBadge//.border(.green)
+                Spacer(minLength: 2
+                )
+                amountText//.border(.green)
+            }//.border(.orange)
+            centerBottom
+        }
+
+        Group {
+            if #available(iOS 16.0, *) {
+                ViewThatFits(in: .horizontal) {
+                    layout1//.border(.green)
+                    layout2
+                    layout3//.border(.red)
+                    layout4//.border(.blue)
+                }
+            } else { layout4 } // view for iOS 15
+        }
+            .accessibilityElement(children: .combine)
+            .accessibilityValue(needsKYC ? ". Needs K Y C" :
+                           shouldConfirm ? ". Needs bank confirmation" : EMPTYSTRING)
+            .accessibilityHint("Will go to detail view.")
     }
 }
 // MARK: -
