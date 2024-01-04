@@ -15,7 +15,7 @@ struct AccountRestriction: Decodable {
     var type: AccountRestrictionType
     var payto_regex: String?
     var human_hint: String?
-    var human_hint_i18n: String?
+    var human_hint_i18n: [String:String]?
 }
 struct WithdrawalExchangeAccountDetails: Decodable {
     var status: String
