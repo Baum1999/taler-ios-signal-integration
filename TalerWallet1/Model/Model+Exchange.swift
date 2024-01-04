@@ -175,7 +175,7 @@ extension WalletModel {
       async -> Exchange? {
         do {
             let request = GetExchangeByUrl(exchangeBaseUrl: url)
-            logger.info("query for exchange: \(url, privacy: .public)")
+//            logger.info("query for exchange: \(url, privacy: .public)")
             let response = try await sendRequest(request)
             return response
         } catch {

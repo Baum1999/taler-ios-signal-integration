@@ -161,10 +161,10 @@ class DebugViewC: ObservableObject {
             if viewID == 0 {
                 logger.log("switching ON, \(newID, privacy: .public)")
                 viewID = newID                              // publish ON
-                announce(this: "Current view is: \(newID).")
+//                announce(this: "Current view is: \(newID).")
             } else if viewID != newID {
                 logger.log("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
-                announce(this: "View switched from \(self.viewID) to \(newID).")
+//                announce(this: "View switched from \(self.viewID) to \(newID).")
                 viewID = newID                              // publish new viewID
             } else {
                 logger.log("\(newID, privacy: .public) stays")
