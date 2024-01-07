@@ -196,7 +196,11 @@ extension WalletCore {
                     switch decoded.newTxState.major {
                         case .done:
                             logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                            Controller.shared.playSound(type.isIncoming ? 2 : 1)
+                            if type.isWithdrawal {
+                                Controller.shared.playSound(2)  // payment_received only for withdrawals
+                            } else if !type.isIncoming {
+                                Controller.shared.playSound(1)  // payment_sent for all outgoing tx
+                            }
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .aborting:
