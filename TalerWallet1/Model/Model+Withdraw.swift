@@ -7,16 +7,23 @@ import taler_swift
 import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-enum AccountRestrictionType: String, Decodable {
+enum AccountRestrictionType: String, Codable {
     case deny
     case regex
 }
-struct AccountRestriction: Decodable {
+
+typealias HintDict = [String:String]
+
+struct AccountRestriction: Codable, Hashable {
     var type: AccountRestrictionType
     var payto_regex: String?
     var human_hint: String?
-    var human_hint_i18n: [String:String]?
+    var human_hint_i18n: HintDict?
 }
+extension AccountRestriction: Identifiable {
+    var id: AccountRestriction {self}
+}
+
 struct WithdrawalExchangeAccountDetails: Decodable {
     var status: String
     var bankName: String?
