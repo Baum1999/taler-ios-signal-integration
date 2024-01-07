@@ -66,6 +66,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
 
     public static let decimalSeparator = "."
 
+    /// 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
     /// The currency of the amount. Cannot be changed later, except...
     private var currency: String
 

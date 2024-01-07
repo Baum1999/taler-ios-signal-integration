@@ -31,8 +31,8 @@ struct ScopeInfo: Codable, Hashable {
         case auditor
     }
     var type: ScopeInfoType
-    var url: String?    // only for "exchange"
-    var currency: String
+    var url: String?            // only for "exchange"
+    var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
 
     public static func == (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
         if let lhsBaseURL = lhs.url {
