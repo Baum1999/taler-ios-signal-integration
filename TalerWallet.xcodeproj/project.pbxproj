@@ -90,7 +90,6 @@
 		4E3EAE622A990778009F1BE8 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095312989CBFE0043A8A1 /* TransactionDetailView.swift */; };
 		4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0951C2989CBCB0043A8A1 /* WalletCore.swift */; };
 		4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
-		4E3EAE652A990778009F1BE8 /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095422989CBFE0043A8A1 /* SideBarView.swift */; };
 		4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095112989CBB00043A8A1 /* WalletModel.swift */; };
 		4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095332989CBFE0043A8A1 /* URLSheet.swift */; };
 		4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */; };
@@ -207,7 +206,6 @@
 		4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */; };
 		4EB095622989CBFE0043A8A1 /* Model+Withdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */; };
 		4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */; };
-		4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095422989CBFE0043A8A1 /* SideBarView.swift */; };
 		4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
 		4EB095682989CBFE0043A8A1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095442989CBFE0043A8A1 /* MainView.swift */; };
 		4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095452989CBFE0043A8A1 /* ErrorView.swift */; };
@@ -382,7 +380,6 @@
 		4EB0953C2989CBFE0043A8A1 /* WithdrawURIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawURIView.swift; sourceTree = "<group>"; };
 		4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Withdraw.swift"; sourceTree = "<group>"; };
 		4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawTOSView.swift; sourceTree = "<group>"; };
-		4EB095422989CBFE0043A8A1 /* SideBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
 		4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchAnimationView.swift; sourceTree = "<group>"; };
 		4EB095442989CBFE0043A8A1 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		4EB095452989CBFE0043A8A1 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
@@ -717,7 +714,6 @@
 			isa = PBXGroup;
 			children = (
 				4EB095442989CBFE0043A8A1 /* MainView.swift */,
-				4EB095422989CBFE0043A8A1 /* SideBarView.swift */,
 				4EB095452989CBFE0043A8A1 /* ErrorView.swift */,
 				4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */,
 			);
@@ -1112,7 +1108,6 @@
 				4E3EAE622A990778009F1BE8 /* TransactionDetailView.swift in Sources */,
 				4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */,
 				4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */,
-				4E3EAE652A990778009F1BE8 /* SideBarView.swift in Sources */,
 				E37AA62A2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */,
 				4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */,
@@ -1218,7 +1213,6 @@
 				4EB095582989CBFE0043A8A1 /* TransactionDetailView.swift in Sources */,
 				4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */,
 				4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */,
-				4EB095662989CBFE0043A8A1 /* SideBarView.swift in Sources */,
 				E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
 				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
@@ -1508,7 +1502,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG TABBAR";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG TALER_WALLET";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_WORKSPACE = YES;
@@ -1550,7 +1544,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TABBAR;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TALER_WALLET;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_WORKSPACE = YES;

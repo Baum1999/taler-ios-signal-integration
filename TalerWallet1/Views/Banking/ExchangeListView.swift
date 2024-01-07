@@ -12,10 +12,6 @@ struct ExchangeListView: View {
     let stack: CallStack
     @Binding var balances: [Balance]
     let navTitle: String
-#if TABBAR  // Taler Wallet
-#else       // GNU Taler
-    var hamburgerAction: () -> Void
-#endif
     @EnvironmentObject private var model: WalletModel
 
     @State var showAlert: Bool = false
@@ -35,11 +31,6 @@ struct ExchangeListView: View {
     }
 
     var body: some View {
-#if TABBAR  // Taler Wallet
-        let hamburger: HamburgerButton? = nil
-#else       // GNU Taler
-        let hamburger = HamburgerButton(action: hamburgerAction)
-#endif
         let accessibilityLabelStr = String(localized: "Add Exchange", comment: "accessibilityLabel for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: accessibilityLabelStr) {
             showAlert = true
@@ -49,7 +40,7 @@ struct ExchangeListView: View {
         if #available(iOS 16.0, *) {
             ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
-                .navigationBarItems(leading: hamburger, trailing: plusButton)
+                .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
                     TextField("Exchange address", text: $newExchange)
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
@@ -63,7 +54,7 @@ struct ExchangeListView: View {
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
             ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
-                .navigationBarItems(leading: hamburger, trailing: plusButton)
+                .navigationBarItems(trailing: plusButton)
                 .textFieldAlert(isPresented: $showAlert,
                                       title: addTitleStr,
                                    doneText: addButtonStr,

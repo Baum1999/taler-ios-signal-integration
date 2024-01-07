@@ -18,7 +18,7 @@ struct RotatingTaler: View {
     let size: CGFloat
     @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
-#if TABBAR  // Taler Wallet
+#if TALER_WALLET
     let logo = "taler-logo-2023-blue"
 #else       // GNU Taler
     let logo = "taler-logo-2023-red"

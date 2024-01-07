@@ -38,11 +38,6 @@ struct SettingsView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
-#if TABBAR  // Taler Wallet
-#else       // GNU Taler
-    var hamburgerAction: () -> Void
-#endif
-
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
 #if DEBUG
@@ -86,11 +81,6 @@ struct SettingsView: View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-#endif
-#if TABBAR  // Taler Wallet
-        let hamburger: HamburgerButton? = nil
-#else       // GNU Taler
-        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
 #endif
         let walletCore = WalletCore.shared
         Group {
@@ -280,7 +270,6 @@ struct SettingsView: View {
             .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
-        .navigationBarItems(leading: hamburger)
         .onAppear() {
             showDevelopItems = developerMode
             hideDescriptions = iconOnly
@@ -311,11 +300,7 @@ struct SettingsView: View {
 #if DEBUG
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-#if TABBAR  // Taler Wallet
         SettingsView(stack: CallStack("Preview"), navTitle: "Settings")
-#else       // GNU Taler
-        SettingsView(stack: CallStack("Preview"), navTitle: "Settings") { }
-#endif
     }
 }
 #endif

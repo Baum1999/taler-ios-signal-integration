@@ -14,10 +14,6 @@ struct BalancesListView: View {
     let navTitle: String
     @Binding var balances: [Balance]
     @Binding var shouldReloadBalances: Int
-#if TABBAR  // Taler Wallet
-#else       // GNU Taler
-    let hamburgerAction: () -> Void
-#endif
 
     @EnvironmentObject private var model: WalletModel
 
@@ -97,17 +93,11 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-#if TABBAR  // Taler Wallet
-        let hamburger: HamburgerButton? = nil
-#else       // GNU Taler
-        let hamburger: HamburgerButton = HamburgerButton(action: hamburgerAction)
-#endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 amountToTransfer: $amountToTransfer, summary: $summary,
                 reloadBalances: reloadBalances)
             .navigationTitle(navTitle)
-            .navigationBarItems(leading: hamburger,
-                                trailing: QRButton(action: checkCameraAvailable))
+            .navigationBarItems(trailing: QRButton(action: checkCameraAvailable))
             .alert("Scanning QR-codes requires access to the camera",
                    isPresented: $showCameraAlert,
                        actions: {   openSettingsButton

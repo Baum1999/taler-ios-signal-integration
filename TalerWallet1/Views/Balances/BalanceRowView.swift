@@ -48,21 +48,12 @@ struct BalanceButton: View {
                 } else { vLayout } // view for iOS 15
             }
         }
-#if TABBAR  // Taler Wallet
         NavigationLink { balanceDest } label: {
             balanceCell
                 .accessibilityElement(children: .combine)
                 .accessibilityHint("Will go to main transactions list.")
-        }
-#else       // GNU Taler
-        Button(action: rowAction) {
-            balanceCell
-        }   .disabled(false)
-            .buttonStyle(TalerButtonStyle(type: iconOnly ? .plain : .balance, aligned: .trailing))
-            .accessibilityElement(children: .combine)
-            .accessibilityHint("Will go to main transactions list.")
 //            .accessibilityLabel(balanceTitleStr + " " + amountStr)    // TODO: CurrencyFormatter!
-#endif
+        }
     }
 }
 

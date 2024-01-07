@@ -92,7 +92,6 @@ extension MainView {
         let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
         let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
-#if TABBAR  // Taler Wallet
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -129,39 +128,6 @@ extension MainView {
                 self.selectedTab = tappedTab
             }
         }
-#else       // GNU Taler
-        @State var sidebarVisible: Bool = false
-        func hamburgerAction() {
-            withAnimation(.easeInOut(duration: 0.25)) {
-                sidebarVisible = !sidebarVisible
-            }
-        }
-
-        var views: [SidebarItem] {[
-            SidebarItem(name: balancesTitle,
-                    sysImage: "chart.bar.xaxis",  // creditcard.fill     // TODO: Wallet Icon
-                        view: AnyView(BalancesListView(stack: stack.push(balancesTitle),
-                                                    navTitle: balancesTitle,
-                                                    balances: $balances,
-                                        shouldReloadBalances: $shouldReloadBalances,
-                                             hamburgerAction: hamburgerAction)
-                                     )),
-            SidebarItem(name: exchangesTitle,
-                    sysImage: "arrow.triangle.2.circlepath",
-                        view: AnyView(ExchangeListView(stack: stack.push(exchangesTitle),
-//                                                    balances: $balances,
-                                                    navTitle: exchangesTitle,
-                                             hamburgerAction: hamburgerAction)
-                                     )),
-            SidebarItem(name: settingsTitle,    // TODO: "About"?
-                    sysImage: "gearshape.fill",
-                        view: AnyView(SettingsView(stack: stack.push(settingsTitle),
-                                                navTitle: settingsTitle,
-                                         hamburgerAction: hamburgerAction)
-                                     ))
-        ]}
-        @State var currentView: Int = 0
-#endif
 
         var body: some View {
 #if PRINT_CHANGES
@@ -179,7 +145,6 @@ extension MainView {
             let delay: UInt = 0     // no delay for release builds
 #endif
           Group {
-#if TABBAR  // Taler Wallet
 //            let labelStyle = iconOnly ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
             TabView(selection: tabSelection()) {
                 NavigationView {
@@ -220,35 +185,6 @@ extension MainView {
                 .tag(Tab.settings)
             }
 //            .animation(.linear(duration: LAUNCHDURATION), value: selectedTab)     doesn't work. Needs CustomTabView
-#else       // GNU Taler
-            ZStack(alignment: .leading) {
-                NavigationView {   // the one and only for all non-sheet views
-                    VStack(alignment: .leading) {   // only needed for backslide transition
-                        views[currentView].view
-                            .id(views[currentView].name)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                            .transition(.backslide)
-                    }   .id(talerFont)
-                        .navigationBarTitleDisplayMode(.automatic)
-                        .background(NavigationBarBuilder { navigationController in
-                            //                            navigationController.navigationBar.barTintColor = .red
-                            navigationController.navigationBar.titleTextAttributes =
-                                [.font: TalerFont.uiFont(talerFont, size: 24, relativeTo: .title2)]
-                            navigationController.navigationBar.largeTitleTextAttributes =
-                                [.font: TalerFont.uiFont(talerFont, size: 38, relativeTo: .largeTitle)]
-                        })
-                }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                .navigationViewStyle(.stack)
-                .talerNavBar(talerFont: talerFont)
-
-                // The side view is above (Z-Axis) the current view
-                SideBarView(stack: stack.push(),
-                            views: views,
-                      currentView: $currentView,
-                   sidebarVisible: sidebarVisible,
-                  hamburgerAction: hamburgerAction)
-            }
-#endif
           } .onNotification(.KYCrequired) { notification in
               // show an alert with the KYC link (button) which opens in Safari
                 if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
@@ -279,12 +215,8 @@ extension MainView {
                 shouldReloadBalances += 1
             }
             .onNotification(.TransactionDone) {
-#if TABBAR  // Taler Wallet
                 shouldReloadBalances += 1
                 selectedTab = .balances
-#else       // GNU Taler
-
-#endif
             }
             .onChange(of: balances) { newArray in
                 for balance in newArray {
