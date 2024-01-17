@@ -251,7 +251,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     public init(currency: String, cent: UInt64) {
         self.currency = currency
         self.integer = cent / 100   // For existing currencies, fractional digits could be 0, 2 or 3
-        self.fraction = UInt32(cent - (self.integer * 100))
+        self.fraction = UInt32(cent - (self.integer * 100)) * (Self.fractionalBase() / 100)
     }
 
     /// Initializes an amount from a decoder.
