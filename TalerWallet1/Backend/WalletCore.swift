@@ -153,7 +153,7 @@ extension WalletCore {
                                  userInfo: [AnyHashable: Any]? = nil) {
         Task { // runs on MainActor
             await postNotificationM(aName, object: anObject, userInfo: userInfo)
-            logger.info("Notification sent: \(aName.rawValue)")
+//            logger.info("Notification sent: \(aName.rawValue, privacy: .public)")
         }
     }
 
@@ -206,13 +206,13 @@ extension WalletCore {
                         case .aborting:
                             if let newMinor = decoded.newTxState.minor {
                                 if newMinor == .refreshExpired {
-                                    logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    logger.warning("RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     Controller.shared.playSound(0)
                                     postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 }
                             }
-                            logger.warning("Unknow aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.warning("Unknown aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         case .expired:
                             logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
@@ -235,8 +235,10 @@ extension WalletCore {
                                     postNotification(.KYCrequired, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 }
-                            }
+                                logger.log("Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            } else {
                             logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
                             logger.warning("Unknow transition: \(decoded.transactionId, privacy: .private(mask: .hash))")
@@ -360,6 +362,7 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
                 self.requestsMade += 1
                 self.semaphore.signal()         // free requestsMade
               self.symLog.log(jsonString)
+              self.logger.log("sendRequest \(requestId, privacy: .public): \(request.operation, privacy: .public)")
                 self.quickjs.sendMessage(message: jsonString)
             } catch {       // call completion
                 self.semaphore.signal()
@@ -379,7 +382,7 @@ extension WalletCore {
             sendRequest(request: reqData) { requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
-                self.logger.info("Request \(requestId) took \(millisecs) ms")
+                self.logger.info("Request \(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
                 var err: Error? = nil
                 if let json = result {
                     do {
