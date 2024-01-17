@@ -5,8 +5,8 @@
 import SwiftUI
 import taler_swift
 
-struct BalanceButton: View {
-    let amountStr: String
+struct BalanceCell: View {
+    let amount: Amount
     let sizeCategory: ContentSizeCategory
     let rowAction: () -> Void
     let balanceDest: LazyView<TransactionsListView>?
@@ -17,13 +17,11 @@ struct BalanceButton: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountText = Text(amountStr)
-            .accessibilityFont(.title)
+        let amountV = AmountV(amount: amount, large: true)
             .foregroundColor(.primary)
-            .monospacedDigit()
         let hLayout = HStack(spacing: 0) {
                 Spacer(minLength: 0)
-                amountText
+                amountV
             }
         let balanceCell = Group {
             if iconOnly {
@@ -85,12 +83,10 @@ struct BalanceRowView: View {
                                  comment: "`Request Payment´ in Balances - set exactly 1 \\t for line break")
     var body: some View {
         VStack (alignment: .trailing, spacing: 6) {
-            let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
-            let amountStr = amount.string(currencyInfo)
-            BalanceButton(amountStr: amountStr,
-                       sizeCategory: sizeCategory,
-                          rowAction: rowAction,
-                        balanceDest: balanceDest)
+            BalanceCell(amount: amount,
+                     sizeCategory: sizeCategory,
+                        rowAction: rowAction,
+                      balanceDest: balanceDest)
 //            .border(.red)
 
             let sendTitle = iconOnly ? sendTitle0 : sendTitle1
@@ -125,8 +121,6 @@ struct BalanceRowView_Previews: PreviewProvider {
     var body: some View {
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
-//        let testStr = test.string(testInfo)
-//        let demoStr = demo.string(demoInfo)
 
         List {
             Section {

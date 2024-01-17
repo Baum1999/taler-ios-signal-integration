@@ -69,21 +69,36 @@ class Controller: ObservableObject {
         return nil
     }
 
-    func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
-        if ticker != currencyTicker {
-            print("❗️Yikes")
-        }
+    func info(for currency: String) -> CurrencyInfo? {
         for info in currencyInfos {
             if info.scope.currency == currency {
                 return info
             }
         }
-        return CurrencyInfo.zero(currency)
+        return nil
+    }
+    func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
+        if ticker != currencyTicker {
+            print("❗️Yikes")
+        }
+        return info(for: currency) ?? CurrencyInfo.zero(currency)
     }
 
     @MainActor
     func getInfo(from exchangeBaseUrl: String, model: WalletModel) async -> CurrencyInfo? {
         if let exchange = await model.getExchangeByUrl(url: exchangeBaseUrl) {
+//            let scopeInfo = exchange.scopeInfo
+//            if let info = hasInfo(for: scopeInfo.currency) {
+//                return info
+//            }
+//            do {
+//                let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
+//                await setInfo(info)
+//                return info
+//            } catch {
+//                return nil
+//            }
+
             if let scopeInfo = exchange.scopeInfo {
                 if let info = hasInfo(for: scopeInfo.currency) {
                     return info

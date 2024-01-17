@@ -69,24 +69,24 @@ struct ThreeAmountsV: View {
                     .lineLimit(4)
                     .padding(.bottom)
             }
-            AmountView(title: iconOnly ? topAbbrev : topTitle,
-                       value: topAmount.readableDescription,
+            AmountRowV(title: iconOnly ? topAbbrev : topTitle,
+                      amount: topAmount,
                        color: labelColor,
                        large: large)
                 .padding(.bottom, 4)
                 .accessibilityElement(children: .combine)
             if let fee {
-                AmountView(title: iconOnly ? String(localized: "Fee:")
+                AmountRowV(title: iconOnly ? String(localized: "Fee:")
                                            : String(localized: "Exchange fee:"),
-                           value: fee.readableDescription,
+                          amount: fee,
                            color: labelColor,
                            large: false)
                 .padding(.bottom, 4)
                 .accessibilityElement(children: .combine)
             }
             if let bottomAmount {
-                AmountView(title: iconOnly ? bottomAbbrev : bottomTitle,
-                           value: bottomAmount.readableDescription,
+                AmountRowV(title: iconOnly ? bottomAbbrev : bottomTitle,
+                          amount: bottomAmount,
                            color: foreColor,
                            large: large)
                 .accessibilityElement(children: .combine)

@@ -12,8 +12,7 @@ struct PendingRowView: View {
     let shouldConfirm: Bool
     let needsKYC: Bool
 
-    @Environment(\.sizeCategory) var sizeCategory
-    @EnvironmentObject private var controller: Controller
+//    @Environment(\.sizeCategory) var sizeCategory
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     let inTitle0 = String(localized: "TitleIncoming_Short", defaultValue: "Incoming",
@@ -34,11 +33,8 @@ struct PendingRowView: View {
         let outTitle = iconOnly ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
 
-        let currencyInfo = controller.info(for: amount.currencyStr, controller.currencyTicker)
-        let amountText = Text(amount.string(currencyInfo))
+        let amountText = AmountV(amount)
             .foregroundColor(pendingColor)
-            .accessibilityFont(.title2)
-            .monospacedDigit()
 
         // this is the default view for iOS 15
         let vStack = VStack {
@@ -72,19 +68,6 @@ struct PendingRowView: View {
 }
 // MARK: -
 #if DEBUG
-func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
-    let unitName = digits == 0 ? "テ" : "ク"  // do not use real currency symbols like "¥" : "€"
-    let scope = ScopeInfo(type: .global, currency: currency)
-    let specs = CurrencySpecification(name: currency,
-                                      code: currency,
-                     fractionalInputDigits: digits,
-                    fractionalNormalDigits: digits,
-              fractionalTrailingZeroDigits: digits,
-                              altUnitNames: [0 : unitName])
-    let previewFormatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
-    return CurrencyInfo(scope: scope, specs: specs, formatter: previewFormatter)
-}
-
 @MainActor
 fileprivate struct Preview_Content: View {
     var body: some View {

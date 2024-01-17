@@ -42,7 +42,6 @@ struct TransactionRowView: View {
 
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @EnvironmentObject private var controller: Controller
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         available < (contentWidth + valueWidth + 40)
@@ -66,19 +65,12 @@ struct TransactionRowView: View {
                              : WalletColors().uncompletedColor
         let textColor = doneOrPending ? .primary :
                     increasedContrast ? .secondary : Color(.tertiaryLabel)
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
 
         let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
                                   shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountStr = common.amountEffective.string(currencyInfo)
-        let amountText = Text(amountStr)
-            .accessibilityFont(.title2)
+        let amountV = AmountV(common.amountEffective)
             .foregroundColor(foreColor)
-            .monospacedDigit()
-        let amount = HStack(spacing: 0) {
-                Spacer(minLength: 0)
-                amountText
-            }
+
         let topString = transaction.localizedType
         let centerTop = Text(topString)
             .foregroundColor(textColor)
@@ -101,7 +93,7 @@ struct TransactionRowView: View {
                 }
                 Spacer(minLength: 2)
             }
-            amountText
+            amountV
         }
 
         let layout2 = VStack(spacing: 0) {
@@ -113,7 +105,7 @@ struct TransactionRowView: View {
                     centerBottom
                     Spacer(minLength: 2)
                 }//.border(.green)
-                amountText//.border(.red)
+                amountV//.border(.red)
             }//.border(.orange)
         }
 
@@ -125,7 +117,7 @@ struct TransactionRowView: View {
                     centerTop
                     Spacer(minLength: 2)
                 }
-                amountText
+                amountV
             }
             centerBottom
         }
@@ -136,7 +128,7 @@ struct TransactionRowView: View {
                 iconBadge//.border(.green)
                 Spacer(minLength: 2
                 )
-                amountText//.border(.green)
+                amountV//.border(.green)
             }//.border(.orange)
             centerBottom
         }
