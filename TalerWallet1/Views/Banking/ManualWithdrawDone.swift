@@ -73,8 +73,9 @@ struct ManualWithdrawDone_Container : View {
     @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
 
     var body: some View {
+        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
-                                       currency: LONGCURRENCY,
+                                      scopeInfo: scopeInfo,
                                       paytoUris: [],
                                       tosStatus: .pending,
                             exchangeEntryStatus: .preset,

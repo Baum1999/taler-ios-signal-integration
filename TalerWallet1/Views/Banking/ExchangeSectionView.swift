@@ -55,15 +55,16 @@ fileprivate struct ExchangeRow_Container : View {
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
+        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
         let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
-                                        currency: LONGCURRENCY,
+                                       scopeInfo: scopeInfo,
                                        paytoUris: [],
                                        tosStatus: .pending,
                              exchangeEntryStatus: .preset,
                             exchangeUpdateStatus: .initial,
                            ageRestrictionOptions: [12,16])
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
-                                        currency: LONGCURRENCY,
+                                       scopeInfo: scopeInfo,
                                        paytoUris: [],
                                        tosStatus: .proposed,
                              exchangeEntryStatus: .ephemeral,

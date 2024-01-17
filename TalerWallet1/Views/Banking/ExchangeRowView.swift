@@ -105,7 +105,8 @@ struct ExchangeRowView: View {
             if controller.hasInfo(for: currency) == nil {
                 symLog.log("fetching info for \(currency)")
                 // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
-                let scopeInfo = exchange.scopeInfo ?? ScopeInfo(type: .global, currency: currency)
+                let scopeInfo = exchange.scopeInfo
+                             ?? ScopeInfo(type: .global, currency: currency)
                 do {
                     let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: delay)
 //                    logger.info("got info: \(scope.currency, privacy: .public)")
@@ -124,15 +125,16 @@ fileprivate struct ExchangeRow_Container : View {
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
+        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
         let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
-                                        currency: LONGCURRENCY,
+                                       scopeInfo: scopeInfo,
                                        paytoUris: [],
                                        tosStatus: .pending,
                              exchangeEntryStatus: .preset,
                             exchangeUpdateStatus: .initial,
                            ageRestrictionOptions: [12,16])
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
-                                        currency: LONGCURRENCY,
+                                       scopeInfo: scopeInfo,
                                        paytoUris: [],
                                        tosStatus: .proposed,
                              exchangeEntryStatus: .ephemeral,

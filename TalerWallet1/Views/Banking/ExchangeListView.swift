@@ -120,7 +120,8 @@ extension ExchangeListCommonV {
             var currencies: [String : [Exchange]] = [:]
 
             for exchange in exchanges {
-                let currency = exchange.currency ?? "Unknown"
+                let currency = exchange.scopeInfo?.currency
+                            ?? exchange.currency ?? "Unknown"
                 if currencies[currency] != nil {
                     currencies[currency]!.append(exchange)
                 } else {
