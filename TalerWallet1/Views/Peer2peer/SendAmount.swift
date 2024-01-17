@@ -150,7 +150,7 @@ fileprivate struct Preview_Content: View {
     @State private var summary: String = ""
 
     var body: some View {
-        let amount = Amount(currency: TESTCURRENCY, integer: 10, fraction: 0)
+        let amount = Amount(currency: TESTCURRENCY, cent: 1000)
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
         amountToTransfer: $amountToPreview,

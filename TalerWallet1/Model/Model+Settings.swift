@@ -35,7 +35,7 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
 extension WalletModel {
     @MainActor func loadTestKudosM(test: Bool)
     async throws {          // M for MainActor
-        let amount = Amount(currency:  test ? TESTCURRENCY : DEMOCURRENCY, integer: 11, fraction: 0)
+        let amount = Amount(currency:  test ? TESTCURRENCY : DEMOCURRENCY, cent: 1100)
         let request = WithdrawTestBalanceRequest(amount: amount,
 //                                                 bankBaseUrl: test ? TESTBANK : DEMOBANK,
                                                  corebankApiBaseUrl: test ? TESTBANK : DEMOBANK,
@@ -80,8 +80,8 @@ fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
 extension WalletModel {
     @MainActor func runIntegrationTestM(newVersion: Bool, test: Bool)
     async throws {               // M for MainActor
-        let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 3, fraction: 0)
-        let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, integer: 1, fraction: 0)
+        let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 300)
+        let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 100)
         let request = RunIntegrationTest(newVersion: newVersion,
                                          exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE,
 //                                         bankBaseUrl: (test ? TESTBANK : DEMOBANK),
