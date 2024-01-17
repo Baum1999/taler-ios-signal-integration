@@ -80,6 +80,15 @@ public class TalerDater: DateFormatter {
         }
     }
 
+    public static func accessibilityDate(_ date: Date?) -> String? {
+        if let date {
+            let formatted = date.formatted(date: .long, time: .shortened)
+//            print(formatted)
+            return formatted
+        }
+        return nil
+    }
+
     public static func dateString() -> String {
         return shared.string(from: Date())
     }
