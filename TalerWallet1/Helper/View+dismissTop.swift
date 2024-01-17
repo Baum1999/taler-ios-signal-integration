@@ -35,11 +35,30 @@ extension View {
             if gotPresented {
                 topController.dismiss(animated: animated)
             } else {
-                print("Yikes❗️ Trying to dismiss the rootViewController!")
+                Self.findNavigationController(viewController: topController)?.popToRootViewController(animated: animated)
             }
         } else {
             print("Yikes❗️ There is no window/rootViewController!")
         }
+    }
+    @MainActor static func findNavigationController(viewController: UIViewController?) -> UINavigationController? {
+        guard let viewController = viewController else {
+            return nil
+        }
+
+        if let navigationController = viewController as? UITabBarController {
+            return findNavigationController(viewController: navigationController.selectedViewController)
+        }
+
+        if let navigationController = viewController as? UINavigationController {
+            return navigationController
+        }
+
+        for childViewController in viewController.children {
+            return findNavigationController(viewController: childViewController)
+        }
+
+        return nil
     }
 }
 // MARK: -
