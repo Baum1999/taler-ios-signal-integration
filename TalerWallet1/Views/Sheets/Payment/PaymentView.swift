@@ -45,8 +45,7 @@ struct PaymentView: View {
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
             List {
-                Text(terms.summary)
-                    .accessibilityFont(.title3)
+                // TODO: show balanceDetails.balanceAvailable
                 let baseURL = preparePayResult.contractTerms.exchanges.first?.url
                 let raw = preparePayResult.amountRaw
                 let currency = raw.currencyStr
@@ -68,7 +67,7 @@ struct PaymentView: View {
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
-                        .accessibilityFont(.body)
+                        .accessibilityFont(.headline)
                     ThreeAmountsV(topTitle: topTitle,
                                  topAbbrev: topAbbrev,
                                  topAmount: raw, fee: nil,
