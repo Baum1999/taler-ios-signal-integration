@@ -27,7 +27,7 @@ struct TransactionDetailView: View {
     let transactionId: String
     let reloadAction: ((_ transactionId: String) async throws -> Transaction)
     let navTitle: String?
-    let doneAction: (() -> Void)?
+    let doneAction: ((_ stack: CallStack) -> Void)?
     let abortAction: ((_ transactionId: String) async throws -> Void)?
     let deleteAction: ((_ transactionId: String) async throws -> Void)?
     let failAction: ((_ transactionId: String) async throws -> Void)?
@@ -71,7 +71,7 @@ struct TransactionDetailView: View {
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == transaction.common.transactionId {       // is the transition for THIS transaction?
                     symLog.log(logStr)
-                    doneAction()        // if this view is in a sheet then dissmiss the sheet
+                    doneAction(stack.push())        // if this view is in a sheet then dissmiss the sheet
                     return true
                 }
             }
@@ -160,7 +160,7 @@ struct TransactionDetailView: View {
                                       action: deleteAction)
                 } } // Delete button
                 if let doneAction {
-                    Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: doneAction)
+                    Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: { doneAction(stack.push()) } )
                         .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
                 } // Done button
             }.id(viewId)    // change viewId to enforce a draw update

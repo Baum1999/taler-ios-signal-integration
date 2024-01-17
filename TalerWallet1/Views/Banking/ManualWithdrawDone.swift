@@ -23,6 +23,9 @@ struct ManualWithdrawDone: View {
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
     }
+    func dismissTopAnimated(_ stack: CallStack) {
+        dismissTop()
+    }
 
     var body: some View {
 #if PRINT_CHANGES
@@ -35,7 +38,7 @@ struct ManualWithdrawDone: View {
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
-                                 doneAction: ViewState.shared.popToRootView,
+                                 doneAction: dismissTopAnimated,    // ViewState.shared.popToRootView,
                                 abortAction: nil,
                                deleteAction: nil,
                                  failAction: nil,

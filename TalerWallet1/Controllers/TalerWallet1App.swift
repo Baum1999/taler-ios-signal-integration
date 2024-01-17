@@ -104,7 +104,7 @@ final class ViewState : ObservableObject {
     @Published var rootViewId = UUID()
     let logger = Logger(subsystem: "net.taler.gnu", category: "ViewState")
 
-    public func popToRootView() -> Void {
+    public func popToRootView(_ stack: CallStack) -> Void {
         logger.info("popToRootView")
         rootViewId = UUID() // setting a new ID will cause tableView popToRootView behaviour
     }

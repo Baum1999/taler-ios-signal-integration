@@ -221,13 +221,10 @@ extension MainView {
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
-                    logger.info("balance changed: \(scope.currency, privacy: .public)")
                     if controller.hasInfo(for: scope.currency) == nil {
                         Task { // runs on MainActor
-//                            logger.info("Task to get info for: \(scope.currency, privacy: .public)")
                             do {
                                 let info = try await model.getCurrencyInfoM(scope: scope, delay: delay)
-//                                logger.info("got info: \(scope.currency, privacy: .public)")
                                 await controller.setInfo(info)
                             } catch {    // TODO: error handling - couldn't get CurrencyInfo
                                 logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")

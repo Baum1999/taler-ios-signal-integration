@@ -23,20 +23,21 @@ func logging_callback(userdata: Optional<UnsafeMutableRawPointer>,
                             tag: Optional<UnsafePointer<Int8>>,
                         message: Optional<UnsafePointer<Int8>>) {
     let native = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
+    let logger = native.logger
     let theTag = String(cString: tag!)
     let theMessage = String(cString: message!)
 
     switch level {
         case TALER_WALLET_LOG_ERROR:
-            native.logger.error("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.error("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
         case TALER_WALLET_LOG_WARN:
-            native.logger.warning("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.warning("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
         case TALER_WALLET_LOG_MESSAGE:
-            native.logger.notice("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.notice("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
         case TALER_WALLET_LOG_INFO:
-            native.logger.info("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.info("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
         case TALER_WALLET_LOG_TRACE:
-            native.logger.trace("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.trace("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
         default: break
     }
 }

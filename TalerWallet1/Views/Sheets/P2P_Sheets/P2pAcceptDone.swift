@@ -22,7 +22,10 @@ struct P2pAcceptDone: View {
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
     }
-
+    func dismissTopAnimated(_ stack: CallStack) {
+        dismissTop()
+    }
+    
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -34,7 +37,7 @@ struct P2pAcceptDone: View {
                       transactionId: transactionId,
                        reloadAction: reloadOneAction,
                            navTitle: navTitle,
-                         doneAction: { dismissTop() },
+                         doneAction: dismissTopAnimated,
                         abortAction: nil,
                        deleteAction: nil,
                          failAction: nil,
