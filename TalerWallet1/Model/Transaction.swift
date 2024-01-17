@@ -68,7 +68,7 @@ enum TransactionMinorState: String, Codable {
             case .autoRefund:               return self.rawValue
             case .user:                     return self.rawValue
             case .bank:                     return self.rawValue
-            case .exchange:                 return self.rawValue
+            case .exchange:                 return self.rawValue    // in aborted
             case .claimProposal:            return self.rawValue
             case .checkRefund:              return self.rawValue
             case .createPurse:              return self.rawValue
@@ -77,7 +77,7 @@ enum TransactionMinorState: String, Codable {
             case .merge:                    return self.rawValue
             case .repurchase:               return self.rawValue
             case .bankRegisterReserve:      return self.rawValue
-            case .bankConfirmTransfer:      return String(localized: "MinorState.bankConfirmTransfer", defaultValue: "Waiting for bank", comment: "TxMinorState heading")
+            case .bankConfirmTransfer:      return String(localized: "MinorState.bankConfirmTransfer", defaultValue: "Waiting for bank transfer", comment: "TxMinorState heading")
             case .withdrawCoins:            return self.rawValue
             case .exchangeWaitReserve:      return self.rawValue
             case .abortingBank:             return self.rawValue
@@ -263,7 +263,7 @@ struct TransactionCommon: Decodable, Sendable {
         do {
             return try Amount.diff(amountEffective, amountRaw)
         } catch {}
-        return Amount(currency: amountRaw.currencyStr, integer: 0, fraction: 0)
+        return Amount.zero(currency: amountRaw.currencyStr)
     }
 
     func incoming() -> Bool {
@@ -494,8 +494,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
 
     var isPending    : Bool { common.txState.major == .pending }
-    var isPendingReady : Bool { common.txState.minor == .ready }
-    var isPendingKYC   : Bool { common.txState.minor == .kyc }
+    var isPendingReady : Bool { isPending && common.txState.minor == .ready }
+    var isPendingKYC   : Bool { isPending && common.txState.minor == .kyc }
     var isDone       : Bool { common.txState.major == .done }
     var isAborting   : Bool { common.txState.major == .aborting }
     var isAborted    : Bool { common.txState.major == .aborted }
