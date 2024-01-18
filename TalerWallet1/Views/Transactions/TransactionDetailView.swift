@@ -309,6 +309,14 @@ struct TransactionDetailView: View {
                     }
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
+                        let expiration = details.info.expiration
+                        let (dateString, date) = TalerDater.dateString(from: expiration)
+                        let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
+                        let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                        Text("Expires: \(dateString)")
+                            .accessibilityFont(.body)
+                            .accessibilityLabel(accessibilityLabel)
+//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {

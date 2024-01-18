@@ -39,6 +39,14 @@ struct P2pPayURIView: View {
                                    baseURL: nil,
                                     status: nil,
                                    summary: peerPullDebitResponse.contractTerms.summary)
+                    let expiration = peerPullDebitResponse.contractTerms.purse_expiration
+                    let (dateString, date) = TalerDater.dateString(from: expiration)
+                    let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
+                    let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                    Text("Expires: \(dateString)")
+                        .accessibilityFont(.body)
+                        .accessibilityLabel(accessibilityLabel)
+//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
