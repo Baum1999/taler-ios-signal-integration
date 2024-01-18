@@ -93,3 +93,28 @@ extension WalletModel {
         let _ = try await sendRequest(request, ASYNCDELAY)
     }
 } // runIntegrationTestM()
+  // MARK: -
+/// A request to add a test balance to the wallet.
+fileprivate struct InfiniteTransactionLoop: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
+    func operation() -> String { "testingInfiniteTransactionLoop" }
+    func args() -> Args { Args(delayMs: delayMs,
+                               shouldFetch: shouldFetch)
+    }
+
+    let delayMs: Int32
+    let shouldFetch: Bool
+
+
+    struct Args: Encodable {
+        let delayMs: Int32
+        let shouldFetch: Bool
+    }
+}
+extension WalletModel {
+    func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool)
+      async throws {
+        let request = InfiniteTransactionLoop(delayMs: delayMs, shouldFetch: shouldFetch)
+        let _ = try await sendRequest(request, ASYNCDELAY)
+    }
+} // runIntegrationTestM()

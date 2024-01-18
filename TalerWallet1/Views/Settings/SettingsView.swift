@@ -246,6 +246,23 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(checkDisabled)
                         }.id("test2runTest")
+                        SettingsItem(name: String("Run Infinite Transaction Loop"), id1: "runInfinite",
+                              description: hideDescriptions ? nil : String("Check DB in background")) {
+                            let title = "Loop"
+                            Button(title) {
+                                checkDisabled = true    // don't run twice
+                                Task { // runs on MainActor
+                                    symLog.log("Running Infinite Transaction Loop")
+                                    do {
+                                        try await model.testingInfiniteTransaction(delayMs: 10_000, shouldFetch: true)
+                                    } catch {    // TODO: show error
+                                        symLog.log(error.localizedDescription)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(checkDisabled)
+                        }.id("runInfiniteLoop")
                         SettingsItem(name: String("Save Logfile"), id1: "save",
                               description: hideDescriptions ? nil : String("Help debugging wallet-core")) {
                             Button("Save") {
