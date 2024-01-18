@@ -53,7 +53,7 @@ struct ManualWithdraw: View {
                 Text("via \(exchange.exchangeBaseUrl.trimURL())")
                     .multilineTextAlignment(.center)
                     .accessibilityFont(.body)
-                if !tosAccepted {
+                if tosAccepted {
                     CurrencyInputView(amount: $amountToTransfer,
                                    available: nil,
                                        title: iconOnly ? String(localized: "Amount:")
