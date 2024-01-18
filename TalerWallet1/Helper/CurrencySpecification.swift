@@ -253,3 +253,17 @@ public class CurrencyFormatter: NumberFormatter {
         fatalError("init(coder:) has not been implemented")
     }
 }
+// MARK: -
+#if DEBUG
+func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
+    let unitName = digits == 0 ? "テ" : "ク"  // do not use real currency symbols like "¥" : "€"
+    let scope = ScopeInfo(type: .global, currency: currency)
+    let specs = CurrencySpecification(name: currency,
+                                      fractionalInputDigits: digits,
+                                      fractionalNormalDigits: digits,
+                                      fractionalTrailingZeroDigits: digits,
+                                      altUnitNames: [0 : unitName])
+    let previewFormatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+    return CurrencyInfo(scope: scope, specs: specs, formatter: previewFormatter)
+}
+#endif
