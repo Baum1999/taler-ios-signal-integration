@@ -115,7 +115,7 @@ extension WithdrawTOSView {
         var languageAction: (String) async -> ()
         var acceptAction: () -> ()
 
-        @State private var selectedLanguage = "en"
+        @State private var selectedLanguage = Locale.preferredLanguageCode
 
         var body: some View {
             let title = String(localized: "Language:", comment: "title of ToS language selection")

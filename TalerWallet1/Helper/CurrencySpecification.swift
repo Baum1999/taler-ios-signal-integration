@@ -209,7 +209,7 @@ public class CurrencyFormatter: NumberFormatter {
         self.hasAltUnitName0 = false
         self.leadingCurrencySymbol = false
         super.init()
-        self.locale = Locale.current
+        self.locale = Locale.autoupdatingCurrent
         self.usesGroupingSeparator = true
         self.numberStyle = .currencyISOCode         // .currency
         self.maximumFractionDigits = 8              // ensure that formatter will not round
