@@ -45,15 +45,6 @@ struct TransactionDetailView: View {
     @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
 
-    func accessibilityDate(_ date: Date?) -> String? {
-        if let date {
-            let formatted = date.formatted(date: .long, time: .shortened)
-//            print(formatted)
-            return formatted
-        }
-        return nil
-    }
-
     func loadTransaction() async {
         do {
             let reloadedTransaction = try await reloadAction(transactionId)
@@ -107,7 +98,7 @@ struct TransactionDetailView: View {
         let pending = transaction.isPending
         let locale = TalerDater.shared.locale
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
-        let accessibilityDate = accessibilityDate(date) ?? dateString
+        let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.localizedType
         VStack {
             List {
@@ -127,13 +118,16 @@ struct TransactionDetailView: View {
                     .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                     .listRowSeparator(.hidden)
                 VStack(alignment: .trailing) {
+                    let majorState = common.txState.major.localizedState
                     let minorState = common.txState.minor?.localizedState ?? nil
+                    let state = transaction.isPending ? minorState ?? majorState
+                                                      : majorState
                     HStack {
                         Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)
                             .foregroundColor(Color.clear)
                         Spacer()
-                        Text("Status: \(minorState ?? common.txState.major.localizedState)")
+                        Text("Status: \(state)")
                             .multilineTextAlignment(.trailing)
                     }
                 }    .listRowSeparator(.automatic)

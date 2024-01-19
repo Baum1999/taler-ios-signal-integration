@@ -193,7 +193,9 @@ extension WalletCore {
             if components.count >= 3 {  // txn:$txtype:$uid
                 if let type = TransactionType(rawValue: components[1]) {
                     guard type != .refresh else { return }
-                    switch decoded.newTxState.major {
+                    let newMajor = decoded.newTxState.major
+                    let newMinor = decoded.newTxState.minor
+                    switch newMajor {
                         case .done:
                             logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if type.isWithdrawal {
@@ -204,7 +206,7 @@ extension WalletCore {
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .aborting:
-                            if let newMinor = decoded.newTxState.minor {
+                            if let newMinor {
                                 if newMinor == .refreshExpired {
                                     logger.warning("RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     Controller.shared.playSound(0)
@@ -220,7 +222,7 @@ extension WalletCore {
                             postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .pending:
-                            if let newMinor = decoded.newTxState.minor {
+                            if let newMinor {
                                 if newMinor == .ready {
                                     logger.log("PendingReady: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     postNotification(.PendingReady, userInfo: [TRANSACTIONTRANSITION: decoded])
@@ -237,11 +239,15 @@ extension WalletCore {
                                 }
                                 logger.log("Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
                             } else {
-                            logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
-                            logger.warning("Unknow transition: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            if let newMinor {
+                                logger.warning("\(newMajor.rawValue, privacy: .public):\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            } else {
+                                logger.warning("\(newMajor.rawValue, privacy: .public): \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                     } // switch
                 } // type
