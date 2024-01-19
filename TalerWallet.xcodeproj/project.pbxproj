@@ -234,6 +234,9 @@
 		4ED2F94B2A278F5100453B40 /* ThreeAmountsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */; };
 		4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
 		4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
+		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
+		4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */; };
+		4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171912B49FE4E00BF9FF5 /* OrderedCollections */; };
 		4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157229F8242800D46A03 /* QRGeneratorView.swift */; };
 		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
 		4EEC157829F9032900D46A03 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
@@ -427,7 +430,9 @@
 				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
 				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
 				4E3EAE792A990778009F1BE8 /* FTalerWalletcore.framework in Frameworks */,
+				4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */,
 				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
+				4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */,
 				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +446,7 @@
 				4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */,
 				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
 				ABC13AA32859962800D23185 /* taler-swift in Frameworks */,
+				4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */,
 				4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -849,6 +855,8 @@
 				4E3EAE162A990778009F1BE8 /* AnyCodable */,
 				4E3EAE182A990778009F1BE8 /* SymLog */,
 				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
+				4EE171872B49635800BF9FF5 /* MarkdownUI */,
+				4EE171912B49FE4E00BF9FF5 /* OrderedCollections */,
 			);
 			productName = Taler;
 			productReference = 4E3EAE892A990778009F1BE8 /* GNU_Taler.app */;
@@ -874,6 +882,7 @@
 				4EB094FC29897D280043A8A1 /* SymLog */,
 				4EEC157529F8ECBF00D46A03 /* CodeScanner */,
 				4E2D8DD22B3F513800234039 /* MarkdownUI */,
+				4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */,
 			);
 			productName = Taler;
 			productReference = D14AFD1D24D232B300C51073 /* Taler_Wallet.app */;
@@ -955,6 +964,7 @@
 				4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */,
 				4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */,
+				4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
 			projectDirPath = "";
@@ -1741,6 +1751,14 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-collections";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twostraws/CodeScanner";
@@ -1788,6 +1806,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */;
 			productName = SymLog;
+		};
+		4EE171872B49635800BF9FF5 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
+			productName = MarkdownUI;
+		};
+		4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		4EE171912B49FE4E00BF9FF5 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
 		};
 		4EEC157529F8ECBF00D46A03 /* CodeScanner */ = {
 			isa = XCSwiftPackageProductDependency;
