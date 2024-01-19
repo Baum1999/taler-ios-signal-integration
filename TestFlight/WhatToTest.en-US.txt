@@ -1,3 +1,8 @@
+Version 0.9.4 (0)
+
+- bug fixes
+- first release of 0.9.4
+
 
 Version 0.9.3 (34)
 
