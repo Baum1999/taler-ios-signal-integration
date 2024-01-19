@@ -166,7 +166,7 @@ extension Controller {
         symLog.log(url)
         guard let scheme = url.scheme else {return UrlCommand.unknown}
         var uncrypted = false
-        switch scheme {
+        switch scheme.lowercased() {
             case "taler+http":
                 uncrypted = true
                 fallthrough
@@ -196,7 +196,7 @@ extension Controller {
             symLog.log("uncrypted: taler://\(command)")
             // TODO: uncrypted
         }
-        switch command {
+        switch command.lowercased() {
             case "withdraw":
                 return .withdraw
             case "withdraw-exchange":

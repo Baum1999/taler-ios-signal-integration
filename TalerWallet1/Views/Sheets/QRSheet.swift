@@ -19,7 +19,7 @@ struct QRSheet: View {
 
                 if let scannedURL = URL(string: scannedCode!) {
                     let scheme = scannedURL.scheme
-                    if scheme == "taler" {
+                    if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(), urlToOpen: scannedURL)
                     } else {
 //                        let _ = print(scannedURL)       // TODO: logging
