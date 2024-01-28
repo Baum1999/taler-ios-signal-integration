@@ -98,7 +98,7 @@ extension BalancesSectionView: View {
                               reloadOneAction: reloadOneAction)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), currency: currency)
+            BarGraphHeader(stack: stack.push(), currency: currencyInfo.scope.currency)
         }.id(sectionID)
         .task {
 //            if shownSectionID != sectionID {
