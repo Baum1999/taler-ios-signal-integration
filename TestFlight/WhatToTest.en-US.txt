@@ -1,3 +1,12 @@
+Version 0.9.4 (2)
+
+• New feature: curl with c-ares improves networking
+- bug fix: currency names default to the long version if a currency symbol is not available
+- bug fix: version info in About dialog is now also showing the build number (in parentheses)
+
+A/B Test: Taler Wallet uses c-ares, GNU Taler doesn't. You can install both apps to test this feature, but then you cannot use bank-integrated withdrawals for both apps with Safari running the bank website on the same iPhone anymore since iOS doesn't let you choose which wallet app to withdraw to. Instead you can open the bank website https://bank.demo.taler.net on your computer or tablet, start the withdrawal there, and scan the QR code with the app (Taler Wallet or GNU Taler) you want to receive the money in.
+
+
 Version 0.9.4 (1)
 
 - now accepts uppercase TALER://PAY URIs
