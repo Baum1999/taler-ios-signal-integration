@@ -14,8 +14,8 @@ public let SEVENDAYS: UInt = 7      // 3..9
 public let THIRTYDAYS: UInt = 30    // 10..30
 
 public let EMPTYSTRING = ""                         // avoid automatic translation of empty "" textLiterals in Text()
-public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionDetail
-public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionDetail
+public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionSummary
+public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionSummary
 public let PENDING_INCOMING = "plus.diamond"
 public let PENDING_OUTGOING = "minus.diamond"
 public let DONE_INCOMING = "plus.circle.fill"

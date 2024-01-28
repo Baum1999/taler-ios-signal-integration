@@ -23,7 +23,7 @@ struct RefundURIView: View {
 
     var body: some View {
         if let refundTransactionId {
-            TransactionDetailView(stack: stack.push(),
+            TransactionSummaryV(stack: stack.push(),
                           transactionId: refundTransactionId,
                            reloadAction: reloadOneAction,
                                navTitle: nil,   // navTitle,

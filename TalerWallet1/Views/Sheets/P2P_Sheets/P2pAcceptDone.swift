@@ -33,7 +33,7 @@ struct P2pAcceptDone: View {
 #endif
         let navTitle = incoming ? String(localized: "Received P2P", comment: "Title, short")
                                 : String(localized: "Paid P2P", comment: "Title, short")
-        TransactionDetailView(stack: stack.push(),
+        TransactionSummaryV(stack: stack.push(),
                       transactionId: transactionId,
                        reloadAction: reloadOneAction,
                            navTitle: navTitle,

@@ -38,7 +38,7 @@ struct P2PReadyV: View {
 #endif
         Group {
             if let transactionId {
-                TransactionDetailView(stack: stack.push(),
+                TransactionSummaryV(stack: stack.push(),
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
@@ -80,7 +80,7 @@ struct P2PReadyV: View {
                                         purse_expiration: timestamp)
                     // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
-                    // will switch from WithdrawProgressView to TransactionDetailView
+                    // will switch from WithdrawProgressView to TransactionSummaryV
                     transactionId = response.transactionId
                 } else {
                     let terms = PeerContractTerms(amount: amountToTransfer,
@@ -88,7 +88,7 @@ struct P2PReadyV: View {
                                         purse_expiration: timestamp)
                     // TODO: let user choose baseURL
                     let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
-                    // will switch from WithdrawProgressView to TransactionDetailView
+                    // will switch from WithdrawProgressView to TransactionSummaryV
                     transactionId = response.transactionId
                 }
             } catch {    // TODO: error

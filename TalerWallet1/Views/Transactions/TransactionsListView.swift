@@ -99,7 +99,7 @@ struct TransactionsArraySliceV: View {
         ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
             NavigationLink {
                 LazyView {
-                    TransactionDetailView(stack: stack.push(),
+                    TransactionSummaryV(stack: stack.push(),
                                   transactionId: transaction.id,
                                    reloadAction: reloadOneAction,
                                        navTitle: nil,

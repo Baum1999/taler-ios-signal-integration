@@ -21,7 +21,7 @@ extension Transaction {             // for Dummys
     }
 }
 // MARK: -
-struct TransactionDetailView: View {
+struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let transactionId: String
@@ -185,7 +185,7 @@ struct TransactionDetailView: View {
         }
         .onAppear {
             symLog.log("onAppear")
-            DebugViewC.shared.setViewID(VIEW_TRANSACTIONDETAIL, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_TRANSACTIONSUMMARY, stack: stack.push())
         }
         .onDisappear {
             symLog.log("onDisappear")
@@ -193,7 +193,7 @@ struct TransactionDetailView: View {
     }
 //}
 //
-//extension TransactionDetail {
+//extension TransactionSummaryV {
     struct KycButton: View {
         let destination: URL
         @AppStorage("iconOnly") var iconOnly: Bool = false
@@ -276,8 +276,12 @@ struct TransactionDetailView: View {
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-                        Text(details.info.summary)
-                            .accessibilityFont(.title3)
+                        NavigationLink(destination: LazyView {
+                            LoadingView(url: nil, message: "Details")
+                        }) {
+                            Text("Show details")
+                        }
+//                        .buttonStyle(TalerButtonStyle(type: .bordered))
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
                                         topTitle: String(localized: "Sum to be paid:"),
                                           baseURL: nil, large: true, summary: details.info.summary)     // TODO: baseURL
@@ -374,7 +378,7 @@ struct TransactionDetailView: View {
 }
 // MARK: -
 #if DEBUG
-//struct TransactionDetail_Previews: PreviewProvider {
+//struct TransactionSummary_Previews: PreviewProvider {
 //    static func deleteTransactionDummy(transactionId: String) async throws {}
 //    static func doneActionDummy() {}
 //    static var withdrawal = Transaction(incoming: true,
@@ -388,8 +392,8 @@ struct TransactionDetailView: View {
 //    static func reloadActionDummy(transactionId: String) async -> Transaction { return withdrawal }
 //    static var previews: some View {
 //        Group {
-//            TransactionDetailView(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
-//            TransactionDetailView(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
+//            TransactionSummaryV(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
+//            TransactionSummaryV(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
 //        }
 //    }
 //}

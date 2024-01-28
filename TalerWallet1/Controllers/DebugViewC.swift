@@ -34,7 +34,8 @@ public let VIEW_PENDING = VIEW_ABOUT + 1                            // 15 Pendin
 
 // MARK: Transactions
 public let VIEW_TRANSACTIONLIST = VIEW_EMPTY + 10                   // 20 TransactionsListView
-public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONLIST + 1        // 21 TransactionDetail
+public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 21 TransactionSummary
+public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 22 TransactionDetail
 
 
 
@@ -79,7 +80,8 @@ public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiti
 // MARK: Merchant Payment
 // openURL (Link, NFC or scan QR) ==> pays merchant
 public let SHEET_PAYMENT = SHEET_WITHDRAWAL + 10                    // 140 Pay Merchant
-public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 2                   // 142 Pay Merchant Template
+public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 1                   // 141 Pay Merchant Template
+public let SHEET_PAY_ACCEPT = SHEET_PAY_TEMPLATE + 1                // 142 Pay Accept
 
 // MARK: P2P Pay Invoice
 // p2p pull debit - openURL (Link or scan QR)

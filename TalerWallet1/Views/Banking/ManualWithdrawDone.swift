@@ -34,7 +34,7 @@ struct ManualWithdrawDone: View {
 #endif
         Group {
             if let transactionId {
-                TransactionDetailView(stack: stack.push(),
+                TransactionSummaryV(stack: stack.push(),
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
