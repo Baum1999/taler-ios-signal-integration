@@ -88,6 +88,7 @@ struct ManualDetailsV: View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             if !iconOnly {
                 Text("The Exchange is waiting for your wire-transfer.")
+                    .bold()
                     .multilineTextAlignment(.leading)
                     .listRowSeparator(.hidden)
             }

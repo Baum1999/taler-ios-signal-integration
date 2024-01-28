@@ -81,6 +81,7 @@ struct ManualWithdraw: View {
                 }
             } } // ScrollVStack
             .frame(maxWidth: .infinity, alignment: .leading)
+//            .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
             .padding(.horizontal)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .navigationTitle(navTitle)

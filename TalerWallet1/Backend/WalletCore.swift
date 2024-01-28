@@ -388,7 +388,7 @@ extension WalletCore {
             sendRequest(request: reqData) { requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
-                self.logger.info("Request \(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
                 var err: Error? = nil
                 if let json = result {
                     do {

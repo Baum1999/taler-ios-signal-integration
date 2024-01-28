@@ -80,6 +80,7 @@ struct RequestPayment: View {
                 )
         } } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
+//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .padding(.horizontal)   // Lists do this automatically, but this is a VStack
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)

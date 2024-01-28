@@ -119,6 +119,7 @@ struct P2PSubjectV: View {
                 .disabled(disabled)
                 .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
+//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
