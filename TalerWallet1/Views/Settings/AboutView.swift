@@ -21,6 +21,7 @@ struct AboutView: View {
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
     @State private var rotationEnabled = false
+    @State private var showGitHash = false
     @State private var listID = UUID()
 
     var body: some View {
@@ -34,9 +35,7 @@ struct AboutView: View {
                 HStack {
                     Spacer()
                     RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
-                        .onTapGesture(count: 2) {
-                            rotationEnabled.toggle()
-                        }
+                        .onTapGesture(count: 1) { rotationEnabled.toggle() }
                     Spacer()
                 }
                 SettingsItem(name: "Visit the taler.net website", id1: "web",
@@ -50,9 +49,17 @@ struct AboutView: View {
                 SettingsItem(name: "App Version", id1: "app") {
                     Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
                 }
-                SettingsItem(name: "Wallet Core Version", id1: "wallet-core") {
-                    Text(verbatim: "\(walletCore.versionInfo?.version ?? "unknown")")
-                }
+                Group {
+                    if showGitHash {
+                        SettingsItem(name: "Wallet-Core Git", id1: "wallet-coreG") {
+                            Text(verbatim: "\(walletCore.versionInfo?.implementationGitHash ?? "unknown")")
+                        }
+                    } else {
+                        SettingsItem(name: "Wallet-Core Version", id1: "wallet-coreV") {
+                            Text(verbatim: "\(walletCore.versionInfo?.implementationSemver ?? "unknown")")
+                        }
+                    }
+                }.onTapGesture(count: 1) { showGitHash.toggle() }
 //                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
 //                    Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
 //                }
@@ -72,21 +79,30 @@ struct AboutView: View {
         }
         .onDisappear() {
         }
-        .task {
-            try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(5))
-            rotationEnabled.toggle()
-        }
+//        .task {
+//            try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(5))
+//            rotationEnabled.toggle()
+//        }
     }
 }
 extension Bundle {
+    var bundleName: String? {
+        return infoDictionary?["CFBundleDisplayName"] as? String
+    }
     var releaseVersionNumber: String? {
         return infoDictionary?["CFBundleShortVersionString"] as? String
     }
-    var buildVersionNumber: String? {
-        return infoDictionary?["CFBundleVersion"] as? String
+    var buildVersionNumber: String {
+        let build = infoDictionary?["CFBundleVersion"]
+        let zero = "0"
+        if let build {
+            return build as? String ?? zero
+        }
+        return zero
     }
     var releaseVersionNumberPretty: String {
-        return "v\(releaseVersionNumber ?? "1.0.0")"
+        let release = releaseVersionNumber ?? "1.0.0"
+        return "v\(release) (\(buildVersionNumber))"
     }
 }
 // MARK: -

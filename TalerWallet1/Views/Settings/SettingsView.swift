@@ -85,7 +85,13 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                let aboutStr = String(localized: "About GNU Taler")
+#if TALER_WALLET
+                let appName = "Taler Wallet"
+#else
+                let appName = "GNU Taler"
+#endif
+                let localizedAppName = Bundle.main.bundleName ?? appName
+                let aboutStr = String(localized: "About \(localizedAppName)")
                 NavigationLink {        // whole row like in a tableView
                     LazyView { AboutView(stack: stack.push(), navTitle: aboutStr) }
                 } label: {
@@ -136,7 +142,7 @@ struct SettingsView: View {
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
                             description: hideDescriptions ? nil : String("More information intended for debugging")) {
-                        withAnimation { showDevelopItems = developerMode }
+                        withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
                     }
                     if showDevelopItems {  // show or hide the following items
                         SettingsItem(name: String("Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
