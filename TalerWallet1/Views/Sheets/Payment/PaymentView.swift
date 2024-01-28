@@ -16,31 +16,13 @@ struct PaymentView: View {
     // the scanned URL
     let url: URL
 
-    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-
-    func acceptAction(preparePayResult: PreparePayResult) {
-        Task { // runs on MainActor
-            do {
-                let confirmPayResult = try await model.confirmPayM(preparePayResult.transactionId)
-//                symLog.log(confirmPayResult as Any)
-                if confirmPayResult.type != "done" {
-                    controller.playSound(0)
-                    // TODO: show error
-                }
-            } catch {
-                controller.playSound(0)
-                // TODO: error
-                symLog.log(error.localizedDescription)
-            }
-            dismissTop()
-        }
-    }
 
     @State var preparePayResult: PreparePayResult? = nil
 
     var body: some View {
+      Group {
         if let preparePayResult {
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
@@ -87,9 +69,14 @@ struct PaymentView: View {
             .listStyle(myListStyle.style).anyView
             .safeAreaInset(edge: .bottom) {
                 if let effective {
-                    Button(navTitle, action: { acceptAction(preparePayResult: preparePayResult) })
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
+                    NavigationLink(destination: LazyView {
+                        PaymentDone(stack: stack.push(),
+                            transactionId: preparePayResult.transactionId)
+                    }) {
+                        Text(navTitle)      // Confirm Payment
+                    }
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
                 } else {
                     Button("Cancel", action: { dismissTop() })
                         .buttonStyle(TalerButtonStyle(type: .bordered))
@@ -97,22 +84,22 @@ struct PaymentView: View {
                 }
             }
             .navigationTitle(navTitle)
-            .onAppear() {
-                symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(SHEET_PAYMENT)
-            }
         } else {
             LoadingView(url: url, message: nil)
-                .task {
-                    do {
-                        symLog.log(".task")
-                        let result = try await model.preparePayForUriM(url.absoluteString)
-                        preparePayResult = result
-                    } catch {    // TODO: error
-                        symLog.log(error.localizedDescription)
-                    }
+            .task { // this runs only once
+                do { // TODO: cancelled
+                    symLog.log(".task")
+                    let result = try await model.preparePayForUriM(url.absoluteString)
+                    preparePayResult = result
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
                 }
+            }
         }
+      }.onAppear() {
+          symLog.log("onAppear")
+          DebugViewC.shared.setSheetID(SHEET_PAYMENT)
+      }
     }
 }
 // MARK: -

@@ -150,6 +150,8 @@
 		4E605DBB2AB05FB6002FB9A7 /* BarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */; };
 		4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */; };
 		4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EDD862A363D8D0031D520 /* ListStyle.swift */; };
+		4E6EF56B2B65A33300AF252A /* PaymentDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EF56A2B65A33300AF252A /* PaymentDone.swift */; };
+		4E6EF56C2B65A33300AF252A /* PaymentDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6EF56A2B65A33300AF252A /* PaymentDone.swift */; };
 		4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
 		4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
 		4E7940DE29FC307C00A9AEA1 /* P2PSubjectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */; };
@@ -328,6 +330,7 @@
 		4E605DB92AB05FB6002FB9A7 /* BarGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarGraph.swift; sourceTree = "<group>"; };
 		4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetailsV.swift; sourceTree = "<group>"; };
 		4E6EDD862A363D8D0031D520 /* ListStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListStyle.swift; sourceTree = "<group>"; };
+		4E6EF56A2B65A33300AF252A /* PaymentDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDone.swift; sourceTree = "<group>"; };
 		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
 		4E753A052A0952F7002D9328 /* DebugViewC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewC.swift; sourceTree = "<group>"; };
 		4E753A072A0B6A5F002D9328 /* ShareSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
@@ -679,6 +682,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */,
+				4E6EF56A2B65A33300AF252A /* PaymentDone.swift */,
 				4EBA56402A7FF5200084948B /* PayTemplateView.swift */,
 			);
 			path = Payment;
@@ -1130,6 +1134,7 @@
 				4E3EAE6B2A990778009F1BE8 /* Model+Withdraw.swift in Sources */,
 				4E3EAE6C2A990778009F1BE8 /* ExchangeSectionView.swift in Sources */,
 				4E3EAE6D2A990778009F1BE8 /* P2PSubjectV.swift in Sources */,
+				4E6EF56B2B65A33300AF252A /* PaymentDone.swift in Sources */,
 				4E3EAE6E2A990778009F1BE8 /* Model+P2P.swift in Sources */,
 				4E3EAE6F2A990778009F1BE8 /* TalerStrings.swift in Sources */,
 				4E3EAE702A990778009F1BE8 /* CurrencyInputView.swift in Sources */,
@@ -1236,6 +1241,7 @@
 				4EB095622989CBFE0043A8A1 /* Model+Withdraw.swift in Sources */,
 				4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */,
 				4E7940DE29FC307C00A9AEA1 /* P2PSubjectV.swift in Sources */,
+				4E6EF56C2B65A33300AF252A /* PaymentDone.swift in Sources */,
 				4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */,
 				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
 				4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */,
