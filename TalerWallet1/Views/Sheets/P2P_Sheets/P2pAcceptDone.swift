@@ -17,15 +17,6 @@ struct P2pAcceptDone: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
-    @State private var finished: Bool = false
-
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
-    }
-    func dismissTopAnimated(_ stack: CallStack) {
-        dismissTop()
-    }
-    
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -33,18 +24,9 @@ struct P2pAcceptDone: View {
 #endif
         let navTitle = incoming ? String(localized: "Received P2P", comment: "Title, short")
                                 : String(localized: "Paid P2P", comment: "Title, short")
-        TransactionSummaryV(stack: stack.push(),
-                      transactionId: transactionId,
-                       reloadAction: reloadOneAction,
-                           navTitle: navTitle,
-                         doneAction: dismissTopAnimated,
-                        abortAction: nil,
-                       deleteAction: nil,
-                         failAction: nil,
-                      suspendAction: nil,
-                       resumeAction: nil)
+        LoadingView(url: nil, message: "Accepting...")
             .navigationBarBackButtonHidden(true)
-            .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+//            .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)
             .onAppear() {
                 symLog.log("onAppear")
@@ -58,7 +40,7 @@ struct P2pAcceptDone: View {
                     } else {
                         _ = try await model.confirmPeerPullDebitM(transactionId)
                     }
-                    finished = true
+                    dismissTop()
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
                     controller.playSound(0)
