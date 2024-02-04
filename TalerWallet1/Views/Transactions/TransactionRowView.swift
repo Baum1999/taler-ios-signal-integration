@@ -47,6 +47,16 @@ struct TransactionRowView: View {
         available < (contentWidth + valueWidth + 40)
     }
 
+    func topString() -> String {
+        switch transaction {
+            case .payment(let paymentTransaction):
+                return paymentTransaction.details.info.merchant.name
+            default:
+                return transaction.isDone ? transaction.localizedTypePast
+                                          : transaction.localizedType
+        }
+    }
+
     var body: some View {
         let common = transaction.common
         let pending = transaction.isPending
@@ -71,7 +81,7 @@ struct TransactionRowView: View {
         let amountV = AmountV(common.amountEffective)
             .foregroundColor(foreColor)
 
-        let topString = transaction.localizedType
+        let topString = topString()
         let centerTop = Text(topString)
             .foregroundColor(textColor)
             .strikethrough(!doneOrPending, color: .red)

@@ -255,6 +255,19 @@ struct TransactionCommon: Decodable, Sendable {
                                                   comment: "TransactionType, scan invoice to pay to another wallet")
         }
     }
+    func localizedTypePast(_ type: TransactionType) -> String {
+        switch type {
+            case .peerPushDebit:  return String(localized: "Sent Money",
+                                                comment: "TransactionType, sent coins to another wallet")
+            case .scanPushCredit: return String(localized: "Received Money",
+                                                comment: "TransactionType, received coins sent from another wallet")
+            case .peerPullCredit: return String(localized: "Requested Money",     // Invoice?
+                                                comment: "TransactionType, sent invoice to another wallet")
+            case .scanPullDebit:  return String(localized: "Paid Request",       // Pay Invoice is the same as Payment
+                                                comment: "TransactionType, paid invoice from another wallet")
+            default:              return localizedType(type)
+        }
+    }
 
     func fee() -> Amount {
         do {
@@ -468,6 +481,9 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
 
     var localizedType: String {
         common.localizedType(common.type)
+    }
+    var localizedTypePast: String {
+        common.localizedTypePast(common.type)
     }
 
     static func == (lhs: Transaction, rhs: Transaction) -> Bool {

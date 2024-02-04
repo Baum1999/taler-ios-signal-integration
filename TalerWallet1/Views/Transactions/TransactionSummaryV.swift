@@ -99,7 +99,8 @@ struct TransactionSummaryV: View {
         let locale = TalerDater.shared.locale
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
         let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
-        let navTitle2 = transaction.localizedType
+        let navTitle2 = transaction.isDone ? transaction.localizedTypePast
+                                           : transaction.localizedType
         VStack {
             List {
                 if developerMode {
@@ -332,8 +333,11 @@ struct TransactionSummaryV: View {
                             }
                         }
                         let colon = ":"
-                        ThreeAmountsSheet(common: common, topAbbrev: transaction.localizedType + colon,
-                                        topTitle: transaction.localizedType + colon,
+                        let localizedType = transaction.isDone ? transaction.localizedTypePast
+                                                               : transaction.localizedType
+                        ThreeAmountsSheet(common: common,
+                                       topAbbrev: localizedType + colon,
+                                        topTitle: localizedType + colon,
                                          baseURL: details.exchangeBaseUrl, large: false,
                                          summary: details.info.summary)
                     } // p2p
