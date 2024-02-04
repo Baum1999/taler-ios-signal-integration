@@ -91,21 +91,31 @@ struct VersionInfo: Decodable {
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
     func operation() -> String { "init" }
     func args() -> Args {
+        let testing = Testing(devModeActive: false) // true, false
+        let config = Config(testing: testing)
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",
-                                 logLevel: "info", // trace, info, warn, error, none
+                                 logLevel: "info",  // trace, info, warn, error, none
+                                   config: config,
                          useNativeLogging: true)
-    }
-
-    struct Args: Encodable {
-        var persistentStoragePath: String
-//        var cryptoWorkerType: String
-        var logLevel: String
-        var useNativeLogging: Bool
     }
 
     var persistentStoragePath: String
 
+    struct Testing: Encodable {
+        var devModeActive: Bool
+        // more to come...
+    }
+    struct Config: Encodable {
+        var testing: Testing
+    }
+    struct Args: Encodable {
+        var persistentStoragePath: String
+//        var cryptoWorkerType: String
+        var logLevel: String
+        var config: Config
+        var useNativeLogging: Bool
+    }
     struct Response: Decodable {
         var versionInfo: VersionInfo
     }
@@ -158,7 +168,7 @@ extension WalletModel {
     }
 }
 // MARK: -
-///  A request to initialize Wallet-core
+///  A request to reset Wallet-core to a virgin DB. WILL DESTROY ALL COINS
 fileprivate struct ResetRequest: WalletBackendFormattedRequest {
     func operation() -> String { "clearDb" }
     func args() -> Args { Args() }
@@ -176,3 +186,24 @@ extension WalletModel {
     }
 }
 // MARK: -
+
+fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
+    func operation() -> String { "applyDevExperiment" }
+    func args() -> Args { Args(devExperimentUri: talerUri) }
+
+    var talerUri: String
+
+    struct Args: Encodable {
+        var devExperimentUri: String
+    }
+    struct Response: Decodable {}
+}
+
+extension WalletModel {
+    /// tell wallet-core to mock new transactions
+    func devExperimentT(talerUri: String) async throws {
+        // T for any Thread
+        let request = DevExperimentRequest(talerUri: talerUri)
+        _ = try await sendRequest(request, 0)
+    }
+}
