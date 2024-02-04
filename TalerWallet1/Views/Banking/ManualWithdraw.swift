@@ -79,10 +79,9 @@ struct ManualWithdraw: View {
                                     p2p: false)
                     .padding(.top)
                 }
-            } } // ScrollVStack
+            }.padding(.horizontal) } // ScrollVStack
             .frame(maxWidth: .infinity, alignment: .leading)
 //            .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-            .padding(.horizontal)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .navigationTitle(navTitle)
             .onAppear {
