@@ -275,6 +275,13 @@ struct TransactionSummaryV: View {
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: details.exchangeBaseUrl, large: false, summary: nil)
                     }
+                    case .deposit(let depositTransaction): Group {
+                        let details = depositTransaction.details
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
+                                          topTitle: String(localized: "Amount to deposit:"),
+                                          baseURL: nil, large: true,            // TODO: baseURL
+                                          summary: nil)
+                    }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
                         NavigationLink(destination: LazyView {

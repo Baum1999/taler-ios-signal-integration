@@ -318,6 +318,27 @@ struct WithdrawalTransaction : Sendable{
     var details: WithdrawalTransactionDetails
 }
 
+struct TrackingState : Decodable {
+    var wireTransferId: String
+    var timestampExecuted: Timestamp
+    var amountRaw: Amount
+    var wireFee: Amount
+}
+
+struct DepositTransactionDetails: Decodable {
+    var depositGroupId: String
+    var targetPaytoUri: String
+    var wireTransferProgress: Int
+    var wireTransferDeadline: Timestamp
+    var deposited: Bool
+    var trackingState: [TrackingState]?
+}
+
+struct DepositTransaction : Sendable {
+    var common: TransactionCommon
+    var details: DepositTransactionDetails
+}
+
 struct RefundInfo: Decodable {
     var amountEffective: Amount
     var amountRaw: Amount
@@ -421,6 +442,7 @@ struct DummyTransaction : Sendable{
 enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     case dummy (DummyTransaction)
     case withdrawal (WithdrawalTransaction)
+    case deposit (DepositTransaction)
     case payment (PaymentTransaction)
     case refund (RefundTransaction)
     case reward (RewardTransaction)
@@ -434,6 +456,9 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 case .withdrawal:
                     let details = try WithdrawalTransactionDetails.init(from: decoder)
                     self = .withdrawal(WithdrawalTransaction(common: common, details: details))
+                case .deposit:
+                    let details = try DepositTransactionDetails.init(from: decoder)
+                    self = .deposit(DepositTransaction(common: common, details: details))
                 case .payment:
                     let details = try PaymentTransactionDetails.init(from: decoder)
                     self = .payment(PaymentTransaction(common: common, details: details))
@@ -544,6 +569,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
         return switch self {
             case .dummy(let dummyTransaction):           dummyTransaction.common
             case .withdrawal(let withdrawalTransaction): withdrawalTransaction.common
+            case .deposit(let depositTransaction):       depositTransaction.common
             case .payment(let paymentTransaction):       paymentTransaction.common
             case .refund(let refundTransaction):         refundTransaction.common
             case .reward(let rewardTransaction):         rewardTransaction.common
@@ -559,6 +585,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 break
             case .withdrawal(let withdrawalTransaction):
                 result[EXCHANGEBASEURL] = withdrawalTransaction.details.exchangeBaseUrl
+            case .deposit(let depositTransaction):
+                result[EXCHANGEBASEURL] = depositTransaction.details.depositGroupId
             case .payment(let paymentTransaction):
                 result["summary"] = paymentTransaction.details.info.summary
             case .refund(let refundTransaction):
