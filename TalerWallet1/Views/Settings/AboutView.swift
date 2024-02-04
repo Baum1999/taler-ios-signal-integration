@@ -52,7 +52,12 @@ struct AboutView: View {
                 Group {
                     if showGitHash {
                         SettingsItem(name: "Wallet-Core Git", id1: "wallet-coreG") {
-                            Text(verbatim: "\(walletCore.versionInfo?.implementationGitHash ?? "unknown")")
+                            if let gitHash = walletCore.versionInfo?.implementationGitHash {
+                                let index = gitHash.index(gitHash.startIndex, offsetBy: 7)
+                                Text(gitHash[..<index])
+                            } else {
+                                Text(verbatim: "unknown")
+                            }
                         }
                     } else {
                         SettingsItem(name: "Wallet-Core Version", id1: "wallet-coreV") {
