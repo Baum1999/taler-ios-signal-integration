@@ -84,7 +84,7 @@ struct Tax: Codable {
 
 /// A product being purchased from a merchant.
 /// https://docs.taler.net/core/api-merchant.html#the-contract-terms
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     var product_id: String?
     var description: String
 //    var description_i18n:   ?
@@ -94,6 +94,8 @@ struct Product: Codable {
     var image: String? // URL to a product image
     var taxes: [Tax]?
     var delivery_date: Timestamp?
+
+    var id: String { product_id ?? "unknown" }
 }
 
 /// Brief information about an order.
