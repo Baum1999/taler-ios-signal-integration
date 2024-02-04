@@ -277,14 +277,15 @@ struct TransactionSummaryV: View {
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         baseURL: details.exchangeBaseUrl, large: false, summary: nil)
+                                         baseURL: details.exchangeBaseUrl, large: false,
+                                         summary: nil, merchant: nil)
                     }
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
                                           topTitle: String(localized: "Amount to deposit:"),
                                           baseURL: nil, large: true,            // TODO: baseURL
-                                          summary: nil)
+                                          summary: nil, merchant: nil)
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
@@ -296,26 +297,32 @@ struct TransactionSummaryV: View {
 //                        .buttonStyle(TalerButtonStyle(type: .bordered))
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
                                         topTitle: String(localized: "Sum to be paid:"),
-                                          baseURL: nil, large: true, summary: details.info.summary)     // TODO: baseURL
+                                         baseURL: nil, large: true,             // TODO: baseURL
+                                         summary: details.info.summary,
+                                        merchant: details.info.merchant.name)
                     }
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                         topTitle: String(localized: "Refunded amount:"),
-                                         baseURL: nil, large: true, summary: nil)     // TODO: baseURL, summary
+                                         baseURL: nil, large: true,             // TODO: baseURL
+                                         summary: details.info?.summary,
+                                        merchant: details.info?.merchant.name)
                     }
                     case .reward(let rewardTransaction): Group {
                         let details = rewardTransaction.details
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:", comment: "mini"),
                                         topTitle: String(localized: "Received Reward:"),
-                                         baseURL: details.exchangeBaseUrl, large: true, summary: nil)       // TODO: summary
+                                         baseURL: details.exchangeBaseUrl, large: true,
+                                         summary: nil, merchant: nil)           // TODO: summary
                     }
                     case .refresh(let refreshTransaction): Group {
                         let details = refreshTransaction.details                // TODO: details
                         Text(details.refreshReason.rawValue)
                         ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:", comment: "mini"),
                                         topTitle: String(localized: "Refreshed amount:"),
-                                         baseURL: nil, large: true, summary: nil)     // TODO: baseURL
+                                         baseURL: nil, large: true,             // TODO: baseURL
+                                         summary: nil, merchant: nil)
                     }
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
@@ -350,7 +357,8 @@ struct TransactionSummaryV: View {
                                        topAbbrev: localizedType + colon,
                                         topTitle: localizedType + colon,
                                          baseURL: details.exchangeBaseUrl, large: false,
-                                         summary: details.info.summary)
+                                         summary: details.info.summary,
+                                        merchant: nil)
                     } // p2p
                 } // switch
             } // Group

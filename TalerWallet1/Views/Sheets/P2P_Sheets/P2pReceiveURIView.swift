@@ -46,7 +46,8 @@ struct P2pReceiveURIView: View {
                                      large: false, pending: false, incoming: true,
                                    baseURL: nil,
                                     status: nil,
-                                   summary: peerPushCreditResponse.contractTerms.summary)
+                                   summary: peerPushCreditResponse.contractTerms.summary,
+                                  merchant: nil)
                     let expiration = peerPushCreditResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
                     let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString

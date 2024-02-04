@@ -38,7 +38,8 @@ struct P2pPayURIView: View {
                                      large: false, pending: false, incoming: false,
                                    baseURL: nil,
                                     status: nil,
-                                   summary: peerPullDebitResponse.contractTerms.summary)
+                                   summary: peerPullDebitResponse.contractTerms.summary,
+                                  merchant: nil)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
                     let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString

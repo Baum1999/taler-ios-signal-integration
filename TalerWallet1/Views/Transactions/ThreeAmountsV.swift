@@ -14,6 +14,7 @@ struct ThreeAmountsSheet: View {
     let baseURL: String?
     let large: Bool               // set to false for QR or IBAN
     let summary: String?
+    let merchant: String?
 
     var body: some View {
         let raw = common.amountRaw
@@ -24,8 +25,8 @@ struct ThreeAmountsSheet: View {
         let isDone = (common.txState.major == .done)
         let incomplete = !(isDone || pending)
 
-        let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending amount to obtain:")
-                                                     : String(localized: "Obtained amount:") )
+        let defaultBottomTitle  = incoming ? (pending ? String(localized: "Pending amount to obtain:")
+                                                      : String(localized: "Obtained amount:") )
                                            : (pending ? String(localized: "Amount to pay:")
                                                       : String(localized: "Paid amount:") )
         let defaultBottomAbbrev = incoming ? (pending ? String(localized: "Pending:", comment: "mini")
@@ -39,7 +40,8 @@ struct ThreeAmountsSheet: View {
                          large: large, pending: pending, incoming: incoming,
                        baseURL: baseURL,
                         status: common.txState.major.localizedState,
-                       summary: summary)
+                       summary: summary,
+                      merchant: merchant)
     }
 }
 // MARK: -
@@ -57,6 +59,7 @@ struct ThreeAmountsV: View {
     let baseURL: String?
     let status: String?
     let summary: String?
+    let merchant: String?
 
     @AppStorage("iconOnly") var iconOnly: Bool = false
     
@@ -67,14 +70,20 @@ struct ThreeAmountsV: View {
         Section {
             if let summary {
                 Text(summary)
-                    .accessibilityFont(.title2)
+                    .accessibilityFont(.title3)
+                    .lineLimit(4)
+                    .padding(.bottom)
+            }
+            if let merchant {
+                Text(merchant)
+                    .accessibilityFont(.title3)
                     .lineLimit(4)
                     .padding(.bottom)
             }
             AmountRowV(title: iconOnly ? topAbbrev : topTitle,
                       amount: topAmount,
                        color: labelColor,
-                       large: large)
+                       large: false)
                 .padding(.bottom, 4)
                 .accessibilityElement(children: .combine)
             if let fee {
@@ -134,7 +143,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
             List {
                 ThreeAmountsSheet(common: common, topAbbrev: "Withdrawal",
                                 topTitle: "Withdrawal", baseURL: DEMOEXCHANGE,
-                                   large: 1==0, summary: nil)
+                                   large: 1==0, summary: nil, merchant: nil)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))
