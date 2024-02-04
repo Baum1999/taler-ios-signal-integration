@@ -295,8 +295,8 @@ struct TransactionSummaryV: View {
                             Text("Show details")
                         }
 //                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Pay:"),
-                                        topTitle: String(localized: "Sum to be paid:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
+                                        topTitle: String(localized: "Price (net):"),
                                          baseURL: nil, large: true,             // TODO: baseURL
                                          summary: details.info.summary,
                                         merchant: details.info.merchant.name)

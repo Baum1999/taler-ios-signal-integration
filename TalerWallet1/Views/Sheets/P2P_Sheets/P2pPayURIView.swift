@@ -62,7 +62,12 @@ struct P2pPayURIView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
             } else {
-                LoadingView(url: url, message: nil)
+#if DEBUG
+                let message = url.host
+#else
+                let message: String? = nil
+#endif
+                LoadingView(url: nil, message: message)
                     .task { do {
                         symLog.log(".task")
                         let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)

@@ -71,7 +71,12 @@ struct P2pReceiveURIView: View {
                     .padding(.horizontal)
                 }
             } else {
-                LoadingView(url: url, message: nil)
+#if DEBUG
+                let message = url.host
+#else
+                let message: String? = nil
+#endif
+                LoadingView(url: nil, message: message)
             }
         }
         .onAppear() {
