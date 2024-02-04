@@ -78,10 +78,9 @@ struct RequestPayment: View {
                 .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()
                 )
-        } } // ScrollVStack
+        }.padding(.horizontal) } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .padding(.horizontal)   // Lists do this automatically, but this is a VStack
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
