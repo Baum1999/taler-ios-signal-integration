@@ -21,6 +21,7 @@ struct BalancesSectionView {
     let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
+    @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -59,13 +60,13 @@ extension BalancesSectionView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = balance.scopeInfo.currency
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let currencyInfo = controller.info(for: currency)
 
         Section {
             let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
             if showSpendingButton {
                 if !iconOnly && showSpendingHint {
-                    Text("You can spend these KUDOS in the Demo Shop, or send them to another wallet.")
+                    Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo Shop, or send them to another wallet.")
                         .accessibilityFont(.body)
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
@@ -96,13 +97,17 @@ extension BalancesSectionView: View {
                           pendingTransactions: $pendingTransactions,
                                 reloadPending: reloadPending,
                               reloadOneAction: reloadOneAction)
+                    .padding(.leading, ICONLEADING)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), currency: currencyInfo.scope.currency)
+            BarGraphHeader(stack: stack.push(), currency: currency,
+                    currencyName: currencyInfo?.scope.currency ?? currency,
+            shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
-        .task {
+        .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
+            // TODO: only load the MAXRECENT most recent transactions
                 let response = await model.transactionsT(stack.push(".task - reload Transactions"), currency: currency)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
@@ -113,19 +118,22 @@ extension BalancesSectionView: View {
 //            }
         }
         let transactionCount = completedTransactions.count
-        /// if there is only one currency, then show recent transactions
+        /// if there is only one currency, then show MAXRECENT recent transactions
         if sectionCount == 1 && transactionCount > 0 {
             Section {
-                let slice = completedTransactions.prefix(3)         // already sorted
+                let slice = completedTransactions.prefix(MAXRECENT)         // already sorted
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
                                       currency: currency,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)
+                    .padding(.leading, ICONLEADING)
             } header: {
                 if !iconOnly {
-                    Text("Recent transactions")
+                    let count = transactionCount > MAXRECENT ? MAXRECENT : transactionCount
+                    Text(count > 1 ? "Recent \(count) transactions"
+                                   : "Recent transaction")
                         .accessibilityFont(.callout)
 //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 }
@@ -133,7 +141,7 @@ extension BalancesSectionView: View {
         } // recent transactions
     } // body
 } // BalancesSectionView
-
+// MARK: -
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack

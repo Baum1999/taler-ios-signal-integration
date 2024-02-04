@@ -11,6 +11,8 @@ struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let currency: String
+    let currencyName: String
+    @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -20,13 +22,13 @@ struct BarGraphHeader: View {
 
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
-            Text(currency)
+            Text(currencyName)
                 .accessibilityFont(.title2)
 //                .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
             BarGraph(transactions: $completedTransactions,
                      maxBars: MAXBARS, barHeight: barHeight)
         }
-        .task {
+        .task(id: shouldReloadBalances + 2_000_000) {
             symLog.log(".task for BarGraphHeader(\(currency)) - reload Transactions")
             // TODO: only load the 10 most recent transactions
             let response = await model.transactionsT(stack.push(".task - reload Transactions for \(currency)"),

@@ -13,18 +13,22 @@ struct ExchangeSectionView: View {
     let currency: String                        // this is the currency to be used
     let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
+    @EnvironmentObject private var controller: Controller
     @AppStorage("iconOnly") var iconOnly: Bool = false
 
+    @State private var shouldReloadBalances: Int = 0
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let currencyInfo = controller.info(for: currency)
+        let currencyName = currencyInfo?.scope.currency ?? currency
         Section {
             ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
-                             currency: currency,            // TODO: (balance.available) amount.isZero to disable Deposit-button
+                             currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button
                      amountToTransfer: $amountToTransfer)   // does still have the wrong currency
                 .listRowSeparator(.hidden)
             }
@@ -43,7 +47,8 @@ struct ExchangeSectionView: View {
                 .padding(.top)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), currency: currency)
+            BarGraphHeader(stack: stack.push(), currency: currency, currencyName: currencyName,
+                           shouldReloadBalances: $shouldReloadBalances)
         }
     }
 }

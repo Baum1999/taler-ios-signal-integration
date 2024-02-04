@@ -95,6 +95,7 @@ struct BalancesListView: View {
 #endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 amountToTransfer: $amountToTransfer, summary: $summary,
+                shouldReloadBalances: $shouldReloadBalances,
                 reloadBalances: reloadBalances)
             .navigationTitle(navTitle)
             .navigationBarItems(trailing: QRButton(action: checkCameraAvailable))
@@ -124,6 +125,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var amountToTransfer: Amount
         @Binding var summary: String
+        @Binding var shouldReloadBalances: Int
         var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
 
         var body: some View {
@@ -141,7 +143,8 @@ extension BalancesListView {
                                           balance: balance,                     // this is the currency to be used
                                      sectionCount: count,
                                  amountToTransfer: $amountToTransfer,           // does still have the wrong currency
-                                          summary: $summary)
+                                          summary: $summary,
+                             shouldReloadBalances: $shouldReloadBalances)
                     }
                     .onAppear() {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))

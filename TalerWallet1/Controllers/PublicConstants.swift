@@ -4,6 +4,8 @@
  */
 import Foundation
 
+public let MAXRECENT = 4
+public let ICONLEADING = CGFloat(-8)
 public let HSPACING = CGFloat(10)                  // space between items in HStack
 
 public let LAUNCHDURATION: Double = 1.60
