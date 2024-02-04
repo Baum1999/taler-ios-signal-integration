@@ -12,6 +12,15 @@ struct QRCodeDetailView: View {
     let incoming: Bool
     let amount: Amount
 
+    @EnvironmentObject private var controller: Controller
+
+    var amountStr: String {
+        if let currencyInfo = controller.info(for: amount.currencyStr) {
+            return amount.string(currencyInfo)
+        }
+        return amount.readableDescription
+    }
+
     var body: some View {
         if talerURI.count > 10 {
             Section {
@@ -42,7 +51,6 @@ struct QRCodeDetailView: View {
                 }
                 .listRowSeparator(.hidden)
 
-                let amountStr = amount.readableDescription       // TODO: currency formatter?
                 let hintStr = incoming ? String(localized: "let the payer scan this QR code to pay \(amountStr).",
                                                   comment: "e.g. '5,3 €'")
                                        : String(localized: "let the payee scan this QR code to receive \(amountStr).",
