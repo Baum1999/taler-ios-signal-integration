@@ -30,10 +30,10 @@ struct P2pPayURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsV(topTitle: String(localized: "Amount to pay:"),
-                                 topAbbrev: String(localized: "Pay:"),
+                                 topAbbrev: String(localized: "Pay:", comment: "mini"),
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Amount to be spent:"),
-                              bottomAbbrev: String(localized: "Effective:"),
+                              bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: false,
                                    baseURL: nil,

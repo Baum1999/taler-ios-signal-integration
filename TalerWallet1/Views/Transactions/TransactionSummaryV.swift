@@ -120,9 +120,13 @@ struct TransactionSummaryV: View {
                     .listRowSeparator(.hidden)
                 VStack(alignment: .trailing) {
                     let majorState = common.txState.major.localizedState
+#if DEBUG
                     let minorState = common.txState.minor?.localizedState ?? nil
                     let state = transaction.isPending ? minorState ?? majorState
                                                       : majorState
+#else
+                    let state = majorState
+#endif
                     HStack {
                         Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)
@@ -271,7 +275,7 @@ struct TransactionSummaryV: View {
                                     }   }   }   }
                             } // switch
                         } // ManualDetails or Confirm now (with bank)
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: details.exchangeBaseUrl, large: false, summary: nil)
                     }
@@ -296,20 +300,20 @@ struct TransactionSummaryV: View {
                     }
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                         topTitle: String(localized: "Refunded amount:"),
                                          baseURL: nil, large: true, summary: nil)     // TODO: baseURL, summary
                     }
                     case .reward(let rewardTransaction): Group {
                         let details = rewardTransaction.details
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:", comment: "mini"),
                                         topTitle: String(localized: "Received Reward:"),
                                          baseURL: details.exchangeBaseUrl, large: true, summary: nil)       // TODO: summary
                     }
                     case .refresh(let refreshTransaction): Group {
                         let details = refreshTransaction.details                // TODO: details
                         Text(details.refreshReason.rawValue)
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:"),
+                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:", comment: "mini"),
                                         topTitle: String(localized: "Refreshed amount:"),
                                          baseURL: nil, large: true, summary: nil)     // TODO: baseURL
                     }

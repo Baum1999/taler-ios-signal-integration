@@ -44,10 +44,10 @@ struct WithdrawURIView: View {
                     let inColor = WalletColors().transactionColor(true)
 
                     ThreeAmountsV(topTitle: String(localized: "Chosen amount to withdraw:"),
-                                 topAbbrev: String(localized: "Chosen:"),
+                                 topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Amount to be withdrawn:"),
-                              bottomAbbrev: String(localized: "Effective:"),
+                              bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
                                    baseURL: exchange.exchangeBaseUrl,
@@ -74,7 +74,12 @@ struct WithdrawURIView: View {
                     .padding(.horizontal)
                 }
             } else {        // no details or no exchange
-                LoadingView(url: url, message: nil)
+#if DEBUG
+                let message = url.host
+#else
+                let message: String? = nil
+#endif
+                LoadingView(url: nil, message: message)
             }
         }
         .onAppear() {

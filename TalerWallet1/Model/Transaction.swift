@@ -152,13 +152,13 @@ enum TxAction: String, Codable {
 
     var localizedActionTitle: String {
         return switch self {
-            case .delete:   String(localized: "TxAction.Delete", defaultValue: "Delete from list", comment: "TxAction button")
+            case .delete:   String(localized: "TxAction.Delete", defaultValue: "Delete from history", comment: "TxAction button")
             case .suspend:  String("Suspend")
             case .resume:   String("Resume")
             case .abort:    String(localized: "TxAction.Abort", defaultValue: "Abort", comment: "TxAction button")
 //            case .revive:   String(localized: "TxAction.Revive", defaultValue: "Revive", comment: "TxAction button")
             case .fail:     String(localized: "TxAction.Fail", defaultValue: "Fail", comment: "TxAction button")
-            case .retry:    String(localized: "TxAction.Retry", defaultValue: "Retry", comment: "TxAction button")
+            case .retry:    String(localized: "TxAction.Retry", defaultValue: "Retry now", comment: "TxAction button")
         }
     }
     var localizedActionImage: String? {

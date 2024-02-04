@@ -26,13 +26,15 @@ struct ThreeAmountsSheet: View {
 
         let defaultBottomTitle = incoming ? (pending ? String(localized: "Pending amount to obtain:")
                                                      : String(localized: "Obtained amount:") )
-                                          :            String(localized: "Paid amount:")
-        let defaultBottomAbbre = incoming ? (pending ? String(localized: "Pending:")
-                                                     : String(localized: "Obtained:") )
-                                          :            String(localized: "Paid:")
+                                           : (pending ? String(localized: "Amount to pay:")
+                                                      : String(localized: "Paid amount:") )
+        let defaultBottomAbbrev = incoming ? (pending ? String(localized: "Pending:", comment: "mini")
+                                                      : String(localized: "Obtained:", comment: "mini") )
+                                           : (pending ? String(localized: "Pay:", comment: "mini")
+                                                      : String(localized: "Paid:", comment: "mini") )
         ThreeAmountsV(topTitle: topTitle, topAbbrev: topAbbrev, topAmount: raw, fee: fee,
                    bottomTitle: bottomTitle ?? defaultBottomTitle,
-                  bottomAbbrev: bottomAbbrev ?? defaultBottomAbbre,
+                  bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
                   bottomAmount: incomplete ? nil : effective,
                          large: large, pending: pending, incoming: incoming,
                        baseURL: baseURL,
@@ -76,8 +78,8 @@ struct ThreeAmountsV: View {
                 .padding(.bottom, 4)
                 .accessibilityElement(children: .combine)
             if let fee {
-                AmountRowV(title: iconOnly ? String(localized: "Fee:")
-                                           : String(localized: "Exchange fee:"),
+                AmountRowV(title: iconOnly ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
+                                           : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
                           amount: fee,
                            color: labelColor,
                            large: false)
@@ -93,7 +95,7 @@ struct ThreeAmountsV: View {
             }
             if let baseURL {
                 VStack(alignment: .leading) {
-                    Text(iconOnly ? "Exchange:" : "Using Exchange:")
+                    Text(iconOnly ? "Payment Provider:" : "Using Payment Provider:")
                         .multilineTextAlignment(.leading)
                         .accessibilityFont(.body)
                     HStack {
