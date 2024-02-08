@@ -10,8 +10,8 @@ import taler_swift
 /// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
     let stack: CallStack
-    let currency: String                        // this is the currency to be used
-    let exchanges: [Exchange]
+    let exchange: Exchange
+//    let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -22,16 +22,18 @@ struct ExchangeSectionView: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let scopeInfo = exchange.scopeInfo
+        let currency = scopeInfo?.currency ?? exchange.currency ?? "unknown"
         let currencyInfo = controller.info(for: currency)
         let currencyName = currencyInfo?.scope.currency ?? currency
         Section {
-            ForEach(exchanges) { exchange in
+//            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
                              currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button
                      amountToTransfer: $amountToTransfer)   // does still have the wrong currency
                 .listRowSeparator(.hidden)
-            }
+//            }
             if "KUDOS" == currency {
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
@@ -47,7 +49,7 @@ struct ExchangeSectionView: View {
                 .padding(.top)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: nil, currencyName: currencyName,
+            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
                            shouldReloadBalances: $shouldReloadBalances)
         }
     }
@@ -75,9 +77,11 @@ fileprivate struct ExchangeRow_Container : View {
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
-        ExchangeSectionView(stack: CallStack("Preview"), currency: LONGCURRENCY,
-                            exchanges: [exchange1, exchange2],
-                            amountToTransfer: $amountToPreview)
+        ExchangeSectionView(stack: CallStack("Preview"),
+//                        scopeInfo: scopeInfo,
+                         exchange: exchange1,
+//                        exchanges: [exchange1, exchange2],
+                 amountToTransfer: $amountToPreview)
     }
 }
 

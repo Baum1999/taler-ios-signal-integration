@@ -64,13 +64,14 @@ struct ExchangeListView: View {
         }
     }
 }
-
-struct ExchangeListCommonV: View {
+// MARK: -
+struct ExchangeListCommonV {
     let symLog: SymLogV?
     let stack: CallStack
     @Binding var balances: [Balance]
 
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var exchanges: [Exchange] = []
 
@@ -81,82 +82,45 @@ struct ExchangeListCommonV: View {
         exchanges = await model.listExchangesM()
     }
 
+}
+// MARK: -
+extension ExchangeListCommonV: View {
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        //Text("Exchanges...")
-        Content(symLog: symLog,
-                 stack: stack.push(),
-              balances: $balances,
-             exchanges: $exchanges,
-      amountToTransfer: $amountToTransfer,
-       reloadExchanges: reloadExchanges)
+        let sortedExchanges = exchanges.sorted { $0 < $1 }
+        // TODO: Balances for amountAvailable for Deposit
+        Group {
+            List(sortedExchanges, id: \.self) { exchange in
+                ExchangeSectionView(stack: stack.push(),
+                                 exchange: exchange,
+                         amountToTransfer: $amountToTransfer)               // does still have the wrong currency
+            }
+            .refreshable {
+                symLog?.log("refreshing")
+                await reloadExchanges()
+            }
+            .listStyle(myListStyle.style).anyView
+        }
+        .onAppear() {
+            DebugViewC.shared.setViewID(VIEW_EXCHANGES, stack: stack.push())
+        }
         .overlay {
             if exchanges.isEmpty {
                 Text("No Exchanges yet...")
                     .accessibilityFont(.body)
             }
         }
+        .onNotification(.ExchangeAdded) { notification in
+            // doesn't need to be received on main thread because we just reload in the background anyway
+            symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
+            Task { await reloadExchanges() } // runs on MainActor
+        }
         .task {
             symLog?.log(".task")
             await reloadExchanges()
         }
-    }
-}
-// MARK: -
-extension ExchangeListCommonV {
-    struct Content: View {
-        let symLog: SymLogV?
-        let stack: CallStack
-        @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-        @Binding var balances: [Balance]
-        @Binding var exchanges: [Exchange]
-        @Binding var amountToTransfer: Amount           // does still have the wrong currency
-        var reloadExchanges: () async -> Void
-
-        func currenciesDict(_ exchanges: [Exchange]) -> [String : [Exchange]] {
-            var currencies: [String : [Exchange]] = [:]
-
-            for exchange in exchanges {
-                let currency = exchange.scopeInfo?.currency
-                            ?? exchange.currency ?? "Unknown"
-                if currencies[currency] != nil {
-                    currencies[currency]!.append(exchange)
-                } else {
-                    currencies[currency] = [exchange]
-                }
-            }
-            return currencies
-        }
-
-//        @State private var exchangeAmount: ExchangeAmount? = nil
-
-        var body: some View {
-            let dict = currenciesDict(exchanges)
-            // TODO: Balances for amountAvailable for Deposit
-            let sortedDict = dict.sorted{ $0.key < $1.key}
-            Group { // necessary for .backslide transition (bug in SwiftUI)
-                List(sortedDict, id: \.key) { key, value in
-                    ExchangeSectionView(stack: stack.push(),
-                                     currency: key, exchanges: value,
-                             amountToTransfer: $amountToTransfer)               // does still have the wrong currency
-                }
-                .refreshable {
-                    symLog?.log("refreshing")
-                    await reloadExchanges()
-                }
-                .listStyle(myListStyle.style).anyView
-            }
-            .onAppear() {
-                DebugViewC.shared.setViewID(VIEW_EXCHANGES, stack: stack.push())
-            }
-            .onNotification(.ExchangeAdded) { notification in
-                // doesn't need to be received on main thread because we just reload in the background anyway
-                symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
-                Task { await reloadExchanges() } // runs on MainActor
-            }
-        } // body
-    }
+    } // body
 }

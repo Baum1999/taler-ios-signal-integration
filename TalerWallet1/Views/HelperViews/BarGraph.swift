@@ -35,8 +35,7 @@ struct BarGraphHeader: View {
                 symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
                 // TODO: only load the 10 most recent transactions
                 let response = await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
-//                                                         scopeInfo: scopeInfo)
-                                                         currency: scopeInfo.currency)
+                                                         scopeInfo: scopeInfo)
                 completedTransactions = WalletModel.completedTransactions(response)
             }
         }

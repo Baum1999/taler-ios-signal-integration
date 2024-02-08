@@ -26,12 +26,14 @@ extension WalletModel {
 fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     func operation() -> String { "getTransactions" }
 //    func operation() -> String { "testingGetSampleTransactions" }
-    func args() -> Args { Args(currency: currency, search: search, sort: sort) }
+    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search, sort: sort) }
 
+    var scopeInfo: ScopeInfo?
     var currency: String?
     var search: String?
     var sort: String?
     struct Args: Encodable {
+        var scopeInfo: ScopeInfo?
         var currency: String?
         var search: String?
         var sort: String?
@@ -99,10 +101,10 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, currency: String? = nil, searchString: String? = nil, sort: String = "descending")
+    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending")
     async -> [Transaction] {                                          // might be called from a background thread itself
         do {
-            let request = GetTransactions(currency: currency, search: searchString, sort: sort)
+            let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort)
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.transactions
         } catch {
@@ -110,9 +112,9 @@ extension WalletModel {
         }
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(_ stack: CallStack, currency: String? = nil, searchString: String? = nil, sort: String = "descending")
+    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending")
     async -> [Transaction] {    // M for MainActor
-        return await transactionsT(stack.push(), currency: currency, searchString: searchString, sort: sort)
+        return await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved

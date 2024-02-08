@@ -41,14 +41,12 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        let currency = balance.scopeInfo.currency
-        transactions = await model.transactionsT(stack.push(), currency: currency)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo)
         completedTransactions = WalletModel.completedTransactions(transactions)
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        let currency = balance.scopeInfo.currency
-        transactions = await model.transactionsT(stack.push(), currency: currency)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
     }
 }
@@ -109,7 +107,7 @@ extension BalancesSectionView: View {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
             // TODO: only load the MAXRECENT most recent transactions
-                let response = await model.transactionsT(stack.push(".task - reload Transactions"), currency: currency)
+                let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
@@ -126,7 +124,7 @@ extension BalancesSectionView: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                      currency: currency,
+                                     scopeInfo: scopeInfo,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
@@ -164,7 +162,7 @@ fileprivate struct BalancesPendingRowView: View {
             LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
-                                  currency: balance.scopeInfo.currency,
+                                 scopeInfo: balance.scopeInfo,
                               transactions: pendingTransactions,
                                 showUpDown: false,
                            reloadAllAction: reloadPending,
@@ -231,7 +229,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     }
 
     var body: some View {
-        let currency = balance.scopeInfo.currency
+        let scopeInfo = balance.scopeInfo
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),
@@ -251,7 +249,7 @@ fileprivate struct BalancesNavigationLinksView: View {
             let balanceDest = LazyView {
                 TransactionsListView(stack: stack.push(),
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
-                                  currency: currency,
+                                 scopeInfo: scopeInfo,
                               transactions: completedTransactions,
                                 showUpDown: true,
                            reloadAllAction: reloadAllAction,

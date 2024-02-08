@@ -38,7 +38,6 @@ struct IconBadge: View {
 
 struct TransactionRowView: View {
     let transaction : Transaction
-    let currency: String
 
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -172,8 +171,8 @@ struct TransactionRow_Previews: PreviewProvider {
                                          time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
         List {
-            TransactionRowView(transaction: withdrawal, currency: TESTCURRENCY)
-            TransactionRowView(transaction: payment, currency: DEMOCURRENCY)
+            TransactionRowView(transaction: withdrawal)
+            TransactionRowView(transaction: payment)
         }
     }
 }
@@ -209,7 +208,9 @@ extension Transaction {             // for PreViews
             let pDetails = PaymentTransactionDetails(info: info,
                                                proposalId: "some proposal ID",
                                            totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
-                                     totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280))
+                                     totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),
+                                                  refunds: [],
+                                        refundQueryActive: false)
             self = .payment(PaymentTransaction(common: common, details: pDetails))
         }
     }
