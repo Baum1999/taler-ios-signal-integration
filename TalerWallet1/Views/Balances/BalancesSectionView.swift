@@ -59,7 +59,8 @@ extension BalancesSectionView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = balance.scopeInfo.currency
+        let scopeInfo = balance.scopeInfo
+        let currency = scopeInfo.currency
         let currencyInfo = controller.info(for: currency)
 
         Section {
@@ -100,7 +101,7 @@ extension BalancesSectionView: View {
                     .padding(.leading, ICONLEADING)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), currency: currency,
+            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo,
                     currencyName: currencyInfo?.scope.currency ?? currency,
             shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)

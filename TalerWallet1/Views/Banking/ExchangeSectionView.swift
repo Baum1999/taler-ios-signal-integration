@@ -47,7 +47,7 @@ struct ExchangeSectionView: View {
                 .padding(.top)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), currency: currency, currencyName: currencyName,
+            BarGraphHeader(stack: stack.push(), scopeInfo: nil, currencyName: currencyName,
                            shouldReloadBalances: $shouldReloadBalances)
         }
     }

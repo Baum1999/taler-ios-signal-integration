@@ -10,7 +10,7 @@ let MAXBARS = 10
 struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currency: String
+    let scopeInfo: ScopeInfo?
     let currencyName: String
     @Binding var shouldReloadBalances: Int
 
@@ -25,15 +25,20 @@ struct BarGraphHeader: View {
             Text(currencyName)
                 .accessibilityFont(.title2)
 //                .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
-            BarGraph(transactions: $completedTransactions,
-                     maxBars: MAXBARS, barHeight: barHeight)
+            if let scopeInfo {
+                BarGraph(transactions: $completedTransactions,
+                         maxBars: MAXBARS, barHeight: barHeight)
+            }
         }
         .task(id: shouldReloadBalances + 2_000_000) {
-            symLog.log(".task for BarGraphHeader(\(currency)) - reload Transactions")
-            // TODO: only load the 10 most recent transactions
-            let response = await model.transactionsT(stack.push(".task - reload Transactions for \(currency)"),
-                                                     currency: currency)
-            completedTransactions = WalletModel.completedTransactions(response)
+            if let scopeInfo {
+                symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
+                // TODO: only load the 10 most recent transactions
+                let response = await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
+//                                                         scopeInfo: scopeInfo)
+                                                         currency: scopeInfo.currency)
+                completedTransactions = WalletModel.completedTransactions(response)
+            }
         }
     }
 }
