@@ -293,7 +293,7 @@ struct TransactionSummaryV: View {
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-//                        TransactionDetailV(paymentTx: paymentTransaction)
+                        TransactionDetailV(paymentTx: paymentTransaction)
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
                                         topTitle: String(localized: "Price (net):"),
