@@ -137,7 +137,8 @@ struct TransactionSummaryV: View {
                     }
                 }    .listRowSeparator(.automatic)
                     .accessibilityFont(.title)
-                TypeDetail(transaction: $transaction, hasDone: doneAction != nil)
+                TypeDetail(stack: stack.push(),
+                           transaction: $transaction, hasDone: doneAction != nil)
 
 //                if transaction.isRetryable { if let retryAction {
 //                    TransactionButton(transactionId: common.transactionId, command: .retry,
@@ -238,6 +239,7 @@ struct TransactionSummaryV: View {
     }
 
     struct TypeDetail: View {
+        let stack: CallStack
         @Binding var transaction: Transaction
         let hasDone: Bool
 
@@ -275,27 +277,25 @@ struct TransactionSummaryV: View {
                                     }   }   }   }
                             } // switch
                         } // ManualDetails or Confirm now (with bank)
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
                                          baseURL: details.exchangeBaseUrl, large: false,
                                          summary: nil, merchant: nil)
                     }
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
                                           topTitle: String(localized: "Amount to deposit:"),
                                           baseURL: nil, large: true,            // TODO: baseURL
                                           summary: nil, merchant: nil)
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-                        NavigationLink(destination: LazyView {
-                            LoadingView(url: nil, message: "Details")
-                        }) {
-                            Text("Show details")
-                        }
-//                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
+//                        TransactionDetailV(paymentTx: paymentTransaction)
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
                                         topTitle: String(localized: "Price (net):"),
                                          baseURL: nil, large: true,             // TODO: baseURL
                                          summary: details.info.summary,
@@ -303,7 +303,8 @@ struct TransactionSummaryV: View {
                     }
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                         topTitle: String(localized: "Refunded amount:"),
                                          baseURL: nil, large: true,             // TODO: baseURL
                                          summary: details.info?.summary,
@@ -311,7 +312,8 @@ struct TransactionSummaryV: View {
                     }
                     case .reward(let rewardTransaction): Group {
                         let details = rewardTransaction.details
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Reward:", comment: "mini"),
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Reward:", comment: "mini"),
                                         topTitle: String(localized: "Received Reward:"),
                                          baseURL: details.exchangeBaseUrl, large: true,
                                          summary: nil, merchant: nil)           // TODO: summary
@@ -319,7 +321,8 @@ struct TransactionSummaryV: View {
                     case .refresh(let refreshTransaction): Group {
                         let details = refreshTransaction.details                // TODO: details
                         Text(details.refreshReason.rawValue)
-                        ThreeAmountsSheet(common: common, topAbbrev: String(localized: "Refreshed:", comment: "mini"),
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common, topAbbrev: String(localized: "Refreshed:", comment: "mini"),
                                         topTitle: String(localized: "Refreshed amount:"),
                                          baseURL: nil, large: true,             // TODO: baseURL
                                          summary: nil, merchant: nil)
@@ -353,7 +356,8 @@ struct TransactionSummaryV: View {
                         let colon = ":"
                         let localizedType = transaction.isDone ? transaction.localizedTypePast
                                                                : transaction.localizedType
-                        ThreeAmountsSheet(common: common,
+                        ThreeAmountsSheet(stack: stack.push(),
+                                          common: common,
                                        topAbbrev: localizedType + colon,
                                         topTitle: localizedType + colon,
                                          baseURL: details.exchangeBaseUrl, large: false,

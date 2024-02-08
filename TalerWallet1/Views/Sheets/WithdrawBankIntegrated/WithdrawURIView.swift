@@ -43,7 +43,8 @@ struct WithdrawURIView: View {
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)
 
-                    ThreeAmountsV(topTitle: String(localized: "Chosen amount to withdraw:"),
+                    ThreeAmountsV(stack: stack.push(),
+                                  topTitle: String(localized: "Chosen amount to withdraw:"),
                                  topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Amount to be withdrawn:"),

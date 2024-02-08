@@ -37,7 +37,8 @@ struct P2pReceiveURIView: View {
                     let effective = peerPushCreditResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsV(topTitle: String(localized: "Gross Amount to receive:"),
+                    ThreeAmountsV(stack: stack.push(),
+                                  topTitle: String(localized: "Gross Amount to receive:"),
                                  topAbbrev: String(localized: "Receive gross:", comment: "mini"),
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Net Amount to receive:"),

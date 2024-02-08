@@ -59,7 +59,8 @@ struct PayTemplateView: View {
                 if let effective {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-                    ThreeAmountsV(topTitle: topTitle,
+                    ThreeAmountsV(stack: stack.push(),
+                                  topTitle: topTitle,
                                  topAbbrev: topAbbrev,
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Amount to spend:"),
@@ -74,7 +75,8 @@ struct PayTemplateView: View {
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
                         .accessibilityFont(.body)
-                    ThreeAmountsV(topTitle: topTitle,
+                    ThreeAmountsV(stack: stack.push(),
+                                  topTitle: topTitle,
                                  topAbbrev: topAbbrev,
                                  topAmount: raw, fee: nil,
                                bottomTitle: String(localized: "Amount available:"),

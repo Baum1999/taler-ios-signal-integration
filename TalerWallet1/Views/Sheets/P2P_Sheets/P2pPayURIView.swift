@@ -29,7 +29,8 @@ struct P2pPayURIView: View {
                     let effective = peerPullDebitResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsV(topTitle: String(localized: "Amount to pay:"),
+                    ThreeAmountsV(stack: stack.push(),
+                                  topTitle: String(localized: "Amount to pay:"),
                                  topAbbrev: String(localized: "Pay:", comment: "mini"),
                                  topAmount: raw, fee: fee,
                                bottomTitle: String(localized: "Amount to be spent:"),

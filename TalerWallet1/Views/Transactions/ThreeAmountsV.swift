@@ -6,6 +6,7 @@ import SwiftUI
 import taler_swift
 
 struct ThreeAmountsSheet: View {
+    let stack: CallStack
     var common: TransactionCommon
     var topAbbrev: String
     var topTitle: String
@@ -33,19 +34,22 @@ struct ThreeAmountsSheet: View {
                                                       : String(localized: "Obtained:", comment: "mini") )
                                            : (pending ? String(localized: "Pay:", comment: "mini")
                                                       : String(localized: "Paid:", comment: "mini") )
-        ThreeAmountsV(topTitle: topTitle, topAbbrev: topAbbrev, topAmount: raw, fee: fee,
-                   bottomTitle: bottomTitle ?? defaultBottomTitle,
-                  bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
-                  bottomAmount: incomplete ? nil : effective,
-                         large: large, pending: pending, incoming: incoming,
-                       baseURL: baseURL,
-                        status: common.txState.major.localizedState,
-                       summary: summary,
-                      merchant: merchant)
+        ThreeAmountsV(stack: stack.push(),
+                   topTitle: topTitle, topAbbrev: topAbbrev,
+                  topAmount: raw, fee: fee,
+                bottomTitle: bottomTitle ?? defaultBottomTitle,
+               bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
+               bottomAmount: incomplete ? nil : effective,
+                      large: large, pending: pending, incoming: incoming,
+                    baseURL: baseURL,
+                     status: common.txState.major.localizedState,
+                    summary: summary,
+                   merchant: merchant)
     }
 }
 // MARK: -
 struct ThreeAmountsV: View {
+    let stack: CallStack
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
@@ -88,7 +92,7 @@ struct ThreeAmountsV: View {
                 .accessibilityElement(children: .combine)
             if let fee {
                 AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
-                                           : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
+                                               : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
                           amount: fee,
                            color: labelColor,
                            large: false)
@@ -141,9 +145,10 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                   txActions: [])
         Group {
             List {
-                ThreeAmountsSheet(common: common, topAbbrev: "Withdrawal",
-                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE,
-                                   large: 1==0, summary: nil, merchant: nil)
+                ThreeAmountsSheet(stack: CallStack("Preview"),
+                                 common: common, topAbbrev: "Withdrawal",
+                               topTitle: "Withdrawal", baseURL: DEMOEXCHANGE,
+                                  large: 1==0, summary: nil, merchant: nil)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})
                             .buttonStyle(TalerButtonStyle(type: .prominent))
