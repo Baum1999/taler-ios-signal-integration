@@ -40,14 +40,14 @@ struct TransferRestrictionsV: View {
     let obtainStr: String
     let restrictions: [AccountRestriction]?
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var selectedLanguage = Locale.preferredLanguageCode
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(iconOnly ? "Transfer \(amountStr) to the Exchange."
-                          : "You need to transfer \(amountStr) from your regular bank account to the Exchange to receive \(obtainStr) as electronic cash in this wallet.")
+            Text(minimalistic ? "Transfer \(amountStr) to the Payment Service."
+                              : "You need to transfer \(amountStr) from your regular bank account to the Payment Service Provider to receive \(obtainStr) as electronic cash in this wallet.")
             .multilineTextAlignment(.leading)
             if let restrictions {
                 ForEach(restrictions) { restriction in
@@ -73,7 +73,7 @@ struct ManualDetailsV: View {
     var common : TransactionCommon
     var details : WithdrawalDetails
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var accountID = 0
     @State private var listID = UUID()
 
@@ -86,8 +86,8 @@ struct ManualDetailsV: View {
 
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
-            if !iconOnly {
-                Text("The Exchange is waiting for your wire-transfer.")
+            if !minimalistic {
+                Text("The Payment Service Provider is waiting for your wire-transfer.")
                     .bold()
                     .multilineTextAlignment(.leading)
                     .listRowSeparator(.hidden)
@@ -121,19 +121,19 @@ struct ManualDetailsV: View {
             }   .padding(.leading)
                 .padding(.top, -8)
 
-            let step1 = Text(iconOnly ? "**Step 1:** Copy+Paste this subject:"
-                                      : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+            let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
+                      : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                             .multilineTextAlignment(.leading)
             let mandatory = Text("This is mandatory, otherwise your money will not arrive in this wallet.")
                                 .bold()
                                 .multilineTextAlignment(.leading)
                                 .listRowSeparator(.hidden)
-            let step2 = Text(iconOnly ? "**Step 2:** Copy+Paste this IBAN:"
-                                      : "**Step 2:** If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website (and save it as favourite for the next time):")
+            let step2 = Text(minimalistic ? "**Step 2:** Copy+Paste this IBAN:"
+                      : "**Step 2:** If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website (and save it as favourite for the next time):")
                             .multilineTextAlignment(.leading)
                             .padding(.top)
-            let step3 = Text(iconOnly ? "**Step 3:** Transfer \(amountStr)."
-                                      : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
+            let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountStr)."
+                      : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
                             .multilineTextAlignment(.leading)
                             .padding(.top)
             Group {
@@ -142,15 +142,15 @@ struct ManualDetailsV: View {
                                    restrictions: account.creditRestrictions)
                     .listRowSeparator(.visible)
                 step1.listRowSeparator(.hidden)
-                if !iconOnly {
+                if !minimalistic {
                     mandatory
                 }
                 cryptocode.listRowSeparator(.hidden)
                 step2.listRowSeparator(.hidden)
                 ibanCode.listRowSeparator(.hidden)
                 step3.listRowSeparator(.visible)
-                Text(iconOnly ? "**Alternative:** Use this PayTo-Link:"
-                              : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
+                Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
+                                  : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
                     .multilineTextAlignment(.leading)
                     .padding(.top)
                     .listRowSeparator(.hidden)

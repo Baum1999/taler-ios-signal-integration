@@ -12,7 +12,7 @@ struct BalanceCell: View {
     let balanceDest: LazyView<TransactionsListView>?
 
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
@@ -24,7 +24,7 @@ struct BalanceCell: View {
                 amountV
             }
         let balanceCell = Group {
-            if iconOnly {
+            if minimalistic {
                 hLayout
             } else {
                 let balanceText = Text("Balance:", comment: "Main view")
@@ -69,7 +69,7 @@ struct BalanceRowView: View {
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
@@ -89,8 +89,8 @@ struct BalanceRowView: View {
                       balanceDest: balanceDest)
 //            .border(.red)
 
-            let sendTitle = iconOnly ? sendTitle0 : sendTitle1
-            let requTitle = iconOnly ? requestTitle0 : requestTitle1
+            let sendTitle = minimalistic ? sendTitle0 : sendTitle1
+            let requTitle = minimalistic ? requestTitle0 : requestTitle1
             let twoRowButtons = TwoRowButtons(sendTitle: sendTitle,
                                               recvTitle: requTitle,
                                          fitsSideBySide: false,

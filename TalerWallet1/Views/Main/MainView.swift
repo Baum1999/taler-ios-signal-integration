@@ -85,7 +85,7 @@ extension MainView {
         @State private var shouldReloadBalances = 0
         @State private var balances: [Balance] = []
         @Binding var talerFont: Int
-        @AppStorage("iconOnly") var iconOnly: Bool = false
+        @AppStorage("minimalistic") var minimalistic: Bool = false
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
@@ -145,7 +145,7 @@ extension MainView {
             let delay: UInt = 0     // no delay for release builds
 #endif
           Group {
-//            let labelStyle = iconOnly ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
+//            let labelStyle = minimalistic ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
             TabView(selection: tabSelection()) {
                 NavigationView {
                     BalancesListView(stack: stack.push(balancesTitle),
@@ -157,7 +157,7 @@ extension MainView {
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")             // iOS will automatically use filled variant
                         .accessibilityLabel(balancesTitle)
-                    if !iconOnly { Text(balancesTitle) }
+                    if !minimalistic { Text(balancesTitle) }
                 }
                 .tag(Tab.balances)
                 .badge(0)         // TODO: set badge if transaction finished in background
@@ -170,7 +170,7 @@ extension MainView {
                 .tabItem {
                     Image(systemName: "building.columns")    //  "arrow.triangle.2.circlepath")
                         .accessibilityLabel(exchangesTitle)
-                    if !iconOnly { Text(exchangesTitle) }
+                    if !minimalistic { Text(exchangesTitle) }
                 }
                 .tag(Tab.exchanges)
 
@@ -180,7 +180,7 @@ extension MainView {
                 .tabItem {
                     Image(systemName: "gear")                   // system will automatically use filled variant
                         .accessibilityLabel(settingsTitle)
-                    if !iconOnly { Text(settingsTitle) }
+                    if !minimalistic { Text(settingsTitle) }
                 }
                 .tag(Tab.settings)
             }

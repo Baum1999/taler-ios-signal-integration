@@ -25,7 +25,7 @@ struct BalancesSectionView {
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var showSpendingHint = true
     @State private var isShowingDetailView = false
@@ -65,8 +65,8 @@ extension BalancesSectionView: View {
         Section {
             let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
             if showSpendingButton {
-                if !iconOnly && showSpendingHint {
-                    Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo Shop, or send them to another wallet.")
+                if !minimalistic && showSpendingHint {
+                    Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo shop, or send them to another wallet.")
                         .accessibilityFont(.body)
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
@@ -130,7 +130,7 @@ extension BalancesSectionView: View {
                                reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             } header: {
-                if !iconOnly {
+                if !minimalistic {
                     let count = transactionCount > MAXRECENT ? MAXRECENT : transactionCount
                     Text(count > 1 ? "Recent \(count) transactions"
                                    : "Recent transaction")

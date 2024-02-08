@@ -36,7 +36,7 @@ struct SettingsView: View {
     @AppStorage("talerFont") var talerFont: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -135,9 +135,9 @@ struct SettingsView: View {
 //                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
-                SettingsToggle(name: String(localized: "Minimalistic"), value: $iconOnly, id1: "minimal",
+                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                         description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
-                    hideDescriptions = iconOnly //withAnimation { hideDescriptions = iconOnly }
+                    hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
                 }
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
@@ -310,7 +310,7 @@ struct SettingsView: View {
         .navigationTitle(navTitle)
         .onAppear() {
             showDevelopItems = developerMode
-            hideDescriptions = iconOnly
+            hideDescriptions = minimalistic
             DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
         }
         .onDisappear() {

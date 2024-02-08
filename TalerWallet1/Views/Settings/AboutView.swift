@@ -18,7 +18,7 @@ struct AboutView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var rotationEnabled = false
     @State private var showGitHash = false
@@ -39,7 +39,7 @@ struct AboutView: View {
                     Spacer()
                 }
                 SettingsItem(name: "Visit the taler.net website", id1: "web",
-                             description: iconOnly ? nil : String(localized: "More info about Gnu Taler in general...")) { }
+                             description: minimalistic ? nil : String(localized: "More info about Gnu Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {

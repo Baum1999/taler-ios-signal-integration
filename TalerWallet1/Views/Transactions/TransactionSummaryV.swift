@@ -201,11 +201,11 @@ struct TransactionSummaryV: View {
 //extension TransactionSummaryV {
     struct KycButton: View {
         let destination: URL
-        @AppStorage("iconOnly") var iconOnly: Bool = false
+        @AppStorage("minimalistic") var minimalistic: Bool = false
 
         var body: some View {
             VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
-                if !iconOnly {
+                if !minimalistic {
                     Text("You need to pass a KYC procedure")
                         .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise
@@ -220,11 +220,11 @@ struct TransactionSummaryV: View {
 
     struct ConfirmationButton: View {
         let destination: URL
-        @AppStorage("iconOnly") var iconOnly: Bool = false
+        @AppStorage("minimalistic") var minimalistic: Bool = false
 
         var body: some View {
             VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
-                if !iconOnly {
+                if !minimalistic {
                     Text("The bank is waiting for your confirmation.")
 //                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise

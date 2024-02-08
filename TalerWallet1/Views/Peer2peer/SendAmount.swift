@@ -17,7 +17,7 @@ struct SendAmount: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays = SEVENDAYS
@@ -87,7 +87,7 @@ struct SendAmount: View {
                 .padding(.bottom, 2)
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
-                               title: iconOnly ? String(localized: "Amount:")
+                               title: minimalistic ? String(localized: "Amount:")
                                                : String(localized: "Amount to send:"),
                       shortcutAction: shortcutAction)
             Text(insufficient ? insufficientLabel

@@ -26,7 +26,7 @@ struct P2PSubjectV: View {
     @Binding var expireDays: UInt
 
     @EnvironmentObject private var model: WalletModel
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var myFeeLabel: String = EMPTYSTRING
     @State private var transactionStarted: Bool = false
@@ -65,7 +65,7 @@ struct P2PSubjectV: View {
                         .accessibilityFont(.body)
                 }
             }
-                if !iconOnly {
+                if !minimalistic {
                     Text("Enter subject:")    // Purpose
                         .accessibilityFont(.title3)
                         .accessibilityAddTraits(.isHeader)
@@ -73,7 +73,7 @@ struct P2PSubjectV: View {
                         .padding(.top)
                 }
                 Group { if #available(iOS 16.0, *) {
-                    TextField(iconOnly ? "Subject" : EMPTYSTRING, text: $summary, axis: .vertical)
+                    TextField(minimalistic ? "Subject" : EMPTYSTRING, text: $summary, axis: .vertical)
                         .focused($isFocused)
                         .lineLimit(2...)
                 } else {

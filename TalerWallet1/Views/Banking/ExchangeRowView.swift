@@ -16,7 +16,7 @@ struct ExchangeRowView: View {
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var buttonSelected: Int? = nil
 
     func selectAndUpdate(_ button: Int) {
@@ -65,8 +65,8 @@ struct ExchangeRowView: View {
                            viewID: VIEW_WITHDRAW_TOS,
                      acceptAction: nil)         // pop back to here
         }
-        let twoRowButtons = TwoRowButtons(sendTitle: iconOnly ? depositTitle0 : depositTitle1,
-                                          recvTitle: iconOnly ? withdrawTitle0 : withdrawTitle1,
+        let twoRowButtons = TwoRowButtons(sendTitle: minimalistic ? depositTitle0 : depositTitle1,
+                                          recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
                                      fitsSideBySide: false,
                                           lineLimit: 5,
                                        sendDisabled: true,             // TODO: availableAmount.isZero
@@ -77,7 +77,7 @@ struct ExchangeRowView: View {
                 VStack(alignment: .leading) {
                     Text(baseURL.trimURL())
                         .accessibilityFont(.headline)
-                    if !iconOnly {
+                    if !minimalistic {
                         Text("Terms of Service")  // VIEW_WITHDRAW_TOS
                             .accessibilityFont(.body)
                     }

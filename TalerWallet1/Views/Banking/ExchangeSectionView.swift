@@ -14,7 +14,7 @@ struct ExchangeSectionView: View {
     let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
     @EnvironmentObject private var controller: Controller
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var shouldReloadBalances: Int = 0
     var body: some View {
@@ -36,7 +36,7 @@ struct ExchangeSectionView: View {
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
                 VStack {
-                    if !iconOnly {
+                    if !minimalistic {
                         Text(bankingHint)
                     }
                     Link(linkTitle, destination: URL(string: DEMOBANK)!)

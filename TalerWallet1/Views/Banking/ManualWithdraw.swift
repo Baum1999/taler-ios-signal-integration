@@ -16,7 +16,7 @@ struct ManualWithdraw: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
     @State private var exchange: Exchange? = nil
@@ -56,7 +56,7 @@ struct ManualWithdraw: View {
                 if tosAccepted {
                     CurrencyInputView(amount: $amountToTransfer,
                                    available: nil,
-                                       title: iconOnly ? String(localized: "Amount:")
+                                       title: minimalistic ? String(localized: "Amount:")
                                                        : String(localized: "Amount to withdraw:"),
                               shortcutAction: nil)
                         .padding(.top)

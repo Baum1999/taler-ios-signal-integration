@@ -14,12 +14,12 @@ struct ToSButtonView: View {
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
     let p2p: Bool
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
-        let hint = iconOnly ? String(localized: "You must accept the Exchange's Terms of Service first.")
-                      : p2p ? String(localized: "You must accept the Exchange's Terms of Service first before you can receive electronic cash in your wallet.", comment: "P2P Receive")
-                            : String(localized: "You must accept the Exchange's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
+        let hint = minimalistic ? String(localized: "You must accept the Payment Service's Terms of Service first.")
+                          : p2p ? String(localized: "You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.", comment: "P2P Receive")
+                                : String(localized: "You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
         Text(hint)
             .accessibilityFont(.body)
             .multilineTextAlignment(.leading)

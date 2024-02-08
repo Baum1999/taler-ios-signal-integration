@@ -13,7 +13,7 @@ struct PendingRowView: View {
     let needsKYC: Bool
 
 //    @Environment(\.sizeCategory) var sizeCategory
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     let inTitle0 = String(localized: "TitleIncoming_Short", defaultValue: "Incoming",
                           comment: "Abbreviation of `Pending incoming´ in Balances")
@@ -29,8 +29,8 @@ struct PendingRowView: View {
         let pendingColor = WalletColors().pendingColor(incoming)
         let iconBadge = IconBadge(foreColor: pendingColor, done: false, incoming: incoming,
                                   shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let inTitle = iconOnly ? inTitle0 : inTitle1
-        let outTitle = iconOnly ? outTitle0 : outTitle1
+        let inTitle = minimalistic ? inTitle0 : inTitle1
+        let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
 
         let amountText = AmountV(amount)

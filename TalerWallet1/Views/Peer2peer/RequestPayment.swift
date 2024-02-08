@@ -16,7 +16,7 @@ struct RequestPayment: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @AppStorage("iconOnly") var iconOnly: Bool = false
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
@@ -63,7 +63,7 @@ struct RequestPayment: View {
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
-                               title: iconOnly ? String(localized: "Amount:")
+                               title: minimalistic ? String(localized: "Amount:")
                                                : String(localized: "Amount to request:"),
                       shortcutAction: shortcutAction)
                 .padding(.top)

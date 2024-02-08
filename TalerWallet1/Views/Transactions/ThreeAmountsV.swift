@@ -61,8 +61,8 @@ struct ThreeAmountsV: View {
     let summary: String?
     let merchant: String?
 
-    @AppStorage("iconOnly") var iconOnly: Bool = false
-    
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
     var body: some View {
         let labelColor = Color(UIColor.label)
         let foreColor = pending ? WalletColors().pendingColor(incoming)
@@ -80,14 +80,14 @@ struct ThreeAmountsV: View {
                     .lineLimit(4)
                     .padding(.bottom)
             }
-            AmountRowV(title: iconOnly ? topAbbrev : topTitle,
+            AmountRowV(title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
                 .accessibilityElement(children: .combine)
             if let fee {
-                AmountRowV(title: iconOnly ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
+                AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
                                            : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
                           amount: fee,
                            color: labelColor,
@@ -96,7 +96,7 @@ struct ThreeAmountsV: View {
                 .accessibilityElement(children: .combine)
             }
             if let bottomAmount {
-                AmountRowV(title: iconOnly ? bottomAbbrev : bottomTitle,
+                AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
                           amount: bottomAmount,
                            color: foreColor,
                            large: large)
@@ -104,7 +104,7 @@ struct ThreeAmountsV: View {
             }
             if let baseURL {
                 VStack(alignment: .leading) {
-                    Text(iconOnly ? "Payment Provider:" : "Using Payment Provider:")
+                    Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
                         .accessibilityFont(.body)
                     HStack {
@@ -122,7 +122,7 @@ struct ThreeAmountsV: View {
                 .accessibilityElement(children: .combine)
             }
         } header: {
-            if !iconOnly {
+            if !minimalistic {
                 Text("Summary")
                     .accessibilityFont(.title3)
             }
