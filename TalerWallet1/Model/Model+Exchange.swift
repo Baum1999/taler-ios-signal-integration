@@ -29,6 +29,15 @@ enum ExchangeUpdateStatus: String, Codable {
 // MARK: -
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
+    static func < (lhs: Exchange, rhs: Exchange) -> Bool {
+        if let leftScope = lhs.scopeInfo {
+            if let rightScope = rhs.scopeInfo {
+                return leftScope < rightScope
+            }
+            return true             // scopeInfo comes first
+        }
+        return false
+    }
     static func == (lhs: Exchange, rhs: Exchange) -> Bool {
         return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl
         &&     lhs.tosStatus == rhs.tosStatus
