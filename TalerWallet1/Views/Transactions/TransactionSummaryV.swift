@@ -140,6 +140,7 @@ struct TransactionSummaryV: View {
                 TypeDetail(stack: stack.push(),
                            transaction: $transaction, hasDone: doneAction != nil)
 
+                // TODO: Retry Countdown, Retry Now button
 //                if transaction.isRetryable { if let retryAction {
 //                    TransactionButton(transactionId: common.transactionId, command: .retry,
 //                                      warning: nil, action: abortAction)
@@ -242,6 +243,7 @@ struct TransactionSummaryV: View {
         let stack: CallStack
         @Binding var transaction: Transaction
         let hasDone: Bool
+        @State private var rotationEnabled = true
 
         var body: some View {
             let common = transaction.common
@@ -252,6 +254,11 @@ struct TransactionSummaryV: View {
                         let title = EMPTYSTRING
                         Text(title)
                             .accessibilityFont(.body)
+                        HStack {
+                            Spacer()
+                            RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                            Spacer()
+                        }
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {
@@ -329,14 +336,16 @@ struct TransactionSummaryV: View {
                     }
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
-                        let expiration = details.info.expiration
-                        let (dateString, date) = TalerDater.dateString(from: expiration)
-                        let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
-                        let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
-                        Text("Expires: \(dateString)")
-                            .accessibilityFont(.body)
-                            .accessibilityLabel(accessibilityLabel)
-//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                        if !transaction.isDone {
+                            let expiration = details.info.expiration
+                            let (dateString, date) = TalerDater.dateString(from: expiration)
+                            let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
+                            let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                            Text("Expires: \(dateString)")
+                                .accessibilityFont(.body)
+                                .accessibilityLabel(accessibilityLabel)
+                            //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                        }
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {
@@ -389,17 +398,6 @@ struct TransactionSummaryV: View {
                         .padding(.bottom)
                 }
             }
-        }
-    }
-    struct DoneButton: View {
-        var doneAction: () -> Void
-
-        var body: some View {
-            Button("Done") {
-                doneAction()
-            }
-            .buttonStyle(TalerButtonStyle(type: .prominent))
-            .padding(.horizontal)
         }
     }
 }
