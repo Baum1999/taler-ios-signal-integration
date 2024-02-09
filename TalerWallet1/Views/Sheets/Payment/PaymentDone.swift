@@ -13,6 +13,8 @@ struct PaymentDone: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
+    @State var paymentDone: Bool = false
+
     func reloadOneAction(_ transactionId: String) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId)
     }
@@ -25,38 +27,46 @@ struct PaymentDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let navTitle = String(localized: "Paid", comment: "Title, short")
-        TransactionSummaryV(stack: stack.push(),
-                      transactionId: transactionId,
-                       reloadAction: reloadOneAction,
-                           navTitle: navTitle,
-                         doneAction: dismissTopAnimated,
-                        abortAction: nil,
-                       deleteAction: nil,
-                         failAction: nil,
-                      suspendAction: nil,
-                       resumeAction: nil)
-        .navigationBarBackButtonHidden(true)
-        .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-        .navigationTitle(navTitle)
-        .onAppear() {
+        Group {
+            if paymentDone {
+                let navTitle = String(localized: "Paid", comment: "Title, short")
+                TransactionSummaryV(stack: stack.push(),
+                            transactionId: transactionId,
+                             reloadAction: reloadOneAction,
+                                 navTitle: navTitle,
+                               doneAction: dismissTopAnimated,
+                              abortAction: nil,
+                             deleteAction: nil,
+                               failAction: nil,
+                            suspendAction: nil,
+                             resumeAction: nil)
+                .navigationBarBackButtonHidden(true)
+                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+                .navigationTitle(navTitle)
+            } else {
+                LoadingView(url: nil, message: "Paying...")
+                    .task {
+                        do {
+                            let confirmPayResult = try await model.confirmPayM(transactionId)
+//                          symLog.log(confirmPayResult as Any)
+                            if confirmPayResult.type == "done" {
+                                paymentDone = true
+                            } else {
+                                controller.playSound(0)
+                                // TODO: show error
+                                dismissTop()
+                            }
+                        } catch {
+                            controller.playSound(0)
+                            // TODO: error
+                            symLog.log(error.localizedDescription)
+                            dismissTop()
+                        }
+                    }
+            }
+        }.onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_PAY_ACCEPT)
-        }
-        .task {
-            do {
-                let confirmPayResult = try await model.confirmPayM(transactionId)
-//                symLog.log(confirmPayResult as Any)
-                if confirmPayResult.type != "done" {
-                    controller.playSound(0)
-                    // TODO: show error
-                }
-            } catch {
-                controller.playSound(0)
-                // TODO: error
-                symLog.log(error.localizedDescription)
-            }
-            dismissTop()
         }
     }
 }
