@@ -84,7 +84,7 @@ struct P2pReceiveURIView: View {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
         }
-        .task { // must be here ond not at LoadingView(), because this needs to run a 2nd time after ToS
+        .task { // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
             do { // TODO: cancelled
                 symLog.log(".task")
                 let ppResponse = try await model.preparePeerPushCreditM(url.absoluteString)

@@ -28,6 +28,7 @@ struct WithdrawExchangeV: View {
                      exchangeBaseUrl: exchangeBaseUrl,
                     amountToTransfer: $amountToTransfer)
             } else {
+                // TODO: Error
                 LoadingView(url: url, message: "No exchangeBaseUrl!")
             }
         }

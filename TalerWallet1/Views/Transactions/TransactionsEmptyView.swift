@@ -11,9 +11,9 @@ import SymLog
 struct TransactionsEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-
     let currency: String
+
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
         List {
