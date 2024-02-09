@@ -57,7 +57,7 @@ struct ManualWithdraw: View {
                     CurrencyInputView(amount: $amountToTransfer,
                                    available: nil,
                                        title: minimalistic ? String(localized: "Amount:")
-                                                       : String(localized: "Amount to withdraw:"),
+                                                           : String(localized: "Amount to withdraw:"),
                               shortcutAction: nil)
                         .padding(.top)
                     QuiteSomeCoins(someCoins: someCoins,
@@ -100,7 +100,7 @@ struct ManualWithdraw: View {
                 if let exc = await model.getExchangeByUrl(url: exchangeBaseUrl) {
                     exchange = exc
                 } else {
-                    // TODO: Error "Can't get Exchange Info"
+                    // TODO: Error "Can't get Exchange / Payment Service Provider Info"
                 }
             }
             if !amountToTransfer.isZero {

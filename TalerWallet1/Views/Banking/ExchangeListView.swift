@@ -31,25 +31,25 @@ struct ExchangeListView: View {
     }
 
     var body: some View {
-        let accessibilityLabelStr = String(localized: "Add Exchange", comment: "accessibilityLabel for the + button")
+        let accessibilityLabelStr = String(localized: "Add Payment Service", comment: "accessibilityLabel for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: accessibilityLabelStr) {
             showAlert = true
         }
-        let addTitleStr = String(localized: "Add Exchange", comment: "title of the addExchange alert")
+        let addTitleStr = String(localized: "Add Payment Service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         if #available(iOS 16.0, *) {
             ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
-                    TextField("Exchange address", text: $newExchange)
+                    TextField("Address of Payment Service", text: $newExchange)
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
                     Button(addButtonStr) {
                         addExchange(newExchange)
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
-                    Text("Please enter the exchange URL")
+                    Text("Please enter the URL")
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
             ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
@@ -109,7 +109,7 @@ extension ExchangeListCommonV: View {
         }
         .overlay {
             if exchanges.isEmpty {
-                Text("No Exchanges yet...")
+                Text("No Payment Services yet...")
                     .accessibilityFont(.body)
             }
         }

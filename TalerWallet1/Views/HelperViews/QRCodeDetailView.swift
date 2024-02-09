@@ -24,7 +24,11 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             Section {
-                Text("Either", comment: "Either (copy/share the payment link to the ...)")
+                let either = incoming ? String(localized: "Either (payer)", defaultValue: "Either",
+                                                 comment: "Either (copy/share the payment link to the payer)")
+                                      : String(localized: "Either (payee)", defaultValue: "Either",
+                                                 comment: "Either (copy/share the payment link to the payee)")
+                Text(either)
                     .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
 //                    .padding(.vertical)
@@ -35,10 +39,9 @@ struct QRCodeDetailView: View {
 //                    .padding(.bottom)
                     .listRowSeparator(.hidden)
 
-                let otherParty = incoming ? String(localized: "payer", comment: "the payment link to the (otherParty), or")
-                                          : String(localized: "payee", comment: "the payment link to the (otherParty), or")
-                Text("the payment link to the \(otherParty), or", 
-                     comment: "(Either copy/share the payment link) to the (payer/payee), or")
+                let otherParty = incoming ? String(localized: "the payment link to the payer, or")
+                                          : String(localized: "the payment link to the payee, or")
+                Text(otherParty)
                     .multilineTextAlignment(.leading)
                     .accessibilityFont(.title3)
                     .listRowSeparator(.hidden)
