@@ -26,7 +26,6 @@ enum UrlCommand {
     case payPush
     case payTemplate
     case refund
-    case reward
 }
 
 // MARK: -

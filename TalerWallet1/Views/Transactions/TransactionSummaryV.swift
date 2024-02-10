@@ -317,14 +317,6 @@ struct TransactionSummaryV: View {
                                          summary: details.info?.summary,
                                         merchant: details.info?.merchant.name)
                     }
-                    case .reward(let rewardTransaction): Group {
-                        let details = rewardTransaction.details
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Reward:", comment: "mini"),
-                                        topTitle: String(localized: "Received Reward:"),
-                                         baseURL: details.exchangeBaseUrl, large: true,
-                                         summary: nil, merchant: nil)           // TODO: summary
-                    }
                     case .refresh(let refreshTransaction): Group {
                         let details = refreshTransaction.details                // TODO: details
                         Text(details.refreshReason.rawValue)

@@ -30,7 +30,7 @@ public let VIEW_BALANCES = VIEW_EMPTY + 1                           // 11 Balanc
 public let VIEW_EXCHANGES = VIEW_BALANCES + 1                       // 12 ExchangeListView
 public let VIEW_SETTINGS = VIEW_EXCHANGES + 1                       // 13 SettingsView
 public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 14 AboutView
-public let VIEW_PENDING = VIEW_ABOUT + 1                            // 15 PendingOpsListView
+//public let VIEW_PENDING = VIEW_ABOUT + 1                            // 15 PendingOpsListView
 
 // MARK: Transactions
 public let VIEW_TRANSACTIONLIST = VIEW_EMPTY + 10                   // 20 TransactionsListView
@@ -39,13 +39,13 @@ public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 22 Transa
 
 
 
-// MARK: - Manual Withdrawal (from ExchangeList)
+// MARK: - Manual Withdrawal (from Banking / ExchangeList)
 // receive coins from bank ==> shows IBAN + Purpose/Subject for manual wire transfer
 public let VIEW_WITHDRAWAL = VIEW_TRANSACTIONLIST + 10              // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
 public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
 
-// MARK: Manual Deposit (from ExchangeList)
+// MARK: Manual Deposit (from Banking / ExchangeList)
 // send coins back to bank account ==> orders exchange to make the wire transfer
 public let VIEW_DEPOSIT = VIEW_WITHDRAWAL + 10                      // 40 Deposit Coins
 //public let VIEW_DEPOSIT_TOS                                       // - user already accepted the ToS at withdrawal, invoice or receive
@@ -94,11 +94,9 @@ public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 160 Recei
 public let SHEET_RCV_P2P_TOS = SHEET_RCV_P2P + 1                    // 161 Receive P2P TOSView
 public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 162 Receive P2P AcceptView
 
-// MARK: Reward - Receive Coins (from merchant)
+// MARK: Refund - Get Coins back from merchant
 // openURL (Link, NFC or scan QR) ==> receive coins from merchant
-public let SHEET_RCV_REWARD = SHEET_RCV_P2P + 10                    // 170 Receive Reward
-
-public let SHEET_REFUND = SHEET_RCV_REWARD + 10                     // 180 Receive Refunds
+public let SHEET_REFUND = SHEET_RCV_P2P + 10                        // 170 Receive Refunds
 
 extension UIDevice {
     var hasNotch: Bool {

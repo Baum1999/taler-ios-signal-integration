@@ -38,8 +38,6 @@ struct URLSheet: View {
                     PayTemplateView(stack: stack.push(), url: urlToOpen)
                 case .refund:
                     RefundURIView(stack: stack.push(), url: urlToOpen)
-//                case .reward:
-//                    RewardURIView(url: urlToOpen)
                 default:        // Error view
                     VStack {
                         Text("unknown command")

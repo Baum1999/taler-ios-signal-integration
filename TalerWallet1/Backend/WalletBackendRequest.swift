@@ -213,40 +213,6 @@ struct WalletBackendConfirmPayRequest: WalletBackendFormattedRequest {
 
     struct Response: Decodable {}
 }
-
-// MARK: -
-/// The result from PrepareReward
-struct PrepareRewardResponse: Decodable {
-    var walletRewardId: String
-    var accepted: Bool
-    var rewardAmountRaw: Amount
-    var rewardAmountEffective: Amount
-    var exchangeBaseUrl: String
-    var expirationTimestamp: Timestamp
-}
-/// A request to prepare a reward.
-struct PrepareRewardRequest: WalletBackendFormattedRequest {
-    typealias Response = PrepareRewardResponse
-    func operation() -> String { "prepareReward" }
-    func args() -> Args { Args(talerRewardUri: talerRewardUri) }
-
-    var talerRewardUri: String
-    struct Args: Encodable {
-        var talerRewardUri: String
-    }
-}
-// MARK: -
-/// A request to accept a reward.
-struct AcceptRewardRequest: WalletBackendFormattedRequest {
-    struct Response: Decodable {}
-    func operation() -> String { "acceptReward" }
-    func args() -> Args { Args(walletRewardId: walletRewardId) }
-
-    var walletRewardId: String
-    struct Args: Encodable {
-        var walletRewardId: String
-    }
-}
 // MARK: -
 /// A request to abort a failed payment.
 struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {

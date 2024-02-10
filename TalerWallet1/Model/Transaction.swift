@@ -197,7 +197,6 @@ enum TransactionType: String, Codable {
     case payment
     case refund
     case refresh
-    case reward                                 // get paid for e.g. survey participation
 //    case tip                                  // tip personnel at restaurants
     case peerPushDebit  = "peer-push-debit"     // send coins to peer, show QR
     case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
@@ -209,7 +208,6 @@ enum TransactionType: String, Codable {
     var isPayment    : Bool { self == .payment }
     var isRefund     : Bool { self == .refund }
     var isRefresh    : Bool { self == .refresh }
-    var isReward     : Bool { self == .reward }
     var isSendCoins  : Bool { self == .peerPushDebit }
     var isRcvCoins   : Bool { self == .scanPushCredit }
     var isSendInvoice: Bool { self == .peerPullCredit }
@@ -217,7 +215,7 @@ enum TransactionType: String, Codable {
 
     var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
-    var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund || isReward }
+    var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund }
 }
 
 struct TransactionCommon: Decodable, Sendable {
@@ -242,8 +240,6 @@ struct TransactionCommon: Decodable, Sendable {
             case .refund:         return String(localized: "Refund",
                                                   comment: "TransactionType")
             case .refresh:        return String(localized: "Refresh",
-                                                  comment: "TransactionType")
-            case .reward:         return String(localized: "Reward",
                                                   comment: "TransactionType")
             case .peerPushDebit:  return String(localized: "Send Money",
                                                   comment: "TransactionType, send coins to another wallet")
@@ -282,7 +278,6 @@ struct TransactionCommon: Decodable, Sendable {
     func incoming() -> Bool {
         return type == .withdrawal
             || type == .refund
-            || type == .reward
             || type == .peerPullCredit
             || type == .scanPushCredit
     }
@@ -375,16 +370,6 @@ struct RefundTransaction : Sendable{
     var details: RefundTransactionDetails
 }
 
-struct RewardTransactionDetails: Decodable {
-    /// The exchange that the reward will be withdrawn from
-    var exchangeBaseUrl: String
-}
-
-struct RewardTransaction : Sendable{
-    var common: TransactionCommon
-    var details: RewardTransactionDetails
-}
-
 enum RefreshReason: String, Decodable {
     case manual
     case payMerchant = "pay-merchant"
@@ -445,7 +430,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     case deposit (DepositTransaction)
     case payment (PaymentTransaction)
     case refund (RefundTransaction)
-    case reward (RewardTransaction)
     case refresh (RefreshTransaction)
     case peer2peer (P2PTransaction)
 
@@ -465,9 +449,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 case .refund:
                     let details = try RefundTransactionDetails.init(from: decoder)
                     self = .refund(RefundTransaction(common: common, details: details))
-                case .reward:
-                    let details = try RewardTransactionDetails.init(from: decoder)
-                    self = .reward(RewardTransaction(common: common, details: details))
                 case .refresh:
                     let details = try RefreshTransactionDetails.init(from: decoder)
                     self = .refresh(RefreshTransaction(common: common, details: details))
@@ -525,7 +506,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isPayment    : Bool { common.type == .payment }
     var isRefund     : Bool { common.type == .refund }
     var isRefresh    : Bool { common.type == .refresh }
-    var isReward     : Bool { common.type == .reward }
     var isSendCoins  : Bool { common.type == .peerPushDebit }
     var isRcvCoins   : Bool { common.type == .scanPushCredit }
     var isSendInvoice: Bool { common.type == .peerPullCredit }
@@ -572,7 +552,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
             case .deposit(let depositTransaction):       depositTransaction.common
             case .payment(let paymentTransaction):       paymentTransaction.common
             case .refund(let refundTransaction):         refundTransaction.common
-            case .reward(let rewardTransaction):         rewardTransaction.common
             case .refresh(let refreshTransaction):       refreshTransaction.common
             case .peer2peer(let p2pTransaction):         p2pTransaction.common
         }
@@ -593,8 +572,6 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 if let info = refundTransaction.details.info {
                     result["summary"] = info.summary
                 }
-            case .reward(let rewardTransaction):
-                result[EXCHANGEBASEURL] = rewardTransaction.details.exchangeBaseUrl
             case .refresh(let refreshTransaction):
                 result["reason"] = refreshTransaction.details.refreshReason.rawValue
             case .peer2peer(let p2pTransaction):
