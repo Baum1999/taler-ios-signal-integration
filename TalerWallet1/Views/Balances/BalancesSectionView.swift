@@ -62,6 +62,12 @@ extension BalancesSectionView: View {
         let currencyInfo = controller.info(for: currency)
 
         Section {
+            if scopeInfo.type == .exchange {
+                let baseURL = scopeInfo.url?.trimURL() ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
+                Text(baseURL)
+                    .accessibilityFont(.headline)
+                    .listRowSeparator(.hidden)
+            }
             let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
             if showSpendingButton {
                 if !minimalistic && showSpendingHint {
