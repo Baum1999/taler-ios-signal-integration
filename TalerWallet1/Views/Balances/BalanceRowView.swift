@@ -19,10 +19,8 @@ struct BalanceCell: View {
     var body: some View {
         let amountV = AmountV(amount: amount, large: true)
             .foregroundColor(.primary)
-        let hLayout = HStack(spacing: 0) {
-                Spacer(minLength: 0)
-                amountV
-            }
+        let hLayout = amountV
+                        .frame(maxWidth: .infinity, alignment: .trailing)
         let balanceCell = Group {
             if minimalistic {
                 hLayout

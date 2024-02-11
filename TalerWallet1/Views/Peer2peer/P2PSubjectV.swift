@@ -58,12 +58,10 @@ struct P2PSubjectV: View {
         ScrollView { VStack (alignment: .leading, spacing: 6) {
             let label = feeLabel ?? myFeeLabel
             if label.count > 0 {
-                HStack {
-                    Spacer()
                     Text(label)
                         .foregroundColor(.red)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                         .talerFont(.body)
-                }
             }
                 if !minimalistic {
                     Text("Enter subject:")    // Purpose
@@ -92,12 +90,10 @@ struct P2PSubjectV: View {
                             symLog.log("...kbd isFocused")
                         }
                     }
-                HStack{
-                    Spacer()
-                    Text(verbatim: "\(summary.count)/100")
+                Text(verbatim: "\(summary.count)/100")                          // maximum 100 characters
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                     .talerFont(.body)
                         .accessibilityValue("\(summary.count) characters of 100")
-                } // maximum 100 characters
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)

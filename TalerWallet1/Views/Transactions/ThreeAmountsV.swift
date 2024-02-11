@@ -111,15 +111,13 @@ struct ThreeAmountsV: View {
                     Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
-                    HStack {
-                        Spacer()
                         Text(baseURL.trimURL())
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                             .multilineTextAlignment(.center)
                             .talerFont(large ? .title3 : .body)
 //                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                             .foregroundColor(labelColor)
                     }
-                }
                 .padding(.top, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)

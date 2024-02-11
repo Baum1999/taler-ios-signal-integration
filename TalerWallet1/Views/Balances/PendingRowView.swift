@@ -41,8 +41,7 @@ struct PendingRowView: View {
             Text(pendingTitle.tabbed(oneLine: true))
             HStack {
                 iconBadge
-                Spacer(minLength: 0)
-                amountText
+                amountText.frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
 
@@ -51,8 +50,7 @@ struct PendingRowView: View {
                 HStack {
                     iconBadge
                     Text(pendingTitle.tabbed(oneLine: false))
-                    Spacer(minLength: 0)
-                    amountText
+                    amountText.frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 vStack
                 VStack {

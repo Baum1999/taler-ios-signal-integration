@@ -131,8 +131,8 @@ struct TransactionSummaryV: View {
                         Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)
                             .foregroundColor(Color.clear)
-                        Spacer()
                         Text("Status: \(state)")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                             .multilineTextAlignment(.trailing)
                     }
                 }    .listRowSeparator(.automatic)
@@ -254,11 +254,8 @@ struct TransactionSummaryV: View {
                         let title = EMPTYSTRING
                         Text(title)
                             .talerFont(.body)
-                        HStack {
-                            Spacer()
                             RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
-                            Spacer()
-                        }
+                            .frame(maxWidth: .infinity, alignment: .center)
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {

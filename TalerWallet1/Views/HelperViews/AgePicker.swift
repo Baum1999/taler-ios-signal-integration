@@ -29,12 +29,11 @@ struct AgePicker: View {
     var body: some View {
         if ageMenuList.count > 1 {
             VStack {
-                HStack {
-                    Text("If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:")
-                        .multilineTextAlignment(.leading)
+                Text("If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(.leading)
                     .talerFont(.footnote)
-                    Spacer()
-                }.padding(.top)
+                    .padding(.top)
                 Picker("Select age", selection: $selectedAge) {
                     ForEach($ageMenuList, id: \.self) { item in
                         let index = item.wrappedValue

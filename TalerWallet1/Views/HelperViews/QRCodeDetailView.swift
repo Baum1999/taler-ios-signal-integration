@@ -33,26 +33,20 @@ struct QRCodeDetailView: View {
                     .talerFont(.title3)
 //                    .padding(.vertical)
                     .listRowSeparator(.hidden)
-
                 CopyShare(textToCopy: talerURI)
                     .disabled(false)
 //                    .padding(.bottom)
                     .listRowSeparator(.hidden)
-
                 let otherParty = incoming ? String(localized: "the payment link to the payer, or")
                                           : String(localized: "the payment link to the payee, or")
                 Text(otherParty)
                     .multilineTextAlignment(.leading)
                     .talerFont(.title3)
                     .listRowSeparator(.hidden)
-
-                HStack {
-                    Spacer()
-                    QRGeneratorView(text: talerURI)
-                        .accessibilityLabel("QR Code")
-                    Spacer()
-                }
-                .listRowSeparator(.hidden)
+                QRGeneratorView(text: talerURI)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .accessibilityLabel("QR Code")
+                    .listRowSeparator(.hidden)
 
                 let hintStr = incoming ? String(localized: "let the payer scan this QR code to pay \(amountStr).",
                                                   comment: "e.g. '5,3 €'")

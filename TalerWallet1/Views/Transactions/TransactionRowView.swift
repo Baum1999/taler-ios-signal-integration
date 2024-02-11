@@ -95,14 +95,14 @@ struct TransactionRowView: View {
         let layout1 = HStack(spacing: 0) {
             HStack(spacing: -4) {
                 iconBadge
-                Spacer(minLength: 0)
+//                Spacer(minLength: 0)
                 VStack(alignment: .leading) {
                     centerTop
                     centerBottom
                 }
                 Spacer(minLength: 2)
             }
-            amountV
+            amountV //.frame(maxWidth: .infinity, alignment: .trailing)
         }
 
         let layout2 = VStack(spacing: 0) {

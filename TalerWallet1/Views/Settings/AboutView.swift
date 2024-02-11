@@ -32,12 +32,9 @@ struct AboutView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                HStack {
-                    Spacer()
                     RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                .frame(maxWidth: .infinity, alignment: .center)
                         .onTapGesture(count: 1) { rotationEnabled.toggle() }
-                    Spacer()
-                }
                 SettingsItem(name: "Visit the taler.net website", id1: "web",
                              description: minimalistic ? nil : String(localized: "More info about Gnu Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
