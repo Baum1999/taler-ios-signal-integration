@@ -80,12 +80,12 @@ struct CurrencyInputView: View {
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let currencyField = CurrencyField(amount: $amount, currencyInfo: currencyInfo)
         VStack (alignment: .center) {   // center shortcut buttons
-                Text(title)
+            Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .talerFont(.title3)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityRemoveTraits(.isStaticText)
+                .accessibilityHidden(true)
             currencyField
+                .accessibilityLabel(title)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
