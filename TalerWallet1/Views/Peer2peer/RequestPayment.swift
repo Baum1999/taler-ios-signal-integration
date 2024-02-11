@@ -13,6 +13,7 @@ struct RequestPayment: View {
 
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    let scopeInfo: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -22,10 +23,19 @@ struct RequestPayment: View {
     @State private var expireDays: UInt = 0
     @State private var buttonSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var exchange: Exchange? = nil          // wg. hasNoFees
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
         buttonSelected = true
+    }
+    private func feeIsNotZero() -> Bool? {
+        if let hasNoFees = exchange?.hasNoFees {
+            if hasNoFees {
+                return nil      // this exchange never has fees
+            }
+        }
+        return peerPullCheck != nil ? true : false
     }
 
     var body: some View {
@@ -44,6 +54,7 @@ struct RequestPayment: View {
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                      feeLabel: someCoins.feeLabel(currencyInfo),
+                 feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: false,
              amountToTransfer: $amountToTransfer,
@@ -53,6 +64,7 @@ struct RequestPayment: View {
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                      feeLabel: nil,
+                 feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: false,
              amountToTransfer: $amountShortcut,
@@ -64,7 +76,7 @@ struct RequestPayment: View {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
                                title: minimalistic ? String(localized: "Amount:")
-                                               : String(localized: "Amount to request:"),
+                                                   : String(localized: "Amount to request:"),
                       shortcutAction: shortcutAction)
                 .padding(.top)
             QuiteSomeCoins(someCoins: someCoins,
@@ -91,6 +103,15 @@ struct RequestPayment: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) {
+            if exchange == nil {
+                if let url = scopeInfo.url {
+                    if let exc = await model.getExchangeByUrl(url: url) {
+                        exchange = exc
+                    } else {
+                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
+                    }
+                }
+            }
             if amountToTransfer.isZero {
 //                fee = EMPTYSTRING
             } else {

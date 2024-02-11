@@ -19,6 +19,7 @@ struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let feeLabel: String?
+    let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
     let currencyInfo: CurrencyInfo
     let amountToSend: Bool
     @Binding var amountToTransfer: Amount
@@ -56,12 +57,14 @@ struct P2PSubjectV: View {
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         ScrollView { VStack (alignment: .leading, spacing: 6) {
-            let label = feeLabel ?? myFeeLabel
-            if label.count > 0 {
+            if let feeIsNotZero {       // don't show fee if nil
+                let label = feeLabel ?? myFeeLabel
+                if label.count > 0 {
                     Text(label)
-                        .foregroundColor(.red)
                         .frame(maxWidth: .infinity, alignment: .trailing)
+                        .foregroundColor(feeIsNotZero ? .red : .secondary)
                         .talerFont(.body)
+                }
             }
                 if !minimalistic {
                     Text("Enter subject:")    // Purpose
@@ -93,7 +96,7 @@ struct P2PSubjectV: View {
                 Text(verbatim: "\(summary.count)/100")                          // maximum 100 characters
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .talerFont(.body)
-                        .accessibilityValue("\(summary.count) characters of 100")
+                    .accessibilityValue("\(summary.count) characters of 100")
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
@@ -131,7 +134,7 @@ struct P2PSubjectV: View {
                     let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
                         let feeStr = feeAmount.string(currencyInfo)
-                        myFeeLabel = String(localized: "+ \(feeStr) send fee")
+                        myFeeLabel = String(localized: "+ \(feeStr) fee")
                     } else { myFeeLabel = EMPTYSTRING }
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)

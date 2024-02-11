@@ -56,6 +56,7 @@ struct Exchange: Codable, Hashable, Identifiable {
 //    var exchangeStatus: String?
     var exchangeEntryStatus: ExchangeEntryStatus
     var exchangeUpdateStatus: ExchangeUpdateStatus
+    var hasNoFees: Bool?
     var ageRestrictionOptions: [Int]
     var lastUpdateErrorInfo: ExchangeError?
 

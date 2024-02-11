@@ -208,6 +208,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     let symLog: SymLogV?
     let stack: CallStack
     let balance: Balance
+    
 //    let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
@@ -241,14 +242,16 @@ fileprivate struct BalancesNavigationLinksView: View {
                 SendAmount(stack: stack.push(),
                  amountAvailable: balance.available,
                 amountToTransfer: $amountToTransfer,        // with correct currency
-                         summary: $summary)
+                         summary: $summary,
+                       scopeInfo: balance.scopeInfo)
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
             NavigationLink(destination: LazyView {
                 RequestPayment(stack: stack.push(),
                     amountToTransfer: $amountToTransfer,    // with correct currency
-                             summary: $summary)
+                             summary: $summary,
+                           scopeInfo: balance.scopeInfo)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 

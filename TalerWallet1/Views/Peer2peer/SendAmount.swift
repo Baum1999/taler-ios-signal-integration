@@ -14,6 +14,7 @@ struct SendAmount: View {
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    let scopeInfo: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -22,26 +23,38 @@ struct SendAmount: View {
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays = SEVENDAYS
     @State private var insufficient = false
+    @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var exchange: Exchange? = nil          // wg. hasNoFees
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
             if let ppCheck {
                 // Outgoing: fee = effective - raw
-                let fee = try ppCheck.amountEffective - ppCheck.amountRaw
-                return fee
+                feeAmount = try ppCheck.amountEffective - ppCheck.amountRaw
+                return feeAmount
             }
         } catch {}
-        return nil
+        feeAmount = nil
+        return feeAmount
     }
     
-    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) send fee") : EMPTYSTRING }
+    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
         buttonSelected = true
+    }
+    private func feeIsNotZero() -> Bool? {
+        if let hasNoFees = exchange?.hasNoFees {
+            if hasNoFees {
+                return nil      // this exchange never has fees
+            }
+        }
+        return peerPushCheck != nil ? (!(feeAmount?.isZero ?? false))
+                                    : false
     }
 
     var body: some View {
@@ -65,6 +78,7 @@ struct SendAmount: View {
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                      feeLabel: feeLabel,
+                 feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: true,
              amountToTransfer: $amountToTransfer,
@@ -74,6 +88,7 @@ struct SendAmount: View {
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                      feeLabel: nil,
+                 feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: true,
              amountToTransfer: $amountShortcut,
@@ -88,12 +103,13 @@ struct SendAmount: View {
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
                                title: minimalistic ? String(localized: "Amount:")
-                                               : String(localized: "Amount to send:"),
+                                                   : String(localized: "Amount to send:"),
                       shortcutAction: shortcutAction)
             Text(insufficient ? insufficientLabel
                               : feeLabel)
                 .talerFont(.body)
-                .foregroundColor(.red)
+                .foregroundColor(insufficient ? .red
+                                 : (feeAmount?.isZero ?? true) ? .secondary : .red)
                 .padding(4)
             NavigationLink(destination: inputDestination) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -114,6 +130,15 @@ struct SendAmount: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: amountToTransfer.value) {
+            if exchange == nil {
+                if let url = scopeInfo.url {
+                    if let exc = await model.getExchangeByUrl(url: url) {
+                        exchange = exc
+                    } else {
+                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
+                    }
+                }
+            }
             do {
                 insufficient = try amountToTransfer > amountAvailable
             } catch {
@@ -146,15 +171,23 @@ struct SendAmount: View {
 // MARK: -
 #if DEBUG
 fileprivate struct Preview_Content: View {
-    @State private var amountToPreview = Amount(currency: TESTCURRENCY, cent: 510)
+    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
     @State private var summary: String = ""
 
     var body: some View {
-        let amount = Amount(currency: TESTCURRENCY, cent: 1000)
+        let amount = Amount(currency: LONGCURRENCY, cent: 1000)
+        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
+        let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
+                                       scopeInfo: scopeInfo,
+                                       paytoUris: [],
+                                       tosStatus: .proposed,
+                             exchangeEntryStatus: .ephemeral,
+                            exchangeUpdateStatus: .ready,
+                           ageRestrictionOptions: [])
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
         amountToTransfer: $amountToPreview,
-                 summary: $summary)
+                   summary: $summary, scopeInfo: scopeInfo)
     }
 }
 
