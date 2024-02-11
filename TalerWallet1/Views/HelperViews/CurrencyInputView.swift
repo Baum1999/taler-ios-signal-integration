@@ -42,7 +42,7 @@ struct ShortcutButton: View {
         Button(action: { action(shortcut, currencyField)} ) {
             Text(title)
                 .lineLimit(1)
-                .accessibilityFont(.callout)
+                .talerFont(.callout)
         }
 //            .frame(maxWidth: .infinity)
             .disabled(isDisabled(shortie: shortie))
@@ -82,7 +82,7 @@ struct CurrencyInputView: View {
         VStack (alignment: .center) {   // center shortcut buttons
             HStack {
                 Text(title)
-                    .accessibilityFont(.title3)
+                .talerFont(.title3)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityRemoveTraits(.isStaticText)
                 Spacer()
@@ -91,7 +91,7 @@ struct CurrencyInputView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
-                .accessibilityFont(.title2)
+                .talerFont(.title2)
                 .textFieldStyle(.roundedBorder)
                 .onTapGesture {
                     if useShortcut != 0 {

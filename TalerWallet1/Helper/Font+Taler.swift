@@ -51,7 +51,7 @@ extension UIFont {
 
 
 /// provides a (custom) scalable UIFont based on the first parameter: 0 = system, 1 = Atkinson, 2 = Nunito, 3 = NunitoItalic
-struct TalerFont {
+struct TalerUIFont {
     @Environment(\.legibilityWeight) private var legibilityWeight: LegibilityWeight?
 
     private static func scalableSystemFont(for style: UIFont.TextStyle, legibilityBold: Bool = false,
@@ -101,37 +101,37 @@ struct TalerFont {
     static func uiFont(_ selectedFont: Int, size: CGFloat, relativeTo style: UIFont.TextStyle,
                 legibilityBold: Bool = false, bold: Bool = false, italic: Bool = false) -> UIFont {
         switch selectedFont {
-            case 1: return TalerFont.atkinson(size: size, relativeTo: style,
+            case 1: return TalerUIFont.atkinson(size: size, relativeTo: style,
                                               legibilityBold: legibilityBold, bold: bold, italic: italic)
-            case 2: return TalerFont.nunito(size: size, relativeTo: style,
+            case 2: return TalerUIFont.nunito(size: size, relativeTo: style,
                                             legibilityBold: legibilityBold, bold: bold, italic: italic)
             default:
 //                return UIFont.preferredFont(forTextStyle: style)
-                return TalerFont.scalableSystemFont(for: style, legibilityBold: legibilityBold, bold: bold, italic: italic)
+                return TalerUIFont.scalableSystemFont(for: style, legibilityBold: legibilityBold, bold: bold, italic: italic)
         }
     }
 
     static func uiFont(_ styleSize: StyleSizeBold) -> UIFont {
-        return uiFont(Controller.shared.talerFont, size: styleSize.size, relativeTo: styleSize.style)
+        return uiFont(Controller.shared.talerFontIndex, size: styleSize.size, relativeTo: styleSize.style)
     }
 }
 
-struct AccessibleFont {   // old running
+struct TalerFont {   // old running
     var regular: Font
     var bold: Font
-    static var talerFont: Int { return 2 }
+    static var talerFontIndex: Int { return 2 }
 
     init(_ base: String, size: CGFloat, relativeTo: Font.TextStyle, isBold: Bool = false) {
-        if AccessibleFont.talerFont == 0 {
+        if TalerFont.talerFontIndex == 0 {
             self.regular = .system(relativeTo)
             self.bold = .system(relativeTo).bold()
         } else if isBold {
             // Nunito has Black Variants, but AtkinsonHyperlegible doesn't
-            self.regular = Font.custom(base + (AccessibleFont.talerFont == 2 ? BOLD : BOLDITALIC), size: size, relativeTo: relativeTo)
-            self.bold = Font.custom(base + (AccessibleFont.talerFont == 2 ? BLACK : BLACKITALIC), size: size, relativeTo: relativeTo)
+            self.regular = Font.custom(base + (TalerFont.talerFontIndex == 2 ? BOLD : BOLDITALIC), size: size, relativeTo: relativeTo)
+            self.bold = Font.custom(base + (TalerFont.talerFontIndex == 2 ? BLACK : BLACKITALIC), size: size, relativeTo: relativeTo)
         } else {
-            self.regular = Font.custom(base + (AccessibleFont.talerFont > 2 ? ITALIC : REGULAR), size: size, relativeTo: relativeTo)
-            self.bold = Font.custom(base + (AccessibleFont.talerFont > 2 ? BOLDITALIC : BOLD), size: size, relativeTo: relativeTo)
+            self.regular = Font.custom(base + (TalerFont.talerFontIndex > 2 ? ITALIC : REGULAR), size: size, relativeTo: relativeTo)
+            self.bold = Font.custom(base + (TalerFont.talerFontIndex > 2 ? BOLDITALIC : BOLD), size: size, relativeTo: relativeTo)
         }
     }
 
@@ -167,19 +167,19 @@ struct StyleSizeBold {
 //    static var caption2:    AccessibleFont { AccessibleFont(fontName, size: 12, relativeTo: .caption2) }    // 11 -> 12
 }
 
-extension AccessibleFont {   // old running
+extension TalerFont {   // old running
     static var fontName: String { NUNITO }
 
-    static var largeTitle:  AccessibleFont { AccessibleFont(fontName, size: 38, relativeTo: .largeTitle) }  // 34 -> 38
-    static var title:       AccessibleFont { AccessibleFont(fontName, size: 31, relativeTo: .title) }       // 28 -> 31
-    static var title2:      AccessibleFont { AccessibleFont(fontName, size: 25, relativeTo: .title2) }      // 22 -> 25
-    static var title3:      AccessibleFont { AccessibleFont(fontName, size: 23, relativeTo: .title3) }      // 20 -> 23
-    static var headline:    AccessibleFont { AccessibleFont(fontName, size: 19, relativeTo: .headline, isBold: true) } // 17 bold -> 19 bold
-    static var body:        AccessibleFont { AccessibleFont(fontName, size: 19, relativeTo: .body) }        // 17 -> 19
-    static var callout:     AccessibleFont { AccessibleFont(fontName, size: 18, relativeTo: .callout) }     // 16 -> 18
-    static var subheadline: AccessibleFont { AccessibleFont(fontName, size: 17, relativeTo: .subheadline) } // 15 -> 17
-    static var footnote:    AccessibleFont { AccessibleFont(fontName, size: 15, relativeTo: .footnote) }    // 13 -> 15
-    static var caption:     AccessibleFont { AccessibleFont(fontName, size: 13, relativeTo: .caption) }     // 12 -> 13
+    static var largeTitle:  TalerFont { TalerFont(fontName, size: 38, relativeTo: .largeTitle) }  // 34 -> 38
+    static var title:       TalerFont { TalerFont(fontName, size: 31, relativeTo: .title) }       // 28 -> 31
+    static var title2:      TalerFont { TalerFont(fontName, size: 25, relativeTo: .title2) }      // 22 -> 25
+    static var title3:      TalerFont { TalerFont(fontName, size: 23, relativeTo: .title3) }      // 20 -> 23
+    static var headline:    TalerFont { TalerFont(fontName, size: 19, relativeTo: .headline, isBold: true) } // 17 bold -> 19 bold
+    static var body:        TalerFont { TalerFont(fontName, size: 19, relativeTo: .body) }        // 17 -> 19
+    static var callout:     TalerFont { TalerFont(fontName, size: 18, relativeTo: .callout) }     // 16 -> 18
+    static var subheadline: TalerFont { TalerFont(fontName, size: 17, relativeTo: .subheadline) } // 15 -> 17
+    static var footnote:    TalerFont { TalerFont(fontName, size: 15, relativeTo: .footnote) }    // 13 -> 15
+    static var caption:     TalerFont { TalerFont(fontName, size: 13, relativeTo: .caption) }     // 12 -> 13
 }
 
 struct StyleSizeBoldViewModifier: ViewModifier {
@@ -188,25 +188,25 @@ struct StyleSizeBoldViewModifier: ViewModifier {
 
     let styleSize: StyleSizeBold
 
-    static var talerFont: Int {
+    static var talerFontIndex: Int {
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
             return 2
         } else {
-            return Controller.shared.talerFont
+            return Controller.shared.talerFontIndex
         }
     }
 
     func body(content: Content) -> some View {      // TODO: italic
-        let uiFont = TalerFont.uiFont(Self.talerFont, size: styleSize.size, relativeTo: styleSize.style,
+        let uiFont = TalerUIFont.uiFont(Self.talerFontIndex, size: styleSize.size, relativeTo: styleSize.style,
                                       legibilityBold: legibilityBold, bold: styleSize.bold)
         content.font(Font(uiFont))
     }
 }
 
-struct AccessibilityFontViewModifier2: ViewModifier {   // old running
+struct TalerFontViewModifier2: ViewModifier {   // old running
     @Environment(\.legibilityWeight) private var legibilityWeight
 
-    var font: AccessibleFont
+    var font: TalerFont
 
     func body(content: Content) -> some View {
         content.font(font.value(legibilityWeight))
@@ -214,10 +214,10 @@ struct AccessibilityFontViewModifier2: ViewModifier {   // old running
 }
 
 extension View {
-    func accessibilityFont(_ font: AccessibleFont) -> some View {
-        return self.modifier(AccessibilityFontViewModifier2(font: font))
+    func talerFont(_ font: TalerFont) -> some View {
+        return self.modifier(TalerFontViewModifier2(font: font))
     }
-    func accessibilityFont1(_ styleSize: StyleSizeBold) -> some View {
+    func talerFont1(_ styleSize: StyleSizeBold) -> some View {
         return self.modifier(StyleSizeBoldViewModifier(styleSize: styleSize))
     }
 }
@@ -241,33 +241,33 @@ struct NavigationBarBuilder: UIViewControllerRepresentable {
 /// This works only once. Each following call does nothing - including (re-)setting to nil
 @MainActor
 struct TalerNavBar: ViewModifier {
-    let talerFont: Int
+    let talerFontIndex: Int
 
-    static func setNavBarFonts(talerFont: Int) -> Void {
+    static func setNavBarFonts(talerFontIndex: Int) -> Void {
         let navBarAppearance = UINavigationBar.appearance()
         navBarAppearance.titleTextAttributes = nil
         navBarAppearance.largeTitleTextAttributes = nil
-        if talerFont != 0 {
-            navBarAppearance.titleTextAttributes = [.font: TalerFont.uiFont(talerFont, size: 24, relativeTo: .title2)]
-            navBarAppearance.largeTitleTextAttributes = [.font: TalerFont.uiFont(talerFont, size: 38, relativeTo: .largeTitle)]
+        if talerFontIndex != 0 {
+            navBarAppearance.titleTextAttributes = [.font: TalerUIFont.uiFont(talerFontIndex, size: 24, relativeTo: .title2)]
+            navBarAppearance.largeTitleTextAttributes = [.font: TalerUIFont.uiFont(talerFontIndex, size: 38, relativeTo: .largeTitle)]
         }
     }
 
-    init(_ talerFont: Int) {
-        self.talerFont = talerFont
-        TalerNavBar.setNavBarFonts(talerFont: talerFont)
+    init(_ talerFontIdx: Int) {
+        self.talerFontIndex = talerFontIdx
+        TalerNavBar.setNavBarFonts(talerFontIndex: talerFontIdx)
     }
 
     func body(content: Content) -> some View {
-        let _ = TalerNavBar.setNavBarFonts(talerFont: talerFont)
+        let _ = TalerNavBar.setNavBarFonts(talerFontIndex: talerFontIndex)
         content
     }
 
 }
 
 extension View {
-    @MainActor func talerNavBar(talerFont: Int) -> some View {
-        self.modifier(TalerNavBar(talerFont))
+    @MainActor func talerNavBar(talerFontIndex: Int) -> some View {
+        self.modifier(TalerNavBar(talerFontIndex))
     }
 }
 
@@ -304,7 +304,7 @@ struct ContentViewFonts: View {
                 Text("title a")
                 Text("bold").bold()
             }
-            .accessibilityFont(.title)
+            .talerFont(.title)
             .padding()
 
             HStack {
@@ -312,19 +312,19 @@ struct ContentViewFonts: View {
                 Text("italic").italic()
                 Text("bold").bold()
             }
-            .accessibilityFont(.title2)
+            .talerFont(.title2)
             .padding()
             Text("headline")
-                .accessibilityFont(.headline)
+                .talerFont(.headline)
                 .padding(.top)
             Text("headline bold")
                 .bold()
-                .accessibilityFont(.headline)
+                .talerFont(.headline)
                 .padding(.bottom)
             Text("title2 bold italic")
                 .bold()
                 .italic()
-                .accessibilityFont(.title2)
+                .talerFont(.title2)
                 .padding()
         }
     }

@@ -100,7 +100,7 @@ extension WithdrawTOSView {
                 let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
                 Section {
                     Text(term9)
-                        .accessibilityFont(.footnote)
+                        .talerFont(.footnote)
                         .foregroundColor(Color(UIColor.label))
                 }
             } // for
@@ -127,7 +127,7 @@ extension WithdrawTOSView {
                             Text(languageName ?? code)
                     }
                 }
-                .accessibilityFont(.title3)
+                .talerFont(.title3)
                 .pickerStyle(.menu)
                 .onAppear() {
                     withAnimation { selectedLanguage = language }
@@ -157,7 +157,7 @@ extension WithdrawTOSView {
                         let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
                             Section {
                             Text(term9)
-                                .accessibilityFont(.footnote)
+                                .talerFont(.footnote)
                                 .foregroundColor(Color(UIColor.label))
                         }
                     } // for

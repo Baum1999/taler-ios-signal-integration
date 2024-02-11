@@ -53,7 +53,7 @@ struct TransactionButton: View {
                     Image(systemName: imageName)
                 }
             }
-            .accessibilityFont(.title2)
+            .talerFont(.title2)
             .frame(maxWidth: .infinity)
         })
         .buttonStyle(.bordered)

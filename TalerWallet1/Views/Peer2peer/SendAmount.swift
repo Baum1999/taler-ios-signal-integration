@@ -83,7 +83,7 @@ struct SendAmount: View {
         let disabled = insufficient || amountToTransfer.isZero
         ScrollView { VStack(alignment: .trailing) {
             Text("Available:\t\(available)")
-                .accessibilityFont(.title3)
+                .talerFont(.title3)
                 .padding(.bottom, 2)
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
@@ -92,7 +92,7 @@ struct SendAmount: View {
                       shortcutAction: shortcutAction)
             Text(insufficient ? insufficientLabel
                               : feeLabel)
-                .accessibilityFont(.body)
+                .talerFont(.body)
                 .foregroundColor(.red)
                 .padding(4)
             NavigationLink(destination: inputDestination) { Text("Next") }

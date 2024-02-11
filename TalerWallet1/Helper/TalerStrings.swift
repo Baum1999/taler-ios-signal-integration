@@ -62,7 +62,7 @@ extension String {
     }
 
     public func width(largeAmountFont: Bool, _ sizeCategory: ContentSizeCategory) -> CGFloat {
-        let uiFont = TalerFont.uiFont(largeAmountFont ? .title : .title2)
+        let uiFont = TalerUIFont.uiFont(largeAmountFont ? .title : .title2)
         return widthOfString(usingUIFont: uiFont, sizeCategory)
     }
 

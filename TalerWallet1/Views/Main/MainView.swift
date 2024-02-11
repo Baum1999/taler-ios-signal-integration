@@ -21,7 +21,7 @@ struct MainView: View {
     @Binding var soundPlayed: Bool
 
     @EnvironmentObject private var controller: Controller
-    @AppStorage("talerFont") var talerFont: Int = 0         // extension mustn't define this, so it must be here
+    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0         // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = true
 
@@ -38,7 +38,7 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(logger: logger, stack: stack.push("Content"), talerFont: $talerFont)
+                Content(logger: logger, stack: stack.push("Content"), talerFontIndex: $talerFontIndex)
                     .onAppear() {
 #if DEBUG
                         if playSoundsI != 0  && playSoundsB && !soundPlayed {
@@ -84,7 +84,7 @@ extension MainView {
         let stack: CallStack
         @State private var shouldReloadBalances = 0
         @State private var balances: [Balance] = []
-        @Binding var talerFont: Int
+        @Binding var talerFontIndex: Int
         @AppStorage("minimalistic") var minimalistic: Bool = false
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel

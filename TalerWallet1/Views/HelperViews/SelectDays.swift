@@ -39,7 +39,7 @@ struct SelectDays: View {
                 .accessibilityLabel("Choose the expiration duration")
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityRemoveTraits(.isStaticText)
-                .accessibilityFont(.title3)
+                .talerFont(.title3)
             HStack {
                 Button(action: oneDayAction) {
                     if developerMode {

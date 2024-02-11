@@ -17,7 +17,7 @@ struct WalletEmptyView: View {
         List {
             Section {
                 Text("There is no digital cash in your wallet.")
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
                     .listRowSeparator(.hidden)
                 let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get some test money")
                 Link(title, destination: URL(string: DEMOBANK)!)
@@ -27,11 +27,11 @@ struct WalletEmptyView: View {
             }
             Section {
                 Text("Just register a test account in the demo bank, then withdraw some electronic cash.")
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
             }
         }
         .listStyle(myListStyle.style).anyView
-        .accessibilityFont(.title2)
+        .talerFont(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY, stack: stack.push("onAppear"))     // 10

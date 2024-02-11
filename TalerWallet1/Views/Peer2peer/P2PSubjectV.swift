@@ -62,12 +62,12 @@ struct P2PSubjectV: View {
                     Spacer()
                     Text(label)
                         .foregroundColor(.red)
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                 }
             }
                 if !minimalistic {
                     Text("Enter subject:")    // Purpose
-                        .accessibilityFont(.title3)
+                        .talerFont(.title3)
                         .accessibilityAddTraits(.isHeader)
                         .accessibilityRemoveTraits(.isStaticText)
                         .padding(.top)
@@ -81,7 +81,7 @@ struct P2PSubjectV: View {
                         .focused($isFocused)
 //                      .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
                 } } // Group for iOS16+ & iOS15
-                    .accessibilityFont(.title2)
+                    .talerFont(.title2)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
                     .background(WalletColors().fieldBackground)
                     .textFieldStyle(.roundedBorder)
@@ -95,7 +95,7 @@ struct P2PSubjectV: View {
                 HStack{
                     Spacer()
                     Text(verbatim: "\(summary.count)/100")
-                        .accessibilityFont(.body)
+                    .talerFont(.body)
                         .accessibilityValue("\(summary.count) characters of 100")
                 } // maximum 100 characters
 

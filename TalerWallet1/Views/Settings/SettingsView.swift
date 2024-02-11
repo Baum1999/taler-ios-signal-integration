@@ -33,7 +33,7 @@ struct SettingsView: View {
     @AppStorage("playSoundsB") var playSoundsB: Bool = true
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
 //    @AppStorage("increaseContrast") var increaseContrast: Bool = false
-    @AppStorage("talerFont") var talerFont: Int = 0
+    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -72,8 +72,8 @@ struct SettingsView: View {
     @State private var listID = UUID()
 
     func redraw(_ newFont: Int) -> Void {
-        if newFont != talerFont {
-            talerFont = newFont
+        if newFont != talerFontIndex {
+            talerFontIndex = newFont
             withAnimation { listID = UUID() }
         }
     }
@@ -131,7 +131,7 @@ struct SettingsView: View {
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
                                description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
                 .id("showWarnings")
-//                SettingsFont(title: String(localized: "Font:"), value: talerFont, action: redraw)
+//                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")

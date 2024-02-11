@@ -27,17 +27,17 @@ struct SettingsItem<Content: View>: View {
                     .id(id1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(foreColor)
-                    .accessibilityFont(.title2)
+                    .talerFont(.title2)
                     .padding([.bottom], 0.01)
                 if let desc = description {
                     Text(desc)
                         .id(id1 == nil ? nil : id1! + "_T")
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityFont(.caption)
+                        .talerFont(.caption)
                 }
             }.id(id1 == nil ? nil : id1! + "_V")
             content()
-                .accessibilityFont(.body)
+                .talerFont(.body)
         }.id(id1 == nil ? nil : id1! + "_H")
             .accessibilityElement(children: .combine)
             .padding([.bottom], 4)
@@ -62,7 +62,7 @@ struct SettingsToggle: View {
                 .id(id1)
 //                .accessibilityLabel(name)
                 .accessibility(sortPriority: 1)
-                .accessibilityFont(.title2)
+                .talerFont(.title2)
                 .onChange(of: value) { value in
                     action()
                 }
@@ -72,7 +72,7 @@ struct SettingsToggle: View {
                     .id(id1 == nil ? nil : id1! + "_T")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibility(sortPriority: 0)
-                    .accessibilityFont(.caption)
+                    .talerFont(.caption)
             }
         }
         .accessibilityElement(children: .combine)
@@ -96,7 +96,7 @@ struct SettingsFont: View {
                 Text(fonts[index]).tag(index)
             })
         })
-            .accessibilityFont(.title2)
+            .talerFont(.title2)
             .pickerStyle(.menu)
             .onAppear() {
                 withAnimation { selectedFont = value }
@@ -114,12 +114,12 @@ struct SettingsStyle: View {
     var body: some View {
         HStack {
             Text(title)
-                .accessibilityFont(.title2)
+                .talerFont(.title2)
             Spacer()
             Picker(selection: $myListStyle) {
                 ForEach(MyListStyle.allCases, id: \.self) {
                     Text($0.displayName.capitalized).tag($0)
-                        .accessibilityFont(.title2)
+                        .talerFont(.title2)
                 }
             } label: {}
                 .pickerStyle(.menu)
@@ -148,10 +148,10 @@ struct SettingsSpeaker: View {
         VStack {
             HStack {
                 Text(name)
-                    .accessibilityFont(.title2)
+                    .talerFont(.title2)
                 Text(verbatim: " ")
-                    .accessibilityFont(.largeTitle)
-                Spacer()
+                    .talerFont(.largeTitle)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 Button {
                     if value > 0 {
                         value = -1
@@ -162,14 +162,14 @@ struct SettingsSpeaker: View {
                     }
                 } label: {
                     Image(systemName: image.0)
-                        .accessibilityFont(.largeTitle)
+                        .talerFont(.largeTitle)
                 }
             }
 
             if let desc = description {
                 Text(desc)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityFont(.caption)
+                    .talerFont(.caption)
             }
         }
         .accessibilityElement(children: .combine)

@@ -65,14 +65,14 @@ extension BalancesSectionView: View {
             if scopeInfo.type == .exchange {
                 let baseURL = scopeInfo.url?.trimURL() ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
                 Text(baseURL)
-                    .accessibilityFont(.headline)
+                    .talerFont(.headline)
                     .listRowSeparator(.hidden)
             }
             let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
             if showSpendingButton {
                 if !minimalistic && showSpendingHint {
                     Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo shop, or send them to another wallet.")
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
                 }
@@ -139,7 +139,7 @@ extension BalancesSectionView: View {
                     let count = transactionCount > MAXRECENT ? MAXRECENT : transactionCount
                     Text(count > 1 ? "Recent \(count) transactions"
                                    : "Recent transaction")
-                        .accessibilityFont(.callout)
+                        .talerFont(.callout)
 //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 }
             }
@@ -191,7 +191,7 @@ fileprivate struct BalancesPendingRowView: View {
                 }
                 if !hasIncoming && !hasOutgoing {           // should never happen
                     Text("Some pending transactions")
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                 }
             }
             .accessibilityElement(children: .combine)

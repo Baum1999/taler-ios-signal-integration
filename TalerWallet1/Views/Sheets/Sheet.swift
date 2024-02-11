@@ -10,7 +10,7 @@ struct Sheet: View {
     private let symLog = SymLogV(0)
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
-    @AppStorage("talerFont") var talerFont: Int = 0
+    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
 
     var sheetView: AnyView
 
@@ -33,12 +33,12 @@ struct Sheet: View {
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         }
         .navigationViewStyle(.stack)
-        .talerNavBar(talerFont: talerFont)
+        .talerNavBar(talerFontIndex: talerFontIndex)
         .overlay(alignment: .top) {
             // Show the viewID on top of the sheet's NavigationView
             Text(idString)
                 .foregroundColor(.purple)
-                .font(.system(size: 11))        // no accessibilityFont
+                .font(.system(size: 11))        // no talerFont
                 .monospacedDigit()
                 .edgesIgnoringSafeArea(.top)
                 .id("sheetID")

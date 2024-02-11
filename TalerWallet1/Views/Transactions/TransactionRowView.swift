@@ -28,9 +28,9 @@ struct IconBadge: View {
                     .foregroundColor(.clear)
                 Image(systemName: imageName)
                     .foregroundColor(foreColor)
-            }.accessibilityFont(.largeTitle)
+            }.talerFont(.largeTitle)
             Image(systemName: badgeName)
-                .accessibilityFont(.caption)
+                .talerFont(.caption)
                 .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
         }.accessibilityHidden(true)
     }
@@ -84,13 +84,13 @@ struct TransactionRowView: View {
         let centerTop = Text(topString)
             .foregroundColor(textColor)
             .strikethrough(!doneOrPending, color: .red)
-            .accessibilityFont(.headline)
+            .talerFont(.headline)
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
             .accessibilityLabel(doneOrPending ? topString : topString +  ", canceled")
         let centerBottom = Text(dateString)
             .foregroundColor(textColor)
-            .accessibilityFont(.callout)
+            .talerFont(.callout)
 
         let layout1 = HStack(spacing: 0) {
             HStack(spacing: -4) {

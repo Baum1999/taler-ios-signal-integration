@@ -24,7 +24,7 @@ struct AccountPicker: View {
                     .tag(index)
             })
         })
-        .accessibilityFont(.title3)
+        .talerFont(.title3)
         .pickerStyle(.menu)
         .onAppear() {
             withAnimation { selectedAccount = value }
@@ -165,7 +165,7 @@ struct ManualDetailsV: View {
                     Spacer()
                 }   .listRowSeparator(.automatic)
             }.id(listID)
-                .accessibilityFont(.body)
+                .talerFont(.body)
         } else {
             // YIKES No exchangeCreditAccountDetails
         }

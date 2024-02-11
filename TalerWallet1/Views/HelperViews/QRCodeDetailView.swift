@@ -30,7 +30,7 @@ struct QRCodeDetailView: View {
                                                  comment: "Either (copy/share the payment link to the payee)")
                 Text(either)
                     .multilineTextAlignment(.leading)
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
 //                    .padding(.vertical)
                     .listRowSeparator(.hidden)
 
@@ -43,7 +43,7 @@ struct QRCodeDetailView: View {
                                           : String(localized: "the payment link to the payee, or")
                 Text(otherParty)
                     .multilineTextAlignment(.leading)
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
                     .listRowSeparator(.hidden)
 
                 HStack {
@@ -60,7 +60,7 @@ struct QRCodeDetailView: View {
                                                   comment: "e.g. '$ 7.41'")
                 Text(hintStr)
                     .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
             }
         }
     }

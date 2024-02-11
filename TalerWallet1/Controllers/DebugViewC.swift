@@ -125,7 +125,7 @@ struct DebugViewV: View {
             }
             Text(viewIDString)
                 .foregroundColor(.red)
-                .font(.system(size: 11))        // no accessibilityFont
+                .font(.system(size: 11))        // no talerFont
                 .monospacedDigit()
                 .id("viewID")
                 .accessibilityLabel(Text("View.ID.", comment: "AccessibilityLabel"))

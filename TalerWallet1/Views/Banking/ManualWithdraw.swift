@@ -52,7 +52,7 @@ struct ManualWithdraw: View {
             ScrollView { VStack(alignment: .trailing) {
                 Text("via \(exchange.exchangeBaseUrl.trimURL())")
                     .multilineTextAlignment(.center)
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
                 if tosAccepted {
                     CurrencyInputView(amount: $amountToTransfer,
                                    available: nil,

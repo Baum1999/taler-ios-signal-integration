@@ -70,7 +70,7 @@ struct QuiteSomeCoins: View {
                     Text(someCoins.quiteSome ? "Note: It will take quite some time to withdraw this amount! Be more patient..."
                                              : "Note: It will take some time to withdraw this amount. Be patient...")
                     .foregroundColor(someCoins.quiteSome ? .red : .primary)
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
                     .multilineTextAlignment(.leading)
                     .padding(.vertical, 6)
                 } // warnings
@@ -80,7 +80,7 @@ struct QuiteSomeCoins: View {
             if let fee = someCoins.fee {
                 Text(someCoins.feeLabel(currencyInfo))
                     .foregroundColor((someCoins.invalid || someCoins.tooMany || !fee.isZero) ? .red : .primary)
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
             }
         }
     }

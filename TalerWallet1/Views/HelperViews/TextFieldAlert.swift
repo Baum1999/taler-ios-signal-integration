@@ -19,7 +19,7 @@ struct TextFieldAlert: ViewModifier {
             if isPresented {
                 VStack {
                     Text(title)
-                        .accessibilityFont(.headline)
+                        .talerFont(.headline)
                         .accessibilityAddTraits(.isHeader)
                         .accessibilityRemoveTraits(.isStaticText)
                         .padding()
@@ -39,7 +39,7 @@ struct TextFieldAlert: ViewModifier {
                             action(text)
                             withAnimation { isPresented.toggle() }
                         }
-//                        .accessibilityFont(.talerBody)     TODO: check
+//                        .talerFont(.talerBody)     TODO: check
                         Spacer()
                     }
                 }

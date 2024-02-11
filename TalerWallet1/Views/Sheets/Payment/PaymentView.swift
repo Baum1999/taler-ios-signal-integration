@@ -51,7 +51,7 @@ struct PaymentView: View {
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency)")
-                        .accessibilityFont(.headline)
+                        .talerFont(.headline)
                     ThreeAmountsV(stack: stack.push(),
                                   topTitle: topTitle,
                                  topAbbrev: topAbbrev,
@@ -67,7 +67,7 @@ struct PaymentView: View {
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                 }
             }
             .listStyle(myListStyle.style).anyView

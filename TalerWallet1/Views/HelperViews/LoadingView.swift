@@ -40,7 +40,7 @@ struct LoadingView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .accessibilityFont(.title)
+        .talerFont(.title)
         .navigationTitle("Loading…")
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
     }

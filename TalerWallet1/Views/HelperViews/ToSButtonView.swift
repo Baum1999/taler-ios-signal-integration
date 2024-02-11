@@ -21,7 +21,7 @@ struct ToSButtonView: View {
                           : p2p ? String(localized: "You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.", comment: "P2P Receive")
                                 : String(localized: "You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.")
         Text(hint)
-            .accessibilityFont(.body)
+            .talerFont(.body)
             .multilineTextAlignment(.leading)
             .padding()
         NavigationLink(destination: LazyView {

@@ -114,7 +114,7 @@ struct TransactionSummaryV: View {
                     } }
                 } // Suspend + Resume buttons
                 Text(dateString)
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
                     .accessibilityLabel(accessibilityDate)
                     .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                     .listRowSeparator(.hidden)
@@ -136,7 +136,7 @@ struct TransactionSummaryV: View {
                             .multilineTextAlignment(.trailing)
                     }
                 }    .listRowSeparator(.automatic)
-                    .accessibilityFont(.title)
+                    .talerFont(.title)
                 TypeDetail(stack: stack.push(),
                            transaction: $transaction, hasDone: doneAction != nil)
 
@@ -253,7 +253,7 @@ struct TransactionSummaryV: View {
                     case .dummy(_):
                         let title = EMPTYSTRING
                         Text(title)
-                            .accessibilityFont(.body)
+                            .talerFont(.body)
                         HStack {
                             Spacer()
                             RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
@@ -334,7 +334,7 @@ struct TransactionSummaryV: View {
                             let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
                             let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
                             Text("Expires: \(dateString)")
-                                .accessibilityFont(.body)
+                                .talerFont(.body)
                                 .accessibilityLabel(accessibilityLabel)
                             //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                         }
@@ -345,13 +345,13 @@ struct TransactionSummaryV: View {
                                 if hasDone {
                                     Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                         .multilineTextAlignment(.leading)
-                                        .accessibilityFont(.subheadline)
+                                        .talerFont(.subheadline)
                                         .padding(.top)
                                 }
                             } else {
                                 Text("This transaction is not yet ready...")
                                     .multilineTextAlignment(.leading)
-                                    .accessibilityFont(.subheadline)
+                                    .talerFont(.subheadline)
                             }
                         }
                         let colon = ":"
@@ -386,7 +386,7 @@ struct TransactionSummaryV: View {
             } else if keys.contains(EXCHANGEBASEURL) {
                 if let baseURL = details[EXCHANGEBASEURL] {
                     Text("from \(baseURL.trimURL())") 
-                        .accessibilityFont(.title2)
+                        .talerFont(.title2)
                         .padding(.bottom)
                 }
             }

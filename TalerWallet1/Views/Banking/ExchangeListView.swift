@@ -110,7 +110,7 @@ extension ExchangeListCommonV: View {
         .overlay {
             if exchanges.isEmpty {
                 Text("No Payment Services yet...")
-                    .accessibilityFont(.body)
+                    .talerFont(.body)
             }
         }
         .onNotification(.ExchangeAdded) { notification in

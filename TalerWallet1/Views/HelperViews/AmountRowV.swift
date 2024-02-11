@@ -15,7 +15,7 @@ struct AmountRowV: View {
     var body: some View {
         let titleV = Text(title)
                         .multilineTextAlignment(.leading)
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
         let amountV = AmountV(amount: amount, large: large)
                         .foregroundColor(color)
         let verticalV = VStack(alignment: .leading) {

@@ -74,13 +74,13 @@ struct ThreeAmountsV: View {
         Section {
             if let summary {
                 Text(summary)
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
                     .lineLimit(4)
                     .padding(.bottom)
             }
             if let merchant {
                 Text(merchant)
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
                     .lineLimit(4)
                     .padding(.bottom)
             }
@@ -110,12 +110,12 @@ struct ThreeAmountsV: View {
                 VStack(alignment: .leading) {
                     Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                     HStack {
                         Spacer()
                         Text(baseURL.trimURL())
                             .multilineTextAlignment(.center)
-                            .accessibilityFont(large ? .title3 : .body)
+                            .talerFont(large ? .title3 : .body)
 //                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
                             .foregroundColor(labelColor)
                     }
@@ -128,7 +128,7 @@ struct ThreeAmountsV: View {
         } header: {
             if !minimalistic {
                 Text("Summary")
-                    .accessibilityFont(.title3)
+                    .talerFont(.title3)
             }
         }
     }

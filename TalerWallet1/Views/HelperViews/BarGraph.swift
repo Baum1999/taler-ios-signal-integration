@@ -23,7 +23,7 @@ struct BarGraphHeader: View {
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
             Text(currencyName)
-                .accessibilityFont(.title2)
+                .talerFont(.title2)
 //                .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
             if let scopeInfo {
                 BarGraph(transactions: $completedTransactions,

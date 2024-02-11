@@ -23,7 +23,7 @@ struct HamburgerButton : View  {
             Image(systemName: "line.3.horizontal")
 //            Image(systemName: "sidebar.squares.leading")
         }
-        .accessibilityFont(.title)
+        .talerFont(.title)
         .accessibilityLabel("Main Menu")
     }
 }
@@ -35,7 +35,7 @@ struct QRButton : View  {
         Button(action: action) {
             Image(systemName: "qrcode.viewfinder")
         }
-        .accessibilityFont(.title)
+        .talerFont(.title)
         .accessibilityLabel("Scan QR codes")
     }
 }
@@ -48,7 +48,7 @@ struct PlusButton : View  {
         Button(action: action) {
             Image(systemName: "plus")
         }
-        .accessibilityFont(.title)
+        .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
 }
@@ -60,7 +60,7 @@ struct ArrowUpButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.up.to.line")
         }
-        .accessibilityFont(.title2)
+        .talerFont(.title2)
         .accessibilityLabel("Scroll up")
     }
 }
@@ -72,7 +72,7 @@ struct ArrowDownButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.down.to.line")
         }
-        .accessibilityFont(.title2)
+        .talerFont(.title2)
         .accessibilityLabel("Scroll down")
     }
 }
@@ -85,7 +85,7 @@ struct ReloadButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.clockwise")
         }
-        .accessibilityFont(.title)
+        .talerFont(.title)
         .accessibilityLabel("Reload")
         .disabled(disabled)
     }
@@ -170,7 +170,7 @@ struct TalerButtonStyle: ButtonStyle {
             let hasBadge = badge.count > 0
             let buttonLabel = configuration.label
                                 .multilineTextAlignment(aligned)
-                                .accessibilityFont(.title3)         //   narrow ? .title3 : .title2
+                                .talerFont(.title3)         //   narrow ? .title3 : .title2
                                 .frame(maxWidth: narrow ? nil : .infinity, alignment: aligned2)
                                 .padding(.vertical, 10)
                                 .padding(.horizontal, hasBadge ? 0 : 6)
@@ -184,7 +184,7 @@ struct TalerButtonStyle: ButtonStyle {
                 buttonLabel
             } else {
                 let badgeV = Image(systemName: badge)
-                                .accessibilityFont(.caption)
+                                .talerFont(.caption)
                 HStack(alignment: .top, spacing: 0) {
                     badgeV.foregroundColor(.clear)
                     buttonLabel

@@ -54,7 +54,7 @@ struct P2pReceiveURIView: View {
                     let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
                     let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
                     Text("Expires: \(dateString)")
-                        .accessibilityFont(.body)
+                        .talerFont(.body)
                         .accessibilityLabel(accessibilityLabel)
 //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 }

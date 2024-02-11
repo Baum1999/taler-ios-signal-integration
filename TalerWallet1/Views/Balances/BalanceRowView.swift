@@ -28,7 +28,7 @@ struct BalanceCell: View {
                 hLayout
             } else {
                 let balanceText = Text("Balance:", comment: "Main view")
-                    .accessibilityFont(.title2)
+                    .talerFont(.title2)
                     .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
                 let vLayout = VStack(alignment: .leading, spacing: 0) {
                     balanceText
