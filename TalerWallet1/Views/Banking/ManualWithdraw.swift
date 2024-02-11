@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called by either the user tapping "Withdraw Coins" in the exchange list
+// Will be called by either the user tapping "Withdraw Coins" in the exchanges list
 // or from WithdrawExchangeV after a withdraw-exchange QR was scanned
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)

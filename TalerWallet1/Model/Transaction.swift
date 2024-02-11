@@ -228,6 +228,25 @@ struct TransactionCommon: Decodable, Sendable {
     var txActions: [TxAction]
     var kycUrl: String?
 
+    var isPending       : Bool { txState.major == .pending }
+    var isPendingReady  : Bool { isPending && txState.minor == .ready }
+    var isPendingKYC    : Bool { isPending && txState.minor == .kyc }
+    var isDone          : Bool { txState.major == .done }
+    var isAborting      : Bool { txState.major == .aborting }
+    var isAborted       : Bool { txState.major == .aborted }
+    var isSuspended     : Bool { txState.major == .suspended }
+    var isDialog        : Bool { txState.major == .dialog }
+    var isAbSuspended   : Bool { txState.major == .suspendedAborting }
+    var isFailed        : Bool { txState.major == .failed }
+    var isExpired       : Bool { txState.major == .expired }
+
+    var isAbortable     : Bool { txActions.contains(.abort) }
+    var isFailable      : Bool { txActions.contains(.fail) }
+    var isDeleteable    : Bool { txActions.contains(.delete) }
+    var isRetryable     : Bool { txActions.contains(.retry) }
+    var isResumable     : Bool { txActions.contains(.resume) }
+    var isSuspendable   : Bool { txActions.contains(.suspend) }
+
     func localizedType(_ type: TransactionType) -> String {
         switch type {
             case .dummy:          return String("")
@@ -514,24 +533,24 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
 
-    var isPending    : Bool { common.txState.major == .pending }
-    var isPendingReady : Bool { isPending && common.txState.minor == .ready }
-    var isPendingKYC   : Bool { isPending && common.txState.minor == .kyc }
-    var isDone       : Bool { common.txState.major == .done }
-    var isAborting   : Bool { common.txState.major == .aborting }
-    var isAborted    : Bool { common.txState.major == .aborted }
-    var isSuspended  : Bool { common.txState.major == .suspended }
-    var isDialog     : Bool { common.txState.major == .dialog }
-    var isAbSuspended: Bool { common.txState.major == .suspendedAborting }
-    var isFailed     : Bool { common.txState.major == .failed }
-    var isExpired    : Bool { common.txState.major == .expired }
+    var isPending       : Bool { common.isPending }
+    var isPendingReady  : Bool { common.isPendingReady }
+    var isPendingKYC    : Bool { common.isPendingKYC }
+    var isDone          : Bool { common.isDone }
+    var isAborting      : Bool { common.isAborting }
+    var isAborted       : Bool { common.isAborted }
+    var isSuspended     : Bool { common.isSuspended }
+    var isDialog        : Bool { common.isDialog }
+    var isAbSuspended   : Bool { common.isAbSuspended }
+    var isFailed        : Bool { common.isFailed }
+    var isExpired       : Bool { common.isExpired }
 
-    var isAbortable  : Bool { common.txActions.contains(.abort) }
-    var isFailable   : Bool { common.txActions.contains(.fail) }
-    var isDeleteable : Bool { common.txActions.contains(.delete) }
-    var isRetryable  : Bool { common.txActions.contains(.retry) }
-    var isResumable  : Bool { common.txActions.contains(.resume) }
-    var isSuspendable: Bool { common.txActions.contains(.suspend) }
+    var isAbortable     : Bool { common.isAbortable }
+    var isFailable      : Bool { common.isFailable }
+    var isDeleteable    : Bool { common.isDeleteable }
+    var isRetryable     : Bool { common.isRetryable }
+    var isResumable     : Bool { common.isResumable }
+    var isSuspendable   : Bool { common.isSuspendable }
 
     var shouldConfirm: Bool {
         switch self {

@@ -22,8 +22,8 @@ struct ThreeAmountsSheet: View {
         let effective = common.amountEffective
         let fee = common.fee()
         let incoming = common.incoming()
-        let pending = (common.txState.major == .pending)
-        let isDone = (common.txState.major == .done)
+        let pending = common.isPending
+        let isDone = common.isDone
         let incomplete = !(isDone || pending)
 
         let defaultBottomTitle  = incoming ? (pending ? String(localized: "Pending amount to obtain:")
@@ -53,10 +53,10 @@ struct ThreeAmountsV: View {
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
-    var fee: Amount?
+    var fee: Amount?                        // nil = don't show fee line, zero = no fee for this tx
     var bottomTitle: String
     var bottomAbbrev: String
-    var bottomAmount: Amount?
+    var bottomAmount: Amount?               // nil = incomplete (aborted, timed out)
     let large: Bool
     let pending: Bool
     let incoming: Bool
@@ -111,13 +111,13 @@ struct ThreeAmountsV: View {
                     Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
-                        Text(baseURL.trimURL())
+                    Text(baseURL.trimURL())
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                            .multilineTextAlignment(.center)
-                            .talerFont(large ? .title3 : .body)
-//                          .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
-                            .foregroundColor(labelColor)
-                    }
+                        .multilineTextAlignment(.center)
+                        .talerFont(large ? .title3 : .body)
+//                        .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+                        .foregroundColor(labelColor)
+                }
                 .padding(.top, 4)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .listRowSeparator(.hidden)
