@@ -254,8 +254,10 @@ struct TransactionSummaryV: View {
                         let title = EMPTYSTRING
                         Text(title)
                             .talerFont(.body)
-                            RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                        RotatingTaler(size: 100, progress: true,
+                                      rotationEnabled: $rotationEnabled)
                             .frame(maxWidth: .infinity, alignment: .center)
+//                            .accessibilityLabel("Progress indicator")
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {

@@ -9,13 +9,17 @@ struct LaunchAnimationView: View {
     var body: some View {
         ZStack {
             Color(.systemGray6).ignoresSafeArea()
-            RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250, rotationEnabled: $rotationEnabled)
+            RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250,
+                      progress: true,
+               rotationEnabled: $rotationEnabled)
+//                .accessibilityLabel("Progress indicator")
         }
     }
 }
 
 struct RotatingTaler: View {
     let size: CGFloat
+    let progress: Bool
     @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
 #if TALER_WALLET
@@ -34,7 +38,7 @@ struct RotatingTaler: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-            .accessibilityLabel("Taler Logo")       // decorative logo - with button function
+            .accessibilityLabel(progress ? "In progress" : "Taler Logo")       // decorative logo - with button function
             .onReceive(animationTimer) { timerValue in
                 if rotationEnabled {
                     withAnimation(.easeInOut(duration: 1.9)) {

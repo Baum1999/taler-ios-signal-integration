@@ -32,9 +32,11 @@ struct AboutView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                    RotatingTaler(size: 100, rotationEnabled: $rotationEnabled)
+                RotatingTaler(size: 100, progress: false,
+                              rotationEnabled: $rotationEnabled)
                 .frame(maxWidth: .infinity, alignment: .center)
-                        .onTapGesture(count: 1) { rotationEnabled.toggle() }
+//                    .accessibilityLabel("Progress indicator")
+                    .onTapGesture(count: 1) { rotationEnabled.toggle() }
                 SettingsItem(name: "Visit the taler.net website", id1: "web",
                              description: minimalistic ? nil : String(localized: "More info about Gnu Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
