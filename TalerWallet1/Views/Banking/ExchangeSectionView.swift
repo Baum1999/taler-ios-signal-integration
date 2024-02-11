@@ -23,9 +23,11 @@ struct ExchangeSectionView: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let scopeInfo = exchange.scopeInfo
-        let currency = scopeInfo?.currency ?? exchange.currency ?? "unknown"
-        let currencyInfo = controller.info(for: currency)
-        let currencyName = currencyInfo?.scope.currency ?? currency
+        let currency = scopeInfo?.currency
+                    ?? exchange.currency
+                    ?? String(localized: "Unknown", comment: "unknown currency")
+        let currencyInfoOpt = controller.info(for: currency)                    // might be nil
+        let currencyName = currencyInfoOpt?.scope.currency ?? currency          // might be "Unknown"
         Section {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
@@ -34,7 +36,7 @@ struct ExchangeSectionView: View {
                      amountToTransfer: $amountToTransfer)   // does still have the wrong currency
                 .listRowSeparator(.hidden)
 //            }
-            if "KUDOS" == currency {
+            if DEMOCURRENCY == currency {
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
                 VStack {

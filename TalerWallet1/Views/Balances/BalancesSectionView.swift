@@ -68,7 +68,7 @@ extension BalancesSectionView: View {
                     .talerFont(.headline)
                     .listRowSeparator(.hidden)
             }
-            let showSpendingButton = "KUDOS" == currency && !balance.available.isZero
+            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
             if showSpendingButton {
                 if !minimalistic && showSpendingHint {
                     Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo shop, or send them to another wallet.")
