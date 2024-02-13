@@ -15,7 +15,9 @@ struct BarGraphHeader: View {
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var completedTransactions: [Transaction] = []
     @ScaledMetric var barHeight = 9       // relative to fontSize
@@ -24,12 +26,16 @@ struct BarGraphHeader: View {
         HStack (alignment: .center, spacing: 10) {
             Text(currencyName)
                 .talerFont(.title2)
-//                .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                .foregroundColor(colorSchemeContrast == .increased ? .primary
+                                                    : minimalistic ? .secondary
+                                            : colorScheme == .dark ? .secondary
+                                                                   : Color(.darkGray))
             if let scopeInfo {
                 BarGraph(transactions: $completedTransactions,
                          maxBars: MAXBARS, barHeight: barHeight)
             }
         }
+//        .headerProminence(.increased)         // unfortunately this is not useful
         .task(id: shouldReloadBalances + 2_000_000) {
             if let scopeInfo {
                 symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")

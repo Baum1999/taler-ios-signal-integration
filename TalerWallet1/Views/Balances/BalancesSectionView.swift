@@ -24,6 +24,8 @@ struct BalancesSectionView {
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -139,8 +141,11 @@ extension BalancesSectionView: View {
                     let count = transactionCount > MAXRECENT ? MAXRECENT : transactionCount
                     Text(count > 1 ? "Recent \(count) transactions"
                                    : "Recent transaction")
-                        .talerFont(.callout)
-//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                        .talerFont(.title3)
+                        .foregroundColor(colorSchemeContrast == .increased ? .primary
+                                                            : minimalistic ? .secondary
+                                                    : colorScheme == .dark ? .secondary
+                                                                           : Color(.darkGray))
                 }
             }
         } // recent transactions
