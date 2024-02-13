@@ -13,6 +13,8 @@ struct ExchangeSectionView: View {
     let exchange: Exchange
 //    let exchanges: [Exchange]
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
+    @Binding var depositIBAN: String
+    @Binding var accountHolder: String
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -33,7 +35,9 @@ struct ExchangeSectionView: View {
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
                              currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button
-                     amountToTransfer: $amountToTransfer)   // does still have the wrong currency
+                     amountToTransfer: $amountToTransfer,   // does still have the wrong currency
+                          depositIBAN: $depositIBAN,
+                        accountHolder: $accountHolder)
                 .listRowSeparator(.hidden)
 //            }
             if DEMOCURRENCY == currency {
@@ -61,6 +65,8 @@ struct ExchangeSectionView: View {
 fileprivate struct ExchangeSection_Previews: PreviewProvider {
 fileprivate struct ExchangeRow_Container : View {
     @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
+    @State private var depositIBAN = "DE1234567890"
+    @State private var accountHolder = "Marc Stibane"
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
     var body: some View {
@@ -83,7 +89,9 @@ fileprivate struct ExchangeRow_Container : View {
 //                        scopeInfo: scopeInfo,
                          exchange: exchange1,
 //                        exchanges: [exchange1, exchange2],
-                 amountToTransfer: $amountToPreview)
+                 amountToTransfer: $amountToPreview,
+                      depositIBAN: $depositIBAN,
+                    accountHolder: $accountHolder)
     }
 }
 

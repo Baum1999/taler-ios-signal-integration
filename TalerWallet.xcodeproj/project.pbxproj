@@ -165,6 +165,8 @@
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
 		4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320422A14F6EA00A87B0E /* WalletColors.swift */; };
 		4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
+		4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583B2B79656E00404A68 /* DepositAmountV.swift */; };
+		4E96583D2B79656E00404A68 /* DepositAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583B2B79656E00404A68 /* DepositAmountV.swift */; };
 		4E96583F2B7967EF00404A68 /* Model+Deposit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583E2B7967EF00404A68 /* Model+Deposit.swift */; };
 		4E9658402B7967EF00404A68 /* Model+Deposit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583E2B7967EF00404A68 /* Model+Deposit.swift */; };
 		4E9796902A3765ED006F73BC /* AgePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E97968F2A3765ED006F73BC /* AgePicker.swift */; };
@@ -228,6 +230,8 @@
 		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
+		4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */; };
+		4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */; };
 		4EC400892AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
 		4EC4008A2AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
 		4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4008B2AE5664100DF72C7 /* CharacterSet+contains.swift */; };
@@ -349,6 +353,7 @@
 		4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualIconWidthDomain.swift; sourceTree = "<group>"; };
 		4E9320422A14F6EA00A87B0E /* WalletColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletColors.swift; sourceTree = "<group>"; };
 		4E9320442A1645B600A87B0E /* RequestPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPayment.swift; sourceTree = "<group>"; };
+		4E96583B2B79656E00404A68 /* DepositAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAmountV.swift; sourceTree = "<group>"; };
 		4E96583E2B7967EF00404A68 /* Model+Deposit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Deposit.swift"; sourceTree = "<group>"; };
 		4E97968F2A3765ED006F73BC /* AgePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgePicker.swift; sourceTree = "<group>"; };
 		4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleAxisGeometryReader.swift; sourceTree = "<group>"; };
@@ -409,6 +414,7 @@
 		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
+		4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositIbanV.swift; sourceTree = "<group>"; };
 		4EC400882AE3E7E800DF72C7 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		4EC4008B2AE5664100DF72C7 /* CharacterSet+contains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CharacterSet+contains.swift"; sourceTree = "<group>"; };
 		4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRowView.swift; sourceTree = "<group>"; };
@@ -678,6 +684,8 @@
 				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
 				4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */,
 				4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */,
+				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
+				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
 				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
 				4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */,
 				4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */,
@@ -1076,6 +1084,7 @@
 				4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
 				4E3EAE2C2A990778009F1BE8 /* ManualWithdraw.swift in Sources */,
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
+				4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
 				4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */,
 				4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */,
 				4E605DAF2AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
@@ -1127,6 +1136,7 @@
 				4E3EAE592A990778009F1BE8 /* Model+Settings.swift in Sources */,
 				4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4E3EAE5A2A990778009F1BE8 /* ErrorView.swift in Sources */,
+				4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */,
 				4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */,
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
 				4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */,
@@ -1185,6 +1195,7 @@
 				4E3327BB2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
 				4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */,
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
+				4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
 				4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */,
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
 				4E605DB02AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
@@ -1236,6 +1247,7 @@
 				4EB095152989CBB00043A8A1 /* Model+Settings.swift in Sources */,
 				4EC4008D2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */,
+				4E96583D2B79656E00404A68 /* DepositAmountV.swift in Sources */,
 				4E3B4BC72A429F2A00CC88B8 /* View+Notification.swift in Sources */,
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
 				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,

@@ -76,7 +76,9 @@ struct ExchangeListCommonV {
     @State private var exchanges: [Exchange] = []
 
     // source of truth for the value the user enters in currencyField for exchange withdrawals
-    @State private var amountToTransfer = Amount.zero(currency: "")     // TODO: Hold different values for different currencies?
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)     // TODO: Hold different values for different currencies?
+    @State private var depositIBAN = EMPTYSTRING
+    @State private var accountHolder = EMPTYSTRING
 
     func reloadExchanges() async -> Void {
         exchanges = await model.listExchangesM()
@@ -96,7 +98,9 @@ extension ExchangeListCommonV: View {
             List(sortedExchanges, id: \.self) { exchange in
                 ExchangeSectionView(stack: stack.push(),
                                  exchange: exchange,
-                         amountToTransfer: $amountToTransfer)               // does still have the wrong currency
+                         amountToTransfer: $amountToTransfer,               // does still have the wrong currency
+                              depositIBAN: $depositIBAN,
+                            accountHolder: $accountHolder)
             }
             .refreshable {
                 symLog?.log("refreshing")
