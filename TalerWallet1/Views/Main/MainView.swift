@@ -21,9 +21,9 @@ struct MainView: View {
     @Binding var soundPlayed: Bool
 
     @EnvironmentObject private var controller: Controller
-    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0         // extension mustn't define this, so it must be here
-    @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
-    @AppStorage("playSoundsB") var playSoundsB: Bool = true
+    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
+    @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
+    @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil

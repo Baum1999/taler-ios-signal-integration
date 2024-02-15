@@ -37,7 +37,7 @@ class Controller: ObservableObject {
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
-    @AppStorage("playSoundsB") var playSoundsB: Bool = true
+    @AppStorage("playSoundsB") var playSoundsB: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0         // extension mustn't define this, so it must be here
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")

@@ -30,7 +30,7 @@ struct SettingsView: View {
 #endif
     @AppStorage("useHaptics") var useHaptics: Bool = true
     @AppStorage("playSoundsI") var playSoundsI: Int = 1
-    @AppStorage("playSoundsB") var playSoundsB: Bool = true
+    @AppStorage("playSoundsB") var playSoundsB: Bool = false
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
 //    @AppStorage("increaseContrast") var increaseContrast: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
