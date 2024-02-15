@@ -118,15 +118,23 @@ extension MainView {
                 self.selectedTab
             } set: { tappedTab in
                 if tappedTab == self.selectedTab {
-                    //User tapped on the tab twice == Pop to root view
+                    // User tapped on the tab twice == Pop to root view
+                    switch tappedTab {
+                        case .balances:
+                            ViewState.shared.popToRootView(nil)
+                        case .exchanges:
+                            ViewState2.shared.popToRootView(nil)
+                        default:
+                            break
+                    }
 //                    if homeNavigationStack.isEmpty {
                         //User already on home view, scroll to top
 //                    } else {
 //                        homeNavigationStack = []
 //                    }
+                } else {    // Set the tab to the tabbed tab
+                    self.selectedTab = tappedTab
                 }
-                //Set the tab to the tabbed tab
-                self.selectedTab = tappedTab
             }
         }
 
