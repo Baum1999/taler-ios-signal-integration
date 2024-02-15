@@ -34,7 +34,10 @@ struct ManualWithdraw: View {
                         ?? exchange.currency
                         ?? String(localized: "Unknown", comment: "unknown currency")
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            let navTitle = String(localized: "NavTitle_Withdraw (currency)", defaultValue: "Withdraw \(currency)")
+            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+            let navTitle = String(localized: "NavTitle_Withdraw (currency)",
+                               defaultValue: "Withdraw \(currencySymbol)",
+                                    comment: "NavTitle: Withdraw 'currencySymbol'")
 //          let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
             let someCoins = SomeCoins(details: withdrawalAmountDetails)
