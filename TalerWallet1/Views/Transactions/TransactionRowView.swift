@@ -40,6 +40,7 @@ struct TransactionRowView: View {
     let transaction : Transaction
 
     @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
@@ -72,8 +73,10 @@ struct TransactionRowView: View {
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                       : done ? WalletColors().transactionColor(incoming)
                              : WalletColors().uncompletedColor
-        let textColor = doneOrPending ? .primary :
-                    increasedContrast ? .secondary : Color(.tertiaryLabel)
+        let textColor = doneOrPending ? .primary
+               : colorScheme == .dark ? .secondary
+                  : increasedContrast ? Color(.darkGray)
+                                      : .secondary  // Color(.tertiaryLabel)
 
         let iconBadge = IconBadge(foreColor: foreColor, done: done, incoming: incoming,
                                   shouldConfirm: shouldConfirm, needsKYC: needsKYC)

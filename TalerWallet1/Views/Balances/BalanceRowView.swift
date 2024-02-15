@@ -11,6 +11,7 @@ struct BalanceCell: View {
     let rowAction: () -> Void
     let balanceDest: LazyView<TransactionsListView>?
 
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -27,7 +28,10 @@ struct BalanceCell: View {
             } else {
                 let balanceText = Text("Balance:", comment: "Main view")
                     .talerFont(.title2)
-                    .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                    .foregroundColor(colorSchemeContrast == .increased ? .primary
+                                                        : minimalistic ? .secondary
+                                                : colorScheme == .dark ? .secondary
+                                                                       : Color(.darkGray))
                 let vLayout = VStack(alignment: .leading, spacing: 0) {
                     balanceText
                     hLayout

@@ -65,6 +65,8 @@ struct ThreeAmountsV: View {
     let summary: String?
     let merchant: String?
 
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
@@ -127,6 +129,10 @@ struct ThreeAmountsV: View {
             if !minimalistic {
                 Text("Summary")
                     .talerFont(.title3)
+                    .foregroundColor(colorSchemeContrast == .increased ? .primary
+                                                        : minimalistic ? .secondary
+                                                : colorScheme == .dark ? .secondary
+                                                                       : Color(.darkGray))
             }
         }
     }
