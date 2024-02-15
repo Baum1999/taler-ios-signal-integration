@@ -89,6 +89,7 @@ extension MainView {
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
+        @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
         let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
         let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
@@ -166,7 +167,8 @@ extension MainView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
                                   balances: $balances,
                                   navTitle: exchangesTitle)
-                }.navigationViewStyle(.stack)
+                }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
+                .navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "building.columns")    //  "arrow.triangle.2.circlepath")
                         .accessibilityLabel(exchangesTitle)

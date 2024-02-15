@@ -17,7 +17,8 @@ import SymLog
 struct TalerWallet1App: App {
     private let symLog = SymLogV()
     @Environment(\.scenePhase) private var phase
-    @StateObject private var viewState = ViewState.shared         // popToRootView()
+    @StateObject private var viewState = ViewState.shared           // popToRootView()
+    @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
     @State private var isActive = true
     @State private var soundPlayed = false
 
@@ -39,6 +40,7 @@ struct TalerWallet1App: App {
             MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
+                .environmentObject(viewState2)      // popToRoot
                 .environmentObject(controller)
                 .environmentObject(model)
                     /// external events are taler:// or payto:// URLs passed to this app
@@ -104,9 +106,22 @@ final class ViewState : ObservableObject {
     @Published var rootViewId = UUID()
     let logger = Logger(subsystem: "net.taler.gnu", category: "ViewState")
 
-    public func popToRootView(_ stack: CallStack) -> Void {
+    public func popToRootView(_ stack: CallStack?) -> Void {
         logger.info("popToRootView")
-        rootViewId = UUID() // setting a new ID will cause tableView popToRootView behaviour
+        rootViewId = UUID() // setting a new ID will cause 1st NavStack popToRootView behaviour
+    }
+
+    private init() { }
+}
+
+final class ViewState2 : ObservableObject {
+    static let shared = ViewState2()
+    @Published var rootViewId = UUID()
+    let logger = Logger(subsystem: "net.taler.gnu", category: "ViewState2")
+
+    public func popToRootView(_ stack: CallStack?) -> Void {
+        logger.info("popToRootView")
+        rootViewId = UUID() // setting a new ID will cause 2nd NavStack popToRootView behaviour
     }
 
     private init() { }
