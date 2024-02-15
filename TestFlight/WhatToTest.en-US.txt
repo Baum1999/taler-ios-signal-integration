@@ -1,3 +1,17 @@
+Version 0.9.4 (5)
+
+• New feature: Deposit
+• New feature: Multiple Exchanges with the same currency
+- tapping on the selected tab item again pops to root
+- rewards / surveys no longer supported - use P2P instead
+
+
+Version 0.9.4 (4)
+
+- For non-global currencies the exchange is shown
+- Accessibility improvements
+
+
 Version 0.9.4 (3)
 
 - Payment shows the fulfillment link
