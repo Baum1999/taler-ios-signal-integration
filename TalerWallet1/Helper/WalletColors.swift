@@ -7,6 +7,7 @@ import SwiftUI
 fileprivate let grouped = true
 
 public struct WalletColors {
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     let tint = Color(.tintColor)
     let gray1 = Color(.systemGray)          // uncompleted
@@ -34,6 +35,13 @@ public struct WalletColors {
           : disabled ? gray7
          : prominent ? tint
            : pressed ? gray4 : gray5
+    }
+
+    func secondary(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast) -> Color {
+        return contrast == .increased ? .primary            // WCAG AAA for any scheme
+                       : minimalistic ? .secondary          // not enough contrast
+                    : scheme == .dark ? .secondary          // WCAG AA for dark scheme
+                                      : Color(.darkGray)    // WCAG AA for light scheme
     }
 
     var backgroundColor: Color {

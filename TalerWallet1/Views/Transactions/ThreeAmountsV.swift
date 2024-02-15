@@ -129,10 +129,7 @@ struct ThreeAmountsV: View {
             if !minimalistic {
                 Text("Summary")
                     .talerFont(.title3)
-                    .foregroundColor(colorSchemeContrast == .increased ? .primary
-                                                        : minimalistic ? .secondary
-                                                : colorScheme == .dark ? .secondary
-                                                                       : Color(.darkGray))
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
         }
     }

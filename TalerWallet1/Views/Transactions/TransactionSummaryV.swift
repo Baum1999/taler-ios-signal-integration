@@ -34,6 +34,7 @@ struct TransactionSummaryV: View {
     let suspendAction: ((_ transactionId: String) async throws -> Void)?
     let resumeAction: ((_ transactionId: String) async throws -> Void)?
 
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
@@ -116,7 +117,7 @@ struct TransactionSummaryV: View {
                 Text(dateString)
                     .talerFont(.body)
                     .accessibilityLabel(accessibilityDate)
-                    .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                     .listRowSeparator(.hidden)
                 VStack(alignment: .trailing) {
                     let majorState = common.txState.major.localizedState
@@ -243,6 +244,8 @@ struct TransactionSummaryV: View {
         let stack: CallStack
         @Binding var transaction: Transaction
         let hasDone: Bool
+        @Environment(\.colorScheme) private var colorScheme
+        @Environment(\.colorSchemeContrast) private var colorSchemeContrast
         @State private var rotationEnabled = true
 
         var body: some View {
@@ -335,7 +338,7 @@ struct TransactionSummaryV: View {
                             Text("Expires: \(dateString)")
                                 .talerFont(.body)
                                 .accessibilityLabel(accessibilityLabel)
-                            //                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                         }
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {

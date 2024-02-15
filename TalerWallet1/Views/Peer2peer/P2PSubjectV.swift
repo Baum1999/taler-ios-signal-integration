@@ -27,6 +27,8 @@ struct P2PSubjectV: View {
     @Binding var expireDays: UInt
 
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var myFeeLabel: String = EMPTYSTRING
@@ -62,7 +64,7 @@ struct P2PSubjectV: View {
                 if label.count > 0 {
                     Text(label)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .foregroundColor(feeIsNotZero ? .red : .secondary)
+                        .foregroundColor(feeIsNotZero ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
                         .talerFont(.body)
                 }
             }

@@ -19,6 +19,8 @@ struct DepositIbanV: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("depositIBAN") var depositIBAN: String = EMPTYSTRING
     @AppStorage("accountHolder") var accountHolder: String = EMPTYSTRING
@@ -63,7 +65,8 @@ struct DepositIbanV: View {
                 if label.count > 0 {
                     Text(label)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .foregroundColor(feeIsNotZero ? .red : .secondary)
+                        .foregroundColor(feeIsNotZero ? .red 
+                                                      : WalletColors().secondary(colorScheme, colorSchemeContrast))
                         .talerFont(.body)
                 }
             }

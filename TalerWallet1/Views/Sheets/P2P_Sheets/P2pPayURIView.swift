@@ -17,6 +17,8 @@ struct P2pPayURIView: View {
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
@@ -48,7 +50,7 @@ struct P2pPayURIView: View {
                     Text("Expires: \(dateString)")
                         .talerFont(.body)
                         .accessibilityLabel(accessibilityLabel)
-//                        .foregroundColor(colorSchemeContrast == .increased ? .primary : .secondary)
+                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

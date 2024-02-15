@@ -28,10 +28,7 @@ struct BalanceCell: View {
             } else {
                 let balanceText = Text("Balance:", comment: "Main view")
                     .talerFont(.title2)
-                    .foregroundColor(colorSchemeContrast == .increased ? .primary
-                                                        : minimalistic ? .secondary
-                                                : colorScheme == .dark ? .secondary
-                                                                       : Color(.darkGray))
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 let vLayout = VStack(alignment: .leading, spacing: 0) {
                     balanceText
                     hLayout

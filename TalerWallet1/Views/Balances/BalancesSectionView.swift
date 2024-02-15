@@ -142,10 +142,7 @@ extension BalancesSectionView: View {
                     Text(count > 1 ? "Recent \(count) transactions"
                                    : "Recent transaction")
                         .talerFont(.title3)
-                        .foregroundColor(colorSchemeContrast == .increased ? .primary
-                                                            : minimalistic ? .secondary
-                                                    : colorScheme == .dark ? .secondary
-                                                                           : Color(.darkGray))
+                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 }
             }
         } // recent transactions

@@ -18,6 +18,8 @@ struct SendAmount: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
@@ -109,7 +111,8 @@ struct SendAmount: View {
                               : feeLabel)
                 .talerFont(.body)
                 .foregroundColor(insufficient ? .red
-                                 : (feeAmount?.isZero ?? true) ? .secondary : .red)
+                : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
+                                              : .red)
                 .padding(4)
             NavigationLink(destination: inputDestination) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent))

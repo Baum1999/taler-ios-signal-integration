@@ -21,6 +21,8 @@ struct DepositAmountV: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State var prepareDepositResult: PrepareDepositResult? = nil
@@ -112,7 +114,8 @@ struct DepositAmountV: View {
                                   : feeLabel)
                     .talerFont(.body)
                     .foregroundColor(insufficient ? .red
-                                                  : (feeAmount?.isZero ?? true) ? .secondary : .red)
+                                                  : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
+                                                                                : .red)
                     .padding(4)
                 Button(buttonTitle(amountToTransfer, currencyInfo)) {
                     if let paytoUri {
