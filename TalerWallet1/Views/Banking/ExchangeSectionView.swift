@@ -10,15 +10,32 @@ import taler_swift
 /// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
     let stack: CallStack
+    @Binding var balances: [Balance]
     let exchange: Exchange
 //    let exchanges: [Exchange]
+//    @Binding var depositIBAN: String
+//    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
-    @Binding var depositIBAN: String
-    @Binding var accountHolder: String
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var shouldReloadBalances: Int = 0
+
+    func amountAvailable(_ exchangeBaseUrl: String, currency: String?) -> Amount? {
+        for balance in balances {
+            if let baseUrl = balance.scopeInfo.url {
+                if baseUrl == exchangeBaseUrl {
+                    return balance.available
+                }
+            } else if let currency {
+                if currency == balance.scopeInfo.currency {
+                    return balance.available
+                }
+            }
+        }
+        return nil
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -34,10 +51,12 @@ struct ExchangeSectionView: View {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
+                      amountAvailable: amountAvailable(exchange.exchangeBaseUrl,
+                                                       currency: currency),
+//                          depositIBAN: $depositIBAN,
+//                        accountHolder: $accountHolder,
                              currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button
-                     amountToTransfer: $amountToTransfer,   // does still have the wrong currency
-                          depositIBAN: $depositIBAN,
-                        accountHolder: $accountHolder)
+                     amountToTransfer: $amountToTransfer)   // does still have the wrong currency
                 .listRowSeparator(.hidden)
 //            }
             if DEMOCURRENCY == currency {
@@ -61,9 +80,10 @@ struct ExchangeSectionView: View {
     }
 }
 // MARK: -
-#if DEBUG
+#if false   // model crashes
 fileprivate struct ExchangeSection_Previews: PreviewProvider {
 fileprivate struct ExchangeRow_Container : View {
+    @State private var previewBalances: [Balance] = []
     @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
     @State private var depositIBAN = "DE1234567890"
     @State private var accountHolder = "Marc Stibane"
@@ -85,13 +105,14 @@ fileprivate struct ExchangeRow_Container : View {
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
-        ExchangeSectionView(stack: CallStack("Preview"),
+        ExchangeSectionView(stack: CallStack("Preview"), 
+                         balances: $previewBalances,
 //                        scopeInfo: scopeInfo,
                          exchange: exchange1,
 //                        exchanges: [exchange1, exchange2],
-                 amountToTransfer: $amountToPreview,
-                      depositIBAN: $depositIBAN,
-                    accountHolder: $accountHolder)
+//                      depositIBAN: $depositIBAN,
+//                    accountHolder: $accountHolder,
+                 amountToTransfer: $amountToPreview)
     }
 }
 

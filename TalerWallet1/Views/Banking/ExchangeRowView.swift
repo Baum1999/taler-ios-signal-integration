@@ -10,10 +10,11 @@ struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let exchange: Exchange
+//    @Binding var depositIBAN: String
+//    @Binding var accountHolder: String
+    let amountAvailable: Amount?
     let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
-    @Binding var depositIBAN: String
-    @Binding var accountHolder: String
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -53,13 +54,15 @@ struct ExchangeRowView: View {
         let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
                                     comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let baseURL = exchange.exchangeBaseUrl
+        
         let deposit = LazyView {
-            DepositAmountV(stack: stack.push(),
-//                 exchangeBaseUrl: baseURL,
-                 amountAvailable: Amount.zero(currency: currency),
-                amountToTransfer: $amountToTransfer,
-                     depositIBAN: $depositIBAN,
-                   accountHolder: $accountHolder)
+            DepositIbanV(stack: stack.push(),
+                      feeLabel: nil,
+                  feeIsNotZero: nil,
+               amountAvailable: amountAvailable,
+//                   depositIBAN: $depositIBAN,
+//                 accountHolder: $accountHolder,
+              amountToTransfer: $amountToTransfer)
         }
         let manualWithdraw = LazyView {
             ManualWithdraw(stack: stack.push(),
@@ -72,11 +75,12 @@ struct ExchangeRowView: View {
                            viewID: VIEW_WITHDRAW_TOS,
                      acceptAction: nil)         // pop back to here
         }
+        let disableDeposit = false     // TODO: availableAmount.isZero
         let twoRowButtons = TwoRowButtons(sendTitle: minimalistic ? depositTitle0 : depositTitle1,
                                           recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
                                      fitsSideBySide: false,
                                           lineLimit: 5,
-                                       sendDisabled: false,  // TODO: availableAmount.isZero
+                                       sendDisabled: disableDeposit,
                                          sendAction: { selectAndUpdate(1) },
                                          recvAction: { selectAndUpdate(2) })
         Group {
@@ -151,10 +155,11 @@ fileprivate struct ExchangeRow_Container : View {
                            ageRestrictionOptions: [])
         ExchangeRowView(stack: CallStack("Preview"),
                      exchange: exchange1,
+              amountAvailable: Amount(currency: LONGCURRENCY, cent: 5000),      // 50,00
                      currency: LONGCURRENCY,
-             amountToTransfer: $amountToPreview,
-                  depositIBAN: $depositIBAN,
-                accountHolder: $accountHolder)
+//                  depositIBAN: $depositIBAN,
+//                accountHolder: $accountHolder,
+             amountToTransfer: $amountToPreview)
     }
 }
 

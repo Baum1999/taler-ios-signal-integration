@@ -12,27 +12,33 @@ struct DepositIbanV: View {
     let stack: CallStack
     let feeLabel: String?
     let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
-    let currencyInfo: CurrencyInfo
+    let amountAvailable: Amount?
+//    @Binding var depositIBAN: String
+//    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount
-    @Binding var depositIBAN: String
-    @Binding var accountHolder: String
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("depositIBAN") var depositIBAN: String = EMPTYSTRING
+    @AppStorage("accountHolder") var accountHolder: String = EMPTYSTRING
 
     @State private var myFeeLabel: String = EMPTYSTRING
     @State private var transactionStarted: Bool = false
+    @State private var paytoUri: String? = nil
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
         let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        return String(localized: "Next", comment: "advance Deposit to Amount")
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
         let amountStr = amount.string(currencyInfo)
         return String(localized: "NavTitle_Deposit_AmountStr",
-                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
+                   defaultValue: "Deposit", comment: "NavTitle: Deposit")
+//                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
     }
 
     var body: some View {
@@ -40,6 +46,17 @@ struct DepositIbanV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let currency = amountToTransfer.currencyStr
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let destination = LazyView {
+            DepositAmountV(stack: stack.push(),
+                        paytoUri: paytoUri,
+//                 exchangeBaseUrl: baseURL,
+                 amountAvailable: amountAvailable,
+//                     depositIBAN: $depositIBAN,
+//                   accountHolder: $accountHolder,
+                amountToTransfer: $amountToTransfer)
+        }
         ScrollView { VStack (alignment: .leading, spacing: 6) {
             if let feeIsNotZero {       // don't show fee if nil
                 let label = feeLabel ?? myFeeLabel
@@ -63,6 +80,7 @@ struct DepositIbanV: View {
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .textFieldStyle(.roundedBorder)
+                .padding(minimalistic ? .bottom : .vertical)
                 .onAppear {
                     symLog.log("dispatching kbd...")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
@@ -78,22 +96,15 @@ struct DepositIbanV: View {
                     .accessibilityRemoveTraits(.isStaticText)
                     .padding(.top)
             }
-            TextField(minimalistic ? "Account holder" : EMPTYSTRING, text: $depositIBAN)
+            TextField(minimalistic ? "IBAN" : EMPTYSTRING, text: $depositIBAN)
                 .talerFont(.title2)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .textFieldStyle(.roundedBorder)
+                .padding(minimalistic ? .bottom : .vertical)
 
-            let disabled = (accountHolder.count < 1) || (depositIBAN.count < 1)    // TODO: check amountAvailable
-            NavigationLink(destination: LazyView {
-                EmptyView()
-//                    P2PReadyV(stack: stack.push(),
-//                            summary: summary,
-//                         expireDays: expireDays,
-//                       amountToSend: amountToSend,
-//                   amountToTransfer: amountToTransfer,
-//                 transactionStarted: $transactionStarted)
-            }) {
+            let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
+            NavigationLink(destination: destination) {
                 Text(buttonTitle(amountToTransfer, currencyInfo))
             }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -110,19 +121,17 @@ struct DepositIbanV: View {
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
         }
-//        .task(id: amountToTransfer.value) {
-//            if amountToSend && feeLabel == nil {
-//                do {
-//                    let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
-//                    if let feeAmount = p2pFee(ppCheck: ppCheck) {
-//                        let feeStr = feeAmount.string(currencyInfo)
-//                        myFeeLabel = String(localized: "+ \(feeStr) fee")
-//                    } else { myFeeLabel = EMPTYSTRING }
-//                } catch {    // TODO: error
-//                    symLog.log(error.localizedDescription)
-//                }
-//            }
-//        }
+        .task(id: depositIBAN) {
+            do {
+                if try await model.validateIbanM(depositIBAN) {
+                    let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
+                    paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                }
+            } catch {    // TODO: error
+                symLog.log(error.localizedDescription)
+                paytoUri = nil
+            }
+        }
     }
 }
 // MARK: -

@@ -12,10 +12,11 @@ struct DepositAmountV: View {
     let stack: CallStack
 
 //    let exchangeBaseUrl: String
-    let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
+    let paytoUri: String?
+    let amountAvailable: Amount?
+//    @Binding var depositIBAN: String
+//    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount
-    @Binding var depositIBAN: String
-    @Binding var accountHolder: String
 //    let scopeInfo: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
@@ -26,7 +27,7 @@ struct DepositAmountV: View {
     @State private var insufficient = false
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
-    @State private var buttonSelected = false
+    @State private var depositStarted = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil          // wg. hasNoFees
 
@@ -44,10 +45,6 @@ struct DepositAmountV: View {
     
     var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
 
-    private func shortcutAction(_ shortcut: Amount) {
-        amountShortcut = shortcut
-        buttonSelected = true
-    }
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.hasNoFees {
             if hasNoFees {
@@ -58,101 +55,130 @@ struct DepositAmountV: View {
                                     : false
     }
 
+    private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+        let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
+    }
+
+    private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+        let amountStr = amount.string(currencyInfo)
+        return String(localized: "NavTitle_Deposit_AmountStr",
+                      defaultValue: "Deposit", comment: "NavTitle: Deposit")
+        //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
-        let navTitle = String(localized: "NavTitle_Deposit_Currency",
-                           defaultValue: "Deposit \(currencySymbol)",
-                                comment: "NavTitle: Deposit 'currencySymbol'")
-        let available = amountAvailable.string(currencyInfo)
-        let _ = print("available: \(available)")
-        let _ = symLog.log("currency: \(currency), available: \(available)")
-        let amountVoiceOver = amountToTransfer.string(currencyInfo)
-        let insufficientLabel = String(localized: "You don't have enough \(currency).")
-        let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
+        if depositStarted {
+            LoadingView(url: nil, message: "Depositing...")
+                .navigationBarBackButtonHidden(true)
+                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 
-        let inputDestination = LazyView {
-            DepositIbanV(stack: stack.push(),
-                     feeLabel: feeLabel,
-                 feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
-             amountToTransfer: $amountToTransfer,
-                  depositIBAN: $depositIBAN,
-                accountHolder: $accountHolder)
-        }
-        let shortcutDestination = LazyView {
-            DepositIbanV(stack: stack.push(),
-                     feeLabel: nil,
-                 feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
-             amountToTransfer: $amountShortcut,
-                  depositIBAN: $depositIBAN,
-                accountHolder: $accountHolder)
-        }
-        let disabled = insufficient || amountToTransfer.isZero
-        ScrollView { VStack(alignment: .trailing) {
-//            Text("Available:\t\(available)")
-//                .talerFont(.title3)
-//                .padding(.bottom, 2)
-            CurrencyInputView(amount: $amountToTransfer,
-                           available: nil,  // amountAvailable,
-                               title: minimalistic ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to deposit:"),
-                      shortcutAction: shortcutAction)
-            Text(insufficient ? insufficientLabel
-                              : feeLabel)
-                .talerFont(.body)
-                .foregroundColor(insufficient ? .red
-                                 : (feeAmount?.isZero ?? true) ? .secondary : .red)
-                .padding(4)
-            NavigationLink(destination: inputDestination) { Text("Next") }
+//            ViewState2.shared.popToRootView
+
+        } else {
+            let currency = amountToTransfer.currencyStr
+            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+            let navTitle = String(localized: "NavTitle_Deposit_Currency",
+                                  defaultValue: "Deposit \(currencySymbol)",
+                                  comment: "NavTitle: Deposit 'currencySymbol'")
+            let available = amountAvailable?.string(currencyInfo) ?? "an unknown amount"
+            let _ = print("available: \(available)")
+            let _ = symLog.log("currency: \(currency), available: \(available)")
+            let amountVoiceOver = amountToTransfer.string(currencyInfo)
+            let insufficientLabel = String(localized: "You don't have enough \(currency).")
+            let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
+
+            let disabled = insufficient || amountToTransfer.isZero
+            ScrollView { VStack(alignment: .trailing) {
+//                Text("via \(exchange.exchangeBaseUrl.trimURL())")
+//                    .multilineTextAlignment(.center)
+//                    .talerFont(.body)
+
+                Text("Available:\t\(available)")
+                    .talerFont(.title3)
+                    .padding(.bottom, 2)
+                CurrencyInputView(amount: $amountToTransfer,
+                               available: nil,  // amountAvailable,
+                                   title: minimalistic ? String(localized: "Amount:")
+                                                       : String(localized: "Amount to deposit:"),
+                          shortcutAction: nil)
+//                .padding(.top)
+                Text(insufficient ? insufficientLabel
+                                  : feeLabel)
+                    .talerFont(.body)
+                    .foregroundColor(insufficient ? .red
+                                                  : (feeAmount?.isZero ?? true) ? .secondary : .red)
+                    .padding(4)
+                Button(buttonTitle(amountToTransfer, currencyInfo)) {
+                    if let paytoUri {
+                        depositStarted = true    // don't run twice
+                        Task { // runs on MainActor
+                            symLog.log("Deposit")
+                            do {
+                                let result = try await model.createDepositGroupM(paytoUri, amount: amountToTransfer)
+                                symLog.log(result.transactionId)
+                                ViewState2.shared.popToRootView(stack.push())
+                                NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
+                            } catch {    // TODO: show error
+                                symLog.log(error.localizedDescription)
+                                depositStarted = false
+                            }
+                        }
+                    }
+                }
                 .buttonStyle(TalerButtonStyle(type: .prominent))
-                .disabled(disabled)
-                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
-                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                )
-        }.padding(.horizontal) } // ScrollVStack
-        .frame(maxWidth: .infinity, alignment: .leading)
-//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        .navigationTitle(navTitle)
-        .onAppear {
-            DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-            symLog.log("❗️ \(navTitle) onAppear")
-        }
-        .onDisappear {
-            symLog.log("❗️ \(navTitle) onDisappear")
-        }
-        .task(id: amountToTransfer.value) {
-//            do {
-//                insufficient = try amountToTransfer > amountAvailable
-//            } catch {
-//                print("Yikes❗️ insufficient failed❗️")
-//                insufficient = true
-//            }
+                .disabled(disabled || depositStarted)
+                .accessibilityHint(disabled ? "enabled when amount is non-zero, but not higher than your available amount" : EMPTYSTRING)
+            }.padding(.horizontal) } // ScrollVStack
+            .frame(maxWidth: .infinity, alignment: .leading)
+//            .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .navigationTitle(navTitle)
+            .onAppear {
+                DebugViewC.shared.setViewID(VIEW_DEPOSIT, stack: stack.push())
+                symLog.log("❗️ \(navTitle) onAppear")
+            }
+            .onDisappear {
+                symLog.log("❗️ \(navTitle) onDisappear")
+            }
+            .task(id: amountToTransfer.value) {
+                if let amountAvailable {
+                    do {
+                        insufficient = try amountToTransfer > amountAvailable
+                    } catch {
+                        print("Yikes❗️ insufficient failed❗️")
+                        insufficient = true
+                    }
 
-//            if insufficient {
-//                announce(this: "\(amountVoiceOver), \(insufficientLabel2)")
-//            } else if amountToTransfer.isZero {
-//                feeStr = EMPTYSTRING
-//            } else {
-//                do {
-//                    let ppCheck = try await model.prepareDepositM("", amount: amountToTransfer)
-//                    prepareDepositResult = ppCheck
-//                    if let feeAmount = fee(ppCheck: prepareDepositResult) {
-//                        feeStr = feeAmount.string(currencyInfo)
-//                    } else { feeStr = EMPTYSTRING }
-//                    announce(this: "\(amountVoiceOver), \(feeLabel)")
-//                } catch {    // TODO: error
-//                    symLog.log(error.localizedDescription)
-//                    prepareDepositResult = nil
-//                }
-//            }
+                    if insufficient {
+                        announce(this: "\(amountVoiceOver), \(insufficientLabel2)")
+                        feeStr = EMPTYSTRING
+                    }
+                }
+                if !insufficient {
+                    if amountToTransfer.isZero {
+                        feeStr = EMPTYSTRING
+                        prepareDepositResult = nil
+                    } else if let paytoUri {
+                        do {
+                            let ppCheck = try await model.prepareDepositM(paytoUri, amount: amountToTransfer)
+                            prepareDepositResult = ppCheck
+                            if let feeAmount = fee(ppCheck: prepareDepositResult) {
+                                feeStr = feeAmount.string(currencyInfo)
+                            } else { feeStr = EMPTYSTRING }
+                            announce(this: "\(amountVoiceOver), \(feeLabel)")
+                        } catch {    // TODO: error
+                            symLog.log(error.localizedDescription)
+                            prepareDepositResult = nil
+                        }
+                    }
+                }
+            }
         }
     }
 }
