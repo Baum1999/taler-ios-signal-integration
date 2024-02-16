@@ -98,16 +98,10 @@ struct SettingsView: View {
                     SettingsItem(name: aboutStr, id1: "about",
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
-#if DEBUG
-                if showDevelopItems {
-                    Text("https://bank.taler.grothoff.org/")
-                    Text("https://bank.taler.fdold.eu/")
-                    Text("https://bank.head.taler.net/")
-                    Text("https://bank.test.taler.net/")
-                    Text("https://bank.demo.taler.net/")
-                    Text("https://bank.taler.ar/")
+                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
+                               description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
+                    hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
                 }
-#endif
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
@@ -129,21 +123,27 @@ struct SettingsView: View {
 //                               description: hideDescriptions ? nil : String(localized: "If you don't want to set it globally in Settings.app"))
 //                .id("increaseContrast")
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
-                               description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
+                        description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
                 .id("showWarnings")
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
-                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
-                        description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
-                    hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
-                }
                 if diagnosticModeEnabled {
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
                             description: hideDescriptions ? nil : String("More information intended for debugging")) {
                         withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
                     }
+#if DEBUG
+                    if showDevelopItems {
+                        Text("https://bank.taler.grothoff.org/")
+                        Text("https://bank.taler.fdold.eu/")
+                        Text("https://bank.head.taler.net/")
+                        Text("https://bank.test.taler.net/")
+                        Text("https://bank.demo.taler.net/")
+                        Text("https://bank.taler.ar/")
+                    }
+#endif
                     if showDevelopItems {  // show or hide the following items
                         SettingsItem(name: String("Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {

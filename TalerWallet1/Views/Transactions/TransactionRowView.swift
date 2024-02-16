@@ -95,6 +95,14 @@ struct TransactionRowView: View {
             .foregroundColor(textColor)
             .talerFont(.callout)
 
+#if DEBUG
+        let debug = false
+        let red = debug ? Color.red : Color.clear
+        let green = debug ? Color.green : Color.clear
+        let blue = debug ? Color.blue : Color.clear
+        let orange = debug ? Color.orange : Color.clear
+#endif
+
         let layout1 = HStack(spacing: 0) {
             HStack(spacing: -4) {
                 iconBadge
@@ -112,13 +120,22 @@ struct TransactionRowView: View {
             centerTop
             HStack(spacing: 8) {
                 HStack(spacing: 0) {
-                    iconBadge//.border(.blue)
+                    iconBadge
+#if DEBUG
+                        .border(blue)
+#endif
                     Spacer(minLength: 0)
                     centerBottom
                     Spacer(minLength: 2)
-                }//.border(.green)
-                amountV//.border(.red)
-            }//.border(.orange)
+                }
+#if DEBUG
+                    .border(green)
+#endif
+                amountV
+#if DEBUG
+                    .border(red)
+#endif
+            }
         }
 
         let layout3 = VStack(spacing: 0) {
@@ -137,21 +154,41 @@ struct TransactionRowView: View {
         let layout4 = VStack(spacing: 0) {
             centerTop
             HStack(spacing: -4) {
-                iconBadge//.border(.green)
-                Spacer(minLength: 2
-                )
-                amountV//.border(.green)
-            }//.border(.orange)
+                iconBadge
+#if DEBUG
+                    .border(green)
+#endif
+                Spacer(minLength: 2)
+                amountV
+#if DEBUG
+                    .border(green)
+#endif
+            }
+#if DEBUG
+                .border(orange)
+#endif
             centerBottom
         }
 
         Group {
             if #available(iOS 16.0, *) {
                 ViewThatFits(in: .horizontal) {
-                    layout1//.border(.green)
+                    layout1
+#if DEBUG
+                        .border(green)
+#endif
                     layout2
-                    layout3//.border(.red)
-                    layout4//.border(.blue)
+#if DEBUG
+                        .border(orange)
+#endif
+                    layout3
+#if DEBUG
+                        .border(red)
+#endif
+                    layout4
+#if DEBUG
+                        .border(blue)
+#endif
                 }
             } else { layout4 } // view for iOS 15
         }
