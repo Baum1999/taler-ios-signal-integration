@@ -1,3 +1,9 @@
+Version 0.9.4 (6)
+
+• New task scheduler in wallet-core
+- Accessibility improvements
+
+
 Version 0.9.4 (5)
 
 • New feature: Deposit
