@@ -20,11 +20,15 @@ struct PayTemplateView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    @State private var preparePayResult: PreparePayResult? = nil
+    @State private var amount: Amount? = nil        // templateParam
+    @State private var summary: String? = nil       // templateParam
+
     func acceptAction(preparePayResult: PreparePayResult) {
         Task { // runs on MainActor
             do {
                 let confirmPayResult = try await model.confirmPayM(preparePayResult.transactionId)
-                //                symLog.log(confirmPayResult as Any)
+//                symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
                     controller.playSound(0)
                     // TODO: show error
@@ -38,16 +42,30 @@ struct PayTemplateView: View {
         }
     }
 
-    @State var preparePayResult: PreparePayResult? = nil
-
-    func query(url: URL) -> String? {
-        if let query = url.query {
-            let array = query.components(separatedBy: "&")
+    func queryURL() -> Bool {
+        if let queryParameters = url.queryParameters {
+            if let amountStr = queryParameters["amount"] {
+                amount = Amount.zero(currency: amountStr)
+            }
+            if let summaryStr = queryParameters["summary"] {
+                summary = summaryStr
+            }
+            return true
         }
-        return nil
+        return false
+    }
+
+    func preparePayForTemplate() async {
+        do {
+            let result = try await model.preparePayForTemplateM(url.absoluteString, amount: amount, summary: summary)
+            preparePayResult = result
+        } catch {    // TODO: error
+            symLog.log(error.localizedDescription)
+        }
     }
 
     var body: some View {
+      Group {
         if let preparePayResult {
             let effective = preparePayResult.amountEffective
             List {
@@ -106,21 +124,17 @@ struct PayTemplateView: View {
                 }
             }
             .navigationTitle(navTitle)
-            .onAppear() {
-                symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
-            }
         } else {
             LoadingView(url: url, message: nil)
                 .task {
-                    do {
-                        symLog.log(".task")
-                        let result = try await model.preparePayForTemplateM(url.absoluteString)
-                        preparePayResult = result
-                    } catch {    // TODO: error
-                        symLog.log(error.localizedDescription)
-                    }
+                    symLog.log(".task")
+                    let hasParams = queryURL()
+                    await preparePayForTemplate()
                 }
         }
+      }.onAppear() {
+          symLog.log("onAppear")
+          DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
+      }
     }
 }
