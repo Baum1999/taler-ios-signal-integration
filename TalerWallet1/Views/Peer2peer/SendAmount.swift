@@ -28,6 +28,7 @@ struct SendAmount: View {
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
+    @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil          // wg. hasNoFees
 
@@ -47,6 +48,9 @@ struct SendAmount: View {
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
+        shortcutSelected = true
+    }
+    private func buttonAction() {
         buttonSelected = true
     }
     private func feeIsNotZero() -> Bool? {
@@ -74,7 +78,6 @@ struct SendAmount: View {
 //        let _ = print("available: \(available)")
         let _ = symLog.log("currency: \(currency), available: \(available)")
         let amountVoiceOver = amountToTransfer.string(currencyInfo)
-        let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
         let inputDestination = LazyView {
@@ -97,30 +100,25 @@ struct SendAmount: View {
                       summary: $summary,
                    expireDays: $expireDays)
         }
-        let disabled = insufficient || amountToTransfer.isZero
-        ScrollView { VStack(alignment: .trailing) {
-            Text("Available:\t\(available)")
-                .talerFont(.title3)
-                .padding(.bottom, 2)
-            CurrencyInputView(amount: $amountToTransfer,
-                           available: amountAvailable,
-                               title: minimalistic ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to send:"),
-                      shortcutAction: shortcutAction)
-            Text(insufficient ? insufficientLabel
-                              : feeLabel)
-                .talerFont(.body)
-                .foregroundColor(insufficient ? .red
-                : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
-                                              : .red)
-                .padding(4)
-            NavigationLink(destination: inputDestination) { Text("Next") }
-                .buttonStyle(TalerButtonStyle(type: .prominent))
-                .disabled(disabled)
-                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
-                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                )
-        }.padding(.horizontal) } // ScrollVStack
+        ScrollView {
+            AmountInputV(stack: stack.push(), url: nil,
+               amountAvailable: amountAvailable,
+              amountToTransfer: $amountToTransfer,
+                   amountLabel: minimalistic ? String(localized: "Amount:")
+                                             : String(localized: "Amount to send:"),
+                  wantsSummary: true,
+                       summary: $summary,
+                  insufficient: $insufficient,
+                     feeAmount: $feeAmount,
+                shortcutAction: shortcutAction,
+                  buttonAction: buttonAction)
+            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            )
+            .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            )
+        } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
