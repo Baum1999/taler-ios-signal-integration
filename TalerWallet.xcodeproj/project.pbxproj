@@ -65,7 +65,6 @@
 		4E3EAE452A990778009F1BE8 /* P2PReadyV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* P2PReadyV.swift */; };
 		4E3EAE462A990778009F1BE8 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */; };
 		4E3EAE472A990778009F1BE8 /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
-		4E3EAE482A990778009F1BE8 /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4E3EAE492A990778009F1BE8 /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
 		4E3EAE4B2A990778009F1BE8 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A072A0B6A5F002D9328 /* ShareSheet.swift */; };
 		4E3EAE4C2A990778009F1BE8 /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095492989CBFE0043A8A1 /* AmountRowV.swift */; };
@@ -227,7 +226,6 @@
 		4EB3136129FEE79B007D68BC /* P2PReadyV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* P2PReadyV.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
 		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
-		4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA56402A7FF5200084948B /* PayTemplateView.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
 		4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */; };
@@ -247,6 +245,12 @@
 		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
 		4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */; };
 		4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171912B49FE4E00BF9FF5 /* OrderedCollections */; };
+		4EEC118D2B83DE4800146CFF /* AmountInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC118C2B83DE4700146CFF /* AmountInputV.swift */; };
+		4EEC118E2B83DE4800146CFF /* AmountInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC118C2B83DE4700146CFF /* AmountInputV.swift */; };
+		4EEC11932B83FB7A00146CFF /* SubjectInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */; };
+		4EEC11942B83FB7A00146CFF /* SubjectInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */; };
+		4EEC11962B840F1100146CFF /* PayTemplateV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC11952B840F1100146CFF /* PayTemplateV.swift */; };
+		4EEC11972B840F1100146CFF /* PayTemplateV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC11952B840F1100146CFF /* PayTemplateV.swift */; };
 		4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157229F8242800D46A03 /* QRGeneratorView.swift */; };
 		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
 		4EEC157829F9032900D46A03 /* Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157729F9032900D46A03 /* Sheet.swift */; };
@@ -411,7 +415,6 @@
 		4EB3136029FEE79B007D68BC /* P2PReadyV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P2PReadyV.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
 		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
-		4EBA56402A7FF5200084948B /* PayTemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateView.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
 		4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositIbanV.swift; sourceTree = "<group>"; };
@@ -423,6 +426,9 @@
 		4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDays.swift; sourceTree = "<group>"; };
 		4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmountsV.swift; sourceTree = "<group>"; };
 		4EDBDCD82AB787CB00925C02 /* CallStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStack.swift; sourceTree = "<group>"; };
+		4EEC118C2B83DE4700146CFF /* AmountInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountInputV.swift; sourceTree = "<group>"; };
+		4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectInputV.swift; sourceTree = "<group>"; };
+		4EEC11952B840F1100146CFF /* PayTemplateV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateV.swift; sourceTree = "<group>"; };
 		4EEC157229F8242800D46A03 /* QRGeneratorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRGeneratorView.swift; sourceTree = "<group>"; };
 		4EEC157729F9032900D46A03 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
@@ -698,7 +704,7 @@
 			children = (
 				4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */,
 				4E6EF56A2B65A33300AF252A /* PaymentDone.swift */,
-				4EBA56402A7FF5200084948B /* PayTemplateView.swift */,
+				4EEC11952B840F1100146CFF /* PayTemplateV.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -758,6 +764,8 @@
 				4EF840A62A0B85F400EE0D47 /* CopyShare.swift */,
 				4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */,
 				4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */,
+				4EEC118C2B83DE4700146CFF /* AmountInputV.swift */,
+				4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */,
 				4E2D8DD42B45822A00234039 /* AmountV.swift */,
 				4E53A33629F50B7B00830EC2 /* CurrencyField.swift */,
 				4EEC157229F8242800D46A03 /* QRGeneratorView.swift */,
@@ -1068,6 +1076,7 @@
 				4E3EAE202A990778009F1BE8 /* MainView.swift in Sources */,
 				4E3EAE212A990778009F1BE8 /* Buttons.swift in Sources */,
 				4E3EAE222A990778009F1BE8 /* TransactionButton.swift in Sources */,
+				4EEC118D2B83DE4800146CFF /* AmountInputV.swift in Sources */,
 				4E3EAE232A990778009F1BE8 /* BalancesSectionView.swift in Sources */,
 				4E3EAE242A990778009F1BE8 /* QRGeneratorView.swift in Sources */,
 				4E3EAE252A990778009F1BE8 /* WithdrawAcceptDone.swift in Sources */,
@@ -1090,11 +1099,13 @@
 				4E605DAF2AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
 				4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */,
 				4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */,
+				4EEC11932B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
 				4E3EAE342A990778009F1BE8 /* SuperScriptDigits.swift in Sources */,
 				4E3EAE352A990778009F1BE8 /* P2pPayURIView.swift in Sources */,
 				4E3EAE362A990778009F1BE8 /* Model+Payment.swift in Sources */,
 				4E3EAE372A990778009F1BE8 /* SettingsView.swift in Sources */,
 				4E3EAE382A990778009F1BE8 /* PaymentView.swift in Sources */,
+				4EEC11962B840F1100146CFF /* PayTemplateV.swift in Sources */,
 				4E3EAE392A990778009F1BE8 /* WithdrawURIView.swift in Sources */,
 				4E3EAE3A2A990778009F1BE8 /* CopyShare.swift in Sources */,
 				4E3EAE3B2A990778009F1BE8 /* TalerWallet1App.swift in Sources */,
@@ -1111,7 +1122,6 @@
 				4E3EAE462A990778009F1BE8 /* TextFieldAlert.swift in Sources */,
 				4E3EAE472A990778009F1BE8 /* QuiteSomeCoins.swift in Sources */,
 				4E2D8DD52B45822A00234039 /* AmountV.swift in Sources */,
-				4E3EAE482A990778009F1BE8 /* PayTemplateView.swift in Sources */,
 				4E3EAE492A990778009F1BE8 /* ManualWithdrawDone.swift in Sources */,
 				4E3EAE4B2A990778009F1BE8 /* ShareSheet.swift in Sources */,
 				4EC4008F2AE8019700DF72C7 /* ExchangeRowView.swift in Sources */,
@@ -1179,6 +1189,7 @@
 				4EB095682989CBFE0043A8A1 /* MainView.swift in Sources */,
 				4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */,
 				4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */,
+				4EEC118E2B83DE4800146CFF /* AmountInputV.swift in Sources */,
 				4EB095602989CBFE0043A8A1 /* BalancesSectionView.swift in Sources */,
 				4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */,
 				4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */,
@@ -1201,11 +1212,13 @@
 				4E605DB02AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,
+				4EEC11942B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
 				4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */,
 				4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */,
 				4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */,
 				4EB0954F2989CBFE0043A8A1 /* SettingsView.swift in Sources */,
 				4EB095552989CBFE0043A8A1 /* PaymentView.swift in Sources */,
+				4EEC11972B840F1100146CFF /* PayTemplateV.swift in Sources */,
 				4EB095612989CBFE0043A8A1 /* WithdrawURIView.swift in Sources */,
 				4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */,
 				4EB094ED298979620043A8A1 /* TalerWallet1App.swift in Sources */,
@@ -1222,7 +1235,6 @@
 				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
 				4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */,
 				4E2D8DD62B45822A00234039 /* AmountV.swift in Sources */,
-				4EBA56412A7FF5200084948B /* PayTemplateView.swift in Sources */,
 				4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */,
 				4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */,
 				4EC400902AE8019700DF72C7 /* ExchangeRowView.swift in Sources */,

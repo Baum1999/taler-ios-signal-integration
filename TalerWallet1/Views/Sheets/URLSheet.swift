@@ -13,8 +13,8 @@ struct URLSheet: View {
     var urlToOpen: URL
 
     @EnvironmentObject private var controller: Controller
-    @State private var amountToTransfer = Amount.zero(currency: "")
-
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
+    @State private var summary = EMPTYSTRING
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -29,13 +29,14 @@ struct URLSheet: View {
                 case .withdrawExchange:
                     WithdrawExchangeV(stack: stack.push(), url: urlToOpen)
                 case .pay:
-                    PaymentView(stack: stack.push(), url: urlToOpen)
+                    PaymentView(stack: stack.push(), url: urlToOpen,
+                             template: false, amountToTransfer: $amountToTransfer, summary: $summary)
                 case .payPull:
                     P2pPayURIView(stack: stack.push(), url: urlToOpen)
                 case .payPush:
                     P2pReceiveURIView(stack: stack.push(), url: urlToOpen)
                 case .payTemplate:
-                    PayTemplateView(stack: stack.push(), url: urlToOpen)
+                    PayTemplateV(stack: stack.push(), url: urlToOpen)
                 case .refund:
                     RefundURIView(stack: stack.push(), url: urlToOpen)
                 default:        // Error view

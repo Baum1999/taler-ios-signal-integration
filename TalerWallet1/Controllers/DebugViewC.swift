@@ -81,7 +81,9 @@ public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiti
 // openURL (Link, NFC or scan QR) ==> pays merchant
 public let SHEET_PAYMENT = SHEET_WITHDRAWAL + 10                    // 140 Pay Merchant
 public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 1                   // 141 Pay Merchant Template
-public let SHEET_PAY_ACCEPT = SHEET_PAY_TEMPLATE + 1                // 142 Pay Accept
+public let SHEET_PAY_TEMPL_AMOUNT = SHEET_PAY_TEMPLATE + 1          // 142 Pay Template Amount
+public let SHEET_PAY_TEMPL_SUBJECT = SHEET_PAY_TEMPL_AMOUNT + 1     // 143 Pay Template Subject
+public let SHEET_PAY_ACCEPT = SHEET_PAY_TEMPL_SUBJECT + 1           // 144 Pay Accept
 
 // MARK: P2P Pay Invoice
 // p2p pull debit - openURL (Link or scan QR)

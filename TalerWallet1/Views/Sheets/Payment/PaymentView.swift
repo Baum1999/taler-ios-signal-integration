@@ -15,6 +15,9 @@ struct PaymentView: View {
 
     // the scanned URL
     let url: URL
+    let template: Bool
+    @Binding var amountToTransfer: Amount
+    @Binding var summary: String
 
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -93,8 +96,15 @@ struct PaymentView: View {
             .task { // this runs only once
                 do { // TODO: cancelled
                     symLog.log(".task")
-                    let result = try await model.preparePayForUriM(url.absoluteString)
-                    preparePayResult = result
+                    if template {
+                        let result = try await model.preparePayForTemplateM(url.absoluteString,
+                                                                     amount: amountToTransfer,
+                                                                    summary: summary)
+                        preparePayResult = result
+                    } else {
+                        let result = try await model.preparePayForUriM(url.absoluteString)
+                        preparePayResult = result
+                    }
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
                 }
@@ -107,6 +117,7 @@ struct PaymentView: View {
     }
 }
 // MARK: -
+#if false
 struct PaymentURIView_Previews: PreviewProvider {
     static var previews: some View {
         let merchant = Merchant(name: "Merchant")
@@ -153,6 +164,12 @@ struct PaymentURIView_Previews: PreviewProvider {
         )
         let url = URL(string: "taler://pay/some_amount")!
         
-        PaymentView(stack: CallStack("Preview"), url: url, preparePayResult: details)
+//        @State private var amount: Amount? = nil        // templateParam
+//        @State private var summary: String? = nil       // templateParam
+
+        PaymentView(stack: CallStack("Preview"),
+                    url: url, template: false, amountToTransfer: nil, summary: nil,
+                    preparePayResult: details)
     }
 }
+#endif
