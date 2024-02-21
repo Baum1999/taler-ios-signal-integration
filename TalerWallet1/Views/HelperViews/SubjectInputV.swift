@@ -92,10 +92,12 @@ struct SubjectInputV<TargetView: View>: View {
             .background(WalletColors().fieldBackground)
             .textFieldStyle(.roundedBorder)
             .onAppear {
-                symLog.log("dispatching kbd...")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    isFocused = true        // make first responder - raise keybord
-                    symLog.log("...kbd isFocused")
+                if !UIAccessibility.isVoiceOverRunning {
+                    symLog.log("dispatching kbd...")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        isFocused = true        // make first responder - raise keybord
+                        symLog.log("...kbd isFocused")
+                    }
                 }
             }
 

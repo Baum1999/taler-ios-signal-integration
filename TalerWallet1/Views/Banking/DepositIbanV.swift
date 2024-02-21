@@ -85,10 +85,12 @@ struct DepositIbanV: View {
                 .textFieldStyle(.roundedBorder)
                 .padding(minimalistic ? .bottom : .vertical)
                 .onAppear {
-                    symLog.log("dispatching kbd...")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                        isFocused = true        // make first responder - raise keybord
-                        symLog.log("...kbd isFocused")
+                    if !UIAccessibility.isVoiceOverRunning {
+                        symLog.log("dispatching kbd...")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                            isFocused = true        // make first responder - raise keybord
+                            symLog.log("...kbd isFocused")
+                        }
                     }
                 }
 

@@ -145,7 +145,7 @@ struct CurrencyInputView: View {
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
 //                print("❗️Yikes: CurrencyInputView hasBeenShown")
-            } else {
+            } else if !UIAccessibility.isVoiceOverRunning {
                 print("❗️CurrencyInputView❗️")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     hasBeenShown = true

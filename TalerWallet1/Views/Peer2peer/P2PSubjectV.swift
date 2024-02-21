@@ -19,7 +19,7 @@ struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let feeLabel: String?
-    let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
+    let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
     let currencyInfo: CurrencyInfo
     let amountToSend: Bool
     @Binding var amountToTransfer: Amount
@@ -89,10 +89,12 @@ struct P2PSubjectV: View {
                     .background(WalletColors().fieldBackground)
                     .textFieldStyle(.roundedBorder)
                     .onAppear {
-                        symLog.log("dispatching kbd...")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                            isFocused = true        // make first responder - raise keybord
-                            symLog.log("...kbd isFocused")
+                        if !UIAccessibility.isVoiceOverRunning {
+                            symLog.log("dispatching kbd...")
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                isFocused = true        // make first responder - raise keybord
+                                symLog.log("...kbd isFocused")
+                            }
                         }
                     }
                 Text(verbatim: "\(summary.count)/100")                          // maximum 100 characters
