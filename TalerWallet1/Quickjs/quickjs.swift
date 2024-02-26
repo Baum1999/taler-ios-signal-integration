@@ -60,7 +60,9 @@ public class Quickjs {
         TALER_WALLET_set_log_handler(talerWalletInstance,
                                      logging_callback,
                                      Unmanaged.passUnretained(self).toOpaque())
-        TALER_WALLET_run(talerWalletInstance);
+        let http_curl = js_curl_http_client_create()
+        TALER_set_http_client_implementation(talerWalletInstance, http_curl)
+        TALER_WALLET_run(talerWalletInstance)
     }
 
     deinit {
