@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -38,7 +41,7 @@ struct AboutView: View {
 //                    .accessibilityLabel("Progress indicator")
                     .onTapGesture(count: 1) { rotationEnabled.toggle() }
                 SettingsItem(name: "Visit the taler.net website", id1: "web",
-                             description: minimalistic ? nil : String(localized: "More info about Gnu Taler in general...")) { }
+                             description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {

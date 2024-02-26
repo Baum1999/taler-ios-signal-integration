@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import os.log
@@ -24,22 +27,23 @@ func logging_callback(userdata: Optional<UnsafeMutableRawPointer>,
                         message: Optional<UnsafePointer<Int8>>) {
     let native = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
     let logger = native.logger
-    let theTag = String(cString: tag!)
-    let theMessage = String(cString: message!)
+    let swiftTag = String(cString: tag!)
+    let swiftMessage = String(cString: message!)
 
     switch level {
         case TALER_WALLET_LOG_ERROR:
-            logger.error("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.error("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         case TALER_WALLET_LOG_WARN:
-            logger.warning("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.warning("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         case TALER_WALLET_LOG_MESSAGE:
-            logger.notice("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.notice("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         case TALER_WALLET_LOG_INFO:
-            logger.info("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.info("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         case TALER_WALLET_LOG_TRACE:
-            logger.trace("\(theTag, privacy: .public)  \(theMessage, privacy: .public)")
+            logger.trace("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         default: break
     }
+//    native.internalOnLog(message: swiftMessage)
 }
 // MARK: -
 public class Quickjs {

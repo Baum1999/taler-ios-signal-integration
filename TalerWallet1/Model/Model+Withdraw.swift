@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import taler_swift
@@ -180,32 +183,31 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
-    @MainActor
-    func loadWithdrawalExchangeForUriM(_ talerUri: String)               // M for MainActor
+    @MainActor                    // M for MainActor
+    func loadWithdrawalExchangeForUriM(_ talerUri: String)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
     /// load withdrawal details. Networking involved
-    @MainActor
-    func loadWithdrawalDetailsForUriM(_ talerWithdrawUri: String)               // M for MainActor
+    @MainActor                  // M for MainActor
+    func getWithdrawalDetailsForUriM(_ talerWithdrawUri: String)
       async throws -> WithdrawUriInfoResponse {
         let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerWithdrawUri)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    @MainActor
-    func loadWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount)  // M for MainActor
+    @MainActor                     // M for MainActor
+    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount)
       async throws -> WithdrawalAmountDetails {
         let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
                                                              amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    @MainActor
+    @MainActor                  // M for MainActor
     func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String], acceptLanguage: String)
-                                // M for MainActor
       async throws -> ExchangeTermsOfService {
         let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl,
                                                  acceptedFormat: acceptedFormat,
@@ -213,22 +215,22 @@ extension WalletModel {
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    @MainActor
-    func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String)       // M for MainActor
+    @MainActor              // M for MainActor
+    func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String)
       async throws -> Decodable {
         let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    @MainActor
-    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String)   // M for MainActor
+    @MainActor               // M for MainActor
+    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String)
       async throws -> AcceptWithdrawalResponse? {
         let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl)
         let response = try await sendRequest(request, ASYNCDELAY)
         return response
     }
-    @MainActor
-    func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?)   // M for MainActor
+    @MainActor                  // M for MainActor
+    func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?)
       async throws -> AcceptManualWithdrawalResult? {
         let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY)

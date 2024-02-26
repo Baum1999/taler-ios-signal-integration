@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -91,13 +94,13 @@ struct WithdrawURIView: View {
         .task {
             do { // TODO: cancelled
                 symLog.log(".task")
-                let withdrawUriInfo = try await model.loadWithdrawalDetailsForUriM(url.absoluteString)
+                let withdrawUriInfo = try await model.getWithdrawalDetailsForUriM(url.absoluteString)
                 let amount = withdrawUriInfo.amount
                 let baseUrl = withdrawUriInfo.defaultExchangeBaseUrl
                            ?? withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
                 if let baseUrl, let exc = await model.getExchangeByUrl(url: baseUrl) {
                     exchange = exc
-                    let details = try await model.loadWithdrawalDetailsForAmountM(baseUrl, amount: amount)
+                    let details = try await model.getWithdrawalDetailsForAmountM(baseUrl, amount: amount)
                     withdrawalAmountDetails = details
 //                    agePicker.setAges(ages: details?.ageRestrictionOptions)
                 } else {    // TODO: error

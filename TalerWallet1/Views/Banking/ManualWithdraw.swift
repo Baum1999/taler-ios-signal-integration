@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -108,7 +111,7 @@ struct ManualWithdraw: View {
             }
             if !amountToTransfer.isZero {
                 do {
-                    let details = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl,
+                    let details = try await model.getWithdrawalDetailsForAmountM(exchangeBaseUrl,
                                                                            amount: amountToTransfer)
                     withdrawalAmountDetails = details
 //                    agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
@@ -124,12 +127,12 @@ struct ManualWithdraw: View {
 #if DEBUG
 struct ManualWithdraw_Previews: PreviewProvider {
     struct StateContainer : View {
-        @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
+        @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
 
         var body: some View {
             ManualWithdraw(stack: CallStack("Preview"),
                  exchangeBaseUrl: DEMOEXCHANGE,
-                amountToTransfer: $amountToTransfer)
+                amountToTransfer: $amountToPreview)
         }
     }
 
