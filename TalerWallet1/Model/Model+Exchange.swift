@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
  */
 import Foundation
@@ -19,12 +19,12 @@ enum ExchangeEntryStatus: String, Codable {
 
 enum ExchangeUpdateStatus: String, Codable {
     case initial
-    case initialUpdate = "initial(update)"
+    case initialUpdate = "initial-update"
     case suspended
     case failed
-    case outdatedUpdate = "outdated(update)"
+    case outdatedUpdate = "outdated-update"
     case ready
-    case readyUpdate = "ready(update)"
+    case readyUpdate = "ready-update"
 }
 // MARK: -
 /// The result from wallet-core's ListExchanges
@@ -176,6 +176,7 @@ extension WalletModel {
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.exchanges
         } catch {
+            // TODO: Error
             return []               // empty, but not nil
         }
     }
