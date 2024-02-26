@@ -69,7 +69,8 @@ class Controller: ObservableObject {
     }
 
     func info(for currency: String) -> CurrencyInfo? {
-//        return CurrencyInfo.euro()            // FAKE EURO instead of the real Currency
+//        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
+//        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
         for info in currencyInfos {
             if info.scope.currency == currency {
                 return info

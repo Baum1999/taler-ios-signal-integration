@@ -90,6 +90,18 @@ public struct CurrencyInfo {
         return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
     }
 
+    public static func francs() -> CurrencyInfo {
+        let currency = "CHF"
+        let scope = ScopeInfo(type: .global, currency: currency)
+        let specs = CurrencySpecification(name: currency,
+                                          fractionalInputDigits: 2,
+                                          fractionalNormalDigits: 2,
+                                          fractionalTrailingZeroDigits: 2,
+                                          altUnitNames: [0 : "CHF"])
+        let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+        return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
+    }
+
     /// returns all characters left from the decimalSeparator
     func integerPartStr(_ integerStr: String, decimalSeparator: String) -> String {
         if let integerIndex = integerStr.endIndex(of: decimalSeparator) {
