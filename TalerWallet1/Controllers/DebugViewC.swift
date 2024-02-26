@@ -25,23 +25,24 @@ import os.log
 
 // Numbering Scheme for Views
 // MARK: - Main View
-public let VIEW_EMPTY = 10                                          // 10 WalletEmptyView
-public let VIEW_BALANCES = VIEW_EMPTY + 1                           // 11 BalancesListView
-public let VIEW_EXCHANGES = VIEW_BALANCES + 1                       // 12 ExchangeListView
-public let VIEW_SETTINGS = VIEW_EXCHANGES + 1                       // 13 SettingsView
+public let VIEW_EMPTY_WALLET = 10                                   // 10 WalletEmptyView
+public let VIEW_BALANCES = VIEW_EMPTY_WALLET + 1                    // 11 BalancesListView
+public let VIEW_BANKING = VIEW_BALANCES + 1                         // 12 ExchangeListView
+public let VIEW_SETTINGS = VIEW_BANKING + 1                         // 13 SettingsView
 public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 14 AboutView
 //public let VIEW_PENDING = VIEW_ABOUT + 1                            // 15 PendingOpsListView
 
 // MARK: Transactions
-public let VIEW_TRANSACTIONLIST = VIEW_EMPTY + 10                   // 20 TransactionsListView
-public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 21 TransactionSummary
-public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 22 TransactionDetail
+public let VIEW_EMPTY_HISTORY = VIEW_EMPTY_WALLET + 10              // 20 TransactionsEmptyView
+public let VIEW_TRANSACTIONLIST = VIEW_EMPTY_HISTORY + 1            // 21 TransactionsListView
+public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 22 TransactionSummary
+public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 23 TransactionDetail
 
 
 
 // MARK: - Manual Withdrawal (from Banking / ExchangeList)
 // receive coins from bank ==> shows IBAN + Purpose/Subject for manual wire transfer
-public let VIEW_WITHDRAWAL = VIEW_TRANSACTIONLIST + 10              // 30 WithdrawAmount
+public let VIEW_WITHDRAWAL = VIEW_EMPTY_HISTORY + 10                // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
 public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
 
@@ -76,6 +77,9 @@ public let SHEET_WITHDRAWAL = VIEW_WITHDRAWAL + 100                 // 130 Withd
 public let SHEET_WITHDRAW_TOS = SHEET_WITHDRAWAL + 1                // 131 WithdrawTOSView
 public let SHEET_WITHDRAW_ACCEPT = SHEET_WITHDRAW_TOS + 1           // 132 WithdrawAcceptView
 public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiting for bank confirmation
+
+public let SHEET_WITHDRAW_EXCHANGE = SHEET_WITHDRAWAL + 5           // 135 WithdrawExchangeV
+
 
 // MARK: Merchant Payment
 // openURL (Link, NFC or scan QR) ==> pays merchant

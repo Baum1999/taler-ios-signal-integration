@@ -14,6 +14,7 @@ import SymLog
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let isSheet: Bool
     let exchangeBaseUrl: String
     @Binding var amountToTransfer: Amount
 
@@ -91,7 +92,11 @@ struct ManualWithdraw: View {
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .navigationTitle(navTitle)
             .onAppear {
-                DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
+                if isSheet {
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_EXCHANGE)
+                } else {
+                    DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
+                }
                 symLog.log("❗️ \(navTitle) onAppear")
             }
             .onDisappear {
@@ -130,7 +135,7 @@ struct ManualWithdraw_Previews: PreviewProvider {
         @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
 
         var body: some View {
-            ManualWithdraw(stack: CallStack("Preview"),
+            ManualWithdraw(stack: CallStack("Preview"), isSheet: false,
                  exchangeBaseUrl: DEMOEXCHANGE,
                 amountToTransfer: $amountToPreview)
         }

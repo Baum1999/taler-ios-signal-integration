@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -65,7 +68,7 @@ struct ExchangeRowView: View {
               amountToTransfer: $amountToTransfer)
         }
         let manualWithdraw = LazyView {
-            ManualWithdraw(stack: stack.push(),
+            ManualWithdraw(stack: stack.push(), isSheet: false,
                  exchangeBaseUrl: baseURL,
                 amountToTransfer: $amountToTransfer)
         }

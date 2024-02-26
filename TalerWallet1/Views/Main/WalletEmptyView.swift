@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import SymLog
@@ -34,7 +37,7 @@ struct WalletEmptyView: View {
         .talerFont(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_EMPTY, stack: stack.push("onAppear"))     // 10
+            DebugViewC.shared.setViewID(VIEW_EMPTY_WALLET, stack: stack.push("onAppear"))     // 10
         }
     }
 }

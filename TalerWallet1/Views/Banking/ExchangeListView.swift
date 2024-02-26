@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -109,7 +112,7 @@ extension ExchangeListCommonV: View {
             .listStyle(myListStyle.style).anyView
         }
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_EXCHANGES, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_BANKING, stack: stack.push())
         }
         .overlay {
             if exchanges.isEmpty {
