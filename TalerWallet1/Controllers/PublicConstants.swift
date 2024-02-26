@@ -51,6 +51,7 @@ public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters
 
 public let PLAINTEXT = "text/plain"
 public let MARKDOWN = "text/markdown"
+public let HTML = "text/html"
 
 public let EXCHANGEBASEURL = "exchangeBaseUrl"
 public let TALERURI = "talerUri"
