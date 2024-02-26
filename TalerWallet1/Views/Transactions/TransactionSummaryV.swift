@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -121,13 +124,10 @@ struct TransactionSummaryV: View {
                     .listRowSeparator(.hidden)
                 VStack(alignment: .trailing) {
                     let majorState = common.txState.major.localizedState
-#if DEBUG
                     let minorState = common.txState.minor?.localizedState ?? nil
-                    let state = transaction.isPending ? minorState ?? majorState
-                                                      : majorState
-#else
-                    let state = majorState
-#endif
+                    let state = developerMode ? transaction.isPending ? minorState ?? majorState
+                                                                      : majorState
+                                              : majorState
                     HStack {
                         Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)

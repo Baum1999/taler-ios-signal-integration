@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 
@@ -39,5 +42,9 @@ extension WalletCore {
     
     static func parseFailureError() -> WalletBackendResponseError {
         return WalletBackendResponseError(talerErrorCode: -3, talerErrorHint: "Could not parse error detail.", message: "")
+    }
+
+    static func walletError() -> WalletBackendResponseError {
+        return WalletBackendResponseError(talerErrorCode: -4, talerErrorHint: "Error detail.", message: "")
     }
 }
