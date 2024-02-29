@@ -85,7 +85,7 @@ struct RequestPayment: View {
                         currencyInfo: currencyInfo,
                      amountEffective: peerPullCheck?.amountEffective)
             NavigationLink(destination: inputDestination) { Text("Next") }
-                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
                 .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()

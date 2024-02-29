@@ -92,9 +92,6 @@ struct ReloadButton : View  {
 }
 
 struct TalerButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled: Bool
-    var disabled: Bool { !isEnabled }
-
     enum TalerButtonStyleType {
         case plain
         case balance
@@ -104,6 +101,7 @@ struct TalerButtonStyle: ButtonStyle {
     var type: TalerButtonStyleType = .plain
     var dimmed: Bool = false
     var narrow: Bool = false
+    var disabled: Bool = false
     var aligned: TextAlignment = .center
     var badge: String = EMPTYSTRING
 

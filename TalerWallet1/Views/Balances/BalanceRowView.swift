@@ -90,13 +90,14 @@ struct BalanceRowView: View {
 
             let sendTitle = minimalistic ? sendTitle0 : sendTitle1
             let requTitle = minimalistic ? requestTitle0 : requestTitle1
-            let twoRowButtons = TwoRowButtons(sendTitle: sendTitle,
-                                              recvTitle: requTitle,
-                                         fitsSideBySide: false,
-                                              lineLimit: 5,
-                                           sendDisabled: amount.isZero,
-                                             sendAction: sendAction,
-                                             recvAction: recvAction)
+            let twoRowButtons = TwoRowButtons(stack: stack.push(),
+                                          sendTitle: sendTitle,
+                                          recvTitle: requTitle,
+                                     fitsSideBySide: false,
+                                          lineLimit: 5,
+                                       sendDisabled: amount.isZero,
+                                         sendAction: sendAction,
+                                         recvAction: recvAction)
             if #available(iOS 16.0, *) {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: HSPACING) {

@@ -79,13 +79,14 @@ struct ExchangeRowView: View {
                      acceptAction: nil)         // pop back to here
         }
         let disableDeposit = false     // TODO: availableAmount.isZero
-        let twoRowButtons = TwoRowButtons(sendTitle: minimalistic ? depositTitle0 : depositTitle1,
-                                          recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
-                                     fitsSideBySide: false,
-                                          lineLimit: 5,
-                                       sendDisabled: disableDeposit,
-                                         sendAction: { selectAndUpdate(1) },
-                                         recvAction: { selectAndUpdate(2) })
+        let twoRowButtons = TwoRowButtons(stack: stack.push(),
+                                      sendTitle: minimalistic ? depositTitle0 : depositTitle1,
+                                      recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
+                                 fitsSideBySide: false,
+                                      lineLimit: 5,
+                                   sendDisabled: disableDeposit,
+                                     sendAction: { selectAndUpdate(1) },
+                                     recvAction: { selectAndUpdate(2) })
         Group {
             NavigationLink(destination: showToS) {
                 VStack(alignment: .leading) {

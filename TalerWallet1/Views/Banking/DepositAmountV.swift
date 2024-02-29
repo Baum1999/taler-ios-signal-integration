@@ -134,7 +134,7 @@ struct DepositAmountV: View {
                         }
                     }
                 }
-                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .disabled(disabled || depositStarted)
                 .accessibilityHint(disabled ? "enabled when amount is non-zero, but not higher than your available amount" : EMPTYSTRING)
             }.padding(.horizontal) } // ScrollVStack

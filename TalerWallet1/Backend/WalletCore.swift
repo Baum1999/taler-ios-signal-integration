@@ -102,20 +102,21 @@ extension WalletCore {
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
+                logger.error("wallet-core sent back an error for request \(requestId, privacy: .public)")
+                symLog.log("id:\(requestId)  \(walletError)")
+                // TODO: decode jsonData to WalletBackendResponseError - or HTTPError
+                completion(requestId, timeSent, jsonData, WalletCore.walletError())
             } catch {        // JSON encoding of response.result failed / should never happen
                 symLog.log(decoded)
                 logger.error("cannot encode wallet-core Error")
                 // TODO: show error alert
                 completion(requestId, timeSent, nil, WalletCore.parseFailureError())
             }
-            // TODO: decode jsonData to WalletBackendResponseError - or HTTPError
-            logger.error("wallet-core sent back an error for request \(requestId, privacy: .public)")
-//            completion(requestId, timeSent, nil, walletError)
-            completion(requestId, timeSent, nil, WalletCore.parseFailureError())
         } else {                                        // JSON decoding of error message failed
             completion(requestId, timeSent, nil, WalletCore.parseFailureError())
         }
     }
+
     private func handleResponse(_ decoded: ResponseOrNotification) throws {
         guard let requestId = decoded.id else {
             logger.error("didn't find requestId in response")

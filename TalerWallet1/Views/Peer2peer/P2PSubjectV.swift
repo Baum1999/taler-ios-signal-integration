@@ -118,7 +118,7 @@ struct P2PSubjectV: View {
                 }) {
                     Text(buttonTitle(amountToTransfer, currencyInfo))
                 }
-                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack

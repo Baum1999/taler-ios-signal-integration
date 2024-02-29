@@ -76,7 +76,7 @@ struct ManualWithdraw: View {
                     NavigationLink(destination: destination) {
                         Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                     .disabled(disabled)
                     .padding(.top)
                 } else {

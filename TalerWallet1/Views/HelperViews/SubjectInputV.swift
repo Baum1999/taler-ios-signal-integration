@@ -112,7 +112,7 @@ struct SubjectInputV<TargetView: View>: View {
                 .padding(4)
 
             NavigationLink("Next", destination: targetView)
-                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
 //                .accessibility(sortPriority: 0)
         }.padding(.horizontal)

@@ -90,13 +90,13 @@ struct AmountInputV: View {
                     NavigationLink(destination: destination) {
                         Text("Next")
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                     .disabled(disabled)
                 } else {
                     Button("Next") {
                         buttonAction()
                     }
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                         .disabled(disabled)
                 }
             }
