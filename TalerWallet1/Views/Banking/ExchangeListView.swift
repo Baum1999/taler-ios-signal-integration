@@ -116,8 +116,19 @@ extension ExchangeListCommonV: View {
         }
         .overlay {
             if exchanges.isEmpty {
-                Text("No Payment Services yet...")
-                    .talerFont(.body)
+                List {
+                    Section {
+                        Text("There are no Payment Services yet.")
+                            .talerFont(.title3)
+                    }
+                    Section {
+                        Text("Use the Add button to add a service.")
+                            .talerFont(.body)
+                            .listRowSeparator(.hidden)
+                        Text("You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.")
+                            .talerFont(.body)
+                    }
+                }
             }
         }
         .onNotification(.ExchangeAdded) { notification in
