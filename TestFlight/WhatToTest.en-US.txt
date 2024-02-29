@@ -1,3 +1,21 @@
+Version 0.9.4 (10)
+
+• New feature: Native Networking instead of curl
+
+
+Version 0.9.4 (9)
+
+• debug version WITHOUT c-ares
+
+
+Version 0.9.4 (8)
+
+• New feature: LocalConsole for GNU Taler only. Find it in Settings...
+
+also GNU Taler no longer claims the taler:// URL scheme. You can now install GNU Taler for debugging/testing in parallel to Taler Wallet, and all System events (System Camera, Mail Messages, NFC Tags, ...) will always go to Taler Wallet.
+Thus you need to scan a QR code from another device (laptop, tablet, phone, ...) to withdraw into GNU Taler, and cannot use the browser on this iPhone for bank-integrated withdrawals, because attempting to open a taler://withdraw/ will open Taler Wallet and not GNU Taler.
+
+
 Version 0.9.4 (7)
 
 • New feature: Pay-Templates
