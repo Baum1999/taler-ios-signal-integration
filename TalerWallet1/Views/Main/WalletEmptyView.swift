@@ -21,15 +21,22 @@ struct WalletEmptyView: View {
             Section {
                 Text("There is no digital cash in your wallet.")
                     .talerFont(.title3)
+            }
+            Section {
+                Text("You can register an account in the demo bank, then withdraw some digital cash to experience how to pay with the money of the future.")
+                    .talerFont(.body)
                     .listRowSeparator(.hidden)
-                let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get some test money")
+                let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")
                 Link(title, destination: URL(string: DEMOBANK)!)
                     .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
                     .padding(.vertical)
                     .accessibilityHint("Will go to the demo bank website.")
             }
             Section {
-                Text("Just register a test account in the demo bank, then withdraw some electronic cash.")
+                Text("Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.")
+                    .talerFont(.body)
+                    .listRowSeparator(.hidden)
+                Text("You can also add a payment service manually on the Banking tab.")
                     .talerFont(.body)
             }
         }
