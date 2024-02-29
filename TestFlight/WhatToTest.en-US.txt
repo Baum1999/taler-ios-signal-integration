@@ -1,3 +1,8 @@
+Version 0.9.4 (11)
+
+• New views for empty wallet (Balances) and zero payment providers (Banking)
+
+
 Version 0.9.4 (10)
 
 • New feature: Native Networking instead of curl
