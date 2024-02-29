@@ -110,6 +110,7 @@ struct ThreeAmountsV: View {
             }
             if let baseURL {
                 VStack(alignment: .leading) {
+                               // TODO: "Issued by" for withdrawals
                     Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)

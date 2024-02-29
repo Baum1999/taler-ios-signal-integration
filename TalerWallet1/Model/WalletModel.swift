@@ -92,6 +92,8 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
     func operation() -> String { "init" }
     func args() -> Args {
         let testing = Testing(devModeActive: false) // true, false
+        let builtin = Builtin(exchanges: [])
+//        let config = Config(testing: testing, builtin: builtin)
         let config = Config(testing: testing)
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",
@@ -106,8 +108,13 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         var devModeActive: Bool
         // more to come...
     }
+    struct Builtin: Encodable {
+        var exchanges: [String]
+        // more to come...
+    }
     struct Config: Encodable {
         var testing: Testing
+//        var builtin: Builtin
     }
     struct Args: Encodable {
         var persistentStoragePath: String

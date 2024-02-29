@@ -112,7 +112,7 @@ extension WalletCore {
                 // TODO: show error alert
                 completion(requestId, timeSent, nil, WalletCore.parseFailureError())
             }
-        } else {                                        // JSON decoding of error message failed
+        } else {             // JSON decoding of error message failed
             completion(requestId, timeSent, nil, WalletCore.parseFailureError())
         }
     }
