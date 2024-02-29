@@ -16,17 +16,17 @@ public protocol QuickjsMessageHandler: AnyObject {
 // MARK: -
 func notification_callback(userdata: Optional<UnsafeMutableRawPointer>,
                            payload: Optional<UnsafePointer<Int8>>) {
-    let native = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
+    let quickjs = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
     let string = String(cString: payload!)
-    native.internalOnNotify(payload: string)
+    quickjs.internalOnNotify(payload: string)
 }
 
 func logging_callback(userdata: Optional<UnsafeMutableRawPointer>,
                           level: TALER_WALLET_LogLevel,
                             tag: Optional<UnsafePointer<Int8>>,
                         message: Optional<UnsafePointer<Int8>>) {
-    let native = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
-    let logger = native.logger
+    let quickjs = Unmanaged<Quickjs>.fromOpaque(userdata!).takeUnretainedValue()
+    let logger = quickjs.logger
     let swiftTag = String(cString: tag!)
     let swiftMessage = String(cString: message!)
 
@@ -43,13 +43,20 @@ func logging_callback(userdata: Optional<UnsafeMutableRawPointer>,
             logger.trace("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         default: break
     }
-//    native.internalOnLog(message: swiftMessage)
 }
 // MARK: -
-public class Quickjs {
+public class Quickjs {      // acts as singleton, since only one instance ever exists
     var talerWalletInstance: OpaquePointer!
     public weak var messageHandler: QuickjsMessageHandler?
     var logger: Logger
+
+    @Atomic(default: 0)
+    private var lastRequestID: Int32
+    private var requests: [Int32: QuickDataTask] = [:]
+
+    private lazy var urlSession: URLSession = {
+        return URLSession(configuration: .default)
+    }()
 
     public init() {
         self.logger = Logger(subsystem: "net.taler.gnu", category: "QuickJS")
@@ -60,18 +67,48 @@ public class Quickjs {
         TALER_WALLET_set_log_handler(talerWalletInstance,
                                      logging_callback,
                                      Unmanaged.passUnretained(self).toOpaque())
-        let http_curl = js_curl_http_client_create()
-        TALER_set_http_client_implementation(talerWalletInstance, http_curl)
+#if USE_HTTP_CLIENT_CURL
+        let http_impl = js_curl_http_client_create()
+#else
+        let http_impl = TALER_pack_http_client_implementation(request_create, request_cancel,
+                                                              Unmanaged.passUnretained(self).toOpaque())
+#endif
+        // http_impl got malloc'd, and could possibly be free'd when the app terminates
+        TALER_set_http_client_implementation(talerWalletInstance, http_impl)
+        // - but we never free anything on termination, thus we don't save http_impl here
         TALER_WALLET_run(talerWalletInstance)
     }
 
-    deinit {
-        // FIXME: TALER_WALLET_destroy
-//        TALER_WALLET_destroy(talerWalletInstance)
+    func reqCreate(_ request: URLRequest,
+                _ responseCb: JSHttpResponseCb?,
+             _ responseCbCls: Optional<UnsafeMutableRawPointer>) -> Int32 {
+        let requestID = $lastRequestID.atomicIncrement()
+        let quickDataTask = QuickDataTask(urlSession: urlSession,
+                                             request: request,
+                                           requestID: requestID,
+                                            requests: &requests,
+                                          responseCb: responseCb,
+                                       responseCbCls: responseCbCls)
+        quickDataTask.run()
+        requests[requestID] = quickDataTask
+        return requestID
     }
 
+    func reqCancel(_ requestID: Int32) -> Int32 {
+        if let quickDataTask = requests[requestID] {
+            if let dataTask = quickDataTask.dataTask {
+                dataTask.cancel()
+            }
+        }
+        requests[requestID] = nil
+        return 0
+    }
 
-    public func internalOnNotify(payload: String) {
+    deinit {
+        // No need to call TALER_WALLET_destroy - memory gets purged anyway
+    }
+
+    func internalOnNotify(payload: String) {
         if let handler = messageHandler {
             handler.handleMessage(message: payload)
         }
@@ -90,17 +127,4 @@ public class Quickjs {
     public func sendMessage(message: String) {
         TALER_WALLET_send_request(talerWalletInstance, message)
     }
-
-    /// Note: This *must* be called before releasing the object, or else the thread will keep going.
-//    public func waitStopped() {
-//        scheduleNodeThreadSync {
-//            self.stopped = true
-//        }
-//        thread.cancel()
-//    }
-
-//    public func putModuleCode(modName: String, code: String) {
-//        __putModuleCodeNative(self.instance, modName.cString(using: .utf8),
-//                              code.cString(using: .utf8))
-//    }
 }

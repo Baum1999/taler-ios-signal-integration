@@ -244,6 +244,8 @@
 		4ED80E892B8F5FB8008BD576 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E872B8F5FB8008BD576 /* CStringArray.swift */; };
 		4ED80E8B2B8F60E7008BD576 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E8A2B8F60E7008BD576 /* Atomic.swift */; };
 		4ED80E8C2B8F60E7008BD576 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E8A2B8F60E7008BD576 /* Atomic.swift */; };
+		4ED80E8E2B8F6212008BD576 /* QuickDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */; };
+		4ED80E8F2B8F6212008BD576 /* QuickDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */; };
 		4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
 		4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDBDCD82AB787CB00925C02 /* CallStack.swift */; };
 		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
@@ -431,6 +433,7 @@
 		4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmountsV.swift; sourceTree = "<group>"; };
 		4ED80E872B8F5FB8008BD576 /* CStringArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CStringArray.swift; sourceTree = "<group>"; };
 		4ED80E8A2B8F60E7008BD576 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
+		4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickDataTask.swift; sourceTree = "<group>"; };
 		4EDBDCD82AB787CB00925C02 /* CallStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStack.swift; sourceTree = "<group>"; };
 		4EEC118C2B83DE4700146CFF /* AmountInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountInputV.swift; sourceTree = "<group>"; };
 		4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectInputV.swift; sourceTree = "<group>"; };
@@ -634,6 +637,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB0950D2989CB9A0043A8A1 /* quickjs.swift */,
+				4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */,
 			);
 			path = Quickjs;
 			sourceTree = "<group>";
@@ -1099,6 +1103,7 @@
 				4E3EAE2B2A990778009F1BE8 /* LoadingView.swift in Sources */,
 				4E3EAE8C2AA0933C009F1BE8 /* Font+Taler.swift in Sources */,
 				4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
+				4ED80E8E2B8F6212008BD576 /* QuickDataTask.swift in Sources */,
 				4E3EAE2C2A990778009F1BE8 /* ManualWithdraw.swift in Sources */,
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
 				4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
@@ -1214,6 +1219,7 @@
 				4EB0956D2989CBFE0043A8A1 /* LoadingView.swift in Sources */,
 				4E3EAE8D2AA0933C009F1BE8 /* Font+Taler.swift in Sources */,
 				4E3327BB2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
+				4ED80E8F2B8F6212008BD576 /* QuickDataTask.swift in Sources */,
 				4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */,
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
 				4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
