@@ -1,3 +1,8 @@
+Version 0.9.4 (12)
+
+• Direct withdrawal of 25 KUDOS when the wallet is empty, no need to register a bank account first
+
+
 Version 0.9.4 (11)
 
 • New views for empty wallet (Balances) and zero payment providers (Banking)
