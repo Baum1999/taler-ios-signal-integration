@@ -153,7 +153,8 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw KUDOS")
                                     do {
-                                        try await model.loadTestKudosM(test: false)
+                                        let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
+                                        try await model.loadTestKudosM(test: false, amount: amount)
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
                                     }
@@ -170,7 +171,8 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
                                     do {
-                                        try await model.loadTestKudosM(test: true)
+                                        let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
+                                        try await model.loadTestKudosM(test: true, amount: amount)
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
                                     }

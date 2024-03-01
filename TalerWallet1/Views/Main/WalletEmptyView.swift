@@ -7,6 +7,7 @@
  */
 import SwiftUI
 import SymLog
+import taler_swift
 
 /// This view shows hints if a wallet is empty
 /// It is the very first thing the user sees after installing the app
@@ -14,7 +15,10 @@ import SymLog
 struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @State private var withDrawDisabled = false
 
     var body: some View {
         List {
@@ -23,21 +27,37 @@ struct WalletEmptyView: View {
                     .talerFont(.title3)
             }
             Section {
-                Text("You can register an account in the demo bank, then withdraw some digital cash to experience how to pay with the money of the future.")
-                    .talerFont(.body)
-                    .listRowSeparator(.hidden)
-                let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")
-                Link(title, destination: URL(string: DEMOBANK)!)
-                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                    .padding(.vertical)
-                    .accessibilityHint("Will go to the demo bank website.")
-            }
-            Section {
                 Text("Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
                 Text("You can also add a payment service manually on the Banking tab.")
                     .talerFont(.body)
+            }
+            Section {
+                Text("Demo: get digital cash to experience how to pay with the money of the future.")
+//                Text("You can register an account in the demo bank, then withdraw some digital cash to experience how to pay with the money of the future.")
+                    .talerFont(.body)
+                    .listRowSeparator(.hidden)
+                let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")
+                Button(title) {
+                    withDrawDisabled = true    // don't run twice
+                    Task { // runs on MainActor
+                        let amount = Amount(currency:  DEMOCURRENCY, cent: 2500)
+                        symLog.log("Withdraw KUDOS")
+                        do {
+                            try await model.loadTestKudosM(test: false, amount: amount)
+                        } catch {    // TODO: show error
+                            symLog.log(error.localizedDescription)
+                        }
+                    }
+                }
+                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawDisabled, aligned: .center))
+                .disabled(withDrawDisabled)
+
+//                Link(title, destination: URL(string: DEMOBANK)!)
+//                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
+//                    .padding(.vertical)
+//                    .accessibilityHint("Will go to the demo bank website.")
             }
         }
         .listStyle(myListStyle.style).anyView

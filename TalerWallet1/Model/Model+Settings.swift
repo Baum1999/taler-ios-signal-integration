@@ -33,13 +33,12 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func loadTestKudosM(test: Bool)
+    @MainActor func loadTestKudosM(test: Bool, amount: Amount)
     async throws {          // M for MainActor
-        let amount = Amount(currency:  test ? TESTCURRENCY : DEMOCURRENCY, cent: 1100)
         let request = WithdrawTestBalanceRequest(amount: amount,
-//                                                 bankBaseUrl: test ? TESTBANK : DEMOBANK,
-                                                 corebankApiBaseUrl: test ? TESTBANK : DEMOBANK,
-                                                 exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE)
+//                                             bankBaseUrl: test ? TESTBANK : DEMOBANK,
+                                     corebankApiBaseUrl: test ? TESTBANK : DEMOBANK,
+                                        exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE)
         let response = try await sendRequest(request, ASYNCDELAY)
     }
 } // loadTestKudosM()
