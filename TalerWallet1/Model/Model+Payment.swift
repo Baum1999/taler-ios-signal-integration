@@ -119,9 +119,19 @@ struct PayMerchantInsufficientBalanceDetails: Codable {
     let balanceAvailable: Amount
     let balanceMaterial: Amount
     let balanceAgeAcceptable: Amount
-    let balanceMerchantAcceptable: Amount
-    let balanceMerchantDepositable: Amount
-    let feeGapEstimate: Amount
+    let balanceReceiverAcceptable: Amount
+    let balanceReceiverDepositable: Amount
+    let perExchange: [String:ExchangeFeeGapEstimate]
+}
+
+struct ExchangeFeeGapEstimate: Codable {
+    let balanceAvailable: Amount
+    let balanceMaterial: Amount
+    let balanceExchangeDepositable: Amount
+    let balanceAgeAcceptable: Amount
+    let balanceReceiverAcceptable: Amount
+    let balanceReceiverDepositable: Amount
+    let maxEffectiveSpendAmount: Amount
 }
 
 /// The result from PreparePayForUri
