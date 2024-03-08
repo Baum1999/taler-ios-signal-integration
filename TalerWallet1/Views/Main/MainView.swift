@@ -101,6 +101,12 @@ extension MainView {
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
 
+#if DEBUG
+        @AppStorage("developerMode") var developerMode: Bool = true
+#else
+        @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
         private var openKycButton: some View {
             Button("KYC") {
                 showKycAlert = false
@@ -246,6 +252,15 @@ extension MainView {
                                 logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
                             }
                         }
+                    }
+                }
+            }
+            .sheet(isPresented: $controller.showError) {
+                controller.cleanError()
+            } content: {
+                if let error = controller.error {
+                    ErrorSheet(error: error, developerMode: developerMode) {
+                        controller.cleanError()
                     }
                 }
             }

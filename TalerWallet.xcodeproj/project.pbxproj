@@ -278,6 +278,10 @@
 		E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA6292AF197E5003850CF /* Model+Refund.swift */; };
 		E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA62D2AF19BE0003850CF /* RefundURIView.swift */; };
 		E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37AA62D2AF19BE0003850CF /* RefundURIView.swift */; };
+		E3E48FB22B9B7B5400898A0F /* ErrorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E48FB12B9B7B5400898A0F /* ErrorSheet.swift */; };
+		E3E48FB32B9B7B5400898A0F /* ErrorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E48FB12B9B7B5400898A0F /* ErrorSheet.swift */; };
+		E3E48FB52B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E48FB42B9B7D5000898A0F /* Encodable+toJSON.swift */; };
+		E3E48FB62B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E48FB42B9B7D5000898A0F /* Encodable+toJSON.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -458,6 +462,8 @@
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E37AA6292AF197E5003850CF /* Model+Refund.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Model+Refund.swift"; sourceTree = "<group>"; };
 		E37AA62D2AF19BE0003850CF /* RefundURIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundURIView.swift; sourceTree = "<group>"; };
+		E3E48FB12B9B7B5400898A0F /* ErrorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSheet.swift; sourceTree = "<group>"; };
+		E3E48FB42B9B7D5000898A0F /* Encodable+toJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+toJSON.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -640,6 +646,7 @@
 				4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */,
 				4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */,
 				4EC4008B2AE5664100DF72C7 /* CharacterSet+contains.swift */,
+				E3E48FB42B9B7D5000898A0F /* Encodable+toJSON.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -830,6 +837,7 @@
 				4EB0952A2989CBFE0043A8A1 /* Payment */,
 				E37AA62C2AF19BA6003850CF /* Refund */,
 				4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */,
+				E3E48FB12B9B7B5400898A0F /* ErrorSheet.swift */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -1130,6 +1138,7 @@
 				4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */,
 				4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */,
 				4EEC11932B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
+				E3E48FB52B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */,
 				4E3EAE342A990778009F1BE8 /* SuperScriptDigits.swift in Sources */,
 				4E3EAE352A990778009F1BE8 /* P2pPayURIView.swift in Sources */,
 				4E3EAE362A990778009F1BE8 /* Model+Payment.swift in Sources */,
@@ -1151,6 +1160,7 @@
 				4E3EAE452A990778009F1BE8 /* P2PReadyV.swift in Sources */,
 				4E3EAE462A990778009F1BE8 /* TextFieldAlert.swift in Sources */,
 				4E3EAE472A990778009F1BE8 /* QuiteSomeCoins.swift in Sources */,
+				E3E48FB22B9B7B5400898A0F /* ErrorSheet.swift in Sources */,
 				4E2D8DD52B45822A00234039 /* AmountV.swift in Sources */,
 				4E3EAE492A990778009F1BE8 /* ManualWithdrawDone.swift in Sources */,
 				4E3EAE4B2A990778009F1BE8 /* ShareSheet.swift in Sources */,
@@ -1247,6 +1257,7 @@
 				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,
 				4EEC11942B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
+				E3E48FB62B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */,
 				4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */,
 				4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */,
 				4EB095542989CBFE0043A8A1 /* Model+Payment.swift in Sources */,
@@ -1268,6 +1279,7 @@
 				4EB3136129FEE79B007D68BC /* P2PReadyV.swift in Sources */,
 				4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */,
 				4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */,
+				E3E48FB32B9B7B5400898A0F /* ErrorSheet.swift in Sources */,
 				4E2D8DD62B45822A00234039 /* AmountV.swift in Sources */,
 				4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */,
 				4E753A082A0B6A5F002D9328 /* ShareSheet.swift in Sources */,

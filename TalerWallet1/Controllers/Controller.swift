@@ -48,6 +48,13 @@ class Controller: ObservableObject {
 
     var messageForSheet: String? = nil
 
+    @Published var showError: Bool = false
+    @Published var error: WalletBackendResponseError? = nil {
+        didSet {
+            self.showError = error != nil
+        }
+    }
+
     init() {
 //        for family in UIFont.familyNames {
 //            print(family)
@@ -216,5 +223,18 @@ extension Controller {
                 symLog.log("unknown command taler://\(command)")
         }
         return .unknown
+    }
+}
+
+// MARK: -
+extension Controller {
+    @MainActor
+    func showError(error: WalletBackendResponseError) {
+        self.error = error
+    }
+
+    @MainActor
+    func cleanError() {
+        self.error = nil
     }
 }
