@@ -168,29 +168,20 @@ extension WalletModel {
     }
 
     /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesM()
-      async -> [Exchange] {   // M for MainActor
-        do {
-            let request = ListExchanges()
-            let response = try await sendRequest(request, ASYNCDELAY)
-            return response.exchanges
-        } catch {
-            // TODO: Error
-            return []               // empty, but not nil
-        }
+    @MainActor func listExchangesM(devMode: Bool = false)
+      async throws -> [Exchange] {   // M for MainActor
+        let request = ListExchanges()
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response.exchanges
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
     func getExchangeByUrl(url: String)
-      async -> Exchange? {
-        do {
-            let request = GetExchangeByUrl(exchangeBaseUrl: url)
+      async throws -> Exchange {
+        let request = GetExchangeByUrl(exchangeBaseUrl: url)
 //            logger.info("query for exchange: \(url, privacy: .public)")
-            let response = try await sendRequest(request)
-            return response
-        } catch {
-            return nil
-        }
+        let response = try await sendRequest(request)
+        return response
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges

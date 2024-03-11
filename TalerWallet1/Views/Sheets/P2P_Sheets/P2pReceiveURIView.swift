@@ -17,6 +17,7 @@ struct P2pReceiveURIView: View {
     let url: URL
     
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -90,10 +91,12 @@ struct P2pReceiveURIView: View {
             do { // TODO: cancelled
                 symLog.log(".task")
                 let ppResponse = try await model.preparePeerPushCreditM(url.absoluteString)
-                exchange = await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
+                exchange = try await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
                 peerPushCreditResponse = ppResponse
-            } catch {    // TODO: error
+            } catch {
                 symLog.log(error.localizedDescription)
+                model.showError(.error(error))
+                controller.playSound(0)
                 peerPushCreditResponse = nil
             }
         }

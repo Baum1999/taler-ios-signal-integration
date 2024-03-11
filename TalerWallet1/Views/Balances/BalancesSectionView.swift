@@ -48,13 +48,25 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
-        completedTransactions = WalletModel.completedTransactions(transactions)
+        do {
+            transactions = try await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
+            completedTransactions = WalletModel.completedTransactions(transactions)
+        } catch {
+            symLog.log(error.localizedDescription)
+            model.showError(.error(error))
+            controller.playSound(0)
+        }
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
-        pendingTransactions = WalletModel.pendingTransactions(transactions)
+        do {
+            transactions = try await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
+            pendingTransactions = WalletModel.pendingTransactions(transactions)
+        } catch {
+            symLog.log(error.localizedDescription)
+            model.showError(.error(error))
+            controller.playSound(0)
+        }
     }
 }
 
@@ -128,11 +140,17 @@ extension BalancesSectionView: View {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
             // TODO: only load the MAXRECENT most recent transactions
-            let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode)
+            do {
+                let response = try await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
                 shownSectionID = sectionID
+            } catch {
+                symLog.log(error.localizedDescription)
+                model.showError(.error(error))
+                controller.playSound(0)
+            }
 //            } else {
 //                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
 //            }

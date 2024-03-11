@@ -25,6 +25,7 @@ struct WithdrawExchangeV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+
         Group {
             if exchange != nil {
                 ManualWithdraw(stack: stack.push(),
@@ -44,22 +45,22 @@ struct WithdrawExchangeV: View {
                     let withdrawExchange = try await model.loadWithdrawalExchangeForUriM(url.absoluteString)
                     let baseUrl = withdrawExchange.exchangeBaseUrl
                     symLog.log("getExchangeByUrl(\(baseUrl))")
-                    if let exc = await model.getExchangeByUrl(url: baseUrl) {
-                        // let the controller collect CurrencyInfo from this formerly unknown exchange
-                        let _ = await controller.getInfo(from: baseUrl, model: model)
-                        if let amount = withdrawExchange.amount {
-                            amountToTransfer = amount
-                        } else {
-                            let currency = exc.scopeInfo.currency
-                            amountToTransfer.setCurrency(currency)
-                            // is already Amount.zero(currency: "")
-                        }
-                        exchange = exc
+                    let exc = try await model.getExchangeByUrl(url: baseUrl)
+                    // let the controller collect CurrencyInfo from this formerly unknown exchange
+                    let _ = try await controller.getInfo(from: baseUrl, model: model)
+                    if let amount = withdrawExchange.amount {
+                        amountToTransfer = amount
                     } else {
-                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
+                        let currency = exc.scopeInfo.currency
+                        amountToTransfer.setCurrency(currency)
+                        // is already Amount.zero(currency: "")
                     }
+                    exchange = exc
                 } catch {    // TODO: error
                     symLog.log(error.localizedDescription)
+                    symLog.log(error.localizedDescription)
+                    model.showError(.error(error))
+                    controller.playSound(0)
                     exchange = nil
                 }
             }

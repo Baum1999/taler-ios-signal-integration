@@ -20,6 +20,12 @@ struct MainView: View {
     let stack: CallStack
     @Binding var soundPlayed: Bool
 
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
@@ -70,6 +76,15 @@ struct MainView: View {
         .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
             let sheet = AnyView(URLSheet(stack: stack.push(), urlToOpen: url))
             Sheet(sheetView: sheet)
+        }
+        .sheet(isPresented: $model.showError) {
+            model.cleanError()
+        } content: {
+            if let error = model.error {
+                ErrorSheet(data: error, devMode: developerMode) {
+                    model.cleanError()
+                }
+            }
         }
     } // body
 }
@@ -253,15 +268,6 @@ extension MainView {
                                 logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
                             }
                         }
-                    }
-                }
-            }
-            .sheet(isPresented: $model.showError) {
-                model.cleanError()
-            } content: {
-                if let error = model.error {
-                    ErrorSheet(data: error, developerMode: developerMode) {
-                        model.cleanError()
                     }
                 }
             }

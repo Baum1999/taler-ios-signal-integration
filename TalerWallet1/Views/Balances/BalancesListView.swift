@@ -16,6 +16,7 @@ struct BalancesListView: View {
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
     @State private var lastReloadedBalances = 0
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
@@ -78,14 +79,23 @@ struct BalancesListView: View {
 
     /// runs on MainActor if called in some Task {}
     @discardableResult
-    private func reloadBalances(_ stack: CallStack, _ invalidateCache: Bool) async -> Int {
+    private func reloadBalances(_ stack: CallStack, _ invalidateCache: Bool) async -> Int? {
         if invalidateCache {
             model.cachedBalances = nil
         }
-        let reloaded = await model.balancesM(stack.push())
-        let count = reloaded.count
-        balances = reloaded         // redraw
-        return count
+
+        do {
+            let reloaded = try await model.balancesM(stack.push())
+            let count = reloaded.count
+            balances = reloaded         // redraw
+            return count
+        } catch {
+            symLog.log(error.localizedDescription)
+            model.showError(.error(error))
+            controller.playSound(0)
+        }
+
+        return nil
     }
 
     var body: some View {
@@ -126,7 +136,7 @@ extension BalancesListView {
         @Binding var amountToTransfer: Amount
         @Binding var summary: String
         @Binding var shouldReloadBalances: Int
-        var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int
+        var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int?
 
         var body: some View {
 #if PRINT_CHANGES
@@ -155,7 +165,7 @@ extension BalancesListView {
             .refreshable {  // already async
                 symLog?.log("refreshing balances")
                 let count = await reloadBalances(stack.push("refreshing balances"), true)
-                if count > 0 {
+                if let count, count > 0 {
                     NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
                 }
             }

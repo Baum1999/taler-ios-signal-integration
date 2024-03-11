@@ -98,8 +98,8 @@ struct WithdrawURIView: View {
                 let amount = withdrawUriInfo.amount
                 let baseUrl = withdrawUriInfo.defaultExchangeBaseUrl
                            ?? withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
-                if let baseUrl, let exc = await model.getExchangeByUrl(url: baseUrl) {
-                    exchange = exc
+                if let baseUrl {
+                    exchange = try await model.getExchangeByUrl(url: baseUrl)
                     let details = try await model.getWithdrawalDetailsForAmountM(baseUrl, amount: amount)
                     withdrawalAmountDetails = details
 //                    agePicker.setAges(ages: details?.ageRestrictionOptions)
@@ -107,8 +107,10 @@ struct WithdrawURIView: View {
                     symLog.log("no exchangeBaseUrl or no exchange")
                     withdrawalAmountDetails = nil
                 }
-            } catch {    // TODO: error
+            } catch {
                 symLog.log(error.localizedDescription)
+                model.showError(.error(error))
+                controller.playSound(0)
                 withdrawalAmountDetails = nil
             }
         }

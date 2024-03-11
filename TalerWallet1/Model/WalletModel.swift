@@ -27,12 +27,6 @@ class WalletModel: ObservableObject {
     let semaphore = AsyncSemaphore(value: 1)
     var cachedBalances: [Balance]? = nil
 
-#if DEBUG
-    @AppStorage("developerMode") var developerMode: Bool = true
-#else
-    @AppStorage("developerMode") var developerMode: Bool = false
-#endif
-
     @Published var showError: Bool = false
     @Published var error: ErrorData? = nil {
         didSet { showError = error != nil }
@@ -275,12 +269,7 @@ extension WalletModel {
 
 extension WalletModel {
     @MainActor
-    func showError(error: ErrorData) {
-        // Do not show dev errors to users
-        if case .developer(_) = error, !developerMode {
-            return
-        }
-
+    func showError(_ error: ErrorData) {
         self.error = error
     }
 

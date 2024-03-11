@@ -10,7 +10,14 @@ struct Sheet: View {
     private let symLog = SymLogV(0)
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
+
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     var sheetView: AnyView
 
@@ -27,7 +34,15 @@ struct Sheet: View {
         let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
                                               : ""      // show nothing if 0
         NavigationView {
-            sheetView
+            Group {
+                if let error = model.error {
+                    ErrorSheet(data: error, devMode: developerMode) {
+                        dismissTop()
+                    }
+                } else {
+                    sheetView
+                }
+            }
                 .navigationBarItems(leading: cancelButton)
                 .navigationBarTitleDisplayMode(.automatic)
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -44,6 +59,9 @@ struct Sheet: View {
                 .id("sheetID")
                 .accessibilityLabel(Text("Sheet.ID.", comment: "AccessibilityLabel"))
                 .accessibilityValue(idString)
+        }
+        .onDisappear {
+            model.cleanError()
         }
     }
 }

@@ -105,10 +105,12 @@ struct RequestPayment: View {
         .task(id: amountToTransfer.value) {
             if exchange == nil {
                 if let url = scopeInfo.url {
-                    if let exc = await model.getExchangeByUrl(url: url) {
-                        exchange = exc
-                    } else {
-                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
+                    do {
+                        exchange = try await model.getExchangeByUrl(url: url)
+                    } catch {
+                        symLog.log(error.localizedDescription)
+                        model.showError(.error(error))
+                        controller.playSound(0)
                     }
                 }
             }

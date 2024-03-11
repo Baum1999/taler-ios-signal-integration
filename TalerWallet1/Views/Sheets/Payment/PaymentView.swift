@@ -20,6 +20,7 @@ struct PaymentView: View {
     @Binding var summary: String
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State var preparePayResult: PreparePayResult? = nil
@@ -105,8 +106,10 @@ struct PaymentView: View {
                         let result = try await model.preparePayForUriM(url.absoluteString)
                         preparePayResult = result
                     }
-                } catch {    // TODO: error
+                } catch {
                     symLog.log(error.localizedDescription)
+                    model.showError(.error(error))
+                    controller.playSound(0)
                 }
             }
         }

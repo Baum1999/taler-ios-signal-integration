@@ -1,17 +1,12 @@
-//
-//  ErrorSheet.swift
-//  TalerWallet
-//
-//  Created by Ivan Avalos on 08/03/24.
-//  Copyright © 2024 Taler. All rights reserved.
-//
-
+/*
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
+ */
 import SwiftUI
 
 enum ErrorData {
-case user(String)
-case developer(String)
-case taler(WalletBackendResponseError)
+case message(String)
+case error(Error)
 }
 
 struct ErrorSheet: View {
@@ -20,33 +15,50 @@ struct ErrorSheet: View {
 
     var onDismiss: () -> Void
 
-    let navTitle = String(localized: "Error")
-    let unknownError = String(localized: "Unknown error")
-
     init(message: String, copyable: Bool, onDismiss: @escaping () -> Void) {
         self.message = message
         self.copyable = copyable
         self.onDismiss = onDismiss
     }
 
-    init(error: WalletBackendResponseError, developerMode: Bool, onDismiss: @escaping () -> Void) {
-        if let json = error.toJSON(), developerMode {
-            self.init(message: json, copyable: true, onDismiss: onDismiss)
-        } else {
-            self.init(message: error.message, copyable: false, onDismiss: onDismiss)
+    init(error: Error, devMode: Bool, onDismiss: @escaping () -> Void) {
+        let walletCoreError = String(localized: "Internal core error")
+        let initializationError = String(localized: "Initialization error")
+        let serializationError = String(localized: "Serialization error")
+        let deserializationError = String(localized: "Deserialization error")
+
+        switch error {
+        case let walletError as WalletBackendError:
+            switch walletError {
+            case .walletCoreError(let error):
+                if let json = error?.toJSON(), devMode {
+                    self.init(message: json, copyable: true, onDismiss: onDismiss)
+                } else if let message = error?.message {
+                    self.init(message: message, copyable: false, onDismiss: onDismiss)
+                } else {
+                    self.init(message: walletCoreError, copyable: false, onDismiss: onDismiss)
+                }
+            case .initializationError:
+                self.init(message: initializationError, copyable: false, onDismiss: onDismiss)
+            case .serializationError:
+                self.init(message: serializationError, copyable: false, onDismiss: onDismiss)
+            case .deserializationError:
+                self.init(message: deserializationError, copyable: false, onDismiss: onDismiss)
+            }
+        default:
+            self.init(message: error.localizedDescription, copyable: false, onDismiss: onDismiss)
         }
     }
 
-    init(data: ErrorData, developerMode: Bool, onDismiss: @escaping () -> Void) {
+    init(data: ErrorData, devMode: Bool, onDismiss: @escaping () -> Void) {
+        let unknownError = String(localized: "Unknown error")
+
         switch data {
-        case .user(let message):
+        case .message(let message):
             self.init(message: message, copyable: false, onDismiss: onDismiss)
             return
-        case .developer(let message):
-            self.init(message: message, copyable: true, onDismiss: onDismiss)
-            return
-        case .taler(let error):
-            self.init(error: error, developerMode: developerMode, onDismiss: onDismiss)
+        case .error(let error):
+            self.init(error: error, devMode: devMode, onDismiss: onDismiss)
             return
         }
 
@@ -89,10 +101,8 @@ struct ErrorSheet: View {
                     .frame(minHeight: geometry.size.height)
                 }
             }
-            .navigationTitle(navTitle)
-            .navigationBarTitleDisplayMode(.inline)
         }.safeAreaInset(edge: .bottom) {
-            Button("Cancel", role: .cancel) {
+            Button("Close", role: .cancel) {
                 onDismiss()
             }
             .buttonStyle(TalerButtonStyle(type: .bordered))
@@ -103,13 +113,13 @@ struct ErrorSheet: View {
 }
 
 struct ErrorSheet_Previews: PreviewProvider {
-    static let error = WalletBackendResponseError(
-        talerErrorCode: 7025,
-        talerErrorHint: "A KYC step is required before withdrawal can proceed",
-        message: "A KYC step is required before withdrawal can proceed")
+    static let error = WalletBackendError.walletCoreError(WalletBackendResponseError(
+        code: 7025,
+        hint: "A KYC step is required before withdrawal can proceed",
+        message: "A KYC step is required before withdrawal can proceed"))
 
     static var previews: some View {
-        ErrorSheet(error: error, developerMode: true, onDismiss: {})
-        ErrorSheet(error: error, developerMode: false, onDismiss: {})
+        ErrorSheet(error: error, devMode: true, onDismiss: {})
+        ErrorSheet(error: error, devMode: false, onDismiss: {})
     }
 }

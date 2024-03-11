@@ -15,6 +15,7 @@ struct BarGraphHeader: View {
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -37,9 +38,15 @@ struct BarGraphHeader: View {
             if let scopeInfo {
                 symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
                 // TODO: only load the 10 most recent transactions
-                let response = await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
-                                                         scopeInfo: scopeInfo)
-                completedTransactions = WalletModel.completedTransactions(response)
+                do {
+                    let response = try await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
+                                                                 scopeInfo: scopeInfo)
+                    completedTransactions = WalletModel.completedTransactions(response)
+                } catch {
+                    symLog.log(error.localizedDescription)
+                    model.showError(.error(error))
+                    controller.playSound(0)
+                }
             }
         }
     }

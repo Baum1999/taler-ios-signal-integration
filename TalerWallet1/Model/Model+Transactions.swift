@@ -103,21 +103,17 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, 
+    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
                        sort: String = "descending", includeRefreshes: Bool = false)
-    async -> [Transaction] {                                          // might be called from a background thread itself
-        do {
-            let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
-            let response = try await sendRequest(request, ASYNCDELAY)
-            return response.transactions
-        } catch {
-            return []
-        }
+    async throws -> [Transaction] {
+        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
+        let response = try await sendRequest(request, ASYNCDELAY)
+        return response.transactions
     }
     /// fetch transactions from Wallet-Core. No networking involved
     @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending")
-    async -> [Transaction] {    // M for MainActor
-        return await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort)
+    async throws -> [Transaction] {    // M for MainActor
+        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved

@@ -1,11 +1,7 @@
-//
-//  Codable+toJson.swift
-//  TalerWallet
-//
-//  Created by Ivan Avalos on 08/03/24.
-//  Copyright © 2024 Taler. All rights reserved.
-//
-
+/*
+ * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * See LICENSE.md
+ */
 import Foundation
 
 extension Encodable {

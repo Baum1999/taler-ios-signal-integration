@@ -16,6 +16,7 @@ struct ExchangeListView: View {
     @Binding var balances: [Balance]
     let navTitle: String
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
     @State var showAlert: Bool = false
     @State var newExchange: String = TESTEXCHANGE
@@ -27,8 +28,10 @@ struct ExchangeListView: View {
                 try await model.addExchange(url: exchange)
                 symLog.log("added: \(exchange)")
                 announce(this: "added: \(exchange)")
-            } catch {    // TODO: error handling - couldn't add exchangeURL
+            } catch {
                 symLog.log("error: \(error)")
+                model.showError(.error(error))
+                controller.playSound(0)
             }
         }
     }
@@ -74,6 +77,7 @@ struct ExchangeListCommonV {
     @Binding var balances: [Balance]
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 //    @AppStorage("depositIBAN") var depositIBAN = EMPTYSTRING
 //    @AppStorage("accountHolder") var accountHolder = EMPTYSTRING
@@ -84,7 +88,12 @@ struct ExchangeListCommonV {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)     // TODO: Hold different values for different currencies?
 
     func reloadExchanges() async -> Void {
-        exchanges = await model.listExchangesM()
+        do {
+            exchanges = try await model.listExchangesM()
+        } catch {
+            model.showError(.error(error))
+            controller.playSound(0)
+        }
     }
 }
 // MARK: -

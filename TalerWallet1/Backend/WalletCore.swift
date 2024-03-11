@@ -62,7 +62,7 @@ class WalletCore: QuickjsMessageHandler {
         let operation: String?
         let id: UInt?
         let result: AnyCodable?
-        let error: AnyCodable?  // should be WalletBackendResponseError?
+        let error: WalletBackendResponseError?
         let payload: AnyCodable?
     }
 
@@ -109,12 +109,10 @@ extension WalletCore {
                 let jsonData = try JSONEncoder().encode(walletError)
                 logger.error("wallet-core sent back an error for request \(requestId, privacy: .public)")
                 symLog.log("id:\(requestId)  \(walletError)")
-                // TODO: decode jsonData to WalletBackendResponseError - or HTTPError
-                completion(requestId, timeSent, jsonData, WalletCore.walletError())
+                completion(requestId, timeSent, jsonData, walletError)
             } catch {        // JSON encoding of response.result failed / should never happen
                 symLog.log(decoded)
                 logger.error("cannot encode wallet-core Error")
-                // TODO: show error alert
                 completion(requestId, timeSent, nil, WalletCore.parseFailureError())
             }
         } else {             // JSON decoding of error message failed
@@ -409,7 +407,7 @@ extension WalletCore {
                 let millisecs = timeUsed.milliseconds
                 self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
                 var err: Error? = nil
-                if let json = result {
+                if let json = result, error == nil {
                     do {
                         let decoded = try JSONDecoder().decode(T.Response.self, from: json)
                         continuation.resume(returning: (decoded, requestId))
@@ -439,7 +437,7 @@ extension WalletCore {
                     } else {
                         self.lastError = nil
                     }
-                    err = WalletBackendError.walletCoreError
+                    err = WalletBackendError.walletCoreError(error)
                 }
                 continuation.resume(throwing: err ?? TransactionDecodingError.invalidStringValue)
             }
