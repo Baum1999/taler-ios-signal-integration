@@ -21,6 +21,7 @@ struct MainView: View {
     @Binding var soundPlayed: Bool
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -255,12 +256,12 @@ extension MainView {
                     }
                 }
             }
-            .sheet(isPresented: $controller.showError) {
-                controller.cleanError()
+            .sheet(isPresented: $model.showError) {
+                model.cleanError()
             } content: {
-                if let error = controller.error {
-                    ErrorSheet(error: error, developerMode: developerMode) {
-                        controller.cleanError()
+                if let error = model.error {
+                    ErrorSheet(data: error, developerMode: developerMode) {
+                        model.cleanError()
                     }
                 }
             }

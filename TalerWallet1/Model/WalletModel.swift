@@ -27,6 +27,17 @@ class WalletModel: ObservableObject {
     let semaphore = AsyncSemaphore(value: 1)
     var cachedBalances: [Balance]? = nil
 
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
+    @Published var showError: Bool = false
+    @Published var error: ErrorData? = nil {
+        didSet { showError = error != nil }
+    }
+
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
       async throws -> T.Response {    // T for any Thread
 #if !DEBUG
@@ -259,5 +270,22 @@ extension WalletModel {
         // T for any Thread
         let request = DevExperimentRequest(talerUri: talerUri)
         _ = try await sendRequest(request, 0)
+    }
+}
+
+extension WalletModel {
+    @MainActor
+    func showError(error: ErrorData) {
+        // Do not show dev errors to users
+        if case .developer(_) = error, !developerMode {
+            return
+        }
+
+        self.error = error
+    }
+
+    @MainActor
+    func cleanError() {
+        self.error = nil
     }
 }
