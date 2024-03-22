@@ -260,6 +260,12 @@ extension MainView {
                 shouldReloadBalances += 1
                 selectedTab = .balances
             }
+            .onNotification(.Error) { notification in
+                if let error = notification.userInfo?[NOTIFICATIONERROR] as? Error {
+                    model.showError(.error(error))
+                    controller.playSound(0)
+                }
+            }
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
@@ -270,6 +276,8 @@ extension MainView {
                                 await controller.setInfo(info)
                             } catch {    // TODO: error handling - couldn't get CurrencyInfo
                                 logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
+                                model.showError(.error(error))
+                                controller.playSound(0)
                             }
                         }
                     }

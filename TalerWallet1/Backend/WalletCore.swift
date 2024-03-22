@@ -197,6 +197,11 @@ extension WalletCore {
                 logger.info("No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
                 return
             }
+
+            if decoded.errorInfo == nil {
+                postNotification(.Error, userInfo: [NOTIFICATIONERROR: decoded.errorInfo])
+            }
+
             let components = decoded.transactionId.components(separatedBy: ":")
             if components.count >= 3 {  // txn:$txtype:$uid
                 if let type = TransactionType(rawValue: components[1]) {
@@ -307,6 +312,7 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
             }
         } catch let error {
             symLog.log("Error \(error) parsing notification: \(anyPayload)")    // TODO: .error
+            postNotification(.Error, userInfo: [NOTIFICATIONERROR: error])
         // TODO: if DevMode then should log into file for user
         }
     }

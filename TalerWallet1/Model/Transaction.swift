@@ -142,6 +142,7 @@ struct TransactionTransition: Codable {             // Notification
     var newTxState: TransactionState
     var transactionId: String
     var experimentalUserData: String?       // KYC
+    var errorInfo:  WalletBackendResponseError?
 }
 
 enum TxAction: String, Codable {

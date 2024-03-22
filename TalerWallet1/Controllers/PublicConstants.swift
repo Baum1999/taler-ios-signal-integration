@@ -59,6 +59,8 @@ public let TALERURI = "talerUri"
 public let TRANSACTIONTRANSITION = "transactionTransition"
 public let TRANSACTIONID = "transactionID"
 
+public let NOTIFICATIONERROR = "error"
+
 /// Notifications sent by wallet-core
 extension Notification.Name {
     static let BalanceChange = Notification.Name("balance-change")
@@ -79,6 +81,7 @@ extension Notification.Name {
 //    static let PayOperationSuccess = Notification.Name("pay-operation-success")
     static let ProposalAccepted = Notification.Name("proposal-accepted")
     static let ProposalDownloaded = Notification.Name("proposal-downloaded")
+    static let Error = Notification.Name("error")
 }
 
 /// Notifications for internal synchronization
