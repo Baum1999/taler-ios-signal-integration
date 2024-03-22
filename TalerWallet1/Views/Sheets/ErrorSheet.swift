@@ -2,20 +2,25 @@
  * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
  * See LICENSE.md
  */
+/**
+ * @author Iván Ávalos
+ */
 import SwiftUI
 
 enum ErrorData {
-case message(String)
+case message(title: String, message: String)
 case error(Error)
 }
 
 struct ErrorSheet: View {
-    var message: String
+    var title: String
+    var message: String? = nil
     var copyable: Bool
 
     var onDismiss: () -> Void
 
-    init(message: String, copyable: Bool, onDismiss: @escaping () -> Void) {
+    init(title: String, message: String? = nil, copyable: Bool, onDismiss: @escaping () -> Void) {
+        self.title = title
         self.message = message
         self.copyable = copyable
         self.onDismiss = onDismiss
@@ -26,27 +31,30 @@ struct ErrorSheet: View {
         let initializationError = String(localized: "Initialization error")
         let serializationError = String(localized: "Serialization error")
         let deserializationError = String(localized: "Deserialization error")
+        let unknownError = String(localized: "Unknown error")
 
         switch error {
         case let walletError as WalletBackendError:
             switch walletError {
             case .walletCoreError(let error):
                 if let json = error?.toJSON(), devMode {
-                    self.init(message: json, copyable: true, onDismiss: onDismiss)
+                    self.init(title: walletCoreError, message: json, copyable: true, onDismiss: onDismiss)
+                } else if let hint = error?.hint {
+                    self.init(title: walletCoreError, message: hint, copyable: false, onDismiss: onDismiss)
                 } else if let message = error?.message {
-                    self.init(message: message, copyable: false, onDismiss: onDismiss)
+                    self.init(title: walletCoreError, message: message, copyable: false, onDismiss: onDismiss)
                 } else {
-                    self.init(message: walletCoreError, copyable: false, onDismiss: onDismiss)
+                    self.init(title: walletCoreError, copyable: false, onDismiss: onDismiss)
                 }
             case .initializationError:
-                self.init(message: initializationError, copyable: false, onDismiss: onDismiss)
+                self.init(title: initializationError, copyable: false, onDismiss: onDismiss)
             case .serializationError:
-                self.init(message: serializationError, copyable: false, onDismiss: onDismiss)
+                self.init(title: serializationError, copyable: false, onDismiss: onDismiss)
             case .deserializationError:
-                self.init(message: deserializationError, copyable: false, onDismiss: onDismiss)
+                self.init(title: deserializationError, copyable: false, onDismiss: onDismiss)
             }
         default:
-            self.init(message: error.localizedDescription, copyable: false, onDismiss: onDismiss)
+            self.init(title: unknownError, message: error.localizedDescription, copyable: false, onDismiss: onDismiss)
         }
     }
 
@@ -54,54 +62,51 @@ struct ErrorSheet: View {
         let unknownError = String(localized: "Unknown error")
 
         switch data {
-        case .message(let message):
-            self.init(message: message, copyable: false, onDismiss: onDismiss)
+        case .message(let title, let message):
+            self.init(title: title, message: message, copyable: false, onDismiss: onDismiss)
             return
         case .error(let error):
             self.init(error: error, devMode: devMode, onDismiss: onDismiss)
             return
         }
 
-        self.init(message: unknownError, copyable: false, onDismiss: onDismiss)
+        self.init(title: unknownError, copyable: false, onDismiss: onDismiss)
     }
 
     var body: some View {
-        NavigationView {
-            GeometryReader { geometry in
-                ScrollView(.vertical) {
-                    VStack {
-                        Image(systemName: "exclamationmark.circle.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundStyle(.red)
-                            .padding(.bottom)
-
-                        Text("There was an error!")
-                            .talerFont(.title)
-                            .padding(.bottom)
-
-                        if copyable {
-                            if #available(iOS 16.4, *) {
-                                Text(message).monospaced()
-                            } else {
-                                Text(message).font(.system(.body, design: .monospaced))
-                            }
-
-                            CopyButton(textToCopy: message, vertical: false)
-                                .accessibilityLabel("Copy the error JSON")
-                                .padding(.top)
-                        } else {
-                            Text(message)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
+        ScrollView {
+            VStack {
+                Image(systemName: "exclamationmark.circle")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundStyle(.red)
                     .padding()
-                    .frame(width: geometry.size.width)
-                    .frame(minHeight: geometry.size.height)
+
+                Text(title)
+                    .talerFont(.title)
+                    .padding(.bottom)
+
+                if let message {
+                    if copyable {
+                        if #available(iOS 16.4, *) {
+                            Text(message).monospaced()
+                        } else {
+                            Text(message).font(.system(.body, design: .monospaced))
+                        }
+
+                        CopyButton(textToCopy: message, vertical: false)
+                            .accessibilityLabel("Copy the error JSON")
+                            .padding()
+                    } else {
+                        Text(message)
+                            .multilineTextAlignment(.center)
+                    }
                 }
             }
-        }.safeAreaInset(edge: .bottom) {
+        }
+        .padding()
+        .safeAreaInset(edge: .bottom) {
             Button("Close", role: .cancel) {
                 onDismiss()
             }

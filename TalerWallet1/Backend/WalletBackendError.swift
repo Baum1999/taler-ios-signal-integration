@@ -4,6 +4,7 @@
  */
 /**
  * @author Marc Stibane
+ * @author Iván Ávalos
  */
 import Foundation
 

@@ -2,6 +2,10 @@
  * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
  * See LICENSE.md
  */
+/**
+ * @author Marc Stibane
+ * @author Iván Ávalos
+ */
 import SwiftUI
 import os.log
 import SymLog
@@ -83,7 +87,7 @@ struct MainView: View {
             if let error = model.error {
                 ErrorSheet(data: error, devMode: developerMode) {
                     model.cleanError()
-                }
+                }.interactiveDismissDisabled()
             }
         }
     } // body

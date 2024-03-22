@@ -109,6 +109,8 @@ struct PayTemplateV: View {
             preparePayResult = ppCheck
         } catch {    // TODO: error
             symLog.log(error.localizedDescription)
+            model.showError(.error(error))
+            controller.playSound(0)
         }
     }
 

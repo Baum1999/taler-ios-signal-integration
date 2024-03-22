@@ -2,6 +2,10 @@
  * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
  * See LICENSE.md
  */
+/**
+ * @author Marc Stibane
+ * @author Iván Ávalos
+ */
 import SwiftUI              // FOUNDATION has no AppStorage
 import AnyCodable
 import FTalerWalletcore
