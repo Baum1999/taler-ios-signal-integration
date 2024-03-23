@@ -17,8 +17,8 @@ struct WithdrawExchangeV: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @State private var exchangeBaseUrl: String?
     @State private var amountToTransfer = Amount.zero(currency: "")
+    @State private var exchange: Exchange? = nil
 
     var body: some View {
 #if PRINT_CHANGES
@@ -26,9 +26,10 @@ struct WithdrawExchangeV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-            if let exchangeBaseUrl {
+            if exchange != nil {
                 ManualWithdraw(stack: stack.push(), isSheet: true,
-                     exchangeBaseUrl: exchangeBaseUrl,
+                     exchangeBaseUrl: exchange!.exchangeBaseUrl,
+                            exchange: $exchange,
                     amountToTransfer: $amountToTransfer)
             } else {
                 // TODO: Error
@@ -36,21 +37,32 @@ struct WithdrawExchangeV: View {
             }
         }
         .task {
-            do { // TODO: cancelled
-                symLog.log(".task")
-                let withdrawExchange = try await model.loadWithdrawalExchangeForUriM(url.absoluteString)
-                let baseUrl = withdrawExchange.exchangeBaseUrl
-                exchangeBaseUrl = baseUrl
-                if let amount = withdrawExchange.amount {
-                    amountToTransfer = amount
-                } else {
-                    // is already Amount.zero(currency: "")
+            if exchange == nil {
+                do { // TODO: cancelled
+                    symLog.log(".task")
+                    let withdrawExchange = try await model.loadWithdrawalExchangeForUriM(url.absoluteString)
+                    let baseUrl = withdrawExchange.exchangeBaseUrl
+                    symLog.log("getExchangeByUrl(\(baseUrl))")
+                    if let exc = await model.getExchangeByUrl(url: baseUrl) {
+                        // let the controller collect CurrencyInfo from this formerly unknown exchange
+                        let _ = await controller.getInfo(from: baseUrl, model: model)
+                        if let amount = withdrawExchange.amount {
+                            amountToTransfer = amount
+                        } else {
+                            let currency = exc.scopeInfo?.currency
+                                        ?? exc.currency
+                                        ?? String(localized: "Unknown", comment: "unknown currency")
+                            amountToTransfer.setCurrency(currency)
+                            // is already Amount.zero(currency: "")
+                        }
+                        exchange = exc
+                    } else {
+                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
+                    }
+                } catch {    // TODO: error
+                    symLog.log(error.localizedDescription)
+                    exchange = nil
                 }
-                // let the controller collect CurrencyInfo from this formerly unknown exchange
-                let _ = await controller.getInfo(from: baseUrl, model: model)
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                exchangeBaseUrl = nil
             }
         }
     }

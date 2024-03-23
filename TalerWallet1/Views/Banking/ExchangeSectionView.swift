@@ -21,15 +21,17 @@ struct ExchangeSectionView: View {
 
     @State private var shouldReloadBalances: Int = 0
 
-    func amountAvailable(_ exchangeBaseUrl: String, currency: String?) -> Amount? {
-        for balance in balances {
-            if let baseUrl = balance.scopeInfo.url {
-                if baseUrl == exchangeBaseUrl {
-                    return balance.available
-                }
-            } else if let currency {
-                if currency == balance.scopeInfo.currency {
-                    return balance.available
+    func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
+        if let exchange {
+            for balance in balances {
+                if let baseUrl = balance.scopeInfo.url {
+                    if baseUrl == exchange.exchangeBaseUrl {
+                        return balance.available
+                    }
+                } else if let currency {
+                    if currency == balance.scopeInfo.currency {
+                        return balance.available
+                    }
                 }
             }
         }
@@ -51,8 +53,7 @@ struct ExchangeSectionView: View {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
-                      amountAvailable: amountAvailable(exchange.exchangeBaseUrl,
-                                                       currency: currency),
+                      amountAvailable: amountAvailable(exchange, currency: currency),
 //                          depositIBAN: $depositIBAN,
 //                        accountHolder: $accountHolder,
                              currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button

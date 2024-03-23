@@ -16,6 +16,7 @@ struct ManualWithdraw: View {
     let stack: CallStack
     let isSheet: Bool
     let exchangeBaseUrl: String
+    @Binding var exchange: Exchange?
     @Binding var amountToTransfer: Amount
 
     @EnvironmentObject private var controller: Controller
@@ -23,7 +24,6 @@ struct ManualWithdraw: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
-    @State private var exchange: Exchange? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
 
@@ -133,10 +133,18 @@ struct ManualWithdraw: View {
 struct ManualWithdraw_Previews: PreviewProvider {
     struct StateContainer : View {
         @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
+        @State private var exchange: Exchange? = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
+                                                                scopeInfo: ScopeInfo(type: .exchange, currency: LONGCURRENCY),
+                                                                paytoUris: [],
+                                                                tosStatus: .accepted,
+                                                      exchangeEntryStatus: .ephemeral,
+                                                     exchangeUpdateStatus: .ready,
+                                                    ageRestrictionOptions: [])
 
         var body: some View {
             ManualWithdraw(stack: CallStack("Preview"), isSheet: false,
                  exchangeBaseUrl: DEMOEXCHANGE,
+                        exchange: $exchange,
                 amountToTransfer: $amountToPreview)
         }
     }

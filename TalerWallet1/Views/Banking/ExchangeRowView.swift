@@ -24,6 +24,7 @@ struct ExchangeRowView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var buttonSelected: Int? = nil
+    @State var myExchange: Exchange? = nil
 
     func selectAndUpdate(_ button: Int) {
         amountToTransfer.setCurrency(currency)
@@ -57,7 +58,7 @@ struct ExchangeRowView: View {
         let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
                                     comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let baseURL = exchange.exchangeBaseUrl
-        
+
         let deposit = LazyView {
             DepositIbanV(stack: stack.push(),
                       feeLabel: nil,
@@ -70,6 +71,7 @@ struct ExchangeRowView: View {
         let manualWithdraw = LazyView {
             ManualWithdraw(stack: stack.push(), isSheet: false,
                  exchangeBaseUrl: baseURL,
+                        exchange: $myExchange,
                 amountToTransfer: $amountToTransfer)
         }
         let showToS = LazyView {
@@ -117,6 +119,9 @@ struct ExchangeRowView: View {
             }
         }
         .task {
+            if myExchange == nil {
+                myExchange = exchange
+            }
             if controller.hasInfo(for: currency) == nil {
                 symLog.log("fetching info for \(currency)")
                 // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
