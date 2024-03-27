@@ -21,6 +21,14 @@ extension URL {
         }
         return nil
     }
+    var xTaler: String? {
+        /// https://datatracker.ietf.org/doc/rfc8905/
+        /// payto://iban/DE75512108001245126199?amount=EUR:200.0&message=hello
+        if scheme == "payto" && host == "x-taler-bank" {
+            return lastPathComponent
+        }
+        return nil
+    }
 
     /// SwifterSwift: Dictionary of the URL's query parameters.
     var queryParameters: [String:String]? {

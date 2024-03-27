@@ -18,10 +18,14 @@ struct AccountPicker: View {
         Picker(title, selection: $selectedAccount, content: {
             ForEach(0..<accountDetails.count, id: \.self, content: { index in
                 let detail = accountDetails[index]
-                let bankName = detail.bankName ?? "BankName " + String(index)
-                let amountStr = detail.transferAmount.readableDescription
-                Text(bankName + ":   " + amountStr)
-                    .tag(index)
+                if detail.status.lowercased() == "ok" {
+                    if let amount = detail.transferAmount {
+                        let amountStr = amount.readableDescription
+                        let bankName = detail.bankLabel ?? ("BankName " + String(index))
+                        Text(bankName + ":   " + amountStr)
+                            .tag(index)
+                    }
+                }
             })
         })
         .talerFont(.title3)
@@ -34,7 +38,7 @@ struct AccountPicker: View {
         }
     }
 }
-
+// MARK: -
 struct TransferRestrictionsV: View {
     let amountStr: String
     let obtainStr: String
@@ -68,7 +72,7 @@ struct TransferRestrictionsV: View {
         }
     }
 }
-
+// MARK: -
 struct ManualDetailsV: View {
     var common : TransactionCommon
     var details : WithdrawalDetails
@@ -83,92 +87,160 @@ struct ManualDetailsV: View {
             withAnimation { listID = UUID() }
         }
     }
+    func validDetails(_ details: [WithdrawalExchangeAccountDetails]) -> [WithdrawalExchangeAccountDetails] {
+        details.filter { detail in
+            detail.status.lowercased() == "ok"
+        }
+    }
 
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
-            if !minimalistic {
-                Text("The Payment Service Provider is waiting for your wire-transfer.")
-                    .bold()
-                    .multilineTextAlignment(.leading)
-                    .listRowSeparator(.hidden)
-            }
-            AccountPicker(title: String(localized: "Bank"), value: accountID,
-                          accountDetails: accountDetails, action: redraw)
-            let account = accountDetails[accountID]
-            let payto = account.paytoUri
-            let payURL = URL(string: payto)
-            let iban = payURL?.iban ?? "unknown IBAN"
-            let amountStr = account.transferAmount.readableDescription        // TODO: formatter?
-            let obtainStr = common.amountRaw.readableDescription
-
-            let cryptocode = HStack {
-                Text(details.reservePub)
-                    .monospacedDigit()
-                    .accessibilityLabel("Cryptocode")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                CopyButton(textToCopy: details.reservePub, vertical: true)
-                    .accessibilityLabel("Copy the cryptocode")
-                    .disabled(false)
-            }   .padding(.leading)
-            let ibanCode = HStack {
-                Text(iban)
-                    .monospacedDigit()
-                    .accessibilityLabel("IBAN of the exchange")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                CopyButton(textToCopy: iban, vertical: true)
-                    .accessibilityLabel("Copy the IBAN")
-                    .disabled(false)
-            }   .padding(.leading)
-                .padding(.top, -8)
-
-            let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
-                      : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+            let validDetails = validDetails(accountDetails)
+            if validDetails.count > 0 {
+                let account = validDetails[accountID]
+                if let amount = account.transferAmount {
+                    let amountStr = amount.readableDescription        // TODO: formatter?
+                    let obtainStr = common.amountRaw.readableDescription
+                    if !minimalistic {
+                        Text("The Payment Service Provider is waiting for your wire-transfer.")
+                            .bold()
                             .multilineTextAlignment(.leading)
-            let mandatory = Text("This is mandatory, otherwise your money will not arrive in this wallet.")
-                                .bold()
+                            .listRowSeparator(.hidden)
+                    }
+                    AccountPicker(title: String(localized: "Bank"), value: accountID,
+                         accountDetails: validDetails, action: redraw)
+                    let payto = account.paytoUri
+                    let payURL = URL(string: payto)
+                    if let queryParameters = payURL?.queryParameters {
+                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
+                        let receiverStr = queryParameters["receiver-name"] ?? EMPTYSTRING
+                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
+                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
+
+                        let iban = payURL?.iban
+                        let xTaler = payURL?.xTaler ??
+//                                   payURL?.host() ??
+                                     String(localized: "unknown payment method")
+                        let cryptocode = HStack {
+                            Text(details.reservePub)
+                                .monospacedDigit()
+                                .accessibilityLabel("Cryptocode")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            CopyButton(textToCopy: details.reservePub, vertical: true)
+                                .accessibilityLabel("Copy the cryptocode")
+                                .disabled(false)
+                        }   .padding(.leading)
+                        let payeeCode = HStack {
+                            VStack(alignment: .leading) {
+                                Text("Payee:")
+                                    .talerFont(.subheadline)
+                                Text(receiverStr)
+                                    .monospacedDigit()
+                                    .padding(.leading)
+                            }   .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Payee")
+                            CopyButton(textToCopy: receiverStr, vertical: true)
+                                .accessibilityLabel("Copy the payee")
+                                .disabled(false)
+                        }   .padding(.top, -8)
+                        let ibanCode = HStack {
+                            VStack(alignment: .leading) {
+                                Text("IBAN:")
+                                    .talerFont(.subheadline)
+                                Text(iban ?? EMPTYSTRING)
+                                    .monospacedDigit()
+                                    .padding(.leading)
+                            }   .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("IBAN of the payee")
+                            CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
+                                .accessibilityLabel("Copy the IBAN")
+                                .disabled(false)
+                        }   .padding(.top, -8)
+                        let xTalerCode = HStack {
+                            VStack(alignment: .leading) {
+                                Text("Account:")
+                                    .talerFont(.subheadline)
+                                Text(xTaler)
+                                    .monospacedDigit()
+                                    .padding(.leading)
+                            }   .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("account of the payee")
+                            CopyButton(textToCopy: xTaler, vertical: true)
+                                .accessibilityLabel("Copy the account")
+                                .disabled(false)
+                        }   .padding(.top, -8)
+
+                        let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
+                                  : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+                                        .multilineTextAlignment(.leading)
+                        let mandatory = Text("This is mandatory, otherwise your money will not arrive in this wallet.")
+                            .bold()
+                            .multilineTextAlignment(.leading)
+                            .listRowSeparator(.hidden)
+                        let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste payee and IBAN:"
+                                   : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):")
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top)
+                        let step2x = Text(minimalistic ? "**Step 2:** Copy+Paste payee and account:"
+                                   : "**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:")
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top)
+                        let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountStr)."
+                                  : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top)
+                        Group {
+                            TransferRestrictionsV(amountStr: amountStr,
+                                                  obtainStr: obtainStr,
+                                               restrictions: account.creditRestrictions)
+                            .listRowSeparator(.visible)
+                            step1.listRowSeparator(.hidden)
+                            if !minimalistic {
+                                mandatory
+                            }
+                            cryptocode.listRowSeparator(.hidden)
+                            if iban != nil {
+                                step2i.listRowSeparator(.hidden)
+                                payeeCode.listRowSeparator(.hidden)
+                                ibanCode.listRowSeparator(.hidden)
+                            } else {
+                                step2x.listRowSeparator(.hidden)
+                                payeeCode.listRowSeparator(.hidden)
+                                xTalerCode.listRowSeparator(.hidden)
+                            }
+                            step3.listRowSeparator(.visible)
+                            Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
+                                    : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
                                 .multilineTextAlignment(.leading)
+                                .padding(.top)
                                 .listRowSeparator(.hidden)
-            let step2 = Text(minimalistic ? "**Step 2:** Copy+Paste this IBAN:"
-                      : "**Step 2:** If you don't already have it in your banking favourites list, then copy and paste this IBAN into the receiver IBAN field in your banking app or website (and save it as favourite for the next time):")
-                            .multilineTextAlignment(.leading)
-                            .padding(.top)
-            let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountStr)."
-                      : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
-                            .multilineTextAlignment(.leading)
-                            .padding(.top)
-            Group {
-                TransferRestrictionsV(amountStr: amountStr,
-                                      obtainStr: obtainStr,
-                                   restrictions: account.creditRestrictions)
-                    .listRowSeparator(.visible)
-                step1.listRowSeparator(.hidden)
-                if !minimalistic {
-                    mandatory
+                            HStack {
+                                Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                                    .accessibilityHidden(true)
+                                    .foregroundColor(Color.clear)
+//                              Spacer()
+                                ShareButton(textToShare: payto)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .accessibilityLabel("Share the PayTo URL")
+                                    .disabled(false)
+//                              Spacer()
+                            }   .listRowSeparator(.automatic)
+                        }.id(listID)
+                            .talerFont(.body)
+                    } else {
+                        // TODO: Error No payto URL
+                    }
+                } else {
+                    // TODO: Error No amount
                 }
-                cryptocode.listRowSeparator(.hidden)
-                step2.listRowSeparator(.hidden)
-                ibanCode.listRowSeparator(.hidden)
-                step3.listRowSeparator(.visible)
-                Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
-                                  : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
-                    .multilineTextAlignment(.leading)
-                    .padding(.top)
-                    .listRowSeparator(.hidden)
-                HStack {
-                    Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-                        .accessibilityHidden(true)
-                        .foregroundColor(Color.clear)
-//                    Spacer()
-                    ShareButton(textToShare: payto)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .accessibilityLabel("Share the PayTo URL")
-                        .disabled(false)
-//                    Spacer()
-                }   .listRowSeparator(.automatic)
-            }.id(listID)
-                .talerFont(.body)
+            } else {
+                // TODO: Error none of the details is valid
+            }
         } else {
-            // YIKES No exchangeCreditAccountDetails
+            // TODO: Error No exchangeCreditAccountDetails
         }
     }
 }

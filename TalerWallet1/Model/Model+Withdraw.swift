@@ -27,13 +27,21 @@ extension AccountRestriction: Identifiable {
     var id: AccountRestriction {self}
 }
 
+//struct TalerErrorDetail: Decodable {
+//    var code: TalerErrorCode
+//    var when: AbsoluteTime?
+//    var hint: String?
+////    [x: string]: unknown;
+//}
+
 struct WithdrawalExchangeAccountDetails: Decodable {
-    var status: String
-    var bankName: String?
+    var status: String                                          // "OK" or error - then conversionError
     var paytoUri: String
-    var transferAmount: Amount
-    var currencySpecification: CurrencySpecification?
-    var creditRestrictions: [AccountRestriction]?
+    var transferAmount: Amount?                                 // only if "OK"
+    var bankLabel: String?                                      // only if wallet-core knows it
+    var currencySpecification: CurrencySpecification?           // only if wallet-core knows it
+    var creditRestrictions: [AccountRestriction]?               // only if restrictions apply
+//    var conversionError: TalerErrorDetail?                    // only if error
 }
 // MARK: -
 /// The result from getWithdrawalDetailsForUri
