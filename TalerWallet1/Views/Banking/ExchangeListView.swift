@@ -129,6 +129,11 @@ extension ExchangeListCommonV: View {
                             .talerFont(.body)
                     }
                 }
+                .refreshable {
+                    symLog?.log("refreshing")
+                    await reloadExchanges()
+                }
+                .listStyle(myListStyle.style).anyView
             }
         }
         .onNotification(.ExchangeAdded) { notification in
