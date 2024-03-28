@@ -1,3 +1,10 @@
+Version 0.9.5 (1)
+
+• New feature: taler://withdraw-exchange no longer requires the pubkey of the exchange
+- bugfix: manual withdrawal now handles x-taler-bank correctly, and shows payee
+- bugfix: expired denominations in withdrawals are retried with new denominations
+
+
 Version 0.9.4 (12)
 
 • Direct withdrawal of 25 KUDOS when the wallet is empty, no need to register a bank account first
