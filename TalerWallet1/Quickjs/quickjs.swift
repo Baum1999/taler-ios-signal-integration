@@ -12,6 +12,7 @@ import FTalerWalletcore
 
 public protocol QuickjsMessageHandler: AnyObject {
     func handleMessage(message: String)
+    func handleLog(message: String)
 }
 // MARK: -
 func notification_callback(userdata: Optional<UnsafeMutableRawPointer>,
@@ -43,6 +44,7 @@ func logging_callback(userdata: Optional<UnsafeMutableRawPointer>,
             logger.trace("\(swiftTag, privacy: .public)  \(swiftMessage, privacy: .public)")
         default: break
     }
+    quickjs.internalOnLog(message: swiftMessage)
 }
 // MARK: -
 public class Quickjs {      // acts as singleton, since only one instance ever exists
@@ -111,6 +113,12 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
     func internalOnNotify(payload: String) {
         if let handler = messageHandler {
             handler.handleMessage(message: payload)
+        }
+    }
+
+    public func internalOnLog(message: String) {
+        if let handler = messageHandler {
+            handler.handleLog(message: message)
         }
     }
 

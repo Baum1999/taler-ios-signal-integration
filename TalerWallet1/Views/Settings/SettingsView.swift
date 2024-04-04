@@ -5,6 +5,7 @@
 import SwiftUI
 import taler_swift
 import SymLog
+import LocalConsole
 
 /*
  * Backup
@@ -37,6 +38,7 @@ struct SettingsView: View {
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("localConsole") var localConsole: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -130,6 +132,12 @@ struct SettingsView: View {
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 if diagnosticModeEnabled {
+                    SettingsToggle(name: String(localized: "LocalConsole"), value: $localConsole, id1: "localConsole",
+                                   description: hideDescriptions ? nil : String(localized: "Show logs")) {
+                        let consoleManager = LCManager.shared
+                        consoleManager.isVisible = localConsole
+                        consoleManager.clear()
+                    }
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
                             description: hideDescriptions ? nil : String("More information intended for debugging")) {
                         withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }

@@ -7,6 +7,7 @@ import AnyCodable
 import FTalerWalletcore
 import SymLog
 import os
+import LocalConsole
 
 /// Delegate for the wallet backend.
 protocol WalletBackendDelegate {
@@ -301,6 +302,13 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
         } catch let error {
             symLog.log("Error \(error) parsing notification: \(anyPayload)")    // TODO: .error
         // TODO: if DevMode then should log into file for user
+        }
+    }
+
+    @MainActor func handleLog(message: String) {
+        let consoleManager = LCManager.shared
+        if consoleManager.isVisible {
+            consoleManager.print(message)
         }
     }
 
