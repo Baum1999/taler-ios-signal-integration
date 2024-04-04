@@ -21,6 +21,7 @@ enum UrlCommand {
     case unknown
     case withdraw
     case withdrawExchange
+    case termsExchange
     case pay
     case payPull
     case payPush
@@ -202,6 +203,8 @@ extension Controller {
                 return .withdraw
             case "withdraw-exchange":
                 return .withdrawExchange
+            case "terms-exchange":
+                return .termsExchange
             case "pay":
                 return .pay
             case "pay-pull":

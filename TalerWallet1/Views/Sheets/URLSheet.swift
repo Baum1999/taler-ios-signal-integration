@@ -28,6 +28,8 @@ struct URLSheet: View {
                     WithdrawURIView(stack: stack.push(), url: urlToOpen)
                 case .withdrawExchange:
                     WithdrawExchangeV(stack: stack.push(), url: urlToOpen)
+                case .termsExchange:
+                    WithdrawExchangeV(stack: stack.push(), url: urlToOpen)      // TODO: just check the ToS
                 case .pay:
                     PaymentView(stack: stack.push(), url: urlToOpen,
                              template: false, amountToTransfer: $amountToTransfer, summary: $summary)
