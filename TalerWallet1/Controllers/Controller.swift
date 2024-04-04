@@ -142,12 +142,12 @@ class Controller: ObservableObject {
     }
 // MARK: -
     @MainActor
-    func initWalletCore(_ model: WalletModel, sqlite3: Bool)
+    func initWalletCore(_ model: WalletModel, setTesting: Bool)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
             do {
-                let versionInfo = try await model.initWalletCoreT(sqlite3: sqlite3)
+                let versionInfo = try await model.initWalletCoreT(setTesting: setTesting)
                 WalletCore.shared.versionInfo = versionInfo
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows

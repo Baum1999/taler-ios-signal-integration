@@ -194,6 +194,7 @@ struct SettingsView: View {
                             walletCore.developDelay = delay}), id1: "delay",
                                        description: hideDescriptions ? nil : String("After each wallet-core action"))
                             .id("delay")
+#if DEBUG
                         SettingsItem(name: String("Run Dev Experiment"), id1: "applyDevExperiment",
                               description: hideDescriptions ? nil : "dev-experiment/insert-pending-refresh") {
                             let title = "Refresh"
@@ -201,6 +202,7 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("running applyDevExperiment Refresh")
                                     do {
+                                        try await model.setConfigT(setTesting: true)
                                         try await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
@@ -209,6 +211,7 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                         }.id("Refresh")
+#endif
                         SettingsItem(name: String("Run Integration Test"), id1: "demo1test",
                               description: hideDescriptions ? nil : String("Perform basic test transactions")) {
                             let title = "Demo 1"

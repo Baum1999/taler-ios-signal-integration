@@ -87,14 +87,61 @@ struct VersionInfo: Decodable {
     var bank: String
 }
 // MARK: -
+fileprivate struct Testing: Encodable {
+    var devModeActive: Bool
+    // more to come...
+}
+
+fileprivate struct Builtin: Encodable {
+    var exchanges: [String]
+    // more to come...
+}
+
+fileprivate struct Config: Encodable {
+    var testing: Testing
+    var builtin: Builtin
+}
+// MARK: -
+///  A request to re-configure Wallet-core
+fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
+    var setTesting: Bool
+
+    func operation() -> String { "setConfig" }
+    func args() -> Args {
+        let testing = Testing(devModeActive: setTesting)
+        let builtin = Builtin(exchanges: [])
+        let config = Config(testing: testing, builtin: builtin)
+        return Args(config: config)
+    }
+
+    struct Args: Encodable {
+        var config: Config
+    }
+    struct Response: Decodable {
+        var versionInfo: VersionInfo
+    }
+}
+
+extension WalletModel {
+    /// initalize Wallet-Core. Will do networking
+    func setConfigT(setTesting: Bool) async throws -> VersionInfo {
+        // T for any Thread
+        let request = ConfigRequest(setTesting: setTesting)
+        let response = try await sendRequest(request, 0)    // no Delay
+        return response.versionInfo
+    }
+}
+// MARK: -
 ///  A request to initialize Wallet-core
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
+    var persistentStoragePath: String
+    var setTesting: Bool
+
     func operation() -> String { "init" }
     func args() -> Args {
-        let testing = Testing(devModeActive: false) // true, false
+        let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
-//        let config = Config(testing: testing, builtin: builtin)
-        let config = Config(testing: testing)
+        let config = Config(testing: testing, builtin: builtin)
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",
                                  logLevel: "info",  // trace, info, warn, error, none
@@ -102,20 +149,6 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
                          useNativeLogging: true)
     }
 
-    var persistentStoragePath: String
-
-    struct Testing: Encodable {
-        var devModeActive: Bool
-        // more to come...
-    }
-    struct Builtin: Encodable {
-        var exchanges: [String]
-        // more to come...
-    }
-    struct Config: Encodable {
-        var testing: Testing
-//        var builtin: Builtin
-    }
     struct Args: Encodable {
         var persistentStoragePath: String
 //        var cryptoWorkerType: String
@@ -130,10 +163,10 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
-    func initWalletCoreT(sqlite3: Bool) async throws -> VersionInfo {
+    func initWalletCoreT(setTesting: Bool) async throws -> VersionInfo {
                     // T for any Thread
-        let docPath = try docPath(sqlite3: sqlite3)
-        let request = InitRequest(persistentStoragePath: docPath)
+        let docPath = try docPath(sqlite3: true)
+        let request = InitRequest(persistentStoragePath: docPath, setTesting: setTesting)
         let response = try await sendRequest(request, 0)    // no Delay
         return response.versionInfo
     }
