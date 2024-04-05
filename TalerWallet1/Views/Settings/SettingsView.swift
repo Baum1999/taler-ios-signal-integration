@@ -19,6 +19,7 @@ import LocalConsole
 struct SettingsView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    @Binding var balances: [Balance]
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
@@ -99,6 +100,19 @@ struct SettingsView: View {
                 } label: {
                     SettingsItem(name: aboutStr, id1: "about",
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
+                }
+
+                let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
+                let exchangesDest = LazyView {
+                    ExchangeListView(stack: stack.push(exchangesTitle),
+                                  balances: $balances,
+                                  navTitle: exchangesTitle)
+                }
+                NavigationLink {        // whole row like in a tableView
+                    exchangesDest
+                } label: {
+                    SettingsItem(name: exchangesTitle, id1: "exchanges",
+                          description: hideDescriptions ? nil : String(localized: "Manage payment service providers...")) {}
                 }
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                                description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
@@ -349,9 +363,9 @@ struct SettingsView: View {
 }
 // MARK: -
 #if DEBUG
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView(stack: CallStack("Preview"), navTitle: "Settings")
-    }
-}
+//struct SettingsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SettingsView(stack: CallStack("Preview"), balances: <#Binding<[Balance]>#>, navTitle: "Settings")
+//    }
+//}
 #endif
