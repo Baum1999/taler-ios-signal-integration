@@ -39,7 +39,8 @@ struct SettingsView: View {
     @AppStorage("developDelay") var developDelay: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("localConsole") var localConsole: Bool = false
+    @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
+    @AppStorage("localConsoleO") var localConsoleO: Bool = false                // for Observability
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -145,11 +146,22 @@ struct SettingsView: View {
 //                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
+                let localConsStr = String(localized: "on LocalConsole")
+                let observability = String(localized: "Observability")
+                SettingsToggle(name: observability, value: $localConsoleO.onChange({ isObserving in
+                    walletCore.isObserving = isObserving}), id1: "localConsoleO",
+                               description: hideDescriptions ? nil : localConsStr) {
+                    let consoleManager = LCManager.shared
+                    consoleManager.isVisible = localConsoleO || localConsoleL
+                    consoleManager.clear()
+                }
                 if diagnosticModeEnabled {
-                    SettingsToggle(name: String(localized: "LocalConsole"), value: $localConsole, id1: "localConsole",
-                                   description: hideDescriptions ? nil : String(localized: "Show logs")) {
+                    let showLogs = String(localized: "Show logs")
+                    SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
+                        walletCore.isLogging = isLogging}), id1: "localConsoleL",
+                                   description: hideDescriptions ? nil : localConsStr) {
                         let consoleManager = LCManager.shared
-                        consoleManager.isVisible = localConsole
+                        consoleManager.isVisible = localConsoleO || localConsoleL
                         consoleManager.clear()
                     }
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",

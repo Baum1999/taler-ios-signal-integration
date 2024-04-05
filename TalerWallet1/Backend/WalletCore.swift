@@ -31,6 +31,8 @@ class WalletCore: QuickjsMessageHandler {
 
     var versionInfo: VersionInfo?           // shown in SettingsView
     var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
+    var isObserving: Bool
+    var isLogging: Bool
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
     private struct FullRequest: Encodable {
@@ -77,6 +79,8 @@ class WalletCore: QuickjsMessageHandler {
     }
 
     init() throws {
+        isObserving = false
+        isLogging = false
         logger.info("init Quickjs")
         requestsMade = 0
         queue = DispatchQueue(label: "net.taler.myQueue", attributes: .concurrent)
@@ -307,7 +311,13 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
 
     @MainActor func handleLog(message: String) {
         let consoleManager = LCManager.shared
-        if consoleManager.isVisible {
+        if isLogging {
+            consoleManager.print(message)
+        }
+    }
+    @MainActor func observe(message: String) {
+        let consoleManager = LCManager.shared
+        if isObserving {
             consoleManager.print(message)
         }
     }
