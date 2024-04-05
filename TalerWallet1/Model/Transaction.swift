@@ -513,7 +513,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     }
 
     static func == (lhs: Transaction, rhs: Transaction) -> Bool {
-        return lhs.id == rhs.id
+        return (lhs.id == rhs.id)
+            && (lhs.common.txState == rhs.common.txState)
     }
 
     func hash(into hasher: inout Hasher) {
