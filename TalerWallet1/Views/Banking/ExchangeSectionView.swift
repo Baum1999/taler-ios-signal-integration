@@ -44,9 +44,7 @@ struct ExchangeSectionView: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let scopeInfo = exchange.scopeInfo
-        let currency = scopeInfo?.currency
-                    ?? exchange.currency
-                    ?? String(localized: "Unknown", comment: "unknown currency")
+        let currency = scopeInfo.currency
         let currencyInfoOpt = controller.info(for: currency)                    // might be nil
         let currencyName = currencyInfoOpt?.scope.currency ?? currency          // might be "Unknown"
         Section {

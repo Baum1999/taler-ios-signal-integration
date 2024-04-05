@@ -2,6 +2,11 @@
  * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
  */
+/**
+ * Model+Exchange
+ *
+ * @author Marc Stibane
+ */
 import Foundation
 import taler_swift
 import SymLog
@@ -30,13 +35,9 @@ enum ExchangeUpdateStatus: String, Codable {
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
     static func < (lhs: Exchange, rhs: Exchange) -> Bool {
-        if let leftScope = lhs.scopeInfo {
-            if let rightScope = rhs.scopeInfo {
-                return leftScope < rightScope
-            }
-            return true             // scopeInfo comes first
-        }
-        return false
+        let leftScope = lhs.scopeInfo
+        let rightScope = rhs.scopeInfo
+        return leftScope < rightScope
     }
     static func == (lhs: Exchange, rhs: Exchange) -> Bool {
         return lhs.exchangeBaseUrl == rhs.exchangeBaseUrl
@@ -47,13 +48,9 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 
     var exchangeBaseUrl: String
-    // deprecated, use scopeInfo
-    var currency: String?           // TODO: remove this
-    var scopeInfo: ScopeInfo?
+    var scopeInfo: ScopeInfo
     var paytoUris: [String]
     var tosStatus: ExchangeTosStatus
-    // deprecated, use EntryStatus + UpdateStatus
-//    var exchangeStatus: String?
     var exchangeEntryStatus: ExchangeEntryStatus
     var exchangeUpdateStatus: ExchangeUpdateStatus
     var hasNoFees: Bool?

@@ -7,7 +7,7 @@ import SymLog
 
 struct LoadingView: View {
     private let symLog = SymLogV(0)
-    let url:URL?
+    let scopeInfo: ScopeInfo?
     let message: String?
 
 //    let backButtonHidden: Bool
@@ -25,11 +25,11 @@ struct LoadingView: View {
                     rotationEnabled.toggle()
                 }
             Spacer()
-            if let url {
-                if let urlStr = url.host {
-                    Text(urlStr)
+            if let scopeInfo {
+                if let urlStr = scopeInfo.url {
+                    Text(urlStr.trimURL())
                 } else {
-                    Text("Error in URL: \(url)")
+                    Text(scopeInfo.currency)
                 }
                 Spacer()
             }
@@ -51,7 +51,7 @@ struct LoadingView: View {
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            LoadingView(url: nil, message: "test message")  // , backButtonHidden: true)
+            LoadingView(scopeInfo: nil, message: "test message")  // , backButtonHidden: true)
                 .navigationBarTitleDisplayMode(.automatic)
         }.navigationViewStyle(.stack)
     }

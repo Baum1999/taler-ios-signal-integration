@@ -44,7 +44,7 @@ struct PaymentDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
             } else {
-                LoadingView(url: nil, message: "Paying...")
+                LoadingView(scopeInfo: nil, message: "Paying...")
                     .task {
                         do {
                             let confirmPayResult = try await model.confirmPayM(transactionId)

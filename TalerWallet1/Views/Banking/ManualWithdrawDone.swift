@@ -48,7 +48,7 @@ struct ManualWithdrawDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
             } else {
-                LoadingView(url: nil, message: exchange.exchangeBaseUrl.trimURL())
+                LoadingView(scopeInfo: nil, message: exchange.exchangeBaseUrl.trimURL())
             }
         }.onAppear() {
             symLog.log("onAppear")

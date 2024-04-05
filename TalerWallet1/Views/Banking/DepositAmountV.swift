@@ -75,7 +75,7 @@ struct DepositAmountV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         if depositStarted {
-            LoadingView(url: nil, message: "Depositing...")
+            LoadingView(scopeInfo: nil, message: "Depositing...")
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 

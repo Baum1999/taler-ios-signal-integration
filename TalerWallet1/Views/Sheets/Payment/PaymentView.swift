@@ -92,7 +92,7 @@ struct PaymentView: View {
             }
             .navigationTitle(navTitle)
         } else {
-            LoadingView(url: url, message: nil)
+            LoadingView(scopeInfo: nil, message: url.host)
             .task { // this runs only once
                 do { // TODO: cancelled
                     symLog.log(".task")

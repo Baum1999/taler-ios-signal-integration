@@ -206,7 +206,7 @@ struct PayTemplateV: View {
               DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
           }.navigationTitle(navTitle)
         } else {
-            LoadingView(url: url, message: nil)
+            LoadingView(scopeInfo: nil, message: url.host)
                 .task {
                     symLog.log(".task")
                     let hasParams = queryURL()

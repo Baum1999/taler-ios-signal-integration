@@ -34,7 +34,7 @@ struct RefundURIView: View {
                           suspendAction: model.suspendTransaction,
                            resumeAction: model.resumeTransaction)
         } else {
-            LoadingView(url: url, message: nil)
+            LoadingView(scopeInfo: nil, message: url.host)
                 .task {
                     do {
                         symLog.log(".task")

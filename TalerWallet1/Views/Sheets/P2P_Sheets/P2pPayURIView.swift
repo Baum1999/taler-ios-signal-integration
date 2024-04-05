@@ -70,7 +70,7 @@ struct P2pPayURIView: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(url: nil, message: message)
+                LoadingView(scopeInfo: nil, message: message)
                     .task { do {
                         symLog.log(".task")
                         let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)

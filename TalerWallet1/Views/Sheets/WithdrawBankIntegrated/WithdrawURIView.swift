@@ -84,7 +84,7 @@ struct WithdrawURIView: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(url: nil, message: message)
+                LoadingView(scopeInfo: nil, message: message)
             }
         }
         .onAppear() {
