@@ -407,8 +407,9 @@ struct RefreshError: Decodable {
     var code: Int
     var when: Timestamp
     var hint: String
-    var numErrors: Int
-    var errors: [HTTPError]
+    var stack: String?
+    var numErrors: Int?         // how many coins had errors
+    var errors: [HTTPError]?    // 1..max(5, numErrors)
 }
 struct RefreshTransactionDetails: Decodable {
     var refreshReason: RefreshReason

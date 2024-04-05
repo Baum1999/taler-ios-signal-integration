@@ -26,17 +26,19 @@ extension WalletModel {
 fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     func operation() -> String { "getTransactions" }
 //    func operation() -> String { "testingGetSampleTransactions" }
-    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search, sort: sort) }
+    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search, sort: sort, includeRefreshes: includeRefreshes) }
 
     var scopeInfo: ScopeInfo?
     var currency: String?
     var search: String?
     var sort: String?
+    var includeRefreshes: Bool?
     struct Args: Encodable {
         var scopeInfo: ScopeInfo?
         var currency: String?
         var search: String?
         var sort: String?
+        var includeRefreshes: Bool?
     }
 
     struct Response: Decodable {                    // list of transactions
@@ -101,10 +103,11 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending")
+    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, 
+                       sort: String = "descending", includeRefreshes: Bool = false)
     async -> [Transaction] {                                          // might be called from a background thread itself
         do {
-            let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort)
+            let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
             let response = try await sendRequest(request, ASYNCDELAY)
             return response.transactions
         } catch {

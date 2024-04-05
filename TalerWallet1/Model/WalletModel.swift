@@ -88,8 +88,22 @@ struct VersionInfo: Decodable {
 }
 // MARK: -
 fileprivate struct Testing: Encodable {
+    var denomselAllowLate: Bool
     var devModeActive: Bool
+    var insecureTrustExchange: Bool
+    var preventThrottling: Bool
+    var skipDefaults: Bool
+    var emitObservabilityEvents: Bool
     // more to come...
+
+    init(devModeActive: Bool) {
+        self.denomselAllowLate = false
+        self.devModeActive = devModeActive
+        self.insecureTrustExchange = false
+        self.preventThrottling = false
+        self.skipDefaults = false
+        self.emitObservabilityEvents = false
+    }
 }
 
 fileprivate struct Builtin: Encodable {
