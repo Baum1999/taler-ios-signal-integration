@@ -177,6 +177,8 @@
 		4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
 		4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
 		4EA076B12BBEED7E00685A10 /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA076B02BBEED7E00685A10 /* LocalConsole */; };
+		4EA076B32BC0607400685A10 /* DepositWithdrawV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */; };
+		4EA076B42BC0607400685A10 /* DepositWithdrawV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */; };
 		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
 		4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */; };
 		4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */; };
@@ -373,6 +375,7 @@
 		4E97968F2A3765ED006F73BC /* AgePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgePicker.swift; sourceTree = "<group>"; };
 		4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleAxisGeometryReader.swift; sourceTree = "<group>"; };
 		4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+fitsSideBySide.swift"; sourceTree = "<group>"; };
+		4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositWithdrawV.swift; sourceTree = "<group>"; };
 		4EA1ABBD29A3833A008821EA /* PublicConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConstants.swift; sourceTree = "<group>"; };
 		4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
@@ -710,6 +713,7 @@
 				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
 				4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */,
 				4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */,
+				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
 				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
 				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
 				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
@@ -1192,6 +1196,7 @@
 				4E3EAE6C2A990778009F1BE8 /* ExchangeSectionView.swift in Sources */,
 				4E3EAE6D2A990778009F1BE8 /* P2PSubjectV.swift in Sources */,
 				4E6EF56B2B65A33300AF252A /* PaymentDone.swift in Sources */,
+				4EA076B32BC0607400685A10 /* DepositWithdrawV.swift in Sources */,
 				4E3EAE6E2A990778009F1BE8 /* Model+P2P.swift in Sources */,
 				4E3EAE6F2A990778009F1BE8 /* TalerStrings.swift in Sources */,
 				4E3EAE702A990778009F1BE8 /* CurrencyInputView.swift in Sources */,
@@ -1308,6 +1313,7 @@
 				4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */,
 				4E7940DE29FC307C00A9AEA1 /* P2PSubjectV.swift in Sources */,
 				4E6EF56C2B65A33300AF252A /* PaymentDone.swift in Sources */,
+				4EA076B42BC0607400685A10 /* DepositWithdrawV.swift in Sources */,
 				4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */,
 				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
 				4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */,
