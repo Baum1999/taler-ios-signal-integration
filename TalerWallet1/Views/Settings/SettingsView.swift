@@ -217,6 +217,7 @@ struct SettingsView: View {
                                     symLog.log("running applyDevExperiment Refresh")
                                     do {
                                         try await model.setConfigT(setTesting: true)
+                                        try await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
                                         try await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
                                     } catch {    // TODO: show error
                                         symLog.log(error.localizedDescription)
