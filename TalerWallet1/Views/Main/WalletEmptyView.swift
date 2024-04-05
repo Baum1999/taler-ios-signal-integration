@@ -30,7 +30,7 @@ struct WalletEmptyView: View {
                 Text("Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
-                Text("You can also add a payment service manually on the Banking tab.")
+                Text("You can also add a payment service manually in the Settings.")
                     .talerFont(.body)
             }
             Section {

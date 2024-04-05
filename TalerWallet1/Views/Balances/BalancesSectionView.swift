@@ -43,12 +43,12 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: true)
         completedTransactions = WalletModel.completedTransactions(transactions)
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: true)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
     }
 }
@@ -70,15 +70,6 @@ extension BalancesSectionView: View {
                     .talerFont(.headline)
                     .listRowSeparator(.hidden)
             }
-            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
-            if showSpendingButton {
-                if !minimalistic && showSpendingHint {
-                    Text("You can spend these \(currencyInfo?.scope.currency ?? currency) in the Demo shop, or send them to another wallet.")
-                        .talerFont(.body)
-                        .multilineTextAlignment(.leading)
-                        .listRowSeparator(.hidden)
-                }
-            }
             BalancesNavigationLinksView(symLog: symLog,
                                          stack: stack.push(),
                                        balance: balance,
@@ -87,6 +78,25 @@ extension BalancesSectionView: View {
                          completedTransactions: $completedTransactions,
                                reloadAllAction: reloadCompleted,
                                reloadOneAction: reloadOneAction)
+            if pendingTransactions.count > 0 {
+                BalancesPendingRowView(symLog: symLog,
+                                        stack: stack.push(),
+                                      balance: balance,
+                          pendingTransactions: $pendingTransactions,
+                                reloadPending: reloadPending,
+                              reloadOneAction: reloadOneAction)
+                    .padding(.leading, ICONLEADING)
+            }
+            let currencyName = currencyInfo?.scope.currency ?? currency
+            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
+            if showSpendingButton {
+                if !minimalistic && showSpendingHint {
+                    Text("You can spend these \(currencyName) in the Demo shop, or send them to another wallet.")
+                        .talerFont(.body)
+                        .multilineTextAlignment(.leading)
+                        .listRowSeparator(.hidden)
+                }
+            }
             if showSpendingButton {
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend test money")
                 Button(title) {
@@ -97,15 +107,13 @@ extension BalancesSectionView: View {
                 .accessibilityHint("Will go to the demo shop website.")
                 .listRowSeparator(.hidden)
             }
-            if pendingTransactions.count > 0 {
-                BalancesPendingRowView(symLog: symLog,
-                                        stack: stack.push(),
-                                      balance: balance,
-                          pendingTransactions: $pendingTransactions,
-                                reloadPending: reloadPending,
-                              reloadOneAction: reloadOneAction)
-                    .padding(.leading, ICONLEADING)
-            }
+            DepositWithdrawV(stack: stack.push(),
+                         scopeInfo: balance.scopeInfo,
+                   amountAvailable: balance.available,
+                          currency: currencyName,
+                  amountToTransfer: $amountToTransfer)   // does still have the wrong currency
+            .listRowSeparator(.hidden)
+
         } header: {
             BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo,
                     currencyName: currencyInfo?.scope.currency ?? currency,
@@ -115,7 +123,7 @@ extension BalancesSectionView: View {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
             // TODO: only load the MAXRECENT most recent transactions
-                let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo)
+            let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: true)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
