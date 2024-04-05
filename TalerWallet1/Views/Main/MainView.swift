@@ -74,7 +74,11 @@ struct MainView: View {
 }
 // MARK: - TabBar
 enum Tab {
-    case balances, exchanges, settings
+    case balances
+#if false
+    case exchanges
+#endif
+    case settings
 }
 
 // MARK: - Content
@@ -91,7 +95,7 @@ extension MainView {
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
         @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
         let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
-        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
+//        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
         let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
@@ -122,8 +126,8 @@ extension MainView {
                     switch tappedTab {
                         case .balances:
                             ViewState.shared.popToRootView(nil)
-                        case .exchanges:
-                            ViewState2.shared.popToRootView(nil)
+//                        case .exchanges:
+//                            ViewState2.shared.popToRootView(nil)
                         default:
                             break
                     }
@@ -170,7 +174,7 @@ extension MainView {
                 }
                 .tag(Tab.balances)
                 .badge(0)         // TODO: set badge if transaction finished in background
-
+#if false
                 NavigationView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
                                   balances: $balances,
@@ -183,9 +187,11 @@ extension MainView {
                     if !minimalistic { Text(exchangesTitle) }
                 }
                 .tag(Tab.exchanges)
-
+#endif
                 NavigationView {
-                    SettingsView(stack: stack.push(), navTitle: settingsTitle)
+                    SettingsView(stack: stack.push(),
+                              balances: $balances,
+                              navTitle: settingsTitle)
                 }.navigationViewStyle(.stack)
                 .tabItem {
                     Image(systemName: "gear")                   // system will automatically use filled variant
