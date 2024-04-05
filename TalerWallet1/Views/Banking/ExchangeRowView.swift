@@ -23,22 +23,6 @@ struct ExchangeRowView: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @State private var buttonSelected: Int? = nil
-    @State var myExchange: Exchange? = nil
-
-    func selectAndUpdate(_ button: Int) {
-        amountToTransfer.setCurrency(currency)
-        buttonSelected = button      // will trigger NavigationLink
-        // TODO: after user tapped a button, while navigation animation runs, contact Exchange to update Fees
-        // cannot be uncommented yet since there is no scopeInfo
-//        Task { // runs on MainActor
-//            do {
-//                try await model.updateExchange(scopeInfo: balance.scopeInfo)
-//            } catch {    // TODO: error handling - couldn't updateExchange
-//                //                symLog.log("error: \(error)")
-//            }
-//        }
-    }
 
     var body: some View {
 #if PRINT_CHANGES
@@ -48,47 +32,13 @@ struct ExchangeRowView: View {
 #else
         let delay: UInt = 0
 #endif
-        let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
-                                   comment: "Abbreviation of `Deposit (currency)´")
-        let depositTitle1 = String(localized: "Deposit\t\(currency)",
-                                   comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
-
-        let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
-                                    comment: "Abbreviation of `Withdraw (currency)´")
-        let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
-                                    comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let baseURL = exchange.exchangeBaseUrl
-
-        let deposit = LazyView {
-            DepositIbanV(stack: stack.push(),
-                      feeLabel: nil,
-                  feeIsNotZero: nil,
-               amountAvailable: amountAvailable,
-//                   depositIBAN: $depositIBAN,
-//                 accountHolder: $accountHolder,
-              amountToTransfer: $amountToTransfer)
-        }
-        let manualWithdraw = LazyView {
-            ManualWithdraw(stack: stack.push(), isSheet: false,
-                 exchangeBaseUrl: baseURL,
-                        exchange: $myExchange,
-                amountToTransfer: $amountToTransfer)
-        }
         let showToS = LazyView {
             WithdrawTOSView(stack: stack.push(),
                   exchangeBaseUrl: baseURL,
                            viewID: VIEW_WITHDRAW_TOS,
                      acceptAction: nil)         // pop back to here
         }
-        let disableDeposit = false     // TODO: availableAmount.isZero
-        let twoRowButtons = TwoRowButtons(stack: stack.push(),
-                                      sendTitle: minimalistic ? depositTitle0 : depositTitle1,
-                                      recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
-                                 fitsSideBySide: false,
-                                      lineLimit: 5,
-                                   sendDisabled: disableDeposit,
-                                     sendAction: { selectAndUpdate(1) },
-                                     recvAction: { selectAndUpdate(2) })
         Group {
             NavigationLink(destination: showToS) {
                 VStack(alignment: .leading) {
@@ -100,28 +50,15 @@ struct ExchangeRowView: View {
                     }
                 }
             }
-            .background( Group {
-                NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            })
             .listRowSeparator(.hidden)
-            if #available(iOS 16.0, *) {
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: HSPACING) {
-                        twoRowButtons.makeCopy(fitsSideBySide: true)
-                    }
-                    VStack { twoRowButtons }
-                }
-            } else { // view for iOS 15
-                VStack { twoRowButtons }
-            }
+
+            DepositWithdrawV(stack: stack.push(),
+                         scopeInfo: exchange.scopeInfo,
+                   amountAvailable: amountAvailable,
+                          currency: currency,
+                  amountToTransfer: $amountToTransfer)
         }
         .task {
-            if myExchange == nil {
-                myExchange = exchange
-            }
             if controller.hasInfo(for: currency) == nil {
                 symLog.log("fetching info for \(currency)")
                 // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
