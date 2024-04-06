@@ -32,10 +32,10 @@ fileprivate struct GetMaxPeerPushAmount: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func getMaxPeerPushAmountM(_ currency: String)       // M for MainActor
+    func getMaxPeerPushAmountM(_ currency: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> AmountResponse {
         let request = GetMaxPeerPushAmount(currency: currency)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // getMaxPeerPushAmountM
@@ -58,10 +58,10 @@ fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func checkPeerPushDebitM(_ amount: Amount)       // M for MainActor
+    func checkPeerPushDebitM(_ amount: Amount, viewHandles: Bool = false)       // M for MainActor
       async throws -> CheckPeerPushDebitResponse {
         let request = CheckPeerPushDebit(amount: amount)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // checkPeerPushDebitM
@@ -90,11 +90,11 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms)       // M for MainActor
+    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)       // M for MainActor
     async throws -> InitiatePeerPushDebitResponse {
         let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
                                             partialContractTerms: terms)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // initiatePeerPushDebitM
@@ -123,10 +123,10 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?)       // M for MainActor
+    func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?, viewHandles: Bool = false)       // M for MainActor
       async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // checkPeerPullCreditM
@@ -151,11 +151,11 @@ fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func initiatePeerPullCreditM(_ baseURL: String?, terms: PeerContractTerms)  // M for MainActor
+    func initiatePeerPullCreditM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)  // M for MainActor
       async throws -> InitiatePeerPullCreditResponse {
         let request = InitiatePeerPullCredit(exchangeBaseUrl: baseURL,
                                         partialContractTerms: terms)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // initiatePeerPullCreditM
@@ -181,10 +181,10 @@ fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func preparePeerPushCreditM(_ talerUri: String)       // M for MainActor
+    func preparePeerPushCreditM(_ talerUri: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> PreparePeerPushCreditResponse {
         let request = PreparePeerPushCredit(talerUri: talerUri)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // preparePeerPushCreditM
@@ -202,10 +202,10 @@ fileprivate struct AcceptPeerPushCredit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func acceptPeerPushCreditM(_ transactionId: String)       // M for MainActor
+    func acceptPeerPushCreditM(_ transactionId: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> Decodable {
         let request = AcceptPeerPushCredit(transactionId: transactionId)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // acceptPeerPushCreditM
@@ -230,10 +230,10 @@ fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func preparePeerPullDebitM(_ talerUri: String)       // M for MainActor
+    func preparePeerPullDebitM(_ talerUri: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> PreparePeerPullDebitResponse {
         let request = PreparePeerPullDebit(talerUri: talerUri)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // preparePeerPullDebitM
@@ -251,10 +251,10 @@ fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor
-    func confirmPeerPullDebitM(_ transactionId: String)       // M for MainActor
+    func confirmPeerPullDebitM(_ transactionId: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> Decodable {
         let request = ConfirmPeerPullDebit(transactionId: transactionId)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 } // confirmPeerPullDebitM

@@ -74,27 +74,27 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
 extension WalletModel {
     /// validate IBAN
     @MainActor
-    func validateIbanM(_ iban: String)       // M for MainActor
+    func validateIbanM(_ iban: String, viewHandles: Bool = false)       // M for MainActor
     async throws -> Bool {
         let request = ValidateIban(iban: iban)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.valid
     }
 
     /// deposit coins. Networking involved
     @MainActor
-    func prepareDepositM(_ depositPaytoUri: String, amount: Amount)       // M for MainActor
+    func prepareDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)       // M for MainActor
       async throws -> PrepareDepositResult {
           let request = PrepareDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
-          let response = try await sendRequest(request, ASYNCDELAY)
+          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }
 
     @MainActor
-    func createDepositGroupM(_ depositPaytoUri: String, amount: Amount)  // M for MainActor
+    func createDepositGroupM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)  // M for MainActor
       async throws -> DepositGroupResult {
           let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
-          let response = try await sendRequest(request, ASYNCDELAY)
+          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }
 }

@@ -38,14 +38,9 @@ struct BarGraphHeader: View {
             if let scopeInfo {
                 symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
                 // TODO: only load the 10 most recent transactions
-                do {
-                    let response = try await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
-                                                                 scopeInfo: scopeInfo)
+                if let response = try? await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
+                                                                 scopeInfo: scopeInfo) {
                     completedTransactions = WalletModel.completedTransactions(response)
-                } catch {
-                    symLog.log(error.localizedDescription)
-                    model.showError(.error(error))
-                    controller.playSound(0)
                 }
             }
         }

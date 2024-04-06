@@ -15,7 +15,7 @@ struct TransactionsListView: View {
     let transactions: [Transaction]
     let showUpDown: Bool
     let reloadAllAction: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @State private var viewId = UUID()
     @State private var upAction: () -> Void = {}
@@ -84,7 +84,7 @@ struct TransactionsArraySliceV: View {
     let stack: CallStack
     let scopeInfo: ScopeInfo
     let transactions: [Transaction]
-    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @EnvironmentObject private var model: WalletModel
     var body: some View {

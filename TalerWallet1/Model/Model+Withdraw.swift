@@ -194,57 +194,57 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
     @MainActor                    // M for MainActor
-    func loadWithdrawalExchangeForUriM(_ talerUri: String)
+    func loadWithdrawalExchangeForUriM(_ talerUri: String, viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     /// load withdrawal details. Networking involved
     @MainActor                  // M for MainActor
-    func getWithdrawalDetailsForUriM(_ talerWithdrawUri: String)
+    func getWithdrawalDetailsForUriM(_ talerWithdrawUri: String, viewHandles: Bool = false)
       async throws -> WithdrawUriInfoResponse {
         let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerWithdrawUri)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor                     // M for MainActor
-    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount, cancellationId: String? = nil)
+    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
       async throws -> WithdrawalAmountDetails {
         let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
                                                              amount: amount,
                                                      cancellationId: cancellationId)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor                  // M for MainActor
-    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String], acceptLanguage: String)
+    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String], acceptLanguage: String, viewHandles: Bool = false)
       async throws -> ExchangeTermsOfService {
         let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl,
                                                  acceptedFormat: acceptedFormat,
                                                  acceptLanguage: acceptLanguage)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor              // M for MainActor
-    func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String)
+    func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String, viewHandles: Bool = false)
       async throws -> Decodable {
         let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor               // M for MainActor
-    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String)
+    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String, viewHandles: Bool = false)
       async throws -> AcceptWithdrawalResponse? {
         let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor                  // M for MainActor
-    func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?)
+    func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?, viewHandles: Bool = false)
       async throws -> AcceptManualWithdrawalResult? {
         let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 }

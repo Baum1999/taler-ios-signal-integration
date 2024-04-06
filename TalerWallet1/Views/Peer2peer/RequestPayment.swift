@@ -105,27 +105,13 @@ struct RequestPayment: View {
         .task(id: amountToTransfer.value) {
             if exchange == nil {
                 if let url = scopeInfo.url {
-                    do {
-                        exchange = try await model.getExchangeByUrl(url: url)
-                    } catch {
-                        symLog.log(error.localizedDescription)
-                        model.showError(.error(error))
-                        controller.playSound(0)
-                    }
+                    exchange = try? await model.getExchangeByUrl(url: url)
                 }
             }
             if amountToTransfer.isZero {
 //                fee = EMPTYSTRING
             } else {
-                do {
-                    let ppCheck = try await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
-                    peerPullCheck = ppCheck     // redraw
-                    // TODO: set from exchange
-//                  agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
-                    peerPullCheck = nil
-                }
+                peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
             }
         }
     }

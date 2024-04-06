@@ -92,26 +92,21 @@ struct WithdrawURIView: View {
             DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)
         }
         .task {
-            do { // TODO: cancelled
-                symLog.log(".task")
-                let withdrawUriInfo = try await model.getWithdrawalDetailsForUriM(url.absoluteString)
+            symLog.log(".task")
+            if let withdrawUriInfo = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
                 let amount = withdrawUriInfo.amount
                 let baseUrl = withdrawUriInfo.defaultExchangeBaseUrl
                            ?? withdrawUriInfo.possibleExchanges.first?.exchangeBaseUrl
                 if let baseUrl {
-                    exchange = try await model.getExchangeByUrl(url: baseUrl)
-                    let details = try await model.getWithdrawalDetailsForAmountM(baseUrl, amount: amount)
-                    withdrawalAmountDetails = details
-//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
+                    exchange = try? await model.getExchangeByUrl(url: baseUrl)
+                    if let details = try? await model.getWithdrawalDetailsForAmountM(baseUrl, amount: amount) {
+                        withdrawalAmountDetails = details
+                    }
+                    //                    agePicker.setAges(ages: details?.ageRestrictionOptions)
                 } else {    // TODO: error
                     symLog.log("no exchangeBaseUrl or no exchange")
                     withdrawalAmountDetails = nil
                 }
-            } catch {
-                symLog.log(error.localizedDescription)
-                model.showError(.error(error))
-                controller.playSound(0)
-                withdrawalAmountDetails = nil
             }
         }
     }

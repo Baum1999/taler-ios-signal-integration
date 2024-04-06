@@ -88,15 +88,11 @@ struct P2pReceiveURIView: View {
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
         }
         .task { // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
-            do { // TODO: cancelled
-                symLog.log(".task")
-                let ppResponse = try await model.preparePeerPushCreditM(url.absoluteString)
-                exchange = try await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
+            symLog.log(".task")
+            if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {
+                exchange = try? await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
                 peerPushCreditResponse = ppResponse
-            } catch {
-                symLog.log(error.localizedDescription)
-                model.showError(.error(error))
-                controller.playSound(0)
+            } else {
                 peerPushCreditResponse = nil
             }
         }

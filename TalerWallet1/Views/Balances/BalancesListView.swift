@@ -84,15 +84,10 @@ struct BalancesListView: View {
             model.cachedBalances = nil
         }
 
-        do {
-            let reloaded = try await model.balancesM(stack.push())
+        if let reloaded = try? await model.balancesM(stack.push()) {
             let count = reloaded.count
             balances = reloaded         // redraw
             return count
-        } catch {
-            symLog.log(error.localizedDescription)
-            model.showError(.error(error))
-            controller.playSound(0)
         }
 
         return nil

@@ -23,21 +23,15 @@ struct WithdrawTOSView: View {
     @State var exchangeTOS: ExchangeTermsOfService?
 
     func loadToS(_ language: String) async {
-        do {
-            if let exchangeBaseUrl {
-                let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]      // MARKDOWN, HTML, PLAINTEXT
-                let someTOS = try await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
-                                                           acceptedFormat: acceptedFormat,
-                                                           acceptLanguage: language)
+        if let exchangeBaseUrl {
+            let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]      // MARKDOWN, HTML, PLAINTEXT
+            if let someTOS = try? await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
+                                                       acceptedFormat: acceptedFormat,
+                                                       acceptLanguage: language) {
                 exchangeTOS = someTOS
-            } else {
-                // TODO: Yikes! No baseURL
-
-
-
             }
-        } catch {    // TODO: error
-            symLog.log(error.localizedDescription)
+        } else {
+            // TODO: Yikes! No baseURL
         }
     }
 
@@ -48,19 +42,15 @@ struct WithdrawTOSView: View {
             Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
                   language: languageCode, languageAction: loadToS) {
                 Task { // runs on MainActor
-                    do {
-                        if let exchangeBaseUrl {
-                            _ = try await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
-                            if acceptAction != nil {
-                                acceptAction!()
-                            } else { // just go back - caller will reload
-                                self.presentationMode.wrappedValue.dismiss()
-                            }
-                        } else {
-                            // TODO: error
+                    if let exchangeBaseUrl {
+                        _ = try? await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
+                        if acceptAction != nil {
+                            acceptAction!()
+                        } else { // just go back - caller will reload
+                            self.presentationMode.wrappedValue.dismiss()
                         }
-                    } catch {    // TODO: Show Error
-                        symLog.log(error.localizedDescription)
+                    } else {
+                        // TODO: error
                     }
                 }
             }

@@ -197,25 +197,25 @@ fileprivate struct confirmPayForUri: WalletBackendFormattedRequest {
 extension WalletModel {
     /// load payment details. Networking involved
     @MainActor
-    func preparePayForUriM(_ talerPayUri: String)       // M for MainActor
+    func preparePayForUriM(_ talerPayUri: String, viewHandles: Bool = false)       // M for MainActor
       async throws -> PreparePayResult {
           let request = PreparePayForUri(talerPayUri: talerPayUri)
-          let response = try await sendRequest(request, ASYNCDELAY)
+          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }
     @MainActor
-    func preparePayForTemplateM(_ talerPayTemplateUri: String, amount: Amount?, summary: String?)       // M for MainActor
+    func preparePayForTemplateM(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)       // M for MainActor
     async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplate(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
     @MainActor
-    func confirmPayM(_ transactionId: String)              // M for MainActor
+    func confirmPayM(_ transactionId: String, viewHandles: Bool = false)              // M for MainActor
       async throws -> ConfirmPayResult {
           let request = confirmPayForUri(transactionId: transactionId)
-          let response = try await sendRequest(request, ASYNCDELAY)
+          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }
 }

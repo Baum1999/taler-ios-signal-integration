@@ -34,16 +34,14 @@ struct P2pAcceptDone: View {
                                                       : SHEET_PAY_P2P_ACCEPT)
             }
             .task {
-                do {
-                    if incoming {
-                        _ = try await model.acceptPeerPushCreditM(transactionId)
-                    } else {
-                        _ = try await model.confirmPeerPullDebitM(transactionId)
+                if incoming {
+                    if let _ = try? await model.acceptPeerPushCreditM(transactionId) {
+                        dismissTop()
                     }
-                    dismissTop()
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
-                    controller.playSound(0)
+                } else {
+                    if let _ = try? await model.confirmPeerPullDebitM(transactionId) {
+                        dismissTop()
+                    }
                 }
             }
     }

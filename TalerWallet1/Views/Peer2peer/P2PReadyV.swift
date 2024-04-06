@@ -27,8 +27,8 @@ struct P2PReadyV: View {
     let navTitle = String(localized: "P2P Ready")
     @State private var transactionId: String? = nil
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
     var body: some View {
@@ -69,35 +69,33 @@ struct P2PReadyV: View {
         }
         .task(id: amountToTransfer.value) {
             symLog.log(".task")
-            do {
-                guard transactionStarted == false else {
+            guard transactionStarted == false else {
 // TODO:               logger.warning("Try to start P2P a second time")
-                    symLog.log("Yikes❗️ Try to start P2P a second time")
-                    return
-                }
-                transactionStarted = true
-                let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
-                                                                      : expireDays > 5 ? 60 : 3)
-                                              : Timestamp.inSomeDays(expireDays)
-                if amountToSend {
-                    let terms = PeerContractTerms(amount: amountToTransfer,
-                                                 summary: summary,
-                                        purse_expiration: timestamp)
-                    // TODO: let user choose baseURL
-                    let response = try await model.initiatePeerPushDebitM(nil, terms: terms)
-                    // will switch from WithdrawProgressView to TransactionSummaryV
-                    transactionId = response.transactionId
-                } else {
-                    let terms = PeerContractTerms(amount: amountToTransfer,
-                                                 summary: summary,
-                                        purse_expiration: timestamp)
-                    // TODO: let user choose baseURL
-                    let response = try await model.initiatePeerPullCreditM(nil, terms: terms)
+                symLog.log("Yikes❗️ Try to start P2P a second time")
+                return
+            }
+            transactionStarted = true
+            let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
+                                                                  : expireDays > 5 ? 60 : 3)
+                                          : Timestamp.inSomeDays(expireDays)
+            if amountToSend {
+                let terms = PeerContractTerms(amount: amountToTransfer,
+                                             summary: summary,
+                                    purse_expiration: timestamp)
+                // TODO: let user choose baseURL
+                if let response = try? await model.initiatePeerPushDebitM(nil, terms: terms) {
                     // will switch from WithdrawProgressView to TransactionSummaryV
                     transactionId = response.transactionId
                 }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
+            } else {
+                let terms = PeerContractTerms(amount: amountToTransfer,
+                                             summary: summary,
+                                    purse_expiration: timestamp)
+                // TODO: let user choose baseURL
+                if let response = try? await model.initiatePeerPullCreditM(nil, terms: terms) {
+                    // will switch from WithdrawProgressView to TransactionSummaryV
+                    transactionId = response.transactionId
+                }
             }
         } // task
     }

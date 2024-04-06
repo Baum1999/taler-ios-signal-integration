@@ -73,11 +73,7 @@ struct P2pPayURIView: View {
                 LoadingView(scopeInfo: nil, message: message)
                     .task { do {
                         symLog.log(".task")
-                        let ppDebitResponse = try await model.preparePeerPullDebitM(url.absoluteString)
-                        peerPullDebitResponse = ppDebitResponse
-                    } catch {    // TODO: error
-                        symLog.log(error.localizedDescription)
-                        peerPullDebitResponse = nil
+                        peerPullDebitResponse = try? await model.preparePeerPullDebitM(url.absoluteString)
                     } }
             }
         }

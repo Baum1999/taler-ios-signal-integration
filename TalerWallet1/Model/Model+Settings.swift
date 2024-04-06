@@ -33,13 +33,13 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func loadTestKudosM(test: Bool, amount: Amount)
+    @MainActor func loadTestKudosM(test: Bool, amount: Amount, viewHandles: Bool = false)
     async throws {          // M for MainActor
         let request = WithdrawTestBalanceRequest(amount: amount,
 //                                             bankBaseUrl: test ? TESTBANK : DEMOBANK,
                                      corebankApiBaseUrl: test ? TESTBANK : DEMOBANK,
                                         exchangeBaseUrl: test ? TESTEXCHANGE : DEMOEXCHANGE)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 } // loadTestKudosM()
 // MARK: -
@@ -77,7 +77,7 @@ fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func runIntegrationTestM(newVersion: Bool, test: Bool)
+    @MainActor func runIntegrationTestM(newVersion: Bool, test: Bool, viewHandles: Bool = false)
     async throws {               // M for MainActor
         let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 300)
         let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 100)
@@ -89,7 +89,7 @@ extension WalletModel {
                                          merchantAuthToken: MERCHANTAUTHTOKEN,
                                          amountToWithdraw: amountW,
                                          amountToSpend: amountS)
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 } // runIntegrationTestM()
   // MARK: -
@@ -111,9 +111,9 @@ fileprivate struct InfiniteTransactionLoop: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool)
+    func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool, viewHandles: Bool = false)
       async throws {
         let request = InfiniteTransactionLoop(delayMs: delayMs, shouldFetch: shouldFetch)
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 } // runIntegrationTestM()

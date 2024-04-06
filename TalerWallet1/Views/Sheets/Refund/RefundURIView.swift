@@ -17,8 +17,8 @@ struct RefundURIView: View {
 
     @State var refundTransactionId: String? = nil
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
     var body: some View {
@@ -36,12 +36,9 @@ struct RefundURIView: View {
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {
-                    do {
-                        symLog.log(".task")
-                        let result = try await model.startRefundForUriM(url: url.absoluteString)
+                    symLog.log(".task")
+                    if let result = try? await model.startRefundForUriM(url: url.absoluteString) {
                         refundTransactionId = result
-                    } catch {    // TODO: error
-                        symLog.log(error.localizedDescription)
                     }
                 }
         }

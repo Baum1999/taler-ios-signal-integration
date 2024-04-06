@@ -20,8 +20,8 @@ struct ManualWithdrawDone: View {
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State private var transactionId: String?
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
     func dismissTopAnimated(_ stack: CallStack) {
         dismissTop()
@@ -55,12 +55,9 @@ struct ManualWithdrawDone: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
             if transactionId == nil {
-                do {
-                    let result = try await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                             amount: amountToTransfer, restrictAge: 0)
-                    transactionId = result!.transactionId
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
+                if let result = try? await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
+                                                                             amount: amountToTransfer, restrictAge: 0) {
+                    transactionId = result.transactionId
                 }
             }
         }

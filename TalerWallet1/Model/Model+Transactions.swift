@@ -104,47 +104,47 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
     func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
-                       sort: String = "descending", includeRefreshes: Bool = false)
+                       sort: String = "descending", includeRefreshes: includeRefreshes, viewHandles: Bool = false)
     async throws -> [Transaction] {
         let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.transactions
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending")
+    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending", viewHandles: Bool = false)
     async throws -> [Transaction] {    // M for MainActor
-        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort)
+        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort, viewHandles: viewHandles)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved
-    func abortTransaction(transactionId: String) async throws {
+    func abortTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = AbortTransaction(transactionId: transactionId)
         logger.notice("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
     /// delete the specified transaction from Wallet-Core. No networking involved
-    func deleteTransaction(transactionId: String) async throws {
+    func deleteTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = DeleteTransaction(transactionId: transactionId)
         logger.notice("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func failTransaction(transactionId: String) async throws {
+    func failTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = FailTransaction(transactionId: transactionId)
         logger.notice("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func suspendTransaction(transactionId: String) async throws {
+    func suspendTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = SuspendTransaction(transactionId: transactionId)
         logger.notice("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func resumeTransaction(transactionId: String) async throws {
+    func resumeTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = ResumeTransaction(transactionId: transactionId)
         logger.notice("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 }

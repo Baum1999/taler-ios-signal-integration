@@ -65,11 +65,7 @@ struct SettingsView: View {
             showResetAlert = false
             Task { // runs on MainActor
                 symLog.log("❗️Reset wallet-core❗️")
-                do {
-                    try await model.resetWalletCoreT()
-                } catch {    // TODO: show error
-                    symLog.log(error.localizedDescription)
-                }
+                try? await model.resetWalletCoreT()
             }
         }
     }
@@ -186,12 +182,8 @@ struct SettingsView: View {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw KUDOS")
-                                    do {
-                                        let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
-                                        try await model.loadTestKudosM(test: false, amount: amount)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
+                                    try? await model.loadTestKudosM(test: false, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -204,12 +196,8 @@ struct SettingsView: View {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
-                                    do {
-                                        let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
-                                        try await model.loadTestKudosM(test: true, amount: amount)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
+                                    try? await model.loadTestKudosM(test: true, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -227,13 +215,9 @@ struct SettingsView: View {
                             Button(title) {
                                 Task { // runs on MainActor
                                     symLog.log("running applyDevExperiment Refresh")
-                                    do {
-                                        try await model.setConfigT(setTesting: true)
-                                        try await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
-                                        try await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.setConfigT(setTesting: true)
+                                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
+                                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -246,11 +230,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on demo")
-                                    do {
-                                        try await model.runIntegrationTestM(newVersion: false, test: false)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.runIntegrationTestM(newVersion: false, test: false)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -263,11 +243,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on test")
-                                    do {
-                                        try await model.runIntegrationTestM(newVersion: false, test: true)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.runIntegrationTestM(newVersion: false, test: true)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -280,11 +256,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on demo")
-                                    do {
-                                        try await model.runIntegrationTestM(newVersion: true, test: false)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.runIntegrationTestM(newVersion: true, test: false)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -297,11 +269,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on test")
-                                    do {
-                                        try await model.runIntegrationTestM(newVersion: true, test: true)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.runIntegrationTestM(newVersion: true, test: true)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -314,11 +282,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Running Infinite Transaction Loop")
-                                    do {
-                                        try await model.testingInfiniteTransaction(delayMs: 10_000, shouldFetch: true)
-                                    } catch {    // TODO: show error
-                                        symLog.log(error.localizedDescription)
-                                    }
+                                    try? await model.testingInfiniteTransaction(delayMs: 10_000, shouldFetch: true)
                                 }
                             }
                             .buttonStyle(.bordered)

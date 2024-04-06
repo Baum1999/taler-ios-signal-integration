@@ -64,12 +64,9 @@ struct ExchangeRowView: View {
                 // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
                 let scopeInfo = exchange.scopeInfo
                              ?? ScopeInfo(type: .global, currency: currency)
-                do {
-                    let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: delay)
+                if let info = try? await model.getCurrencyInfoM(scope: scopeInfo, delay: delay) {
 //                    logger.info("got info: \(scope.currency, privacy: .public)")
                     await controller.setInfo(info)
-                } catch {    // TODO: error handling - couldn't get CurrencyInfo
-//                    logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
                 }
             }
         }

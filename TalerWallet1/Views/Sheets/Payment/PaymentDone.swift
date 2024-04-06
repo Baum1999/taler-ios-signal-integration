@@ -15,8 +15,8 @@ struct PaymentDone: View {
 
     @State var paymentDone: Bool = false
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
     func dismissTopAnimated(_ stack: CallStack) {
         dismissTop()
@@ -46,9 +46,8 @@ struct PaymentDone: View {
             } else {
                 LoadingView(scopeInfo: nil, message: "Paying...")
                     .task {
-                        do {
-                            let confirmPayResult = try await model.confirmPayM(transactionId)
-//                          symLog.log(confirmPayResult as Any)
+                        if let confirmPayResult = try? await model.confirmPayM(transactionId) {
+                            //                          symLog.log(confirmPayResult as Any)
                             if confirmPayResult.type == "done" {
                                 paymentDone = true
                             } else {
@@ -56,11 +55,6 @@ struct PaymentDone: View {
                                 // TODO: show error
                                 dismissTop()
                             }
-                        } catch {
-                            controller.playSound(0)
-                            // TODO: error
-                            symLog.log(error.localizedDescription)
-                            dismissTop()
                         }
                     }
             }

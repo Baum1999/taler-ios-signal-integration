@@ -19,8 +19,8 @@ struct WithdrawAcceptDone: View {
 
     @State private var transactionId: String? = nil
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-            return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
+            return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
     func dismissTopAnimated(_ stack: CallStack) {
         dismissTop()
@@ -54,16 +54,12 @@ struct WithdrawAcceptDone: View {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
         }.task {
-            do {
-                if let exchangeBaseUrl {
-                    let result = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString)
-                    let confirmTransferUrl = result!.confirmTransferUrl
+            if let exchangeBaseUrl {
+                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString) {
+                    let confirmTransferUrl = result.confirmTransferUrl
                     symLog.log(confirmTransferUrl)
-                    transactionId = result!.transactionId
+                    transactionId = result.transactionId
                 }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-                controller.playSound(0)
             }
         }
     }

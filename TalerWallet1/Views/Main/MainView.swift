@@ -271,13 +271,8 @@ extension MainView {
                     let scope = balance.scopeInfo
                     if controller.hasInfo(for: scope.currency) == nil {
                         Task { // runs on MainActor
-                            do {
-                                let info = try await model.getCurrencyInfoM(scope: scope, delay: delay)
+                            if let info = try? await model.getCurrencyInfoM(scope: scope, delay: delay) {
                                 await controller.setInfo(info)
-                            } catch {    // TODO: error handling - couldn't get CurrencyInfo
-                                logger.error("Couldn't get info for: \(scope.currency, privacy: .public)\n\(error)")
-                                model.showError(.error(error))
-                                controller.playSound(0)
                             }
                         }
                     }

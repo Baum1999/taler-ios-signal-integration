@@ -40,28 +40,26 @@ struct WithdrawExchangeV: View {
         }
         .task {
             if exchange == nil {
-                do { // TODO: cancelled
-                    symLog.log(".task")
-                    let withdrawExchange = try await model.loadWithdrawalExchangeForUriM(url.absoluteString)
+                symLog.log(".task")
+                if let withdrawExchange = try? await model.loadWithdrawalExchangeForUriM(url.absoluteString) {
                     let baseUrl = withdrawExchange.exchangeBaseUrl
                     symLog.log("getExchangeByUrl(\(baseUrl))")
-                    let exc = try await model.getExchangeByUrl(url: baseUrl)
-                    // let the controller collect CurrencyInfo from this formerly unknown exchange
-                    let _ = try await controller.getInfo(from: baseUrl, model: model)
-                    if let amount = withdrawExchange.amount {
-                        amountToTransfer = amount
+                    if let exc = try? await model.getExchangeByUrl(url: baseUrl) {
+                        // let the controller collect CurrencyInfo from this formerly unknown exchange
+                        let _ = try? await controller.getInfo(from: baseUrl, model: model)
+                        if let amount = withdrawExchange.amount {
+                            amountToTransfer = amount
+                        } else {
+                            let currency = exc.scopeInfo?.currency
+                            ?? exc.currency
+                            ?? String(localized: "Unknown", comment: "unknown currency")
+                            amountToTransfer.setCurrency(currency)
+                            // is already Amount.zero(currency: "")
+                        }
+                        exchange = exc
                     } else {
-                        let currency = exc.scopeInfo.currency
-                        amountToTransfer.setCurrency(currency)
-                        // is already Amount.zero(currency: "")
+                        exchange = nil
                     }
-                    exchange = exc
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
-                    symLog.log(error.localizedDescription)
-                    model.showError(.error(error))
-                    controller.playSound(0)
-                    exchange = nil
                 }
             }
         }

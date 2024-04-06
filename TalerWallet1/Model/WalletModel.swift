@@ -32,7 +32,7 @@ class WalletModel: ObservableObject {
         didSet { showError = error != nil }
     }
 
-    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0)
+    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0, viewHandles: Bool = false)
       async throws -> T.Response {    // T for any Thread
 #if !DEBUG
         logger.log("sending: \(request.operation(), privacy: .public)")
@@ -52,20 +52,24 @@ class WalletModel: ObservableObject {
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
             logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
+            if !viewHandles {
+                // TODO: symlog + controller sound
+                self.error = .error(error)
+            }
             throw error
         }
     }
 
-    func getTransactionByIdT(_ transactionId: String)
+    func getTransactionByIdT(_ transactionId: String, viewHandles: Bool = false)
       async throws -> Transaction {              // T for any Thread
         // might be called from a background thread itself
         let request = GetTransactionById(transactionId: transactionId)
-        return try await sendRequest(request, ASYNCDELAY)
+        return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
     /// get the specified transaction from Wallet-Core. No networking involved
-    @MainActor func getTransactionByIdM(_ transactionId: String)
+    @MainActor func getTransactionByIdM(_ transactionId: String, viewHandles: Bool = false)
     async throws -> Transaction {                // M for MainActor
-        return try await getTransactionByIdT(transactionId)      // call GetTransactionById on main thread
+        return try await getTransactionByIdT(transactionId, viewHandles: viewHandles)      // call GetTransactionById on main thread
     }
 }
 // MARK: -
@@ -182,11 +186,11 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
-    func initWalletCoreT(setTesting: Bool) async throws -> VersionInfo {
+    func initWalletCoreT(setTesting: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
                     // T for any Thread
         let docPath = try docPath(sqlite3: true)
         let request = InitRequest(persistentStoragePath: docPath, setTesting: setTesting)
-        let response = try await sendRequest(request, 0)    // no Delay
+        let response = try await sendRequest(request, 0, viewHandles: viewHandles)    // no Delay
         return response.versionInfo
     }
 
@@ -238,10 +242,10 @@ fileprivate struct ResetRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// reset Wallet-Core
-    func resetWalletCoreT() async throws {
+    func resetWalletCoreT(viewHandles: Bool = false) async throws {
         // T for any Thread
         let request = ResetRequest()
-        _ = try await sendRequest(request, 0)
+        _ = try await sendRequest(request, 0, viewHandles: viewHandles)
     }
 }
 // MARK: -
@@ -260,10 +264,10 @@ fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// tell wallet-core to mock new transactions
-    func devExperimentT(talerUri: String) async throws {
+    func devExperimentT(talerUri: String, viewHandles: Bool = false) async throws {
         // T for any Thread
         let request = DevExperimentRequest(talerUri: talerUri)
-        _ = try await sendRequest(request, 0)
+        _ = try await sendRequest(request, 0, viewHandles: viewHandles)
     }
 }
 

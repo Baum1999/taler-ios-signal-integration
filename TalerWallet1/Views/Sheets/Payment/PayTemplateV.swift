@@ -62,17 +62,12 @@ struct PayTemplateV: View {
     }
     func acceptAction(preparePayResult: PreparePayResult) {
         Task { // runs on MainActor
-            do {
-                let confirmPayResult = try await model.confirmPayM(preparePayResult.transactionId)
-//                symLog.log(confirmPayResult as Any)
+            if let confirmPayResult = try? await model.confirmPayM(preparePayResult.transactionId) {
+                //                symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
                     controller.playSound(0)
                     // TODO: show error
                 }
-            } catch {
-                controller.playSound(0)
-                // TODO: error
-                symLog.log(error.localizedDescription)
             }
             dismissTop()
         }
@@ -94,8 +89,7 @@ struct PayTemplateV: View {
     }
 
     func preparePayForTemplate() async {
-        do {
-            let ppCheck = try await model.preparePayForTemplateM(url.absoluteString, amount: amountToTransfer, summary: summary)
+        if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amountToTransfer, summary: summary) {
             let amount = ppCheck.amountRaw
             let currency = amount.currencyStr
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
@@ -107,10 +101,6 @@ struct PayTemplateV: View {
             let amountVoiceOver = amount.string(currencyInfo)
             announce(this: "\(amountVoiceOver), \(feeLabel)")
             preparePayResult = ppCheck
-        } catch {    // TODO: error
-            symLog.log(error.localizedDescription)
-            model.showError(.error(error))
-            controller.playSound(0)
         }
     }
 

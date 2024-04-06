@@ -40,32 +40,22 @@ struct BalancesSectionView {
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
 
-    func reloadOneAction(_ transactionId: String) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId)
+    func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
+        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
     @State private var sectionID = UUID()
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        do {
-            transactions = try await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
+        if let transactions = try? await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode) {
             completedTransactions = WalletModel.completedTransactions(transactions)
-        } catch {
-            symLog.log(error.localizedDescription)
-            model.showError(.error(error))
-            controller.playSound(0)
         }
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        do {
-            transactions = try await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
+        if let transactions = try? await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode) {
             pendingTransactions = WalletModel.pendingTransactions(transactions)
-        } catch {
-            symLog.log(error.localizedDescription)
-            model.showError(.error(error))
-            controller.playSound(0)
         }
     }
 }
@@ -140,16 +130,11 @@ extension BalancesSectionView: View {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
             // TODO: only load the MAXRECENT most recent transactions
-            do {
-                let response = try await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode)
+            if let response = try? await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode) {
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
                 shownSectionID = sectionID
-            } catch {
-                symLog.log(error.localizedDescription)
-                model.showError(.error(error))
-                controller.playSound(0)
             }
 //            } else {
 //                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
@@ -187,7 +172,7 @@ fileprivate struct BalancesPendingRowView: View {
     let balance: Balance                            // this is the currency to be used
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     var body: some View {
         let pendingIncoming = balance.pendingIncoming
@@ -247,7 +232,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     @Binding var summary: String
     @Binding var completedTransactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String) async throws -> Transaction)
+    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 //    @EnvironmentObject private var model: WalletModel
 
     @State private var buttonSelected: Int? = nil

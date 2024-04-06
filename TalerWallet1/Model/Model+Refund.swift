@@ -40,15 +40,15 @@ struct StartRefundQueryRequest: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     @MainActor
-    func startRefundForUriM(url: String) async throws -> String {
+    func startRefundForUriM(url: String, viewHandles: Bool = false) async throws -> String {
         let request = StartRefundURIRequest(talerRefundUri: url)
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.transactionId
     }
 
     @MainActor
-    func startRefundM(transactionId: String) async throws {
+    func startRefundM(transactionId: String, viewHandles: Bool = false) async throws {
         let request = StartRefundQueryRequest(transactionId: transactionId)
-        let _ = try await sendRequest(request, ASYNCDELAY)
+        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 }

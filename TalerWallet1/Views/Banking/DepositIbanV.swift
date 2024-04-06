@@ -127,13 +127,10 @@ struct DepositIbanV: View {
 //            print("❗️ P2PSubjectV onDisappear")
         }
         .task(id: depositIBAN) {
-            do {
-                if try await model.validateIbanM(depositIBAN) {
-                    let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
-                    paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
+            if (try? await model.validateIbanM(depositIBAN)) == true {
+                let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
+                paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            } else {
                 paytoUri = nil
             }
         }

@@ -10,7 +10,7 @@ struct TransactionButton: View {
     let transactionId: String
     let command: TxAction
     let warning: String?
-    let action: (_ transactionId: String) async throws -> Void
+    let action: (_ transactionId: String, _ viewHandles: Bool) async throws -> Void
 
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
 
@@ -21,12 +21,9 @@ struct TransactionButton: View {
     private func doAction() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
-            do {
-                try await action(transactionId)
+            if let _ = try? await action(transactionId, false) {
 //                symLog.log("\(executed) \(transactionId)")
                 executed = true
-            } catch {    // TODO: error
-//                symLog.log(error.localizedDescription)
             }
         }
     }
@@ -75,7 +72,7 @@ struct TransactionButton: View {
 #if DEBUG
 struct TransactionButton_Previews: PreviewProvider {
 
-    static func action(_ transactionId: String) async throws {
+    static func action(_ transactionId: String, _ viewHandles: Bool) async throws {
         print(transactionId)
     }
 

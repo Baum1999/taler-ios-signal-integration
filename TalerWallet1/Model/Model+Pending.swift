@@ -42,10 +42,10 @@ struct PendingOperation: Codable, Hashable {
 }
 // MARK: -
 extension WalletModel {
-    @MainActor func getPendingOperationsM()
+    @MainActor func getPendingOperationsM(viewHandles: Bool = false)
       async throws -> [PendingOperation] {   // M for MainActor
         let request = GetPendingOperations()
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.pendingOperations
     }
 }

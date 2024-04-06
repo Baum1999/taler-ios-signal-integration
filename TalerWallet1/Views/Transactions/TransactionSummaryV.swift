@@ -28,14 +28,14 @@ struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let transactionId: String
-    let reloadAction: ((_ transactionId: String) async throws -> Transaction)
+    let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let navTitle: String?
     let doneAction: ((_ stack: CallStack) -> Void)?
-    let abortAction: ((_ transactionId: String) async throws -> Void)?
-    let deleteAction: ((_ transactionId: String) async throws -> Void)?
-    let failAction: ((_ transactionId: String) async throws -> Void)?
-    let suspendAction: ((_ transactionId: String) async throws -> Void)?
-    let resumeAction: ((_ transactionId: String) async throws -> Void)?
+    let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
+    let deleteAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
+    let failAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
+    let suspendAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
+    let resumeAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -50,12 +50,10 @@ struct TransactionSummaryV: View {
     @State var viewId = UUID()
 
     func loadTransaction() async {
-        do {
-            let reloadedTransaction = try await reloadAction(transactionId)
+        if let reloadedTransaction = try? await reloadAction(transactionId, false) {
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
             withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
-        } catch {
-            symLog.log(error.localizedDescription)
+        } else {
             withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
         }
     }

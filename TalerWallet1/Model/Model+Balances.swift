@@ -54,13 +54,13 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
-    @MainActor func balancesM(_ stack: CallStack)
+    @MainActor func balancesM(_ stack: CallStack, viewHandles: Bool = false)
       async throws -> [Balance] {          // M for MainActor
         await semaphore.wait()
         defer { semaphore.signal() }
         if cachedBalances == nil {
             let request = Balances()
-            let response = try await sendRequest(request, ASYNCDELAY)
+            let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
             cachedBalances = response.balances
         } else {
             logger.trace("returning cached Balances")

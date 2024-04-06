@@ -38,8 +38,7 @@ struct SubjectInputV<TargetView: View>: View {
 
     func preparePayForTemplate() async {
         if let url {
-            do {
-                let ppCheck = try await model.preparePayForTemplateM(url.absoluteString, amount: amountToTransfer, summary: summary)
+            if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amountToTransfer, summary: summary) {
                 let amount = ppCheck.amountRaw
                 let currency = amount.currencyStr
                 let currencyInfo = controller.info(for: currency, controller.currencyTicker)
@@ -51,8 +50,6 @@ struct SubjectInputV<TargetView: View>: View {
                 let amountVoiceOver = amount.string(currencyInfo)
                 announce(this: "\(amountVoiceOver), \(feeLabel)")
                 preparePayResult = ppCheck
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
             }
         }
     }

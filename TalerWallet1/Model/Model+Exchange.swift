@@ -156,11 +156,11 @@ fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesForScopedCurrencyM(scope: ScopeInfo)
+    @MainActor func listExchangesForScopedCurrencyM(scope: ScopeInfo, viewHandles: Bool = false)
       async -> [ExchangeUrlItem] {            // M for MainActor
         do {
             let request = ListExchangesForScopedCurrency(scope: scope)
-            let response = try await sendRequest(request, ASYNCDELAY)
+            let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
             return response.exchanges
         } catch {
             return []               // empty, but not nil
@@ -168,45 +168,47 @@ extension WalletModel {
     }
 
     /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesM(devMode: Bool = false)
+    @MainActor func listExchangesM(devMode: Bool = false, viewHandles: Bool = false)
       async throws -> [Exchange] {   // M for MainActor
         let request = ListExchanges()
-        let response = try await sendRequest(request, ASYNCDELAY)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.exchanges
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func getExchangeByUrl(url: String)
+    func getExchangeByUrl(url: String, viewHandles: Bool = false)
       async throws -> Exchange {
         let request = GetExchangeByUrl(exchangeBaseUrl: url)
 //            logger.info("query for exchange: \(url, privacy: .public)")
-        let response = try await sendRequest(request)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func addExchange(url: String)
+    func addExchange(url: String, viewHandles: Bool = false)
     async throws {
         let request = AddExchange(exchangeBaseUrl: url)
         logger.info("adding exchange: \(url, privacy: .public)")
-        _ = try await sendRequest(request)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     /// ask wallet-core to update an existing exchange by querying it for denominations, fees, and scoped currency info
 //    func updateExchange(scopeInfo: ScopeInfo)
-    func updateExchange(exchangeBaseUrl: String)
+//    func updateExchange(scopeInfo: ScopeInfo, viewHandles: Bool = false)
+    func updateExchange(exchangeBaseUrl: String, viewHandles: Bool = false)
       async throws  {
 //        let request = UpdateExchange(scopeInfo: scopeInfo)
         let request = UpdateExchange(exchangeBaseUrl: exchangeBaseUrl)
+//        logger.info("updating exchange for: \(scopeInfo.currency, privacy: .public)")
         logger.info("updating exchange: \(exchangeBaseUrl, privacy: .public)")
-        _ = try await sendRequest(request)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     @MainActor
-    func getCurrencyInfoM(scope: ScopeInfo, delay: UInt = 0)
+    func getCurrencyInfoM(scope: ScopeInfo, delay: UInt = 0, viewHandles: Bool = false)
       async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
-        let response = try await sendRequest(request, ASYNCDELAY + delay)
+        let response = try await sendRequest(request, ASYNCDELAY + delay, viewHandles: viewHandles)
         return CurrencyInfo(scope: scope, specs: response.currencySpecification,
                         formatter: CurrencyFormatter.formatter(scope: scope,
                                                                specs: response.currencySpecification))

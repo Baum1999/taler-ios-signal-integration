@@ -95,21 +95,17 @@ struct PaymentView: View {
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
             .task { // this runs only once
-                do { // TODO: cancelled
-                    symLog.log(".task")
-                    if template {
-                        let result = try await model.preparePayForTemplateM(url.absoluteString,
-                                                                     amount: amountToTransfer,
-                                                                    summary: summary)
-                        preparePayResult = result
-                    } else {
-                        let result = try await model.preparePayForUriM(url.absoluteString)
+                symLog.log(".task")
+                if template {
+                    if let result = try? await model.preparePayForTemplateM(url.absoluteString,
+                                                                 amount: amountToTransfer,
+                                                                            summary: summary) {
                         preparePayResult = result
                     }
-                } catch {
-                    symLog.log(error.localizedDescription)
-                    model.showError(.error(error))
-                    controller.playSound(0)
+                } else {
+                    if let result = try? await model.preparePayForUriM(url.absoluteString) {
+                        preparePayResult = result
+                    }
                 }
             }
         }

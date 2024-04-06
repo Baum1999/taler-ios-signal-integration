@@ -134,14 +134,11 @@ struct P2PSubjectV: View {
         }
         .task(id: amountToTransfer.value) {
             if amountToSend && feeLabel == nil {
-                do {
-                    let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
+                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
                         let feeStr = feeAmount.string(currencyInfo)
                         myFeeLabel = String(localized: "+ \(feeStr) fee")
                     } else { myFeeLabel = EMPTYSTRING }
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
                 }
             }
         }

@@ -44,11 +44,7 @@ struct WalletEmptyView: View {
                     Task { // runs on MainActor
                         let amount = Amount(currency:  DEMOCURRENCY, cent: 2500)
                         symLog.log("Withdraw KUDOS")
-                        do {
-                            try await model.loadTestKudosM(test: false, amount: amount)
-                        } catch {    // TODO: show error
-                            symLog.log(error.localizedDescription)
-                        }
+                        try? await model.loadTestKudosM(test: false, amount: amount)
                     }
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawDisabled, aligned: .center))

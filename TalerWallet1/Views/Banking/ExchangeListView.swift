@@ -24,14 +24,9 @@ struct ExchangeListView: View {
     func addExchange(_ exchange: String) -> Void {
         Task { // runs on MainActor
             symLog.log("adding: \(exchange)")
-            do {
-                try await model.addExchange(url: exchange)
+            if let _ = try? await model.addExchange(url: exchange) {
                 symLog.log("added: \(exchange)")
                 announce(this: "added: \(exchange)")
-            } catch {
-                symLog.log("error: \(error)")
-                model.showError(.error(error))
-                controller.playSound(0)
             }
         }
     }
@@ -88,11 +83,8 @@ struct ExchangeListCommonV {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)     // TODO: Hold different values for different currencies?
 
     func reloadExchanges() async -> Void {
-        do {
-            exchanges = try await model.listExchangesM()
-        } catch {
-            model.showError(.error(error))
-            controller.playSound(0)
+        if let exc = try? await model.listExchangesM() {
+            exchanges = exc
         }
     }
 }

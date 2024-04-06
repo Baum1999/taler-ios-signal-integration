@@ -122,13 +122,11 @@ struct DepositAmountV: View {
                         depositStarted = true    // don't run twice
                         Task { // runs on MainActor
                             symLog.log("Deposit")
-                            do {
-                                let result = try await model.createDepositGroupM(paytoUri, amount: amountToTransfer)
+                            if let result = try? await model.createDepositGroupM(paytoUri, amount: amountToTransfer) {
                                 symLog.log(result.transactionId)
                                 ViewState2.shared.popToRootView(stack.push())
                                 NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
-                            } catch {    // TODO: show error
-                                symLog.log(error.localizedDescription)
+                            } else {
                                 depositStarted = false
                             }
                         }
@@ -168,15 +166,13 @@ struct DepositAmountV: View {
                         feeStr = EMPTYSTRING
                         prepareDepositResult = nil
                     } else if let paytoUri {
-                        do {
-                            let ppCheck = try await model.prepareDepositM(paytoUri, amount: amountToTransfer)
+                        if let ppCheck = try? await model.prepareDepositM(paytoUri, amount: amountToTransfer) {
                             prepareDepositResult = ppCheck
                             if let feeAmount = fee(ppCheck: prepareDepositResult) {
                                 feeStr = feeAmount.string(currencyInfo)
                             } else { feeStr = EMPTYSTRING }
                             announce(this: "\(amountVoiceOver), \(feeLabel)")
-                        } catch {    // TODO: error
-                            symLog.log(error.localizedDescription)
+                        } else {
                             prepareDepositResult = nil
                         }
                     }

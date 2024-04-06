@@ -133,13 +133,7 @@ struct SendAmount: View {
         .task(id: amountToTransfer.value) {
             if exchange == nil {
                 if let url = scopeInfo.url {
-                    do {
-                        exchange = try await model.getExchangeByUrl(url: url)
-                    } catch {
-                        symLog.log(error.localizedDescription)
-                        model.showError(.error(error))
-                        controller.playSound(0)
-                    }
+                    exchange = try? await model.getExchangeByUrl(url: url)
                 }
             }
             do {
@@ -154,8 +148,7 @@ struct SendAmount: View {
             } else if amountToTransfer.isZero {
                 feeStr = EMPTYSTRING
             } else {
-                do {
-                    let ppCheck = try await model.checkPeerPushDebitM(amountToTransfer)
+                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
                     peerPushCheck = ppCheck
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
@@ -163,8 +156,7 @@ struct SendAmount: View {
                         feeStr = feeAmount.string(currencyInfo)
                     } else { feeStr = EMPTYSTRING }
                     announce(this: "\(amountVoiceOver), \(feeLabel)")
-                } catch {    // TODO: error
-                    symLog.log(error.localizedDescription)
+                } else {
                     peerPushCheck = nil
                 }
             }
