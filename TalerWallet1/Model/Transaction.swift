@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import AnyCodable
@@ -327,7 +330,7 @@ struct WithdrawalTransactionDetails: Decodable {
     var withdrawalDetails: WithdrawalDetails
 }
 
-struct WithdrawalTransaction : Sendable{
+struct WithdrawalTransaction : Sendable {
     var common: TransactionCommon
     var details: WithdrawalTransactionDetails
 }
@@ -402,6 +405,35 @@ enum RefreshReason: String, Decodable {
     case recoup
     case backupRestored = "backup-restored"
     case scheduled
+
+    var localizedRefreshReason: String {
+        switch self {
+            case .manual:               return String(localized: "Merchant",
+                                                      comment: "RefreshReason")
+            case .payMerchant:          return String(localized: "Merchant",
+                                                    comment: "RefreshReason")
+            case .payDeposit:           return String(localized: "Deposit",
+                                                  comment: "RefreshReason")
+            case .payPeerPush:          return String(localized: "Pay Peer-Push",
+                                                  comment: "RefreshReason")
+            case .payPeerPull:          return String(localized: "Pay Peer-Pull",
+                                                  comment: "RefreshReason")
+            case .refund:               return String(localized: "Refund",
+                                                  comment: "RefreshReason")
+            case .abortPay:             return String(localized: "Abort Payment",
+                                                  comment: "RefreshReason")
+            case .abortDeposit:         return String(localized: "Abort Deposit",
+                                                  comment: "RefreshReason")
+            case .abortPeerPushDebit:   return String(localized: "Abort P2P Send",
+                                                    comment: "RefreshReason")
+            case .recoup:           return String(localized: "Recoup",
+                                                  comment: "RefreshReason")
+            case .backupRestored:   return String(localized: "Backup restored",
+                                                  comment: "RefreshReason")
+            case .scheduled:        return String(localized: "Scheduled",
+                                                  comment: "RefreshReason")
+        }
+    }
 }
 struct RefreshError: Decodable {
     var code: Int
