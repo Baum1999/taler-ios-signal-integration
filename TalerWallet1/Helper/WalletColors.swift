@@ -64,6 +64,9 @@ public struct WalletColors {
         // used in TransactionRowView
         gray1
     }
+    func errorColor() -> Color {
+        Color("Error")
+    }
     func pendingColor(_ incoming: Bool) -> Color {
         incoming ? Color("PendingIncoming")
                  : Color("PendingOutgoing")
