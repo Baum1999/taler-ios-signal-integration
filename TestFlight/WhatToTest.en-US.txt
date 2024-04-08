@@ -1,3 +1,12 @@
+Version 0.9.6 (1)
+
+• New feature: Removed 'Banking' tab. Withdraw + deposit are now directly available in Balances
+    Added Settings->Payment Services for exchange management (w.i.p.)
+• New feature: LocalConsole also for Taler Wallet
+- bugfix: (pending) refresh transactions are now shown correctly
+- bugfix: wallet-core 0.10.2 speeds up fee computations
+
+
 Version 0.9.5 (3)
 
 - bugfix: wallet-core 0.10.1 fixes exchange handling
