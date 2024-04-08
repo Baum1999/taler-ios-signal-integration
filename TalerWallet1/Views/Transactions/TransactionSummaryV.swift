@@ -240,13 +240,54 @@ struct TransactionSummaryV: View {
         }
     }
 
+    struct PendingWithdrawalDetails: View {
+        @Binding var transaction: Transaction
+        let details: WithdrawalTransactionDetails
+
+        var body: some View {
+            let common = transaction.common
+            if transaction.isPendingKYC {
+                if let kycUrl = common.kycUrl {
+                    if let destination = URL(string: kycUrl) {
+                        KycButton(destination: destination)
+                    }
+                }
+            }
+            let withdrawalDetails = details.withdrawalDetails
+            switch withdrawalDetails.type {
+                case .manual:               // "Make a wire transfer of \(amount) to"
+                    ManualDetailsV(common: common, details: withdrawalDetails)
+
+                case .bankIntegrated:       // "Confirm now" (with bank)
+                    if !transaction.isPendingKYC {              // cannot confirm if KYC is needed first
+                        let confirmed = withdrawalDetails.confirmed ?? false
+                        if !confirmed {
+                            if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
+                                if let destination = URL(string: confirmationUrl) {
+                                    ConfirmationButton(destination: destination)
+                                }   }   }   }
+            } // switch
+        }
+    }
+
     struct TypeDetail: View {
         let stack: CallStack
         @Binding var transaction: Transaction
         let hasDone: Bool
         @Environment(\.colorScheme) private var colorScheme
         @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+        @AppStorage("minimalistic") var minimalistic: Bool = false
         @State private var rotationEnabled = true
+
+        func refreshFee(input: Amount, output: Amount) -> Amount? {
+            do {
+                let fee = try input - output
+                return fee
+            } catch {
+                
+            }
+            return nil
+        }
 
         var body: some View {
             let common = transaction.common
@@ -264,27 +305,7 @@ struct TransactionSummaryV: View {
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {
-                            if transaction.isPendingKYC {
-                                if let kycUrl = common.kycUrl {
-                                    if let destination = URL(string: kycUrl) {
-                                        KycButton(destination: destination)
-                                    }
-                                }
-                            }
-                            let withdrawalDetails = details.withdrawalDetails
-                            switch withdrawalDetails.type {
-                                case .manual:               // "Make a wire transfer of \(amount) to"
-                                    ManualDetailsV(common: common, details: withdrawalDetails)
-
-                                case .bankIntegrated:       // "Confirm now" (with bank)
-                                    if !transaction.isPendingKYC {              // cannot confirm if KYC is needed first
-                                        let confirmed = withdrawalDetails.confirmed ?? false
-                                        if !confirmed {
-                                            if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
-                                                if let destination = URL(string: confirmationUrl) {
-                                                    ConfirmationButton(destination: destination)
-                                    }   }   }   }
-                            } // switch
+                            PendingWithdrawalDetails(transaction: $transaction, details: details)
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
@@ -320,13 +341,45 @@ struct TransactionSummaryV: View {
                                         merchant: details.info?.merchant.name)
                     }
                     case .refresh(let refreshTransaction): Group {
-                        let details = refreshTransaction.details                // TODO: details
-                        Text(details.refreshReason.rawValue)
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Refreshed:", comment: "mini"),
-                                        topTitle: String(localized: "Refreshed amount:"),
-                                         baseURL: nil, large: true,             // TODO: baseURL
-                                         summary: nil, merchant: nil)
+                        let labelColor = Color(UIColor.label)
+                        let errorColor = WalletColors().errorColor()
+                        let details = refreshTransaction.details
+                        Section {
+                            Text(details.refreshReason.localizedRefreshReason)
+                                .talerFont(.title)
+                            let input = details.refreshInputAmount
+                            AmountRowV(title: minimalistic ? "Refreshed:" : "Refreshed amount:",
+                                      amount: input,
+                                       color: labelColor,
+                                       large: true)
+                            if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
+                                AmountRowV(title: minimalistic ? "Fee:" : "Refreshed fee:",
+                                          amount: fee,
+                                           color: labelColor,
+                                           large: true)
+                            }
+                            if let error = details.error {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(error.hint)
+                                            .talerFont(.headline)
+                                            .foregroundColor(errorColor)
+                                            .listRowSeparator(.hidden)
+                                        if let stack = error.stack {
+                                            Text(stack)
+                                                .talerFont(.body)
+                                                .foregroundColor(errorColor)
+                                                .listRowSeparator(.hidden)
+                                        }
+                                    }
+                                    let stackStr = error.stack ?? EMPTYSTRING
+                                    let errorStr = error.hint + "\n" + stackStr
+                                    CopyButton(textToCopy: errorStr, vertical: true)
+                                        .accessibilityLabel("Copy the error")
+                                        .disabled(false)
+                                }
+                            }
+                        }
                     }
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
