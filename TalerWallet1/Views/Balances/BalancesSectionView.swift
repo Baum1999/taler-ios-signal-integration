@@ -27,6 +27,11 @@ struct BalancesSectionView {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @EnvironmentObject private var controller: Controller
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var showSpendingHint = true
@@ -43,12 +48,12 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: true)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
         completedTransactions = WalletModel.completedTransactions(transactions)
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: true)
+        transactions = await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode)
         pendingTransactions = WalletModel.pendingTransactions(transactions)
     }
 }
@@ -123,7 +128,7 @@ extension BalancesSectionView: View {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
             // TODO: only load the MAXRECENT most recent transactions
-            let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: true)
+            let response = await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode)
                 transactions = response
                 pendingTransactions = WalletModel.pendingTransactions(response)
                 completedTransactions = WalletModel.completedTransactions(response)
