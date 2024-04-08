@@ -47,6 +47,7 @@ struct AmountRowV: View {
             }
         }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
             .listRowSeparator(.hidden)
     }
 }

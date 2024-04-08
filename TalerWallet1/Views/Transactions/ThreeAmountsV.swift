@@ -91,7 +91,6 @@ struct ThreeAmountsV: View {
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
-                .accessibilityElement(children: .combine)
             if let fee {
                 AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
                                                : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
@@ -99,14 +98,12 @@ struct ThreeAmountsV: View {
                            color: labelColor,
                            large: false)
                 .padding(.bottom, 4)
-                .accessibilityElement(children: .combine)
             }
             if let bottomAmount {
                 AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
                           amount: bottomAmount,
                            color: foreColor,
                            large: large)
-                .accessibilityElement(children: .combine)
             }
             if let baseURL {
                 VStack(alignment: .leading) {
