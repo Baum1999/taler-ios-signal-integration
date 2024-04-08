@@ -120,7 +120,7 @@ fileprivate struct Config: Encodable {
 fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
     var setTesting: Bool
 
-    func operation() -> String { "setConfig" }
+    func operation() -> String { "setWalletRunConfig" }
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
