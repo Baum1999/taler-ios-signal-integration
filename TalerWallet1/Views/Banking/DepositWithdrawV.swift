@@ -26,11 +26,14 @@ struct DepositWithdrawV: View {
         amountToTransfer.setCurrency(currency)
         buttonSelected = button      // will trigger NavigationLink
         // after user tapped a button, while navigation animation runs, contact Exchange to update Fees
-        Task { // runs on MainActor
-            do {
-                try await model.updateExchange(scopeInfo: scopeInfo)
-            } catch {    // TODO: error handling - couldn't updateExchange
-                symLog.log("error: \(error)")
+        if let url = scopeInfo.url {
+            Task { // runs on MainActor
+                do {
+//                    try await model.updateExchange(scopeInfo: scopeInfo)
+                    try await model.updateExchange(exchangeBaseUrl: url)
+                } catch {    // TODO: error handling - couldn't updateExchange
+                    symLog.log("error: \(error)")
+                }
             }
         }
     }
