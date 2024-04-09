@@ -386,9 +386,9 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
                 self.completions[requestId] = (sendTime, completionHandler)
                 self.requestsMade += 1
                 self.semaphore.signal()         // free requestsMade
-              self.symLog.log(jsonString)
               self.logger.log("sendRequest \(requestId, privacy: .public): \(request.operation, privacy: .public)")
                 self.quickjs.sendMessage(message: jsonString)
+              self.symLog.log(jsonString)
             } catch {       // call completion
                 self.semaphore.signal()
               self.symLog.log(error)
