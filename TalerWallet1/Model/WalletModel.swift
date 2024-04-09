@@ -102,7 +102,7 @@ fileprivate struct Testing: Encodable {
         self.insecureTrustExchange = false
         self.preventThrottling = false
         self.skipDefaults = false
-        self.emitObservabilityEvents = false
+        self.emitObservabilityEvents = true
     }
 }
 
