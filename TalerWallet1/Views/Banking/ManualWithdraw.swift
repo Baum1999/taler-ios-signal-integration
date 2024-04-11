@@ -126,15 +126,18 @@ struct ManualWithdraw: View {
                     do {
                         let details = try await model.getWithdrawalDetailsForAmountM(exchangeBaseUrl,
                                                                               amount: amountToTransfer,
-                                                                      cancellationId: "manual")
+                                                                      cancellationId: "cancel",
+                                                                         viewHandles: true)
                         withdrawalAmountDetails = details
 //                      agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
-//                    } catch WALLET_CORE_REQUEST_CANCELLED {
-                        // passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
-                        // when calling getWithdrawalDetailsForAmount again before the last call returned
-                        // since amountToTransfer changed and we don't need the old fee anymore
-                        // we just ignore it and do nothing.
-                    } catch {    // TODO: error
+                    } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
+                        symLog.log(walletBackendResponseError?.hint)
+                        // TODO: ignore WALLET_CORE_REQUEST_CANCELLED but handle all others
+                        // Passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
+                        // when calling getWithdrawalDetailsForAmount again before the last call returned.
+                        // Since amountToTransfer changed and we don't need the old fee anymore, we just
+                        // ignore it and do nothing.
+                    } catch {
                         symLog.log(error.localizedDescription)
                         withdrawalAmountDetails = nil
                     }
