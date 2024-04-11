@@ -415,7 +415,11 @@ extension WalletCore {
             sendRequest(request: reqData) { requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
-                self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                if let error {
+                    self.logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms")
+                } else {
+                    self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                }
                 var err: Error? = nil
                 if let json = result, error == nil {
                     do {
@@ -442,7 +446,8 @@ extension WalletCore {
                         err = error     // this will be thrown in continuation.resume(throwing:), otherwise keep nil
                     }
                 } else {
-                    if let error = error {
+                    // TODO: WALLET_CORE_REQUEST_CANCELLED
+                    if let error {
                         self.lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
                     } else {
                         self.lastError = nil
