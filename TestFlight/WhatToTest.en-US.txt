@@ -1,3 +1,9 @@
+Version 0.9.7 (1)
+
+• better error handling
+- bugfix: wallet-core 0.10.6 cache handling, fee computations
+
+
 Version 0.9.6 (1)
 
 • New feature: Removed 'Banking' tab. Withdraw + deposit are now directly available in Balances
