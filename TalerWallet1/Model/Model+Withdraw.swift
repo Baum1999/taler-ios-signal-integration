@@ -209,7 +209,8 @@ extension WalletModel {
         return response
     }
     @MainActor                     // M for MainActor
-    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
+    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount,
+                                           cancellationId: String? = nil, viewHandles: Bool = false)
       async throws -> WithdrawalAmountDetails {
         let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
                                                              amount: amount,

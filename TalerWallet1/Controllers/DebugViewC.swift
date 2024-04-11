@@ -39,15 +39,14 @@ public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 22 Transa
 public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 23 TransactionDetail
 
 
-
 // MARK: - Manual Withdrawal (from Banking / ExchangeList)
-// receive coins from bank ==> shows IBAN + Purpose/Subject for manual wire transfer
+// receive coins from bank ==> shows payee, IBAN + Purpose/Subject for manual wire transfer
 public let VIEW_WITHDRAWAL = VIEW_EMPTY_HISTORY + 10                // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
 public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
 
 // MARK: Manual Deposit (from Banking / ExchangeList)
-// send coins back to bank account ==> orders exchange to make the wire transfer
+// send coins back to customer ==> instruct exchange to make the wire transfer to the customer's bank account
 public let VIEW_DEPOSIT = VIEW_WITHDRAWAL + 10                      // 40 Deposit Coins
 //public let VIEW_DEPOSIT_TOS                                       // - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
@@ -57,7 +56,7 @@ public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
 public let VIEW_P2P_SEND = VIEW_DEPOSIT + 10                        // 50 Send Coins
 //public let VIEW_SEND_TOS                                          // - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_P2P_SUBJECT = VIEW_P2P_SEND + 2                     // 52 Send / Request Subject
-public let VIEW_P2P_READY = VIEW_P2P_SEND + 3                       // 53 Send / Request Ready 
+public let VIEW_P2P_READY = VIEW_P2P_SUBJECT + 1                    // 53 Send / Request Ready
 
 // MARK: P2P Private Receive (from Balances)
 // pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
@@ -104,6 +103,8 @@ public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 162 Recei
 // openURL (Link, NFC or scan QR) ==> receive coins from merchant
 public let SHEET_REFUND = SHEET_RCV_P2P + 10                        // 170 Receive Refunds
 
+
+// MARK: -
 extension UIDevice {
     var hasNotch: Bool {
         let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
