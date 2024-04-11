@@ -50,9 +50,7 @@ struct WithdrawExchangeV: View {
                         if let amount = withdrawExchange.amount {
                             amountToTransfer = amount
                         } else {
-                            let currency = exc.scopeInfo?.currency
-                            ?? exc.currency
-                            ?? String(localized: "Unknown", comment: "unknown currency")
+                            let currency = exc.scopeInfo.currency
                             amountToTransfer.setCurrency(currency)
                             // is already Amount.zero(currency: "")
                         }

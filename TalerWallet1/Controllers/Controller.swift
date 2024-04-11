@@ -89,17 +89,13 @@ class Controller: ObservableObject {
     @MainActor
     func getInfo(from exchangeBaseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
         let exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
-        if let scopeInfo = exchange.scopeInfo {
-            if let info = hasInfo(for: scopeInfo.currency) {
-                return info
-            }
-            let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
-            await setInfo(info)
+        let scopeInfo = exchange.scopeInfo
+        if let info = hasInfo(for: scopeInfo.currency) {
             return info
-        } else {
-            // TODO: Error "Can't get Exchange Info"
         }
-        return nil
+        let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
+        await setInfo(info)
+        return info
     }
 
     @MainActor

@@ -104,7 +104,7 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
     func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
-                       sort: String = "descending", includeRefreshes: includeRefreshes, viewHandles: Bool = false)
+                       sort: String = "descending", includeRefreshes: Bool = false, viewHandles: Bool = false)
     async throws -> [Transaction] {
         let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
