@@ -110,7 +110,6 @@ struct ManualWithdraw: View {
         }
       }
         .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
-            symLog.log("getExchangeByUrl(\(scopeInfo?.url))")
             if let exchangeBaseUrl = scopeInfo?.url {
                 if exchange == nil || exchange?.tosStatus != .accepted {
                     if let exc = await model.getExchangeByUrl(url: exchangeBaseUrl) {
@@ -122,9 +121,15 @@ struct ManualWithdraw: View {
                 if !amountToTransfer.isZero {
                     do {
                         let details = try await model.getWithdrawalDetailsForAmountM(exchangeBaseUrl,
-                                                                              amount: amountToTransfer)
+                                                                              amount: amountToTransfer,
+                                                                      cancellationId: "manual")
                         withdrawalAmountDetails = details
 //                      agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
+//                    } catch WALLET_CORE_REQUEST_CANCELLED {
+                        // passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
+                        // when calling getWithdrawalDetailsForAmount again before the last call returned
+                        // since amountToTransfer changed and we don't need the old fee anymore
+                        // we just ignore it and do nothing.
                     } catch {    // TODO: error
                         symLog.log(error.localizedDescription)
                         withdrawalAmountDetails = nil
