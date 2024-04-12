@@ -301,6 +301,16 @@ extension WalletCore {
                 case Notification.Name.ProposalDownloaded.rawValue:             // "proposal-downloaded":
                     symLog.log(anyPayload)
                     postNotification(.ProposalDownloaded, userInfo: nil)
+                case Notification.Name.TaskObservabilityEvent.rawValue:
+                    symLog.log(anyPayload)
+                    if let json = anyPayload.toJSON() {
+                        observe(message: json)
+                    }
+                case Notification.Name.RequestObservabilityEvent.rawValue:
+                    symLog.log(anyPayload)
+                    if let json = anyPayload.toJSON() {
+                        observe(message: json)
+                    }
 
                     // TODO: remove these once wallet-core doesn't send them anymore
 //                case "refresh-started", "refresh-melted",
