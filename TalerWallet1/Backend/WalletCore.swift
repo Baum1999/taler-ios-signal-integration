@@ -35,7 +35,7 @@ class WalletCore: QuickjsMessageHandler {
 
     var versionInfo: VersionInfo?           // shown in SettingsView
     var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
-    var isObserving: Bool
+    var isObserving: Int
     var isLogging: Bool
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
@@ -83,7 +83,7 @@ class WalletCore: QuickjsMessageHandler {
     }
 
     init() throws {
-        isObserving = false
+        isObserving = 0
         isLogging = false
         logger.info("init Quickjs")
         requestsMade = 0
@@ -304,12 +304,12 @@ extension WalletCore {
                 case Notification.Name.TaskObservabilityEvent.rawValue:
                     symLog.log(anyPayload)
                     if let json = anyPayload.toJSON() {
-                        observe(message: json)
+                        observeJSON(message: json)
                     }
                 case Notification.Name.RequestObservabilityEvent.rawValue:
                     symLog.log(anyPayload)
                     if let json = anyPayload.toJSON() {
-                        observe(message: json)
+                        observeJSON(message: json)
                     }
 
                     // TODO: remove these once wallet-core doesn't send them anymore
@@ -333,9 +333,15 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
             consoleManager.print(message)
         }
     }
-    @MainActor func observe(message: String) {
+    @MainActor func observeTriplet(message: String) {
         let consoleManager = LCManager.shared
-        if isObserving {
+        if isObserving != 0 {
+            consoleManager.print(message)
+        }
+    }
+    @MainActor func observeJSON(message: String) {
+        let consoleManager = LCManager.shared
+        if isObserving < 0 {
             consoleManager.print(message)
         }
     }

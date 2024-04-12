@@ -149,15 +149,17 @@ struct SettingsSpeaker: View {
             HStack {
                 Text(name)
                     .talerFont(.title2)
+                Spacer()
                 Text(verbatim: " ")
                     .talerFont(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
                 Button {
                     if value > 0 {
                         value = -1
+                        action(value)
                         Controller.shared.playSound(1)
                     } else {
                         value = value + 1
+                        action(value)
                         Controller.shared.playSound(value)
                     }
                 } label: {

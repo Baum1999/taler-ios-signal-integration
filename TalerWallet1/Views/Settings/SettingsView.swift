@@ -40,7 +40,7 @@ struct SettingsView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
-    @AppStorage("localConsoleO") var localConsoleO: Bool = false                // for Observability
+    @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -118,37 +118,25 @@ struct SettingsView: View {
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
-                    .id("playHaptics")
                 }
-                let playToggle = SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB,
-                                         description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
-                                    .id("playSounds")
-#if DEBUG
-                if Double.random(in: -100.0...100.0) > 0 {
-                    SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSoundsI,
-                                    description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
-                    .id("playSounds")
-                } else { playToggle }
-#else
-                playToggle
-#endif
-//                SettingsToggle(name: String(localized: "Increase Contrast"), value: $increaseContrast, id1: "contrast",
-//                               description: hideDescriptions ? nil : String(localized: "If you don't want to set it globally in Settings.app"))
-//                .id("increaseContrast")
+                SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB, id1: "playSounds",
+                               description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
                         description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
-                .id("showWarnings")
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 let localConsStr = String(localized: "on LocalConsole")
                 let observability = String(localized: "Observability")
-                SettingsToggle(name: observability, value: $localConsoleO.onChange({ isObserving in
-                    walletCore.isObserving = isObserving}), id1: "localConsoleO",
-                               description: hideDescriptions ? nil : localConsStr) {
+//                SettingsToggle(name: observability, value: $localConsoleO.onChange({ isObserving in
+//                    walletCore.isObserving = isObserving}), id1: "localConsoleO",
+//                               description: hideDescriptions ? nil : localConsStr) {
+                SettingsSpeaker(name: observability, value: $localConsoleO.onChange({ isObserving in
+                    walletCore.isObserving = isObserving}),
+                                description: hideDescriptions ? nil : localConsStr) { isObserving in
                     let consoleManager = LCManager.shared
-                    consoleManager.isVisible = localConsoleO || localConsoleL
+                    consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
                 }
                 if diagnosticModeEnabled {
@@ -157,7 +145,7 @@ struct SettingsView: View {
                         walletCore.isLogging = isLogging}), id1: "localConsoleL",
                                    description: hideDescriptions ? nil : localConsStr) {
                         let consoleManager = LCManager.shared
-                        consoleManager.isVisible = localConsoleO || localConsoleL
+                        consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                         consoleManager.clear()
                     }
                     SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
