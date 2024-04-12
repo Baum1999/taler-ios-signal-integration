@@ -6,6 +6,65 @@ import SwiftUI
 import OrderedCollections
 import taler_swift
 
+struct SegmentControl: View {
+    let value: Int
+    let accountDetails: [WithdrawalExchangeAccountDetails]
+    let action: (Int) -> Void
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    @State private var selectedAccount = 0
+    @ScaledMetric var frameHeight = 80       // relative to fontSize
+
+    public var body: some View {
+        let count = accountDetails.count
+        ZStack(alignment: .center) {
+            GeometryReader { geo in
+                RoundedRectangle(cornerRadius: 6.0)
+                    .foregroundColor(WalletColors().pickerSelected(colorScheme, colorSchemeContrast))
+                    .cornerRadius(6.0)
+                    .padding(4)
+                    .frame(width: geo.size.width / CGFloat(count))
+                    .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
+                    .offset(x: geo.size.width / CGFloat(count) * CGFloat(selectedAccount), y: 0)
+            }
+            .frame(height: frameHeight)
+
+            HStack(spacing: 0) {
+                ForEach((0..<count), id: \.self) { index in
+                    let detail = accountDetails[index]
+                    let amount = detail.transferAmount
+                    VStack(spacing: 6) {
+                        let amountStr = amount?.readableDescription ?? ""
+                        Text(amountStr)
+                            .talerFont(.title3)
+                        let bankName = detail.bankLabel ?? ("BankName " + String(index))
+                        Text(bankName)
+                            .talerFont(.subheadline)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(.gray.opacity(0.00001))
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.150)) {
+                            selectedAccount = index
+                        }
+                    }
+                }
+            }
+        }
+        .onAppear() {
+            withAnimation { selectedAccount = value }
+        }
+        .onChange(of: selectedAccount) { selected in
+            action(selected)
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 6.0)
+                .fill(WalletColors().fieldBackground)
+        )
+    }
+}
 struct AccountPicker: View {
     let title: String
     let value: Int
@@ -18,14 +77,12 @@ struct AccountPicker: View {
         Picker(title, selection: $selectedAccount, content: {
             ForEach(0..<accountDetails.count, id: \.self, content: { index in
                 let detail = accountDetails[index]
-                if detail.status.lowercased() == "ok" {
                     if let amount = detail.transferAmount {
                         let amountStr = amount.readableDescription
                         let bankName = detail.bankLabel ?? ("BankName " + String(index))
                         Text(bankName + ":   " + amountStr)
                             .tag(index)
                     }
-                }
             })
         })
         .talerFont(.title3)
@@ -107,8 +164,20 @@ struct ManualDetailsV: View {
                             .multilineTextAlignment(.leading)
                             .listRowSeparator(.hidden)
                     }
-                    AccountPicker(title: String(localized: "Bank"), value: accountID,
-                         accountDetails: validDetails, action: redraw)
+                    if validDetails.count > 1 {
+                        if validDetails.count > 3 {
+                            AccountPicker(title: String(localized: "Bank"), value: accountID,
+                                          accountDetails: validDetails, action: redraw)
+                            .listRowSeparator(.hidden)
+                        } else {
+                            SegmentControl(value: accountID, accountDetails: validDetails, action: redraw)
+                                .listRowSeparator(.hidden)
+                        }
+                    } else if let amount = account.transferAmount {
+                        let amountStr = amount.readableDescription
+                        let bankName = account.bankLabel ?? "Unknown bank"
+                        Text(bankName + ":   " + amountStr)
+                    }
                     let payto = account.paytoUri
                     let payURL = URL(string: payto)
                     if let queryParameters = payURL?.queryParameters {
