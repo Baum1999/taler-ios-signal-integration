@@ -74,6 +74,7 @@ class WalletCore: QuickjsMessageHandler {
         let type: String
         let id: String?
         let reservePub: String?
+        let event: [String: AnyCodable]?
     }
 
     deinit {
@@ -301,15 +302,16 @@ extension WalletCore {
                 case Notification.Name.ProposalDownloaded.rawValue:             // "proposal-downloaded":
                     symLog.log(anyPayload)
                     postNotification(.ProposalDownloaded, userInfo: nil)
-                case Notification.Name.TaskObservabilityEvent.rawValue:
+                case Notification.Name.TaskObservabilityEvent.rawValue, Notification.Name.RequestObservabilityEvent.rawValue:
                     symLog.log(anyPayload)
-                    if let json = anyPayload.toJSON() {
-                        observeJSON(message: json)
-                    }
-                case Notification.Name.RequestObservabilityEvent.rawValue:
-                    symLog.log(anyPayload)
-                    if let json = anyPayload.toJSON() {
-                        observeJSON(message: json)
+                    let timestamp = TalerDater.dateString()
+                    if let event = payload.event,
+                       let json = event.toJSON(),
+                       let type = event["type"]?.value as? String {
+                        observe(json: json,
+                                type: type,
+                                timestamp: timestamp,
+                                showJSON: isObserving < 0)
                     }
 
                     // TODO: remove these once wallet-core doesn't send them anymore
@@ -333,17 +335,18 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
             consoleManager.print(message)
         }
     }
-    @MainActor func observeTriplet(message: String) {
+
+    @MainActor func observe(json: String, type: String?, timestamp: String, showJSON: Bool) {
         let consoleManager = LCManager.shared
-        if isObserving != 0 {
-            consoleManager.print(message)
+        if let type {
+            consoleManager.print("- Event type: \(type)")
         }
-    }
-    @MainActor func observeJSON(message: String) {
-        let consoleManager = LCManager.shared
-        if isObserving < 0 {
-            consoleManager.print(message)
+        consoleManager.print("- Timestamp: \(timestamp)")
+        if showJSON{
+            consoleManager.print("- Payload:")
+            consoleManager.print(json)
         }
+        consoleManager.print("------")
     }
 
     /// here not only responses, but also notifications from wallet-core will be received
