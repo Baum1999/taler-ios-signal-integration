@@ -26,7 +26,6 @@ struct SegmentControl: View {
                     .cornerRadius(6.0)
                     .padding(4)
                     .frame(width: geo.size.width / CGFloat(count))
-                    .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
                     .offset(x: geo.size.width / CGFloat(count) * CGFloat(selectedAccount), y: 0)
             }
             .frame(height: frameHeight)
@@ -35,16 +34,22 @@ struct SegmentControl: View {
                 ForEach((0..<count), id: \.self) { index in
                     let detail = accountDetails[index]
                     let amount = detail.transferAmount
+                    let bankName = detail.bankLabel
+                    let amountStr = amount?.readableDescription ?? ""
+                    let a11yLabel = bankName != nil ? (bankName! + amountStr) : amountStr
                     VStack(spacing: 6) {
-                        let amountStr = amount?.readableDescription ?? ""
                         Text(amountStr)
                             .talerFont(.title3)
-                        let bankName = detail.bankLabel ?? ("BankName " + String(index))
-                        Text(bankName)
-                            .talerFont(.subheadline)
+                        if let bankName {
+                            Text(bankName)
+                                .talerFont(.subheadline)
+                        }
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(a11yLabel)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityAddTraits(index == selectedAccount ? .isSelected : [])
                     .frame(maxWidth: .infinity)
-                    .background(.gray.opacity(0.00001))
                     .onTapGesture {
                         withAnimation(.easeInOut(duration: 0.150)) {
                             selectedAccount = index
@@ -61,7 +66,7 @@ struct SegmentControl: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 6.0)
-                .fill(WalletColors().fieldBackground)
+                .fill(WalletColors().sideBackground)
         )
     }
 }
@@ -79,9 +84,13 @@ struct AccountPicker: View {
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
                         let amountStr = amount.readableDescription
-                        let bankName = detail.bankLabel ?? ("BankName " + String(index))
-                        Text(bankName + ":   " + amountStr)
-                            .tag(index)
+                        if let bankName = detail.bankLabel {
+                            Text(bankName + ":   " + amountStr)
+                                .tag(index)
+                        } else {
+                            Text(amountStr)
+                                .tag(index)
+                        }
                     }
             })
         })
@@ -175,8 +184,11 @@ struct ManualDetailsV: View {
                         }
                     } else if let amount = account.transferAmount {
                         let amountStr = amount.readableDescription
-                        let bankName = account.bankLabel ?? "Unknown bank"
-                        Text(bankName + ":   " + amountStr)
+                        if let bankName = account.bankLabel {
+                            Text(bankName + ":   " + amountStr)
+                        } else {
+                            Text(amountStr)
+                        }
                     }
                     let payto = account.paytoUri
                     let payURL = URL(string: payto)

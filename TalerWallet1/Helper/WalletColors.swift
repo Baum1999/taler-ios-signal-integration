@@ -62,6 +62,10 @@ public struct WalletColors {
                                       : (scheme == .dark ? gray4 : gray5)
     }
 
+    var pickerBackground: Color {
+        gray7
+    }
+
     var fieldForeground: Color {              // text color
         Color.primary
     }
