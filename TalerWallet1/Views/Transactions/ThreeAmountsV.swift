@@ -70,7 +70,7 @@ struct ThreeAmountsV: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
-        let labelColor = Color(UIColor.label)
+        let labelColor = WalletColors().labelColor
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
         Section {

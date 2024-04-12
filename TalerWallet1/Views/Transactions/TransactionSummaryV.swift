@@ -339,8 +339,8 @@ struct TransactionSummaryV: View {
                                         merchant: details.info?.merchant.name)
                     }
                     case .refresh(let refreshTransaction): Group {
-                        let labelColor = Color(UIColor.label)
-                        let errorColor = WalletColors().errorColor()
+                        let labelColor = WalletColors().labelColor
+                        let errorColor = WalletColors().errorColor
                         let details = refreshTransaction.details
                         Section {
                             Text(details.refreshReason.localizedRefreshReason)

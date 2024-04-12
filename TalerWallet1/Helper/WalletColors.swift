@@ -44,6 +44,10 @@ public struct WalletColors {
                                       : Color(.darkGray)    // WCAG AA for light scheme
     }
 
+    var labelColor: Color {
+        Color(UIColor.label)
+    }
+
     var backgroundColor: Color {
         grouped ? Color(.systemGroupedBackground)
                 : Color(.systemBackground)
@@ -53,9 +57,15 @@ public struct WalletColors {
         gray6
     }
 
+    func pickerSelected(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast) -> Color {
+        return contrast == .increased ? (scheme == .dark ? gray3 : gray4)
+                                      : (scheme == .dark ? gray4 : gray5)
+    }
+
     var fieldForeground: Color {              // text color
         Color.primary
     }
+
     var fieldBackground: Color {
         gray8
     }
@@ -64,13 +74,16 @@ public struct WalletColors {
         // used in TransactionRowView
         gray1
     }
-    func errorColor() -> Color {
+
+    var errorColor: Color {
         Color("Error")
     }
+
     func pendingColor(_ incoming: Bool) -> Color {
         incoming ? Color("PendingIncoming")
                  : Color("PendingOutgoing")
     }
+
     func transactionColor(_ incoming: Bool) -> Color {
         incoming ? Color("Incoming")
                  : Color("Outgoing")
