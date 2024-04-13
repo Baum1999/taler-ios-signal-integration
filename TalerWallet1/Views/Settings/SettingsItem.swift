@@ -130,16 +130,16 @@ struct SettingsStyle: View {
     }
 }
 // MARK: -
-struct SettingsSpeaker: View {
+struct SettingsTriState: View {
     var name: String
     @Binding var value: Int
     var description: String?
     var action: (_ value: Int) -> Void = {value in }
 
     func imageName(_ value: Int) -> (String, String) {
-        return (value == 0) ? ("speaker.slash", String(localized:"Off",          comment: "Accessibility String for Payment Sounds."))
-             : (value == 1) ? ("speaker.fill",  String(localized:"Taler Sounds", comment: "Accessibility String for Payment Sounds."))
-                            : ("speaker",       String(localized:"Apple Sounds", comment: "Accessibility String for Payment Sounds."))
+        return (value == 0) ? ("eye.slash", "Off")
+             : (value == 1) ? ("eye",       "Type only")
+                            : ("eye.fill",  "Type and JSON")
     }
     var body: some View {
         let image = imageName(value)
@@ -185,14 +185,14 @@ struct SettingsSpeaker: View {
 #if DEBUG
 struct SettingsItemPreview : View {
     @State var developerMode: Bool = false
-    @State var playSounds: Int = 0
+    @State var observe: Int = 0
 
     var body: some View {
         VStack {
             SettingsToggle(name: "Developer Mode", value: $developerMode, id1: "dev1",
                     description: "More information intended for debugging")
-            SettingsSpeaker(name: String(localized: "Play Payment Sounds"), value: $playSounds,
-                     description: String(localized: "After a transaction finished"))
+            SettingsTriState(name: "Observe walletCore", value: $observe,
+                     description: "on LocalConsole")
 
         }
     }

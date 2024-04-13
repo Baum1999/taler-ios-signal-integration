@@ -128,11 +128,11 @@ struct SettingsView: View {
                 SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 let localConsStr = String(localized: "on LocalConsole")
-                let observability = String(localized: "Observability")
+                let observability = String(localized: "Observe walletCore")
 //                SettingsToggle(name: observability, value: $localConsoleO.onChange({ isObserving in
 //                    walletCore.isObserving = isObserving}), id1: "localConsoleO",
 //                               description: hideDescriptions ? nil : localConsStr) {
-                SettingsSpeaker(name: observability, value: $localConsoleO.onChange({ isObserving in
+                SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
                     walletCore.isObserving = isObserving}),
                                 description: hideDescriptions ? nil : localConsStr) { isObserving in
                     let consoleManager = LCManager.shared
