@@ -93,6 +93,7 @@ struct BalanceRowView: View {
             let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                           sendTitle: sendTitle,
                                           recvTitle: requTitle,
+                                           recvA11y: requTitle.tabbed(oneLine: true),
                                      fitsSideBySide: false,
                                           lineLimit: 5,
                                        sendDisabled: amount.isZero,

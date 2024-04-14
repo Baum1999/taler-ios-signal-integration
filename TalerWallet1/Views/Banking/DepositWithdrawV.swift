@@ -68,6 +68,7 @@ struct DepositWithdrawV: View {
         let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                       sendTitle: minimalistic ? depositTitle0 : depositTitle1,
                                       recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
+                                       recvA11y: withdrawTitle1.tabbed(oneLine: true),
                                  fitsSideBySide: false,
                                       lineLimit: 5,
                                    sendDisabled: disableDeposit,

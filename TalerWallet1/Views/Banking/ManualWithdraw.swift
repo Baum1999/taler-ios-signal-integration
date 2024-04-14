@@ -45,6 +45,9 @@ struct ManualWithdraw: View {
             let navTitle = String(localized: "NavTitle_Withdraw (currency)",
                                defaultValue: "Withdraw \(currencySymbol)",
                                     comment: "NavTitle: Withdraw 'currencySymbol'")
+            let navA11y = String(localized: "NavTitle_Withdraw (currency) A11y",
+                                 defaultValue: "Withdraw \(currency)",
+                                 comment: "NavTitle: Withdraw 'currency'")
 //          let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
             let someCoins = SomeCoins(details: withdrawalAmountDetails)

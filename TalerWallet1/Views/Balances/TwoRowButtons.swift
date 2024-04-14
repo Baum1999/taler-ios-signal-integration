@@ -9,6 +9,7 @@ struct TwoRowButtons: View {
     let stack: CallStack
     let sendTitle: String
     let recvTitle: String
+    let recvA11y: String
     let fitsSideBySide: Bool
     let lineLimit: Int
     let sendDisabled: Bool
@@ -20,6 +21,7 @@ struct TwoRowButtons: View {
         TwoRowButtons(stack: stack.push(),
                   sendTitle: sendTitle,
                   recvTitle: recvTitle,
+                   recvA11y: recvA11y,
              fitsSideBySide: fitsSideBySide,
                   lineLimit: lineLimit,
                sendDisabled: sendDisabled,
@@ -40,9 +42,8 @@ struct TwoRowButtons: View {
                                           disabled: sendDisabled,
                                            aligned: .center))
             let recvButtonTitle = recvTitle.tabbed(oneLine: !fitsSideBySide)
-            let recvVoiceOverTitle = recvTitle.tabbed(oneLine: true)
             Button(recvButtonTitle, action: recvAction)
-                .accessibilityLabel(Text(recvVoiceOverTitle))
+                .accessibilityLabel(Text(recvA11y))
                 .lineLimit(lineLimit)
                 .disabled(false)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
@@ -59,6 +60,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + TESTCURRENCY,
                       recvTitle: "Request " + LONGCURRENCY,
+                       recvA11y: "Request " + LONGCURRENCY,
                  fitsSideBySide: false,
                       lineLimit: 2, sendDisabled: true,
                      sendAction: {}, recvAction: {})
@@ -66,6 +68,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + DEMOCURRENCY,
                       recvTitle: "Request " + DEMOCURRENCY,
+                       recvA11y: "Request " + DEMOCURRENCY,
                  fitsSideBySide: true,
                       lineLimit: 2, sendDisabled: true,
                      sendAction: {}, recvAction: {})

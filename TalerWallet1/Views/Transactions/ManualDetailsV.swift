@@ -36,7 +36,7 @@ struct SegmentControl: View {
                     let amount = detail.transferAmount
                     let bankName = detail.bankLabel
                     let amountStr = amount?.readableDescription ?? ""
-                    let a11yLabel = bankName != nil ? (bankName! + amountStr) : amountStr
+                    let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
                     VStack(spacing: 6) {
                         Text(amountStr)
                             .talerFont(.title3)
