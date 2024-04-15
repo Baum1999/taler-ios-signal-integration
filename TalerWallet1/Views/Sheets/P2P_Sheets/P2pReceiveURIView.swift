@@ -49,6 +49,7 @@ struct P2pReceiveURIView: View {
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
                                    baseURL: nil,
+                                    noFees: nil,        // TODO: check baseURL for fees
                                     status: nil,
                                    summary: peerPushCreditResponse.contractTerms.summary,
                                   merchant: nil)

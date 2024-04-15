@@ -55,6 +55,7 @@ struct WithdrawURIView: View {
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: true,
                                    baseURL: exchange.exchangeBaseUrl,
+                                    noFees: exchange.noFees,
                                     status: nil,        // common.txState.major.localizedState
                                    summary: nil,
                                   merchant: nil)

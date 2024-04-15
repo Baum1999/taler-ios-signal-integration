@@ -13,6 +13,7 @@ struct ThreeAmountsSheet: View {
     var bottomTitle: String?
     var bottomAbbrev: String?
     let baseURL: String?
+    let noFees: Bool?                       // true if exchange charges no fees at all
     let large: Bool               // set to false for QR or IBAN
     let summary: String?
     let merchant: String?
@@ -42,6 +43,7 @@ struct ThreeAmountsSheet: View {
                bottomAmount: incomplete ? nil : effective,
                       large: large, pending: pending, incoming: incoming,
                     baseURL: baseURL,
+                     noFees: noFees,
                      status: common.txState.major.localizedState,
                     summary: summary,
                    merchant: merchant)
@@ -61,6 +63,7 @@ struct ThreeAmountsV: View {
     let pending: Bool
     let incoming: Bool
     let baseURL: String?
+    let noFees: Bool?                       // true if exchange charges no fees at all
     let status: String?
     let summary: String?
     let merchant: String?
@@ -73,6 +76,7 @@ struct ThreeAmountsV: View {
         let labelColor = WalletColors().labelColor
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
+        let hasNoFees = noFees ?? false
         Section {
             if let summary {
                 Text(summary)
@@ -91,19 +95,21 @@ struct ThreeAmountsV: View {
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
-            if let fee {
-                AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
-                                               : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
-                          amount: fee,
-                           color: labelColor,
-                           large: false)
-                .padding(.bottom, 4)
-            }
-            if let bottomAmount {
-                AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
-                          amount: bottomAmount,
-                           color: foreColor,
-                           large: large)
+            if hasNoFees == false {
+                if let fee {
+                    AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
+                               : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
+                               amount: fee,
+                               color: labelColor,
+                               large: false)
+                    .padding(.bottom, 4)
+                }
+                if let bottomAmount {
+                    AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
+                               amount: bottomAmount,
+                               color: foreColor,
+                               large: large)
+                }
             }
             if let baseURL {
                 VStack(alignment: .leading) {
@@ -146,7 +152,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
             List {
                 ThreeAmountsSheet(stack: CallStack("Preview"),
                                  common: common, topAbbrev: "Withdrawal",
-                               topTitle: "Withdrawal", baseURL: DEMOEXCHANGE,
+                               topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, noFees: false,
                                   large: 1==0, summary: nil, merchant: nil)
                     .safeAreaInset(edge: .bottom) {
                         Button(String(localized: "Accept"), action: {})

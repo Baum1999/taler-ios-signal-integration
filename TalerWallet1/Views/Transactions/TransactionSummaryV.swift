@@ -308,7 +308,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                         topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         baseURL: details.exchangeBaseUrl, large: false,
+                                         baseURL: details.exchangeBaseUrl, noFees: nil, large: false,
                                          summary: nil, merchant: nil)
                     }
                     case .deposit(let depositTransaction): Group {
@@ -316,7 +316,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
                                           topTitle: String(localized: "Amount to deposit:"),
-                                          baseURL: nil, large: true,            // TODO: baseURL
+                                          baseURL: nil, noFees: nil, large: true,            // TODO: baseURL, noFees
                                           summary: nil, merchant: nil)
                     }
                     case .payment(let paymentTransaction): Group {
@@ -325,7 +325,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
                                         topTitle: String(localized: "Price (net):"),
-                                         baseURL: nil, large: true,             // TODO: baseURL
+                                         baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
                                          summary: details.info.summary,
                                         merchant: details.info.merchant.name)
                     }
@@ -334,7 +334,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                           common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                         topTitle: String(localized: "Refunded amount:"),
-                                         baseURL: nil, large: true,             // TODO: baseURL
+                                         baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
                                          summary: details.info?.summary,
                                         merchant: details.info?.merchant.name)
                     }
@@ -414,7 +414,8 @@ struct TransactionSummaryV: View {
                                           common: common,
                                        topAbbrev: localizedType + colon,
                                         topTitle: localizedType + colon,
-                                         baseURL: details.exchangeBaseUrl, large: false,
+                                         baseURL: details.exchangeBaseUrl, noFees: nil,         // TODO: noFees
+                                           large: false,
                                          summary: details.info.summary,
                                         merchant: nil)
                     } // p2p
@@ -423,7 +424,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                          common: common, topAbbrev: String(localized: "Recoup:", comment: "mini"),
                                        topTitle: String(localized: "Recoup:"),
-                                        baseURL: nil, large: true,              // TODO: baseURL, noFees
+                                        baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
                                         summary: nil,
                                        merchant: nil)
 
@@ -433,7 +434,7 @@ struct TransactionSummaryV: View {
                         ThreeAmountsSheet(stack: stack.push(),
                                          common: common, topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),
-                                        baseURL: details.exchangeBaseUrl, large: true,             // TODO: baseURL, noFees
+                                        baseURL: details.exchangeBaseUrl, noFees: nil, large: true,             // TODO: baseURL, noFees
                                         summary: details.lossEventType,
                                        merchant: nil)
                     }

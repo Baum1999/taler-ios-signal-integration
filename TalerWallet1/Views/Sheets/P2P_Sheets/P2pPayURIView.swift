@@ -40,6 +40,7 @@ struct P2pPayURIView: View {
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: false,
                                    baseURL: nil,
+                                    noFees: nil,        // TODO: check baseURL for fees
                                     status: nil,
                                    summary: peerPullDebitResponse.contractTerms.summary,
                                   merchant: nil)

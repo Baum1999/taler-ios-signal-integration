@@ -49,6 +49,7 @@ struct PaymentView: View {
                               bottomAmount: effective,
                                      large: false, pending: false, incoming: false,
                                    baseURL: baseURL,
+                                    noFees: nil,        // TODO: check baseURL for fees
                                     status: nil,
                                    summary: terms.summary,
                                   merchant: terms.merchant.name)
@@ -65,6 +66,7 @@ struct PaymentView: View {
                               bottomAmount: balanceDetails.balanceAvailable,
                                      large: false, pending: false, incoming: false,
                                    baseURL: baseURL,
+                                    noFees: nil,        // TODO: check baseURL for fees
                                     status: nil,
                                    summary: terms.summary,
                                   merchant: terms.merchant.name)
