@@ -8,6 +8,7 @@ import taler_swift
 struct TwoRowButtons: View {
     let stack: CallStack
     let sendTitle: String
+    let sendA11y: String
     let recvTitle: String
     let recvA11y: String
     let fitsSideBySide: Bool
@@ -20,6 +21,7 @@ struct TwoRowButtons: View {
     func makeCopy(fitsSideBySide: Bool) -> TwoRowButtons {
         TwoRowButtons(stack: stack.push(),
                   sendTitle: sendTitle,
+                   sendA11y: sendA11y,
                   recvTitle: recvTitle,
                    recvA11y: recvA11y,
              fitsSideBySide: fitsSideBySide,
@@ -32,9 +34,8 @@ struct TwoRowButtons: View {
     var body: some View {
         Group {
             let sendButtonTitle = sendTitle.tabbed(oneLine: !fitsSideBySide)
-            let sendVoiceOverTitle = sendTitle.tabbed(oneLine: true)
             Button(sendButtonTitle, action: sendAction)
-                .accessibilityLabel(Text(sendVoiceOverTitle))
+                .accessibilityLabel(Text(sendA11y))
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
                 .buttonStyle(TalerButtonStyle(type: .bordered,
@@ -59,6 +60,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
         List {
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + TESTCURRENCY,
+                       sendA11y: "Send " + TESTCURRENCY,
                       recvTitle: "Request " + LONGCURRENCY,
                        recvA11y: "Request " + LONGCURRENCY,
                  fitsSideBySide: false,
@@ -67,6 +69,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + DEMOCURRENCY,
+                       sendA11y: "Send " + DEMOCURRENCY,
                       recvTitle: "Request " + DEMOCURRENCY,
                        recvA11y: "Request " + DEMOCURRENCY,
                  fitsSideBySide: true,

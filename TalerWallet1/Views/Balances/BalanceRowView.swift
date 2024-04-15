@@ -92,6 +92,7 @@ struct BalanceRowView: View {
             let requTitle = minimalistic ? requestTitle0 : requestTitle1
             let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                           sendTitle: sendTitle,
+                                           sendA11y: sendTitle.tabbed(oneLine: true),
                                           recvTitle: requTitle,
                                            recvA11y: requTitle.tabbed(oneLine: true),
                                      fitsSideBySide: false,

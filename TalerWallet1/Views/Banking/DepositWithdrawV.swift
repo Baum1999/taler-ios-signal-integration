@@ -67,6 +67,7 @@ struct DepositWithdrawV: View {
         let disableDeposit = amountAvailable?.isZero ?? false
         let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                       sendTitle: minimalistic ? depositTitle0 : depositTitle1,
+                                       sendA11y: depositTitle1.tabbed(oneLine: true),
                                       recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
                                        recvA11y: withdrawTitle1.tabbed(oneLine: true),
                                  fitsSideBySide: false,
