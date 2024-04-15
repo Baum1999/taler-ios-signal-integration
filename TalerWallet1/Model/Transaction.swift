@@ -478,9 +478,14 @@ struct RecoupTransaction : Sendable {
     var details: RecoupTransactionDetails
 }
 
+enum DenomLossEventType: String, Decodable {
+    case denomExpired = "denom-expired"
+    case denomVanished = "denom-vanished"
+    case denomUnoffered = "denom-unoffered"
+}
 struct DenomLossTransactionDetails: Decodable {
     var exchangeBaseUrl: String
-    var lossEventType: String
+    var lossEventType: DenomLossEventType
 }
 struct DenomLossTransaction : Sendable {
     var common: TransactionCommon
@@ -660,7 +665,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 result["reason"] = recoupTransaction.details.recoupReason
             case .denomLoss(let denomLossTransaction):
                 result[EXCHANGEBASEURL] = denomLossTransaction.details.exchangeBaseUrl
-                result["reason"] = denomLossTransaction.details.lossEventType
+                result["reason"] = denomLossTransaction.details.lossEventType.rawValue
         }
         return result
     }

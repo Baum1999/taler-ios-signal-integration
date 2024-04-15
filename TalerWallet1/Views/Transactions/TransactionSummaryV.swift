@@ -435,7 +435,7 @@ struct TransactionSummaryV: View {
                                          common: common, topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),
                                         baseURL: details.exchangeBaseUrl, noFees: nil, large: true,             // TODO: baseURL, noFees
-                                        summary: details.lossEventType,
+                                        summary: details.lossEventType.rawValue,
                                        merchant: nil)
                     }
                 } // switch
