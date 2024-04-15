@@ -155,7 +155,7 @@ struct SettingsView: View {
 #if DEBUG
                     if showDevelopItems {
                         Text("https://bank.taler.grothoff.org/")
-                        Text("https://bank.taler.fdold.eu/")
+                        Text("https://bank.regio-taler.fdold.eu/")
                         Text("https://bank.head.taler.net/")
                         Text("https://bank.test.taler.net/")
                         Text("https://bank.demo.taler.net/")

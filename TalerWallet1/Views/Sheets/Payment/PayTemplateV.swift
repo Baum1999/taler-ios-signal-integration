@@ -200,9 +200,10 @@ struct PayTemplateV: View {
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {
-                    symLog.log(".task")
+                    symLog.log("LoadingView.task preparePayForTemplate")
                     let hasParams = queryURL()
                     await preparePayForTemplate()
+                    symLog.log("preparePayForTemplate finished")
                 }
         }
     }
