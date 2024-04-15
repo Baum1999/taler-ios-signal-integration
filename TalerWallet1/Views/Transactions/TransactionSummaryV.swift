@@ -418,6 +418,25 @@ struct TransactionSummaryV: View {
                                          summary: details.info.summary,
                                         merchant: nil)
                     } // p2p
+                    case .recoup(let recoupTransaction): Group {
+                        let details = recoupTransaction.details                 // TODO: more details
+                        ThreeAmountsSheet(stack: stack.push(),
+                                         common: common, topAbbrev: String(localized: "Recoup:", comment: "mini"),
+                                       topTitle: String(localized: "Recoup:"),
+                                        baseURL: nil, large: true,              // TODO: baseURL, noFees
+                                        summary: nil,
+                                       merchant: nil)
+
+                    }
+                    case .denomLoss(let denomLossTransaction): Group {
+                        let details = denomLossTransaction.details              // TODO: more details
+                        ThreeAmountsSheet(stack: stack.push(),
+                                         common: common, topAbbrev: String(localized: "Lost:", comment: "mini"),
+                                       topTitle: String(localized: "Money lost:"),
+                                        baseURL: details.exchangeBaseUrl, large: true,             // TODO: baseURL, noFees
+                                        summary: details.lossEventType,
+                                       merchant: nil)
+                    }
                 } // switch
             } // Group
         }

@@ -206,6 +206,9 @@ enum TransactionType: String, Codable {
     case scanPushCredit = "peer-push-credit"    // scan QR, receive coins from peer
     case peerPullCredit = "peer-pull-credit"    // request payment from peer, show QR
     case scanPullDebit  = "peer-pull-debit"     // scan QR, pay requested
+//    case internalWithdrawal = "internal-withdrawal"
+    case recoup
+    case denomLoss      = "denom-loss"          // coins are lost, denomination no longer available
 
     var isWithdrawal : Bool { self == .withdrawal }
     var isDeposit    : Bool { self == .deposit }
@@ -272,6 +275,10 @@ struct TransactionCommon: Decodable, Sendable {
                                                   comment: "TransactionType, send invoice to another wallet")
             case .scanPullDebit:  return String(localized: "Pay Request",       // Pay Invoice is the same as Payment
                                                   comment: "TransactionType, scan invoice to pay to another wallet")
+            case .recoup:         return String(localized: "Recoup",
+                                                  comment: "TransactionType")
+            case .denomLoss:      return String(localized: "Money lost",
+                                                  comment: "TransactionType")
         }
     }
     func localizedTypePast(_ type: TransactionType) -> String {
@@ -325,12 +332,10 @@ struct WithdrawalDetails: Decodable {
     /// URL for user-initiated confirmation
     var bankConfirmationUrl: String?
 }
-
 struct WithdrawalTransactionDetails: Decodable {
     var exchangeBaseUrl: String
     var withdrawalDetails: WithdrawalDetails
 }
-
 struct WithdrawalTransaction : Sendable {
     var common: TransactionCommon
     var details: WithdrawalTransactionDetails
@@ -342,7 +347,6 @@ struct TrackingState : Decodable {
     var amountRaw: Amount
     var wireFee: Amount
 }
-
 struct DepositTransactionDetails: Decodable {
     var depositGroupId: String
     var targetPaytoUri: String
@@ -351,7 +355,6 @@ struct DepositTransactionDetails: Decodable {
     var deposited: Bool
     var trackingState: [TrackingState]?
 }
-
 struct DepositTransaction : Sendable {
     var common: TransactionCommon
     var details: DepositTransactionDetails
@@ -363,7 +366,6 @@ struct RefundInfo: Decodable {
     var transactionId: String
     var timestamp: Timestamp
 }
-
 struct PaymentTransactionDetails: Decodable {
     var info: OrderShortInfo
     var proposalId: String
@@ -374,7 +376,6 @@ struct PaymentTransactionDetails: Decodable {
     var refundQueryActive: Bool?
     var posConfirmation: String?
 }
-
 struct PaymentTransaction : Sendable{
     var common: TransactionCommon
     var details: PaymentTransactionDetails
@@ -387,7 +388,6 @@ struct RefundTransactionDetails: Decodable {
     var amountInvalid: Amount?
     var info: OrderShortInfo?       // TODO: is this still here?
 }
-
 struct RefundTransaction : Sendable{
     var common: TransactionCommon
     var details: RefundTransactionDetails
@@ -451,8 +451,7 @@ struct RefreshTransactionDetails: Decodable {
     var refreshOutputAmount: Amount
     var error: RefreshError?
 }
-
-struct RefreshTransaction : Sendable{
+struct RefreshTransaction : Sendable {
     var common: TransactionCommon
     var details: RefreshTransactionDetails
 }
@@ -461,16 +460,31 @@ struct P2pShortInfo: Codable, Sendable {
     var summary: String
     var expiration: Timestamp
 }
-
 struct P2PTransactionDetails: Codable, Sendable {
     var exchangeBaseUrl: String
     var talerUri: String?       // only if we initiated the transaction
     var info: P2pShortInfo
 }
-
-struct P2PTransaction : Sendable{
+struct P2PTransaction : Sendable {
     var common: TransactionCommon
     var details: P2PTransactionDetails
+}
+
+struct RecoupTransactionDetails: Decodable {
+    var recoupReason: String?
+}
+struct RecoupTransaction : Sendable {
+    var common: TransactionCommon
+    var details: RecoupTransactionDetails
+}
+
+struct DenomLossTransactionDetails: Decodable {
+    var exchangeBaseUrl: String
+    var lossEventType: String
+}
+struct DenomLossTransaction : Sendable {
+    var common: TransactionCommon
+    var details: DenomLossTransactionDetails
 }
 
 struct DummyTransaction : Sendable{
@@ -485,6 +499,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     case refund (RefundTransaction)
     case refresh (RefreshTransaction)
     case peer2peer (P2PTransaction)
+    case recoup (RecoupTransaction)
+    case denomLoss (DenomLossTransaction)
 
     init(from decoder: Decoder) throws {
         do {
@@ -508,6 +524,12 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 case .peerPushDebit, .peerPullCredit, .scanPullDebit, .scanPushCredit:
                     let details = try P2PTransactionDetails.init(from: decoder)
                     self = .peer2peer(P2PTransaction(common: common, details: details))
+                case .recoup:
+                    let details = try RecoupTransactionDetails.init(from: decoder)
+                    self = .recoup(RecoupTransaction(common: common, details: details))
+                case .denomLoss:
+                    let details = try DenomLossTransactionDetails.init(from: decoder)
+                    self = .denomLoss(DenomLossTransaction(common: common, details: details))
                 default:
                     let context = DecodingError.Context(
                         codingPath: decoder.codingPath,
@@ -608,6 +630,8 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
             case .refund(let refundTransaction):         refundTransaction.common
             case .refresh(let refreshTransaction):       refreshTransaction.common
             case .peer2peer(let p2pTransaction):         p2pTransaction.common
+            case .recoup(let recoupTransaction):         recoupTransaction.common
+            case .denomLoss(let denomLossTransaction):   denomLossTransaction.common
         }
     }
 
@@ -632,6 +656,11 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
                 result[EXCHANGEBASEURL] = p2pTransaction.details.exchangeBaseUrl
                 result["summary"] = p2pTransaction.details.info.summary
                 result[TALERURI] = p2pTransaction.details.talerUri ?? ""
+            case .recoup(let recoupTransaction):
+                result["reason"] = recoupTransaction.details.recoupReason
+            case .denomLoss(let denomLossTransaction):
+                result[EXCHANGEBASEURL] = denomLossTransaction.details.exchangeBaseUrl
+                result["reason"] = denomLossTransaction.details.lossEventType
         }
         return result
     }
