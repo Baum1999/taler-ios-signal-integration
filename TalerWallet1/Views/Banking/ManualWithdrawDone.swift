@@ -72,6 +72,7 @@ struct ManualWithdrawDone_Container : View {
     var body: some View {
         let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
         let exchange = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
+                                      masterPub: "masterPub",
                                       scopeInfo: scopeInfo,
                                       paytoUris: [],
                                       tosStatus: .pending,

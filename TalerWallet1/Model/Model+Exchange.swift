@@ -48,13 +48,16 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 
     var exchangeBaseUrl: String
+    var masterPub: String
     var scopeInfo: ScopeInfo
     var paytoUris: [String]
     var tosStatus: ExchangeTosStatus
     var exchangeEntryStatus: ExchangeEntryStatus
     var exchangeUpdateStatus: ExchangeUpdateStatus
-    var hasNoFees: Bool?
+    var peerPaymentsDisabled: Bool?
+    var noFees: Bool?
     var ageRestrictionOptions: [Int]
+    var lastUpdateTimestamp: Timestamp?
     var lastUpdateErrorInfo: ExchangeError?
 
     var id: String { exchangeBaseUrl }

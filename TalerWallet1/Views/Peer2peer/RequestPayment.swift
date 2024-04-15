@@ -23,14 +23,14 @@ struct RequestPayment: View {
     @State private var expireDays: UInt = 0
     @State private var buttonSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
-    @State private var exchange: Exchange? = nil          // wg. hasNoFees
+    @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
         buttonSelected = true
     }
     private func feeIsNotZero() -> Bool? {
-        if let hasNoFees = exchange?.hasNoFees {
+        if let hasNoFees = exchange?.noFees {
             if hasNoFees {
                 return nil      // this exchange never has fees
             }

@@ -30,7 +30,7 @@ struct SendAmount: View {
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
-    @State private var exchange: Exchange? = nil          // wg. hasNoFees
+    @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
@@ -54,7 +54,7 @@ struct SendAmount: View {
         buttonSelected = true
     }
     private func feeIsNotZero() -> Bool? {
-        if let hasNoFees = exchange?.hasNoFees {
+        if let hasNoFees = exchange?.noFees {
             if hasNoFees {
                 return nil      // this exchange never has fees
             }
@@ -173,6 +173,7 @@ fileprivate struct Preview_Content: View {
         let amount = Amount(currency: LONGCURRENCY, cent: 1000)
         let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
+                                       masterPub: "masterPub",
                                        scopeInfo: scopeInfo,
                                        paytoUris: [],
                                        tosStatus: .proposed,

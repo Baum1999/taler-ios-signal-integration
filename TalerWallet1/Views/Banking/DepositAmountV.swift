@@ -31,7 +31,7 @@ struct DepositAmountV: View {
     @State private var feeStr: String = EMPTYSTRING
     @State private var depositStarted = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
-    @State private var exchange: Exchange? = nil          // wg. hasNoFees
+    @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func fee(ppCheck: PrepareDepositResult?) -> Amount? {
         do {
@@ -48,7 +48,7 @@ struct DepositAmountV: View {
     var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
 
     private func feeIsNotZero() -> Bool? {
-        if let hasNoFees = exchange?.hasNoFees {
+        if let hasNoFees = exchange?.noFees {
             if hasNoFees {
                 return nil      // this exchange never has fees
             }
