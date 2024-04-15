@@ -6,6 +6,7 @@
  * @author Iván Ávalos
  */
 import SwiftUI
+import taler_swift
 
 enum ErrorData {
 case message(title: String, message: String)
@@ -119,7 +120,7 @@ struct ErrorSheet: View {
 
 struct ErrorSheet_Previews: PreviewProvider {
     static let error = WalletBackendError.walletCoreError(WalletBackendResponseError(
-        code: 7025,
+        code: 7025, when: Timestamp.now(),
         hint: "A KYC step is required before withdrawal can proceed",
         message: "A KYC step is required before withdrawal can proceed"))
 
