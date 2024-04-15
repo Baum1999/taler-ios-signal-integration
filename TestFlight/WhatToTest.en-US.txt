@@ -1,7 +1,14 @@
-Version 0.9.7 (1)
+Version 0.10.0 (wallet-core 0.10.6)
+
+• Use segmented control instead of drop-down picker for bank selection in manual withdrawal
+• Observability via LocalConsole
+- accessibility improvements
+
+
+Version 0.9.7 (wallet-core 0.10.6)
 
 • better error handling
-- bugfix: wallet-core 0.10.6 cache handling, fee computations
+- bugfix: wallet-core cache handling & fee computations
 
 
 Version 0.9.6 (1)
