@@ -116,14 +116,7 @@ struct ManualWithdraw: View {
             if let exchangeBaseUrl = scopeInfo?.url {
                 symLog.log("getExchangeByUrl(\(exchangeBaseUrl))")
                 if exchange == nil || exchange?.tosStatus != .accepted {
-                    do {
-                        exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
-                    } catch {
-                        // TODO: Error "Can't get Exchange / Payment Service Provider Info"
-                        symLog.log(error.localizedDescription)
-                        model.showError(.error(error))
-                        controller.playSound(0)
-                    }
+                    exchange = try? await model.getExchangeByUrl(url: exchangeBaseUrl)
                 }
                 if !amountToTransfer.isZero {
                     do {

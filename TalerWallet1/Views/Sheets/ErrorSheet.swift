@@ -40,7 +40,7 @@ struct ErrorSheet: View {
             case .walletCoreError(let error):
                 if let json = error?.toJSON(), devMode {
                     self.init(title: walletCoreError, message: json, copyable: true, onDismiss: onDismiss)
-                } else if let hint = error?.hint {
+                } else if let hint = error?.errorResponse?.hint ?? error?.hint {
                     self.init(title: walletCoreError, message: hint, copyable: false, onDismiss: onDismiss)
                 } else if let message = error?.message {
                     self.init(title: walletCoreError, message: message, copyable: false, onDismiss: onDismiss)

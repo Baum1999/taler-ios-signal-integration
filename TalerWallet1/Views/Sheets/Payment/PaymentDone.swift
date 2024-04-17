@@ -50,10 +50,6 @@ struct PaymentDone: View {
                             //                          symLog.log(confirmPayResult as Any)
                             if confirmPayResult.type == "done" {
                                 paymentDone = true
-                            } else {
-                                controller.playSound(0)
-                                // TODO: show error
-                                dismissTop()
                             }
                         }
                     }
