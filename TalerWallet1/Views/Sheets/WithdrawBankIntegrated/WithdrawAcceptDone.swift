@@ -23,6 +23,7 @@ struct WithdrawAcceptDone: View {
             return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
     func dismissTopAnimated(_ stack: CallStack) {
+        symLog.log("ErrorSheet dismissTop")
         dismissTop()
     }
 

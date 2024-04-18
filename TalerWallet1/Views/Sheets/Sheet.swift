@@ -35,8 +35,9 @@ struct Sheet: View {
                                               : ""      // show nothing if 0
         NavigationView {
             Group {
-                if let error = model.error {
-                    ErrorSheet(data: error, devMode: developerMode) {
+                if let error2 = model.error2 {
+                    ErrorSheet(data: error2, devMode: developerMode) {
+                        logger.log("ErrorSheet dismissTop")
                         dismissTop()
                     }
                 } else {
@@ -61,7 +62,7 @@ struct Sheet: View {
                 .accessibilityValue(idString)
         }
         .onDisappear {
-            model.cleanError()
+            symLog.log("❗️❗️Sheet onDisappear")
         }
     }
 }

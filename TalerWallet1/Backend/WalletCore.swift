@@ -112,7 +112,8 @@ extension WalletCore {
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
-                logger.error("wallet-core sent back an error for request \(requestId, privacy: .public)")
+                let responseCode = walletError.errorResponse?.code ?? 0
+                logger.error("wallet-core sent back error \(walletError.code, privacy: .public), \(responseCode, privacy: .public) for request \(requestId, privacy: .public)")
                 symLog.log("id:\(requestId)  \(walletError)")
                 completion(requestId, timeSent, jsonData, walletError)
             } catch {        // JSON encoding of response.result failed / should never happen
@@ -375,7 +376,6 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
             let decoded = try JSONDecoder().decode(ResponseOrNotification.self, from: messageData)
             switch decoded.type {
                 case "error":
-                    symLog.log(decoded)                 // TODO: .error
                     try handleError(decoded)
                 case "response":
                     try handleResponse(decoded)
@@ -404,7 +404,7 @@ print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        /
         }
     }
     
-    private func sendRequest(request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, Data?, WalletBackendResponseError?) -> Void) {
+    private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, Data?, WalletBackendResponseError?) -> Void) {
         // Encode the request and send it to the backend.
         queue.async {
             self.semaphore.wait()               // guard access to requestsMade
@@ -436,7 +436,7 @@ extension WalletCore {
         let reqData = WalletBackendRequest(operation: request.operation(),
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
-            sendRequest(request: reqData) { requestId, timeSent, result, error in
+            encodeAndSend(reqData) { requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
                 if let error {
@@ -469,14 +469,12 @@ extension WalletCore {
                         }
                         err = error     // this will be thrown in continuation.resume(throwing:), otherwise keep nil
                     }
-                } else {
+                } else if let error {
                     // TODO: WALLET_CORE_REQUEST_CANCELLED
-                    if let error {
-                        self.lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
-                    } else {
-                        self.lastError = nil
-                    }
+                    self.lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
                     err = WalletBackendError.walletCoreError(error)
+                } else {        // both result and error are nil
+                    self.lastError = nil
                 }
                 continuation.resume(throwing: err ?? TransactionDecodingError.invalidStringValue)
             }

@@ -101,6 +101,8 @@ struct PayTemplateV: View {
             let amountVoiceOver = amount.string(currencyInfo)
             announce(this: "\(amountVoiceOver), \(feeLabel)")
             preparePayResult = ppCheck
+        } else {
+            symLog.log("preparePayForTemplateM failed")
         }
     }
 

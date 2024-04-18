@@ -88,7 +88,9 @@ struct PaymentView: View {
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
                 } else {
-                    Button("Cancel", action: { dismissTop() })
+                    Button("Cancel", action: {
+                        dismissTop()
+                    })
                         .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding(.horizontal)
                 }

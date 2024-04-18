@@ -22,7 +22,7 @@ struct QRSheet: View {
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(), urlToOpen: scannedURL)
                     } else {
-//                        let _ = print(scannedURL)       // TODO: logging
+//                        let _ = print(scannedURL)       // TODO: error logging
                         ErrorView(errortext: scannedURL.absoluteString)
                     }
                 } else {
@@ -35,10 +35,10 @@ struct QRSheet: View {
                             symLog.log("Found code: \(result.string)")
                             scannedCode = result.string
                         case .failure(let error):
+                            // TODO: errorAlert
                             ErrorView(errortext: error.localizedDescription)
                     }
                 }
-                // TODO: errorAlert
             }
         }
     }

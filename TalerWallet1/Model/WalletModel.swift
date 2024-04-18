@@ -28,8 +28,16 @@ class WalletModel: ObservableObject {
     var cachedBalances: [Balance]? = nil
 
     @Published var showError: Bool = false
-    @Published var error: ErrorData? = nil {
-        didSet { showError = error != nil }
+    @Published var error2: ErrorData? = nil
+
+    @MainActor func setError(_ theError: Error?) {
+        if let theError {
+            self.error2 = .error(theError)
+            self.showError = true
+        } else {
+            self.error2 = nil
+            self.showError = false
+        }
     }
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0, viewHandles: Bool = false)
@@ -54,7 +62,7 @@ class WalletModel: ObservableObject {
             logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
             if !viewHandles {
                 // TODO: symlog + controller sound
-                self.error = .error(error)
+                await setError(error)
             }
             throw error
         }
@@ -271,14 +279,3 @@ extension WalletModel {
     }
 }
 
-extension WalletModel {
-    @MainActor
-    func showError(_ error: ErrorData) {
-        self.error = error
-    }
-
-    @MainActor
-    func cleanError() {
-        self.error = nil
-    }
-}

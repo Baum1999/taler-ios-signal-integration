@@ -82,11 +82,11 @@ struct MainView: View {
             Sheet(sheetView: sheet)
         }
         .sheet(isPresented: $model.showError) {
-            model.cleanError()
+            model.setError(nil)
         } content: {
-            if let error = model.error {
-                ErrorSheet(data: error, devMode: developerMode) {
-                    model.cleanError()
+            if let error2 = model.error2 {
+                ErrorSheet(data: error2, devMode: developerMode) {
+                    model.setError(nil)
                 }.interactiveDismissDisabled()
             }
         }
@@ -262,7 +262,7 @@ extension MainView {
             }
             .onNotification(.Error) { notification in
                 if let error = notification.userInfo?[NOTIFICATIONERROR] as? Error {
-                    model.showError(.error(error))
+                    model.setError(error)
                     controller.playSound(0)
                 }
             }

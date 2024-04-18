@@ -134,17 +134,17 @@ class QuickDataTask: NSObject {
                         let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
                         responseCb(responseCbCls, responseInfoPtr)
                     }
-                } else {
+                } else {    // TODO: pass error to walletCore
                     var errmsg = "No http response from \(url)"
-                    logger.error("⁉️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(errmsg, privacy: .public)")
+                    logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public) \(errmsg, privacy: .public)")
                     var errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
                     var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                          status: 0,
-                                                          errmsg: errmsg_p0,
-                                                          response_headers: nil,
-                                                          num_response_headers: 0,
-                                                          body: nil,
-                                                          body_len: 0)
+                                                              status: 0,
+                                                              errmsg: errmsg_p0,
+                                                    response_headers: nil,
+                                                num_response_headers: 0,
+                                                                body: nil,
+                                                            body_len: 0)
                     let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
                     responseCb(responseCbCls, responseInfoPtr)
                 }
