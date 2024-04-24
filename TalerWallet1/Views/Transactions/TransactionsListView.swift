@@ -62,7 +62,7 @@ struct TransactionsListView: View {
             }
         } // ScrollView
         .navigationTitle(navTitle)
-        .accessibilityHint(Text("Transaction list"))
+        .accessibilityHint(String(localized: "Transaction list"))
         .task {
             symLog.log(".task ")
             await reloadAllAction(stack.push())

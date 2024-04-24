@@ -100,7 +100,7 @@ struct P2PSubjectV: View {
                 Text(verbatim: "\(summary.count)/100")                          // maximum 100 characters
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .talerFont(.body)
-                    .accessibilityValue("\(summary.count) characters of 100")
+                    .accessibilityValue(String(localized: "\(summary.count) characters of 100"))
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
                 SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
@@ -120,7 +120,7 @@ struct P2PSubjectV: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
-                .accessibilityHint(disabled ? "enabled when subject and expiration are set" : EMPTYSTRING)
+                .accessibilityHint(disabled ? String(localized: "enabled when subject and expiration are set") : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))

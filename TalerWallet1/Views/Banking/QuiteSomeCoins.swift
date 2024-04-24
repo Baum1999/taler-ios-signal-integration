@@ -17,10 +17,10 @@ struct SomeCoins {
     let fee: Amount?
     func feeLabel(_ currencyInfo: CurrencyInfo?) -> String {
        return if let fee {
-                invalid ? "Amount too small!"
-              : tooMany ? "Amount too big for a single withdrawal!"
-           : fee.isZero ? "No withdrawal fee"
-                        : "- \(fee.string(currencyInfo)) fee"
+                invalid ? String(localized: "Amount too small!")
+              : tooMany ? String(localized: "Amount too big for a single withdrawal!")
+           : fee.isZero ? String(localized: "No withdrawal fee")
+                        : String(localized: "- \(fee.string(currencyInfo)) fee")
        } else {
            EMPTYSTRING
        }

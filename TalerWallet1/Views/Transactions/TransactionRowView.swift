@@ -90,7 +90,7 @@ struct TransactionRowView: View {
             .talerFont(.headline)
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
-            .accessibilityLabel(doneOrPending ? topString : topString +  ", canceled")
+            .accessibilityLabel(doneOrPending ? topString : topString +  String(localized: ", canceled"))
         let centerBottom = Text(dateString)
             .foregroundColor(textColor)
             .talerFont(.callout)
@@ -193,9 +193,9 @@ struct TransactionRowView: View {
             } else { layout4 } // view for iOS 15
         }
             .accessibilityElement(children: .combine)
-            .accessibilityValue(needsKYC ? ". Needs K Y C" :
-                           shouldConfirm ? ". Needs bank confirmation" : EMPTYSTRING)
-            .accessibilityHint("Will go to detail view.")
+            .accessibilityValue(needsKYC ? String(localized: ". Needs K Y C") :
+                           shouldConfirm ? String(localized: ". Needs bank confirmation") : EMPTYSTRING)
+            .accessibilityHint(String(localized: "Will go to detail view."))
     }
 }
 // MARK: -

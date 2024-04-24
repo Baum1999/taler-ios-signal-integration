@@ -114,7 +114,7 @@ struct DepositIbanV: View {
             }
             .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
-                .accessibilityHint(disabled ? "enabled when account holder and IBAN are set" : EMPTYSTRING)
+                .accessibilityHint(disabled ? String(localized: "enabled when account holder and IBAN are set") : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))

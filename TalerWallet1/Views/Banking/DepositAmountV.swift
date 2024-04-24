@@ -134,7 +134,7 @@ struct DepositAmountV: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .disabled(disabled || depositStarted)
-                .accessibilityHint(disabled ? "enabled when amount is non-zero, but not higher than your available amount" : EMPTYSTRING)
+                .accessibilityHint(disabled ? String(localized: "enabled when amount is non-zero, but not higher than your available amount") : EMPTYSTRING)
             }.padding(.horizontal) } // ScrollVStack
             .frame(maxWidth: .infinity, alignment: .leading)
 //            .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4

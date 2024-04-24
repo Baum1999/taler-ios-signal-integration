@@ -55,7 +55,7 @@ struct PaymentView: View {
                                   merchant: terms.merchant.name)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
-                    Text("You don't have enough \(currency)")
+                    Text("You don't have enough \(currency).")
                         .talerFont(.headline)
                     ThreeAmountsV(stack: stack.push(),
                                   topTitle: topTitle,

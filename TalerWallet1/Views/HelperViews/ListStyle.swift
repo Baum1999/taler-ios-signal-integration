@@ -66,7 +66,7 @@ struct AnyViewDemo: View {
 
     var body: some View {
         VStack {
-            Picker("List Style", selection: $selectedStyle) {
+            Picker("List Style:", selection: $selectedStyle) {
                 ForEach(MyListStyle.allCases, id: \.self) {
                     Text($0.displayName.capitalized).tag($0)
                 }

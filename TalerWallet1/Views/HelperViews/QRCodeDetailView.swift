@@ -25,13 +25,15 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             Section {
-                let eitherMini = incoming ? String(localized: "Either (payer)", defaultValue: "Either",
+                let eitherMini = incoming ? String(localized: "Either (payer) Mini 1",
+                                                defaultValue: "Either",
                                                      comment: "Either (copy/share this link to the payer)")
-                                          : String(localized: "Either (payee)", defaultValue: "Either",
+                                          : String(localized: "Either (payee) Mini 1",
+                                                defaultValue: "Either",
                                                      comment: "Either (copy/share this link to the payee)")
-                let eitherLong = incoming ? String(localized: "Either provide this payment link (payer)",
+                let eitherLong = incoming ? String(localized: "Either (payer) Long 1",
                                                 defaultValue: "Either provide this payment link")
-                                          : String(localized: "Either provide this payment link (payee)",
+                                          : String(localized: "Either (payee) Long 1",
                                                 defaultValue: "Either provide this payment link")
                 Text(minimalistic ? eitherMini : eitherLong)
                     .multilineTextAlignment(.leading)
@@ -43,10 +45,10 @@ struct QRCodeDetailView: View {
 //                    .padding(.bottom)
                     .listRowSeparator(.hidden)
 
-                let otherPartyMini = incoming ? String(localized: "or scan this(payer)", defaultValue: "or scan this")
-                                              : String(localized: "or scan this(payee)", defaultValue: "or scan this")
-                let otherPartyLong = incoming ? String(localized: "to the payer, or")
-                                              : String(localized: "to the payee, or")
+                let otherPartyMini = incoming ? String(localized: "Either (payer) Mini 2", defaultValue: "or scan this")
+                                              : String(localized: "Either (payee) Mini 2", defaultValue: "or scan this")
+                let otherPartyLong = incoming ? String(localized: "Either (payer) Long 2", defaultValue: "to the payer, or")
+                                              : String(localized: "Either (payee) Long 2", defaultValue: "to the payee, or")
                 Text(minimalistic ? otherPartyMini : otherPartyLong)
                     .multilineTextAlignment(.leading)
                     .talerFont(.title3)
@@ -56,11 +58,15 @@ struct QRCodeDetailView: View {
                     .accessibilityLabel("QR Code")
                     .listRowSeparator(.hidden)
 
-                let scanMini = incoming ? String(localized: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
-                                        : String(localized: "to receive \(amountStr).", comment: "e.g. '$ 7.41'")
-                let scanLong = incoming ? String(localized: "let the payer scan this QR code to pay \(amountStr).",
+                let scanMini = incoming ? String(localized: "Either (payer) Mini 3",
+                                              defaultValue: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
+                                        : String(localized: "Either (payee) Mini 3",
+                                              defaultValue: "to receive \(amountStr).", comment: "e.g. '$ 7.41'")
+                let scanLong = incoming ? String(localized: "Either (payer) Long 3",
+                                              defaultValue: "let the payer scan this QR code to pay \(amountStr).",
                                                    comment: "e.g. '5,3 €'")
-                                        : String(localized: "let the payee scan this QR code to receive \(amountStr).",
+                                        : String(localized: "Either (payee) Long 3",
+                                              defaultValue: "let the payee scan this QR code to receive \(amountStr).",
                                                    comment: "e.g. '$ 7.41'")
                 Text(minimalistic ? scanMini : scanLong)
                     .multilineTextAlignment(.leading)

@@ -137,7 +137,7 @@ struct DebugViewV: View {
                 .id("viewID")
                 .accessibilityLabel(Text("View.ID.", comment: "AccessibilityLabel"))
                 .accessibilityValue(viewIDString)
-                .accessibilityHint("Shows which view you currently are on.")
+                .accessibilityHint(String(localized: "Shows which view you currently are on."))
             Spacer()
         }
         .edgesIgnoringSafeArea(.top)

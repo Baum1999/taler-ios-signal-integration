@@ -214,7 +214,7 @@ struct TransactionSummaryV: View {
                 }
                 Link("Open KYC website", destination: destination)
                     .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
-                    .accessibilityHint("Will go to KYC website to confirm this withdrawal.")
+                    .accessibilityHint(String(localized: "Will go to KYC website to confirm this withdrawal."))
             }
         }
     }
@@ -233,7 +233,7 @@ struct TransactionSummaryV: View {
                 }
                 Link("Confirm now", destination: destination)
                     .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
-                    .accessibilityHint("Will go to bank website to confirm this withdrawal.")
+                    .accessibilityHint(String(localized: "Will go to bank website to confirm this withdrawal."))
             }
         }
     }

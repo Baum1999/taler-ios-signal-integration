@@ -111,7 +111,7 @@ extension BalancesSectionView: View {
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
                 }
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-                .accessibilityHint("Will go to the demo shop website.")
+                .accessibilityHint(String(localized: "Will go to the demo shop website."))
                 .listRowSeparator(.hidden)
             }
             DepositWithdrawV(stack: stack.push(),
@@ -217,7 +217,7 @@ fileprivate struct BalancesPendingRowView: View {
                                                  needsKYC ? needsKYCStr :
                                             shouldConfirm ? needsConfStr
                                                           : EMPTYSTRING)
-            .accessibilityHint("Will go to Pending transactions.")
+            .accessibilityHint(String(localized: "Will go to Pending transactions."))
         } // NavLinkLabel
     } // body
 } // BalancesPendingRowView

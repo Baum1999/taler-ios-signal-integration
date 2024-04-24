@@ -40,7 +40,7 @@ struct AboutView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
 //                    .accessibilityLabel("Progress indicator")
                     .onTapGesture(count: 1) { rotationEnabled.toggle() }
-                SettingsItem(name: "Visit the taler.net website", id1: "web",
+                SettingsItem(name: String(localized: "Visit the taler.net website"), id1: "web",
                              description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
@@ -48,7 +48,7 @@ struct AboutView: View {
                         UIApplication.shared.open(URL(string:TALER_NET)!, options: [:])
                     }
 
-                SettingsItem(name: "App Version", id1: "app") {
+                SettingsItem(name: String(localized: "App Version"), id1: "app") {
                     Text(verbatim: "\(Bundle.main.releaseVersionNumberPretty)")
                 }
                 Group {
@@ -62,7 +62,7 @@ struct AboutView: View {
                             }
                         }
                     } else {
-                        SettingsItem(name: "Wallet-Core Version", id1: "wallet-coreV") {
+                        SettingsItem(name: String(localized: "WalletCore Version"), id1: "wallet-coreV") {
                             Text(verbatim: "\(walletCore.versionInfo?.implementationSemver ?? "unknown")")
                         }
                     }
