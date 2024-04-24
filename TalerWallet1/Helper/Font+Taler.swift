@@ -301,27 +301,27 @@ struct ContentViewFonts: View {
     var body: some View {
         VStack {
             HStack {
-                Text("title a")
-                Text("bold").bold()
+                Text(verbatim: "title a")
+                Text(verbatim: "bold").bold()
             }
             .talerFont(.title)
             .padding()
 
             HStack {
-                Text("title2 a")
-                Text("italic").italic()
-                Text("bold").bold()
+                Text(verbatim: "title2 a")
+                Text(verbatim: "italic").italic()
+                Text(verbatim: "bold").bold()
             }
             .talerFont(.title2)
             .padding()
-            Text("headline")
+            Text(verbatim: "headline")
                 .talerFont(.headline)
                 .padding(.top)
-            Text("headline bold")
+            Text(verbatim: "headline bold")
                 .bold()
                 .talerFont(.headline)
                 .padding(.bottom)
-            Text("title2 bold italic")
+            Text(verbatim: "title2 bold italic")
                 .bold()
                 .italic()
                 .talerFont(.title2)

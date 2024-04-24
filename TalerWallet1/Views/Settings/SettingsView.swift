@@ -125,7 +125,7 @@ struct SettingsView: View {
                         description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
-                SettingsStyle(title: String(localized: "Liststyle:"), myListStyle: $myListStyle)
+                SettingsStyle(title: String(localized: "List Style:"), myListStyle: $myListStyle)
                     .id("liststyle")
                 let localConsStr = String(localized: "on LocalConsole")
                 let observability = String(localized: "Observe walletCore")
@@ -154,12 +154,12 @@ struct SettingsView: View {
                     }
 #if DEBUG
                     if showDevelopItems {
-                        Text("https://bank.taler.grothoff.org/")
-                        Text("https://bank.regio-taler.fdold.eu/")
-                        Text("https://bank.head.taler.net/")
-                        Text("https://bank.test.taler.net/")
-                        Text("https://bank.demo.taler.net/")
-                        Text("https://bank.taler.ar/")
+                        Text(verbatim: "https://bank.taler.grothoff.org/")
+                        Text(verbatim: "https://bank.regio-taler.fdold.eu/")
+                        Text(verbatim: "https://bank.head.taler.net/")
+                        Text(verbatim: "https://bank.test.taler.net/")
+                        Text(verbatim: "https://bank.demo.taler.net/")
+                        Text(verbatim: "https://bank.taler.ar/")
                     }
 #endif
                     if showDevelopItems {  // show or hide the following items

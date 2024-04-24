@@ -82,7 +82,8 @@ fileprivate struct Previews: PreviewProvider {
     struct StateContainer: View {
 //        @StateObject private var controller = Controller.shared
         var body: some View {
-            Text("Hello")
+            let hello = "Hello"
+            Text(hello)
 //            Preview_Content()
 //                .environmentObject(controller)
         }
