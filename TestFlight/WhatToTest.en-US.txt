@@ -1,3 +1,9 @@
+Version 0.10.1 (wallet-core 0.10.7)
+
+• German localization
+- Improve observability and error handling
+
+
 Version 0.10.0 (wallet-core 0.10.6)
 
 • Use segmented control instead of drop-down picker for bank selection in manual withdrawal
