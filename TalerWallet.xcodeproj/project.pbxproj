@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */; };
+		4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1853992BDAE6D40034F3BA /* LocalConsole */; };
+		4E18539C2BDAE6E50034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E18539B2BDAE6E50034F3BA /* LocalConsole */; };
 		4E2254972A822B8100E41D29 /* payment_received.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254952A822B8100E41D29 /* payment_received.m4a */; };
 		4E2254982A822B8100E41D29 /* payment_sent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4E2254962A822B8100E41D29 /* payment_sent.m4a */; };
 		4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2D8DD22B3F513800234039 /* MarkdownUI */; };
@@ -139,7 +141,6 @@
 		4E578E942A4822D500F21F1C /* P2pPayURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E932A4822D500F21F1C /* P2pPayURIView.swift */; };
 		4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F62A3B9E5B00072618 /* WithdrawAcceptDone.swift */; };
-		4E5FA9A22B862C4A002DB016 /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5FA9A12B862C4A002DB016 /* LocalConsole */; };
 		4E605D902AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */; };
 		4E605D912AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8E2AA8B407002FB9A7 /* Nunito-Black.ttf */; };
 		4E605D922AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E605D8F2AA8B407002FB9A7 /* Nunito-BlackItalic.ttf */; };
@@ -176,7 +177,6 @@
 		4E983C2A2ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C282ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift */; };
 		4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
 		4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */; };
-		4EA076B12BBEED7E00685A10 /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA076B02BBEED7E00685A10 /* LocalConsole */; };
 		4EA076B32BC0607400685A10 /* DepositWithdrawV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */; };
 		4EA076B42BC0607400685A10 /* DepositWithdrawV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */; };
 		4EA1ABBE29A3833A008821EA /* PublicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA1ABBD29A3833A008821EA /* PublicConstants.swift */; };
@@ -475,7 +475,7 @@
 			files = (
 				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
 				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
-				4E5FA9A22B862C4A002DB016 /* LocalConsole in Frameworks */,
+				4E18539C2BDAE6E50034F3BA /* LocalConsole in Frameworks */,
 				4E3EAE792A990778009F1BE8 /* FTalerWalletcore.framework in Frameworks */,
 				4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */,
 				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
@@ -490,7 +490,7 @@
 			files = (
 				ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */,
 				4EB094FD29897D280043A8A1 /* SymLog in Frameworks */,
-				4EA076B12BBEED7E00685A10 /* LocalConsole in Frameworks */,
+				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
 				4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */,
 				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
 				ABC13AA32859962800D23185 /* taler-swift in Frameworks */,
@@ -920,7 +920,7 @@
 				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
 				4EE171872B49635800BF9FF5 /* MarkdownUI */,
 				4EE171912B49FE4E00BF9FF5 /* OrderedCollections */,
-				4E5FA9A12B862C4A002DB016 /* LocalConsole */,
+				4E18539B2BDAE6E50034F3BA /* LocalConsole */,
 			);
 			productName = Taler;
 			productReference = 4E3EAE892A990778009F1BE8 /* GNU_Taler.app */;
@@ -947,7 +947,7 @@
 				4EEC157529F8ECBF00D46A03 /* CodeScanner */,
 				4E2D8DD22B3F513800234039 /* MarkdownUI */,
 				4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */,
-				4EA076B02BBEED7E00685A10 /* LocalConsole */,
+				4E1853992BDAE6D40034F3BA /* LocalConsole */,
 			);
 			productName = Taler;
 			productReference = D14AFD1D24D232B300C51073 /* Taler_Wallet.app */;
@@ -1031,7 +1031,7 @@
 				4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */,
 				4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				4E5FA9A02B862638002DB016 /* XCRemoteSwiftPackageReference "LocalConsole" */,
+				4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */,
 			);
 			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
 			projectDirPath = "";
@@ -1813,6 +1813,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/LocalConsole";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Fesh-com/swift-markdown-ui-standalone";
@@ -1843,14 +1851,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		4E5FA9A02B862638002DB016 /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/duraidabdul/LocalConsole";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.12.1;
 			};
 		};
 		4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */ = {
@@ -1888,6 +1888,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4E1853992BDAE6D40034F3BA /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
+		4E18539B2BDAE6E50034F3BA /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
 		4E2D8DD22B3F513800234039 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
@@ -1911,16 +1921,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */;
 			productName = CodeScanner;
-		};
-		4E5FA9A12B862C4A002DB016 /* LocalConsole */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E5FA9A02B862638002DB016 /* XCRemoteSwiftPackageReference "LocalConsole" */;
-			productName = LocalConsole;
-		};
-		4EA076B02BBEED7E00685A10 /* LocalConsole */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E5FA9A02B862638002DB016 /* XCRemoteSwiftPackageReference "LocalConsole" */;
-			productName = LocalConsole;
 		};
 		4EB094FC29897D280043A8A1 /* SymLog */ = {
 			isa = XCSwiftPackageProductDependency;
