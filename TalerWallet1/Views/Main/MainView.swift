@@ -41,6 +41,7 @@ struct MainView: View {
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
+        ViewState.shared.popToRootView(nil)
     }
     var body: some View {
 #if PRINT_CHANGES
@@ -106,26 +107,25 @@ extension MainView {
     struct Content: View {
         let logger: Logger
         let stack: CallStack
-        @State private var shouldReloadBalances = 0
-        @State private var balances: [Balance] = []
         @Binding var talerFontIndex: Int
-        @AppStorage("minimalistic") var minimalistic: Bool = false
-        @EnvironmentObject private var controller: Controller
-        @EnvironmentObject private var model: WalletModel
-        @EnvironmentObject private var viewState: ViewState     // popToRootView()
-        @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
-        let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
-//        let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
-        let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
-        @State private var selectedTab: Tab = .balances
-        @State private var showKycAlert: Bool = false
-        @State private var kycURI: URL?
 
 #if DEBUG
         @AppStorage("developerMode") var developerMode: Bool = true
 #else
         @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+        @AppStorage("minimalistic") var minimalistic: Bool = false
+        @EnvironmentObject private var controller: Controller
+        @EnvironmentObject private var model: WalletModel
+        @EnvironmentObject private var viewState: ViewState     // popToRootView()
+        @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
+
+        @State private var shouldReloadBalances = 0
+        @State private var balances: [Balance] = []
+        @State private var selectedTab: Tab = .balances
+        @State private var showKycAlert: Bool = false
+        @State private var kycURI: URL?
+
 
         private var openKycButton: some View {
             Button("KYC") {
@@ -183,6 +183,9 @@ extension MainView {
 #else
             let delay: UInt = 0     // no delay for release builds
 #endif
+            let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
+//            let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
+            let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
           Group {
 //            let labelStyle = minimalistic ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
             TabView(selection: tabSelection()) {
