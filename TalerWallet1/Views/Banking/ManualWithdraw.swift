@@ -109,7 +109,8 @@ struct ManualWithdraw: View {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
         } else {
-            LoadingView(scopeInfo: scopeInfo, message: "Contacting...")
+            let contacting = String(localized: "Contacting...")
+            LoadingView(scopeInfo: scopeInfo, message: contacting)
         }
       }
         .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes

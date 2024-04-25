@@ -270,7 +270,7 @@ struct ManualDetailsV: View {
                                         .multilineTextAlignment(.leading)
                                         .padding(.top)
                         let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountStr)."
-                                  : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically.")
+                                  : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
                                         .multilineTextAlignment(.leading)
                                         .padding(.top)
                         Group {

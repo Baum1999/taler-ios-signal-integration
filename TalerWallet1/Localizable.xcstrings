@@ -1,5 +1,3744 @@
 {
   "sourceLanguage" : "en",
-  "strings" : {},
+  "strings" : {
+    "- %@ fee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- %@ Gebühr"
+          }
+        }
+      }
+    },
+    ", canceled" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", abgebrochen"
+          }
+        }
+      }
+    },
+    ". Needs bank confirmation" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Benötigt die Bestätigung der Bank"
+          }
+        }
+      }
+    },
+    ". Needs K Y C" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Benötigt K Y C"
+          }
+        }
+      }
+    },
+    "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternative:** Wenn ihre Bank bereits Payto unterstützt, können Sie diesen Paytolink verwenden:"
+          }
+        }
+      }
+    },
+    "**Alternative:** Use this PayTo-Link:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternative:** Verwenden SIe diesen PayTo-Link:"
+          }
+        }
+      }
+    },
+    "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 1:** Kopieren Sie diesen Code und setzen ihn als Verwendungszweck in ihrer Banking-App oder Bank-Webseite ein:"
+          }
+        }
+      }
+    },
+    "**Step 1:** Copy+Paste this subject:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 1:** Kopieren Sie diesen Verwendungszweck"
+          }
+        }
+      }
+    },
+    "**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 2:** Kopieren Sie Empfänger und Konto in Ihre Banking-App oder Bank-Webseite:"
+          }
+        }
+      }
+    },
+    "**Step 2:** Copy+Paste payee and account:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 2:** Kopieren Sie Empfänger und Konto"
+          }
+        }
+      }
+    },
+    "**Step 2:** Copy+Paste payee and IBAN:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 2:** Kopieren Sie Empfänger und IBAN"
+          }
+        }
+      }
+    },
+    "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 2:** Wenn Sie es noch nicht in Ihrer Favoritenliste haben, kopieren Sie Empfänger und IBAN in Ihre Banking-App oder Bank-Webseite (und speichern den Kontakt als Favorit für das nächste Mal):"
+          }
+        }
+      }
+    },
+    "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 3:** Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt. Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
+          }
+        }
+      }
+    },
+    "**Step 3:** Transfer %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 3:** Schließen Sie die Überweisung von %@ ab."
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%lld characters of 100" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Zeichen von 100"
+          }
+        }
+      }
+    },
+    "%lld days ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor %lld Tagen"
+          }
+        }
+      }
+    },
+    "%lld hours ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor %lld Stunden"
+          }
+        }
+      }
+    },
+    "%lld minutes ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor %lld Minuten"
+          }
+        }
+      }
+    },
+    "%lld years" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Jahre"
+          }
+        }
+      }
+    },
+    "%llu Day" : {
+      "comment" : "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Tag"
+          }
+        }
+      }
+    },
+    "%llu Days" : {
+      "comment" : "7 Days, always plural (3..9), 4 letters max., abbreviate if longer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Tage"
+          }
+        }
+      }
+    },
+    "+ %@ fee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ Gebühr"
+          }
+        }
+      }
+    },
+    "1 hour ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor 1 Stunde"
+          }
+        }
+      }
+    },
+    "1 minute ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor 1 Minute"
+          }
+        }
+      }
+    },
+    "Abort Deposit" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzahlung abbrechen"
+          }
+        }
+      }
+    },
+    "Abort P2P Send" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P Zahlung abbrechen"
+          }
+        }
+      }
+    },
+    "Abort Payment" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlung abbrechen"
+          }
+        }
+      }
+    },
+    "About %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über %@"
+          }
+        }
+      }
+    },
+    "About 1½ hours ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor ca. 1½ Stunden"
+          }
+        }
+      }
+    },
+    "About 2 hours ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor ca. 2 Stunden"
+          }
+        }
+      }
+    },
+    "About an hour ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor ca. 1 Stunde"
+          }
+        }
+      }
+    },
+    "Accept" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akzeptieren"
+          }
+        }
+      }
+    },
+    "Accept P2P Receive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P Zahlungsempfang akzeptieren"
+          }
+        }
+      }
+    },
+    "Accept Terms of Service" : {
+      "comment" : "Button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzungsbedingungen akzeptieren"
+          }
+        }
+      }
+    },
+    "Account holder:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontoinhaber:"
+          }
+        }
+      }
+    },
+    "account of the payee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto des Empfängers"
+          }
+        }
+      }
+    },
+    "Account:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto"
+          }
+        }
+      }
+    },
+    "Add" : {
+      "comment" : "button in the addExchange alert",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        }
+      }
+    },
+    "Add Payment Service" : {
+      "comment" : "accessibilityLabel for the + button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienst hinzufügen"
+          }
+        }
+      }
+    },
+    "Address of Payment Service" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse des Zahlungsdienstes"
+          }
+        }
+      }
+    },
+    "Amount available:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbarer Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to be spent:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auszugebender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to be withdrawn:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abzuhebender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to deposit:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzuzahlender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to pay:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu bezahlender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to request:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anzufordernder Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to send:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu sendender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to spend:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auszugebender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount to withdraw:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abzuhebender Betrag:"
+          }
+        }
+      }
+    },
+    "Amount too big for a single withdrawal!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betrag zu groß für eine Abhebung!"
+          }
+        }
+      }
+    },
+    "Amount too small!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betrag zu klein!"
+          }
+        }
+      }
+    },
+    "Amount:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betrag:"
+          }
+        }
+      }
+    },
+    "App Version" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Version"
+          }
+        }
+      }
+    },
+    "Are you sure you want to abort this transaction?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diese Transaktion abbrechen wollen?"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete this transaction?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diese Transaktion löschen wollen?"
+          }
+        }
+      }
+    },
+    "Are you sure you want to fail this transaction?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diese Transaktion scheitern lassen wollen?"
+          }
+        }
+      }
+    },
+    "Available:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar:"
+          }
+        }
+      }
+    },
+    "Available:\t%@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar: %@"
+          }
+        }
+      }
+    },
+    "Backup restored" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup wiederhergestellt"
+          }
+        }
+      }
+    },
+    "Balance:" : {
+      "comment" : "Main view",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo:"
+          }
+        }
+      }
+    },
+    "Bank" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank"
+          }
+        }
+      }
+    },
+    "but you only have %@ to deposit." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aber Sie haben nur %@ zum Einzahlen."
+          }
+        }
+      }
+    },
+    "but you only have %@ to send." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aber Sie haben nur %@ zum Versenden."
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "Checking Link" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link wird überprüft"
+          }
+        }
+      }
+    },
+    "Choose the expiration duration" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wählen Sie die Verfallszeit"
+          }
+        }
+      }
+    },
+    "Chosen amount to withdraw:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewählter Betrag zum Abheben:"
+          }
+        }
+      }
+    },
+    "Chosen:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewählt:"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
+    "Closing Camera" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera beenden"
+          }
+        }
+      }
+    },
+    "Confirm later" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später bestätigen"
+          }
+        }
+      }
+    },
+    "Confirm now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt bestätigen"
+          }
+        }
+      }
+    },
+    "Confirm Payment" : {
+      "comment" : "pay P2P request/invoice\npay merchant",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlung bestätigen"
+          }
+        }
+      }
+    },
+    "Confirm with Bank" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit der Bank bestätigen"
+          }
+        }
+      }
+    },
+    "Confirm Withdrawal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abhebung bestätigen"
+          }
+        }
+      }
+    },
+    "Contacting..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontaktiere..."
+          }
+        }
+      }
+    },
+    "Copy the account" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto kopieren"
+          }
+        }
+      }
+    },
+    "Copy the cryptocode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cryptocode kopieren"
+          }
+        }
+      }
+    },
+    "Copy the error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler kopieren"
+          }
+        }
+      }
+    },
+    "Copy the error JSON" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler-JSON kopieren"
+          }
+        }
+      }
+    },
+    "Copy the IBAN" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN kopieren"
+          }
+        }
+      }
+    },
+    "Copy the payee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empfänger kopieren"
+          }
+        }
+      }
+    },
+    "Copy.long" : {
+      "comment" : "may be a bit longer",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Copy"
+          }
+        }
+      }
+    },
+    "Copy.short" : {
+      "comment" : "5 letters max, else abbreviate",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Copy"
+          }
+        }
+      }
+    },
+    "Cryptocode" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cryptocode"
+          }
+        }
+      }
+    },
+    "Customize Order" : {
+      "comment" : "pay merchant",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auftrag bearbeiten"
+          }
+        }
+      }
+    },
+    "Demo: get digital cash to experience how to pay with the money of the future." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo: Mit Digitalem Bargeld ausprobieren wie Sie mit dem Geld der Zukunft bezahlen."
+          }
+        }
+      }
+    },
+    "Deposit" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzahlen"
+          }
+        }
+      }
+    },
+    "Deposit\t%@" : {
+      "comment" : "Button `Deposit (currency)´, must have ONE \\t and ONE %@",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@\teinzahlen"
+          }
+        }
+      }
+    },
+    "Deposit %@" : {
+      "comment" : "amount with currency",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ einzahlen"
+          }
+        }
+      }
+    },
+    "Deposit:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzahlen:"
+          }
+        }
+      }
+    },
+    "DepositButton_Short" : {
+      "comment" : "Abbreviation of `Deposit (currency)´",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzahlen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deposit"
+          }
+        }
+      }
+    },
+    "Deserialization error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interner Deserialisierungsfehler"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "Effective:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netto:"
+          }
+        }
+      }
+    },
+    "Either (payee) Long 1" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entweder geben Sie diesen Zahlungslink"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Either provide this payment link"
+          }
+        }
+      }
+    },
+    "Either (payee) Long 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "an den Empfänger, oder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "to the payee, or"
+          }
+        }
+      }
+    },
+    "Either (payee) Long 3" : {
+      "comment" : "e.g. '$ 7.41'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lassen Sie den Empfänger den QR Code scannen um %@ zu erhalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "let the payee scan this QR code to receive %@."
+          }
+        }
+      }
+    },
+    "Either (payee) Mini 1" : {
+      "comment" : "Either (copy/share this link to the payee)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entweder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Either"
+          }
+        }
+      }
+    },
+    "Either (payee) Mini 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "oder den QR Code"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "or scan this"
+          }
+        }
+      }
+    },
+    "Either (payee) Mini 3" : {
+      "comment" : "e.g. '$ 7.41'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "scannen um %@ zu erhalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "to receive %@."
+          }
+        }
+      }
+    },
+    "Either (payer) Long 1" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entweder geben Sie diesen Zahlungslink"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Either provide this payment link"
+          }
+        }
+      }
+    },
+    "Either (payer) Long 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "an den Bezahlenden, oder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "to the payer, or"
+          }
+        }
+      }
+    },
+    "Either (payer) Long 3" : {
+      "comment" : "e.g. '5,3 €'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lassen Sie den Bezahlenden den QR Code scannen um %@ zu bezahlen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "let the payer scan this QR code to pay %@."
+          }
+        }
+      }
+    },
+    "Either (payer) Mini 1" : {
+      "comment" : "Either (copy/share this link to the payer)",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entweder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Either"
+          }
+        }
+      }
+    },
+    "Either (payer) Mini 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "oder den QR Code"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "or scan this"
+          }
+        }
+      }
+    },
+    "Either (payer) Mini 3" : {
+      "comment" : "e.g. '5,3 €'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "scannen um %@ zu bezahlen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "to pay %@."
+          }
+        }
+      }
+    },
+    "enabled when account holder and IBAN are set" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktiviert, wenn Kontoinhaber und IBAN eingegeben sind"
+          }
+        }
+      }
+    },
+    "enabled when amount is non-zero, but not higher than your available amount" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktiviert, wenn der Betrag ungleich Null ist, aber nicht höher als Ihr verfügbarer Betrag"
+          }
+        }
+      }
+    },
+    "enabled when subject and expiration are set" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktiviert, wenn Betreff und Ablaufdatum eingegeben sind"
+          }
+        }
+      }
+    },
+    "Enter subject:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendungszweck eingeben:"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "Expires in:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft ab in:"
+          }
+        }
+      }
+    },
+    "Expires: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft ab: %@"
+          }
+        }
+      }
+    },
+    "Fee (long):" : {
+      "comment" : "long version",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebühr:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fee:"
+          }
+        }
+      }
+    },
+    "Fee (short):" : {
+      "comment" : "short version",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebühr:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fee:"
+          }
+        }
+      }
+    },
+    "For Delete, Fail & Abort buttons" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Löschen, Abbrechen und Scheitern"
+          }
+        }
+      }
+    },
+    "from %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "von %@"
+          }
+        }
+      }
+    },
+    "Gross Amount to receive:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruttobetrag zu erhalten:"
+          }
+        }
+      }
+    },
+    "Haptics" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptik"
+          }
+        }
+      }
+    },
+    "IBAN of the payee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN des Empfängers"
+          }
+        }
+      }
+    },
+    "IBAN:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN:"
+          }
+        }
+      }
+    },
+    "If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn diese Wallet einem Kind oder Minderjährigen gehört, sollte das generierte Elektronic-Cash altersbeschränkt sein."
+          }
+        }
+      }
+    },
+    "In progress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Verarbeitung"
+          }
+        }
+      }
+    },
+    "Initialization error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initialisierungsfehler"
+          }
+        }
+      }
+    },
+    "Internal core error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interner Systemfehler"
+          }
+        }
+      }
+    },
+    "KYC" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC"
+          }
+        }
+      }
+    },
+    "Language:" : {
+      "comment" : "title of ToS language selection",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache:"
+          }
+        }
+      }
+    },
+    "LinkTitle_DEMOBANK" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo Bank Webseite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Demo Bank Website"
+          }
+        }
+      }
+    },
+    "LinkTitle_DEMOSHOP" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demogeld ausgeben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Spend test money"
+          }
+        }
+      }
+    },
+    "LinkTitle_Test_Money" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demogeld erhalten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Get demo money"
+          }
+        }
+      }
+    },
+    "List Style:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listenstil:"
+          }
+        }
+      }
+    },
+    "Loading…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laden..."
+          }
+        }
+      }
+    },
+    "Lost:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlust:"
+          }
+        }
+      }
+    },
+    "Main Menu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauptmenü"
+          }
+        }
+      }
+    },
+    "MajorState.Aborted" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Aborted"
+          }
+        }
+      }
+    },
+    "MajorState.Aborting" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Aborting"
+          }
+        }
+      }
+    },
+    "MajorState.Deleted" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelöscht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deleted"
+          }
+        }
+      }
+    },
+    "MajorState.Dialog" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dialog"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Dialog"
+          }
+        }
+      }
+    },
+    "MajorState.Done" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "MajorState.Expired" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelaufen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Expired"
+          }
+        }
+      }
+    },
+    "MajorState.Failed" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescheitert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Failed"
+          }
+        }
+      }
+    },
+    "MajorState.Pending" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pending"
+          }
+        }
+      }
+    },
+    "Manage payment service providers..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienste verwalten"
+          }
+        }
+      }
+    },
+    "Merchant" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Händler"
+          }
+        }
+      }
+    },
+    "Minimalistic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimalistisch"
+          }
+        }
+      }
+    },
+    "MinorState.aml" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AML benötigt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "AML required"
+          }
+        }
+      }
+    },
+    "MinorState.bankConfirmTransfer" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warte auf Banküberweisung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Waiting for bank transfer"
+          }
+        }
+      }
+    },
+    "MinorState.kyc" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC benötigt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "KYC required"
+          }
+        }
+      }
+    },
+    "MinorState.mergekyc" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC benötigt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "KYC required"
+          }
+        }
+      }
+    },
+    "Money lost" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld verloren"
+          }
+        }
+      }
+    },
+    "Money lost:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld verloren:"
+          }
+        }
+      }
+    },
+    "More info about GNU Taler in general..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr Info über GNU Taler im Allgemeinen..."
+          }
+        }
+      }
+    },
+    "More info about this app..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr Info über diese App..."
+          }
+        }
+      }
+    },
+    "More than a week ago" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor mehr als einer Woche"
+          }
+        }
+      }
+    },
+    "NavTitle_Deposit_AmountStr" : {
+      "comment" : "NavTitle: Deposit",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzahlung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deposit"
+          }
+        }
+      }
+    },
+    "NavTitle_Deposit_Currency" : {
+      "comment" : "NavTitle: Deposit 'currencySymbol'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ einzahlen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deposit %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Request_AmountStr" : {
+      "comment" : "NavTitle: Request 'amountStr'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ anfordern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Request_Currency" : {
+      "comment" : "NavTitle: Request 'currencySymbol'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ anfordern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Send_AmountStr" : {
+      "comment" : "NavTitle: Send 'amountStr'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ senden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Send %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Send_Currency" : {
+      "comment" : "NavTitle: Send 'currencySymbol'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ senden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Send %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Withdraw (currency)" : {
+      "comment" : "NavTitle: Withdraw 'currencySymbol'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ abheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Withdraw %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Withdraw (currency) A11y" : {
+      "comment" : "NavTitle: Withdraw 'currency'",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ abheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Withdraw %@"
+          }
+        }
+      }
+    },
+    "Net Amount to receive:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettobetrag erhalten:"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "comment" : "advance Deposit to Amount",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        }
+      }
+    },
+    "No date" : {
+      "comment" : "Timestamp missing or invalid",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Datum"
+          }
+        }
+      }
+    },
+    "No withdrawal fee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Gebühr"
+          }
+        }
+      }
+    },
+    "Note: It will take quite some time to withdraw this amount! Be more patient..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis: Es braucht eine ganze Weile um diesen Betrag abzuheben. Seien Sie noch geduldiger..."
+          }
+        }
+      }
+    },
+    "Note: It will take some time to withdraw this amount. Be patient..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis: Es braucht eine Weile um diesen Betrag abzuheben. Seien Sie geduldig..."
+          }
+        }
+      }
+    },
+    "Observe walletCore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WalleCore observieren"
+          }
+        }
+      }
+    },
+    "Obtained amount:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhaltenen Betrag:"
+          }
+        }
+      }
+    },
+    "Obtained:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalten:"
+          }
+        }
+      }
+    },
+    "Omit text where possible" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möglichst wenig Text"
+          }
+        }
+      }
+    },
+    "on LocalConsole" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "on LocalConsole"
+          }
+        }
+      }
+    },
+    "Open KYC website" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC Webseite öffnen"
+          }
+        }
+      }
+    },
+    "Open merchant website" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Händler-Webseite öffnen"
+          }
+        }
+      }
+    },
+    "Open Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        }
+      }
+    },
+    "Opening Camera" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera wird geöffnet"
+          }
+        }
+      }
+    },
+    "P2P Ready" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P bereit"
+          }
+        }
+      }
+    },
+    "P2P Receive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P erhalten"
+          }
+        }
+      }
+    },
+    "Paid" : {
+      "comment" : "Title, short",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlt"
+          }
+        }
+      }
+    },
+    "Paid amount:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlter Betrag:"
+          }
+        }
+      }
+    },
+    "Paid P2P" : {
+      "comment" : "Title, short",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P bezahlt"
+          }
+        }
+      }
+    },
+    "Paid Request" : {
+      "comment" : "TransactionType, paid invoice from another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anforderung bezahlt"
+          }
+        }
+      }
+    },
+    "Paid:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlt:"
+          }
+        }
+      }
+    },
+    "Pay P2P" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P bezahlen"
+          }
+        }
+      }
+    },
+    "Pay Peer-Pull" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay Peer-Pull"
+          }
+        }
+      }
+    },
+    "Pay Peer-Push" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay Peer-Push"
+          }
+        }
+      }
+    },
+    "Pay Request" : {
+      "comment" : "TransactionType, scan invoice to pay to another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsanforderung"
+          }
+        }
+      }
+    },
+    "Pay:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlen:"
+          }
+        }
+      }
+    },
+    "Payee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empfänger"
+          }
+        }
+      }
+    },
+    "Payee:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empfänger:"
+          }
+        }
+      }
+    },
+    "Payment" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlung"
+          }
+        }
+      }
+    },
+    "Payment provider:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienst"
+          }
+        }
+      }
+    },
+    "Pending" : {
+      "comment" : "ViewTitle of TransactionList",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehend"
+          }
+        }
+      }
+    },
+    "Pending amount to obtain:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu erhaltender Betrag:"
+          }
+        }
+      }
+    },
+    "Pending:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehend:"
+          }
+        }
+      }
+    },
+    "Play Payment Sounds" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungs-Töne abspielen"
+          }
+        }
+      }
+    },
+    "Please allow camera access in settings." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte erlauben Sie den Zugriff auf die Kamera in den Systemeinstellungen"
+          }
+        }
+      }
+    },
+    "Please enter the URL" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte geben Sie die URL ein"
+          }
+        }
+      }
+    },
+    "Price (net):" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettopreis:"
+          }
+        }
+      }
+    },
+    "Price:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preis:"
+          }
+        }
+      }
+    },
+    "QR Code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Code"
+          }
+        }
+      }
+    },
+    "QR code and link can also be scanned or copied / shared from Transactions later." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Code und Link können auch aus der Umsatzliste kopiert/geteilt werden."
+          }
+        }
+      }
+    },
+    "Receive gross:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalten (brutto):"
+          }
+        }
+      }
+    },
+    "Receive Money" : {
+      "comment" : "TransactionType, scan to receive coins sent from another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld erhalten"
+          }
+        }
+      }
+    },
+    "Receive net:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalten (netto):"
+          }
+        }
+      }
+    },
+    "Received Money" : {
+      "comment" : "TransactionType, received coins sent from another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld erhalten"
+          }
+        }
+      }
+    },
+    "Received P2P" : {
+      "comment" : "Title, short",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P erhalten"
+          }
+        }
+      }
+    },
+    "Recent %lld transactions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuellste %lld Umsätze"
+          }
+        }
+      }
+    },
+    "Recent transaction" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktueller Umsatz"
+          }
+        }
+      }
+    },
+    "Recoup" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recoup"
+          }
+        }
+      }
+    },
+    "Recoup:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recoup:"
+          }
+        }
+      }
+    },
+    "Refresh" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneuerung"
+          }
+        }
+      }
+    },
+    "Refund" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstattung"
+          }
+        }
+      }
+    },
+    "Refunded amount:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstatteter Betrag:"
+          }
+        }
+      }
+    },
+    "Refunded:" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstattet:"
+          }
+        }
+      }
+    },
+    "Reload" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu laden"
+          }
+        }
+      }
+    },
+    "Request %@" : {
+      "comment" : "amount with currency",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ anfordern"
+          }
+        }
+      }
+    },
+    "Request Money" : {
+      "comment" : "TransactionType, send invoice to another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld anfordern"
+          }
+        }
+      }
+    },
+    "RequestButton_Full" : {
+      "comment" : "`Request Payment´ in Balances - set exactly 1 \\t for line break",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlung\tanfordern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request\tPayment"
+          }
+        }
+      }
+    },
+    "RequestButton_Short" : {
+      "comment" : "Abbreviation of button `Request Payment´",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anfordern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Request"
+          }
+        }
+      }
+    },
+    "Requested Money" : {
+      "comment" : "TransactionType, sent invoice to another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angefordertes Geld"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurücksetzen"
+          }
+        }
+      }
+    },
+    "Reset Wallet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet zurücksetzen"
+          }
+        }
+      }
+    },
+    "Restriction:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschränkung:"
+          }
+        }
+      }
+    },
+    "Right now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade eben"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichern"
+          }
+        }
+      }
+    },
+    "Scan QR codes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Code scannen"
+          }
+        }
+      }
+    },
+    "Scanning QR-codes requires access to the camera" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um QR Codes zu scannen wird Zugriff auf die Kamera benötigt"
+          }
+        }
+      }
+    },
+    "Scheduled" : {
+      "comment" : "RefreshReason",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geplant"
+          }
+        }
+      }
+    },
+    "Scroll down" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abwärts blättern"
+          }
+        }
+      }
+    },
+    "Scroll up" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufwärts blättern"
+          }
+        }
+      }
+    },
+    "Select age" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alter auswählen"
+          }
+        }
+      }
+    },
+    "Send %@ now" : {
+      "comment" : "amount with currency",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt %@ senden"
+          }
+        }
+      }
+    },
+    "Send Money" : {
+      "comment" : "TransactionType, send coins to another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld senden"
+          }
+        }
+      }
+    },
+    "SendButton_Full" : {
+      "comment" : "`Send Money´ in Balances - set exactly 1 \\t for line break",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld\tsenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Send\tMoney"
+          }
+        }
+      }
+    },
+    "SendButton_Short" : {
+      "comment" : "Abbreviation of button `Send Money´",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Send"
+          }
+        }
+      }
+    },
+    "Sent Money" : {
+      "comment" : "TransactionType, sent coins to another wallet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld gesendet"
+          }
+        }
+      }
+    },
+    "Serialization error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interner Serialisierungsfehler"
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
+          }
+        }
+      }
+    },
+    "Share the PayTo URL" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die PayTo URL teilen"
+          }
+        }
+      }
+    },
+    "Sheet.ID." : {
+      "comment" : "AccessibilityLabel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blatt.ID."
+          }
+        }
+      }
+    },
+    "Shortcut" : {
+      "comment" : "VoiceOver: $50,$25,$10,$5 shortcut buttons",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurzwahl"
+          }
+        }
+      }
+    },
+    "Show logs" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logs anzeigen"
+          }
+        }
+      }
+    },
+    "Show Warnings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warnungen anzeigen"
+          }
+        }
+      }
+    },
+    "Shows which view you currently are on." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt bei welchen Dialog Sie gerade sind"
+          }
+        }
+      }
+    },
+    "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da die Demobank Taler direkt unterstützt, können Sie eine Abhebung starten von der"
+          }
+        }
+      }
+    },
+    "Some pending transactions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehende Umsätze"
+          }
+        }
+      }
+    },
+    "Standard iOS Font" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard iOS Zeichensatz"
+          }
+        }
+      }
+    },
+    "Status: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status: %@"
+          }
+        }
+      }
+    },
+    "Subject" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendungszweck"
+          }
+        }
+      }
+    },
+    "Summary" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersicht"
+          }
+        }
+      }
+    },
+    "Taler Logo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taler Logo"
+          }
+        }
+      }
+    },
+    "Tap the button to go to the KYC website." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücken Sie den Button um auf die KYC Webseite zu gehen."
+          }
+        }
+      }
+    },
+    "Terms of Service" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzungsbedingungen"
+          }
+        }
+      }
+    },
+    "The bank is waiting for your confirmation." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bank wartet auf Ihre Freigabe."
+          }
+        }
+      }
+    },
+    "The Payment Service Provider is waiting for your wire-transfer." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zahlungsdienst wartet auf Ihre Überweisung."
+          }
+        }
+      }
+    },
+    "There are no Payment Services yet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt noch keine Zahlungsdienste."
+          }
+        }
+      }
+    },
+    "There are no transactions for %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt noch keine Umsätze for %@."
+          }
+        }
+      }
+    },
+    "There is no digital cash in your wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt noch kein digitales Geld in Ihrem Wallet."
+          }
+        }
+      }
+    },
+    "This is mandatory, otherwise your money will not arrive in this wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist obligatorisch, da Ihr Geld sonst nicht in dieser Wallet ankommt."
+          }
+        }
+      }
+    },
+    "This operation cannot be undone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das kann nicht rückgängig gemacht werden"
+          }
+        }
+      }
+    },
+    "This transaction is not yet ready..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Transaktion ist noch nicht bereit..."
+          }
+        }
+      }
+    },
+    "TitleBalances" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Balances"
+          }
+        }
+      }
+    },
+    "TitleExchanges" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Payment Services"
+          }
+        }
+      }
+    },
+    "TitleIncoming_Full" : {
+      "comment" : "`Pending incoming´ in Balances - set exactly 1 \t for line break",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehende\tEingänge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pending\tincoming"
+          }
+        }
+      }
+    },
+    "TitleIncoming_Short" : {
+      "comment" : "Abbreviation of `Pending incoming´ in Balances",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingehend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Incoming"
+          }
+        }
+      }
+    },
+    "TitleOutgoing_Full" : {
+      "comment" : "`Pending outgoing´ in Balances - set exactly 1 \t for line break",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehende\tAusgänge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pending\toutgoing"
+          }
+        }
+      }
+    },
+    "TitleOutgoing_Short" : {
+      "comment" : "Abbreviation of `Pending outgoing´ in Balances",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgehend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Outgoing"
+          }
+        }
+      }
+    },
+    "TitleSettings" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "Transaction list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umsatzliste"
+          }
+        }
+      }
+    },
+    "Transactions" : {
+      "comment" : "ViewTitle of TransactionList",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umsätze"
+          }
+        }
+      }
+    },
+    "Transfer %@ to the Payment Service." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisen Sie %@ an den Zahlungsdienst."
+          }
+        }
+      }
+    },
+    "TxAction.Abort" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Abort"
+          }
+        }
+      }
+    },
+    "TxAction.Delete" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der Liste löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete from history"
+          }
+        }
+      }
+    },
+    "TxAction.Fail" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scheitern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fail"
+          }
+        }
+      }
+    },
+    "TxAction.Retry" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt nochmal versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Retry now"
+          }
+        }
+      }
+    },
+    "TxActionDone.Abort" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausstehende abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Abort pending..."
+          }
+        }
+      }
+    },
+    "TxActionDone.Delete" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von der Liste gelöscht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deleted from list"
+          }
+        }
+      }
+    },
+    "TxActionDone.Fail" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scheitern..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Failing..."
+          }
+        }
+      }
+    },
+    "TxActionDone.Retry" : {
+      "comment" : "TxAction button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nochmal versuchen..."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Retrying..."
+          }
+        }
+      }
+    },
+    "unknown command" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Kommando"
+          }
+        }
+      }
+    },
+    "Unknown error" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Fehler"
+          }
+        }
+      }
+    },
+    "unknown payment method" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannte Zahlungsmethode"
+          }
+        }
+      }
+    },
+    "Unknown Payment Provider" : {
+      "comment" : "exchange url",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Zahlungsdienst"
+          }
+        }
+      }
+    },
+    "Unknown Payment Service" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Zahlungsdienst"
+          }
+        }
+      }
+    },
+    "unrestricted" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unbeschränkt"
+          }
+        }
+      }
+    },
+    "Use the Add button to add a service." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fügen Sie einen Zahlungsdienst hinzu."
+          }
+        }
+      }
+    },
+    "Use the QR code scan button to start a withdrawal if your bank already supports Taler payments." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannen Sie einen QR-Code um eine Abhebung zu starten wenn Ihre Bank schon Taler-Abhebungen unterstützt."
+          }
+        }
+      }
+    },
+    "Using payment service provider:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit dem Zahlungsdienst:"
+          }
+        }
+      }
+    },
+    "via %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "via %@"
+          }
+        }
+      }
+    },
+    "Vibration Feedback" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vibrations-Feedback"
+          }
+        }
+      }
+    },
+    "View.ID." : {
+      "comment" : "AccessibilityLabel",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seiten-ID."
+          }
+        }
+      }
+    },
+    "Visit the taler.net website" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehe zur taler.net Webseite"
+          }
+        }
+      }
+    },
+    "WalletCore Version" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WalletCore-Version"
+          }
+        }
+      }
+    },
+    "When a transaction finished" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn eine Transaktion abgeschlossen ist"
+          }
+        }
+      }
+    },
+    "Will go to bank website to confirm this withdrawal." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Bank-Webseite um diese Abhebung zu bestätigen."
+          }
+        }
+      }
+    },
+    "Will go to detail view." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Detail-Ansicht."
+          }
+        }
+      }
+    },
+    "Will go to KYC website to confirm this withdrawal." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur KYC-Webseite um diese Abhebung zu bestätigen."
+          }
+        }
+      }
+    },
+    "Will go to main transactions list." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Transaktions-Liste"
+          }
+        }
+      }
+    },
+    "Will go to Pending transactions." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zu den ausstehenden Transaktionen."
+          }
+        }
+      }
+    },
+    "Will go to the demo shop website." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Demo Shop-Webseite"
+          }
+        }
+      }
+    },
+    "Will go to the merchant website." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Händler-Webseite"
+          }
+        }
+      }
+    },
+    "Wire Transfer" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisung"
+          }
+        }
+      }
+    },
+    "Withdraw\t%@" : {
+      "comment" : "Button `Withdraw (currency)´, must have ONE \\t and ONE %@",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@\tabheben"
+          }
+        }
+      }
+    },
+    "Withdrawal" : {
+      "comment" : "TransactionType",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abhebung"
+          }
+        }
+      }
+    },
+    "WithdrawButton_Short" : {
+      "comment" : "Abbreviation of `Withdraw (currency)´",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Withdraw"
+          }
+        }
+      }
+    },
+    "xloc.generic.ok" : {
+
+    },
+    "Yesterday" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestern"
+          }
+        }
+      }
+    },
+    "You can also add a payment service manually in the Settings." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie können in den Einstellungen manuell einen Zahlungsdienst hinzufügen."
+          }
+        }
+      }
+    },
+    "You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie können auch im Salden-Tab einen Abheben-QR-Code scannen um automatisch einen Zahlungsdienst hinzuzufügen."
+          }
+        }
+      }
+    },
+    "You can spend these %@ in the Demo shop, or send them to another wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie können diese %@ im Demo-Shop ausgeben, oder an eine andere Wallet senden."
+          }
+        }
+      }
+    },
+    "You don't have enough %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie haben nicht genug %@."
+          }
+        }
+      }
+    },
+    "You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet." : {
+      "comment" : "P2P Receive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Elektronic-Cash in ihr Wallet bekommen können."
+          }
+        }
+      }
+    },
+    "You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Electronic-Cash in Ihr Wallet abheben können."
+          }
+        }
+      }
+    },
+    "You must accept the Payment Service's Terms of Service first." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren."
+          }
+        }
+      }
+    },
+    "You need to pass a KYC procedure" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen ein KYC-Verfahren durchlaufen"
+          }
+        }
+      }
+    },
+    "You need to transfer %@ from your regular bank account to the Payment Service Provider to receive %@ as electronic cash in this wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen %1$@ von Ihrem regulären Bankkonto an den Zahlungsdienst überweisen um %2$@ als Electronic-Cash in dieses Wallet zu erhalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You need to transfer %1$@ from your regular bank account to the Payment Service Provider to receive %2$@ as electronic cash in this wallet."
+          }
+        }
+      }
+    }
+  },
   "version" : "1.0"
 }

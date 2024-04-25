@@ -61,7 +61,7 @@ enum TransactionMinorState: String, Codable {
             case .deposit:                  return self.rawValue
             case .kyc:                      return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
-            case .mergeKycRequired:         return String(localized: "MinorState.mergekyc", defaultValue: "KYC merge", comment: "TxMinorState heading")
+            case .mergeKycRequired:         return String(localized: "MinorState.mergekyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .track:                    return self.rawValue
             case .submitPayment:            return self.rawValue
             case .rebindSession:            return self.rawValue

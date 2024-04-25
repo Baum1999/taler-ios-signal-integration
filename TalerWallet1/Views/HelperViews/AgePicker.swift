@@ -38,7 +38,7 @@ struct AgePicker: View {
                     ForEach($ageMenuList, id: \.self) { item in
                         let index = item.wrappedValue
                         Text((index == 0) ? "unrestricted"
-                                          : "\(index) years").tag(index)
+                             : "\(index) years", comment: "Age Picker").tag(index)
                     }
                 }
                 .talerFont(.body)
