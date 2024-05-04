@@ -11,15 +11,8 @@ struct AmountV: View {
 
     @EnvironmentObject private var controller: Controller
 
-    var amountStr: String {
-        if let currencyInfo = controller.info(for: amount.currencyStr) {
-            return amount.string(currencyInfo)
-        }
-        return amount.readableDescription
-    }
-
     var body: some View {
-        Text(amountStr)
+        Text(amount.string())
             .multilineTextAlignment(.center)
             .talerFont(large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)

@@ -41,6 +41,14 @@ extension Amount {
         }
     }
 
+    func string(useSymbol: Bool = true) -> String {
+        let controller = Controller.shared
+        if let currencyInfo = controller.info(for: self.currencyStr) {
+            return self.string(currencyInfo, useSymbol: useSymbol)
+        }
+        return self.readableDescription
+    }
+
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
         let inputDigits = currencyInfo.specs.fractionalInputDigits
         if inputDigits < 0 { return 0 }
@@ -133,7 +141,7 @@ public struct CurrencyInfo {
         formatter.setUseSymbol(useSymbol)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: integer) {
-            if fraction == 0 { return integerStr }              // formatter already added trailing zeroes
+            if fraction == 0 { return integerStr.nbs() }                        // formatter already added trailing zeroes
             if let fractionStr = formatter.string(for: fraction) {
                 if let decimalSeparator = formatter.currencyDecimalSeparator {
                     if let fractionIndex = fractionStr.endIndex(of: decimalSeparator) {
@@ -159,7 +167,7 @@ public struct CurrencyInfo {
                             }
                         }
 //            print(resultStr)
-                        return resultStr
+                        return resultStr.nbs()
                     }
                     // if we arrive here then fractionStr doesn't have a decimal separator. Yikes!
                 }
@@ -181,7 +189,7 @@ public struct CurrencyInfo {
         madeUpStr += Locale.current.decimalSeparator ?? "."     // currencyDecimalSeparator
         madeUpStr += String(String(fraction).dropFirst())       // remove the leading 0
         // TODO: fractionalNormalDigits, fractionalTrailingZeroDigits
-        return madeUpStr
+        return madeUpStr.nbs()
     }
 }
 

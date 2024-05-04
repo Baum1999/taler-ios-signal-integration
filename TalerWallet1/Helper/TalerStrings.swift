@@ -40,6 +40,16 @@ extension StringProtocol {
 }
 
 extension String {
+    func replacingOccurrences(of char1: String.Element, with char2: String.Element) -> String {
+        String(self.map {
+            $0 == char1 ? char2 : $0
+        })
+    }
+
+    func nbs() -> String {
+        self.replacingOccurrences(of: " ", with: "\u{00A0}")
+    }
+
     func tabbed(oneLine: Bool) -> String {
         let fragments = self.components(separatedBy: "\t")
         if fragments.count > 1 {

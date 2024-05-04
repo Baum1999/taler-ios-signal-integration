@@ -165,8 +165,8 @@ struct ManualDetailsV: View {
             if validDetails.count > 0 {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
-                    let amountStr = amount.readableDescription        // TODO: formatter?
-                    let obtainStr = common.amountRaw.readableDescription
+                    let amountStr = amount.string()
+                    let obtainStr = common.amountRaw.string()
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")
                             .bold()
@@ -183,7 +183,6 @@ struct ManualDetailsV: View {
                                 .listRowSeparator(.hidden)
                         }
                     } else if let amount = account.transferAmount {
-                        let amountStr = amount.readableDescription
                         if let bankName = account.bankLabel {
                             Text(bankName + ":   " + amountStr)
                         } else {
@@ -193,7 +192,7 @@ struct ManualDetailsV: View {
                     let payto = account.paytoUri
                     let payURL = URL(string: payto)
                     if let queryParameters = payURL?.queryParameters {
-                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
+//                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
                         let receiverStr = queryParameters["receiver-name"] ?? EMPTYSTRING
                         let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
                         let messageStr = queryParameters["message"] ?? EMPTYSTRING

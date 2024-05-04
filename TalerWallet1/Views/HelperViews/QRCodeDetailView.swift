@@ -15,13 +15,6 @@ struct QRCodeDetailView: View {
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    var amountStr: String {
-        if let currencyInfo = controller.info(for: amount.currencyStr) {
-            return amount.string(currencyInfo)
-        }
-        return amount.readableDescription
-    }
-
     var body: some View {
         if talerURI.count > 10 {
             Section {
@@ -58,6 +51,7 @@ struct QRCodeDetailView: View {
                     .accessibilityLabel("QR Code")
                     .listRowSeparator(.hidden)
 
+                let amountStr = amount.string()
                 let scanMini = incoming ? String(localized: "Either (payer) Mini 3",
                                               defaultValue: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
                                         : String(localized: "Either (payee) Mini 3",
