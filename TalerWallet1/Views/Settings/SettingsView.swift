@@ -154,12 +154,12 @@ struct SettingsView: View {
                     }
 #if DEBUG
                     if showDevelopItems {
-                        Text(verbatim: "https://bank.taler.grothoff.org/")
-                        Text(verbatim: "https://bank.regio-taler.fdold.eu/")
-                        Text(verbatim: "https://bank.head.taler.net/")
-                        Text(verbatim: "https://bank.test.taler.net/")
-                        Text(verbatim: "https://bank.demo.taler.net/")
-                        Text(verbatim: "https://bank.taler.ar/")
+                        let banks = ["taler.grothoff.org", "regio-taler.fdold.eu", "taler.ar",
+                                     "head.taler.net", "demo.taler.net", "test.taler.net"]
+                        ForEach(banks, id: \.self) { bank in
+                            let urlStr = "https://bank." + bank
+                            Link(bank, destination: URL(string: urlStr)!)
+                        }
                     }
 #endif
                     if showDevelopItems {  // show or hide the following items
