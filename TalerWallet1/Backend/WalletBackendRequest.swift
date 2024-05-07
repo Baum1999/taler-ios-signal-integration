@@ -29,6 +29,7 @@ struct ScopeInfo: Codable, Hashable {
         case global
         case exchange
         case auditor
+        case madeUp     // => type unknown, currency name taken from amount
     }
     var type: ScopeInfoType
     var noFees: Bool?           // only for "global". Regional have this field per Exchange

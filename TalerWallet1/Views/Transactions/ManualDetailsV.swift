@@ -159,13 +159,25 @@ struct ManualDetailsV: View {
         }
     }
 
+    func amountString(_ amount: Amount, specs: CurrencySpecification?, scope: ScopeInfo? = nil) -> String {
+        if let specs {
+            let myScope = scope ?? ScopeInfo(type: .madeUp, currency: amount.currencyStr)
+            let currencyInfo = CurrencyInfo(scope: myScope, specs: specs,
+                                        formatter: CurrencyFormatter.formatter(scope: myScope,
+                                                                               specs: specs))
+            return amount.string(currencyInfo)
+        }
+        return amount.string()
+    }
+
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             let validDetails = validDetails(accountDetails)
             if validDetails.count > 0 {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
-                    let amountStr = amount.string()
+                    let specs = account.currencySpecification
+                    let amountStr = amountString(amount, specs: specs)
                     let obtainStr = common.amountRaw.string()
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")
