@@ -8,6 +8,7 @@ import SwiftUI
 import SymLog
 import os.log
 import CoreHaptics
+import Network
 
 enum BackendState {
     case none
@@ -36,6 +37,7 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
+    @Published var isConnected: Bool = true
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -45,8 +47,30 @@ class Controller: ObservableObject {
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
     var currencyInfos: [CurrencyInfo]
-
     var messageForSheet: String? = nil
+
+    private let monitor = NWPathMonitor()
+
+    func checkInternetConnection() {
+        monitor.pathUpdateHandler = { path in
+            let status = switch path.status {
+                case .satisfied: "active"
+                case .unsatisfied: "inactive"
+                default: "unknown"
+            }
+            self.logger.log("Internet connection is \(status)")
+            DispatchQueue.main.async {
+                self.isConnected = (path.status == .satisfied)
+            }
+        }
+        self.logger.log("Start monitoring internet connection")
+        let queue = DispatchQueue(label: "InternetMonitor")
+        monitor.start(queue: queue)
+    }
+    func stopCheckingConnection() {
+        self.logger.log("Stop monitoring internet connection")
+        monitor.cancel()
+    }
 
     init() {
 //        for family in UIFont.familyNames {
@@ -58,6 +82,7 @@ class Controller: ObservableObject {
         backendState = .instantiated
         currencyTicker = 0
         currencyInfos = []
+//        checkInternetConnection()
     }
 // MARK: -
     func hasInfo(for currency: String) -> CurrencyInfo? {
