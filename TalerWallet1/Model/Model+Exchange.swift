@@ -146,7 +146,9 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
-    typealias Response = CurrencySpecification2
+    struct Response: Codable, Sendable {
+        let currencySpecification: CurrencySpecification
+    }
     func operation() -> String { "getCurrencySpecification" }
     func args() -> Args { Args(scope: scope) }
 

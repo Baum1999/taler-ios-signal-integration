@@ -193,10 +193,6 @@ public struct CurrencyInfo {
     }
 }
 
-public struct CurrencySpecification2: Codable, Sendable {
-    let currencySpecification: CurrencySpecification
-}
-
 public struct CurrencySpecification: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
         case name = "name"
