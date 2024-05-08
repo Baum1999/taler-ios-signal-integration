@@ -168,7 +168,9 @@ extension WalletCore {
     }
 
     private func handlePendingProcessed(_ payload: Payload) throws {
-        guard let id = payload.id else { throw WalletBackendError.deserializationError }
+        guard let id = payload.id else {
+            throw WalletBackendError.deserializationError
+        }
         let pendingOp = Notification.Name.PendingOperationProcessed.rawValue
         if id.hasPrefix("exchange-update:") {
             // Bla Bla Bla

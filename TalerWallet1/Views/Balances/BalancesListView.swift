@@ -110,7 +110,7 @@ struct BalancesListView: View {
                                     dismissAlertButton },
                        message: {   Text("Please allow camera access in settings.") })
             .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
-                let sheet = AnyView(QRSheet(stack: stack.push()))
+                let sheet = AnyView(QRSheet(stack: stack.push(".sheet")))
                 Sheet(sheetView: sheet)
             } // sheet
             .task(id: shouldReloadBalances) {
