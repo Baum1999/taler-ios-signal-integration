@@ -267,14 +267,28 @@ extension WalletCore {
                     } // switch
                 } // type
             } // 3 components
-        } catch {       // rethrows
-            symLog.log(jsonData)       // TODO: .error
-            throw WalletBackendError.deserializationError
+            return
+        } catch DecodingError.dataCorrupted(let context) {
+            print(context)
+        } catch DecodingError.keyNotFound(let key, let context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch DecodingError.valueNotFound(let value, let context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch DecodingError.typeMismatch(let type, let context) {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let error {       // rethrows
+            symLog.log(error)       // TODO: .error
         }
+        throw WalletBackendError.walletCoreError(nil)       // TODO: error?
     }
 
     @MainActor private func handleNotification(_ anyCodable: AnyCodable?) throws {
-        guard let anyPayload = anyCodable else { throw WalletBackendError.deserializationError }
+        guard let anyPayload = anyCodable else {
+            throw WalletBackendError.deserializationError
+        }
         do {
             let jsonData = try JSONEncoder().encode(anyPayload)
             let payload = try JSONDecoder().decode(Payload.self, from: jsonData)

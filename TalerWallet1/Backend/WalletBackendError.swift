@@ -32,7 +32,7 @@ struct WalletBackendResponseError: Codable {
     /// Numeric error code defined defined in the GANA gnu-taler-error-codes registry.
     var code: Int
 
-    var when: Timestamp
+    var when: Timestamp?
 
     /// English description of the error code.
     var hint: String
