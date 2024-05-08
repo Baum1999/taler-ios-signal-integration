@@ -182,9 +182,10 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         "\(currency):\(valueStr)"
     }
     
-    /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`" (with space).
+    /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`" (with non-breaking space).
     public var readableDescription: String {
-        "\(valueStr) \(currency)"
+        let NONBREAKING = "\u{00A0}"
+        return valueStr + NONBREAKING + currency
     }
     
     /// Whether the value is valid. An amount is valid if and only if the currency is not empty and the value is less than the maximum allowed value.

@@ -47,7 +47,7 @@ extension String {
     }
 
     func nbs() -> String {
-        self.replacingOccurrences(of: " ", with: "\u{00A0}")
+        self.replacingOccurrences(of: " ", with: NONBREAKING)
     }
 
     func tabbed(oneLine: Bool) -> String {
