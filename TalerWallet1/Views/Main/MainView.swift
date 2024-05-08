@@ -121,6 +121,7 @@ extension MainView {
         @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
 
         @State private var shouldReloadBalances = 0
+        @State private var shouldReloadPending = 0
         @State private var balances: [Balance] = []
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
@@ -193,6 +194,7 @@ extension MainView {
                     BalancesListView(stack: stack.push(balancesTitle),
                                   navTitle: balancesTitle,
                                   balances: $balances,
+//                       shouldReloadPending: $shouldReloadPending,
                       shouldReloadBalances: $shouldReloadBalances)
                 }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                 .navigationViewStyle(.stack)
@@ -255,13 +257,18 @@ extension MainView {
                 shouldReloadBalances += 1
             }
             .onNotification(.TransactionExpired) { notification in
-                // reload balances on receiving BalanceChange notification ...
+                // reload balances on receiving TransactionExpired notification ...
                 logger.info(".onNotification(.TransactionExpired) ==> reload")
                 shouldReloadBalances += 1
+                shouldReloadPending += 1
             }
             .onNotification(.TransactionDone) {
                 shouldReloadBalances += 1
+                shouldReloadPending += 1
                 selectedTab = .balances
+            }
+            .onNotification(.TransactionError) { notification in
+                shouldReloadPending += 1
             }
             .onNotification(.Error) { notification in
                 if let error = notification.userInfo?[NOTIFICATIONERROR] as? Error {

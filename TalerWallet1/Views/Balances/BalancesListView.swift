@@ -13,6 +13,7 @@ struct BalancesListView: View {
     let stack: CallStack
     let navTitle: String
     @Binding var balances: [Balance]
+//    @Binding var shouldReloadPending: Int
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -100,6 +101,7 @@ struct BalancesListView: View {
 #endif
         Content(symLog: symLog, stack: stack.push(), balances: $balances,
                 amountToTransfer: $amountToTransfer, summary: $summary,
+//                shouldReloadPending: $shouldReloadPending,
                 shouldReloadBalances: $shouldReloadBalances,
                 reloadBalances: reloadBalances)
             .navigationTitle(navTitle)
@@ -130,6 +132,7 @@ extension BalancesListView {
         @Binding var balances: [Balance]
         @Binding var amountToTransfer: Amount
         @Binding var summary: String
+//        @Binding var shouldReloadPending: Int
         @Binding var shouldReloadBalances: Int
         var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int?
 

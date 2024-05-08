@@ -196,14 +196,13 @@ extension WalletCore {
     @MainActor private func handleStateTransition(_ jsonData: Data) throws {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
+            if let errorInfo = decoded.errorInfo {
+                // reload pending transaction list to add error badge
+                postNotification(.TransactionError, userInfo: [NOTIFICATIONERROR: WalletBackendError.walletCoreError(errorInfo)])
+            }
             guard decoded.newTxState != decoded.oldTxState else {
-                // TODO: Same state usually means that an error is transmitted
                 logger.info("No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
                 return
-            }
-
-            if decoded.errorInfo == nil {
-                postNotification(.Error, userInfo: [NOTIFICATIONERROR: decoded.errorInfo])
             }
 
             let components = decoded.transactionId.components(separatedBy: ":")
