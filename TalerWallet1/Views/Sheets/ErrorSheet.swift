@@ -9,8 +9,8 @@ import SwiftUI
 import taler_swift
 
 enum ErrorData {
-case message(title: String, message: String)
-case error(Error)
+    case message(title: String, message: String)
+    case error(Error)
 }
 
 struct ErrorSheet: View {
