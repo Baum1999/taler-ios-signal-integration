@@ -1,3 +1,9 @@
+Version 0.10.3 (wallet-core 0.10.8)
+
+- Error handling
+- Bugfixes
+
+
 Version 0.10.2 (wallet-core 0.10.7)
 
 - Improve German localization
