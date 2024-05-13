@@ -12,12 +12,24 @@ struct QRSheet: View {
     let stack: CallStack
     @State private var scannedCode: String?
 
+    func codeToURL(_ code: String) -> URL? {
+        if let scannedURL = URL(string: code) {
+            return scannedURL
+        }
+        if let encodedScan = code.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            if let encodedURL = URL(string: encodedScan) {
+                return encodedURL
+            }
+        }
+        return nil
+    }
+
     var body: some View {
         Group {
             if scannedCode != nil {
 //                let _ = print(scannedCode as Any)       // TODO: logging
 
-                if let scannedURL = URL(string: scannedCode!) {
+                if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(), urlToOpen: scannedURL)
