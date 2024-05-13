@@ -22,9 +22,9 @@ enum TransactionMinorState: String, Codable {
     // Placeholder until D37 is fully implemented
     case unknown
     case deposit
-    case kyc        // KycRequired
     case aml        // AmlRequired
-    case mergeKycRequired = "merge-kyc"
+    case kyc        // KycRequired
+    case mergeKycRequired = "merge-kyc"     // same as KYC but for P2P
     case track
     case submitPayment = "submit-payment"
     case rebindSession = "rebind-session"
@@ -59,9 +59,8 @@ enum TransactionMinorState: String, Codable {
         switch self {
             case .unknown:                  return self.rawValue
             case .deposit:                  return self.rawValue
-            case .kyc:                      return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
+            case .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
-            case .mergeKycRequired:         return String(localized: "MinorState.mergekyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .track:                    return self.rawValue
             case .submitPayment:            return self.rawValue
             case .rebindSession:            return self.rawValue
