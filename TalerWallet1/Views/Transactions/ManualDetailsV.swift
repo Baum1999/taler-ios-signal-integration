@@ -204,10 +204,10 @@ struct ManualDetailsV: View {
                     let payto = account.paytoUri
                     let payURL = URL(string: payto)
                     if let queryParameters = payURL?.queryParameters {
+                        let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING).replacingOccurrences(of: "+", with: " ")
 //                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
-                        let receiverStr = queryParameters["receiver-name"] ?? EMPTYSTRING
-                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
-                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
+//                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
+//                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
 
                         let iban = payURL?.iban
                         let xTaler = payURL?.xTaler ??
