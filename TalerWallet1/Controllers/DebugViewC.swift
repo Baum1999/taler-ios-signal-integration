@@ -157,21 +157,21 @@ class DebugViewC: ObservableObject {
     @Published var viewID: Int = 0
     @Published var sheetID: Int = 0
 
-    func announce(this: String) {
-        if UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .announcement, argument: this)
-        }
-    }
+//    func announce(_ this: String) {
+//        if UIAccessibility.isVoiceOverRunning {
+//            UIAccessibility.post(notification: .announcement, argument: this)
+//        }
+//    }
 
     @MainActor func setViewID(_ newID: Int, stack: CallStack) -> Void {
         if developerMode {
             if viewID == 0 {
                 logger.log("switching ON, \(newID, privacy: .public)")
                 viewID = newID                              // publish ON
-//                announce(this: "Current view is: \(newID).")
+//                announce("Current view is: \(newID).")
             } else if viewID != newID {
                 logger.log("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
-//                announce(this: "View switched from \(self.viewID) to \(newID).")
+//                announce("View switched from \(self.viewID) to \(newID).")
                 viewID = newID                              // publish new viewID
             } else {
                 logger.log("\(newID, privacy: .public) stays")
