@@ -52,8 +52,8 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
     public weak var messageHandler: QuickjsMessageHandler?
     var logger: Logger
 
-    @Atomic(default: 0)
-    private var lastRequestID: Int32
+    @Atomic(default: 0)                                                         // boilerPlate around NSLock…
+    private var lastRequestID: Int32                                            // …to safeguard increments
     private var requests: [Int32: QuickDataTask] = [:]
 
     private lazy var urlSession: URLSession = {
@@ -84,7 +84,7 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
     func reqCreate(_ request: URLRequest,
                 _ responseCb: JSHttpResponseCb?,
              _ responseCbCls: Optional<UnsafeMutableRawPointer>) -> Int32 {
-        let requestID = $lastRequestID.atomicIncrement()
+        let requestID = $lastRequestID.atomicIncrement()                        // ensure requestID is unique
         let quickDataTask = QuickDataTask(urlSession: urlSession,
                                              request: request,
                                            requestID: requestID,

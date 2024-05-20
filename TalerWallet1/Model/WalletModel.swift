@@ -67,17 +67,26 @@ class WalletModel: ObservableObject {
             throw error
         }
     }
+}
+// MARK: -
+/// A request to tell wallet-core about the network.
+fileprivate struct NetworkAvailabilityRequest: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { "hintNetworkAvailability" }
+    func args() -> Args { Args(isNetworkAvailable: isNetworkAvailable) }
 
-    func getTransactionByIdT(_ transactionId: String, viewHandles: Bool = false)
-      async throws -> Transaction {              // T for any Thread
-        // might be called from a background thread itself
-        let request = GetTransactionById(transactionId: transactionId)
-        return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+    var isNetworkAvailable: Bool
+
+    struct Args: Encodable {
+        var isNetworkAvailable: Bool
     }
-    /// get the specified transaction from Wallet-Core. No networking involved
-    @MainActor func getTransactionByIdM(_ transactionId: String, viewHandles: Bool = false)
-    async throws -> Transaction {                // M for MainActor
-        return try await getTransactionByIdT(transactionId, viewHandles: viewHandles)      // call GetTransactionById on main thread
+}
+
+extension WalletModel {
+    func hintNetworkAvailabilityT(_ isNetworkAvailable: Bool = false) async {
+        // T for any Thread
+        let request = NetworkAvailabilityRequest(isNetworkAvailable: isNetworkAvailable)
+        _ = try? await sendRequest(request, 0)
     }
 }
 // MARK: -
@@ -91,6 +100,20 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 
     struct Args: Encodable {
         var transactionId: String
+    }
+}
+
+extension WalletModel {
+    func getTransactionByIdT(_ transactionId: String, viewHandles: Bool = false)
+      async throws -> Transaction {              // T for any Thread
+        // might be called from a background thread itself
+        let request = GetTransactionById(transactionId: transactionId)
+        return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+    }
+    /// get the specified transaction from Wallet-Core. No networking involved
+    @MainActor func getTransactionByIdM(_ transactionId: String, viewHandles: Bool = false)
+    async throws -> Transaction {                // M for MainActor
+        return try await getTransactionByIdT(transactionId, viewHandles: viewHandles)      // call GetTransactionById on main thread
     }
 }
 // MARK: -
@@ -257,7 +280,6 @@ extension WalletModel {
     }
 }
 // MARK: -
-
 fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
     func operation() -> String { "applyDevExperiment" }
     func args() -> Args { Args(devExperimentUri: talerUri) }
@@ -278,4 +300,3 @@ extension WalletModel {
         _ = try await sendRequest(request, 0, viewHandles: viewHandles)
     }
 }
-

@@ -60,7 +60,18 @@ class Controller: ObservableObject {
             }
             self.logger.log("Internet connection is \(status)")
             DispatchQueue.main.async {
-                self.isConnected = (path.status == .satisfied)
+                if path.status == .unsatisfied {
+                    self.isConnected = false
+                    Task.detached {
+                        await WalletModel.shared.hintNetworkAvailabilityT(false)
+                    }
+                } else {
+                    self.stopCheckingConnection()
+                    self.isConnected = true
+                    Task.detached {
+                        await WalletModel.shared.hintNetworkAvailabilityT(true)
+                    }
+                }
             }
         }
         self.logger.log("Start monitoring internet connection")
