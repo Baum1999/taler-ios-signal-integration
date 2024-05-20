@@ -7,7 +7,7 @@ import UIKit
 
 extension View {
     @MainActor
-    public func announce(this: String) {
+    public func announce(_ this: String) {
         if UIAccessibility.isVoiceOverRunning {
             UIAccessibility.post(notification: .announcement, argument: this)
         }

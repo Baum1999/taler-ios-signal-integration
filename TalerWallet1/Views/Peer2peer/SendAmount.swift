@@ -144,7 +144,7 @@ struct SendAmount: View {
             }
 
             if insufficient {
-                announce(this: "\(amountVoiceOver), \(insufficientLabel2)")
+                announce("\(amountVoiceOver), \(insufficientLabel2)")
             } else if amountToTransfer.isZero {
                 feeStr = EMPTYSTRING
             } else {
@@ -155,7 +155,7 @@ struct SendAmount: View {
                     if let feeAmount = fee(ppCheck: peerPushCheck) {
                         feeStr = feeAmount.string(currencyInfo)
                     } else { feeStr = EMPTYSTRING }
-                    announce(this: "\(amountVoiceOver), \(feeLabel)")
+                    announce("\(amountVoiceOver), \(feeLabel)")
                 } else {
                     peerPushCheck = nil
                 }

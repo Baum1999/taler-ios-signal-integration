@@ -26,7 +26,7 @@ struct ExchangeListView: View {
             symLog.log("adding: \(exchange)")
             if let _ = try? await model.addExchange(url: exchange) {
                 symLog.log("added: \(exchange)")
-                announce(this: "added: \(exchange)")
+                announce("added: \(exchange)")
             }
         }
     }

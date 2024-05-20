@@ -48,7 +48,7 @@ struct SubjectInputV<TargetView: View>: View {
                     feeStr = feeAmount.string(currencyInfo)
                 } else { feeStr = EMPTYSTRING }
                 let amountVoiceOver = amount.string(currencyInfo)
-                announce(this: "\(amountVoiceOver), \(feeLabel)")
+                announce("\(amountVoiceOver), \(feeLabel)")
                 preparePayResult = ppCheck
             }
         }

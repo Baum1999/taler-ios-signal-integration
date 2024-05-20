@@ -157,7 +157,7 @@ struct DepositAmountV: View {
                     }
 
                     if insufficient {
-                        announce(this: "\(amountVoiceOver), \(insufficientLabel2)")
+                        announce("\(amountVoiceOver), \(insufficientLabel2)")
                         feeStr = EMPTYSTRING
                     }
                 }
@@ -171,7 +171,7 @@ struct DepositAmountV: View {
                             if let feeAmount = fee(ppCheck: prepareDepositResult) {
                                 feeStr = feeAmount.string(currencyInfo)
                             } else { feeStr = EMPTYSTRING }
-                            announce(this: "\(amountVoiceOver), \(feeLabel)")
+                            announce("\(amountVoiceOver), \(feeLabel)")
                         } else {
                             prepareDepositResult = nil
                         }
