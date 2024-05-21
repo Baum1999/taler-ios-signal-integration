@@ -176,6 +176,58 @@ fileprivate struct PreparePayForTemplate: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+struct TemplateContractDetails: Codable {
+    let summary: String?                    // Human-readable short summary of the contract
+    let currency: String?
+    let amount: Amount?                     // Total amount payable
+    let minimumAge: Int
+    let payDuration: String?   // RelativeTime
+
+    enum CodingKeys: String, CodingKey {
+        case summary
+        case currency
+        case amount
+        case minimumAge = "minimum_age"
+        case payDuration = "pay_duration"
+    }
+}
+struct TemplateContractDetailsDefaults: Codable {
+    let summary: String?                    // Human-readable short summary of the contract
+    let currency: String?
+    let amount: Amount?                     // Total amount payable
+    let minimumAge: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case summary
+        case currency
+        case amount
+        case minimumAge = "minimum_age"
+    }
+}
+/// The result from checkPayForTemplate
+struct WalletTemplateDetails: Codable {
+    let templateContract: TemplateContractDetails
+    let editableDefaults: TemplateContractDetailsDefaults?
+    let requiredCurrency: String?
+
+    enum CodingKeys: String, CodingKey {
+        case templateContract = "template_contract"
+        case editableDefaults = "editable_defaults"
+        case requiredCurrency = "required_currency"
+    }
+}
+/// A request to get an exchange's payment contract terms.
+fileprivate struct CheckPayForTemplate: WalletBackendFormattedRequest {
+    typealias Response = WalletTemplateDetails
+    func operation() -> String { "checkPayForTemplate" }
+    func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri) }
+
+    var talerPayTemplateUri: String
+    struct Args: Encodable {
+        var talerPayTemplateUri: String
+    }
+}
+// MARK: -
 /// The result from confirmPayForUri
 struct ConfirmPayResult: Decodable {
     var type: String
@@ -204,8 +256,15 @@ extension WalletModel {
           return response
     }
     @MainActor
+    func checkPayForTemplateM(_ talerPayTemplateUri: String, viewHandles: Bool = false)       // M for MainActor
+      async throws -> WalletTemplateDetails {
+        let request = CheckPayForTemplate(talerPayTemplateUri: talerPayTemplateUri)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
+    }
+    @MainActor
     func preparePayForTemplateM(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)       // M for MainActor
-    async throws -> PreparePayResult {
+      async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplate(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
@@ -214,8 +273,8 @@ extension WalletModel {
     @MainActor
     func confirmPayM(_ transactionId: String, viewHandles: Bool = false)              // M for MainActor
       async throws -> ConfirmPayResult {
-          let request = confirmPayForUri(transactionId: transactionId)
-          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-          return response
+        let request = confirmPayForUri(transactionId: transactionId)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
     }
 }
