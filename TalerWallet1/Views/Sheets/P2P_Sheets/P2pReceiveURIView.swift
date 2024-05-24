@@ -50,7 +50,7 @@ struct P2pReceiveURIView: View {
                                      large: false, pending: false, incoming: true,
                                    baseURL: nil,
                                     noFees: nil,        // TODO: check baseURL for fees
-                                    status: nil,
+                                txStateLcl: nil,
                                    summary: peerPushCreditResponse.contractTerms.summary,
                                   merchant: nil)
                     let expiration = peerPushCreditResponse.contractTerms.purse_expiration

@@ -41,7 +41,7 @@ struct P2pPayURIView: View {
                                      large: false, pending: false, incoming: false,
                                    baseURL: nil,
                                     noFees: nil,        // TODO: check baseURL for fees
-                                    status: nil,
+                                txStateLcl: nil,
                                    summary: peerPullDebitResponse.contractTerms.summary,
                                   merchant: nil)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration

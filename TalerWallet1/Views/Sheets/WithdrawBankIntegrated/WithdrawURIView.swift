@@ -56,7 +56,7 @@ struct WithdrawURIView: View {
                                      large: false, pending: false, incoming: true,
                                    baseURL: exchange.exchangeBaseUrl,
                                     noFees: exchange.noFees,
-                                    status: nil,        // common.txState.major.localizedState
+                                txStateLcl: nil,        // common.txState.major.localizedState
                                    summary: nil,
                                   merchant: nil)
                     let someCoins = SomeCoins(details: withdrawalAmountDetails)

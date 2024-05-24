@@ -18,6 +18,12 @@ struct ThreeAmountsSheet: View {
     let summary: String?
     let merchant: String?
 
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
     var body: some View {
         let raw = common.amountRaw
         let effective = common.amountEffective
@@ -35,6 +41,9 @@ struct ThreeAmountsSheet: View {
                                                       : String(localized: "Obtained:", comment: "mini") )
                                            : (pending ? String(localized: "Pay:", comment: "mini")
                                                       : String(localized: "Paid:", comment: "mini") )
+        let majorLcl = common.txState.major.localizedState
+        let txStateLcl = developerMode && pending ? (common.txState.minor?.localizedState ?? majorLcl)
+                                                  : majorLcl
         ThreeAmountsV(stack: stack.push(),
                    topTitle: topTitle, topAbbrev: topAbbrev,
                   topAmount: raw, fee: fee,
@@ -44,7 +53,7 @@ struct ThreeAmountsSheet: View {
                       large: large, pending: pending, incoming: incoming,
                     baseURL: baseURL,
                      noFees: noFees,
-                     status: common.txState.major.localizedState,
+                 txStateLcl: txStateLcl,
                     summary: summary,
                    merchant: merchant)
     }
@@ -64,7 +73,7 @@ struct ThreeAmountsV: View {
     let incoming: Bool
     let baseURL: String?
     let noFees: Bool?                       // true if exchange charges no fees at all
-    let status: String?
+    let txStateLcl: String?                 // localizedState
     let summary: String?
     let merchant: String?
 

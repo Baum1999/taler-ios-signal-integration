@@ -50,7 +50,7 @@ struct PaymentView: View {
                                      large: false, pending: false, incoming: false,
                                    baseURL: baseURL,
                                     noFees: nil,        // TODO: check baseURL for fees
-                                    status: nil,
+                                txStateLcl: nil,
                                    summary: terms.summary,
                                   merchant: terms.merchant.name)
                     // TODO: payment: popup with all possible exchanges, check fees
@@ -67,7 +67,7 @@ struct PaymentView: View {
                                      large: false, pending: false, incoming: false,
                                    baseURL: baseURL,
                                     noFees: nil,        // TODO: check baseURL for fees
-                                    status: nil,
+                                txStateLcl: nil,
                                    summary: terms.summary,
                                   merchant: terms.merchant.name)
                 } else {
