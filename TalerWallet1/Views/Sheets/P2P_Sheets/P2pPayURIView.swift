@@ -11,7 +11,7 @@ import SymLog
 struct P2pPayURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Pay P2P")
+    let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
 
     // the scanned URL
     let url: URL
@@ -46,11 +46,11 @@ struct P2pPayURIView: View {
                                   merchant: nil)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
-                    let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
-                    let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                    let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+                    let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                     Text("Expires: \(dateString)")
                         .talerFont(.body)
-                        .accessibilityLabel(accessibilityLabel)
+                        .accessibilityLabel(a11yLabel)
                         .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 }
                 .listStyle(myListStyle.style).anyView

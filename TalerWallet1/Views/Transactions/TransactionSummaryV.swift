@@ -100,7 +100,7 @@ struct TransactionSummaryV: View {
         let pending = transaction.isPending
         let locale = TalerDater.shared.locale
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
-        let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
+        let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.isDone ? transaction.localizedTypePast
                                            : transaction.localizedType
         VStack {
@@ -117,7 +117,7 @@ struct TransactionSummaryV: View {
                 } // Suspend + Resume buttons
                 Text(dateString)
                     .talerFont(.body)
-                    .accessibilityLabel(accessibilityDate)
+                    .accessibilityLabel(a11yDate)
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                     .listRowSeparator(.hidden)
                 VStack(alignment: .trailing) {
@@ -296,10 +296,9 @@ struct TransactionSummaryV: View {
                         let title = EMPTYSTRING
                         Text(title)
                             .talerFont(.body)
-                        RotatingTaler(size: 100, progress: true,
-                                      rotationEnabled: $rotationEnabled)
+                        RotatingTaler(size: 100, progress: true, rotationEnabled: $rotationEnabled)
                             .frame(maxWidth: .infinity, alignment: .center)
-//                            .accessibilityLabel("Progress indicator")
+                            // has its own accessibilityLabel
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if pending {
@@ -373,7 +372,7 @@ struct TransactionSummaryV: View {
                                     let stackStr = error.stack ?? EMPTYSTRING
                                     let errorStr = error.hint + "\n" + stackStr
                                     CopyButton(textToCopy: errorStr, vertical: true)
-                                        .accessibilityLabel("Copy the error")
+                                        .accessibilityLabel(Text("Copy the error", comment: "VoiceOver"))
                                         .disabled(false)
                                 }
                             }
@@ -384,11 +383,11 @@ struct TransactionSummaryV: View {
                         if !transaction.isDone {
                             let expiration = details.info.expiration
                             let (dateString, date) = TalerDater.dateString(from: expiration)
-                            let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
-                            let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                            let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+                            let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                             Text("Expires: \(dateString)")
                                 .talerFont(.body)
-                                .accessibilityLabel(accessibilityLabel)
+                                .accessibilityLabel(a11yLabel)
                                 .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                         }
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification

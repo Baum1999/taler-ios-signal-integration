@@ -55,11 +55,11 @@ struct P2pReceiveURIView: View {
                                   merchant: nil)
                     let expiration = peerPushCreditResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
-                    let accessibilityDate = TalerDater.accessibilityDate(date) ?? dateString
-                    let accessibilityLabel = String(localized: "Expires: \(accessibilityDate)")
+                    let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+                    let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                     Text("Expires: \(dateString)")
                         .talerFont(.body)
-                        .accessibilityLabel(accessibilityLabel)
+                        .accessibilityLabel(a11yLabel)
                         .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 }
                 .listStyle(myListStyle.style).anyView

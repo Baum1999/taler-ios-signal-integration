@@ -90,7 +90,7 @@ struct TransactionRowView: View {
             .talerFont(.headline)
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
-            .accessibilityLabel(doneOrPending ? topString : topString +  String(localized: ", canceled"))
+            .accessibilityLabel(doneOrPending ? topString : topString +  String(localized: ", canceled", comment: "VoiceOver"))
         let centerBottom = Text(dateString)
             .foregroundColor(textColor)
             .talerFont(.callout)

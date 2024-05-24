@@ -35,10 +35,9 @@ struct AboutView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                RotatingTaler(size: 100, progress: false,
-                              rotationEnabled: $rotationEnabled)
-                .frame(maxWidth: .infinity, alignment: .center)
-//                    .accessibilityLabel("Progress indicator")
+                RotatingTaler(size: 100, progress: false, rotationEnabled: $rotationEnabled)
+                    // has its own accessibilityLabel
+                    .frame(maxWidth: .infinity, alignment: .center)
                     .onTapGesture(count: 1) { rotationEnabled.toggle() }
                 SettingsItem(name: String(localized: "Visit the taler.net website"), id1: "web",
                              description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }

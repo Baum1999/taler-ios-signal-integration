@@ -38,7 +38,7 @@ extension View {
 
     @ViewBuilder
     func errorAlert(error: Binding<Error?>,
-              buttonTitle: LocalizedStringKey = "xloc.generic.ok",
+              buttonTitle: LocalizedStringKey = "OK",
                    action: (() -> Void)? = nil) -> some View
     {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)

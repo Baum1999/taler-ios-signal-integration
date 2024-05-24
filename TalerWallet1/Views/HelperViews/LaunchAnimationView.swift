@@ -38,7 +38,8 @@ struct RotatingTaler: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-            .accessibilityLabel(progress ? "In progress" : "Taler Logo")       // decorative logo - with button function
+            .accessibilityLabel(progress ? Text("In progress", comment: "VoiceOver")
+                                         : Text("Taler Logo", comment: "VoiceOver"))       // decorative logo - with button function
             .onReceive(animationTimer) { timerValue in
                 if rotationEnabled {
                     withAnimation(.easeInOut(duration: 1.9)) {

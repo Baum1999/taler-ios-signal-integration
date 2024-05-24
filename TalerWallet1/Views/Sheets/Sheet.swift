@@ -58,7 +58,7 @@ struct Sheet: View {
                 .monospacedDigit()
                 .edgesIgnoringSafeArea(.top)
                 .id("sheetID")
-                .accessibilityLabel(Text("Sheet.ID.", comment: "AccessibilityLabel"))
+                .accessibilityLabel(Text("Sheet.ID.", comment: "VoiceOver"))
                 .accessibilityValue(idString)
         }
         .onDisappear {

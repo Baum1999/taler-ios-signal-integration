@@ -135,7 +135,7 @@ struct DebugViewV: View {
                 .font(.system(size: 11))        // no talerFont
                 .monospacedDigit()
                 .id("viewID")
-                .accessibilityLabel(Text("View.ID.", comment: "AccessibilityLabel"))
+                .accessibilityLabel(Text("View.ID.", comment: "VoiceOver"))
                 .accessibilityValue(viewIDString)
                 .accessibilityHint(String(localized: "Shows which view you currently are on."))
             Spacer()
