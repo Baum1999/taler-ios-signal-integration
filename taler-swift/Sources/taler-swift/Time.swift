@@ -16,6 +16,51 @@ enum TimestampError: Error {
     case invalidUInt64Value
 }
 
+public enum RelativeTime: Codable, Hashable, Sendable {
+    // Duration in microseconds or "forever"
+    // to represent an infinite duration. Numeric
+    // values are capped at 2^53 - 1 inclusive.
+    case microseconds(UInt64)
+    case forever
+
+    enum CodingKeys: String, CodingKey {
+        case d_us = "d_us"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            self = RelativeTime.microseconds(try container.decode(UInt64.self, forKey: .d_us))
+        } catch {       // rethrows or never
+            let stringValue = try container.decode(String.self, forKey: .d_us)
+            if stringValue == "forever" {
+                self = RelativeTime.forever
+            } else {
+                throw TimestampError.invalidStringRepresentation
+            }
+        }
+    }
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+            case .microseconds(let d_us):
+                hasher.combine(d_us)
+            case .forever:
+                hasher.combine("forever")
+        }
+    }
+    public func encode(to encoder: Encoder) throws {
+        var value = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+            case .microseconds(let d_us):
+                try value.encode(d_us, forKey: .d_us)
+            case .forever:
+                try value.encode("forever", forKey: .d_us)
+        }
+    }
+}
+
+
+
 /// A point in time, represented by milliseconds from January 1, 1970..
 public enum Timestamp: Codable, Hashable, Sendable {
     case milliseconds(UInt64)
