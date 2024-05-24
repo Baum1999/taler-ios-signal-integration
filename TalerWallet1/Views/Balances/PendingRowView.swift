@@ -18,12 +18,12 @@ struct PendingRowView: View {
     let inTitle0 = String(localized: "TitleIncoming_Short", defaultValue: "Incoming",
                           comment: "Abbreviation of `Pending incoming´ in Balances")
     let inTitle1 = String(localized: "TitleIncoming_Full", defaultValue: "Pending\tincoming",
-                          comment: "`Pending incoming´ in Balances - set exactly 1 \t for line break")
+                          comment: "`Pending incoming´ in Balances - set exactly 1 \\t for line break")
 
     let outTitle0 = String(localized: "TitleOutgoing_Short", defaultValue: "Outgoing",
                            comment: "Abbreviation of `Pending outgoing´ in Balances")
     let outTitle1 = String(localized: "TitleOutgoing_Full", defaultValue: "Pending\toutgoing",
-                           comment: "`Pending outgoing´ in Balances - set exactly 1 \t for line break")
+                           comment: "`Pending outgoing´ in Balances - set exactly 1 \\t for line break")
 
     var body: some View {
         let pendingColor = WalletColors().pendingColor(incoming)
