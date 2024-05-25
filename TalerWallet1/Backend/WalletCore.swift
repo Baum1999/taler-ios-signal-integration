@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -320,8 +320,8 @@ extension WalletCore {
                     postNotification(.ProposalDownloaded, userInfo: nil)
                 case Notification.Name.TaskObservabilityEvent.rawValue,
                      Notification.Name.RequestObservabilityEvent.rawValue:
-                    symLog.log(anyPayload)
                     if isObserving != 0 {
+                        symLog.log(anyPayload)
                         let timestamp = TalerDater.dateString()
                         if let event = payload.event, let json = event.toJSON() {
                             let type = event["type"]?.value as? String
@@ -337,7 +337,7 @@ extension WalletCore {
 //                     "refresh-revealed", "refresh-unwarranted":
 //                    break
                 default:
-print("\n❗️ WalletCore.swift:251 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
+print("\n❗️ WalletCore.swift:340 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {
