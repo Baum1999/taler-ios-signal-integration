@@ -12,6 +12,7 @@
       }
     },
     ", canceled" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -376,6 +377,7 @@
       }
     },
     "account of the payee" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -407,7 +409,7 @@
       }
     },
     "Add Payment Service" : {
-      "comment" : "accessibilityLabel for the + button",
+      "comment" : "VoiceOver for the + button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -793,6 +795,7 @@
       }
     },
     "Copy the account" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -803,6 +806,7 @@
       }
     },
     "Copy the cryptocode" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -813,6 +817,7 @@
       }
     },
     "Copy the error" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -833,6 +838,7 @@
       }
     },
     "Copy the IBAN" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -843,6 +849,7 @@
       }
     },
     "Copy the payee" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -889,6 +896,7 @@
       }
     },
     "Cryptocode" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -898,13 +906,24 @@
         }
       }
     },
-    "Customize Order" : {
+    "Custom Amount" : {
       "comment" : "pay merchant",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auftrag bearbeiten"
+            "value" : "Betrag ändern"
+          }
+        }
+      }
+    },
+    "Custom Summary" : {
+      "comment" : "pay merchant",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zweck ändern"
           }
         }
       }
@@ -1283,6 +1302,7 @@
       }
     },
     "Expires: %@" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1369,6 +1389,7 @@
       }
     },
     "IBAN of the payee" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1399,6 +1420,7 @@
       }
     },
     "In progress" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1770,24 +1792,6 @@
         }
       }
     },
-    "MinorState.mergekyc" : {
-      "comment" : "TxMinorState heading",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "KYC benötigt"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "KYC required"
-          }
-        }
-      }
-    },
     "Money lost" : {
       "comment" : "TransactionType",
       "localizations" : {
@@ -2076,6 +2080,16 @@
         }
       }
     },
+    "OK" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
     "Omit text where possible" : {
       "localizations" : {
         "de" : {
@@ -2211,6 +2225,7 @@
       }
     },
     "Pay P2P" : {
+      "comment" : "Nav Title",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2265,6 +2280,7 @@
       }
     },
     "Payee" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2828,6 +2844,7 @@
       }
     },
     "Share the PayTo URL" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2838,7 +2855,7 @@
       }
     },
     "Sheet.ID." : {
-      "comment" : "AccessibilityLabel",
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2950,6 +2967,7 @@
       }
     },
     "Taler Logo" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3094,7 +3112,7 @@
       }
     },
     "TitleIncoming_Full" : {
-      "comment" : "`Pending incoming´ in Balances - set exactly 1 \t for line break",
+      "comment" : "`Pending incoming´ in Balances - set exactly 1 \\t for line break",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -3130,7 +3148,7 @@
       }
     },
     "TitleOutgoing_Full" : {
-      "comment" : "`Pending outgoing´ in Balances - set exactly 1 \t for line break",
+      "comment" : "`Pending outgoing´ in Balances - set exactly 1 \\t for line break",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -3469,7 +3487,7 @@
       }
     },
     "View.ID." : {
-      "comment" : "AccessibilityLabel",
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3628,9 +3646,6 @@
           }
         }
       }
-    },
-    "xloc.generic.ok" : {
-
     },
     "Yesterday" : {
       "localizations" : {
