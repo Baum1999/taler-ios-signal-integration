@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -44,8 +47,6 @@ struct DepositAmountV: View {
         feeAmount = nil
         return feeAmount
     }
-    
-    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
 
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {
@@ -109,9 +110,9 @@ struct DepositAmountV: View {
                                    title: minimalistic ? String(localized: "Amount:")
                                                        : String(localized: "Amount to deposit:"),
                           shortcutAction: nil)
-//                .padding(.top)
+
                 Text(insufficient ? insufficientLabel
-                                  : feeLabel)
+                                  : feeLabel(feeStr))
                     .talerFont(.body)
                     .foregroundColor(insufficient ? .red
                                                   : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
@@ -167,11 +168,15 @@ struct DepositAmountV: View {
                         prepareDepositResult = nil
                     } else if let paytoUri {
                         if let ppCheck = try? await model.prepareDepositM(paytoUri, amount: amountToTransfer) {
-                            prepareDepositResult = ppCheck
-                            if let feeAmount = fee(ppCheck: prepareDepositResult) {
+                            if let feeAmount = fee(ppCheck: ppCheck) {
                                 feeStr = feeAmount.string(currencyInfo)
-                            } else { feeStr = EMPTYSTRING }
-                            announce("\(amountVoiceOver), \(feeLabel)")
+                                let feeLabel = feeLabel(feeStr)
+                                announce("\(amountVoiceOver), \(feeLabel)")
+                            } else {
+                                feeStr = EMPTYSTRING
+                                announce(amountVoiceOver)
+                            }
+                            prepareDepositResult = ppCheck
                         } else {
                             prepareDepositResult = nil
                         }

@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import taler_swift
@@ -163,7 +166,7 @@ struct TemplateParams: Codable {
     let summary: String?                    // Human-readable short summary of the contract
 }
 /// A request to get an exchange's payment contract terms.
-fileprivate struct PreparePayForTemplate: WalletBackendFormattedRequest {
+fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult
     func operation() -> String { "preparePayForTemplate" }
     func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams) }
@@ -177,44 +180,38 @@ fileprivate struct PreparePayForTemplate: WalletBackendFormattedRequest {
 }
 // MARK: -
 struct TemplateContractDetails: Codable {
-    let summary: String?                    // Human-readable short summary of the contract
+    let summary: String?                    // Human-readable short summary of the contract. Fixed if this field exists, editable if nil
     let currency: String?
-    let amount: Amount?                     // Total amount payable
+    let amount: Amount?                     // Total amount payable. Fixed if this field exists, editable if nil
     let minimumAge: Int
-    let payDuration: String?   // RelativeTime
+    let payDuration: RelativeTime
 
     enum CodingKeys: String, CodingKey {
-        case summary
-        case currency
-        case amount
+        case summary, currency, amount
         case minimumAge = "minimum_age"
         case payDuration = "pay_duration"
     }
 }
 struct TemplateContractDetailsDefaults: Codable {
-    let summary: String?                    // Human-readable short summary of the contract
+    let summary: String?                    // Default 'Human-readable short summary' if editable, or empty if nil.
     let currency: String?
-    let amount: Amount?                     // Total amount payable
-    let minimumAge: Int?
-
-    enum CodingKeys: String, CodingKey {
-        case summary
-        case currency
-        case amount
-        case minimumAge = "minimum_age"
-    }
+    let amount: Amount?                     // Default amount if editable, or unspecified if nil.
 }
-/// The result from checkPayForTemplate
-struct WalletTemplateDetails: Codable {
+struct TalerMerchantTemplateDetails: Codable {
     let templateContract: TemplateContractDetails
     let editableDefaults: TemplateContractDetailsDefaults?
-    let requiredCurrency: String?
-
+//    let requiredCurrency: String?
     enum CodingKeys: String, CodingKey {
         case templateContract = "template_contract"
         case editableDefaults = "editable_defaults"
-        case requiredCurrency = "required_currency"
+//        case requiredCurrency = "required_currency"
     }
+}
+
+/// The result from checkPayForTemplate
+struct WalletTemplateDetails: Codable {
+    let templateDetails: TalerMerchantTemplateDetails
+    let supportedCurrencies: [String]
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct CheckPayForTemplate: WalletBackendFormattedRequest {
@@ -266,7 +263,7 @@ extension WalletModel {
     func preparePayForTemplateM(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)       // M for MainActor
       async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
-        let request = PreparePayForTemplate(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
+        let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

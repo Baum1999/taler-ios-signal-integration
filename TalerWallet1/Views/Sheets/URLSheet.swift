@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -32,7 +35,8 @@ struct URLSheet: View {
                     WithdrawExchangeV(stack: stack.push(), url: urlToOpen)      // TODO: just check the ToS
                 case .pay:
                     PaymentView(stack: stack.push(), url: urlToOpen,
-                             template: false, amountToTransfer: $amountToTransfer, summary: $summary)
+                             template: false, amountToTransfer: $amountToTransfer, summary: $summary,
+                     amountIsEditable: false, summaryIsEditable: false)
                 case .payPull:
                     P2pPayURIView(stack: stack.push(), url: urlToOpen)
                 case .payPush:

@@ -1,11 +1,69 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
 import SymLog
 
+typealias Announce = (_ this: String) -> ()
+
+func feeLabel(_ feeString: String) -> String {
+    feeString.count > 0 ? String(localized: "+ \(feeString) fee")
+    : EMPTYSTRING
+}
+
+func templateFee(ppCheck: PreparePayResult?) -> Amount? {
+    do {
+        if let ppCheck {
+            // Outgoing: fee = effective - raw
+            if let effective = ppCheck.amountEffective {
+                let fee = try effective - ppCheck.amountRaw
+                return fee
+            }
+        }
+    } catch {}
+    return nil
+}
+
+struct PayForTemplateResult {
+    let ppCheck: PreparePayResult
+    let insufficient: Bool
+    let feeAmount: Amount?
+    let feeStr: String
+}
+
+func preparePayForTemplate(model: WalletModel,
+                             url: URL,
+                          amount: Amount?,
+                         summary: String?,
+                        announce: Announce)
+  async -> PayForTemplateResult? {
+    if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amount, summary: summary) {
+        let controller = Controller.shared
+        let amountRaw = ppCheck.amountRaw
+        let currency = amountRaw.currencyStr
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let amountVoiceOver = amountRaw.string(currencyInfo)
+        let insufficient = ppCheck.status == .insufficientBalance
+        if let feeAmount = templateFee(ppCheck: ppCheck) {
+            let feeStr = feeAmount.string(currencyInfo)
+            let feeLabel = feeLabel(feeStr)
+            announce("\(amountVoiceOver), \(feeLabel)")
+            return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
+                                        feeAmount: feeAmount, feeStr: feeStr)
+        }
+        announce(amountVoiceOver)
+        return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
+                                    feeAmount: nil, feeStr: EMPTYSTRING)
+    }
+    return nil
+}
+
+// MARK: -
 // Will be called either by the user scanning a QR code or tapping the provided link,
 // both from the shop's website. We show the payment details in a sheet.
 struct PaymentView: View {
@@ -18,6 +76,8 @@ struct PaymentView: View {
     let template: Bool
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    let amountIsEditable: Bool                      //
+    let summaryIsEditable: Bool                      //
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -34,6 +94,7 @@ struct PaymentView: View {
                 // TODO: show balanceDetails.balanceAvailable
                 let baseURL = preparePayResult.contractTerms.exchanges.first?.url
                 let raw = preparePayResult.amountRaw
+                let status = preparePayResult.status
                 let currency = raw.currencyStr
                 let topTitle = String(localized: "Amount to pay:")
                 let topAbbrev = String(localized: "Pay:", comment: "mini")
@@ -102,8 +163,8 @@ struct PaymentView: View {
                 symLog.log(".task")
                 if template {
                     if let result = try? await model.preparePayForTemplateM(url.absoluteString,
-                                                                 amount: amountToTransfer,
-                                                                            summary: summary) {
+                                                                     amount: amountIsEditable ? amountToTransfer : nil,
+                                                                    summary: summaryIsEditable ? summary : nil) {
                         preparePayResult = result
                     }
                 } else {
@@ -170,9 +231,10 @@ struct PaymentURIView_Previews: PreviewProvider {
 //        @State private var amount: Amount? = nil        // templateParam
 //        @State private var summary: String? = nil       // templateParam
 
-        PaymentView(stack: CallStack("Preview"),
-                    url: url, template: false, amountToTransfer: nil, summary: nil,
-                    preparePayResult: details)
+        PaymentView(stack: CallStack("Preview"), url: url,
+                 template: false, amountToTransfer: nil, summary: nil,
+         amountIsEditable: false, summaryIsEditable: false,
+         preparePayResult: details)
     }
 }
 #endif

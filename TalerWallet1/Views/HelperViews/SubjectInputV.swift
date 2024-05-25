@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -15,8 +18,8 @@ struct SubjectInputV<TargetView: View>: View {
     @Binding var amountToTransfer: Amount
     let amountLabel: String
     @Binding var summary: String
-    @Binding var insufficient: Bool
-    @Binding var feeAmount: Amount?
+//    @Binding var insufficient: Bool
+//    @Binding var feeAmount: Amount?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
     let currencyInfo: CurrencyInfo
 
@@ -30,37 +33,21 @@ struct SubjectInputV<TargetView: View>: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
+    let navTitle = String(localized: "Custom Summary", comment:"pay merchant")
+
     @State private var preparePayResult: PreparePayResult? = nil
-    @State private var feeStr: String = EMPTYSTRING
     @FocusState private var isFocused: Bool
-
-    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
-
-    func preparePayForTemplate() async {
-        if let url {
-            if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amountToTransfer, summary: summary) {
-                let amount = ppCheck.amountRaw
-                let currency = amount.currencyStr
-                let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-                insufficient = ppCheck.status == .insufficientBalance
-                feeAmount = templateFee(ppCheck: ppCheck)
-                if let feeAmount {
-                    feeStr = feeAmount.string(currencyInfo)
-                } else { feeStr = EMPTYSTRING }
-                let amountVoiceOver = amount.string(currencyInfo)
-                announce("\(amountVoiceOver), \(feeLabel)")
-                preparePayResult = ppCheck
-            }
-        }
-    }
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let insufficientLabel = String(localized: "You don't have enough \(currency).")
+//        let feeStr = feeAmount?.string(currencyInfo) ?? EMPTYSTRING
+//        let insufficientLabel = String(localized: "You don't have enough \(currency).")
+//        let feeLabel = insufficient ? insufficientLabel
+//                                    : feeLabel(feeStr)
         let available = amountAvailable?.string(currencyInfo) ?? nil
-        let disabled = insufficient || summary.count == 0
-        VStack(alignment: .leading) {
+//        let disabled = insufficient || summary.count == 0
+        let disabled = summary.count == 0
+        ScrollView { VStack(alignment: .leading) {
             if let available {
                 Text("Available:\t\(available)")
                     .talerFont(.title3)
@@ -97,22 +84,31 @@ struct SubjectInputV<TargetView: View>: View {
                     }
                 }
             }
-
-            let subLabel = insufficient ? insufficientLabel
-                                        : feeLabel
-            Text(subLabel)
+            HStack {
+                Text(amountToTransfer.string(currencyInfo))
+                // TODO: hasFees?
+//                Text(feeLabel)
+            }
                 .talerFont(.body)
-                .foregroundColor(insufficient ? .red
-                                 : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
-                                 : .red)
-            //                    .accessibility(sortPriority: 1)
+//                .foregroundColor(insufficient ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
+                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+//                .accessibility(sortPriority: 1)
                 .padding(4)
+//            if insufficient {
+//                Text(insufficientLabel)
+//                    .talerFont(.body)
+//                    .foregroundColor(.red)
+//                    .padding(4)
+//            }
 
             NavigationLink("Next", destination: targetView)
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
 //                .accessibility(sortPriority: 0)
-        }.padding(.horizontal)
+        }.padding(.horizontal) } // ScrollVStack
+        .navigationTitle(navTitle)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {
 //            symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_PAY_TEMPL_SUBJECT)

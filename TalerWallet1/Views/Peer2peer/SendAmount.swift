@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -43,8 +46,6 @@ struct SendAmount: View {
         feeAmount = nil
         return feeAmount
     }
-    
-    var feeLabel: String { feeStr.count > 0 ? String(localized: "+ \(feeStr) fee") : EMPTYSTRING }
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -82,11 +83,11 @@ struct SendAmount: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                     feeLabel: feeLabel,
+                     feeLabel: feeLabel(feeStr),
                  feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: true,
-             amountToTransfer: $amountToTransfer,
+             amountToTransfer: $amountToTransfer,       // from the textedit
                       summary: $summary,
                    expireDays: $expireDays)
         }
@@ -96,20 +97,22 @@ struct SendAmount: View {
                  feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: true,
-             amountToTransfer: $amountShortcut,
+             amountToTransfer: $amountShortcut,         // from the tapped shortcut button
                       summary: $summary,
                    expireDays: $expireDays)
         }
         ScrollView {
+            let amountLabel = minimalistic ? String(localized: "Amount:")
+                                           : String(localized: "Amount to send:")
+
             AmountInputV(stack: stack.push(), url: nil,
                amountAvailable: amountAvailable,
               amountToTransfer: $amountToTransfer,
-                   amountLabel: minimalistic ? String(localized: "Amount:")
-                                             : String(localized: "Amount to send:"),
-                  wantsSummary: true,
+                   amountLabel: amountLabel,
+             summaryIsEditable: true,
                        summary: $summary,
-                  insufficient: $insufficient,
-                     feeAmount: $feeAmount,
+//                  insufficient: $insufficient,
+//                     feeAmount: $feeAmount,
                 shortcutAction: shortcutAction,
                   buttonAction: buttonAction)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
@@ -149,13 +152,17 @@ struct SendAmount: View {
                 feeStr = EMPTYSTRING
             } else {
                 if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
-                    peerPushCheck = ppCheck
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                    if let feeAmount = fee(ppCheck: peerPushCheck) {
+                    if let feeAmount = fee(ppCheck: ppCheck) {
                         feeStr = feeAmount.string(currencyInfo)
-                    } else { feeStr = EMPTYSTRING }
-                    announce("\(amountVoiceOver), \(feeLabel)")
+                        let feeLabel = feeLabel(feeStr)
+                        announce("\(amountVoiceOver), \(feeLabel)")
+                    } else {
+                        feeStr = EMPTYSTRING
+                        announce(amountVoiceOver)
+                    }
+                    peerPushCheck = ppCheck
                 } else {
                     peerPushCheck = nil
                 }
