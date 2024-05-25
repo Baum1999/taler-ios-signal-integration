@@ -257,6 +257,8 @@
 		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
 		4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */; };
 		4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171912B49FE4E00BF9FF5 /* OrderedCollections */; };
+		4EE77E7D2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */; };
+		4EE77E7F2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */; };
 		4EEC118D2B83DE4800146CFF /* AmountInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC118C2B83DE4700146CFF /* AmountInputV.swift */; };
 		4EEC118E2B83DE4800146CFF /* AmountInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC118C2B83DE4700146CFF /* AmountInputV.swift */; };
 		4EEC11932B83FB7A00146CFF /* SubjectInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */; };
@@ -448,6 +450,8 @@
 		4ED80E8A2B8F60E7008BD576 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickDataTask.swift; sourceTree = "<group>"; };
 		4EDBDCD82AB787CB00925C02 /* CallStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStack.swift; sourceTree = "<group>"; };
+		4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "GNU_Taler InfoPlist.xcstrings"; sourceTree = "<group>"; };
+		4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Taler_Wallet InfoPlist.xcstrings"; sourceTree = "<group>"; };
 		4EEC118C2B83DE4700146CFF /* AmountInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountInputV.swift; sourceTree = "<group>"; };
 		4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectInputV.swift; sourceTree = "<group>"; };
 		4EEC11952B840F1100146CFF /* PayTemplateV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayTemplateV.swift; sourceTree = "<group>"; };
@@ -589,6 +593,8 @@
 				4E2254942A822B8100E41D29 /* Sounds */,
 				4E3EAEA62AA12750009F1BE8 /* Fonts */,
 				4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */,
+				4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */,
+				4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */,
 				4E363CBF2A24754200D7E98C /* Settings.bundle */,
 				4EB094F529897A9A0043A8A1 /* Preview Content */,
 				4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */,
@@ -1023,6 +1029,7 @@
 				en,
 				Base,
 				de,
+				es,
 			);
 			mainGroup = D14AFD1424D232B300C51073;
 			packageReferences = (
@@ -1059,6 +1066,7 @@
 				4E3EAE9C2AA12467009F1BE8 /* Nunito-Regular.ttf in Resources */,
 				4E605D922AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */,
 				4E3EAE9E2AA12467009F1BE8 /* Nunito-Bold.ttf in Resources */,
+				4EE77E7D2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings in Resources */,
 				4E3EAEA42AA12582009F1BE8 /* Nunito-BoldItalic.ttf in Resources */,
 				4E605D902AA8B407002FB9A7 /* Nunito-Black.ttf in Resources */,
 				4E3EAEA22AA12582009F1BE8 /* Nunito-Italic.ttf in Resources */,
@@ -1077,6 +1085,7 @@
 				4E8C17202A6509BB005B2392 /* Atkinson-Hyperlegible-Regular-102.otf in Resources */,
 				4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */,
 				4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */,
+				4EE77E7F2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings in Resources */,
 				4E8C17212A6509BB005B2392 /* Atkinson-Hyperlegible-Italic-102.otf in Resources */,
 				4E3EAE9D2AA12467009F1BE8 /* Nunito-Regular.ttf in Resources */,
 				4E605D932AA8B407002FB9A7 /* Nunito-BlackItalic.ttf in Resources */,
