@@ -46,8 +46,9 @@ struct WithdrawalExchangeAccountDetails: Decodable {
 // MARK: -
 /// The result from getWithdrawalDetailsForUri
 struct WithdrawUriInfoResponse: Decodable {
-    var amount: Amount
-    var defaultExchangeBaseUrl: String?
+    var amount: Amount?                     // if nil then ask User
+    var currency: String                    // use this if amount=nil
+    var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
     var possibleExchanges: [Exchange]       // TODO: query these for fees?
 }
 /// A request to get an exchange's withdrawal details.
