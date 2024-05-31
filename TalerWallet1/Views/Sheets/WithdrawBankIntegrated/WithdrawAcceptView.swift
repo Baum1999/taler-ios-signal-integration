@@ -1,111 +1,107 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
 import SymLog
 
 struct WithdrawAcceptView: View {
-    private let symLog = SymLogV(0)
-    let navTitle = String(localized: "Accept Withdrawal")
+    private let symLog = SymLogV()
+    let stack: CallStack
+    let navTitle = String(localized: "Withdrawal")
 
-    let exchangeBaseUrl: String
-    let model: WithdrawModel?
-    let amount: Amount?
+    // the URL from the bank website
     let url: URL
+    @Binding var amountToTransfer: Amount
+    @Binding var exchange: Exchange?
 
-    @State private var buttonSelected: Int? = nil
-    @State private var confirmTransferUrl: String? = nil
-    @State private var transactionId: String? = nil
-    @State var manualWithdrawalDetails: ManualWithdrawalDetails?
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    func acceptAction() -> () {
-        Task {
-            do {
-                if let model {
-                    if let acceptWithdrawalResponse = try await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString) {
-                        confirmTransferUrl = acceptWithdrawalResponse.confirmTransferUrl
-                        transactionId = acceptWithdrawalResponse.transactionId
-                        symLog.log(confirmTransferUrl ?? "❗️Yikes: No confirmTransferUrl")
-                        buttonSelected = 1      // trigger NavigationLink
-                    } else {
-                        // TODO: error sendAcceptIntWithdrawal failed
-                    }
-                }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-            }
-        }
-    }
+    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 
     var body: some View {
-        VStack {
-            if let manualWithdrawalDetails {
+        if let exchange, let withdrawalAmountDetails {
+            VStack {
+                let tosAccepted = exchange.tosStatus == .accepted
+                if !tosAccepted {
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                 viewID: SHEET_WITHDRAW_TOS,
+                                    p2p: false)
+                }
                 List {
+                    let raw = withdrawalAmountDetails.amountRaw
+                    let effective = withdrawalAmountDetails.amountEffective
+                    let currency = raw.currencyStr
+                    let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    let fee = try! Amount.diff(raw, effective)
+                    let outColor = WalletColors().transactionColor(false)
+                    let inColor = WalletColors().transactionColor(true)
 
-                    HStack(spacing: 0) {
-                        NavigationLink(destination: LazyView {
-                            WithdrawAcceptDone(model: model, confirmTransferUrl: confirmTransferUrl, transactionId: transactionId)
-                        }, tag: 1, selection: $buttonSelected
-                        ) { EmptyView() }.frame(width: 0).opacity(0).hidden()
-
-                        ThreeAmountsView(topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         topAmount: raw, fee: fee,
-                                         bottomTitle: String(localized: "Coins to be withdrawn:"),
-                                         bottomAmount: effective,
-                                         large: false, pending: false, incoming: true,
-                                         baseURL: exchangeBaseUrl)
+                    ThreeAmountsV(stack: stack.push(),
+                               topTitle: String(localized: "Chosen amount to withdraw:"),
+                              topAbbrev: String(localized: "Chosen:", comment: "mini"),
+                              topAmount: raw, fee: fee,
+                            bottomTitle: String(localized: "Amount to be withdrawn:"),
+                           bottomAbbrev: String(localized: "Effective:", comment: "mini"),
+                           bottomAmount: effective,
+                                  large: false, pending: false, incoming: true,
+                                baseURL: exchange.exchangeBaseUrl,
+                                 noFees: exchange.noFees,
+                             txStateLcl: nil,        // common.txState.major.localizedState
+                                summary: nil,
+                               merchant: nil)
+                    let someCoins = SomeCoins(details: withdrawalAmountDetails)
+                    QuiteSomeCoins(someCoins: someCoins,
+                               shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
+                                    currency: currency,
+                                currencyInfo: currencyInfo,
+                             amountEffective: effective)
+                }
+                .listStyle(myListStyle.style).anyView
+                .navigationTitle(navTitle)
+                if tosAccepted {
+                    NavigationLink(destination: LazyView {
+                        WithdrawAcceptDone(stack: stack.push(),
+                                           exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                           url: url)
+                    }) {
+                        Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                    }
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
+                }
+            }
+            .onAppear() {
+                symLog.log("onAppear")
+                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)
+            }
+        } else {        // no details or no exchange
+#if DEBUG
+            let message = url.host
+#else
+            let message: String? = nil
+#endif
+            LoadingView(scopeInfo: nil, message: message)
+                .task(id: exchange) {
+                    symLog.log(".task")
+                    if let exchange {
+                        if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
+                                                                                  amount: amountToTransfer) {
+                            withdrawalAmountDetails = details
+                        }
+//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
+                    } else {    // TODO: error
+                        symLog.log("no exchangeBaseUrl or no exchange")
+                        withdrawalAmountDetails = nil
                     }
                 }
-                .safeAreaInset(edge: .bottom) {
-                    Button("Confirm Withdrawal", action: acceptAction)
-                        .lineLimit(2)
-                        .disabled(false)
-                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-                        .padding()
-                }
-                .navigationTitle(navTitle)
-            } else {
-                WithdrawProgressView(message: exchangeBaseUrl.trimURL())
-                    .navigationTitle("Found Exchange")
-            }
         }
-//        .overlay {
-//            VStack {
-//                ErrorView(errortext: "unknown state")       // TODO: Error
-//            }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-//                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-//        }
-        .onAppear() {
-            DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)
-        }
-        .task { if let amount, let model {
-            do { // TODO: cancelled
-                symLog.log(".task")
-                if exchangeBaseUrl.hasPrefix(HTTPS) {
-                    symLog.log("amount: \(amount), baseURL: \(String(describing: exchangeBaseUrl))")
-                    // TODO: let user choose exchange from list
-                    manualWithdrawalDetails = try await model.loadWithdrawalDetailsForAmountM(exchangeBaseUrl, amount: amount)
-                    symLog.log("raw: \(manualWithdrawalDetails!.amountRaw), effective: \(manualWithdrawalDetails!.amountEffective)")
-                } else {
-                    // TODO: error no exchange!
-                }
-            } catch {    // TODO: error
-                symLog.log(error.localizedDescription)
-            }
-        } else {
-            // TODO: error no amount!
-        } }
-    }
-}
-// MARK: -
-struct WithdrawAcceptView_Previews: PreviewProvider {
-    static var previews: some View {
-        let amount = try! Amount(fromString: LONGCURRENCY + ":2.4")
-        WithdrawAcceptView(exchangeBaseUrl: DEMOEXCHANGE,
-                                     model: nil,
-                                    amount: amount,
-                                       url: URL(string: DEMOSHOP)!)
     }
 }
