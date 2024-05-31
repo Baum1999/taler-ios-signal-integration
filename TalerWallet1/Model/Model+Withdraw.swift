@@ -44,9 +44,19 @@ struct WithdrawalExchangeAccountDetails: Decodable {
 //    var conversionError: TalerErrorDetail?                    // only if error
 }
 // MARK: -
+enum WithdrawalOperationStatus: String, Codable {
+    case pending
+    case selected
+    case aborted
+    case confirmed
+}
 /// The result from getWithdrawalDetailsForUri
 struct WithdrawUriInfoResponse: Decodable {
+    var operationId: String
+    var status: WithdrawalOperationStatus   // pending, selected, aborted, confirmed
+    var confirmTransferUrl: String?
     var amount: Amount?                     // if nil then ask User
+    var maxAmount: Amount?                  // limit how much the user may withdraw
     var currency: String                    // use this if amount=nil
     var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
     var possibleExchanges: [Exchange]       // TODO: query these for fees?
