@@ -56,7 +56,8 @@ struct WithdrawAcceptDone: View {
             DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
         }.task {
             if let exchangeBaseUrl {
-                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString) {
+                // TODO: restrictAge
+                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString, restrictAge: nil) {
                     let confirmTransferUrl = result.confirmTransferUrl
                     symLog.log(confirmTransferUrl)
                     transactionId = result.transactionId
