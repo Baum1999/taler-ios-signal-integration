@@ -106,10 +106,12 @@ extension ExchangeListCommonV: View {
 //                            accountHolder: $accountHolder,
                          amountToTransfer: $amountToTransfer)               // does still have the wrong currency
             }
+//#if REFRESHABLE
             .refreshable {
                 symLog?.log("refreshing")
                 await reloadExchanges()
             }
+//#endif
             .listStyle(myListStyle.style).anyView
         }
         .onAppear() {
@@ -130,10 +132,12 @@ extension ExchangeListCommonV: View {
                             .talerFont(.body)
                     }
                 }
+//#if REFRESHABLE
                 .refreshable {
                     symLog?.log("refreshing")
                     await reloadExchanges()
                 }
+//#endif
                 .listStyle(myListStyle.style).anyView
             }
         }

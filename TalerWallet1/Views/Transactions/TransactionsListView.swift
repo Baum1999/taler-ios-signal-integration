@@ -37,10 +37,12 @@ struct TransactionsListView: View {
             }
             .id(viewId)
             .listStyle(myListStyle.style).anyView
+#if REFRESHABLE
             .refreshable {
                 symLog.log("refreshing")
                 await reloadAllAction(stack.push())
             }
+#endif
             .navigationBarItems(trailing: HStack {
                 if showUpDown {
                     ArrowUpButton(action: upAction)

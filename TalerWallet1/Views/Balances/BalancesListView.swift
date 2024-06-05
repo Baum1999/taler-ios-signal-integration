@@ -160,6 +160,7 @@ extension BalancesListView {
                     .listStyle(myListStyle.style).anyView
                 }
             }
+#if REFRESHABLE
             .refreshable {  // already async
                 symLog?.log("refreshing balances")
                 let count = await reloadBalances(stack.push("refreshing balances"), true)
@@ -167,6 +168,7 @@ extension BalancesListView {
                     NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
                 }
             }
+#endif
         } // body
     } // Content
 }
