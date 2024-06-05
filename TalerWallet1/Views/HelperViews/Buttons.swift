@@ -31,8 +31,14 @@ struct HamburgerButton : View  {
 struct QRButton : View  {
     let action: () -> Void
 
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
     var body: some View {
         Button(action: action) {
+            if !minimalistic {
+                Text("Scan QR")
+                    .talerFont(.title)
+            }
             Image(systemName: "qrcode.viewfinder")
         }
         .talerFont(.title)
