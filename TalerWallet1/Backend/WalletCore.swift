@@ -295,6 +295,9 @@ extension WalletCore {
             let payload = try JSONDecoder().decode(Payload.self, from: jsonData)
 
             switch payload.type {
+                case Notification.Name.ExchangeStateTransition.rawValue:
+//                    symLog.log(anyPayload)
+                    break
                 case Notification.Name.TransactionStateTransition.rawValue:
                     symLog.log(anyPayload)
                     try handleStateTransition(jsonData)
@@ -337,7 +340,7 @@ extension WalletCore {
 //                     "refresh-revealed", "refresh-unwarranted":
 //                    break
                 default:
-print("\n❗️ WalletCore.swift:340 Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
+print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {

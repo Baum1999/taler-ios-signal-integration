@@ -31,6 +31,22 @@ enum ExchangeUpdateStatus: String, Codable {
     case ready
     case readyUpdate = "ready-update"
 }
+
+struct ExchangeState: Codable, Hashable {
+    var exchangeEntryStatus: ExchangeEntryStatus
+    var exchangeUpdateStatus: ExchangeUpdateStatus
+    var tosStatus: ExchangeTosStatus
+}
+
+struct ExchangeTransition: Codable {             // Notification
+    enum TransitionType: String, Codable {
+        case transition = "exchange-state-transition"
+    }
+    var type: TransitionType
+    var exchangeBaseUrl: String
+    var oldExchangeState: ExchangeState
+    var newExchangeState: ExchangeState
+}
 // MARK: -
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {

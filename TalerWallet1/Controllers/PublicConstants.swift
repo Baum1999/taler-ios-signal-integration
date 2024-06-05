@@ -66,6 +66,7 @@ public let NOTIFICATIONERROR = "error"
 extension Notification.Name {
     static let BalanceChange = Notification.Name("balance-change")
     static let ExchangeAdded = Notification.Name("exchange-added")
+    static let ExchangeStateTransition = Notification.Name(ExchangeTransition.TransitionType.transition.rawValue)
     static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
     static let TransactionDone = Notification.Name("transaction-done")
     static let TransactionExpired = Notification.Name("transaction-expired")
