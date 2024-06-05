@@ -128,13 +128,14 @@ extension BalancesListView {
     struct Content: View {
         let symLog: SymLogV?
         let stack: CallStack
-        @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
         @Binding var balances: [Balance]
         @Binding var amountToTransfer: Amount
         @Binding var summary: String
 //        @Binding var shouldReloadPending: Int
         @Binding var shouldReloadBalances: Int
         var reloadBalances: (_ stack: CallStack, _ invalidateCache: Bool) async -> Int?
+
+        @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
         var body: some View {
 #if PRINT_CHANGES
