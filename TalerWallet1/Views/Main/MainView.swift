@@ -96,9 +96,7 @@ struct MainView: View {
 // MARK: - TabBar
 enum Tab {
     case balances
-#if false
-    case exchanges
-#endif
+    case overview
     case settings
 }
 
@@ -185,7 +183,7 @@ extension MainView {
             let delay: UInt = 0     // no delay for release builds
 #endif
             let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
-//            let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Banking")
+            let overviewTitle = String(localized: "TitleOverview", defaultValue: "Overview")
             let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
           Group {
 //            let labelStyle = minimalistic ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
@@ -205,20 +203,22 @@ extension MainView {
                 }
                 .tag(Tab.balances)
                 .badge(0)         // TODO: set badge if transaction finished in background
-#if false
-                NavigationView {
-                    ExchangeListView(stack: stack.push(exchangesTitle),
-                                  balances: $balances,
-                                  navTitle: exchangesTitle)
-                }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                .navigationViewStyle(.stack)
-                .tabItem {
-                    Image(systemName: "building.columns")    //  "arrow.triangle.2.circlepath")
-                        .accessibilityLabel(exchangesTitle)
-                    if !minimalistic { Text(exchangesTitle) }
+                if balances.count > 1 {
+                    NavigationView {
+                        OverviewListV(stack: stack.push(overviewTitle),
+                                     navTitle: overviewTitle,
+                                     balances: $balances,
+//                        shouldReloadPending: $shouldReloadPending,
+                         shouldReloadBalances: $shouldReloadBalances)
+                    }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
+                    .navigationViewStyle(.stack)
+                    .tabItem {
+                        Image(systemName: "dollarsign")
+                            .accessibilityLabel(overviewTitle)
+                        if !minimalistic { Text(overviewTitle) }
+                    }
+                    .tag(Tab.overview)
                 }
-                .tag(Tab.exchanges)
-#endif
                 NavigationView {
                     SettingsView(stack: stack.push(),
                               balances: $balances,
