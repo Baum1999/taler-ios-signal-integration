@@ -64,7 +64,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 
     var exchangeBaseUrl: String
-    var masterPub: String
+    var masterPub: String?
     var scopeInfo: ScopeInfo
     var paytoUris: [String]
     var tosStatus: ExchangeTosStatus
