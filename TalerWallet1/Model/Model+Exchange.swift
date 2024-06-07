@@ -76,7 +76,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     var lastUpdateTimestamp: Timestamp?
     var lastUpdateErrorInfo: ExchangeError?
 
-    var id: String { exchangeBaseUrl }
+    var id: String { exchangeBaseUrl + tosStatus.rawValue }
     var name: String? {
         if let url = URL(string: exchangeBaseUrl) {
             if let host = url.host {
