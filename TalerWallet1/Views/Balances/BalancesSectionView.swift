@@ -105,7 +105,7 @@ extension BalancesSectionView: View {
                 }
             }
             if showSpendingButton {
-                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend test money")
+                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 Button(title) {
                     showSpendingHint = false
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])

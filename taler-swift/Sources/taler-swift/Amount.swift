@@ -52,7 +52,7 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
 
     /// The size of `integer` in relation to `fraction`.
     static func fractionalBase(_ power: UInt = Amount.fractionalBaseDigits) -> UInt32 {
-        var exponent = power < Amount.fractionalBaseDigits
+        let exponent = power < Amount.fractionalBaseDigits
                      ? power : Amount.fractionalBaseDigits
         var base: UInt32 = 1
         for _ in 0..<exponent { base *= 10 }
