@@ -28,6 +28,8 @@ struct ManualWithdraw: View {
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
 
+    fileprivate let sheetID = SHEET_WITHDRAW_EXCHANGE                           // 135 WithdrawExchangeV
+    fileprivate let viewID = VIEW_WITHDRAWAL                                    // 30 WithdrawAmount
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -88,8 +90,9 @@ struct ManualWithdraw: View {
                 } else {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                 viewID: VIEW_WITHDRAW_TOS,         // TODO: YIKES might be withdraw-exchange
-                                    p2p: false)
+                                 viewID: VIEW_WITHDRAW_TOS,                     // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
+                                    p2p: false,
+                           acceptAction: nil)
                     .padding(.top)
                 }
             }.padding(.horizontal) } // ScrollVStack
@@ -99,9 +102,9 @@ struct ManualWithdraw: View {
             .navigationTitle(navTitle)
             .onAppear {
                 if isSheet {
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_EXCHANGE)
+                    DebugViewC.shared.setSheetID(sheetID)
                 } else {
-                    DebugViewC.shared.setViewID(VIEW_WITHDRAWAL, stack: stack.push())
+                    DebugViewC.shared.setViewID(viewID, stack: stack.push())
                 }
                 symLog.log("❗️ \(navTitle) onAppear")
             }

@@ -25,6 +25,15 @@ struct WithdrawAcceptView: View {
 
     @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 
+    func reloadExchange() async -> Void {        // TODO: throws?
+        if let exchange {
+            if let someExchange = try? await model.getExchangeByUrl(url: exchange.exchangeBaseUrl) {
+                self.exchange = someExchange
+            }
+        }
+    }
+
+    fileprivate let sheetID = SHEET_WITHDRAW_ACCEPT                             // 132 WithdrawAcceptView
     var body: some View {
         if let exchange, let withdrawalAmountDetails {
             VStack {
@@ -33,7 +42,8 @@ struct WithdrawAcceptView: View {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: exchange.exchangeBaseUrl,
                                  viewID: SHEET_WITHDRAW_TOS,
-                                    p2p: false)
+                                    p2p: false,
+                           acceptAction: reloadExchange)
                 }
                 List {
                     let raw = withdrawalAmountDetails.amountRaw
@@ -80,7 +90,7 @@ struct WithdrawAcceptView: View {
             }
             .onAppear() {
                 symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)
+                DebugViewC.shared.setSheetID(sheetID)
             }
         } else {        // no details or no exchange
 #if DEBUG
@@ -89,8 +99,8 @@ struct WithdrawAcceptView: View {
             let message: String? = nil
 #endif
             LoadingView(scopeInfo: nil, message: message)
-                .task(id: exchange) {
-                    symLog.log(".task")
+                .task(id: exchange?.id) {
+                    symLog.log(".task \(exchange?.id ?? "nil")")
                     if let exchange {
                         if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
                                                                                   amount: amountToTransfer) {

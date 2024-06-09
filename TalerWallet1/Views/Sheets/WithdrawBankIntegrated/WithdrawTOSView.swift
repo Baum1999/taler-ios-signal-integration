@@ -14,7 +14,7 @@ struct WithdrawTOSView: View {
 
     let exchangeBaseUrl: String?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
-    let acceptAction: (() -> Void)?
+    let acceptAction: (() async -> Void)?
 
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var model: WalletModel
@@ -45,7 +45,7 @@ struct WithdrawTOSView: View {
                     if let exchangeBaseUrl {
                         _ = try? await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
                         if acceptAction != nil {
-                            acceptAction!()
+                            await acceptAction!()
                         } else { // just go back - caller will reload
                             self.presentationMode.wrappedValue.dismiss()
                         }

@@ -33,7 +33,8 @@ struct P2pReceiveURIView: View {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: peerPushCreditResponse.exchangeBaseUrl,
                                  viewID: SHEET_RCV_P2P_TOS,
-                                    p2p: true)
+                                    p2p: true,
+                           acceptAction: nil)
                 }
                 List {
                     let raw = peerPushCreditResponse.amountRaw

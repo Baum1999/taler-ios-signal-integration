@@ -13,6 +13,7 @@ struct ToSButtonView: View {
     let exchangeBaseUrl: String?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
     let p2p: Bool
+    let acceptAction: (() async -> Void)?
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -28,7 +29,7 @@ struct ToSButtonView: View {
             WithdrawTOSView(stack: stack.push(),
                   exchangeBaseUrl: exchangeBaseUrl,
                            viewID: viewID,
-                     acceptAction: nil)         // pop back to here
+                     acceptAction: acceptAction)                                // pop back to here
         }) {
             Text("Terms of Service")  // VIEW_WITHDRAW_TOS
         }.buttonStyle(TalerButtonStyle(type: .prominent))
@@ -37,5 +38,5 @@ struct ToSButtonView: View {
 }
 
 #Preview {
-    ToSButtonView(stack: CallStack("Preview"), exchangeBaseUrl: nil, viewID: 0, p2p: false)
+    ToSButtonView(stack: CallStack("Preview"), exchangeBaseUrl: nil, viewID: 0, p2p: false, acceptAction: nil)
 }
