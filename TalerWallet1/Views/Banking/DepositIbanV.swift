@@ -31,13 +31,13 @@ struct DepositIbanV: View {
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
         return String(localized: "Next", comment: "advance Deposit to Amount")
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.string(currencyInfo)
+        let amountStr = amount.formatted(currencyInfo)
         return String(localized: "NavTitle_Deposit_AmountStr",
                    defaultValue: "Deposit", comment: "NavTitle: Deposit")
 //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")

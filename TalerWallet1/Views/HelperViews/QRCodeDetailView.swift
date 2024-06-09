@@ -51,7 +51,7 @@ struct QRCodeDetailView: View {
                     .accessibilityLabel("QR Code")
                     .listRowSeparator(.hidden)
 
-                let amountStr = amount.string()
+                let amountStr = amount.formatted()
                 let scanMini = incoming ? String(localized: "Either (payer) Mini 3",
                                               defaultValue: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
                                         : String(localized: "Either (payee) Mini 3",

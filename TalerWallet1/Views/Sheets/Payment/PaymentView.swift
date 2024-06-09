@@ -47,10 +47,10 @@ func preparePayForTemplate(model: WalletModel,
         let amountRaw = ppCheck.amountRaw
         let currency = amountRaw.currencyStr
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let amountVoiceOver = amountRaw.string(currencyInfo)
+        let amountVoiceOver = amountRaw.formatted(currencyInfo)
         let insufficient = ppCheck.status == .insufficientBalance
         if let feeAmount = templateFee(ppCheck: ppCheck) {
-            let feeStr = feeAmount.string(currencyInfo)
+            let feeStr = feeAmount.formatted(currencyInfo)
             let feeLabel = feeLabel(feeStr)
             announce("\(amountVoiceOver), \(feeLabel)")
             return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,

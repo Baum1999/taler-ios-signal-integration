@@ -165,9 +165,9 @@ struct ManualDetailsV: View {
             let currencyInfo = CurrencyInfo(scope: myScope, specs: specs,
                                         formatter: CurrencyFormatter.formatter(scope: myScope,
                                                                                specs: specs))
-            return amount.string(currencyInfo)
+            return amount.formatted(currencyInfo)
         }
-        return amount.string()
+        return amount.formatted()
     }
 
     var body: some View {
@@ -178,7 +178,7 @@ struct ManualDetailsV: View {
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
                     let amountStr = amountString(amount, specs: specs)
-                    let obtainStr = common.amountRaw.string()
+                    let obtainStr = common.amountRaw.formatted()
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")
                             .bold()

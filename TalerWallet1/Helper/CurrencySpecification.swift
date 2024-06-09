@@ -33,7 +33,7 @@ extension Locale {
 }
 
 extension Amount {
-    func string(_ currencyInfo: CurrencyInfo?, useSymbol: Bool = true) -> String {
+    func formatted(_ currencyInfo: CurrencyInfo?, useSymbol: Bool = true) -> String {
         if let currencyInfo {
             return currencyInfo.string(for: valueAsFloatTuple, useSymbol: useSymbol)
         } else {
@@ -41,10 +41,10 @@ extension Amount {
         }
     }
 
-    func string(useSymbol: Bool = true) -> String {
+    func formatted(useSymbol: Bool = true) -> String {
         let controller = Controller.shared
         if let currencyInfo = controller.info(for: self.currencyStr) {
-            return self.string(currencyInfo, useSymbol: useSymbol)
+            return self.formatted(currencyInfo, useSymbol: useSymbol)
         }
         return self.readableDescription
     }

@@ -20,7 +20,7 @@ struct SomeCoins {
                 invalid ? String(localized: "Amount too small!")
               : tooMany ? String(localized: "Amount too big for a single withdrawal!")
            : fee.isZero ? String(localized: "No withdrawal fee")
-                        : String(localized: "- \(fee.string(currencyInfo)) fee")
+                        : String(localized: "- \(fee.formatted(currencyInfo)) fee")
        } else {
            EMPTYSTRING
        }

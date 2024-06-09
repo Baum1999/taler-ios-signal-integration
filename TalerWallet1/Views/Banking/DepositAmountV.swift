@@ -59,12 +59,12 @@ struct DepositAmountV: View {
     }
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.string(currencyInfo)
+        let amountStr = amount.formatted(currencyInfo)
         return String(localized: "NavTitle_Deposit_AmountStr",
                       defaultValue: "Deposit", comment: "NavTitle: Deposit")
         //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
@@ -89,10 +89,10 @@ struct DepositAmountV: View {
             let navTitle = String(localized: "NavTitle_Deposit_Currency",
                                   defaultValue: "Deposit \(currencySymbol)",
                                   comment: "NavTitle: Deposit 'currencySymbol'")
-            let available = amountAvailable?.string(currencyInfo) ?? "an unknown amount"
+            let available = amountAvailable?.formatted(currencyInfo) ?? "an unknown amount"
             let _ = print("available: \(available)")
             let _ = symLog.log("currency: \(currency), available: \(available)")
-            let amountVoiceOver = amountToTransfer.string(currencyInfo)
+            let amountVoiceOver = amountToTransfer.formatted(currencyInfo)
             let insufficientLabel = String(localized: "You don't have enough \(currency).")
             let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
 
@@ -169,7 +169,7 @@ struct DepositAmountV: View {
                     } else if let paytoUri {
                         if let ppCheck = try? await model.prepareDepositM(paytoUri, amount: amountToTransfer) {
                             if let feeAmount = fee(ppCheck: ppCheck) {
-                                feeStr = feeAmount.string(currencyInfo)
+                                feeStr = feeAmount.formatted(currencyInfo)
                                 let feeLabel = feeLabel(feeStr)
                                 announce("\(amountVoiceOver), \(feeLabel)")
                             } else {

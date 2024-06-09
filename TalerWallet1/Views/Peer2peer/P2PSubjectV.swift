@@ -36,7 +36,7 @@ struct P2PSubjectV: View {
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.string(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
         return amountToSend ? String(localized: "Send \(amountWithCurrency) now",
                                        comment: "amount with currency")
                             : String(localized: "Request \(amountWithCurrency)",
@@ -44,7 +44,7 @@ struct P2PSubjectV: View {
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.string(currencyInfo)
+        let amountStr = amount.formatted(currencyInfo)
         return amountToSend ? String(localized: "NavTitle_Send_AmountStr",
                                   defaultValue: "Send \(amountStr)",
                                        comment: "NavTitle: Send 'amountStr'")
@@ -136,7 +136,7 @@ struct P2PSubjectV: View {
             if amountToSend && feeLabel == nil {
                 if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
-                        let feeStr = feeAmount.string(currencyInfo)
+                        let feeStr = feeAmount.formatted(currencyInfo)
                         myFeeLabel = String(localized: "+ \(feeStr) fee")
                     } else { myFeeLabel = EMPTYSTRING }
                 }
