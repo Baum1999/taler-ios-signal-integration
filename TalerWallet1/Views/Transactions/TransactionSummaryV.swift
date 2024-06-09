@@ -226,14 +226,14 @@ struct TransactionSummaryV: View {
         var body: some View {
             VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
                 if !minimalistic {
-                    Text("The bank is waiting for your confirmation.")
+                    Text("The bank is waiting for your authorization.")
 //                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise
                         .listRowSeparator(.hidden)
                 }
-                Link("Confirm now", destination: destination)
+                Link("Authorize now", destination: destination)
                     .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
-                    .accessibilityHint(String(localized: "Will go to bank website to confirm this withdrawal."))
+                    .accessibilityHint(String(localized: "Will go to bank website to authorize this withdrawal."))
             }
         }
     }
