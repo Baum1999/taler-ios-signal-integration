@@ -172,12 +172,13 @@ struct PayTemplateV: View {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {
                     if let details = try? await model.checkPayForTemplateM(url.absoluteString) {
-                        let supportedCurrency0 = details.supportedCurrencies[0]
                         let contract = details.templateDetails.templateContract     // specifies fixed amount/summary
                         amountIsEditable = contract.amount == nil
                         summaryIsEditable = contract.summary == nil
                         let defaults = details.templateDetails.editableDefaults     // might be nil, or its fields might be nil
-                        let prepCurrency = contract.currency ?? defaults?.currency ?? supportedCurrency0
+                        let prepCurrency = contract.currency ?? defaults?.currency ?? 
+                                    (details.supportedCurrencies.count > 0 ? details.supportedCurrencies[0]
+                                                                           : String(localized: "UNKNOWN", comment: "merchant didn't specify the currency, use ALL CAPS"))
                         let zeroAmount = Amount(currency: prepCurrency, cent: 0)
                         let prepAmount = contract.amount ?? defaults?.amount        // might be nil
                         let prepSummary = contract.summary ?? defaults?.summary     // might be nil
