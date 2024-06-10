@@ -57,6 +57,12 @@ struct AmountInputV: View {
         let available = amountAvailable?.formatted(currencyInfo) ?? nil
         let flags = checkAvailable(amount: amountToTransfer)
         ScrollView { VStack(alignment: .trailing) {
+            if summary.count > 0 {
+                Text(summary)
+                    .talerFont(.body)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    .padding(4)
+            }
             if let available {
                 Text("Available:\t\(available)")
                     .talerFont(.title3)
