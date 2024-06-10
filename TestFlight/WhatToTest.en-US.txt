@@ -1,3 +1,8 @@
+Version 0.11.2 (wallet-core 0.11.4)
+
+- Bugfix: Send P2P had the comparison (amount <= available) wrong
+
+
 Version 0.11.1 (wallet-core 0.11.3)
 
 - Bugfixes
