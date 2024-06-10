@@ -116,6 +116,7 @@ fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest 
 }
 // MARK: -
 enum ExchangeTosStatus: String, Codable {
+    case missingTos = "missing-tos"
     case pending
     case proposed
     case accepted
