@@ -99,6 +99,8 @@ enum TransactionMajorState: String, Codable {
       // No state, only used when reporting transitions into the initial state
     case none
     case pending
+    // Florian: Should IMO be rendered like a done state, but with the possibility of suspend/resume buttons. In the minor state auto-refund, we could display some additional hint "The wallet is automatically checking for refunds until XYZ" but very low priority to show this IMO.
+    case finalizing
     case done
     case aborting
     case aborted
@@ -114,6 +116,7 @@ enum TransactionMajorState: String, Codable {
         switch self {
             case .none:      return                   "none"
             case .pending:   return String(localized: "MajorState.Pending", defaultValue: "Pending", comment: "TxMajorState heading")
+            case .finalizing:return String(localized: "MajorState.Finalizing", defaultValue: "Finalizing", comment: "TxMajorState heading")
             case .done:      return String(localized: "MajorState.Done", defaultValue: "Done", comment: "TxMajorState heading")
             case .aborting:  return String(localized: "MajorState.Aborting", defaultValue: "Aborting", comment: "TxMajorState heading")
             case .aborted:   return String(localized: "MajorState.Aborted", defaultValue: "Aborted", comment: "TxMajorState heading")
