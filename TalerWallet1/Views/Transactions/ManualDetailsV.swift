@@ -33,10 +33,12 @@ struct SegmentControl: View {
             HStack(spacing: 0) {
                 ForEach((0..<count), id: \.self) { index in
                     let detail = accountDetails[index]
+                    let specs = detail.currencySpecification
                     let amount = detail.transferAmount
+                    let amountStr = amount?.formatted(specs: specs) ?? ""
                     let bankName = detail.bankLabel
-                    let amountStr = amount?.readableDescription ?? ""
                     let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
+//            let _ = print(amountStr)
                     VStack(spacing: 6) {
                         Text(amountStr)
                             .talerFont(.title3)
@@ -83,7 +85,8 @@ struct AccountPicker: View {
             ForEach(0..<accountDetails.count, id: \.self, content: { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
-                        let amountStr = amount.readableDescription
+                        let amountStr = amount.formatted()
+//            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
                             Text(bankName + ":   " + amountStr)
                                 .tag(index)
@@ -159,17 +162,6 @@ struct ManualDetailsV: View {
         }
     }
 
-    func amountString(_ amount: Amount, specs: CurrencySpecification?, scope: ScopeInfo? = nil) -> String {
-        if let specs {
-            let myScope = scope ?? ScopeInfo(type: .madeUp, currency: amount.currencyStr)
-            let currencyInfo = CurrencyInfo(scope: myScope, specs: specs,
-                                        formatter: CurrencyFormatter.formatter(scope: myScope,
-                                                                               specs: specs))
-            return amount.formatted(currencyInfo)
-        }
-        return amount.formatted()
-    }
-
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             let validDetails = validDetails(accountDetails)
@@ -177,8 +169,9 @@ struct ManualDetailsV: View {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
-                    let amountStr = amountString(amount, specs: specs)
+                    let amountStr = amount.formatted(specs: specs)
                     let obtainStr = common.amountRaw.formatted()
+//            let _ = print(amountStr, " | ", obtainStr)
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")
                             .bold()

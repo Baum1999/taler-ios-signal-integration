@@ -49,6 +49,16 @@ extension Amount {
         return self.readableDescription
     }
 
+    func formatted(specs: CurrencySpecification?, scope: ScopeInfo? = nil) -> String {
+        if let specs {
+            let myScope = scope ?? ScopeInfo(type: .madeUp, currency: currencyStr)
+            let formatter = CurrencyFormatter.formatter(scope: myScope, specs: specs)
+            let currencyInfo = CurrencyInfo(scope: myScope, specs: specs, formatter: formatter)
+            return formatted(currencyInfo)
+        }
+        return formatted()
+    }
+
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
         let inputDigits = currencyInfo.specs.fractionalInputDigits
         if inputDigits < 0 { return 0 }
@@ -128,12 +138,18 @@ public struct CurrencyInfo {
     }
 
     func symbol() -> String? {
-        if formatter.hasAltUnitName0 {
-            if let symbol = specs.altUnitNames?[0] {
-                return symbol
+        formatter.altUnitName0
+    }
+
+    func currencyString(_ euroString: String, useSymbol: Bool = true) -> String {
+        if useSymbol {
+            if let altUnitName0 = formatter.altUnitName0 {
+                let symbolString = euroString.replacingOccurrences(of: formatter.currencySymbol, with: altUnitName0)
+                return symbolString.replacingOccurrences(of: formatter.currencyCode, with: altUnitName0)
             }
         }
-        return nil
+        let nameString = euroString.replacingOccurrences(of: formatter.currencySymbol, with: formatter.currencyName)
+        return nameString.replacingOccurrences(of: formatter.currencyCode, with: formatter.currencyName)
     }
 
     // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
@@ -141,7 +157,9 @@ public struct CurrencyInfo {
         formatter.setUseSymbol(useSymbol)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: integer) {
-            if fraction == 0 { return integerStr.nbs() }                        // formatter already added trailing zeroes
+            if fraction == 0 {
+                return currencyString(integerStr.nbs(), useSymbol: useSymbol)   // formatter already added trailing zeroes
+            }
             if let fractionStr = formatter.string(for: fraction) {
                 if let decimalSeparator = formatter.currencyDecimalSeparator {
                     if let fractionIndex = fractionStr.endIndex(of: decimalSeparator) {
@@ -167,7 +185,7 @@ public struct CurrencyInfo {
                             }
                         }
 //            print(resultStr)
-                        return resultStr.nbs()
+                        return currencyString(resultStr.nbs(), useSymbol: useSymbol)
                     }
                     // if we arrive here then fractionStr doesn't have a decimal separator. Yikes!
                 }
@@ -219,24 +237,30 @@ public struct CurrencySpecification: Codable, Sendable {
 
 public class CurrencyFormatter: NumberFormatter {
 
-    var hasAltUnitName0: Bool   // specs.altUnitNames[0] should have the Symbol ($,€,¥)
+    var longName: String
+    var altUnitName0: String?           // specs.altUnitNames[0] should have the Symbol ($,€,¥)
+    var currencyName: String
     var leadingCurrencySymbol: Bool
     /// factory
     static func formatter(scope: ScopeInfo, specs: CurrencySpecification) -> CurrencyFormatter {
         let formatter = CurrencyFormatter()
-        formatter.setCode(to: scope.currency)
+        formatter.longName = specs.name
+        formatter.altUnitName0 = specs.altUnitNames?[0]
+        formatter.currencyName = scope.currency
+//        formatter.setCode(to: "EUR")
+//        formatter.setSymbol(to: "€")
         formatter.setMinimumFractionDigits(specs.fractionalTrailingZeroDigits)
-        if let symbol = specs.altUnitNames?[0] {
-            formatter.setSymbol(to: symbol)
-            formatter.hasAltUnitName0 = true
-        }
         return formatter
     }
 
     public override init() {
-        self.hasAltUnitName0 = false
+        self.longName = "Euro"
+        self.altUnitName0 = "€"
+        self.currencyName = "EUR"
         self.leadingCurrencySymbol = false
         super.init()
+        self.currencyCode = "EUR"
+        self.currencySymbol = "€"
         self.locale = Locale.autoupdatingCurrent
         self.usesGroupingSeparator = true
         self.numberStyle = .currencyISOCode         // .currency
@@ -259,13 +283,13 @@ public class CurrencyFormatter: NumberFormatter {
         numberStyle = useSymbol ? .currency : .currencyISOCode
     }
 
-    func setCode(to code:String) {
-        currencyCode = code
-    }
+//    func setCode(to code:String) {
+//        currencyCode = code
+//    }
 
-    func setSymbol(to symbol:String) {
-        currencySymbol = symbol
-    }
+//    func setSymbol(to symbol:String) {
+//        currencySymbol = symbol
+//    }
 
     func setMinimumFractionDigits(_ digits: Int) {
         minimumFractionDigits = digits
