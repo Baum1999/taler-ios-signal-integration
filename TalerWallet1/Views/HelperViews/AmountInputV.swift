@@ -40,7 +40,7 @@ struct AmountInputV: View {
     func checkAvailable(amount: Amount) -> Flags {
         if let amountAvailable {
             do {
-                let insufficient = try amountAvailable > amount
+                let insufficient = try amount > amountAvailable
                 let disabled = insufficient || amount.isZero
                 return Flags(insufficient: insufficient, disabled: disabled)
             } catch {
