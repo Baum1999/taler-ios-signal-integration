@@ -931,6 +931,22 @@
         }
       }
     },
+    "Authorize now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt authorisieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Confirmar ahora"
+          }
+        }
+      }
+    },
     "Available:" : {
       "comment" : "mini",
       "localizations" : {
@@ -1176,6 +1192,7 @@
       }
     },
     "Confirm now" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1975,6 +1992,22 @@
         }
       }
     },
+    "Exchange" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Service Provider"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveedor de Pagos"
+          }
+        }
+      }
+    },
     "Expires in:" : {
       "localizations" : {
         "de" : {
@@ -2286,7 +2319,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Spend test money"
+            "value" : "Spend demo money"
           }
         },
         "es" : {
@@ -2549,6 +2582,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Falló"
+          }
+        }
+      }
+    },
+    "MajorState.Finalizing" : {
+      "comment" : "TxMajorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Finalizing"
           }
         }
       }
@@ -3935,7 +3980,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bezahlung\tanfordern"
+            "value" : "Zahlung\tanfordern"
           }
         },
         "en" : {
@@ -4069,6 +4114,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Guardar"
+          }
+        }
+      }
+    },
+    "Scan QR" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-Scan"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Scan QR"
           }
         }
       }
@@ -4545,7 +4606,24 @@
         }
       }
     },
+    "The bank is waiting for your authorization." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bank wartet auf Ihre Freigabe."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "El banco esta esperando su confirmación."
+          }
+        }
+      }
+    },
     "The bank is waiting for your confirmation." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4815,6 +4893,23 @@
         }
       }
     },
+    "TitleOverview" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersicht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Overview"
+          }
+        }
+      }
+    },
     "TitleSettings" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -5079,6 +5174,23 @@
         }
       }
     },
+    "UNKNOWN" : {
+      "comment" : "merchant didn't specify the currency, use ALL CAPS",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UNBEKANNT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "DESCONOCIDO"
+          }
+        }
+      }
+    },
     "unknown command" : {
       "localizations" : {
         "de" : {
@@ -5321,7 +5433,24 @@
         }
       }
     },
+    "Will go to bank website to authorize this withdrawal." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Bank-Webseite um diese Abhebung freizugeben."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Irá al sitio web del bank para confirmar esta extracción."
+          }
+        }
+      }
+    },
     "Will go to bank website to confirm this withdrawal." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
