@@ -9,6 +9,7 @@
 import SwiftUI
 import os.log
 import SymLog
+import AVFoundation
 
 // Use this to delay instantiation when using `NavigationLink`, etc...
 struct LazyView<Content: View>: View {
@@ -38,11 +39,67 @@ struct MainView: View {
 
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
+    @State private var showQRScanner: Bool = false
+    @State private var showCameraAlert: Bool = false
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
         ViewState.shared.popToRootView(nil)
     }
+
+    private var openSettingsButton: some View {
+        Button("Open Settings") {
+            showCameraAlert = false
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
+    }
+    let ClosingAnnouncement = AttributedString(localized: "Closing Camera")
+    private var dismissAlertButton: some View {
+        Button("Cancel", role: .cancel) {
+            if #available(iOS 17.0, *) {
+                AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+            }
+            showCameraAlert = false
+        }
+    }
+    private func dismissingSheet() {
+        if #available(iOS 17.0, *) {
+            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+        }
+    }
+
+    var defaultPriorityAnnouncement = AttributedString(localized: "Opening Camera")
+    var lowPriorityAnnouncement: AttributedString {
+        var lowPriorityString = AttributedString ("Camera Loading")
+        if #available(iOS 17.0, *) {
+            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
+        }
+        return lowPriorityString
+    }
+    var highPriorityAnnouncement: AttributedString {
+        var highPriorityString = AttributedString("Camera Active")
+        if #available(iOS 17.0, *) {
+            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
+        }
+        return highPriorityString
+    }
+    private func checkCameraAvailable() -> Void {
+        // Open Camera when QR-Button was tapped
+        if #available(iOS 17.0, *) {
+            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
+        }
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
+            if granted {
+                showQRScanner = true            // present sheet
+                if #available(iOS 17.0, *) {
+                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                }
+            } else {
+                showCameraAlert = true
+            }
+        })
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -50,7 +107,9 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(logger: logger, stack: stack.push("Content"), talerFontIndex: $talerFontIndex)
+                Content(logger: logger, stack: stack.push("Content"),
+                talerFontIndex: $talerFontIndex,
+                  cameraAction: checkCameraAvailable)
                     .onAppear() {
 #if DEBUG
                         if playSoundsI != 0  && playSoundsB && !soundPlayed {
@@ -59,6 +118,15 @@ struct MainView: View {
 #endif
                         soundPlayed = true
                     }
+                    .alert("Scanning QR-codes requires access to the camera",
+                           isPresented: $showCameraAlert,
+                               actions: {   openSettingsButton
+                                            dismissAlertButton },
+                               message: {   Text("Please allow camera access in settings.") })
+                    .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
+                        let sheet = AnyView(QRSheet(stack: stack.push(".sheet")))
+                        Sheet(sheetView: sheet)
+                    } // sheet
             } else if controller.backendState == .error {
                 ErrorView(errortext: nil)            // TODO: show Error View
             } else {
@@ -106,6 +174,7 @@ extension MainView {
         let logger: Logger
         let stack: CallStack
         @Binding var talerFontIndex: Int
+        let cameraAction: () -> Void
 
 #if DEBUG
         @AppStorage("developerMode") var developerMode: Bool = true
@@ -190,10 +259,11 @@ extension MainView {
             TabView(selection: tabSelection()) {
                 NavigationView {
                     BalancesListView(stack: stack.push(balancesTitle),
-                                  navTitle: balancesTitle,
                                   balances: $balances,
 //                       shouldReloadPending: $shouldReloadPending,
-                      shouldReloadBalances: $shouldReloadBalances)
+                      shouldReloadBalances: $shouldReloadBalances,
+                              cameraAction: cameraAction)
+                    .navigationTitle(balancesTitle)
                 }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                 .navigationViewStyle(.stack)
                 .tabItem {
@@ -206,10 +276,11 @@ extension MainView {
                 if balances.count > 1 {
                     NavigationView {
                         OverviewListV(stack: stack.push(overviewTitle),
-                                     navTitle: overviewTitle,
-                                     balances: $balances,
+                                   balances: $balances,
 //                        shouldReloadPending: $shouldReloadPending,
-                         shouldReloadBalances: $shouldReloadBalances)
+                       shouldReloadBalances: $shouldReloadBalances,
+                               cameraAction: cameraAction)
+                        .navigationTitle(overviewTitle)
                     }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tabItem {

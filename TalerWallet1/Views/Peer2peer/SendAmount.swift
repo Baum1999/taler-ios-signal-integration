@@ -18,6 +18,7 @@ struct SendAmount: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
+    let cameraAction: () -> Void
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -108,6 +109,7 @@ struct SendAmount: View {
             AmountInputV(stack: stack.push(), url: nil,
                amountAvailable: amountAvailable,
               amountToTransfer: $amountToTransfer,
+                       wireFee: nil,
                    amountLabel: amountLabel,
              summaryIsEditable: true,
                        summary: $summary,
@@ -133,6 +135,7 @@ struct SendAmount: View {
         .onDisappear {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
+        .navigationBarItems(trailing: QRButton(action: cameraAction))
         .task(id: amountToTransfer.value) {
             if exchange == nil {
                 if let url = scopeInfo.url {
@@ -176,6 +179,9 @@ fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
     @State private var summary: String = ""
 
+    private func checkCameraAvailable() -> Void {
+        // Open Camera when QR-Button was tapped
+    }
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, cent: 1000)
         let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
@@ -190,7 +196,9 @@ fileprivate struct Preview_Content: View {
         SendAmount(stack: CallStack("Preview"),
          amountAvailable: amount,
         amountToTransfer: $amountToPreview,
-                   summary: $summary, scopeInfo: scopeInfo)
+                 summary: $summary,
+               scopeInfo: scopeInfo,
+            cameraAction: checkCameraAvailable)
     }
 }
 

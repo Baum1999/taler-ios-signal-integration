@@ -22,6 +22,7 @@ struct BalancesSectionView {
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
     @Binding var shouldReloadBalances: Int
+    let cameraAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
@@ -84,7 +85,8 @@ extension BalancesSectionView: View {
                                        summary: $summary,
                          completedTransactions: $completedTransactions,
                                reloadAllAction: reloadCompleted,
-                               reloadOneAction: reloadOneAction)
+                               reloadOneAction: reloadOneAction,
+                                  cameraAction: cameraAction)
             if pendingTransactions.count > 0 {
                 BalancesPendingRowView(symLog: symLog,
                                         stack: stack.push(),
@@ -233,6 +235,8 @@ fileprivate struct BalancesNavigationLinksView: View {
     @Binding var completedTransactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
+    let cameraAction: () -> Void
+
 //    @EnvironmentObject private var model: WalletModel
 
     @State private var buttonSelected: Int? = nil
@@ -261,7 +265,8 @@ fileprivate struct BalancesNavigationLinksView: View {
                  amountAvailable: balance.available,
                 amountToTransfer: $amountToTransfer,        // with correct currency
                          summary: $summary,
-                       scopeInfo: balance.scopeInfo)
+                       scopeInfo: balance.scopeInfo,
+                    cameraAction: cameraAction)
             }, tag: 1, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
 
@@ -269,7 +274,8 @@ fileprivate struct BalancesNavigationLinksView: View {
                 RequestPayment(stack: stack.push(),
                     amountToTransfer: $amountToTransfer,    // with correct currency
                              summary: $summary,
-                           scopeInfo: balance.scopeInfo)
+                           scopeInfo: balance.scopeInfo,
+                        cameraAction: cameraAction)
             }, tag: 2, selection: $buttonSelected
             ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
 
