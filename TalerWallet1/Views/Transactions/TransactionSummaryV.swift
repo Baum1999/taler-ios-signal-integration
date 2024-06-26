@@ -160,7 +160,7 @@ struct TransactionSummaryV: View {
                                       action: deleteAction)
                 } } // Delete button
                 if let doneAction {
-                    Button(transaction.shouldConfirm ? "Confirm later" : "Done", action: { doneAction(stack.push()) } )
+                    Button(transaction.shouldConfirm ? "Authorize later" : "Done", action: { doneAction(stack.push()) } )
                         .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
                 } // Done button
             }.id(viewId)    // change viewId to enforce a draw update
