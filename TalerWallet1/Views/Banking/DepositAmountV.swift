@@ -59,7 +59,7 @@ struct DepositAmountV: View {
     }
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useISO: true)
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 

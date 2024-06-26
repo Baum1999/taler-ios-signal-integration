@@ -36,7 +36,7 @@ struct P2PSubjectV: View {
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useISO: true)
         return amountToSend ? String(localized: "Send \(amountWithCurrency) now",
                                        comment: "amount with currency")
                             : String(localized: "Request \(amountWithCurrency)",

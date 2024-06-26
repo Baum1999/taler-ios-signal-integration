@@ -35,7 +35,7 @@ struct SegmentControl: View {
                     let detail = accountDetails[index]
                     let specs = detail.currencySpecification
                     let amount = detail.transferAmount
-                    let amountStr = amount?.formatted(specs: specs) ?? ""
+                    let amountStr = amount?.formatted(specs: specs, useISO: false) ?? ""
                     let bankName = detail.bankLabel
                     let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
 //            let _ = print(amountStr)
@@ -85,7 +85,7 @@ struct AccountPicker: View {
             ForEach(0..<accountDetails.count, id: \.self, content: { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
-                        let amountStr = amount.formatted()
+                        let amountStr = amount.formatted(useISO: false)
 //            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
                             Text(bankName + ":   " + amountStr)
@@ -119,8 +119,10 @@ struct TransferRestrictionsV: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(minimalistic ? "Transfer \(amountStr) to the Payment Service."
-                              : "You need to transfer \(amountStr) from your regular bank account to the Payment Service Provider to receive \(obtainStr) as electronic cash in this wallet.")
+            let amountNBS = amountStr.nbs
+            let obtainNBS = obtainStr.nbs
+            Text(minimalistic ? "Transfer \(amountNBS) to the Payment Service."
+                              : "You need to transfer \(amountNBS) from your regular bank account to the Payment Service Provider to receive \(obtainNBS) as electronic cash in this wallet.")
             .multilineTextAlignment(.leading)
             if let restrictions {
                 ForEach(restrictions) { restriction in
@@ -273,8 +275,9 @@ struct ManualDetailsV: View {
                                    : "**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:")
                                         .multilineTextAlignment(.leading)
                                         .padding(.top)
-                        let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountStr)."
-                                  : "**Step 3:** Finish the wire transfer of \(amountStr) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+                        let amountNBS = amountStr.nbs
+                        let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountNBS)."
+                                  : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
                                         .multilineTextAlignment(.leading)
                                         .padding(.top)
                         Group {

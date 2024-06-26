@@ -31,7 +31,7 @@ struct DepositIbanV: View {
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, useSymbol: false)
+        let amountWithCurrency = amount.formatted(currencyInfo, useISO: true)
         return String(localized: "Next", comment: "advance Deposit to Amount")
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
