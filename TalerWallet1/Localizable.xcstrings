@@ -931,12 +931,22 @@
         }
       }
     },
+    "Authorize later" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später autorisieren"
+          }
+        }
+      }
+    },
     "Authorize now" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jetzt authorisieren"
+            "value" : "Jetzt autorisieren"
           }
         },
         "es" : {
@@ -1176,6 +1186,7 @@
       }
     },
     "Confirm later" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1226,6 +1237,7 @@
       }
     },
     "Confirm with Bank" : {
+      "comment" : "Nav title",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2094,7 +2106,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für Löschen, Abbrechen und Scheitern"
+            "value" : "Für Löschen, Scheitern und Annullieren"
           }
         },
         "es" : {
@@ -2590,6 +2602,12 @@
       "comment" : "TxMajorState heading",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertigstellen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4611,7 +4629,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Bank wartet auf Ihre Freigabe."
+            "value" : "Die Bank wartet auf Ihre Bestätigung."
           }
         },
         "es" : {
