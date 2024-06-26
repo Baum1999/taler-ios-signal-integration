@@ -37,11 +37,11 @@ struct QRButton : View  {
         Button(action: action) {
             if !minimalistic {
                 Text("Scan QR")
-                    .talerFont(.title)
+                    .talerFont(.title3)
             }
             Image(systemName: "qrcode.viewfinder")
+                .talerFont(.title2)
         }
-        .talerFont(.title)
         .accessibilityLabel("Scan QR codes")
     }
 }
