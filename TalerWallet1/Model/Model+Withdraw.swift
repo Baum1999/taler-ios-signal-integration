@@ -171,15 +171,17 @@ struct AcceptWithdrawalResponse: Decodable {
 fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptWithdrawalResponse
     func operation() -> String { "acceptBankIntegratedWithdrawal" }
-    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl, restrictAge: restrictAge) }
+    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge) }
 
     var talerWithdrawUri: String
     var exchangeBaseUrl: String
+    var amount: Amount?
     var restrictAge: Int?
 
     struct Args: Encodable {
         var talerWithdrawUri: String
         var exchangeBaseUrl: String
+        var amount: Amount?
         var restrictAge: Int?
     }
 }
@@ -251,9 +253,10 @@ extension WalletModel {
         return response
     }
     @MainActor               // M for MainActor
-    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String, restrictAge: Int?, viewHandles: Bool = false)
+    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String, amount: Amount?, restrictAge: Int?, viewHandles: Bool = false)
       async throws -> AcceptWithdrawalResponse? {
-          let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl, restrictAge: restrictAge)
+          let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl,
+                                                                 amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

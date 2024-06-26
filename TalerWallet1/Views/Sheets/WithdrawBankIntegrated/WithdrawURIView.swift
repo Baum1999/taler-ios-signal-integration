@@ -22,6 +22,7 @@ struct WithdrawURIView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var withdrawUriInfo: WithdrawUriInfoResponse? = nil
@@ -29,8 +30,11 @@ struct WithdrawURIView: View {
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var buttonSelected = false
     @State private var shortcutSelected = false
+    @State private var amountAvailable: Amount? = nil
     @State private var wireFee: Amount? = nil
+    @State private var summary = EMPTYSTRING
 
     @State private var selectedExchange = EMPTYSTRING
     @State private var exchange: Exchange? = nil
@@ -43,10 +47,18 @@ struct WithdrawURIView: View {
         }
     }
 
+    private func shortcutAction(_ shortcut: Amount) {
+        amountShortcut = shortcut
+        shortcutSelected = true
+    }
+    private func buttonAction() {
+        buttonSelected = true
+    }
+
     var body: some View {
         if possibleExchanges.count > 0 {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
-                VStack {
+                ScrollView { VStack {
                     let title = String(localized: "Exchange")
                     if possibleExchanges.count > 1 {
                         Picker(title, selection: $selectedExchange) {
@@ -71,18 +83,40 @@ struct WithdrawURIView: View {
                                 await loadExchange(defaultBaseUrl)
                             }
                     }
-                    if amountToTransfer.isZero {
-                        // TODO: input amount, then 
-                        WithdrawAcceptView(stack: stack.push(), url: url,
-                                amountToTransfer: $amountToTransfer,
-                                        exchange: $exchange)
+                    let acceptDestination = WithdrawAcceptView(stack: stack.push(), url: url,
+                                                    amountToTransfer: $amountToTransfer,
+                                                            exchange: $exchange)
+                    if amountIsEditable {   // amountToTransfer.isZero {
+                        let shortcutDestination = LazyView {
+                            WithdrawAcceptView(stack: stack.push(), url: url,
+                                    amountToTransfer: $amountShortcut,
+                                            exchange: $exchange)
+                        }
+                        // TODO: input amount, then
+                        let amountLabel = minimalistic ? String(localized: "Amount:")
+                                                       : String(localized: "Amount to withdraw:")
+
+                        AmountInputV(stack: stack.push(), url: nil,
+                           amountAvailable: amountAvailable,
+                          amountToTransfer: $amountToTransfer,
                                    wireFee: wireFee,
+                               amountLabel: amountLabel,
+                         summaryIsEditable: false,
+                                   summary: $summary,
+//                              insufficient: $insufficient,
+//                                 feeAmount: $feeAmount,
+                            shortcutAction: shortcutAction,
+                              buttonAction: buttonAction)
+                        .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                        )
+                        .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
+                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                        )
                     } else {
-                        WithdrawAcceptView(stack: stack.push(), url: url,
-                                amountToTransfer: $amountToTransfer,
-                                        exchange: $exchange)
+                        acceptDestination
                     }
-                }
+                } } // ScrollVStack
                 .navigationTitle(navTitle)
                 .onAppear() {
                     symLog.log("onAppear")
@@ -104,9 +138,12 @@ struct WithdrawURIView: View {
                 .task {
                     symLog.log(".task")
                     if let someInfo = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
+                        let currency = someInfo.currency
                         defaultExchangeBaseUrl = someInfo.defaultExchangeBaseUrl
                         possibleExchanges = someInfo.possibleExchanges
-                        amountToTransfer = someInfo.amount ?? Amount.zero(currency: someInfo.currency)
+                        amountToTransfer = someInfo.amount ?? Amount.zero(currency: currency)
+                        amountAvailable = someInfo.maxAmount
+                        amountIsEditable = someInfo.editableAmount
                         wireFee = someInfo.wireFee
                     }
 

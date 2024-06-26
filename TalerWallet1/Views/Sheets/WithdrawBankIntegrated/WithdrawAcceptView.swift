@@ -79,8 +79,9 @@ struct WithdrawAcceptView: View {
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         WithdrawAcceptDone(stack: stack.push(),
-                                           exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                           url: url)
+                                 exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                             url: url,
+                                amountToTransfer: amountToTransfer)
                     }) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }

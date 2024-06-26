@@ -9,10 +9,11 @@ import SymLog
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Confirm with Bank")
+    let navTitle = String(localized: "Confirm with Bank", comment: "Nav title")
 
     let exchangeBaseUrl: String?
     let url: URL
+    let amountToTransfer: Amount?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -57,7 +58,8 @@ struct WithdrawAcceptDone: View {
         }.task {
             if let exchangeBaseUrl {
                 // TODO: restrictAge
-                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString, restrictAge: nil) {
+                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString,
+                                                                          amount: amountToTransfer, restrictAge: nil) {
                     let confirmTransferUrl = result.confirmTransferUrl
                     symLog.log(confirmTransferUrl)
                     transactionId = result.transactionId
@@ -71,6 +73,7 @@ struct WithdrawAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
         WithdrawAcceptDone(stack: CallStack("Preview"),
                  exchangeBaseUrl: DEMOEXCHANGE,
-                             url: URL(string: DEMOSHOP)!)
+                             url: URL(string: DEMOSHOP)!,
+                amountToTransfer: nil)
     }
 }
