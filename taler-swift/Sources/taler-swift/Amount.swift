@@ -4,6 +4,8 @@
  */
 import Foundation
 
+fileprivate let NONBREAKING: Character = "\u{00A0}"
+
 public func SuperScriptDigit(_ number: UInt32) -> String {
     switch number {
         case 0: return String("\u{2070}")
@@ -183,11 +185,15 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     }
     
     /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`" (with non-breaking space).
-    public var readableDescription: String {
-        let NONBREAKING = "\u{00A0}"
-        return valueStr + NONBREAKING + currency
+    public var readableDescriptionNBS: String {
+        return valueStr + String(NONBREAKING) + currency
     }
     
+    /// The string representation of the amount, formatted as "`integer`.`fraction` `currency`" (with space (not non-breaking space)).
+    public var readableDescription: String {
+        return valueStr + " " + currency
+    }
+
     /// Whether the value is valid. An amount is valid if and only if the currency is not empty and the value is less than the maximum allowed value.
     var valid: Bool {
         if currency.range(of: Amount.currencyRegex, options: .regularExpression) == nil {
