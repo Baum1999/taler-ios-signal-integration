@@ -122,6 +122,7 @@ struct PayTemplateV: View {
                 let amountInput = AmountInputV(stack: stack.push(), url: url,
                                      amountAvailable: nil,
                                     amountToTransfer: $amountToTransfer,
+                                             wireFee: nil,
                                          amountLabel: amountLabel,
                                    summaryIsEditable: summaryIsEditable,
                                              summary: $summary,

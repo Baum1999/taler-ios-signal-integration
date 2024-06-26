@@ -16,6 +16,7 @@ struct AmountInputV: View {
     let url: URL?
     let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount
     @Binding var amountToTransfer: Amount
+    let wireFee: Amount?
     let amountLabel: String
     let summaryIsEditable: Bool                      // if true we call SubjectInputV next
     @Binding var summary: String

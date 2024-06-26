@@ -30,6 +30,7 @@ struct WithdrawURIView: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var shortcutSelected = false
+    @State private var wireFee: Amount? = nil
 
     @State private var selectedExchange = EMPTYSTRING
     @State private var exchange: Exchange? = nil
@@ -75,6 +76,7 @@ struct WithdrawURIView: View {
                         WithdrawAcceptView(stack: stack.push(), url: url,
                                 amountToTransfer: $amountToTransfer,
                                         exchange: $exchange)
+                                   wireFee: wireFee,
                     } else {
                         WithdrawAcceptView(stack: stack.push(), url: url,
                                 amountToTransfer: $amountToTransfer,
@@ -105,6 +107,7 @@ struct WithdrawURIView: View {
                         defaultExchangeBaseUrl = someInfo.defaultExchangeBaseUrl
                         possibleExchanges = someInfo.possibleExchanges
                         amountToTransfer = someInfo.amount ?? Amount.zero(currency: someInfo.currency)
+                        wireFee = someInfo.wireFee
                     }
 
                     // TODO: amount = nil ==> show amount input
