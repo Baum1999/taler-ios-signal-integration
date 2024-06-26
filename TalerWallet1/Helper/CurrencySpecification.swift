@@ -33,30 +33,30 @@ extension Locale {
 }
 
 extension Amount {
-    func formatted(_ currencyInfo: CurrencyInfo?, useSymbol: Bool = true) -> String {
+    func formatted(_ currencyInfo: CurrencyInfo?, useISO: Bool = false) -> String {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsFloatTuple, useSymbol: useSymbol)
+            return currencyInfo.string(for: valueAsFloatTuple, useISO: useISO)
         } else {
             return valueStr
         }
     }
 
-    func formatted(useSymbol: Bool = true) -> String {
+    func formatted(useISO: Bool = false) -> String {
         let controller = Controller.shared
         if let currencyInfo = controller.info(for: self.currencyStr) {
-            return self.formatted(currencyInfo, useSymbol: useSymbol)
+            return self.formatted(currencyInfo, useISO: useISO)
         }
         return self.readableDescription
     }
 
-    func formatted(specs: CurrencySpecification?, scope: ScopeInfo? = nil) -> String {
+    func formatted(specs: CurrencySpecification?, scope: ScopeInfo? = nil, useISO: Bool = false) -> String {
         if let specs {
             let myScope = scope ?? ScopeInfo(type: .madeUp, currency: currencyStr)
             let formatter = CurrencyFormatter.formatter(scope: myScope, specs: specs)
             let currencyInfo = CurrencyInfo(scope: myScope, specs: specs, formatter: formatter)
-            return formatted(currencyInfo)
+            return formatted(currencyInfo, useISO: useISO)
         }
-        return formatted()
+        return formatted(useISO: useISO)
     }
 
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
@@ -97,14 +97,15 @@ public struct CurrencyInfo {
     }
 
     public static func euro() -> CurrencyInfo {
-        let currency = "Euro"
+        let currency = "EUR"
         let scope = ScopeInfo(type: .global, currency: currency)
         let specs = CurrencySpecification(name: currency,
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
                   fractionalTrailingZeroDigits: 2,
-                                  altUnitNames: [0 : "€"])
+                                  altUnitNames: [0 : "€"])                      // ensure altUnitSymbol
         let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+        print(formatter.longName ?? formatter.altUnitSymbol ?? formatter.altUnitName0 ?? formatter.currencyName ?? currency)
         return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
     }
 
@@ -115,8 +116,9 @@ public struct CurrencyInfo {
                                           fractionalInputDigits: 2,
                                           fractionalNormalDigits: 2,
                                           fractionalTrailingZeroDigits: 2,
-                                          altUnitNames: [0 : "CHF"])
+                                          altUnitNames: [0 : " CHF"])           // ensure altUnitName0
         let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
+        print(formatter.longName ?? formatter.altUnitSymbol ?? formatter.altUnitName0 ?? formatter.currencyName ?? currency)
         return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
     }
 
@@ -137,34 +139,50 @@ public struct CurrencyInfo {
         }
     }
 
-    func symbol() -> String? {
-        formatter.altUnitName0
-    }
+    var altUnitName0: String? { formatter.altUnitName0 }
+    var altUnitSymbol: String? { formatter.altUnitSymbol }
 
-    func currencyString(_ euroString: String, useSymbol: Bool = true) -> String {
-        if useSymbol {
-            if let altUnitName0 = formatter.altUnitName0 {
-                let symbolString = euroString.replacingOccurrences(of: formatter.currencySymbol, with: altUnitName0)
-                return symbolString.replacingOccurrences(of: formatter.currencyCode, with: altUnitName0)
+    func currencyString(_ aString: String, useISO: Bool = false) -> String {
+        if !useISO {
+            if let aSymbol = altUnitSymbol {
+                let symbolString = aString.replacingOccurrences(of: formatter.currencySymbol, with: aSymbol)
+                return symbolString.replacingOccurrences(of: formatter.currencyCode, with: aSymbol)
+            }
+            if let aName = altUnitName0 {
+                let spacedName = formatter.leadingCurrencySymbol ? aName + " "
+                                                                 : " " + aName
+                let spacedString1 = aString.replacingOccurrences(of: formatter.currencySymbol, with: spacedName)
+                let spacedString2 = spacedString1.replacingOccurrences(of: formatter.currencyCode, with: spacedName)
+                let spacedString3 = spacedString2.replacingOccurrences(of: "  ", with: " ")  // ensure we have only 1 space
+                return spacedString3
             }
         }
-        let nameString = euroString.replacingOccurrences(of: formatter.currencySymbol, with: formatter.currencyName)
-        return nameString.replacingOccurrences(of: formatter.currencyCode, with: formatter.currencyName)
+        if let currencyName = formatter.currencyName {
+            let spacedName = formatter.leadingCurrencySymbol ? currencyName + " "
+                                                             : " " + currencyName
+            let spacedString1 = aString.replacingOccurrences(of: formatter.currencySymbol, with: spacedName)
+            let spacedString2 = spacedString1.replacingOccurrences(of: formatter.currencyCode, with: spacedName)
+            let spacedString3 = spacedString2.replacingOccurrences(of: "  ", with: " ")  // ensure we have only 1 space
+            return spacedString3
+        }
+        return aString
     }
 
     // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
-    func string(for valueTuple: (Double, Double), useSymbol: Bool = true) -> String {
-        formatter.setUseSymbol(useSymbol)
+    func string(for valueTuple: (Double, Double), useISO: Bool = false) -> String {
+        formatter.setUseISO(useISO)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: integer) {
+            let integerSpaced = integerStr.spaced
             if fraction == 0 {
-                return currencyString(integerStr.nbs(), useSymbol: useSymbol)   // formatter already added trailing zeroes
+                return currencyString(integerSpaced, useISO: useISO)   // formatter already added trailing zeroes
             }
             if let fractionStr = formatter.string(for: fraction) {
+                let fractionSpaced = fractionStr.spaced
                 if let decimalSeparator = formatter.currencyDecimalSeparator {
-                    if let fractionIndex = fractionStr.endIndex(of: decimalSeparator) {
-                        var fractionPartStr = String(fractionStr[fractionIndex...])
-                        var resultStr = integerPartStr(integerStr, decimalSeparator: decimalSeparator)
+                    if let fractionIndex = fractionSpaced.endIndex(of: decimalSeparator) {
+                        var fractionPartStr = String(fractionSpaced[fractionIndex...])
+                        var resultStr = integerPartStr(integerSpaced, decimalSeparator: decimalSeparator)
                         if !resultStr.contains(decimalSeparator) {
                             resultStr += decimalSeparator
                         }
@@ -185,7 +203,7 @@ public struct CurrencyInfo {
                             }
                         }
 //            print(resultStr)
-                        return currencyString(resultStr.nbs(), useSymbol: useSymbol)
+                        return currencyString(resultStr, useISO: useISO)
                     }
                     // if we arrive here then fractionStr doesn't have a decimal separator. Yikes!
                 }
@@ -197,17 +215,17 @@ public struct CurrencyInfo {
         // TODO: log.error(formatter doesn't work)
         // we need to format ourselves
         var currencyName = scope.currency
-        if useSymbol {
-            if let symbol = symbol() {
-                currencyName = symbol
+        if !useISO {
+            if let altUnitName0 {
+                currencyName = altUnitName0
             }
         }
         var madeUpStr = currencyName + " " + String(integer)
 //        let homeCurrency = Locale.current.currency      //'currency' is only available in iOS 16 or newer
-        madeUpStr += Locale.current.decimalSeparator ?? "."     // currencyDecimalSeparator
+        madeUpStr += formatter.currencyDecimalSeparator ?? Locale.current.decimalSeparator ?? "."
         madeUpStr += String(String(fraction).dropFirst())       // remove the leading 0
         // TODO: fractionalNormalDigits, fractionalTrailingZeroDigits
-        return madeUpStr.nbs()
+        return madeUpStr
     }
 }
 
@@ -237,15 +255,23 @@ public struct CurrencySpecification: Codable, Sendable {
 
 public class CurrencyFormatter: NumberFormatter {
 
-    var longName: String
-    var altUnitName0: String?           // specs.altUnitNames[0] should have the Symbol ($,€,¥)
-    var currencyName: String
+    var longName: String?
+    var altUnitName0: String?           // specs.altUnitNames[0] should have either the name
+    var altUnitSymbol: String?           // specs.altUnitNames[0] should have the Symbol ($,€,¥)
+    var currencyName: String?
     var leadingCurrencySymbol: Bool
     /// factory
+
     static func formatter(scope: ScopeInfo, specs: CurrencySpecification) -> CurrencyFormatter {
         let formatter = CurrencyFormatter()
+        if let altUnitNameZero = specs.altUnitNames?[0] {
+            if altUnitNameZero.hasPrefix(" ") {
+                formatter.altUnitName0 = String(altUnitNameZero.dropFirst())
+            } else {
+                formatter.altUnitSymbol = altUnitNameZero
+            }
+        }
         formatter.longName = specs.name
-        formatter.altUnitName0 = specs.altUnitNames?[0]
         formatter.currencyName = scope.currency
 //        formatter.setCode(to: "EUR")
 //        formatter.setSymbol(to: "€")
@@ -254,14 +280,25 @@ public class CurrencyFormatter: NumberFormatter {
     }
 
     public override init() {
-        self.longName = "Euro"
-        self.altUnitName0 = "€"
-        self.currencyName = "EUR"
+        self.longName = nil
+        self.altUnitName0 = nil
+        self.altUnitSymbol = nil
+        self.currencyName = nil
         self.leadingCurrencySymbol = false
         super.init()
-        self.currencyCode = "EUR"
-        self.currencySymbol = "€"
+//        self.currencyCode = "EUR"
+//        self.currencySymbol = "€"
         self.locale = Locale.autoupdatingCurrent
+        if #available(iOS 16.0, *) {
+            let currency = self.locale.currency
+            if let currencyCode = currency?.identifier {
+                self.longName = self.locale.localizedString(forCurrencyCode: currencyCode)
+            }
+        } else {
+            if let currencyCode = self.locale.currencyCode {
+                self.longName = self.locale.localizedString(forCurrencyCode: currencyCode)
+            }
+        }
         self.usesGroupingSeparator = true
         self.numberStyle = .currencyISOCode         // .currency
         self.maximumFractionDigits = 8              // ensure that formatter will not round
@@ -279,8 +316,8 @@ public class CurrencyFormatter: NumberFormatter {
         self.leadingCurrencySymbol = currencySymbolLocation == 0
     }
 
-    func setUseSymbol(_ useSymbol: Bool) {
-        numberStyle = useSymbol ? .currency : .currencyISOCode
+    func setUseISO(_ useISO: Bool) {
+        numberStyle = useISO ? .currencyISOCode : .currency     // currencyPlural or currencyAccounting
     }
 
 //    func setCode(to code:String) {
