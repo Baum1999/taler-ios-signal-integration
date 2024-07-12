@@ -209,6 +209,26 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+struct QrCodeSpec: Decodable, Hashable {
+    var type: String
+    var qrContent: String
+}
+/// A request to accept a manual withdrawl.
+fileprivate struct GetQrCodesForPayto: WalletBackendFormattedRequest {
+    func operation() -> String { "getQrCodesForPayto" }
+    func args() -> Args { Args(paytoUri: paytoUri) }
+
+    var paytoUri: String
+
+    struct Response: Decodable, Sendable {              // list of QrCodeSpecs
+        var codes: [QrCodeSpec]
+    }
+
+    struct Args: Encodable {
+        var paytoUri: String
+    }
+}
+// MARK: -
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
     @MainActor                    // M for MainActor
@@ -266,5 +286,12 @@ extension WalletModel {
         let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
+    }
+    @MainActor                  // M for MainActor
+    func getQrCodesForPaytoM(_ paytoUri: String, viewHandles: Bool = false)
+    async throws -> [QrCodeSpec]? {
+        let request = GetQrCodesForPayto(paytoUri: paytoUri)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.codes
     }
 }

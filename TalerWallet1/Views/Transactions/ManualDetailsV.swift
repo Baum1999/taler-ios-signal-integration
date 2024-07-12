@@ -148,9 +148,11 @@ struct ManualDetailsV: View {
     var common : TransactionCommon
     var details : WithdrawalDetails
 
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var accountID = 0
     @State private var listID = UUID()
+    @State private var qrCodeSpecs: [QrCodeSpec] = []
 
     func redraw(_ newAccount: Int) -> Void {
         if newAccount != accountID {
@@ -181,7 +183,7 @@ struct ManualDetailsV: View {
                             .listRowSeparator(.hidden)
                     }
                     if validDetails.count > 1 {
-                        if validDetails.count > 3 {
+                        if validDetails.count > 3 { // too many for SegmentControl
                             AccountPicker(title: String(localized: "Bank"), value: accountID,
                                           accountDetails: validDetails, action: redraw)
                             .listRowSeparator(.hidden)
@@ -197,6 +199,19 @@ struct ManualDetailsV: View {
                         }
                     }
                     let payto = account.paytoUri
+                    let qrCodesForPayto = Group {
+                        ForEach(qrCodeSpecs, id: \.self) { spec in
+                            let specDetails = String("❗️\(spec.type)❗️\(spec.qrContent)❗️")
+                            QRGeneratorView(text: spec.qrContent)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .accessibilityLabel("QR Code")
+                                .listRowSeparator(.hidden)
+
+//                            Text(specDetails)
+//                                .listRowSeparator(.automatic)
+                        }
+                    }
+
                     let payURL = URL(string: payto)
                     if let queryParameters = payURL?.queryParameters {
                         let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING).replacingOccurrences(of: "+", with: " ")
@@ -316,8 +331,14 @@ struct ManualDetailsV: View {
                                     .disabled(false)
 //                              Spacer()
                             }   .listRowSeparator(.automatic)
+                            qrCodesForPayto
                         }.id(listID)
                             .talerFont(.body)
+                            .task {
+                                if let specs = try? await model.getQrCodesForPaytoM(payto) {
+                                    qrCodeSpecs = specs ?? []
+                                }
+                            }
                     } else {
                         // TODO: Error No payto URL
                     }
