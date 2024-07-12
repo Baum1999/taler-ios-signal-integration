@@ -1,6 +1,11 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * Overview when there's more than 1 currency/exchange
+ *
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -58,7 +63,7 @@ struct OverviewListV: View {
                       shouldReloadBalances: $shouldReloadBalances)
                 }
                 .onAppear() {
-                    DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
+                    DebugViewC.shared.setViewID(VIEW_OVERVIEW, stack: stack.push("onAppear"))
                 }
                 .listStyle(myListStyle.style).anyView
             }
