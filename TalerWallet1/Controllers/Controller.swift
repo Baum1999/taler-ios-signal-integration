@@ -195,9 +195,9 @@ extension Controller {
                 fallthrough
             case "taler", "ext+taler", "web+taler":
                 return talerScheme(url, uncrypted)
-            case "payto":
-                messageForSheet = url.absoluteString
-                return paytoScheme(url)
+//            case "payto":
+//                messageForSheet = url.absoluteString
+//                return paytoScheme(url)
             default:
                 self.logger.error("unknown scheme: <\(scheme)>")       // should never happen
         }
@@ -206,12 +206,12 @@ extension Controller {
 }
 // MARK: -
 extension Controller {
-    func paytoScheme(_ url:URL) -> UrlCommand {
-        let logItem = "scheme payto:// is not yet implemented"
-        // TODO: write logItem to somewhere in Debug section of SettingsView
-        symLog.log(logItem)        // TODO: symLog.error(logItem)
-        return UrlCommand.unknown
-    }
+//    func paytoScheme(_ url:URL) -> UrlCommand {
+//        let logItem = "scheme payto:// is not yet implemented"
+//        // TODO: write logItem to somewhere in Debug section of SettingsView
+//        symLog.log(logItem)        // TODO: symLog.error(logItem)
+//        return UrlCommand.unknown
+//    }
     
     func talerScheme(_ url:URL,_ uncrypted: Bool = false) -> UrlCommand {
         guard let command = url.host else {return UrlCommand.unknown}
