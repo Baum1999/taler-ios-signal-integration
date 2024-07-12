@@ -78,19 +78,16 @@ struct P2PReadyV: View {
             let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
                                                                   : expireDays > 5 ? 60 : 3)
                                           : Timestamp.inSomeDays(expireDays)
+            let terms = PeerContractTerms(amount: amountToTransfer,
+                                         summary: summary,
+                                purse_expiration: timestamp)
             if amountToSend {
-                let terms = PeerContractTerms(amount: amountToTransfer,
-                                             summary: summary,
-                                    purse_expiration: timestamp)
                 // TODO: let user choose baseURL
                 if let response = try? await model.initiatePeerPushDebitM(nil, terms: terms) {
                     // will switch from WithdrawProgressView to TransactionSummaryV
                     transactionId = response.transactionId
                 }
             } else {
-                let terms = PeerContractTerms(amount: amountToTransfer,
-                                             summary: summary,
-                                    purse_expiration: timestamp)
                 // TODO: let user choose baseURL
                 if let response = try? await model.initiatePeerPullCreditM(nil, terms: terms) {
                     // will switch from WithdrawProgressView to TransactionSummaryV
