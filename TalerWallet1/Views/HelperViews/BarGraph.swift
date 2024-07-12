@@ -25,9 +25,11 @@ struct BarGraphHeader: View {
 
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
-            Text(currencyName)
-                .talerFont(.title2)
-                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            if !minimalistic {
+                Text(currencyName)
+                    .talerFont(.title2)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            }
             if let scopeInfo {
                 BarGraph(transactions: $completedTransactions,
                          maxBars: MAXBARS, barHeight: barHeight)
