@@ -103,7 +103,7 @@ struct P2PSubjectV: View {
                     .accessibilityValue(String(localized: "\(summary.count) characters of 100"))
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
-                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS)
+                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: amountToSend)
                     .disabled(false)
                     .padding(.bottom)
 

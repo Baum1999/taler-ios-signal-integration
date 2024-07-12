@@ -9,6 +9,7 @@ import SymLog
 struct SelectDays: View {
     private let symLog = SymLogV(0)
     @Environment(\.isEnabled) private var isEnabled: Bool
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
@@ -17,6 +18,7 @@ struct SelectDays: View {
 
     @Binding var selected: UInt
     let maxExpiration: UInt
+    let outgoing: Bool
 
     func oneDayAction() -> Void {
         selected = ONEDAY
@@ -74,6 +76,11 @@ struct SelectDays: View {
                     .accessibilityAddTraits(selected == THIRTYDAYS ? .isSelected : [])
                     .disabled(!isEnabled || maxExpiration < THIRTYDAYS)
             } // 3 buttons
+            if !minimalistic {
+                Text(outgoing ? "The exchange will send your money back if it won't get collected in time, or when you abort the operation."
+                              : "This request will be cancelled if it doesn't get paid in time, or when you abort the operation.")
+                .talerFont(.body)
+            }
         }
     }
 }
@@ -82,7 +89,7 @@ struct SelectDays: View {
 struct SelectDays_Previews: PreviewProvider {
     static var previews: some View {
         @State var expireDays: UInt = 1
-        SelectDays(selected: $expireDays, maxExpiration: 20)
+        SelectDays(selected: $expireDays, maxExpiration: 20, outgoing: false)
     }
 }
 #endif
