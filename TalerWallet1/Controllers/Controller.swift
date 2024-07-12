@@ -1,6 +1,11 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * Controller
+ *
+ * @author Marc Stibane
  */
 import Foundation
 import AVFoundation
@@ -59,6 +64,7 @@ class Controller: ObservableObject {
                 default: "unknown"
             }
             self.logger.log("Internet connection is \(status)")
+#if false
             DispatchQueue.main.async {
                 if path.status == .unsatisfied {
                     self.isConnected = false
@@ -73,6 +79,7 @@ class Controller: ObservableObject {
                     }
                 }
             }
+#endif
         }
         self.logger.log("Start monitoring internet connection")
         let queue = DispatchQueue(label: "InternetMonitor")
@@ -165,12 +172,12 @@ class Controller: ObservableObject {
                 WalletCore.shared.versionInfo = versionInfo
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows
-                symLog.log(error.localizedDescription)      // TODO: .error
+                self.logger.error("\(error.localizedDescription)")
                 backendState = .error                       // ❗️Yikes app cannot continue
                 throw error
             }
         } else {
-            symLog.log("Yikes❗️ wallet-core already initialized")     // TODO: .fault
+            self.logger.fault("Yikes❗️ wallet-core already initialized")
         }
     }
 }
@@ -179,6 +186,7 @@ class Controller: ObservableObject {
 extension Controller {
     func openURL(_ url: URL, stack: CallStack) -> UrlCommand {
         symLog.log(url)
+        self.logger.trace("openURL(\(url))")
         guard let scheme = url.scheme else {return UrlCommand.unknown}
         var uncrypted = false
         switch scheme.lowercased() {
@@ -191,7 +199,7 @@ extension Controller {
                 messageForSheet = url.absoluteString
                 return paytoScheme(url)
             default:
-                symLog.log("unknown scheme: <\(scheme)>")       // should never happen
+                self.logger.error("unknown scheme: <\(scheme)>")       // should never happen
         }
         return UrlCommand.unknown
     }
@@ -208,7 +216,7 @@ extension Controller {
     func talerScheme(_ url:URL,_ uncrypted: Bool = false) -> UrlCommand {
         guard let command = url.host else {return UrlCommand.unknown}
         if uncrypted {
-            symLog.log("uncrypted: taler://\(command)")
+            self.logger.trace("uncrypted http: taler://\(command)")
             // TODO: uncrypted
         }
         switch command.lowercased() {
@@ -229,7 +237,7 @@ extension Controller {
             case "refund":
                 return .refund
             default:
-                symLog.log("unknown command taler://\(command)")
+                self.logger.error("unknown command taler://\(command)")
         }
         return .unknown
     }

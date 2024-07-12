@@ -138,7 +138,7 @@ class QuickDataTask: NSObject {
                     Task.detached {
                         var errmsg = "No http response from \(url)"
                         logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public) \(error, privacy: .public) \(errmsg, privacy: .public)")
-                        await WalletModel.shared.hintNetworkAvailabilityT(false)
+//                        await WalletModel.shared.hintNetworkAvailabilityT(false)
                         Controller.shared.checkInternetConnection()    // TODO: pass error to walletCore
                         var errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
                         var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
