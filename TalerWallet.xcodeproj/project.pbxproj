@@ -135,6 +135,8 @@
 		4E3EAEA82AA70157009F1BE8 /* Binding+onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */; };
 		4E3EAEA92AA70157009F1BE8 /* Binding+onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */; };
 		4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
+		4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
+		4E4F60A92C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
 		4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */; };
 		4E53A33729F50B7B00830EC2 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E53A33629F50B7B00830EC2 /* CurrencyField.swift */; };
 		4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E912A481D8600F21F1C /* Controller+playSound.swift */; };
@@ -357,6 +359,7 @@
 		4E3EAEA12AA12582009F1BE8 /* Nunito-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Binding+onChange.swift"; sourceTree = "<group>"; };
 		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmount.swift; sourceTree = "<group>"; };
+		4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Condition.swift"; sourceTree = "<group>"; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
 		4E578E912A481D8600F21F1C /* Controller+playSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+playSound.swift"; sourceTree = "<group>"; };
@@ -660,6 +663,7 @@
 				4E3EAE8B2AA0933C009F1BE8 /* Font+Taler.swift */,
 				4EB095082989CB7C0043A8A1 /* View+dismissTop.swift */,
 				4E605DB62AB05E48002FB9A7 /* View+flippedDirection.swift */,
+				4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */,
 				4E3B4BC62A429F2A00CC88B8 /* View+Notification.swift */,
 				4E605DAE2AADDD13002FB9A7 /* UIScreen+screenSize.swift */,
 				4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */,
@@ -1229,6 +1233,7 @@
 				4E3EAE592A990778009F1BE8 /* Model+Settings.swift in Sources */,
 				4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4E3EAE5A2A990778009F1BE8 /* ErrorView.swift in Sources */,
+				4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */,
 				4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */,
 				4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */,
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
@@ -1352,6 +1357,7 @@
 				4EB095152989CBB00043A8A1 /* Model+Settings.swift in Sources */,
 				4EC4008D2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
 				4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */,
+				4E4F60A92C3BBF9F003BB669 /* View+Condition.swift in Sources */,
 				4E96583D2B79656E00404A68 /* DepositAmountV.swift in Sources */,
 				4E3B4BC72A429F2A00CC88B8 /* View+Notification.swift in Sources */,
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
