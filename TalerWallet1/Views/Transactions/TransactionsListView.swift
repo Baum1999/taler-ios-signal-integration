@@ -5,6 +5,11 @@
 import SwiftUI
 import SymLog
 
+#if DEBUG
+fileprivate let showUpDown = 8      // show up+down buttons in the menubar if list has many lines
+#else
+fileprivate let showUpDown = 25     // show up+down buttons in the menubar if list has many lines
+#endif
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -13,13 +18,11 @@ struct TransactionsListView: View {
 
     let scopeInfo: ScopeInfo
     let transactions: [Transaction]
-    let showUpDown: Bool
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @State private var viewId = UUID()
-    @State private var upAction: () -> Void = {}
-    @State private var downAction: () -> Void = {}
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -43,24 +46,17 @@ struct TransactionsListView: View {
                 await reloadAllAction(stack.push())
             }
 #endif
-            .navigationBarItems(trailing: HStack {
-                if showUpDown {
-                    ArrowUpButton(action: upAction)
-                    ArrowDownButton(action: downAction)
-                } else {
-                    EmptyView()
-                }
-            })
-            .onAppear {
-                if showUpDown {
-                    upAction = {
+            .if(count > showUpDown) { view in
+                view.navigationBarItems(trailing: HStack {
+                    ArrowUpButton {
+//                        print("up")
                         withAnimation { scrollView.scrollTo(0) }
                     }
-                    downAction = {
+                    ArrowDownButton {
+//                        print("down")
                         withAnimation { scrollView.scrollTo(transactions.count - 1) }
                     }
-//                    downAction()
-                }
+                })
             }
         } // ScrollView
         .navigationTitle(navTitle)

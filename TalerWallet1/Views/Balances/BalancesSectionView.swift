@@ -190,7 +190,6 @@ fileprivate struct BalancesPendingRowView: View {
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
                               transactions: pendingTransactions,
-                                showUpDown: false,
                            reloadAllAction: reloadPending,
                            reloadOneAction: reloadOneAction)
             }
@@ -284,7 +283,6 @@ fileprivate struct BalancesNavigationLinksView: View {
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: scopeInfo,
                               transactions: completedTransactions,
-                                showUpDown: true,
                            reloadAllAction: reloadAllAction,
                            reloadOneAction: reloadOneAction)
             }

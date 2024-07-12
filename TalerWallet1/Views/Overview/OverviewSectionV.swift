@@ -161,7 +161,6 @@ fileprivate struct CurrenciesPendingRowV: View {
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
                               transactions: pendingTransactions,
-                                showUpDown: false,
                            reloadAllAction: reloadPending,
                            reloadOneAction: reloadOneAction)
             }
@@ -234,7 +233,6 @@ fileprivate struct CurrenciesNavigationLinksV: View {
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: scopeInfo,
                               transactions: completedTransactions,
-                                showUpDown: true,
                            reloadAllAction: reloadAllAction,
                            reloadOneAction: reloadOneAction)
             }
