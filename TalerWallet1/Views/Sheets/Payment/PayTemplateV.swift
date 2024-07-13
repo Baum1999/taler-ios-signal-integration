@@ -153,7 +153,8 @@ struct PayTemplateV: View {
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
                         )
                 }
-            } else {                        // both template contract amount and summary are fixed => directly show the payment
+            } else {    // both template contract amount and summary are fixed => directly show the payment
+                // Attention: contains a List, thus mustn't be included in a ScrollView
                 PaymentView(stack: stack.push(),
                               url: url,
                          template: true,

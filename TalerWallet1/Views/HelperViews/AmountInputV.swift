@@ -57,7 +57,7 @@ struct AmountInputV: View {
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let available = amountAvailable?.formatted(currencyInfo) ?? nil
         let flags = checkAvailable(amount: amountToTransfer)
-        ScrollView { VStack(alignment: .trailing) {
+        VStack(alignment: .trailing) {
             if summary.count > 0 {
                 Text(summary)
                     .talerFont(.body)
@@ -91,7 +91,7 @@ struct AmountInputV: View {
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
-        }.padding(.horizontal) } // ScrollVStack
+        }.padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {

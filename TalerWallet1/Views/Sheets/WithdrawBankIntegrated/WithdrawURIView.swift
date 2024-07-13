@@ -58,7 +58,7 @@ struct WithdrawURIView: View {
     var body: some View {
         if possibleExchanges.count > 0 {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
-                ScrollView { VStack {
+                VStack {
                     let title = String(localized: "Exchange")
                     if possibleExchanges.count > 1 {
                         Picker(title, selection: $selectedExchange) {
@@ -87,6 +87,7 @@ struct WithdrawURIView: View {
                                                     amountToTransfer: $amountToTransfer,
                                                             exchange: $exchange)
                     if amountIsEditable {   // amountToTransfer.isZero {
+                      ScrollView {
                         let shortcutDestination = LazyView {
                             WithdrawAcceptView(stack: stack.push(), url: url,
                                     amountToTransfer: $amountShortcut,
@@ -113,10 +114,11 @@ struct WithdrawURIView: View {
                         .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
                         )
+                      }
                     } else {
                         acceptDestination
                     }
-                } } // ScrollVStack
+                }
                 .navigationTitle(navTitle)
                 .onAppear() {
                     symLog.log("onAppear")
