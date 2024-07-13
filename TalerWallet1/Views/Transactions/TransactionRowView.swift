@@ -71,38 +71,29 @@ struct TransactionRowView: View {
             .talerFont(.callout)
 
 #if DEBUG
-        let debug = false
+        let debug = 1==0
         let red = debug ? Color.red : Color.clear
         let green = debug ? Color.green : Color.clear
         let blue = debug ? Color.blue : Color.clear
         let orange = debug ? Color.orange : Color.clear
 #endif
 
-        let layout1 = HStack(spacing: 0) {
-            HStack(spacing: 2) {
-                iconBadge
-//                Spacer(minLength: 0)
+        let layout1 = HStack(spacing: 4) {
                 VStack(alignment: .leading) {
                     centerTop
                     centerBottom
                 }
-                Spacer(minLength: 2)
-            }
+#if DEBUG
+                .border(orange)
+#endif
+            Spacer(minLength: 0)
             amountV //.frame(maxWidth: .infinity, alignment: .trailing)
         }
 
-        let layout2 = VStack(spacing: 0) {
+        let layout2 = VStack(alignment: .leading, spacing: 2) {
             centerTop
-            HStack(spacing: 8) {
-                HStack(spacing: 0) {
-                    iconBadge
-#if DEBUG
-                        .border(blue)
-#endif
-                    Spacer(minLength: 0)
-                    centerBottom
-                    Spacer(minLength: 2)
-                }
+            HStack(spacing: 10) {
+                centerBottom
 #if DEBUG
                     .border(green)
 #endif
@@ -115,25 +106,20 @@ struct TransactionRowView: View {
 
         let layout3 = VStack(spacing: 0) {
             HStack(spacing: 8) {
-                HStack(spacing: 0) {
-                    iconBadge
-                    Spacer(minLength: 0)
                     centerTop
                     Spacer(minLength: 2)
-                }
                 amountV
             }
             centerBottom
         }
 
-        let layout4 = VStack(spacing: 0) {
+        let layout4 = VStack(alignment: .leading, spacing: 2) {
             centerTop
             HStack(spacing: -4) {
-                iconBadge
+                Spacer(minLength: 2)
 #if DEBUG
                     .border(green)
 #endif
-                Spacer(minLength: 2)
                 amountV
 #if DEBUG
                     .border(green)
@@ -145,7 +131,11 @@ struct TransactionRowView: View {
             centerBottom
         }
 
-        Group {
+        HStack {
+            iconBadge
+#if DEBUG
+                .border(blue)
+#endif
             if #available(iOS 16.0, *) {
                 ViewThatFits(in: .horizontal) {
                     layout1
