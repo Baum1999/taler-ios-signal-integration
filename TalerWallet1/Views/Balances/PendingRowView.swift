@@ -27,8 +27,8 @@ struct PendingRowView: View {
 
     var body: some View {
         let pendingColor = WalletColors().pendingColor(incoming)
-        let iconBadge = IconBadge(foreColor: pendingColor, done: false, incoming: incoming,
-                                  shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+        let iconBadge = PendingIconBadge(foreColor: pendingColor, done: false, incoming: incoming,
+                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
         let inTitle = minimalistic ? inTitle0 : inTitle1
         let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
