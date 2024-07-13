@@ -42,13 +42,15 @@ struct TransactionRowView: View {
 
         let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
         let incoming = common.incoming()
-        let foreColor = pending ? WalletColors().pendingColor(incoming)
-                      : done ? WalletColors().transactionColor(incoming)
-                             : WalletColors().uncompletedColor
         let textColor = doneOrPending ? .primary
                : colorScheme == .dark ? .secondary
                   : increasedContrast ? Color(.darkGray)
                                       : .secondary  // Color(.tertiaryLabel)
+        let refreshZero = common.type.isRefresh && common.amountEffective.isZero
+        let foreColor = refreshZero ? textColor
+                          : pending ? WalletColors().pendingColor(incoming)
+                             : done ? WalletColors().transactionColor(incoming)
+                                    : WalletColors().uncompletedColor
 
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
@@ -77,7 +79,7 @@ struct TransactionRowView: View {
 #endif
 
         let layout1 = HStack(spacing: 0) {
-            HStack(spacing: -4) {
+            HStack(spacing: 2) {
                 iconBadge
 //                Spacer(minLength: 0)
                 VStack(alignment: .leading) {

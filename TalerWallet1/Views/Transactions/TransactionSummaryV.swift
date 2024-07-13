@@ -127,9 +127,11 @@ struct TransactionSummaryV: View {
                                                                       : majorState
                                               : majorState
                     HStack {
-                        Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                        Text(Image(common.type.iconName()))
+//                        Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)
-                            .foregroundColor(Color.clear)
+//                            .foregroundColor(Color.clear)
+//                        Spacer()
                         Text("Status: \(state)")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .multilineTextAlignment(.trailing)

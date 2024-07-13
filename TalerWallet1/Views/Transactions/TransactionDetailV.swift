@@ -18,10 +18,16 @@ struct TransactionDetailV: View {
         let info = details.info
         Section {
             if let posConfirmation = details.posConfirmation {
+                Text("Confirmation:")
+                    .talerFont(.title3)
+                    .listRowSeparator(.hidden)
                 Text(posConfirmation)
                     .talerFont(.body)
             }
 //            Text(info.summary)
+            Text("Order-ID:")
+                .talerFont(.title3)
+                .listRowSeparator(.hidden)
             Text(info.orderId)
                 .talerFont(.body)
 //            Text(info.merchant.name)
