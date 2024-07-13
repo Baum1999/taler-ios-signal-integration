@@ -14,12 +14,12 @@ extension Transaction {             // for Dummys
         let amount = Amount.zero(currency: dummyCurrency)
         let now = Timestamp.now()
         let common = TransactionCommon(type: .dummy,
-                                       txState: TransactionState(major: .pending),
-                                       amountEffective: amount,
-                                       amountRaw: amount,
-                                       transactionId: "",
-                                       timestamp: now,
-                                       txActions: [])
+                                    txState: TransactionState(major: .pending),
+                            amountEffective: amount,
+                                  amountRaw: amount,
+                              transactionId: "",
+                                  timestamp: now,
+                                  txActions: [])
         self = .dummy(DummyTransaction(common: common))
     }
 }
@@ -103,7 +103,7 @@ struct TransactionSummaryV: View {
         let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.isDone ? transaction.localizedTypePast
                                            : transaction.localizedType
-        VStack {
+        Group {
             List {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
@@ -224,8 +224,8 @@ struct TransactionSummaryV: View {
         @AppStorage("minimalistic") var minimalistic: Bool = false
 
         var body: some View {
-            VStack(alignment: .leading) {  // Show Hint that User should Confirm on bank website
-                if !minimalistic {
+            VStack(alignment: .leading) {
+                if !minimalistic {      // show hint that the user should authorize on bank website
                     Text("The bank is waiting for your authorization.")
 //                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise
@@ -256,8 +256,8 @@ struct TransactionSummaryV: View {
                 case .manual:               // "Make a wire transfer of \(amount) to"
                     ManualDetailsV(common: common, details: withdrawalDetails)
 
-                case .bankIntegrated:       // "Confirm now" (with bank)
-                    if !transaction.isPendingKYC {              // cannot confirm if KYC is needed first
+                case .bankIntegrated:       // "Authorize now" (with bank)
+                    if !transaction.isPendingKYC {              // cannot authorize if KYC is needed first
                         let confirmed = withdrawalDetails.confirmed ?? false
                         if !confirmed {
                             if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {

@@ -1,11 +1,12 @@
-//
-//  TransactionDetailV.swift
-//  TalerWallet
-//
-//  Created by Marc Stibane on 2024-01-28.
-//  Copyright © 2024 Taler. All rights reserved.
-//
-
+/*
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
+ * See LICENSE.md
+ */
+/**
+ * Overview when there's more than 1 currency/exchange
+ *
+ * @author Marc Stibane
+ */
 import SwiftUI
 
 struct TransactionDetailV: View {
@@ -18,9 +19,11 @@ struct TransactionDetailV: View {
         Section {
             if let posConfirmation = details.posConfirmation {
                 Text(posConfirmation)
+                    .talerFont(.body)
             }
 //            Text(info.summary)
             Text(info.orderId)
+                .talerFont(.body)
 //            Text(info.merchant.name)
 
             if let fulfillmentUrl = info.fulfillmentUrl {
@@ -32,12 +35,14 @@ struct TransactionDetailV: View {
                 }
             } else if let fulfillmentMessage = info.fulfillmentMessage {
                 Text(fulfillmentMessage)
+                    .talerFont(.body)
             }
             if let products = info.products {
                 ForEach(products) {product in
                     Section {
                         if let product_id = product.product_id {
                             Text(product_id)
+                                .talerFont(.body)
                         }
                     }
                 }
