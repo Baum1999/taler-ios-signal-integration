@@ -108,9 +108,17 @@ extension BalancesSectionView: View {
             }
             if showSpendingButton {
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
-                Button(title) {
+                let action = {
                     showSpendingHint = false
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
+                }
+                Button(action: action) {
+                    HStack {
+                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
+                        Spacer()
+                        Text(title)
+                        Spacer()
+                    }
                 }
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                 .accessibilityHint(String(localized: "Will go to the demo shop website."))
