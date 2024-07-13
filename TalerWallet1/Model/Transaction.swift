@@ -209,7 +209,7 @@ enum TransactionType: String, Codable {
     case peerPullCredit = "peer-pull-credit"    // request payment from peer, show QR
     case scanPullDebit  = "peer-pull-debit"     // scan QR, pay requested
 //    case internalWithdrawal = "internal-withdrawal"
-    case recoup
+    case recoup                                 // denomination revoked
     case denomLoss      = "denom-loss"          // coins are lost, denomination no longer available
 
     var isWithdrawal : Bool { self == .withdrawal }
@@ -225,6 +225,25 @@ enum TransactionType: String, Codable {
     var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
     var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund }
+    func iconName(_ done: Bool = false) -> String {
+        let iconName = switch self {
+            case .dummy:            ICONNAME_DUMMY
+            case .withdrawal:       ICONNAME_WITHDRAWAL
+            case .deposit:          ICONNAME_DEPOSIT
+            case .payment:          ICONNAME_PAYMENT
+            case .refund:           ICONNAME_REFUND
+            case .refresh:          ICONNAME_REFRESH
+            case .peerPushDebit:    ICONNAME_OUTGOING_P2P
+            case .scanPushCredit:   ICONNAME_INCOMING_P2P
+            case .peerPullCredit:   ICONNAME_INCOMING_P2P
+            case .scanPullDebit:    ICONNAME_OUTGOING_P2P
+            case .recoup:           ICONNAME_RECOUP
+            case .denomLoss:        ICONNAME_DENOMLOSS
+        }
+        return isRefresh ? iconName        // refresh has no fill
+                  : done ? iconName + ICONNAME_FILL
+                         : iconName
+    }
 }
 
 struct TransactionCommon: Decodable, Sendable {

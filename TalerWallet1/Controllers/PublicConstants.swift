@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 
@@ -19,10 +22,25 @@ public let EMPTYSTRING = ""                         // avoid automatic translati
 public let NONBREAKING: Character = "\u{00A0}"
 public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionSummary
-public let PENDING_INCOMING = "plus.diamond"
-public let PENDING_OUTGOING = "minus.diamond"
-public let DONE_INCOMING = "plus.circle.fill"
-public let DONE_OUTGOING = "minus.circle.fill"
+//public let PENDING_INCOMING = "plus.diamond"      // 􀡿 􀢀
+public let PENDING_INCOMING = "plus"                // 􀅼 􀢀
+public let PENDING_OUTGOING = "minus.diamond"       // 􀢁 􀢂
+public let DONE_INCOMING = "plus.circle.fill"       // 􀁌 􀁍
+public let DONE_OUTGOING = "minus.circle"           // 􀁎 􀁏
+
+public let ICONNAME_FILL = ".fill"
+public let ICONNAME_DUMMY = "taler.circle"                          // 􀀀 􀀁
+public let ICONNAME_WITHDRAWAL = "taler.down"                       // 􁾬 􁾭
+public let ICONNAME_DEPOSIT = "taler.up"                            // 􁾨 􁾩
+public let ICONNAME_REFUND = "taler.turn.up.backward"               // 􀰚 􀰛
+public let ICONNAME_PAYMENT = "taler.turn.up.forward"               // 􀉐 􀰟
+public let ICONNAME_INCOMING_P2P = "taler.backward"                 // 􁉈 􁉅
+public let ICONNAME_OUTGOING_P2P = "taler.forward"                  // 􁉆 􁉇
+public let ICONNAME_REFRESH = "taler.counterclockwise"              // 􁹠   no fill variant!
+//public let ICONNAME_REFRESH1 = "arrow.counterclockwise.circle"    // 􀚃 􀚄
+//public let ICONNAME_REFRESH2 = "arrow.counterclockwise.square"    // 􂅟 􂅠
+public let ICONNAME_RECOUP = "taler.exclamationmark.circle"         // 􀁞 􀁟
+public let ICONNAME_DENOMLOSS = "taler.exclamationmark.triangle"    // 􀇾 􀇿
 
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
