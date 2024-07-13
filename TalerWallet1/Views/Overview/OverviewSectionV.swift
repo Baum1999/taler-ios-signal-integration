@@ -167,7 +167,7 @@ fileprivate struct CurrenciesPendingRowV: View {
         } label: {
             let needsKYC =  needsKYCin || needsKYCout
             let needsKYCStr = String(localized: ". Needs K Y C", comment: "VoiceOver")
-            let needsConfStr = String(localized: ". Needs bank confirmation", comment: "VoiceOver")
+            let needsConfStr = String(localized: ". Needs bank authorization", comment: "VoiceOver")
             VStack(spacing: 6) {
                 let hasIncoming = !pendingIncoming.isZero
                 if hasIncoming {

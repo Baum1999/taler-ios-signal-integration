@@ -9,7 +9,7 @@ import SymLog
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Confirm with Bank", comment: "Nav title")
+    let navTitle = String(localized: "Authorize with Bank", comment: "Nav title")
 
     let exchangeBaseUrl: String?
     let url: URL
@@ -50,7 +50,7 @@ struct WithdrawAcceptDone: View {
                 .navigationTitle(navTitle)
             } else {
                 LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL()
-                                                  ?? "Bank Confirmation")
+                                                  ?? "Bank Authorization")
             }
         }.onAppear() {
             symLog.log("onAppear")

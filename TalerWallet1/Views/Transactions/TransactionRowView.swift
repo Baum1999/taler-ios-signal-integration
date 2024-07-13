@@ -167,7 +167,7 @@ struct TransactionRowView: View {
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(needsKYC ? String(localized: ". Needs K Y C") :
-                           shouldConfirm ? String(localized: ". Needs bank confirmation") : EMPTYSTRING)
+                           shouldConfirm ? String(localized: ". Needs bank authorization") : EMPTYSTRING)
             .accessibilityHint(String(localized: "Will go to detail view."))
     }
 }
