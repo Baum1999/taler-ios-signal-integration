@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -8,8 +11,10 @@ import taler_swift
 struct TwoRowButtons: View {
     let stack: CallStack
     let sendTitle: String
+    var sendType: TransactionType
     let sendA11y: String
     let recvTitle: String
+    var recvType: TransactionType
     let recvA11y: String
     let fitsSideBySide: Bool
     let lineLimit: Int
@@ -21,8 +26,10 @@ struct TwoRowButtons: View {
     func makeCopy(fitsSideBySide: Bool) -> TwoRowButtons {
         TwoRowButtons(stack: stack.push(),
                   sendTitle: sendTitle,
+                   sendType: sendType,
                    sendA11y: sendA11y,
                   recvTitle: recvTitle,
+                   recvType: recvType,
                    recvA11y: recvA11y,
              fitsSideBySide: fitsSideBySide,
                   lineLimit: lineLimit,
@@ -34,7 +41,14 @@ struct TwoRowButtons: View {
     var body: some View {
         Group {
             let sendButtonTitle = sendTitle.tabbed(oneLine: !fitsSideBySide)
-            Button(sendButtonTitle, action: sendAction)
+            Button(action: sendAction) {
+                HStack {
+                    ButtonIconBadge(type: sendType, foreColor: .accentColor, done: false)
+                    Spacer()
+                    Text(sendButtonTitle)
+                    Spacer()
+                }
+            }
                 .accessibilityLabel(Text(sendA11y))
                 .lineLimit(lineLimit)
                 .disabled(sendDisabled)
@@ -43,7 +57,14 @@ struct TwoRowButtons: View {
                                           disabled: sendDisabled,
                                            aligned: .center))
             let recvButtonTitle = recvTitle.tabbed(oneLine: !fitsSideBySide)
-            Button(recvButtonTitle, action: recvAction)
+            Button(action: recvAction) {
+                HStack {
+                    ButtonIconBadge(type: recvType, foreColor: .accentColor, done: false)
+                    Spacer()
+                    Text(recvButtonTitle)
+                    Spacer()
+                }
+            }
                 .accessibilityLabel(Text(recvA11y))
                 .lineLimit(lineLimit)
                 .disabled(false)
@@ -60,8 +81,10 @@ struct TwoRowButtons_Previews: PreviewProvider {
         List {
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + TESTCURRENCY,
+                       sendType: .peerPushDebit,
                        sendA11y: "Send " + TESTCURRENCY,
                       recvTitle: "Request " + LONGCURRENCY,
+                       recvType: .peerPullCredit,
                        recvA11y: "Request " + LONGCURRENCY,
                  fitsSideBySide: false,
                       lineLimit: 2, sendDisabled: true,
@@ -69,8 +92,10 @@ struct TwoRowButtons_Previews: PreviewProvider {
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + DEMOCURRENCY,
+                       sendType: .peerPushDebit,
                        sendA11y: "Send " + DEMOCURRENCY,
                       recvTitle: "Request " + DEMOCURRENCY,
+                       recvType: .peerPullCredit,
                        recvA11y: "Request " + DEMOCURRENCY,
                  fitsSideBySide: true,
                       lineLimit: 2, sendDisabled: true,

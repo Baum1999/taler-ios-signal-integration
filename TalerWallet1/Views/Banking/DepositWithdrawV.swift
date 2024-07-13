@@ -40,12 +40,12 @@ struct DepositWithdrawV: View {
 
     var body: some View {
         let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
-                                     comment: "Abbreviation of `Deposit (currency)´")
+                                     comment: "Abbreviation of button `Deposit (currency)´")
         let depositTitle1 = String(localized: "Deposit\t\(currency)",
                                      comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
 
         let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
-                                      comment: "Abbreviation of `Withdraw (currency)´")
+                                      comment: "Abbreviation of button `Withdraw (currency)´")
         let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
                                       comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let deposit = LazyView {
@@ -67,8 +67,10 @@ struct DepositWithdrawV: View {
         let disableDeposit = amountAvailable?.isZero ?? false
         let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                       sendTitle: minimalistic ? depositTitle0 : depositTitle1,
+                                       sendType: .deposit,
                                        sendA11y: depositTitle1.tabbed(oneLine: true),
                                       recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
+                                       recvType: .withdrawal,
                                        recvA11y: withdrawTitle1.tabbed(oneLine: true),
                                  fitsSideBySide: false,
                                       lineLimit: 5,

@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -71,16 +74,17 @@ struct BalanceRowView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
-                              comment: "Abbreviation of button `Send Money´")
-    let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\tMoney",
-                              comment: "`Send Money´ in Balances - set exactly 1 \\t for line break")
-
-    let requestTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
-                                 comment: "Abbreviation of button `Request Payment´")
-    let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\tPayment",
-                                 comment: "`Request Payment´ in Balances - set exactly 1 \\t for line break")
     var body: some View {
+        let currency = amount.currencyStr
+        let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
+                                  comment: "Abbreviation of button `Send (currency)´")
+        let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\t\(currency)",
+                                  comment: "`Send (currency)´ in Balances - must have ONE \\t and ONE %@")
+
+        let requestTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
+                                     comment: "Abbreviation of button `Request (currency)´")
+        let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\t\(currency)",
+                                     comment: "`Request (currency)´ in Balances - must have ONE \\t and ONE %@")
         VStack (alignment: .trailing, spacing: 6) {
             BalanceCell(amount: amount,
                      sizeCategory: sizeCategory,
@@ -92,8 +96,10 @@ struct BalanceRowView: View {
             let requTitle = minimalistic ? requestTitle0 : requestTitle1
             let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                           sendTitle: sendTitle,
+                                           sendType: .peerPushDebit,
                                            sendA11y: sendTitle.tabbed(oneLine: true),
                                           recvTitle: requTitle,
+                                           recvType: .peerPullCredit,
                                            recvA11y: requTitle.tabbed(oneLine: true),
                                      fitsSideBySide: false,
                                           lineLimit: 5,
