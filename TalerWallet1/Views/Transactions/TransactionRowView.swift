@@ -40,7 +40,6 @@ struct TransactionRowView: View {
         let details = transaction.detailsToShow()
         let keys = details.keys
 
-        let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
         let incoming = common.incoming()
         let textColor = doneOrPending ? .primary
                : colorScheme == .dark ? .secondary
@@ -66,9 +65,12 @@ struct TransactionRowView: View {
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
             .accessibilityLabel(doneOrPending ? topString : topString +  String(localized: ", canceled", comment: "VoiceOver"))
-        let centerBottom = Text(dateString)
-            .foregroundColor(textColor)
-            .talerFont(.callout)
+        let centerBottom = TimelineView(.everyMinute) { context in
+            let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
+            Text(dateString)
+                .foregroundColor(textColor)
+                .talerFont(.callout)
+        }
 
 #if DEBUG
         let debug = 1==0
