@@ -19,6 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/**
+ * @author Marc Stibane
+ */
 import SwiftUI
 import UIKit
 import taler_swift
@@ -59,7 +62,7 @@ struct CurrencyField: View {
         ZStack {
             // Text view to display the formatted currency
             // Set as priority so CurrencyInputField size doesn't affect parent
-            Text(amount.formatted(currencyInfo))
+            Text(amount.formatted(currencyInfo, isNegative: false))
                 .layoutPriority(1)
                 // make the textfield use the whole width for tapping inside to become active
                 .frame(maxWidth: .infinity, alignment: .trailing)

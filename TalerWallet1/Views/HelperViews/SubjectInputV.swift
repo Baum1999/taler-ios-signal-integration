@@ -44,7 +44,7 @@ struct SubjectInputV<TargetView: View>: View {
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
 //        let feeLabel = insufficient ? insufficientLabel
 //                                    : feeLabel(feeStr)
-        let available = amountAvailable?.formatted(currencyInfo) ?? nil
+        let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
 //        let disabled = insufficient || summary.count == 0
         let disabled = summary.count == 0
         ScrollView { VStack(alignment: .leading) {
@@ -85,7 +85,7 @@ struct SubjectInputV<TargetView: View>: View {
                 }
             }
             HStack {
-                Text(amountToTransfer.formatted(currencyInfo))
+                Text(amountToTransfer.formatted(currencyInfo, isNegative: false))
                 // TODO: hasFees?
 //                Text(feeLabel)
             }

@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -51,7 +54,7 @@ struct QRCodeDetailView: View {
                     .accessibilityLabel("QR Code")
                     .listRowSeparator(.hidden)
 
-                let amountStr = amount.formatted()
+                let amountStr = amount.formatted(isNegative: false)
                 let scanMini = incoming ? String(localized: "Either (payer) Mini 3",
                                               defaultValue: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
                                         : String(localized: "Either (payee) Mini 3",

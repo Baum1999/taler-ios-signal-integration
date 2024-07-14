@@ -349,11 +349,13 @@ struct TransactionSummaryV: View {
                             let input = details.refreshInputAmount
                             AmountRowV(title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
+                                  isNegative: false,
                                        color: labelColor,
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
                                 AmountRowV(title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
+                                      isNegative: !fee.isZero,
                                            color: labelColor,
                                            large: true)
                             }

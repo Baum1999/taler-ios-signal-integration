@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import OrderedCollections
@@ -35,7 +38,7 @@ struct SegmentControl: View {
                     let detail = accountDetails[index]
                     let specs = detail.currencySpecification
                     let amount = detail.transferAmount
-                    let amountStr = amount?.formatted(specs: specs, useISO: false) ?? ""
+                    let amountStr = amount?.formatted(specs: specs, isNegative: false, useISO: false) ?? ""
                     let bankName = detail.bankLabel
                     let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
 //            let _ = print(amountStr)
@@ -85,7 +88,7 @@ struct AccountPicker: View {
             ForEach(0..<accountDetails.count, id: \.self, content: { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
-                        let amountStr = amount.formatted(useISO: false)
+                        let amountStr = amount.formatted(isNegative: false, useISO: false)
 //            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
                             Text(bankName + ":   " + amountStr)
@@ -173,8 +176,8 @@ struct ManualDetailsV: View {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
-                    let amountStr = amount.formatted(specs: specs)
-                    let obtainStr = common.amountRaw.formatted()
+                    let amountStr = amount.formatted(specs: specs, isNegative: false)
+                    let obtainStr = common.amountRaw.formatted(isNegative: false)
 //            let _ = print(amountStr, " | ", obtainStr)
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")

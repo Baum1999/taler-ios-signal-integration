@@ -76,10 +76,10 @@ struct SendAmount: View {
         let navTitle = String(localized: "NavTitle_Send_Currency",
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")
-        let available = amountAvailable.formatted(currencyInfo)
+        let available = amountAvailable.formatted(currencyInfo, isNegative: false)
 //        let _ = print("available: \(available)")
         let _ = symLog.log("currency: \(currency), available: \(available)")
-        let amountVoiceOver = amountToTransfer.formatted(currencyInfo)
+        let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
         let inputDestination = LazyView {
@@ -158,7 +158,7 @@ struct SendAmount: View {
                 // TODO: set from exchange
 //                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
                     if let feeAmount = fee(ppCheck: ppCheck) {
-                        feeStr = feeAmount.formatted(currencyInfo)
+                        feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
                         let feeLabel = feeLabel(feeStr)
                         announce("\(amountVoiceOver), \(feeLabel)")
                     } else {

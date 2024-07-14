@@ -55,7 +55,7 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV(common.amountEffective)
+        let amountV = AmountV(common.amountEffective, isNegative: !incoming)
             .foregroundColor(foreColor)
 
         let topString = topString()

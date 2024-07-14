@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -37,7 +40,7 @@ struct ShortcutButton: View {
 
     var body: some View {
         let shortie = Amount(currency: currency, cent: UInt64(shortcut))        // TODO: adapt for ¥
-        let title = shortie.formatted(currencyInfo)
+        let title = shortie.formatted(currencyInfo, isNegative: false)
         let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
         Button(action: { action(shortcut, currencyField)} ) {
             Text(title)

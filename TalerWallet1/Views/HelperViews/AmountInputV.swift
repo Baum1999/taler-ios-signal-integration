@@ -55,7 +55,7 @@ struct AmountInputV: View {
         let currency = amountToTransfer.currencyStr
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
-        let available = amountAvailable?.formatted(currencyInfo) ?? nil
+        let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
         let flags = checkAvailable(amount: amountToTransfer)
         VStack(alignment: .trailing) {
             if summary.count > 0 {

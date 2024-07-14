@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -101,21 +104,25 @@ struct ThreeAmountsV: View {
             }
             AmountRowV(title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
+                  isNegative: !incoming,
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
             if hasNoFees == false {
                 if let fee {
-                    AmountRowV(title: minimalistic ? String(localized: "Fee (short):", defaultValue:"Fee:", comment:"short version")
-                               : String(localized: "Fee (long):", defaultValue:"Fee:", comment:"long version"),
-                               amount: fee,
+                    let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
+                                             : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")
+                    AmountRowV(title: title,
+                              amount: fee,
+                          isNegative: !incoming,
                                color: labelColor,
                                large: false)
                     .padding(.bottom, 4)
                 }
                 if let bottomAmount {
                     AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
-                               amount: bottomAmount,
+                              amount: bottomAmount,
+                          isNegative: !incoming,
                                color: foreColor,
                                large: large)
                 }

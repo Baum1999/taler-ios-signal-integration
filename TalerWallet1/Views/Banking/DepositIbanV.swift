@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -31,13 +34,13 @@ struct DepositIbanV: View {
     @FocusState private var isFocused: Bool
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, useISO: true)
+        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
         return String(localized: "Next", comment: "advance Deposit to Amount")
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.formatted(currencyInfo)
+        let amountStr = amount.formatted(currencyInfo, isNegative: true)
         return String(localized: "NavTitle_Deposit_AmountStr",
                    defaultValue: "Deposit", comment: "NavTitle: Deposit")
 //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")

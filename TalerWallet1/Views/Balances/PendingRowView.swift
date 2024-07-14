@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -33,7 +36,7 @@ struct PendingRowView: View {
         let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
 
-        let amountText = AmountV(amount)
+        let amountText = AmountV(amount, isNegative: !incoming)
             .foregroundColor(pendingColor)
 
         // this is the default view for iOS 15

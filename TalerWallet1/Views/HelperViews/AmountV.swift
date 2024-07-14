@@ -1,18 +1,22 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
 
 struct AmountV: View {
     let amount: Amount
-    let large: Bool      // set to false for QR or IBAN
+    let isNegative: Bool        // if true, show a "-" before the amount
+    let large: Bool             // set to false for QR or IBAN
 
     @EnvironmentObject private var controller: Controller
 
     var body: some View {
-        Text(amount.formatted())
+        Text(amount.formatted(isNegative: isNegative))
             .multilineTextAlignment(.center)
             .talerFont(large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
@@ -21,8 +25,9 @@ struct AmountV: View {
     }
 }
 extension AmountV {
-    init(_ amount: Amount) {
+    init(_ amount: Amount, isNegative: Bool) {
         self.amount = amount
+        self.isNegative = isNegative
         self.large = false
     }
 }

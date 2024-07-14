@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import taler_swift
@@ -33,30 +36,30 @@ extension Locale {
 }
 
 extension Amount {
-    func formatted(_ currencyInfo: CurrencyInfo?, useISO: Bool = false) -> String {
+    func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool, useISO: Bool = false) -> String {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsFloatTuple, useISO: useISO)
+            return currencyInfo.string(for: valueAsFloatTuple, isNegative: isNegative, useISO: useISO)
         } else {
             return valueStr
         }
     }
 
-    func formatted(useISO: Bool = false) -> String {
+    func formatted(isNegative: Bool, useISO: Bool = false) -> String {
         let controller = Controller.shared
         if let currencyInfo = controller.info(for: self.currencyStr) {
-            return self.formatted(currencyInfo, useISO: useISO)
+            return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO)
         }
         return self.readableDescription
     }
 
-    func formatted(specs: CurrencySpecification?, scope: ScopeInfo? = nil, useISO: Bool = false) -> String {
+    func formatted(specs: CurrencySpecification?, isNegative: Bool, scope: ScopeInfo? = nil, useISO: Bool = false) -> String {
         if let specs {
             let myScope = scope ?? ScopeInfo(type: .madeUp, currency: currencyStr)
             let formatter = CurrencyFormatter.formatter(scope: myScope, specs: specs)
             let currencyInfo = CurrencyInfo(scope: myScope, specs: specs, formatter: formatter)
-            return formatted(currencyInfo, useISO: useISO)
+            return formatted(currencyInfo, isNegative: isNegative, useISO: useISO)
         }
-        return formatted(useISO: useISO)
+        return formatted(isNegative: isNegative, useISO: useISO)
     }
 
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
@@ -169,10 +172,10 @@ public struct CurrencyInfo {
     }
 
     // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
-    func string(for valueTuple: (Double, Double), useISO: Bool = false) -> String {
+    func string(for valueTuple: (Double, Double), isNegative: Bool, useISO: Bool = false) -> String {
         formatter.setUseISO(useISO)
         let (integer, fraction) = valueTuple
-        if let integerStr = formatter.string(for: integer) {
+        if let integerStr = formatter.string(for: isNegative ? -integer : integer) {
             let integerSpaced = integerStr.spaced
             if fraction == 0 {
                 return currencyString(integerSpaced, useISO: useISO)   // formatter already added trailing zeroes
@@ -220,7 +223,8 @@ public struct CurrencyInfo {
                 currencyName = altUnitName0
             }
         }
-        var madeUpStr = currencyName + " " + String(integer)
+        var madeUpStr = currencyName + (isNegative ? " -" + String(integer)
+                                                   : " " + String(integer))
 //        let homeCurrency = Locale.current.currency      //'currency' is only available in iOS 16 or newer
         madeUpStr += formatter.currencyDecimalSeparator ?? Locale.current.decimalSeparator ?? "."
         madeUpStr += String(String(fraction).dropFirst())       // remove the leading 0

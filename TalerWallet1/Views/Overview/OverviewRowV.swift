@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -18,7 +21,7 @@ struct CurrenciesCell: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountV = AmountV(amount: amount, large: true)
+        let amountV = AmountV(amount: amount, isNegative: false, large: true)
             .foregroundColor(.primary)
         let hLayout = amountV
                         .frame(maxWidth: .infinity, alignment: .trailing)

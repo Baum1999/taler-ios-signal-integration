@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -20,7 +23,7 @@ struct SomeCoins {
                 invalid ? String(localized: "Amount too small!")
               : tooMany ? String(localized: "Amount too big for a single withdrawal!")
            : fee.isZero ? String(localized: "No withdrawal fee")
-                        : String(localized: "- \(fee.formatted(currencyInfo)) fee")
+                        : String(localized: "- \(fee.formatted(currencyInfo, isNegative: false)) fee")
        } else {
            EMPTYSTRING
        }
