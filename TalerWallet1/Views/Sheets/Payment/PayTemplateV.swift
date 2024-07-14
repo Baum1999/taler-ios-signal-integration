@@ -61,7 +61,7 @@ struct PayTemplateV: View {
                     // TODO: show error
                 }
             }
-            dismissTop()
+            dismissTop(stack.push())
         }
     }
 

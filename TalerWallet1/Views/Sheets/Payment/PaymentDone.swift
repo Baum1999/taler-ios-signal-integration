@@ -19,7 +19,7 @@ struct PaymentDone: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
     func dismissTopAnimated(_ stack: CallStack) {
-        dismissTop()
+        dismissTop(stack.push())
     }
 
     var body: some View {

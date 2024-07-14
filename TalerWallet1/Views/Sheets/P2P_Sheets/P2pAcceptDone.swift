@@ -36,11 +36,11 @@ struct P2pAcceptDone: View {
             .task {
                 if incoming {
                     if let _ = try? await model.acceptPeerPushCreditM(transactionId) {
-                        dismissTop()
+                        dismissTop(stack.push())
                     }
                 } else {
                     if let _ = try? await model.confirmPeerPullDebitM(transactionId) {
-                        dismissTop()
+                        dismissTop(stack.push())
                     }
                 }
             }

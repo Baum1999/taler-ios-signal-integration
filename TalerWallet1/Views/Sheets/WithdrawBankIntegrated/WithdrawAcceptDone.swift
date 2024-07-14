@@ -25,7 +25,7 @@ struct WithdrawAcceptDone: View {
     }
     func dismissTopAnimated(_ stack: CallStack) {
         symLog.log("ErrorSheet dismissTop")
-        dismissTop()
+        dismissTop(stack.push())
     }
 
     var body: some View {

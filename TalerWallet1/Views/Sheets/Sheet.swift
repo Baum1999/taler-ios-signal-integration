@@ -8,6 +8,7 @@ import os.log
 
 struct Sheet: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
     @EnvironmentObject private var model: WalletModel
@@ -26,7 +27,7 @@ struct Sheet: View {
     var cancelButton: some View {
         Button("Cancel") {
             logger.log("Cancel")
-            dismissTop()
+            dismissTop(stack.push())
         }
     }
 
@@ -38,7 +39,7 @@ struct Sheet: View {
                 if let error2 = model.error2 {
                     ErrorSheet(data: error2, devMode: developerMode) {
                         logger.log("ErrorSheet dismissTop")
-                        dismissTop()
+                        dismissTop(stack.push())
                     }
                 } else {
                     sheetView

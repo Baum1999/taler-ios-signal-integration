@@ -125,7 +125,7 @@ struct MainView: View {
                                message: {   Text("Please allow camera access in settings.") })
                     .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
                         let sheet = AnyView(QRSheet(stack: stack.push(".sheet")))
-                        Sheet(sheetView: sheet)
+                        Sheet(stack: stack.push(), sheetView: sheet)
                     } // sheet
             } else if controller.backendState == .error {
                 ErrorView(errortext: nil)            // TODO: show Error View
@@ -148,7 +148,7 @@ struct MainView: View {
         }
         .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
             let sheet = AnyView(URLSheet(stack: stack.push(), urlToOpen: url))
-            Sheet(sheetView: sheet)
+            Sheet(stack: stack.push(), sheetView: sheet)
         }
         .sheet(isPresented: $model.showError) {
             model.setError(nil)
