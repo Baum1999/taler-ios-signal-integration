@@ -244,6 +244,7 @@ fileprivate struct BalancesNavigationLinksView: View {
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let cameraAction: () -> Void
 
+    @EnvironmentObject private var controller: Controller
 //    @EnvironmentObject private var model: WalletModel
 
     @State private var buttonSelected: Int? = nil
@@ -266,6 +267,9 @@ fileprivate struct BalancesNavigationLinksView: View {
 
     var body: some View {
         let scopeInfo = balance.scopeInfo
+        let currency = scopeInfo.currency
+        let currencyInfo = controller.info(for: currency)
+        let currencyName = currencyInfo?.scope.currency ?? currency
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),
@@ -299,6 +303,7 @@ fileprivate struct BalancesNavigationLinksView: View {
 
             BalanceRowView(stack: stack.push(),
                           amount: balance.available,
+                    currencyName: currencyName,
                       sendAction: {
                             selectAndUpdate(1)      // trigger SendAmount NavigationLink
                    }, recvAction: {

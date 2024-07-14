@@ -64,6 +64,7 @@ struct BalanceCell: View {
 struct BalanceRowView: View {
     let stack: CallStack
     let amount: Amount
+    let currencyName: String
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
@@ -75,15 +76,14 @@ struct BalanceRowView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
-        let currency = amount.currencyStr
         let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
                                   comment: "Abbreviation of button `Send (currency)´")
-        let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\t\(currency)",
+        let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\t\(currencyName)",
                                   comment: "`Send (currency)´ in Balances - must have ONE \\t and ONE %@")
 
         let requestTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
                                      comment: "Abbreviation of button `Request (currency)´")
-        let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\t\(currency)",
+        let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\t\(currencyName)",
                                      comment: "`Request (currency)´ in Balances - must have ONE \\t and ONE %@")
         VStack (alignment: .trailing, spacing: 6) {
             BalanceCell(amount: amount,
@@ -132,10 +132,10 @@ struct BalanceRowView_Previews: PreviewProvider {
 
         List {
             Section {
-                BalanceRowView(stack: CallStack("Preview"), amount: demo,
+                BalanceRowView(stack: CallStack("Preview"), amount: demo, currencyName: DEMOCURRENCY,
                           sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
             }
-            BalanceRowView(stack: CallStack("Preview"), amount: test, 
+            BalanceRowView(stack: CallStack("Preview"), amount: test, currencyName: TESTCURRENCY, 
                       sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
         }
     }
