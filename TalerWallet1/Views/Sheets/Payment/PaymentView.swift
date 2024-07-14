@@ -154,7 +154,7 @@ struct PaymentView: View {
                     })
                         .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding(.horizontal)
-                }
+                } // Cancel
             }
             .navigationTitle(navTitle)
         } else {

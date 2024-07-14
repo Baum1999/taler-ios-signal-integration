@@ -111,7 +111,7 @@ extension WithdrawTOSView {
         var body: some View {
             let title = String(localized: "Language:", comment: "title of ToS language selection")
             List {
-            if tos.tosAvailableLanguages.count > 1 {
+              if tos.tosAvailableLanguages.count > 1 {
                 Picker(title, selection: $selectedLanguage) {
                         ForEach(tos.tosAvailableLanguages, id: \.self) { code in
                             let languageName = Locale.current.localizedString(forLanguageCode: code)
@@ -128,15 +128,15 @@ extension WithdrawTOSView {
                         await languageAction(selected)
                     }
                 }
-            }
+              }
                 if tos.contentType == MARKDOWN {
                     Section {
                         let content = MarkdownContent(tos.content)
                         Markdown(content)
                     }
                 } else {
-                let components = tos.content.components(separatedBy: "\n\n")
-                ForEach (components, id: \.self) { term0 in
+                    let components = tos.content.components(separatedBy: "\n\n")
+                    ForEach (components, id: \.self) { term0 in
                         let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
                         let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
                         let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks

@@ -766,9 +766,9 @@
 		4EB0952A2989CBFE0043A8A1 /* Payment */ = {
 			isa = PBXGroup;
 			children = (
+				4EEC11952B840F1100146CFF /* PayTemplateV.swift */,
 				4EB0952D2989CBFE0043A8A1 /* PaymentView.swift */,
 				4E6EF56A2B65A33300AF252A /* PaymentDone.swift */,
-				4EEC11952B840F1100146CFF /* PayTemplateV.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";

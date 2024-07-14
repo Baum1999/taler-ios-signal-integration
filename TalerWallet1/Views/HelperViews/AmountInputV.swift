@@ -69,7 +69,7 @@ struct AmountInputV: View {
                     .talerFont(.title3)
                     .padding(.bottom, 2)
 //                  .accessibility(sortPriority: 3)
-            }
+            } // available
             CurrencyInputView(amount: $amountToTransfer,
                            available: amountAvailable,
                                title: amountLabel,
