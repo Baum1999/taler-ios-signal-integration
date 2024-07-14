@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -19,13 +22,12 @@ struct WithdrawAcceptDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
+    @State private var transaction: Transaction? = nil
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-            return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
-    }
-    func dismissTopAnimated(_ stack: CallStack) {
-        symLog.log("ErrorSheet dismissTop")
-        dismissTop(stack.push())
+        let response = try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
+        transaction = response
+        return response
     }
 
     var body: some View {
@@ -39,7 +41,7 @@ struct WithdrawAcceptDone: View {
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
-                                 doneAction: dismissTopAnimated,
+                                    hasDone: true,
                                 abortAction: nil,
                                deleteAction: nil,
                                  failAction: nil,
@@ -48,6 +50,17 @@ struct WithdrawAcceptDone: View {
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
+                .safeAreaInset(edge: .bottom) {
+                    if let transaction {
+                        Button(transaction.shouldConfirm ? "Authorize later" : "Done", action: { dismissTop(stack.push()) } )
+                            .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
+                            .padding(.horizontal)
+                    } else {
+                        Button("Cancel", action: { dismissTop(stack.push()) } )
+                            .buttonStyle(TalerButtonStyle(type: .bordered))
+                            .padding(.horizontal)
+                    }
+                }
             } else {
                 LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL()
                                                   ?? "Bank Authorization")

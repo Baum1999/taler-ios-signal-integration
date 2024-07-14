@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -23,9 +26,6 @@ struct ManualWithdrawDone: View {
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
-    func dismissTopAnimated(_ stack: CallStack) {
-        dismissTop(stack.push())
-    }
 
     var body: some View {
 #if PRINT_CHANGES
@@ -38,7 +38,7 @@ struct ManualWithdrawDone: View {
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
-                                 doneAction: dismissTopAnimated,    // ViewState.shared.popToRootView,
+                                    hasDone: true,
                                 abortAction: nil,
                                deleteAction: nil,
                                  failAction: nil,
@@ -47,6 +47,11 @@ struct ManualWithdrawDone: View {
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
+                .safeAreaInset(edge: .bottom) {
+                    Button("Done", action: { dismissTop(stack.push()) } )       // ViewState.shared.popToRootView ?
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                }
             } else {
                 LoadingView(scopeInfo: nil, message: exchange.exchangeBaseUrl.trimURL())
             }

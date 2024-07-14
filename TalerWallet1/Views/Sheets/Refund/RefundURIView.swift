@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import SymLog
@@ -27,12 +30,17 @@ struct RefundURIView: View {
                           transactionId: refundTransactionId,
                            reloadAction: reloadOneAction,
                                navTitle: nil,   // navTitle,
-                             doneAction: ViewState.shared.popToRootView,
+                                hasDone: true,
                             abortAction: model.abortTransaction,
                            deleteAction: model.deleteTransaction,
                              failAction: model.failTransaction,
                           suspendAction: model.suspendTransaction,
                            resumeAction: model.resumeTransaction)
+            .safeAreaInset(edge: .bottom) {
+                Button("Done", action: { dismissTop(stack.push()) } )           // ViewState.shared.popToRootView ?
+                    .buttonStyle(TalerButtonStyle(type: .prominent))
+                    .padding(.horizontal)
+            }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {

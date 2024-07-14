@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import SymLog
@@ -102,7 +105,7 @@ struct TransactionsArraySliceV: View {
                                   transactionId: transaction.id,
                                    reloadAction: reloadOneAction,
                                        navTitle: nil,
-                                     doneAction: nil,
+                                        hasDone: false,
                                     abortAction: abortAction,
                                    deleteAction: deleteAction,
                                      failAction: failAction,

@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -42,7 +45,7 @@ struct P2PReadyV: View {
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,
-                                 doneAction: ViewState.shared.popToRootView,
+                                    hasDone: true,
                                 abortAction: nil,
                                deleteAction: nil,
                                  failAction: nil,
@@ -50,6 +53,11 @@ struct P2PReadyV: View {
                                resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+                .safeAreaInset(edge: .bottom) {
+                    Button("Done", action: { dismissTop(stack.push()) } )       // ViewState.shared.popToRootView ?
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
+                }
             } else {
 #if DEBUG
                 let message = amountToTransfer.currencyStr

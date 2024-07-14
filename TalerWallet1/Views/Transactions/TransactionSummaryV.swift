@@ -30,7 +30,7 @@ struct TransactionSummaryV: View {
     let transactionId: String
     let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let navTitle: String?
-    let doneAction: ((_ stack: CallStack) -> Void)?
+    let hasDone: Bool
     let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
     let deleteAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
     let failAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
@@ -58,13 +58,14 @@ struct TransactionSummaryV: View {
         }
     }
 
+    @MainActor
     @discardableResult
     func checkDismiss(_ notification: Notification, _ logStr: String = "") -> Bool {
-        if let doneAction {
+        if hasDone {
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == transaction.common.transactionId {       // is the transition for THIS transaction?
                     symLog.log(logStr)
-                    doneAction(stack.push())        // if this view is in a sheet then dissmiss the sheet
+                    dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
                     return true
                 }
             }
@@ -115,12 +116,11 @@ struct TransactionSummaryV: View {
                                           command: .resume, warning: nil, action: resumeAction)
                     } }
                 } // Suspend + Resume buttons
-                Text(dateString)
-                    .talerFont(.body)
-                    .accessibilityLabel(a11yDate)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                    .listRowSeparator(.hidden)
-                VStack(alignment: .trailing) {
+                Group {
+                    Text(dateString)
+                        .talerFont(.body)
+                        .accessibilityLabel(a11yDate)
+                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                     let majorState = common.txState.major.localizedState
                     let minorState = common.txState.minor?.localizedState ?? nil
                     let state = developerMode ? transaction.isPending ? minorState ?? majorState
@@ -128,18 +128,17 @@ struct TransactionSummaryV: View {
                                               : majorState
                     HStack {
                         Text(Image(common.type.iconName()))
-//                        Text(verbatim: "|")   // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                             .accessibilityHidden(true)
-//                            .foregroundColor(Color.clear)
-//                        Spacer()
+                        Spacer()
                         Text("Status: \(state)")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .multilineTextAlignment(.trailing)
-                    }
-                }    .listRowSeparator(.automatic)
+                    } // Icon + State
+                }    .listRowSeparator(.hidden)
                     .talerFont(.title)
                 TypeDetail(stack: stack.push(),
-                           transaction: $transaction, hasDone: doneAction != nil)
+                     transaction: $transaction,
+                         hasDone: hasDone)
 
                 // TODO: Retry Countdown, Retry Now button
 //                if transaction.isRetryable { if let retryAction {
@@ -161,10 +160,6 @@ struct TransactionSummaryV: View {
                                       warning: String(localized: "Are you sure you want to delete this transaction?"),
                                       action: deleteAction)
                 } } // Delete button
-                if let doneAction {
-                    Button(transaction.shouldConfirm ? "Authorize later" : "Done", action: { doneAction(stack.push()) } )
-                        .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
-                } // Done button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
         } // Group
