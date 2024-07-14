@@ -79,7 +79,7 @@ struct TransactionRowView: View {
 #endif
 
         let layout1 = HStack(spacing: 4) {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 2) {
                     centerTop
                     centerBottom
                 }
@@ -92,11 +92,12 @@ struct TransactionRowView: View {
 
         let layout2 = VStack(alignment: .leading, spacing: 2) {
             centerTop
-            HStack(spacing: 10) {
+            HStack(spacing: 6) {
                 centerBottom
 #if DEBUG
                     .border(green)
 #endif
+                Spacer(minLength: 0)
                 amountV
 #if DEBUG
                     .border(red)
