@@ -22,7 +22,7 @@ struct MerchantContractTerms: Codable {
 //    let autoRefund: String?     // TODO:    TalerProtocolDuration
     let wireMethod: String              // merchant wants to use
     let summary: String                 // Human-readable short summary of the contract
-    let summaryI18n: String?            //      "      localized     "
+    let summaryI18n: [String:String]?   //      "      localized     "
     let nonce: String                   // used to ensure freshness
     let amount: Amount                  // Total amount payable
     let payDeadline: Timestamp          // Deadline to pay for the contract
