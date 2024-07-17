@@ -52,7 +52,7 @@ struct ManualWithdraw: View {
                                  comment: "NavTitle: Withdraw 'currency'")
 //          let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
-            let someCoins = SomeCoins(details: withdrawalAmountDetails)
+            let coinData = CoinData(details: withdrawalAmountDetails)
 //          let restrictAge: Int? = (selectedAge == 0) ? nil
 //                                                     : selectedAge
 //  let _ = print(selectedAge, restrictAge)
@@ -62,7 +62,7 @@ struct ManualWithdraw: View {
                         amountToTransfer: amountToTransfer)
 //                           restrictAge: restrictAge)
             }
-            let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
+            let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
             let tosAccepted = exchange.tosStatus == .accepted
             ScrollView { VStack(alignment: .trailing) {
                 Text("via \(exchange.exchangeBaseUrl.trimURL())")
@@ -75,7 +75,7 @@ struct ManualWithdraw: View {
                                                            : String(localized: "Amount to withdraw:"),
                               shortcutAction: nil)
                         .padding(.top)
-                    QuiteSomeCoins(someCoins: someCoins,
+                    QuiteSomeCoins(coinData: coinData,
                                shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
                                     currency: currency,
                                 currencyInfo: currencyInfo,

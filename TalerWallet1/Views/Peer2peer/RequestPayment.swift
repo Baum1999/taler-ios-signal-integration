@@ -50,11 +50,11 @@ struct RequestPayment: View {
         let navTitle = String(localized: "NavTitle_Request_Currency",
                            defaultValue: "Request \(currencySymbol)",
                                 comment: "NavTitle: Request 'currencySymbol'")
-        let someCoins = SomeCoins(details: peerPullCheck)
+        let coinData = CoinData(details: peerPullCheck)
         let _ = symLog.log("currency: \(currency)")
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                     feeLabel: someCoins.feeLabel(currencyInfo),
+                     feeLabel: coinData.feeLabel(currencyInfo),
                  feeIsNotZero: feeIsNotZero(),
                  currencyInfo: currencyInfo,
                  amountToSend: false,
@@ -72,7 +72,7 @@ struct RequestPayment: View {
                       summary: $summary,
                    expireDays: $expireDays)
         }
-        let disabled = amountToTransfer.isZero || someCoins.invalid || someCoins.tooMany
+        let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
         ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(amount: $amountToTransfer,
                            available: nil,
@@ -80,7 +80,7 @@ struct RequestPayment: View {
                                                    : String(localized: "Amount to request:"),
                       shortcutAction: shortcutAction)
                 .padding(.top)
-            QuiteSomeCoins(someCoins: someCoins,
+            QuiteSomeCoins(coinData: coinData,
                        shouldShowFee: true,     // always true since the requester pays fees
                             currency: currency,
                         currencyInfo: currencyInfo,

@@ -67,8 +67,8 @@ struct WithdrawAcceptView: View {
                              txStateLcl: nil,        // common.txState.major.localizedState
                                 summary: nil,
                                merchant: nil)
-                    let someCoins = SomeCoins(details: withdrawalAmountDetails)
-                    QuiteSomeCoins(someCoins: someCoins,
+                    let coinData = CoinData(details: withdrawalAmountDetails)
+                    QuiteSomeCoins(coinData: coinData,
                                shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                                     currency: currency,
                                 currencyInfo: currencyInfo,

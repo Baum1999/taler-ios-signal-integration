@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-struct SomeCoins {
+struct CoinData {
     let numCoins: Int       // 0 == invalid, -1 == unknown
     var unknown:   Bool { numCoins < 0 }
     var invalid:   Bool { numCoins == 0 }
@@ -30,7 +30,7 @@ struct SomeCoins {
     }
 }
 
-extension SomeCoins {
+extension CoinData {
     init(details: WithdrawalAmountDetails?) {
         do {
             if let details {
@@ -60,19 +60,19 @@ extension SomeCoins {
 // MARK: -
 struct QuiteSomeCoins: View {
     private let symLog = SymLogV(0)
-    let someCoins: SomeCoins
+    let coinData: CoinData
     let shouldShowFee: Bool
     let currency: String
     let currencyInfo: CurrencyInfo?
     let amountEffective: Amount?
 
     var body: some View {
-        if !someCoins.invalid {
-            if !someCoins.tooMany {
-                if someCoins.manyCoins {
-                    Text(someCoins.quiteSome ? "Note: It will take quite some time to withdraw this amount! Be more patient..."
+        if !coinData.invalid {
+            if !coinData.tooMany {
+                if coinData.manyCoins {
+                    Text(coinData.quiteSome ? "Note: It will take quite some time to withdraw this amount! Be more patient..."
                                              : "Note: It will take some time to withdraw this amount. Be patient...")
-                    .foregroundColor(someCoins.quiteSome ? .red : .primary)
+                    .foregroundColor(coinData.quiteSome ? .red : .primary)
                     .talerFont(.body)
                     .multilineTextAlignment(.leading)
                     .padding(.vertical, 6)
@@ -80,21 +80,21 @@ struct QuiteSomeCoins: View {
             }
         }
         if shouldShowFee {
-            if let fee = someCoins.fee {
-                Text(someCoins.feeLabel(currencyInfo))
-                    .foregroundColor((someCoins.invalid || someCoins.tooMany || !fee.isZero) ? .red : .primary)
+            if let fee = coinData.fee {
+                Text(coinData.feeLabel(currencyInfo))
+                    .foregroundColor((coinData.invalid || coinData.tooMany || !fee.isZero) ? .red : .primary)
                     .talerFont(.body)
             }
         }
     }
 }
 // MARK: -
-struct QuiteSomeCoins_Previews: PreviewProvider {
-    static var previews: some View {
-        QuiteSomeCoins(someCoins: SomeCoins(numCoins: 4, fee: Amount(currency: LONGCURRENCY, cent: 20) ),
-                   shouldShowFee: true,
-                        currency: LONGCURRENCY,
-                    currencyInfo: nil,
-                 amountEffective: nil)
-    }
-}
+//struct QuiteSomeCoins_Previews: PreviewProvider {
+//    static var previews: some View {
+//        QuiteSomeCoins(coinData: CoinData(numCoins: 4, fee: Amount(currency: LONGCURRENCY, cent: 20) ),
+//                  shouldShowFee: true,
+//                amountEffective: nil)
+//        .environment(\.currencyInfo, currencyInfo)
+//        .environment(\.currencyName, currencyName)      // TODO: check if this gets updated!!!
+//    }
+//}
