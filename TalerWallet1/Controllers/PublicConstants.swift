@@ -82,6 +82,7 @@ public let NOTIFICATIONERROR = "error"
 
 /// Notifications sent by wallet-core
 extension Notification.Name {
+    static let Idle = Notification.Name("idle")
     static let BalanceChange = Notification.Name("balance-change")
     static let ExchangeAdded = Notification.Name("exchange-added")
     static let ExchangeStateTransition = Notification.Name(ExchangeTransition.TransitionType.transition.rawValue)

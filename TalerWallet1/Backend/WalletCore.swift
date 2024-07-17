@@ -295,6 +295,9 @@ extension WalletCore {
             let payload = try JSONDecoder().decode(Payload.self, from: jsonData)
 
             switch payload.type {
+                case Notification.Name.Idle.rawValue:
+//                    symLog.log(anyPayload)
+                    break
                 case Notification.Name.ExchangeStateTransition.rawValue:
 //                    symLog.log(anyPayload)
                     break
