@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import taler_swift
@@ -9,7 +12,6 @@ import AnyCodable
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: - IBAN
-/// The result from PrepareDeposit
 struct ValidateIbanResult: Codable {
     let valid: Bool
 }
@@ -31,28 +33,27 @@ struct DepositFees: Codable {
     let wire: Amount
     let refresh: Amount
 }
-
-/// The result from PrepareDeposit
-struct PrepareDepositResult: Codable {
+struct CheckDepositResult: Codable {
     let totalDepositCost: Amount
     let effectiveDepositAmount: Amount
     let fees: DepositFees
 }
 /// A request to get an exchange's deposit contract terms.
-fileprivate struct PrepareDeposit: WalletBackendFormattedRequest {
-    typealias Response = PrepareDepositResult
-    func operation() -> String { "prepareDeposit" }
-    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount) }
+fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
+    typealias Response = CheckDepositResult
+    func operation() -> String { "checkDeposit" }
+    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount, clientCancellationId: cancellationId) }
 
     var depositPaytoUri: String
     var amount: Amount
+    var cancellationId: String?
     struct Args: Encodable {
         var depositPaytoUri: String
         var amount: Amount
+        var clientCancellationId: String?
     }
 }
 // MARK: -
-/// The result from CreateDepositGroup
 struct DepositGroupResult: Decodable {
     var depositGroupId: String
     var transactionId: String
@@ -72,26 +73,27 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
 }
 // MARK: -
 extension WalletModel {
-    /// validate IBAN
-    @MainActor
-    func validateIbanM(_ iban: String, viewHandles: Bool = false)       // M for MainActor
+    /// validate IBAN. No Networking
+    @MainActor    // M for MainActor
+    func validateIbanM(_ iban: String, viewHandles: Bool = false)
     async throws -> Bool {
         let request = ValidateIban(iban: iban)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.valid
     }
 
-    /// deposit coins. Networking involved
-    @MainActor
-    func prepareDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)       // M for MainActor
-      async throws -> PrepareDepositResult {
-          let request = PrepareDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
+    /// check fees for deposit. No Networking
+    @MainActor    // M for MainActor
+    func checkDepositM(_ depositPaytoUri: String, amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
+      async throws -> CheckDepositResult {
+          let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount, cancellationId: cancellationId)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }
 
-    @MainActor
-    func createDepositGroupM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)  // M for MainActor
+    /// deposit coins. Networking involved
+    @MainActor          // M for MainActor
+    func createDepositGroupM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
           let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)

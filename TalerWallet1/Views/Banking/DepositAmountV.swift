@@ -28,7 +28,7 @@ struct DepositAmountV: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State var prepareDepositResult: PrepareDepositResult? = nil
+    @State var checkDepositResult: CheckDepositResult? = nil
     @State private var insufficient = false
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
@@ -36,7 +36,7 @@ struct DepositAmountV: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
-    private func fee(ppCheck: PrepareDepositResult?) -> Amount? {
+    private func fee(ppCheck: CheckDepositResult?) -> Amount? {
         do {
             if let ppCheck {
                 // Outgoing: fee = effective - raw
@@ -54,7 +54,7 @@ struct DepositAmountV: View {
                 return nil      // this exchange never has fees
             }
         }
-        return prepareDepositResult != nil ? (!(feeAmount?.isZero ?? false))
+        return checkDepositResult != nil ? (!(feeAmount?.isZero ?? false))
                                     : false
     }
 
@@ -165,9 +165,9 @@ struct DepositAmountV: View {
                 if !insufficient {
                     if amountToTransfer.isZero {
                         feeStr = EMPTYSTRING
-                        prepareDepositResult = nil
+                        checkDepositResult = nil
                     } else if let paytoUri {
-                        if let ppCheck = try? await model.prepareDepositM(paytoUri, amount: amountToTransfer) {
+                        if let ppCheck = try? await model.checkDepositM(paytoUri, amount: amountToTransfer) {
                             if let feeAmount = fee(ppCheck: ppCheck) {
                                 feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
                                 let feeLabel = feeLabel(feeStr)
@@ -176,9 +176,9 @@ struct DepositAmountV: View {
                                 feeStr = EMPTYSTRING
                                 announce(amountVoiceOver)
                             }
-                            prepareDepositResult = ppCheck
+                            checkDepositResult = ppCheck
                         } else {
-                            prepareDepositResult = nil
+                            checkDepositResult = nil
                         }
                     }
                 }
