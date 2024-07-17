@@ -350,13 +350,7 @@ extension MainView {
             .onChange(of: balances) { newArray in
                 for balance in newArray {
                     let scope = balance.scopeInfo
-                    if controller.hasInfo(for: scope.currency) == nil {
-                        Task { // runs on MainActor
-                            if let info = try? await model.getCurrencyInfoM(scope: scope, delay: delay) {
-                                await controller.setInfo(info)
-                            }
-                        }
-                    }
+                    controller.checkInfo(for: scope, model: model)
                 }
             }
         } // body

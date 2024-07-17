@@ -52,6 +52,7 @@ class Controller: ObservableObject {
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
     var currencyInfos: [CurrencyInfo]
+    var exchanges: [Exchange]
     var messageForSheet: String? = nil
 
     private let monitor = NWPathMonitor()
@@ -100,13 +101,14 @@ class Controller: ObservableObject {
         backendState = .instantiated
         currencyTicker = 0
         currencyInfos = []
+        exchanges = []
 //        checkInternetConnection()
     }
 // MARK: -
-    func hasInfo(for currency: String) -> CurrencyInfo? {
-        for info in currencyInfos {
-            if info.scope.currency == currency {
-                return info
+    func exchange(for baseUrl: String) -> Exchange? {
+        for exchange in exchanges {
+            if exchange.exchangeBaseUrl == baseUrl {
+                return exchange
             }
         }
         return nil
@@ -120,20 +122,50 @@ class Controller: ObservableObject {
                 return info
             }
         }
+        logger.log("  ❗️ no info for \(currency)")
         return nil
     }
     func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
         if ticker != currencyTicker {
-            print("❗️Yikes")
+            print("  ❗️Yikes - race condition while getting info for \(currency)")
         }
         return info(for: currency) ?? CurrencyInfo.zero(currency)
+    }
+
+    func hasInfo(for currency: String) -> Bool {
+        for info in currencyInfos {
+            if info.scope.currency == currency {
+                return true
+            }
+        }
+        logger.log("  ❗️ no info for \(currency)")
+        return false
+    }
+
+    func checkInfo(for scope: ScopeInfo, model: WalletModel) {
+        for info in currencyInfos {
+            if info.scope == scope {
+                return  // got it, nothing to do
+            }
+        }
+        Task {
+            if let baseUrl = scope.url {
+                if exchange(for: baseUrl) == nil {
+                    let exchange = try await model.getExchangeByUrl(url: baseUrl)
+                    exchanges.append(exchange)
+                }
+            }
+            let info = try await model.getCurrencyInfoM(scope: scope, delay: 0)
+            await setInfo(info)
+            logger.log("  ❗️info set for \(scope.currency)")
+        }
     }
 
     @MainActor
     func getInfo(from exchangeBaseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
         let exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
         let scopeInfo = exchange.scopeInfo
-        if let info = hasInfo(for: scopeInfo.currency) {
+        if let info = info(for: scopeInfo.currency) {
             return info
         }
         let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
@@ -185,8 +217,11 @@ class Controller: ObservableObject {
 // MARK: -
 extension Controller {
     func openURL(_ url: URL, stack: CallStack) -> UrlCommand {
+#if DEBUG
         symLog.log(url)
+#else
         self.logger.trace("openURL(\(url))")
+#endif
         guard let scheme = url.scheme else {return UrlCommand.unknown}
         var uncrypted = false
         switch scheme.lowercased() {
