@@ -113,7 +113,10 @@ struct RequestPayment: View {
             if amountToTransfer.isZero {
 //                fee = EMPTYSTRING
             } else {
-                peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
+//                peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
+                let baseURL = exchange?.exchangeBaseUrl
+                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer,
+                                                                      cancellationId: "cancel")
             }
         }
     }

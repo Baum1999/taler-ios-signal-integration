@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import taler_swift
@@ -31,8 +34,8 @@ fileprivate struct GetMaxPeerPushAmount: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func getMaxPeerPushAmountM(_ currency: String, viewHandles: Bool = false)       // M for MainActor
+    @MainActor            // M for MainActor
+    func getMaxPeerPushAmountM(_ currency: String, viewHandles: Bool = false)
       async throws -> AmountResponse {
         let request = GetMaxPeerPushAmount(currency: currency)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
@@ -49,18 +52,20 @@ struct CheckPeerPushDebitResponse: Codable {
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
     func operation() -> String { "checkPeerPushDebit" }
-    func args() -> Args { Args(amount: amount) }
+    func args() -> Args { Args(amount: amount, clientCancellationId: cancellationId) }
 
     var amount: Amount
+    var cancellationId: String?
     struct Args: Encodable {
         var amount: Amount
+        var clientCancellationId: String?
     }
 }
 extension WalletModel {
-    @MainActor
-    func checkPeerPushDebitM(_ amount: Amount, viewHandles: Bool = false)       // M for MainActor
+    @MainActor          // M for MainActor
+    func checkPeerPushDebitM(_ amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
       async throws -> CheckPeerPushDebitResponse {
-        let request = CheckPeerPushDebit(amount: amount)
+        let request = CheckPeerPushDebit(amount: amount, cancellationId: cancellationId)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
@@ -89,8 +94,8 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)       // M for MainActor
+    @MainActor             // M for MainActor
+    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)
     async throws -> InitiatePeerPushDebitResponse {
         let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
                                             partialContractTerms: terms)
@@ -110,22 +115,28 @@ struct CheckPeerPullCreditResponse: Codable {
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
     func operation() -> String { "checkPeerPullCredit" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, scopeInfo: scopeInfo, amount: amount) }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, scopeInfo: scopeInfo,
+                                        amount: amount, clientCancellationId: cancellationId) }
 
     var exchangeBaseUrl: String?
     var scopeInfo: ScopeInfo?
     var amount: Amount
+    var cancellationId: String?
     struct Args: Encodable {
         var exchangeBaseUrl: String?
         var scopeInfo: ScopeInfo?
         var amount: Amount
+        var clientCancellationId: String?
     }
 }
 extension WalletModel {
-    @MainActor
-    func checkPeerPullCreditM(_ amount: Amount, exchangeBaseUrl: String?, viewHandles: Bool = false)       // M for MainActor
+    @MainActor           // M for MainActor
+    func checkPeerPullCreditM(_ exchangeBaseUrl: String?, amount: Amount,
+                              cancellationId: String? = nil, viewHandles: Bool = false)
       async throws -> CheckPeerPullCreditResponse {
-        let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl, amount: amount)
+        let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl,
+                                                   amount: amount,
+                                           cancellationId: cancellationId)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
