@@ -9,6 +9,7 @@ import SwiftUI
 import taler_swift
 
 struct BalanceCell: View {
+    let stack: CallStack?
     let amount: Amount
     let sizeCategory: ContentSizeCategory
     let rowAction: () -> Void
@@ -21,7 +22,7 @@ struct BalanceCell: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountV = AmountV(amount: amount, isNegative: false, large: true)
+        let amountV = AmountV(stack: stack?.push("AmountV"), amount: amount, isNegative: false, large: true)
             .foregroundColor(.primary)
         let hLayout = amountV
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -86,10 +87,11 @@ struct BalanceRowView: View {
         let requestTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\t\(currencyName)",
                                      comment: "`Request (currency)´ in Balances - must have ONE \\t and ONE %@")
         VStack (alignment: .trailing, spacing: 6) {
-            BalanceCell(amount: amount,
-                     sizeCategory: sizeCategory,
-                        rowAction: rowAction,
-                      balanceDest: balanceDest)
+            BalanceCell(stack: stack.push("BalanceCell"),
+                       amount: amount,
+                 sizeCategory: sizeCategory,
+                    rowAction: rowAction,
+                  balanceDest: balanceDest)
 //            .border(.red)
 
             let sendTitle = minimalistic ? sendTitle0 : sendTitle1

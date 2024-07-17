@@ -10,6 +10,7 @@ import taler_swift
 
 // Title and Amount
 struct AmountRowV: View {
+    let stack: CallStack?
     let title: String
     let amount: Amount
     let isNegative: Bool        // if true, show a "-" before the amount
@@ -20,7 +21,7 @@ struct AmountRowV: View {
         let titleV = Text(title)
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
-        let amountV = AmountV(amount: amount, isNegative: isNegative, large: large)
+        let amountV = AmountV(stack: stack?.push(), amount: amount, isNegative: isNegative, large: large)
                         .foregroundColor(color)
         let verticalV = VStack(alignment: .leading) {
             titleV
@@ -57,6 +58,7 @@ struct AmountRowV: View {
 }
 extension AmountRowV {
     init(title: String, amount: Amount, isNegative: Bool, color: Color) {
+        self.stack = nil
         self.title = title
         self.amount = amount
         self.isNegative = isNegative
@@ -77,7 +79,7 @@ fileprivate func talerFromStr(_ from: String) -> Amount {
 #Preview {
     List {
         let fee = Amount(currency: "Taler", cent: 20)
-        AmountRowV(title: "Fee", amount: fee, isNegative: true, color: Color("Outgoing"), large: false)
+        AmountRowV(stack: nil, title: "Fee", amount: fee, isNegative: true, color: Color("Outgoing"), large: false)
         let cents = Amount(currency: "Taler", cent: 480)
         AmountRowV(title: "Cents", amount: cents, isNegative: false, color: Color("Incoming"))
         let amount = talerFromStr("Taler:4.80")

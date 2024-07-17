@@ -9,6 +9,7 @@ import SwiftUI
 import taler_swift
 
 struct AmountV: View {
+    let stack: CallStack?
     let amount: Amount
     let isNegative: Bool        // if true, show a "-" before the amount
     let large: Bool             // set to false for QR or IBAN
@@ -26,6 +27,7 @@ struct AmountV: View {
 }
 extension AmountV {
     init(_ amount: Amount, isNegative: Bool) {
+        self.stack = nil
         self.amount = amount
         self.isNegative = isNegative
         self.large = false

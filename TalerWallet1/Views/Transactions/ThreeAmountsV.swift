@@ -102,7 +102,8 @@ struct ThreeAmountsV: View {
                     .lineLimit(4)
                     .padding(.bottom)
             }
-            AmountRowV(title: minimalistic ? topAbbrev : topTitle,
+            AmountRowV(stack: stack.push(),
+                       title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
                   isNegative: !incoming,
                        color: labelColor,
@@ -112,7 +113,8 @@ struct ThreeAmountsV: View {
                 if let fee {
                     let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
                                              : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")
-                    AmountRowV(title: title,
+                    AmountRowV(stack: stack.push(),
+                               title: title,
                               amount: fee,
                           isNegative: !incoming,
                                color: labelColor,
@@ -120,7 +122,8 @@ struct ThreeAmountsV: View {
                     .padding(.bottom, 4)
                 }
                 if let bottomAmount {
-                    AmountRowV(title: minimalistic ? bottomAbbrev : bottomTitle,
+                    AmountRowV(stack: stack.push(),
+                               title: minimalistic ? bottomAbbrev : bottomTitle,
                               amount: bottomAmount,
                           isNegative: !incoming,
                                color: foreColor,

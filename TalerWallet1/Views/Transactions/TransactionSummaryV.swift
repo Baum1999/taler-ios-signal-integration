@@ -342,13 +342,15 @@ struct TransactionSummaryV: View {
                             Text(details.refreshReason.localizedRefreshReason)
                                 .talerFont(.title)
                             let input = details.refreshInputAmount
-                            AmountRowV(title: minimalistic ? "Refreshed:" : "Refreshed amount:",
+                            AmountRowV(stack: stack.push(),
+                                       title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
                                   isNegative: false,
                                        color: labelColor,
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
-                                AmountRowV(title: minimalistic ? "Fee:" : "Refreshed fee:",
+                                AmountRowV(stack: stack.push(),
+                                           title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
                                       isNegative: !fee.isZero,
                                            color: labelColor,
@@ -425,7 +427,6 @@ struct TransactionSummaryV: View {
                                         baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
                                         summary: nil,
                                        merchant: nil)
-
                     }
                     case .denomLoss(let denomLossTransaction): Group {
                         let details = denomLossTransaction.details              // TODO: more details
