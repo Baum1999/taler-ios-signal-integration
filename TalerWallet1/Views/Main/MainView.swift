@@ -122,7 +122,7 @@ struct MainView: View {
                            isPresented: $showCameraAlert,
                                actions: {   openSettingsButton
                                             dismissAlertButton },
-                               message: {   Text("Please allow camera access in settings.") })
+                               message: {   Text("Please allow camera access in settings.") }) // Scanning QR-codes
                     .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
                         let sheet = AnyView(QRSheet(stack: stack.push(".sheet")))
                         Sheet(stack: stack.push(), sheetView: sheet)
