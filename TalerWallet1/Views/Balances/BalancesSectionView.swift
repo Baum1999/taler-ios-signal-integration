@@ -126,9 +126,9 @@ extension BalancesSectionView: View {
                 .listRowSeparator(.hidden)
             }
             DepositWithdrawV(stack: stack.push(),
-                         scopeInfo: balance.scopeInfo,
+                      currencyInfo: currencyInfo,
+//                         scopeInfo: balance.scopeInfo,
                    amountAvailable: balance.available,
-                          currency: currencyName,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
             .listRowSeparator(.hidden)
 

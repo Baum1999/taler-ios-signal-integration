@@ -45,11 +45,12 @@ struct ExchangeSectionView: View {
 #endif
         let scopeInfo = exchange.scopeInfo
         let currency = scopeInfo.currency
-        let currencyInfoOpt = controller.info(for: currency)                    // might be nil
-        let currencyName = currencyInfoOpt?.scope.currency ?? currency          // might be "Unknown"
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let currencyName = currencyInfo.scope.currency
         Section {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
+                         currencyInfo: currencyInfo,
                              exchange: exchange,
                       amountAvailable: amountAvailable(exchange, currency: currency),
 //                          depositIBAN: $depositIBAN,

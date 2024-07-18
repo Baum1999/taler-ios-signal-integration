@@ -12,6 +12,7 @@ import SymLog
 struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let exchange: Exchange
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
@@ -53,9 +54,9 @@ struct ExchangeRowView: View {
             .listRowSeparator(.hidden)
 
             DepositWithdrawV(stack: stack.push(),
-                         scopeInfo: exchange.scopeInfo,
+                      currencyInfo: currencyInfo,
+//                         scopeInfo: exchange.scopeInfo,
                    amountAvailable: amountAvailable,
-                          currency: currency,
                   amountToTransfer: $amountToTransfer)
         }
         .task {
@@ -99,6 +100,7 @@ fileprivate struct ExchangeRow_Container : View {
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
         ExchangeRowView(stack: CallStack("Preview"),
+                 currencyInfo: CurrencyInfo.zero(LONGCURRENCY),
                      exchange: exchange1,
               amountAvailable: Amount(currency: LONGCURRENCY, cent: 5000),      // 50,00
                      currency: LONGCURRENCY,

@@ -12,9 +12,10 @@ import SymLog
 struct DepositWithdrawV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let scopeInfo: ScopeInfo
+    let currencyInfo: CurrencyInfo
+//    let scopeInfo: ScopeInfo
     let amountAvailable: Amount?
-    let currency: String                        // this is the currency to be used
+//    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
 
     @EnvironmentObject private var model: WalletModel
@@ -23,13 +24,15 @@ struct DepositWithdrawV: View {
     @State private var myExchange: Exchange? = nil
 
     func selectAndUpdate(_ button: Int) {
+        let scope = currencyInfo.scope
+        let currency = scope.currency
         amountToTransfer.setCurrency(currency)
         buttonSelected = button      // will trigger NavigationLink
         // after user tapped a button, while navigation animation runs, contact Exchange to update Fees
-        if let url = scopeInfo.url {
+        if let url = scope.url {
             Task { // runs on MainActor
                 do {
-//                    try await model.updateExchange(scopeInfo: scopeInfo)
+    // TODO:        try await model.updateExchange(scopeInfo: scope)
                     try await model.updateExchange(exchangeBaseUrl: url)
                 } catch {    // TODO: error handling - couldn't updateExchange
                     symLog.log("error: \(error)")
@@ -39,14 +42,16 @@ struct DepositWithdrawV: View {
     }
 
     var body: some View {
+        let scope = currencyInfo.scope
+        let currencyName = currencyInfo.specs.name
         let depositTitle0 = String(localized: "DepositButton_Short", defaultValue: "Deposit",
                                      comment: "Abbreviation of button `Deposit (currency)´")
-        let depositTitle1 = String(localized: "Deposit\t\(currency)",
+        let depositTitle1 = String(localized: "Deposit\t\(currencyName)",
                                      comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
 
         let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
                                       comment: "Abbreviation of button `Withdraw (currency)´")
-        let withdrawTitle1 = String(localized: "Withdraw\t\(currency)",
+        let withdrawTitle1 = String(localized: "Withdraw\t\(currencyName)",
                                       comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let deposit = LazyView {
             DepositIbanV(stack: stack.push(),
@@ -60,7 +65,7 @@ struct DepositWithdrawV: View {
         let manualWithdraw = LazyView {
             ManualWithdraw(stack: stack.push(),
                          isSheet: false,
-                       scopeInfo: scopeInfo,
+                       scopeInfo: scope,
                         exchange: $myExchange,
                 amountToTransfer: $amountToTransfer)
         }
