@@ -88,11 +88,11 @@ struct WithdrawURIView: View {
                             .task {
                                 await loadExchange(defaultBaseUrl)
                             }
-                    }
+                    } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(), url: url,
                                                     amountToTransfer: $amountToTransfer,
                                                             exchange: $exchange)
-                    if amountIsEditable {   // amountToTransfer.isZero {
+                    if amountIsEditable {
                       ScrollView {
                         let shortcutDestination = LazyView {
                             WithdrawAcceptView(stack: stack.push(), url: url,
@@ -102,7 +102,6 @@ struct WithdrawURIView: View {
                         // TODO: input amount, then
                         let amountLabel = minimalistic ? String(localized: "Amount:")
                                                        : String(localized: "Amount to withdraw:")
-
                         AmountInputV(stack: stack.push(), url: nil,
                            amountAvailable: amountAvailable,
                           amountToTransfer: $amountToTransfer,
@@ -117,21 +116,21 @@ struct WithdrawURIView: View {
                                 computeFee: computeFeeWithdraw)
                         .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        )
+                        ) // shortcutDestination
                         .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        )
+                        ) // acceptDestination
                       }
                     } else {
                         acceptDestination
-                    }
+                    } // directly show the accept view
                 }
                 .navigationTitle(navTitle)
                 .onAppear() {
                     symLog.log("onAppear")
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)
                 }
-                    //                    agePicker.setAges(ages: details?.ageRestrictionOptions)
+//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
             } else {    // TODO: error
 //                symLog.log("no exchangeBaseUrl or no exchange")
             }
@@ -157,7 +156,7 @@ struct WithdrawURIView: View {
                     }
 
                     // TODO: amount = nil ==> show amount input
-                }
+                } // getWithdrawalDetailsForUriM
         }
     }
 }

@@ -60,7 +60,7 @@ struct ExchangeRowView: View {
                   amountToTransfer: $amountToTransfer)
         }
         .task {
-            if controller.hasInfo(for: currency) == nil {
+            if controller.info(for: currency) == nil {
                 symLog.log("fetching info for \(currency)")
                 // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
                 let scopeInfo = exchange.scopeInfo

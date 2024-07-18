@@ -41,7 +41,8 @@ struct ManualWithdraw: View {
 
       Group {
         if let exchange {
-            let currency = exchange.scopeInfo.currency
+            let scopeInfo = exchange.scopeInfo
+            let currency = scopeInfo.currency
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
             let navTitle = String(localized: "NavTitle_Withdraw (currency)",

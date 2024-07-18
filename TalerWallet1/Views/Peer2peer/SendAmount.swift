@@ -124,11 +124,11 @@ struct SendAmount: View {
                     computeFee: computeFeeSend)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            )
+            ) // shortcutDestination
             .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            )
-        } // ScrollVStack
+            ) // inputDestination
+        } // ScrollView
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
