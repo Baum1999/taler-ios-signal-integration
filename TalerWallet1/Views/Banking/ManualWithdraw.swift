@@ -44,12 +44,14 @@ struct ManualWithdraw: View {
             let scopeInfo = exchange.scopeInfo
             let currency = scopeInfo.currency
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+            let currencyName = currencyInfo.scope.currency
+            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyName
+
             let navTitle = String(localized: "NavTitle_Withdraw (currency)",
                                defaultValue: "Withdraw \(currencySymbol)",
                                     comment: "NavTitle: Withdraw 'currencySymbol'")
             let navA11y = String(localized: "NavTitle_Withdraw (currency) A11y",
-                                 defaultValue: "Withdraw \(currency)",
+                                 defaultValue: "Withdraw \(currencyName)",
                                  comment: "NavTitle: Withdraw 'currency'")
 //          let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 
