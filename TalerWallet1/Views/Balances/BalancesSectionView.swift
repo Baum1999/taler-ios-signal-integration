@@ -275,6 +275,7 @@ fileprivate struct BalancesNavigationLinksView: View {
         HStack(spacing: 0) {
             NavigationLink(destination: LazyView {
                 SendAmount(stack: stack.push(),
+                    currencyInfo: currencyInfo,
                  amountAvailable: balance.available,
                 amountToTransfer: $amountToTransfer,        // with correct currency
                          summary: $summary,

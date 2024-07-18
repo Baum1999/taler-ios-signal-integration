@@ -13,6 +13,7 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo?
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var amountToTransfer: Amount
@@ -189,20 +190,21 @@ fileprivate struct Preview_Content: View {
     }
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, cent: 1000)
-        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
+        let currencyInfo = CurrencyInfo.zero(LONGCURRENCY)
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
                                        masterPub: "masterPub",
-                                       scopeInfo: scopeInfo,
+                                       scopeInfo: currencyInfo.scope,
                                        paytoUris: [],
                                        tosStatus: .proposed,
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
         SendAmount(stack: CallStack("Preview"),
+            currencyInfo: currencyInfo,
          amountAvailable: amount,
         amountToTransfer: $amountToPreview,
                  summary: $summary,
-               scopeInfo: scopeInfo,
+               scopeInfo: currencyInfo.scope,
             cameraAction: checkCameraAvailable)
     }
 }
