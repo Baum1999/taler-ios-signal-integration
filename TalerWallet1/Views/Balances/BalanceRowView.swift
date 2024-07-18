@@ -64,8 +64,8 @@ struct BalanceCell: View {
 /// [Send Money]  [Request Payment]
 struct BalanceRowView: View {
     let stack: CallStack
-    let amount: Amount
     let currencyName: String
+    let amount: Amount
     let sendAction: () -> Void
     let recvAction: () -> Void
     let rowAction: () -> Void
@@ -134,10 +134,10 @@ struct BalanceRowView_Previews: PreviewProvider {
 
         List {
             Section {
-                BalanceRowView(stack: CallStack("Preview"), amount: demo, currencyName: DEMOCURRENCY,
+                BalanceRowView(stack: CallStack("Preview"), currencyName: DEMOCURRENCY, amount: demo,
                           sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
             }
-            BalanceRowView(stack: CallStack("Preview"), amount: test, currencyName: TESTCURRENCY, 
+            BalanceRowView(stack: CallStack("Preview"), currencyName: TESTCURRENCY, amount: test,
                       sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
         }
     }

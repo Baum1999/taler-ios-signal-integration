@@ -9,9 +9,6 @@ import MarkdownUI
 struct WithdrawTOSView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-
-    let navTitle = String(localized: "Terms of Service")
-
     let exchangeBaseUrl: String?
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
     let acceptAction: (() async -> Void)?
@@ -21,6 +18,8 @@ struct WithdrawTOSView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State var exchangeTOS: ExchangeTermsOfService?
+
+    let navTitle = String(localized: "Terms of Service")
 
     func loadToS(_ language: String) async {
         if let exchangeBaseUrl {

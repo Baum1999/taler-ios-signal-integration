@@ -21,9 +21,9 @@ func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
-    let currencyInfo: CurrencyInfo
     let amountToSend: Bool
     @Binding var amountToTransfer: Amount
     @Binding var summary: String

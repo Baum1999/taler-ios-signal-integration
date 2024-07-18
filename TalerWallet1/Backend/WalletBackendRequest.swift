@@ -33,7 +33,7 @@ struct ScopeInfo: Codable, Hashable {
     }
     var type: ScopeInfoType
     var noFees: Bool?           // only for "global". Regional have this field per Exchange
-    var url: String?            // only for "exchange"
+    var url: String?            // only for "exchange" and "auditor"
     var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
 
     public static func < (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
@@ -53,7 +53,7 @@ struct ScopeInfo: Codable, Hashable {
                 }
                 return true
             }
-            if let rhsBaseURL = rhs.url {
+            if rhs.url != nil {
                 return false
             }
             // fall thru

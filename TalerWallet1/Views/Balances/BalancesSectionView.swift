@@ -81,7 +81,7 @@ extension BalancesSectionView: View {
                     .listRowSeparator(.hidden)
             }
             BalancesNavigationLinksView(symLog: symLog,
-                                         stack: stack.push(),
+                                         stack: stack.push("Section"),
                                        balance: balance,
                               amountToTransfer: $amountToTransfer,      // does still have the wrong currency
                                        summary: $summary,
@@ -106,8 +106,6 @@ extension BalancesSectionView: View {
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
                 }
-            }
-            if showSpendingButton {
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let action = {
                     showSpendingHint = false
@@ -250,7 +248,6 @@ fileprivate struct BalancesNavigationLinksView: View {
     let cameraAction: () -> Void
 
     @EnvironmentObject private var controller: Controller
-//    @EnvironmentObject private var model: WalletModel
 
     @State private var buttonSelected: Int? = nil
 
@@ -307,8 +304,8 @@ fileprivate struct BalancesNavigationLinksView: View {
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
             BalanceRowView(stack: stack.push(),
-                          amount: balance.available,
                     currencyName: currencyName,
+                          amount: balance.available,
                       sendAction: {
                             selectAndUpdate(1)      // trigger SendAmount NavigationLink
                    }, recvAction: {

@@ -60,10 +60,10 @@ extension CoinData {
 // MARK: -
 struct QuiteSomeCoins: View {
     private let symLog = SymLogV(0)
+    let currencyInfo: CurrencyInfo
+    let currency: String
     let coinData: CoinData
     let shouldShowFee: Bool
-    let currency: String
-    let currencyInfo: CurrencyInfo?
     let amountEffective: Amount?
 
     var body: some View {
@@ -94,7 +94,5 @@ struct QuiteSomeCoins: View {
 //        QuiteSomeCoins(coinData: CoinData(numCoins: 4, fee: Amount(currency: LONGCURRENCY, cent: 20) ),
 //                  shouldShowFee: true,
 //                amountEffective: nil)
-//        .environment(\.currencyInfo, currencyInfo)
-//        .environment(\.currencyName, currencyName)      // TODO: check if this gets updated!!!
 //    }
 //}

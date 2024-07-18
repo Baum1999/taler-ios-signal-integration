@@ -54,9 +54,9 @@ struct RequestPayment: View {
         let _ = symLog.log("currency: \(currency)")
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                 currencyInfo: currencyInfo,
                      feeLabel: coinData.feeLabel(currencyInfo),
                  feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
                  amountToSend: false,
              amountToTransfer: $amountToTransfer,
                       summary: $summary,
@@ -64,9 +64,9 @@ struct RequestPayment: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                 currencyInfo: currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
                  amountToSend: false,
              amountToTransfer: $amountShortcut,
                       summary: $summary,
@@ -80,11 +80,11 @@ struct RequestPayment: View {
                                                    : String(localized: "Amount to request:"),
                       shortcutAction: shortcutAction)
                 .padding(.top)
-            QuiteSomeCoins(coinData: coinData,
-                       shouldShowFee: true,     // always true since the requester pays fees
-                            currency: currency,
-                        currencyInfo: currencyInfo,
-                     amountEffective: peerPullCheck?.amountEffective)
+            QuiteSomeCoins(currencyInfo: currencyInfo,
+                               currency: currency,
+                               coinData: coinData,
+                          shouldShowFee: true,           // always true since the requester pays fees
+                        amountEffective: peerPullCheck?.amountEffective)
             NavigationLink(destination: inputDestination) { Text("Next") }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)

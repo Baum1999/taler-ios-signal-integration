@@ -84,9 +84,9 @@ struct SendAmount: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                 currencyInfo: currencyInfo,
                      feeLabel: feeLabel(feeStr),
                  feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
                  amountToSend: true,
              amountToTransfer: $amountToTransfer,       // from the textedit
                       summary: $summary,
@@ -94,9 +94,9 @@ struct SendAmount: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                 currencyInfo: currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
-                 currencyInfo: currencyInfo,
                  amountToSend: true,
              amountToTransfer: $amountShortcut,         // from the tapped shortcut button
                       summary: $summary,
