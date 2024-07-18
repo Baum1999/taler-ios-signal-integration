@@ -68,7 +68,8 @@ extension OverviewSectionV: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
-        let currencyInfo = controller.info(for: currency)
+        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+        let currencyName = currencyInfo.scope.currency
 
         Section {
             if scopeInfo.type == .exchange {
@@ -95,9 +96,8 @@ extension OverviewSectionV: View {
                     .padding(.leading, ICONLEADING)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo,
-                    currencyName: currencyInfo?.scope.currency ?? currency,
-            shouldReloadBalances: $shouldReloadBalances)
+            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
+                           shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {
@@ -141,7 +141,6 @@ extension OverviewSectionV: View {
 fileprivate struct CurrenciesPendingRowV: View {
     let symLog: SymLogV?
     let stack: CallStack
-//    let currency: String // = currencyInfo.scope.currency
     let balance: Balance                            // this is the currency to be used
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()

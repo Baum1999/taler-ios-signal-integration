@@ -40,6 +40,8 @@ struct BalancesSectionView {
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
+    @State private var currencyName: String = "UNKNOWN"
 
     func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -69,8 +71,8 @@ extension BalancesSectionView: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
-        let currencyInfo = controller.info(for: currency)
 
+        Group {
         Section {
             if scopeInfo.type == .exchange {
                 let baseURL = scopeInfo.url?.trimURL() ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
@@ -96,7 +98,6 @@ extension BalancesSectionView: View {
                               reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
-            let currencyName = currencyInfo?.scope.currency ?? currency
             let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
             if showSpendingButton {
                 if !minimalistic && showSpendingHint {
@@ -132,10 +133,14 @@ extension BalancesSectionView: View {
             .listRowSeparator(.hidden)
 
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo,
-                    currencyName: currencyInfo?.scope.currency ?? currency,
-            shouldReloadBalances: $shouldReloadBalances)
+            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
+                           shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
+        .task(id: controller.currencyTicker) {
+            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyName = currencyInfo.scope.currency
+        }
+        } // group
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
