@@ -65,6 +65,10 @@ struct SendAmount: View {
                                     : false
     }
 
+    private func computeFeeSend(_ amount: Amount) async -> ComputeFeeResult? {
+        return nil
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -114,9 +118,10 @@ struct SendAmount: View {
              summaryIsEditable: true,
                        summary: $summary,
 //                  insufficient: $insufficient,
-//                     feeAmount: $feeAmount,
+                     feeAmount: $feeAmount,
                 shortcutAction: shortcutAction,
-                  buttonAction: buttonAction)
+                  buttonAction: buttonAction,
+                    computeFee: computeFeeSend)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
             )

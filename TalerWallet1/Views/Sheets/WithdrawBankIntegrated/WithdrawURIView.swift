@@ -55,6 +55,10 @@ struct WithdrawURIView: View {
         buttonSelected = true
     }
 
+    private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
+        return nil
+    }
+
     var body: some View {
         if possibleExchanges.count > 0 {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
@@ -105,9 +109,10 @@ struct WithdrawURIView: View {
                          summaryIsEditable: false,
                                    summary: $summary,
 //                              insufficient: $insufficient,
-//                                 feeAmount: $feeAmount,
+                                 feeAmount: $feeAmount,
                             shortcutAction: shortcutAction,
-                              buttonAction: buttonAction)
+                              buttonAction: buttonAction,
+                                computeFee: computeFeeWithdraw)
                         .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
                         )

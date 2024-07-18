@@ -9,6 +9,12 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+struct ComputeFeeResult {
+    let insufficient: Bool
+    let feeAmount: Amount?
+    let feeStr: String
+}
+
 struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -21,9 +27,10 @@ struct AmountInputV: View {
     let summaryIsEditable: Bool                      // if true we call SubjectInputV next
     @Binding var summary: String
 //    @Binding var insufficient: Bool
-//    @Binding var feeAmount: Amount?
+    @Binding var feeAmount: Amount?
     let shortcutAction: ((_ amount: Amount) -> Void)?
     let buttonAction: () -> Void
+    let computeFee: ((_ amount: Amount) async -> ComputeFeeResult?)?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -75,19 +82,14 @@ struct AmountInputV: View {
                                title: amountLabel,
                       shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
-            if flags.insufficient {
-                Text(insufficientLabel)
-                    .talerFont(.body)
-                    .foregroundColor(.red)
-                    .padding(4)
-//            } else {
-//                Text(feeLabel(feeStr))
-//                    .talerFont(.body)
-//                    .foregroundColor((feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
-//                                     : .red)
-//                    .padding(4)
-//                  .accessibility(sortPriority: 1)
-            }
+
+            let color = flags.insufficient || !(feeAmount?.isZero ?? true) ? .red
+                      : WalletColors().secondary(colorScheme, colorSchemeContrast)
+            Text(flags.insufficient ? insufficientLabel : feeLabel(feeStr))
+                .talerFont(.body)
+                .foregroundColor(color)
+                .padding(4)
+                .accessibility(sortPriority: 1)
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
@@ -98,24 +100,19 @@ struct AmountInputV: View {
 //          symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_PAY_TEMPL_AMOUNT)
         }
-//        .task(id: amountToTransfer.value) {
-//            if let url {
-//                symLog.log(".task preparePayForTemplate")
-//                if let result = await preparePayForTemplate(model: model,
-//                                                              url: url,
-//                                                           amount: amountToTransfer,
-//                                                          summary: summaryIsEditable ? summary ?? " "
-//                                                                                     : nil,
-//                                                         announce: announce)
-//                {   symLog.log("preparePayForTemplate finished")
+        .task(id: amountToTransfer.value) {
+            // re-compute the fees on every tapped digit or backspace
+            if let computeFee {
+                symLog.log(".task computeFee")
+                if let result: ComputeFeeResult = await computeFee(amountToTransfer) {
+                    symLog.log("computeFee() finished")
+                    feeStr = result.feeStr
 //                    insufficient = result.insufficient
 //                    feeAmount = result.feeAmount
-//                    feeStr = result.feeStr
-//                    preparePayResult = result.ppCheck
-//                } else {
-//                    symLog.log("preparePayForTemplateM failed")
-//                }
-//            }
-//        }
+                } else {
+                    symLog.log("computeFee() failed")
+                }
+            }
+        }
     }
 }
