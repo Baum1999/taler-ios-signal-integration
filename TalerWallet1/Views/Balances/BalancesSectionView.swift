@@ -82,6 +82,7 @@ extension BalancesSectionView: View {
             }
             BalancesNavigationLinksView(symLog: symLog,
                                          stack: stack.push("Section"),
+                                  currencyInfo: currencyInfo,
                                        balance: balance,
                               amountToTransfer: $amountToTransfer,      // does still have the wrong currency
                                        summary: $summary,
@@ -237,8 +238,9 @@ fileprivate struct BalancesPendingRowView: View {
 fileprivate struct BalancesNavigationLinksView: View {
     let symLog: SymLogV?
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let balance: Balance
-    
+
 //    let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
