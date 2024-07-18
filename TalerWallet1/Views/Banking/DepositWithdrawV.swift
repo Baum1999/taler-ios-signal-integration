@@ -55,6 +55,7 @@ struct DepositWithdrawV: View {
                                       comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
         let deposit = LazyView {
             DepositIbanV(stack: stack.push(),
+                  currencyInfo: currencyInfo,
                       feeLabel: nil,
                   feeIsNotZero: nil,
                amountAvailable: amountAvailable,

@@ -13,6 +13,7 @@ import SymLog
 struct DepositIbanV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
     let amountAvailable: Amount?
@@ -33,14 +34,14 @@ struct DepositIbanV: View {
     @State private var paytoUri: String? = nil
     @FocusState private var isFocused: Bool
 
-    private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+    private func buttonTitle(_ amount: Amount) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
         return String(localized: "Next", comment: "advance Deposit to Amount")
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
-    private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.formatted(currencyInfo, isNegative: true)
+    private func subjectTitle(_ amount: Amount) -> String {
+//        let amountStr = amount.formatted(currencyInfo, isNegative: true)
         return String(localized: "NavTitle_Deposit_AmountStr",
                    defaultValue: "Deposit", comment: "NavTitle: Deposit")
 //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
@@ -51,8 +52,6 @@ struct DepositIbanV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let destination = LazyView {
             DepositAmountV(stack: stack.push(),
                     currencyInfo: currencyInfo,
@@ -114,14 +113,14 @@ struct DepositIbanV: View {
 
             let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
             NavigationLink(destination: destination) {
-                Text(buttonTitle(amountToTransfer, currencyInfo))
+                Text(buttonTitle(amountToTransfer))
             }
             .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? String(localized: "enabled when account holder and IBAN are set") : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))
+        .navigationTitle(subjectTitle(amountToTransfer))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT_ACCEPT, stack: stack.push())
