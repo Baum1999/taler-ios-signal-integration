@@ -85,7 +85,7 @@ struct DepositAmountV: View {
         } else {
             let currency = amountToTransfer.currencyStr
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyInfo.specs.name
             let navTitle = String(localized: "NavTitle_Deposit_Currency",
                                   defaultValue: "Deposit \(currencySymbol)",
                                   comment: "NavTitle: Deposit 'currencySymbol'")
@@ -93,7 +93,7 @@ struct DepositAmountV: View {
             let _ = print("available: \(available)")
             let _ = symLog.log("currency: \(currency), available: \(available)")
             let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-            let insufficientLabel = String(localized: "You don't have enough \(currency).")
+            let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
             let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
 
             let disabled = insufficient || amountToTransfer.isZero
