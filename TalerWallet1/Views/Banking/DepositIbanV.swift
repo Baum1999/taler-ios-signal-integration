@@ -55,6 +55,7 @@ struct DepositIbanV: View {
         let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let destination = LazyView {
             DepositAmountV(stack: stack.push(),
+                    currencyInfo: currencyInfo,
                         paytoUri: paytoUri,
 //                 exchangeBaseUrl: baseURL,
                  amountAvailable: amountAvailable,

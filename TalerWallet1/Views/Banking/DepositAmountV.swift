@@ -13,6 +13,7 @@ import SymLog
 struct DepositAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
 
 //    let exchangeBaseUrl: String
     let paytoUri: String?
@@ -58,12 +59,12 @@ struct DepositAmountV: View {
                                     : false
     }
 
-    private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+    private func buttonTitle(_ amount: Amount) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: false, useISO: true)
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
-    private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
+    private func subjectTitle(_ amount: Amount) -> String {
         let amountStr = amount.formatted(currencyInfo, isNegative: false)
         return String(localized: "NavTitle_Deposit_AmountStr",
                       defaultValue: "Deposit", comment: "NavTitle: Deposit")
@@ -84,14 +85,13 @@ struct DepositAmountV: View {
 
         } else {
             let currency = amountToTransfer.currencyStr
-            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyInfo.specs.name
             let navTitle = String(localized: "NavTitle_Deposit_Currency",
                                   defaultValue: "Deposit \(currencySymbol)",
                                   comment: "NavTitle: Deposit 'currencySymbol'")
             let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? "an unknown amount"
             let _ = print("available: \(available)")
-            let _ = symLog.log("currency: \(currency), available: \(available)")
+            let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(available)")
             let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
             let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
             let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
@@ -118,7 +118,7 @@ struct DepositAmountV: View {
                                                   : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
                                                                                 : .red)
                     .padding(4)
-                Button(buttonTitle(amountToTransfer, currencyInfo)) {
+                Button(buttonTitle(amountToTransfer)) {
                     if let paytoUri {
                         depositStarted = true    // don't run twice
                         Task { // runs on MainActor
