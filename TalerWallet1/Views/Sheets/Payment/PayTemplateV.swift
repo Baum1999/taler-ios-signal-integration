@@ -39,7 +39,7 @@ struct PayTemplateV: View {
     @State private var summaryIsEditable = false
     @State private var summary: String = EMPTYSTRING       // templateParam
 
-//    @State private var feeAmount: Amount? = nil
+    @State private var feeAmount: Amount? = nil
 //    @State private var feeStr: String = EMPTYSTRING
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -63,6 +63,19 @@ struct PayTemplateV: View {
             }
             dismissTop(stack.push())
         }
+    }
+
+    private func computeFeePayTemplate(_ amount: Amount) async -> ComputeFeeResult? {
+//        if let result = await preparePayForTemplate(model: model,
+//                                                    url: url,
+//                                                    amount: amountToTransfer,
+//                                                    summary: summaryIsEditable ? summary ?? " "
+//                                                    : nil,
+//                                                    announce: announce)
+//        {
+//            preparePayResult = result.ppCheck
+//        }
+        return nil
     }
 
     var body: some View {
@@ -127,9 +140,10 @@ struct PayTemplateV: View {
                                    summaryIsEditable: summaryIsEditable,
                                              summary: $summary,
 //                                        insufficient: $insufficient,
-//                                           feeAmount: $feeAmount,
+                                           feeAmount: $feeAmount,
                                       shortcutAction: shortcutAction,
-                                        buttonAction: buttonAction1)
+                                        buttonAction: buttonAction1,
+                                          computeFee: computeFeePayTemplate)
                 ScrollView {
                     if summaryIsEditable {  // after amount input,
                         amountInput

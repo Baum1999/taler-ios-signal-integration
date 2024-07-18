@@ -41,6 +41,8 @@ struct WithdrawURIView: View {
     @State private var possibleExchanges: [Exchange] = []
     @State private var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
 
+    @State private var feeAmount: Amount? = nil
+
     func loadExchange(_ baseUrl: String) async {        // TODO: throws?
         if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
             exchange = someExchange
