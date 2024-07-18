@@ -77,6 +77,18 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         currency = newCurrency
     }
 
+    /// Name & symbol{s) of the  currency of the amount. Cannot be changed later, except...
+    private var currencyNm: String?
+    private var currencySmbls: [Int : String]?
+
+    /// ... with these functions
+    public func setCurrencyName(_ newCurrency: String) {
+        currencyNm = newCurrency
+    }
+    public func setCurrencySymbols(_ newCurrency: [Int : String]) {
+        currencySmbls = newCurrency
+    }
+
     /// The integer value of the amount (number to the left of the decimal point).
     var integer: UInt64
     
@@ -177,6 +189,12 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// read-only getter
     public var currencyStr: String {
         currency
+    }
+    public var currencyName: String {
+        currencyNm ?? currency
+    }
+    public var currencySymbol: String {
+        currencySmbls?[0] ?? currency
     }
 
     /// The string representation of the amount, formatted as "`currency`:`integer`.`fraction`" (without space).
