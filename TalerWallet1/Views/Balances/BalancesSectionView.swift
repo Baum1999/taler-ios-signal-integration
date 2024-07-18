@@ -71,6 +71,7 @@ extension BalancesSectionView: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
+        let _ = symLog.log("BalancesSectionView❗️ \(currencyInfo.scope.currency) used as currencyInfo")
 
         Group {
         Section {
@@ -182,8 +183,7 @@ extension BalancesSectionView: View {
 fileprivate struct BalancesPendingRowView: View {
     let symLog: SymLogV?
     let stack: CallStack
-//    let currency: String // = currencyInfo.scope.currency
-    let balance: Balance                            // this is the currency to be used
+    let balance: Balance
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
@@ -268,46 +268,47 @@ fileprivate struct BalancesNavigationLinksView: View {
 //            }
 //        }
     }
+    private static func className() -> String {"\(self)"}
 
     var body: some View {
         let scopeInfo = balance.scopeInfo
-        let currency = scopeInfo.currency
-        let currencyInfo = controller.info(for: currency)
-        let currencyName = currencyInfo?.scope.currency ?? currency
         HStack(spacing: 0) {
-            NavigationLink(destination: LazyView {
-                SendAmount(stack: stack.push(),
+            let sendDest = // LazyView {
+                SendAmount(stack: stack.push("\(Self.className())()"),
                     currencyInfo: currencyInfo,
                  amountAvailable: balance.available,
                 amountToTransfer: $amountToTransfer,        // with correct currency
                          summary: $summary,
-                       scopeInfo: balance.scopeInfo,
+                       scopeInfo: scopeInfo,
                     cameraAction: cameraAction)
-            }, tag: 1, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // SendAmount
-
-            NavigationLink(destination: LazyView {
-                RequestPayment(stack: stack.push(),
+            // }
+            let requestDest = // LazyView {
+                RequestPayment(stack: stack.push("\(Self.className())()"),
                     amountToTransfer: $amountToTransfer,    // with correct currency
                              summary: $summary,
-                           scopeInfo: balance.scopeInfo,
+                           scopeInfo: scopeInfo,
                         cameraAction: cameraAction)
-            }, tag: 2, selection: $buttonSelected
-            ) { EmptyView() }.frame(width: 0).opacity(0).hidden()           // RequestPayment
-
+            // }
             let balanceDest = LazyView {
-                TransactionsListView(stack: stack.push(),
+                TransactionsListView(stack: stack.push("\(Self.className())()"),
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: scopeInfo,
                               transactions: completedTransactions,
                            reloadAllAction: reloadAllAction,
                            reloadOneAction: reloadOneAction)
             }
-            NavigationLink(destination: balanceDest, tag: 3, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
+            NavigationLink(destination: sendDest, tag: 1, selection: $buttonSelected) {
+                EmptyView()
+            }.frame(width: 0).opacity(0).hidden()           // SendAmount
+            NavigationLink(destination: requestDest, tag: 2, selection: $buttonSelected) {
+                EmptyView()
+            }.frame(width: 0).opacity(0).hidden()           // RequestPayment
+            NavigationLink(destination: balanceDest, tag: 3, selection: $buttonSelected) {
+                EmptyView()
+            }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
-            BalanceRowView(stack: stack.push(),
-                    currencyName: currencyName,
+            BalanceRowView(stack: stack.push("BalancesNavigationLinksView"),
+                    currencyName: currencyInfo.specs.name,
                           amount: balance.available,
                       sendAction: {
                             selectAndUpdate(1)      // trigger SendAmount NavigationLink
