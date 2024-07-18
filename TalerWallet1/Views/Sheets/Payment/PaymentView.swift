@@ -29,39 +29,40 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
     return nil
 }
 
-struct PayForTemplateResult {
-    let ppCheck: PreparePayResult
-    let insufficient: Bool
-    let feeAmount: Amount?
-    let feeStr: String
-}
-
-func preparePayForTemplate(model: WalletModel,
-                             url: URL,
-                          amount: Amount?,
-                         summary: String?,
-                        announce: Announce)
-  async -> PayForTemplateResult? {
-    if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amount, summary: summary) {
-        let controller = Controller.shared
-        let amountRaw = ppCheck.amountRaw
-        let currency = amountRaw.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let amountVoiceOver = amountRaw.formatted(currencyInfo, isNegative: false)
-        let insufficient = ppCheck.status == .insufficientBalance
-        if let feeAmount = templateFee(ppCheck: ppCheck) {
-            let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-            let feeLabel = feeLabel(feeStr)
-            announce("\(amountVoiceOver), \(feeLabel)")
-            return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
-                                        feeAmount: feeAmount, feeStr: feeStr)
-        }
-        announce(amountVoiceOver)
-        return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
-                                    feeAmount: nil, feeStr: EMPTYSTRING)
-    }
-    return nil
-}
+/// at the moment the merchant doesn't provide live fee updates, but only after creating the payment. Thus we cannot show life fees...
+//struct PayForTemplateResult {
+//    let ppCheck: PreparePayResult
+//    let insufficient: Bool
+//    let feeAmount: Amount?
+//    let feeStr: String
+//}
+//
+//func preparePayForTemplate(model: WalletModel,
+//                             url: URL,
+//                          amount: Amount?,
+//                         summary: String?,
+//                        announce: Announce)
+//  async -> PayForTemplateResult? {
+//    if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amount, summary: summary) {
+//        let controller = Controller.shared
+//        let amountRaw = ppCheck.amountRaw
+//        let currency = amountRaw.currencyStr
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//        let amountVoiceOver = amountRaw.formatted(currencyInfo, isNegative: false)
+//        let insufficient = ppCheck.status == .insufficientBalance
+//        if let feeAmount = templateFee(ppCheck: ppCheck) {
+//            let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+//            let feeLabel = feeLabel(feeStr)
+//            announce("\(amountVoiceOver), \(feeLabel)")
+//            return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
+//                                        feeAmount: feeAmount, feeStr: feeStr)
+//        }
+//        announce(amountVoiceOver)
+//        return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
+//                                    feeAmount: nil, feeStr: EMPTYSTRING)
+//    }
+//    return nil
+//}
 
 // MARK: -
 // Will be called either by the user scanning a QR code or tapping the provided link,
