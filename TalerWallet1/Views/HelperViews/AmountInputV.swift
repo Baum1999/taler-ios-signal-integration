@@ -18,6 +18,8 @@ struct ComputeFeeResult {
 struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
+
     // the scanned URL
     let url: URL?
     let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount
@@ -77,10 +79,11 @@ struct AmountInputV: View {
                     .padding(.bottom, 2)
 //                  .accessibility(sortPriority: 3)
             } // available
-            CurrencyInputView(amount: $amountToTransfer,
-                           available: amountAvailable,
-                               title: amountLabel,
-                      shortcutAction: shortcutAction)
+            CurrencyInputView(currencyInfo: currencyInfo,
+                                    amount: $amountToTransfer,
+                                 available: amountAvailable,
+                                     title: amountLabel,
+                            shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
 
             let color = flags.insufficient || !(feeAmount?.isZero ?? true) ? .red

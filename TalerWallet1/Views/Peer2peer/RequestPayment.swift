@@ -74,11 +74,12 @@ struct RequestPayment: View {
         }
         let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
         ScrollView { VStack(alignment: .trailing) {
-            CurrencyInputView(amount: $amountToTransfer,
-                           available: nil,
-                               title: minimalistic ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to request:"),
-                      shortcutAction: shortcutAction)
+            CurrencyInputView(currencyInfo: currencyInfo,
+                                    amount: $amountToTransfer,
+                                 available: nil,
+                                     title: minimalistic ? String(localized: "Amount:")
+                                                         : String(localized: "Amount to request:"),
+                            shortcutAction: shortcutAction)
                 .padding(.top)
             QuiteSomeCoins(currencyInfo: currencyInfo,
                                currency: currency,

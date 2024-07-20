@@ -40,6 +40,7 @@ struct WithdrawURIView: View {
     @State private var exchange: Exchange? = nil
     @State private var possibleExchanges: [Exchange] = []
     @State private var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
 
     @State private var feeAmount: Amount? = nil
 
@@ -102,7 +103,9 @@ struct WithdrawURIView: View {
                         // TODO: input amount, then
                         let amountLabel = minimalistic ? String(localized: "Amount:")
                                                        : String(localized: "Amount to withdraw:")
-                        AmountInputV(stack: stack.push(), url: nil,
+                        AmountInputV(stack: stack.push(),
+                              currencyInfo: currencyInfo,
+                                       url: nil,
                            amountAvailable: amountAvailable,
                           amountToTransfer: $amountToTransfer,
                                    wireFee: wireFee,
@@ -126,6 +129,11 @@ struct WithdrawURIView: View {
                     } // directly show the accept view
                 }
                 .navigationTitle(navTitle)
+                .task(id: controller.currencyTicker) {
+                    let currency = amountToTransfer.currencyStr
+                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    currencyName = currencyInfo.scope.currency
+                }
                 .onAppear() {
                     symLog.log("onAppear")
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)

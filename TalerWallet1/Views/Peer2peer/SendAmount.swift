@@ -110,8 +110,9 @@ struct SendAmount: View {
         ScrollView {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to send:")
-
-            AmountInputV(stack: stack.push(), url: nil,
+            AmountInputV(stack: stack.push(),
+                  currencyInfo: currencyInfo,
+                           url: nil,
                amountAvailable: amountAvailable,
               amountToTransfer: $amountToTransfer,
                        wireFee: nil,

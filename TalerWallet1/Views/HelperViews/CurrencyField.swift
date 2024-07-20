@@ -30,8 +30,8 @@ import SymLog
 @MainActor
 struct CurrencyField: View {
     private let symLog = SymLogV(0)
-    @Binding var amount: Amount         // the `value´
     let currencyInfo: CurrencyInfo
+    @Binding var amount: Amount         // the `value´
 
     private var currencyFieldRepresentable: CurrencyTextfieldRepresentable! = nil
 
@@ -47,11 +47,12 @@ struct CurrencyField: View {
         currencyFieldRepresentable.updateText(amount: amount)
     }
 
-    public init(amount: Binding<Amount>, currencyInfo: CurrencyInfo) {
+    public init(currencyInfo: CurrencyInfo, amount: Binding<Amount>) {
         self._amount = amount
         self.currencyInfo = currencyInfo
-        self.currencyFieldRepresentable = CurrencyTextfieldRepresentable(amount: self.$amount,
-                                                                   currencyInfo: currencyInfo)
+        self.currencyFieldRepresentable =
+                CurrencyTextfieldRepresentable(currencyInfo: currencyInfo,
+                                                     amount: self.$amount)
     }
 
     var body: some View {
@@ -74,7 +75,7 @@ struct CurrencyField: View {
         }
     }
 }
-
+// MARK: -
 // Sub-class UITextField to remove selection and caret
 class NoCaretTextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -89,11 +90,11 @@ class NoCaretTextField: UITextField {
         .null
     }
 }
-
+// MARK: -
 @MainActor
 struct CurrencyTextfieldRepresentable: UIViewRepresentable {
-    @Binding var amount: Amount
     let currencyInfo: CurrencyInfo
+    @Binding var amount: Amount
 
     private let textField = NoCaretTextField(frame: .zero)
 

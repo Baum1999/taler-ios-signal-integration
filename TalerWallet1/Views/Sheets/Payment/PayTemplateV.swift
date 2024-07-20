@@ -132,7 +132,9 @@ struct PayTemplateV: View {
             }// destination to subject input, when user tapped an amount shortcut
           Group {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
-                let amountInput = AmountInputV(stack: stack.push(), url: url,
+                let amountInput = AmountInputV(stack: stack.push(),
+                                        currencyInfo: currencyInfo,
+                                                 url: url,
                                      amountAvailable: nil,
                                     amountToTransfer: $amountToTransfer,
                                              wireFee: nil,

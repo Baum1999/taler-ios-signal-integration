@@ -105,11 +105,12 @@ struct DepositAmountV: View {
                 Text("Available:\t\(available)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
-                CurrencyInputView(amount: $amountToTransfer,
-                               available: nil,  // amountAvailable,
-                                   title: minimalistic ? String(localized: "Amount:")
-                                                       : String(localized: "Amount to deposit:"),
-                          shortcutAction: nil)
+                CurrencyInputView(currencyInfo: currencyInfo,
+                                        amount: $amountToTransfer,
+                                     available: nil,  // amountAvailable,
+                                         title: minimalistic ? String(localized: "Amount:")
+                                                             : String(localized: "Amount to deposit:"),
+                                shortcutAction: nil)
 
                 Text(insufficient ? insufficientLabel
                                   : feeLabel(feeStr))

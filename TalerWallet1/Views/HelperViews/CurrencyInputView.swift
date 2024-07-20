@@ -11,20 +11,20 @@ import taler_swift
 fileprivate let shortcuts = [5000,2500,1000,500]        // TODO: adapt for ¥
 
 struct ShortcutButton: View {
-    let shortcut: Int
-    let currency: String
     let currencyInfo: CurrencyInfo
+    let currency: String
     let currencyField: CurrencyField
+    let shortcut: Int
     let available: Amount?
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {
-        ShortcutButton(shortcut: newShortcut,
-                       currency: currency,
-                   currencyInfo: currencyInfo,
-                  currencyField: currencyField,
-                      available: available,
-                         action: action)
+        ShortcutButton(currencyInfo: currencyInfo,
+                           currency: currency,
+                      currencyField: currencyField,
+                           shortcut: newShortcut,
+                          available: available,
+                             action: action)
     }
 
     func isDisabled(shortie: Amount) -> Bool {
@@ -55,18 +55,19 @@ struct ShortcutButton: View {
 }
 // MARK: -
 struct CurrencyInputView: View {
+    let currencyInfo: CurrencyInfo
     @Binding var amount: Amount         // the `value´
     let available: Amount?
     let title: String
     let shortcutAction: ((_ amount: Amount) -> Void)?
 
-    @EnvironmentObject private var controller: Controller
+//    @EnvironmentObject private var controller: Controller
     
     @State private var hasBeenShown = false
     @State private var showKeyboard = 0
     @State private var useShortcut = 0
 
-    func action(shortcut: Int, currencyField: CurrencyField) {
+    @MainActor func action(shortcut: Int, currencyField: CurrencyField) {
         let shortie = Amount(currency: amount.currencyStr, cent: UInt64(shortcut))      // TODO: adapt for ¥
         if let shortcutAction {
             shortcutAction(shortie)
@@ -80,8 +81,7 @@ struct CurrencyInputView: View {
 
     var body: some View {
         let currency = amount.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencyField = CurrencyField(amount: $amount, currencyInfo: currencyInfo)
+        let currencyField = CurrencyField(currencyInfo: currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
             Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,12 +102,12 @@ struct CurrencyInputView: View {
                     showKeyboard += 1
                 }
             if #available(iOS 16.0, *) {
-                let shortcutButton = ShortcutButton(shortcut: 0,
-                                                    currency: currency,
-                                                currencyInfo: currencyInfo,
-                                               currencyField: currencyField,
-                                                   available: available,
-                                                      action: action)
+                let shortcutButton = ShortcutButton(currencyInfo: currencyInfo,
+                                                        currency: currency,
+                                                   currencyField: currencyField,
+                                                        shortcut: 0,
+                                                       available: available,
+                                                          action: action)
                 ViewThatFits(in: .horizontal) {
                     HStack {
                         ForEach(shortcuts, id: \.self) {
@@ -168,15 +168,15 @@ struct CurrencyInputView: View {
 fileprivate struct Previews: PreviewProvider {
     @MainActor
     struct StateContainer: View {
-        @StateObject private var controller = Controller.shared
         @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
         var body: some View {
-//            Preview_Content()
-            CurrencyInputView(amount: $amountToTransfer,
-                           available: nil,
-                               title: "Amount to withdraw:",
-                      shortcutAction: nil)
-                .environmentObject(controller)
+            let currencyInfo = CurrencyInfo.zero(LONGCURRENCY)
+
+            CurrencyInputView(currencyInfo: currencyInfo,
+                                    amount: $amountToTransfer,
+                                 available: Amount(currency: LONGCURRENCY, cent: 2000),
+                                     title: "Amount to withdraw:",
+                            shortcutAction: nil)
         }
     }
     static var previews: some View {

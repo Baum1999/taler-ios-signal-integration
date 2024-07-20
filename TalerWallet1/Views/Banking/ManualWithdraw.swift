@@ -72,11 +72,12 @@ struct ManualWithdraw: View {
                     .multilineTextAlignment(.center)
                     .talerFont(.body)
                 if tosAccepted {
-                    CurrencyInputView(amount: $amountToTransfer,
-                                   available: nil,
-                                       title: minimalistic ? String(localized: "Amount:")
-                                                           : String(localized: "Amount to withdraw:"),
-                              shortcutAction: nil)
+                    CurrencyInputView(currencyInfo: currencyInfo,
+                                            amount: $amountToTransfer,
+                                         available: nil,
+                                             title: minimalistic ? String(localized: "Amount:")
+                                                                 : String(localized: "Amount to withdraw:"),
+                                    shortcutAction: nil)
                         .padding(.top)
                     QuiteSomeCoins(currencyInfo: currencyInfo,
                                        currency: currency,
