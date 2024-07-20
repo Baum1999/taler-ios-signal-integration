@@ -13,7 +13,6 @@ struct DepositWithdrawV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let currencyInfo: CurrencyInfo
-//    let scopeInfo: ScopeInfo
     let amountAvailable: Amount?
 //    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
@@ -48,12 +47,13 @@ struct DepositWithdrawV: View {
                                      comment: "Abbreviation of button `Deposit (currency)´")
         let depositTitle1 = String(localized: "Deposit\t\(currencyName)",
                                      comment: "Button `Deposit (currency)´, must have ONE \\t and ONE %@")
-
+        let depositTitle = minimalistic ? depositTitle0 : depositTitle1
         let withdrawTitle0 = String(localized: "WithdrawButton_Short", defaultValue: "Withdraw",
                                       comment: "Abbreviation of button `Withdraw (currency)´")
         let withdrawTitle1 = String(localized: "Withdraw\t\(currencyName)",
                                       comment: "Button `Withdraw (currency)´, must have ONE \\t and ONE %@")
-        let deposit = LazyView {
+        let withdrawTitle = minimalistic ? withdrawTitle0 : withdrawTitle1
+        let depositDest = LazyView {
             DepositIbanV(stack: stack.push(),
                   currencyInfo: currencyInfo,
                       feeLabel: nil,
@@ -63,7 +63,7 @@ struct DepositWithdrawV: View {
 //                 accountHolder: $accountHolder,
               amountToTransfer: $amountToTransfer)
         }
-        let manualWithdraw = LazyView {
+        let manualWithdrawDest = LazyView {
             ManualWithdraw(stack: stack.push(),
                          isSheet: false,
                        scopeInfo: scope,
@@ -72,10 +72,10 @@ struct DepositWithdrawV: View {
         }
         let disableDeposit = amountAvailable?.isZero ?? false
         let twoRowButtons = TwoRowButtons(stack: stack.push(),
-                                      sendTitle: minimalistic ? depositTitle0 : depositTitle1,
+                                      sendTitle: depositTitle,
                                        sendType: .deposit,
                                        sendA11y: depositTitle1.tabbed(oneLine: true),
-                                      recvTitle: minimalistic ? withdrawTitle0 : withdrawTitle1,
+                                      recvTitle: withdrawTitle,
                                        recvType: .withdrawal,
                                        recvA11y: withdrawTitle1.tabbed(oneLine: true),
                                  fitsSideBySide: false,
@@ -96,9 +96,9 @@ struct DepositWithdrawV: View {
             }
         }
         .background( Group {
-            NavigationLink(destination: deposit, tag: 1, selection: $buttonSelected)
+            NavigationLink(destination: depositDest, tag: 1, selection: $buttonSelected)
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            NavigationLink(destination: manualWithdraw, tag: 2, selection: $buttonSelected)
+            NavigationLink(destination: manualWithdrawDest, tag: 2, selection: $buttonSelected)
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()
         })
     }
