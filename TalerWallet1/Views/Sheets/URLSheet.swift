@@ -15,15 +15,19 @@ struct URLSheet: View {
     let navTitle = String(localized: "Checking Link")
     var urlToOpen: URL
 
+    @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
     @EnvironmentObject private var controller: Controller
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var summary = EMPTYSTRING
+    @State private var showAlert: Bool = false
+    @State private var urlCommand: UrlCommand = .unknown
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let urlCommand = controller.openURL(urlToOpen, stack: stack.push())
+        let warning = String(localized: "It seems you wanted to request money - but this transaction will let you pay...")
 
         Group {
             switch urlCommand {
@@ -54,6 +58,24 @@ struct URLSheet: View {
                     .navigationTitle(navTitle)
             }
         }
+        .task {
+            let incomingExpected = controller.frontendState == 1
+            let command = controller.openURL(urlToOpen, stack: stack.push())
+            if incomingExpected && command.isOutgoing {
+                showAlert = true
+            }
+            urlCommand = command
+        }
+        .alert(warning, isPresented: $showAlert, actions: {
+            Button("Cancel", role: .cancel) {
+                showAlert = false
+                dismissTop(stack.push())
+            }
+            Button("OK") {
+                showAlert = false
+            }
+          }, message: { Text("\nWarnings can be switched off in Settings") }
+        )
     }
 }
 // MARK: -
