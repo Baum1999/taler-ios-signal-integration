@@ -163,7 +163,7 @@ struct SettingsView: View {
                     }
 #endif
                     if showDevelopItems {  // show or hide the following items
-                        SettingsItem(name: String("Withdraw from DEMO"), id1: "demo1with",
+                        SettingsItem(name: String("DEMO"), id1: "demo1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
@@ -177,7 +177,7 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("demo1withdraw")
-                        SettingsItem(name: String("Withdraw from TEST"), id1: "test1with",
+                        SettingsItem(name: String("TEST"), id1: "test1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
@@ -191,7 +191,7 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("test1withdraw")
-                        SettingsItem(name: String("Withdraw from HEAD"), id1: "head1with",
+                        SettingsItem(name: String("HEAD"), id1: "head1with",
                                      description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
