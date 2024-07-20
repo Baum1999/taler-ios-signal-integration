@@ -61,6 +61,7 @@ struct BalancesListView: View {
                 }
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
+                    controller.frontendState = 0                            // neutral
                 }
                 .listStyle(myListStyle.style).anyView
             }

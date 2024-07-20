@@ -137,6 +137,7 @@ struct SendAmount: View {
         .navigationTitle(navTitle)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
+            controller.frontendState = -1                            // outgoing
             symLog.log("❗️ \(navTitle) onAppear")
         }
         .onDisappear {
