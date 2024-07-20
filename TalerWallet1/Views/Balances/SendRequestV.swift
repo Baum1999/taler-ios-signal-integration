@@ -20,6 +20,7 @@ struct SendRequestV: View {
     let cameraAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var buttonSelected: Int? = nil
 
@@ -84,8 +85,8 @@ struct SendRequestV: View {
                                  fitsSideBySide: false,
                                       lineLimit: 5,
                                    sendDisabled: disableSend,
-                                     sendAction: { selectAndUpdate(1) },
-                                     recvAction: { selectAndUpdate(2) })
+                                     sendAction: { controller.frontendState = -1; selectAndUpdate(1)  },
+                                     recvAction: { controller.frontendState = 1; selectAndUpdate(2) })
         Group {
             if #available(iOS 16.0, *) {
                 ViewThatFits(in: .horizontal) {
