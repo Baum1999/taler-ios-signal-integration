@@ -152,6 +152,40 @@ class Controller: ObservableObject {
         return false
     }
 
+//    @MainActor
+    func exchange(for baseUrl: String?, model: WalletModel) async -> Exchange? {
+        if let baseUrl {
+            if let exchange1 = exchange(for: baseUrl) {
+                return exchange1
+            }
+            if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl) {
+                exchanges.append(exchange2)
+                return exchange2
+            }
+        }
+        return nil
+    }
+
+    func updateInfo(_ scope: ScopeInfo, model: WalletModel) async {
+        if let info = try? await model.getCurrencyInfoM(scope: scope) {
+            await setInfo(info)
+            logger.log("  ❗️info set for \(scope.currency)")
+        }
+    }
+
+    func checkInfo(for baseUrl: String, model: WalletModel) async {
+        if let exchange = await exchange(for: baseUrl, model: model) {
+            let scope = exchange.scopeInfo
+            for info in currencyInfos {
+                if info.scope == scope {
+                    return  // got it, nothing to do
+                }
+            }
+            await updateInfo(scope, model: model)
+        }
+    }
+
+    /// called whenever a new currency pops up - will first load the Exchange and then currencyInfos
     func checkInfo(for scope: ScopeInfo, model: WalletModel) {
         for info in currencyInfos {
             if info.scope == scope {
@@ -159,15 +193,10 @@ class Controller: ObservableObject {
             }
         }
         Task {
-            if let baseUrl = scope.url {
-                if exchange(for: baseUrl) == nil {
-                    let exchange = try await model.getExchangeByUrl(url: baseUrl)
-                    exchanges.append(exchange)
-                }
+            let exchange = await exchange(for: scope.url, model: model)
+            if let scope2 = exchange?.scopeInfo {
+                await updateInfo(scope2, model: model)
             }
-            let info = try await model.getCurrencyInfoM(scope: scope, delay: 0)
-            await setInfo(info)
-            logger.log("  ❗️info set for \(scope.currency)")
         }
     }
 
