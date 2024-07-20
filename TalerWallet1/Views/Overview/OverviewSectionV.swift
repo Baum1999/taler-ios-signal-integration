@@ -87,12 +87,13 @@ extension OverviewSectionV: View {
                                reloadAllAction: reloadCompleted,
                                reloadOneAction: reloadOneAction)
             if pendingTransactions.count > 0 {
-                CurrenciesPendingRowV(symLog: symLog,
-                                        stack: stack.push(),
-                                      balance: balance,
-                          pendingTransactions: $pendingTransactions,
-                                reloadPending: reloadPending,
-                              reloadOneAction: reloadOneAction)
+                BalancesPendingRowV(//symLog: symLog,
+                                    stack: stack.push(),
+                             currencyInfo: currencyInfo,
+                                  balance: balance,
+                      pendingTransactions: $pendingTransactions,
+                            reloadPending: reloadPending,
+                          reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
         } header: {
@@ -136,63 +137,8 @@ extension OverviewSectionV: View {
             }
         } // recent transactions
     } // body
-} // BalancesSectionView
+} // OverviewSectionV
 // MARK: -
-fileprivate struct CurrenciesPendingRowV: View {
-    let symLog: SymLogV?
-    let stack: CallStack
-    let balance: Balance                            // this is the currency to be used
-    @Binding var pendingTransactions: [Transaction]
-    let reloadPending: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
-
-    var body: some View {
-        let pendingIncoming = balance.pendingIncoming
-        let pendingOutgoing = balance.pendingOutgoing
-        let needsKYCin = balance.flags.contains(.incomingKyc)
-        let needsKYCout = balance.flags.contains(.outgoingKyc)
-        let shouldConfirm = balance.flags.contains(.incomingConfirmation)
-
-        NavigationLink {
-            //let _ = print("button: Pending Transactions: \(currency)")
-            LazyView {
-                TransactionsListView(stack: stack.push(),
-                                  navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
-                                 scopeInfo: balance.scopeInfo,
-                              transactions: pendingTransactions,
-                           reloadAllAction: reloadPending,
-                           reloadOneAction: reloadOneAction)
-            }
-        } label: {
-            let needsKYC =  needsKYCin || needsKYCout
-            let needsKYCStr = String(localized: ". Needs K Y C", comment: "VoiceOver")
-            let needsConfStr = String(localized: ". Needs bank authorization", comment: "VoiceOver")
-            VStack(spacing: 6) {
-                let hasIncoming = !pendingIncoming.isZero
-                if hasIncoming {
-                    PendingRowView(amount: pendingIncoming, incoming: true,
-                            shouldConfirm: shouldConfirm, needsKYC: needsKYCin)
-                }
-                let hasOutgoing = !pendingOutgoing.isZero
-                if hasOutgoing {
-                    PendingRowView(amount: pendingOutgoing, incoming: false,
-                            shouldConfirm: false, needsKYC: needsKYCout)
-                }
-                if !hasIncoming && !hasOutgoing {           // should never happen
-                    Text("Some pending transactions")
-                        .talerFont(.body)
-                }
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityValue(needsKYC && shouldConfirm ? needsKYCStr + needsConfStr :
-                                                 needsKYC ? needsKYCStr :
-                                            shouldConfirm ? needsConfStr
-                                                          : EMPTYSTRING)
-            .accessibilityHint(String(localized: "Will go to Pending transactions."))
-        } // NavLinkLabel
-    } // body
-} // CurrenciesPendingRowV
-
 fileprivate struct CurrenciesNavigationLinksV: View {
     let symLog: SymLogV?
     let stack: CallStack
