@@ -15,7 +15,6 @@ import SymLog
 struct WithdrawURIView: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website
     let url: URL
@@ -43,6 +42,8 @@ struct WithdrawURIView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
 
     @State private var feeAmount: Amount? = nil
+
+    let navTitle = String(localized: "Withdrawal")
 
     func loadExchange(_ baseUrl: String) async {        // TODO: throws?
         if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
@@ -153,14 +154,18 @@ struct WithdrawURIView: View {
             LoadingView(scopeInfo: nil, message: message)
                 .task {
                     symLog.log(".task")
-                    if let someInfo = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
-                        let currency = someInfo.currency
-                        defaultExchangeBaseUrl = someInfo.defaultExchangeBaseUrl
-                        possibleExchanges = someInfo.possibleExchanges
-                        amountToTransfer = someInfo.amount ?? Amount.zero(currency: currency)
-                        amountAvailable = someInfo.maxAmount
-                        amountIsEditable = someInfo.editableAmount
-                        wireFee = someInfo.wireFee
+                    if let uriInfoResponse = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
+                        let amount = uriInfoResponse.amount
+                        let currency = amount?.currencyStr ?? uriInfoResponse.currency
+                        amountToTransfer = amount ?? Amount.zero(currency: currency)
+                        amountAvailable = uriInfoResponse.maxAmount     // may be nil
+                        wireFee = uriInfoResponse.wireFee               // may be nil
+                        let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
+                                   ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
+                        defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
+                        possibleExchanges = uriInfoResponse.possibleExchanges
+                        amountIsEditable = uriInfoResponse.editableAmount
+                        await controller.checkInfo(for: baseUrl, model: model)
                     }
 
                     // TODO: amount = nil ==> show amount input

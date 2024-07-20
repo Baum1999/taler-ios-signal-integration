@@ -37,6 +37,14 @@ struct SendAmount: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
+    private func shortcutAction(_ shortcut: Amount) {
+        amountShortcut = shortcut
+        shortcutSelected = true
+    }
+    private func buttonAction() {
+        buttonSelected = true
+    }
+
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
             if let ppCheck {
@@ -49,13 +57,6 @@ struct SendAmount: View {
         return feeAmount
     }
 
-    private func shortcutAction(_ shortcut: Amount) {
-        amountShortcut = shortcut
-        shortcutSelected = true
-    }
-    private func buttonAction() {
-        buttonSelected = true
-    }
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {
             if hasNoFees {
