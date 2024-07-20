@@ -54,19 +54,19 @@ struct WithdrawAcceptView: View {
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)
 
-                    ThreeAmountsV(stack: stack.push(),
-                               topTitle: String(localized: "Chosen amount to withdraw:"),
-                              topAbbrev: String(localized: "Chosen:", comment: "mini"),
-                              topAmount: raw, fee: fee,
-                            bottomTitle: String(localized: "Amount to be withdrawn:"),
-                           bottomAbbrev: String(localized: "Effective:", comment: "mini"),
-                           bottomAmount: effective,
-                                  large: false, pending: false, incoming: true,
-                                baseURL: exchange.exchangeBaseUrl,
-                                 noFees: exchange.noFees,
-                             txStateLcl: nil,        // common.txState.major.localizedState
-                                summary: nil,
-                               merchant: nil)
+                    ThreeAmountsSection(stack: stack.push(),
+                                     topTitle: String(localized: "Chosen amount to withdraw:"),
+                                    topAbbrev: String(localized: "Chosen:", comment: "mini"),
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "Amount to be withdrawn:"),
+                                 bottomAbbrev: String(localized: "Effective:", comment: "mini"),
+                                 bottomAmount: effective,
+                                        large: false, pending: false, incoming: true,
+                                      baseURL: exchange.exchangeBaseUrl,
+                                       noFees: exchange.noFees,
+                                   txStateLcl: nil,        // common.txState.major.localizedState
+                                      summary: nil,
+                                     merchant: nil)
                     let coinData = CoinData(details: withdrawalAmountDetails)
                     QuiteSomeCoins(currencyInfo: currencyInfo,
                                        currency: currency,

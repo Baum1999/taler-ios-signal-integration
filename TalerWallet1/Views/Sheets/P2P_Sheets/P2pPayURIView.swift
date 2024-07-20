@@ -31,19 +31,19 @@ struct P2pPayURIView: View {
                     let effective = peerPullDebitResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsV(stack: stack.push(),
-                                  topTitle: String(localized: "Amount to pay:"),
-                                 topAbbrev: String(localized: "Pay:", comment: "mini"),
-                                 topAmount: raw, fee: fee,
-                               bottomTitle: String(localized: "Amount to be spent:"),
-                              bottomAbbrev: String(localized: "Effective:", comment: "mini"),
-                              bottomAmount: effective,
-                                     large: false, pending: false, incoming: false,
-                                   baseURL: nil,
-                                    noFees: nil,        // TODO: check baseURL for fees
-                                txStateLcl: nil,
-                                   summary: peerPullDebitResponse.contractTerms.summary,
-                                  merchant: nil)
+                    ThreeAmountsSection(stack: stack.push(),
+                                     topTitle: String(localized: "Amount to pay:"),
+                                    topAbbrev: String(localized: "Pay:", comment: "mini"),
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "Amount to be spent:"),
+                                 bottomAbbrev: String(localized: "Effective:", comment: "mini"),
+                                 bottomAmount: effective,
+                                        large: false, pending: false, incoming: false,
+                                      baseURL: nil,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                   txStateLcl: nil,
+                                      summary: peerPullDebitResponse.contractTerms.summary,
+                                     merchant: nil)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
                     let a11yDate = TalerDater.accessibilityDate(date) ?? dateString

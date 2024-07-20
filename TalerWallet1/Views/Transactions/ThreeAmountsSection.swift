@@ -47,22 +47,26 @@ struct ThreeAmountsSheet: View {
         let majorLcl = common.txState.major.localizedState
         let txStateLcl = developerMode && pending ? (common.txState.minor?.localizedState ?? majorLcl)
                                                   : majorLcl
-        ThreeAmountsV(stack: stack.push(),
-                   topTitle: topTitle, topAbbrev: topAbbrev,
-                  topAmount: raw, fee: fee,
-                bottomTitle: bottomTitle ?? defaultBottomTitle,
-               bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
-               bottomAmount: incomplete ? nil : effective,
-                      large: large, pending: pending, incoming: incoming,
-                    baseURL: baseURL,
-                     noFees: noFees,
-                 txStateLcl: txStateLcl,
-                    summary: summary,
-                   merchant: merchant)
+        ThreeAmountsSection(stack: stack.push(),
+                         topTitle: topTitle,
+                        topAbbrev: topAbbrev,
+                        topAmount: raw,
+                              fee: fee,
+                      bottomTitle: bottomTitle ?? defaultBottomTitle,
+                     bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
+                     bottomAmount: incomplete ? nil : effective,
+                            large: large,
+                          pending: pending,
+                         incoming: incoming,
+                          baseURL: baseURL,
+                           noFees: noFees,
+                       txStateLcl: txStateLcl,
+                          summary: summary,
+                         merchant: merchant)
     }
 }
 // MARK: -
-struct ThreeAmountsV: View {
+struct ThreeAmountsSection: View {
     let stack: CallStack
     var topTitle: String
     var topAbbrev: String

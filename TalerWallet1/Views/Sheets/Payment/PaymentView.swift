@@ -102,36 +102,40 @@ struct PaymentView: View {
                 if let effective {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
-                    ThreeAmountsV(stack: stack.push(),
-                                  topTitle: topTitle,
-                                 topAbbrev: topAbbrev,
-                                 topAmount: raw, fee: fee,
-                               bottomTitle: String(localized: "Amount to spend:"),
-                              bottomAbbrev: String(localized: "Effective:", comment: "mini"),
-                              bottomAmount: effective,
-                                     large: false, pending: false, incoming: false,
-                                   baseURL: baseURL,
-                                    noFees: nil,        // TODO: check baseURL for fees
-                                txStateLcl: nil,
-                                   summary: terms.summary,
-                                  merchant: terms.merchant.name)
+                    ThreeAmountsSection(stack: stack.push(),
+                                     topTitle: topTitle,
+                                    topAbbrev: topAbbrev,
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "Amount to spend:"),
+                                 bottomAbbrev: String(localized: "Effective:", comment: "mini"),
+                                 bottomAmount: effective,
+                                        large: false,
+                                      pending: false,
+                                     incoming: false,
+                                      baseURL: baseURL,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                   txStateLcl: nil,
+                                      summary: terms.summary,
+                                     merchant: terms.merchant.name)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency).")
                         .talerFont(.headline)
-                    ThreeAmountsV(stack: stack.push(),
-                                  topTitle: topTitle,
-                                 topAbbrev: topAbbrev,
-                                 topAmount: raw, fee: nil,
-                               bottomTitle: String(localized: "Amount available:"),
-                              bottomAbbrev: String(localized: "Available:", comment: "mini"),
-                              bottomAmount: balanceDetails.balanceAvailable,
-                                     large: false, pending: false, incoming: false,
-                                   baseURL: baseURL,
-                                    noFees: nil,        // TODO: check baseURL for fees
-                                txStateLcl: nil,
-                                   summary: terms.summary,
-                                  merchant: terms.merchant.name)
+                    ThreeAmountsSection(stack: stack.push(),
+                                     topTitle: topTitle,
+                                    topAbbrev: topAbbrev,
+                                    topAmount: raw, fee: nil,
+                                  bottomTitle: String(localized: "Amount available:"),
+                                 bottomAbbrev: String(localized: "Available:", comment: "mini"),
+                                 bottomAmount: balanceDetails.balanceAvailable,
+                                        large: false,
+                                      pending: false,
+                                     incoming: false,
+                                      baseURL: baseURL,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                   txStateLcl: nil,
+                                      summary: terms.summary,
+                                     merchant: terms.merchant.name)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")

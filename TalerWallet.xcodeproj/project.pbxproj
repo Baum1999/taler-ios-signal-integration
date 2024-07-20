@@ -101,7 +101,7 @@
 		4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
 		4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095112989CBB00043A8A1 /* WalletModel.swift */; };
 		4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095332989CBFE0043A8A1 /* URLSheet.swift */; };
-		4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */; };
+		4E3EAE6A2A990778009F1BE8 /* ThreeAmountsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */; };
 		4E3EAE6B2A990778009F1BE8 /* Model+Withdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0953D2989CBFE0043A8A1 /* Model+Withdraw.swift */; };
 		4E3EAE6C2A990778009F1BE8 /* ExchangeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */; };
 		4E3EAE6D2A990778009F1BE8 /* P2PSubjectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */; };
@@ -253,7 +253,7 @@
 		4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */; };
 		4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */; };
 		4ECB62822A0BB01D004ABBB7 /* SelectDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */; };
-		4ED2F94B2A278F5100453B40 /* ThreeAmountsV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */; };
+		4ED2F94B2A278F5100453B40 /* ThreeAmountsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */; };
 		4ED80E882B8F5FB8008BD576 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E872B8F5FB8008BD576 /* CStringArray.swift */; };
 		4ED80E892B8F5FB8008BD576 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E872B8F5FB8008BD576 /* CStringArray.swift */; };
 		4ED80E8B2B8F60E7008BD576 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E8A2B8F60E7008BD576 /* Atomic.swift */; };
@@ -465,7 +465,7 @@
 		4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeSectionView.swift; sourceTree = "<group>"; };
 		4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+P2P.swift"; sourceTree = "<group>"; };
 		4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDays.swift; sourceTree = "<group>"; };
-		4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmountsV.swift; sourceTree = "<group>"; };
+		4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmountsSection.swift; sourceTree = "<group>"; };
 		4ED80E872B8F5FB8008BD576 /* CStringArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CStringArray.swift; sourceTree = "<group>"; };
 		4ED80E8A2B8F60E7008BD576 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		4ED80E8D2B8F6212008BD576 /* QuickDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickDataTask.swift; sourceTree = "<group>"; };
@@ -785,7 +785,7 @@
 				4E6EF56D2B669C7000AF252A /* TransactionDetailV.swift */,
 				4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */,
 				4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */,
-				4ED2F94A2A278F5100453B40 /* ThreeAmountsV.swift */,
+				4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */,
 			);
 			path = Transactions;
 			sourceTree = "<group>";
@@ -1262,7 +1262,7 @@
 				E37AA62A2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */,
 				4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */,
-				4E3EAE6A2A990778009F1BE8 /* ThreeAmountsV.swift in Sources */,
+				4E3EAE6A2A990778009F1BE8 /* ThreeAmountsSection.swift in Sources */,
 				4E3EAE6B2A990778009F1BE8 /* Model+Withdraw.swift in Sources */,
 				4ED80E882B8F5FB8008BD576 /* CStringArray.swift in Sources */,
 				4E3EAE6C2A990778009F1BE8 /* ExchangeSectionView.swift in Sources */,
@@ -1389,7 +1389,7 @@
 				E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
 				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
-				4ED2F94B2A278F5100453B40 /* ThreeAmountsV.swift in Sources */,
+				4ED2F94B2A278F5100453B40 /* ThreeAmountsSection.swift in Sources */,
 				4EB095622989CBFE0043A8A1 /* Model+Withdraw.swift in Sources */,
 				4ED80E892B8F5FB8008BD576 /* CStringArray.swift in Sources */,
 				4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */,

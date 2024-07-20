@@ -41,19 +41,19 @@ struct P2pReceiveURIView: View {
                     let effective = peerPushCreditResponse.amountEffective
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsV(stack: stack.push(),
-                                  topTitle: String(localized: "Gross Amount to receive:"),
-                                 topAbbrev: String(localized: "Receive gross:", comment: "mini"),
-                                 topAmount: raw, fee: fee,
-                               bottomTitle: String(localized: "Net Amount to receive:"),
-                              bottomAbbrev: String(localized: "Receive net:", comment: "mini"),
-                              bottomAmount: effective,
-                                     large: false, pending: false, incoming: true,
-                                   baseURL: nil,
-                                    noFees: nil,        // TODO: check baseURL for fees
-                                txStateLcl: nil,
-                                   summary: peerPushCreditResponse.contractTerms.summary,
-                                  merchant: nil)
+                    ThreeAmountsSection(stack: stack.push(),
+                                     topTitle: String(localized: "Gross Amount to receive:"),
+                                    topAbbrev: String(localized: "Receive gross:", comment: "mini"),
+                                    topAmount: raw, fee: fee,
+                                  bottomTitle: String(localized: "Net Amount to receive:"),
+                                 bottomAbbrev: String(localized: "Receive net:", comment: "mini"),
+                                 bottomAmount: effective,
+                                        large: false, pending: false, incoming: true,
+                                      baseURL: nil,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                   txStateLcl: nil,
+                                      summary: peerPushCreditResponse.contractTerms.summary,
+                                     merchant: nil)
                     let expiration = peerPushCreditResponse.contractTerms.purse_expiration
                     let (dateString, date) = TalerDater.dateString(from: expiration)
                     let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
