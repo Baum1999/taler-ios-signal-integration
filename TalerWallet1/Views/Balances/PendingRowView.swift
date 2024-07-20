@@ -10,6 +10,7 @@ import taler_swift
 
 /// This view shows a pending transaction row in a currency section
 struct PendingRowView: View {
+    let currencyInfo: CurrencyInfo
     let amount: Amount
     let incoming: Bool
     let shouldConfirm: Bool
@@ -75,8 +76,10 @@ fileprivate struct Preview_Content: View {
         let test = Amount(currency: TESTCURRENCY, cent: 123)
         let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
         List {
-            PendingRowView(amount: test, incoming: true, shouldConfirm: true, needsKYC: false)
-            PendingRowView(amount: demo, incoming: false, shouldConfirm: false, needsKYC: true)
+            PendingRowView(currencyInfo: CurrencyInfo.zero(TESTCURRENCY),
+                                 amount: test, incoming: true, shouldConfirm: true, needsKYC: false)
+            PendingRowView(currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
+                                 amount: demo, incoming: false, shouldConfirm: false, needsKYC: true)
         }
     }
 }

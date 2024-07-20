@@ -30,16 +30,18 @@ struct BalancesPendingRowV: View {
 
         VStack(spacing: 6) {
             if hasIncoming {
-                PendingRowView(amount: pendingIncoming,
-                             incoming: true,
-                        shouldConfirm: shouldConfirm,
-                             needsKYC: needsKYCin)
+                PendingRowView(currencyInfo: currencyInfo,
+                                     amount: pendingIncoming,
+                                   incoming: true,
+                              shouldConfirm: shouldConfirm,
+                                   needsKYC: needsKYCin)
             }
             if hasOutgoing {
-                PendingRowView(amount: pendingOutgoing,
-                             incoming: false,
-                        shouldConfirm: false,
-                             needsKYC: needsKYCout)
+                PendingRowView(currencyInfo: currencyInfo,
+                                     amount: pendingOutgoing,
+                                   incoming: false,
+                              shouldConfirm: false,
+                                   needsKYC: needsKYCout)
             }
             if !hasIncoming && !hasOutgoing {
                 // should never happen - but DOES when wallet-core doesn't report P2P as pendingIncoming/pendingOutgoing
