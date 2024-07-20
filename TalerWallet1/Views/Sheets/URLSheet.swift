@@ -59,10 +59,12 @@ struct URLSheet: View {
             }
         }
         .task {
-            let incomingExpected = controller.frontendState == 1
             let command = controller.openURL(urlToOpen, stack: stack.push())
-            if incomingExpected && command.isOutgoing {
-                showAlert = true
+            if shouldShowWarning {
+                let incomingExpected = controller.frontendState == 1
+                if incomingExpected && command.isOutgoing {
+                    showAlert = true
+                }
             }
             urlCommand = command
         }
