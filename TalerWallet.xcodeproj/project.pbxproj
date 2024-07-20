@@ -111,7 +111,7 @@
 		4E3EAE712A990778009F1BE8 /* URL+id+iban.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E363CBB2A237E0900D7E98C /* URL+id+iban.swift */; };
 		4E3EAE722A990778009F1BE8 /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
 		4E3EAE732A990778009F1BE8 /* SettingsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095262989CBFE0043A8A1 /* SettingsItem.swift */; };
-		4E3EAE742A990778009F1BE8 /* BalanceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */; };
+		4E3EAE742A990778009F1BE8 /* SendRequestV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095362989CBFE0043A8A1 /* SendRequestV.swift */; };
 		4E3EAE752A990778009F1BE8 /* DebugViewC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E753A052A0952F7002D9328 /* DebugViewC.swift */; };
 		4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE162A990778009F1BE8 /* AnyCodable */; };
 		4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE182A990778009F1BE8 /* SymLog */; };
@@ -223,7 +223,7 @@
 		4EB095582989CBFE0043A8A1 /* TransactionSummaryV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095312989CBFE0043A8A1 /* TransactionSummaryV.swift */; };
 		4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */; };
 		4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095332989CBFE0043A8A1 /* URLSheet.swift */; };
-		4EB0955C2989CBFE0043A8A1 /* BalanceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */; };
+		4EB0955C2989CBFE0043A8A1 /* SendRequestV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095362989CBFE0043A8A1 /* SendRequestV.swift */; };
 		4EB0955D2989CBFE0043A8A1 /* BalancesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095372989CBFE0043A8A1 /* BalancesListView.swift */; };
 		4EB0955E2989CBFE0043A8A1 /* PendingRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095382989CBFE0043A8A1 /* PendingRowView.swift */; };
 		4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */; };
@@ -440,7 +440,7 @@
 		4EB095312989CBFE0043A8A1 /* TransactionSummaryV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionSummaryV.swift; sourceTree = "<group>"; };
 		4EB095322989CBFE0043A8A1 /* Model+Transactions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Transactions.swift"; sourceTree = "<group>"; };
 		4EB095332989CBFE0043A8A1 /* URLSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSheet.swift; sourceTree = "<group>"; };
-		4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceRowView.swift; sourceTree = "<group>"; };
+		4EB095362989CBFE0043A8A1 /* SendRequestV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendRequestV.swift; sourceTree = "<group>"; };
 		4EB095372989CBFE0043A8A1 /* BalancesListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesListView.swift; sourceTree = "<group>"; };
 		4EB095382989CBFE0043A8A1 /* PendingRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingRowView.swift; sourceTree = "<group>"; };
 		4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletEmptyView.swift; sourceTree = "<group>"; };
@@ -800,7 +800,7 @@
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */,
 				4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */,
-				4EB095362989CBFE0043A8A1 /* BalanceRowView.swift */,
+				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
 				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4EB095382989CBFE0043A8A1 /* PendingRowView.swift */,
 			);
@@ -1284,7 +1284,7 @@
 				4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E3EAE722A990778009F1BE8 /* RequestPayment.swift in Sources */,
 				4E3EAE732A990778009F1BE8 /* SettingsItem.swift in Sources */,
-				4E3EAE742A990778009F1BE8 /* BalanceRowView.swift in Sources */,
+				4E3EAE742A990778009F1BE8 /* SendRequestV.swift in Sources */,
 				4E3EAEA82AA70157009F1BE8 /* Binding+onChange.swift in Sources */,
 				4E3EAE752A990778009F1BE8 /* DebugViewC.swift in Sources */,
 			);
@@ -1412,7 +1412,7 @@
 				4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */,
 				4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */,
 				4EB095502989CBFE0043A8A1 /* SettingsItem.swift in Sources */,
-				4EB0955C2989CBFE0043A8A1 /* BalanceRowView.swift in Sources */,
+				4EB0955C2989CBFE0043A8A1 /* SendRequestV.swift in Sources */,
 				4E3EAEA92AA70157009F1BE8 /* Binding+onChange.swift in Sources */,
 				4E753A062A0952F8002D9328 /* DebugViewC.swift in Sources */,
 			);
