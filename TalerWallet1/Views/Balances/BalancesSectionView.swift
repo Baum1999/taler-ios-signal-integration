@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -8,11 +11,13 @@ import SymLog
 
 /// This view shows a currency section
 ///     Currency Name
-/// [Send Coins]  [Receive Coins]     Balance
-///      tapping on Balance leads to completed Transactions (.done)
+/// "Balance"                   $balance                    // leads to completed Transactions (.done)
+/// [􁉇Send $currency]  [􁉅Request $currency]
 /// optional:   Pending Incoming
 /// optional:   Pending Outgoing
-/// optional:   Suspended / Aborting / Aborted / Expired
+/// optional:   [􀰟Spend KUDOS]
+/// [􁾭Withdraw $currency]  [􁾩Deposit $currency]
+/// optional?:   Suspended / Aborting / Aborted / Expired
 
 struct BalancesSectionView {
     private let symLog = SymLogV(0)
@@ -42,6 +47,9 @@ struct BalancesSectionView {
     @State private var pendingTransactions: [Transaction] = []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
     @State private var currencyName: String = "UNKNOWN"
+//    @State private var buttonSelected: Int? = nil
+
+    private static func className() -> String {"\(self)"}
 
     func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -73,24 +81,50 @@ extension BalancesSectionView: View {
         let currency = scopeInfo.currency
         let _ = symLog.log("BalancesSectionView❗️ \(currencyInfo.scope.currency) used as currencyInfo")
 
-        Group {
+        let balanceDest = LazyView {
+            TransactionsListView(stack: stack.push("\(Self.className())()"),
+                              navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
+                             scopeInfo: scopeInfo,
+                          transactions: completedTransactions,
+                       reloadAllAction: reloadCompleted,
+                       reloadOneAction: reloadOneAction)
+        }
+
         Section {
             if scopeInfo.type == .exchange {
                 let baseURL = scopeInfo.url?.trimURL() ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
                 Text(baseURL)
                     .talerFont(.headline)
-                    .listRowSeparator(.hidden)
+//                    .listRowSeparator(.hidden)
             }
-            BalancesNavigationLinksView(symLog: symLog,
-                                         stack: stack.push("Section"),
-                                  currencyInfo: currencyInfo,
-                                       balance: balance,
-                              amountToTransfer: $amountToTransfer,      // does still have the wrong currency
-                                       summary: $summary,
-                         completedTransactions: $completedTransactions,
-                               reloadAllAction: reloadCompleted,
-                               reloadOneAction: reloadOneAction,
-                                  cameraAction: cameraAction)
+            BalanceCellV(stack: stack.push("BalanceCell"),
+                  currencyInfo: currencyInfo,
+                        amount: balance.available,
+//                        sizeCategory: sizeCategory,
+//                     rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
+                   balanceDest: balanceDest)
+//            .listRowSeparator(.hidden)
+//            .border(.red)
+
+            SendRequestV(stack: stack.push(),
+                  currencyInfo: currencyInfo,
+               amountAvailable: balance.available,
+              amountToTransfer: $amountToTransfer,
+                       summary: $summary,
+                  cameraAction: cameraAction)
+//            .listRowSeparator(.hidden)
+
+//            BalancesNavigationLinksV(symLog: symLog,
+//                                         stack: stack.push("Section"),
+//                                  currencyInfo: currencyInfo,
+//                                       balance: balance,
+//                              amountToTransfer: $amountToTransfer,      // does still have the wrong currency
+//                                       summary: $summary,
+//                         completedTransactions: $completedTransactions,
+//                               reloadAllAction: reloadCompleted,
+//                               reloadOneAction: reloadOneAction,
+//                                  cameraAction: cameraAction)
+
             if pendingTransactions.count > 0 {
                 BalancesPendingRowV(//symLog: symLog,
                                      stack: stack.push(),
@@ -131,17 +165,16 @@ extension BalancesSectionView: View {
 //                         scopeInfo: balance.scopeInfo,
                    amountAvailable: balance.available,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
-            .listRowSeparator(.hidden)
 
         } header: {
             BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
                            shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
+        .listRowSeparator(.hidden)
         .task(id: controller.currencyTicker) {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
         }
-        } // group
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
@@ -180,92 +213,6 @@ extension BalancesSectionView: View {
         } // recent transactions
     } // body
 } // BalancesSectionView
-// MARK: -
-fileprivate struct BalancesNavigationLinksView: View {
-    let symLog: SymLogV?
-    let stack: CallStack
-    let currencyInfo: CurrencyInfo
-    let balance: Balance
-
-//    let sectionCount: Int
-    @Binding var amountToTransfer: Amount           // does still have the wrong currency
-    @Binding var summary: String
-    @Binding var completedTransactions: [Transaction]
-    let reloadAllAction: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
-    let cameraAction: () -> Void
-
-    @EnvironmentObject private var controller: Controller
-
-    @State private var buttonSelected: Int? = nil
-
-    func selectAndUpdate(_ button: Int) {
-        let currency = balance.scopeInfo.currency
-        amountToTransfer.setCurrency(currency)      // replace wrong currency here
-        symLog?.log("balance.scopeInfo.currency: \(currency)")
-
-        buttonSelected = button      // will trigger NavigationLink
-        // while navigation animation runs, contact Exchange to update Fees
-//        Task { // runs on MainActor
-//            do {
-//                try await model.updateExchange(scopeInfo: balance.scopeInfo)
-//            } catch {    // TODO: error handling - couldn't updateExchange
-//                symLog.log("error: \(error)")
-//            }
-//        }
-    }
-    private static func className() -> String {"\(self)"}
-
-    var body: some View {
-        let scopeInfo = balance.scopeInfo
-        HStack(spacing: 0) {
-            let sendDest = // LazyView {
-                SendAmount(stack: stack.push("\(Self.className())()"),
-                    currencyInfo: currencyInfo,
-                 amountAvailable: balance.available,
-                amountToTransfer: $amountToTransfer,        // with correct currency
-                         summary: $summary,
-                       scopeInfo: scopeInfo,
-                    cameraAction: cameraAction)
-            // }
-            let requestDest = // LazyView {
-                RequestPayment(stack: stack.push("\(Self.className())()"),
-                    amountToTransfer: $amountToTransfer,    // with correct currency
-                             summary: $summary,
-                           scopeInfo: scopeInfo,
-                        cameraAction: cameraAction)
-            // }
-            let balanceDest = LazyView {
-                TransactionsListView(stack: stack.push("\(Self.className())()"),
-                                  navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
-                                 scopeInfo: scopeInfo,
-                              transactions: completedTransactions,
-                           reloadAllAction: reloadAllAction,
-                           reloadOneAction: reloadOneAction)
-            }
-            NavigationLink(destination: sendDest, tag: 1, selection: $buttonSelected) {
-                EmptyView()
-            }.frame(width: 0).opacity(0).hidden()           // SendAmount
-            NavigationLink(destination: requestDest, tag: 2, selection: $buttonSelected) {
-                EmptyView()
-            }.frame(width: 0).opacity(0).hidden()           // RequestPayment
-            NavigationLink(destination: balanceDest, tag: 3, selection: $buttonSelected) {
-                EmptyView()
-            }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
-
-            BalanceRowView(stack: stack.push("BalancesNavigationLinksView"),
-                    currencyName: currencyInfo.specs.name,
-                          amount: balance.available,
-                      sendAction: {
-                            selectAndUpdate(1)      // trigger SendAmount NavigationLink
-                   }, recvAction: {
-                            selectAndUpdate(2)      // trigger RequestPayment NavigationLink
-                    }, rowAction: {
-                            buttonSelected = 3      // trigger TransactionList NavigationLink
-                  }, balanceDest: balanceDest)
-        }
-    }
-}
 // MARK: -
 #if false   // model crashes
 struct BalancesSectionView_Previews: PreviewProvider {
