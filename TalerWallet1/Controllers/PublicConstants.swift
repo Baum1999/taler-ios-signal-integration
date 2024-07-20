@@ -49,6 +49,7 @@ public let TALER = "taler.net/"
 public let TALER_NET = HTTPS + TALER
 public let DEMO = ".demo." + TALER
 public let TEST = ".test." + TALER
+public let HEAD = ".head." + TALER
 
 public let DEMOBANK = HTTPS + "bank" + DEMO
 public let DEMOSHOP = HTTPS + "shop" + DEMO
@@ -58,6 +59,10 @@ public let TESTBANK = HTTPS + "bank" + TEST
 public let TESTSHOP = HTTPS + "shop" + TEST
 public let TESTBACKEND = HTTPS + "backend" + TEST
 public let TESTEXCHANGE = HTTPS + "exchange" + TEST
+public let HEADBANK = HTTPS + "bank" + HEAD
+public let HEADSHOP = HTTPS + "shop" + HEAD
+public let HEADBACKEND = HTTPS + "backend" + HEAD
+public let HEADEXCHANGE = HTTPS + "exchange" + HEAD
 
 public let ARS_AGE_EXCHANGE = HTTPS + "exchange-age.taler.ar/"
 public let ARS_EXP_EXCHANGE = HTTPS + "exchange-expensive.taler.ar/"

@@ -163,21 +163,21 @@ struct SettingsView: View {
                     }
 #endif
                     if showDevelopItems {  // show or hide the following items
-                        SettingsItem(name: String("Withdraw \(DEMOCURRENCY)"), id1: "demo1with",
+                        SettingsItem(name: String("Withdraw from DEMO"), id1: "demo1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
-                                    symLog.log("Withdraw KUDOS")
+                                    symLog.log("Withdraw DEMO KUDOS")
                                     let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
-                                    try? await model.loadTestKudosM(test: false, amount: amount)
+                                    try? await model.loadTestKudosM(0, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("demo1withdraw")
-                        SettingsItem(name: String("Withdraw \(TESTCURRENCY)"), id1: "test1with",
+                        SettingsItem(name: String("Withdraw from TEST"), id1: "test1with",
                               description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
@@ -185,12 +185,26 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
                                     let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
-                                    try? await model.loadTestKudosM(test: true, amount: amount)
+                                    try? await model.loadTestKudosM(1, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("test1withdraw")
+                        SettingsItem(name: String("Withdraw from HEAD"), id1: "head1with",
+                                     description: hideDescriptions ? nil : String("Get money for testing")) {
+                            let title = "Withdraw"
+                            Button(title) {
+                                withDrawDisabled = true    // don't run twice
+                                Task { // runs on MainActor
+                                    symLog.log("Withdraw HEAD KUDOS")
+                                    let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
+                                    try? await model.loadTestKudosM(2, amount: amount)
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(withDrawDisabled)
+                        }.id("head1withdraw")
                         SettingsToggle(name: String("Set 2 seconds delay"),
                                        value: $developDelay.onChange({ delay in
                             walletCore.developDelay = delay}), id1: "delay",
