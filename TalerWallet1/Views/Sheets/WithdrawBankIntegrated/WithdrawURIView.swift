@@ -60,6 +60,14 @@ struct WithdrawURIView: View {
     }
 
     private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
+        if let exchange {
+            if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
+                                                                             amount: amount) {
+                let fee = try? details.amountRaw - details.amountEffective
+                let feeStr = fee?.readableDescription ?? "nix"
+                symLog.log("Fee = \(feeStr)")
+            }
+        }
         return nil
     }
 

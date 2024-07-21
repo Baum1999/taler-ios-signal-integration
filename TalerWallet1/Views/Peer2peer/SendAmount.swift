@@ -11,9 +11,9 @@ import SymLog
 
 // Called when tapping "Send Coins" in the balances list
 struct SendAmount: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     let stack: CallStack
-    let currencyInfo: CurrencyInfo?
+    let currencyInfo: CurrencyInfo
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var amountToTransfer: Amount
@@ -68,23 +68,54 @@ struct SendAmount: View {
     }
 
     private func computeFeeSend(_ amount: Amount) async -> ComputeFeeResult? {
+        if exchange == nil {
+            if let url = currencyInfo.scope.url {
+                exchange = try? await model.getExchangeByUrl(url: url)
+            }
+        }
+        do {
+            insufficient = try amount > amountAvailable
+        } catch {
+            print("Yikes❗️ insufficient failed❗️")
+            insufficient = true
+        }
+
+        if insufficient {
+//            announce("\(amountVoiceOver), \(insufficientLabel2)")
+        } else if amount.isZero {
+            feeStr = EMPTYSTRING
+        } else {
+            if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
+                // TODO: set from exchange
+//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+                if let feeAmount = fee(ppCheck: ppCheck) {
+                    feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+                    let feeLabel = feeLabel(feeStr)
+//                    announce("\(amountVoiceOver), \(feeLabel)")
+                } else {
+                    feeStr = EMPTYSTRING
+//                    announce(amountVoiceOver)
+                }
+                peerPushCheck = ppCheck
+            } else {
+                peerPushCheck = nil
+            }
+        }
         return nil
     }
 
     var body: some View {
-#if PRINT_CHANGES
+#if true //PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyInfo.specs.name
         let navTitle = String(localized: "NavTitle_Send_Currency",
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")
         let available = amountAvailable.formatted(currencyInfo, isNegative: false)
 //        let _ = print("available: \(available)")
-        let _ = symLog.log("currency: \(currency), available: \(available)")
+        let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(available)")
         let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
         let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
 
@@ -108,6 +139,7 @@ struct SendAmount: View {
                       summary: $summary,
                    expireDays: $expireDays)
         }
+
         ScrollView {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to send:")
@@ -145,41 +177,41 @@ struct SendAmount: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .navigationBarItems(trailing: QRButton(action: cameraAction))
-        .task(id: amountToTransfer.value) {
-            if exchange == nil {
-                if let url = scopeInfo.url {
-                    exchange = try? await model.getExchangeByUrl(url: url)
-                }
-            }
-            do {
-                insufficient = try amountToTransfer > amountAvailable
-            } catch {
-                print("Yikes❗️ insufficient failed❗️")
-                insufficient = true
-            }
-
-            if insufficient {
-                announce("\(amountVoiceOver), \(insufficientLabel2)")
-            } else if amountToTransfer.isZero {
-                feeStr = EMPTYSTRING
-            } else {
-                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
-                // TODO: set from exchange
-//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                    if let feeAmount = fee(ppCheck: ppCheck) {
-                        feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-                        let feeLabel = feeLabel(feeStr)
-                        announce("\(amountVoiceOver), \(feeLabel)")
-                    } else {
-                        feeStr = EMPTYSTRING
-                        announce(amountVoiceOver)
-                    }
-                    peerPushCheck = ppCheck
-                } else {
-                    peerPushCheck = nil
-                }
-            }
-        }
+//        .task(id: amountToTransfer.value) {
+//            if exchange == nil {
+//                if let url = scopeInfo.url {
+//                    exchange = try? await model.getExchangeByUrl(url: url)
+//                }
+//            }
+//            do {
+//                insufficient = try amountToTransfer > amountAvailable
+//            } catch {
+//                print("Yikes❗️ insufficient failed❗️")
+//                insufficient = true
+//            }
+//
+//            if insufficient {
+//                announce("\(amountVoiceOver), \(insufficientLabel2)")
+//            } else if amountToTransfer.isZero {
+//                feeStr = EMPTYSTRING
+//            } else {
+//                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
+//                // TODO: set from exchange
+////                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
+//                    if let feeAmount = fee(ppCheck: ppCheck) {
+//                        feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+//                        let feeLabel = feeLabel(feeStr)
+//                        announce("\(amountVoiceOver), \(feeLabel)")
+//                    } else {
+//                        feeStr = EMPTYSTRING
+//                        announce(amountVoiceOver)
+//                    }
+//                    peerPushCheck = ppCheck
+//                } else {
+//                    peerPushCheck = nil
+//                }
+//            }
+//        }
     }
 }
 // MARK: -

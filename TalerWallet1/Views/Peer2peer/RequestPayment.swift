@@ -22,14 +22,20 @@ struct RequestPayment: View {
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
+    @State private var feeAmount: Amount? = nil
     @State private var buttonSelected = false
+    @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
+        shortcutSelected = true
+    }
+    private func buttonAction() {
         buttonSelected = true
     }
+
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {
             if hasNoFees {
@@ -37,6 +43,24 @@ struct RequestPayment: View {
             }
         }
         return peerPullCheck != nil ? true : false
+    }
+
+    private func computeFeeRequest(_ amount: Amount) async -> ComputeFeeResult? {
+        if exchange == nil {
+            if let url = scopeInfo.url {
+                exchange = try? await model.getExchangeByUrl(url: url)
+            }
+        }
+        if amount.isZero {
+//            fee = EMPTYSTRING
+        } else {
+            let baseURL = exchange?.exchangeBaseUrl
+            peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amount,
+                                                                  cancellationId: "cancel")
+
+//            return ComputeFeeResult(insufficient: false, feeAmount: <#T##Amount?#>, feeStr: <#T##String#>)
+        }
+        return nil
     }
 
     var body: some View {
@@ -52,6 +76,8 @@ struct RequestPayment: View {
                                 comment: "NavTitle: Request 'currencySymbol'")
         let coinData = CoinData(details: peerPullCheck)
         let _ = symLog.log("currency: \(currency)")
+        let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
+
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                  currencyInfo: currencyInfo,
@@ -73,26 +99,52 @@ struct RequestPayment: View {
                    expireDays: $expireDays)
         }
         let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
-        ScrollView { VStack(alignment: .trailing) {
-            CurrencyInputView(currencyInfo: currencyInfo,
-                                    amount: $amountToTransfer,
-                                 available: nil,
-                                     title: minimalistic ? String(localized: "Amount:")
-                                                         : String(localized: "Amount to request:"),
-                            shortcutAction: shortcutAction)
-                .padding(.top)
-            QuiteSomeCoins(currencyInfo: currencyInfo,
-                               currency: currency,
-                               coinData: coinData,
-                          shouldShowFee: true,           // always true since the requester pays fees
-                        amountEffective: peerPullCheck?.amountEffective)
-            NavigationLink(destination: inputDestination) { Text("Next") }
-                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
-                .disabled(disabled)
-                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                )
-        }.padding(.horizontal) } // ScrollVStack
+
+        ScrollView {
+            let amountLabel = minimalistic ? String(localized: "Amount:")
+                                           : String(localized: "Amount to request:")
+            AmountInputV(stack: stack.push(),
+                  currencyInfo: currencyInfo,
+                           url: nil,
+               amountAvailable: nil,
+              amountToTransfer: $amountToTransfer,
+                       wireFee: nil,
+                   amountLabel: amountLabel,
+             summaryIsEditable: true,
+                       summary: $summary,
+//                  insufficient: $insufficient,
+                     feeAmount: $feeAmount,
+                shortcutAction: shortcutAction,
+                  buttonAction: buttonAction,
+                    computeFee: computeFeeRequest)
+            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            ) // shortcutDestination
+            .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            ) // inputDestination
+
+//        VStack(alignment: .trailing) {
+//            CurrencyInputView(amount: $amountToTransfer,
+//                           available: nil,
+//                               title: minimalistic ? String(localized: "Amount:")
+//                                                   : String(localized: "Amount to request:"),
+//                      shortcutAction: shortcutAction)
+//                .padding(.top)
+//            QuiteSomeCoins(currencyInfo: currencyInfo,
+//                               currency: currency,
+//                               coinData: coinData,
+//                          shouldShowFee: true,           // always true since the requester pays fees
+//                        amountEffective: peerPullCheck?.amountEffective)
+//            NavigationLink(destination: inputDestination) { Text("Next") }
+//                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
+//                .disabled(disabled)
+//                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
+//                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+//                )
+//        }.padding(.horizontal)
+
+        } // ScrollView
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -106,21 +158,21 @@ struct RequestPayment: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .navigationBarItems(trailing: QRButton(action: cameraAction))
-        .task(id: amountToTransfer.value) {
-            if exchange == nil {
-                if let url = scopeInfo.url {
-                    exchange = try? await model.getExchangeByUrl(url: url)
-                }
-            }
-            if amountToTransfer.isZero {
-//                fee = EMPTYSTRING
-            } else {
-//                peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
-                let baseURL = exchange?.exchangeBaseUrl
-                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer,
-                                                                      cancellationId: "cancel")
-            }
-        }
+//        .task(id: amountToTransfer.value) {
+//            if exchange == nil {
+//                if let url = scopeInfo.url {
+//                    exchange = try? await model.getExchangeByUrl(url: url)
+//                }
+//            }
+//            if amountToTransfer.isZero {
+// //               fee = EMPTYSTRING
+//            } else {
+//                let baseURL = exchange?.exchangeBaseUrl
+// //               peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
+//                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer,
+//                                                                       cancellationId: "cancel")
+//            }
+//        }
     }
 }
 // MARK: -
