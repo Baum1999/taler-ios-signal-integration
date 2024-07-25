@@ -24,7 +24,11 @@ struct BalanceCellV: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountV = AmountV(stack: stack?.push("AmountV"), amount: amount, isNegative: false, large: true)
+        let amountV = AmountV(stack: stack?.push("AmountV"),
+                       currencyInfo: currencyInfo,
+                             amount: amount,
+                         isNegative: false,
+                              large: true)
             .foregroundColor(.primary)
         let hLayout = amountV
                         .frame(maxWidth: .infinity, alignment: .trailing)

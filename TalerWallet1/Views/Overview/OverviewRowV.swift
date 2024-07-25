@@ -10,6 +10,7 @@ import taler_swift
 
 struct CurrenciesCell: View {
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let amount: Amount
     let sizeCategory: ContentSizeCategory
     let rowAction: () -> Void
@@ -22,7 +23,7 @@ struct CurrenciesCell: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountV = AmountV(stack: stack.push(), amount: amount, isNegative: false, large: true)
+        let amountV = AmountV(stack: stack.push(), currencyInfo: currencyInfo, amount: amount, isNegative: false, large: true)
             .foregroundColor(.primary)
         let hLayout = amountV
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -64,6 +65,7 @@ struct CurrenciesCell: View {
 /// [Send Money]  [Request Payment]
 struct OverviewRowV: View {
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let amount: Amount
     let sendAction: () -> Void
     let recvAction: () -> Void
@@ -78,6 +80,7 @@ struct OverviewRowV: View {
     var body: some View {
         VStack (alignment: .trailing, spacing: 6) {
             CurrenciesCell(stack: stack.push(),
+                    currencyInfo: currencyInfo,
                           amount: amount,
                     sizeCategory: sizeCategory,
                        rowAction: rowAction,
@@ -97,10 +100,12 @@ struct OverviewRowV_Previews: PreviewProvider {
 
         List {
             Section {
-                OverviewRowV(stack: CallStack("Preview"), amount: demo,
+                let currencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+                OverviewRowV(stack: CallStack("Preview"), currencyInfo: currencyInfo, amount: demo,
                         sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
             }
-            OverviewRowV(stack: CallStack("Preview"), amount: test,
+            let currencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+            OverviewRowV(stack: CallStack("Preview"), currencyInfo: currencyInfo, amount: test,
                     sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
         }
     }

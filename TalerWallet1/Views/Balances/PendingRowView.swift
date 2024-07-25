@@ -37,7 +37,7 @@ struct PendingRowView: View {
         let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
 
-        let amountText = AmountV(amount, isNegative: !incoming)
+        let amountText = AmountV(currencyInfo, amount, isNegative: !incoming)
             .foregroundColor(pendingColor)
 
         // this is the default view for iOS 15

@@ -9,6 +9,7 @@ import SwiftUI
 import taler_swift
 
 struct TransactionRowView: View {
+    let currencyInfo: CurrencyInfo
     let transaction : Transaction
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -54,7 +55,7 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV(common.amountEffective, isNegative: !incoming)
+        let amountV = AmountV(currencyInfo, common.amountEffective, isNegative: !incoming)
             .foregroundColor(foreColor)
 
         let topString = topString()
@@ -179,8 +180,8 @@ struct TransactionRow_Previews: PreviewProvider {
                                          time: Timestamp(from: 1_666_666_000_000))
     static var previews: some View {
         List {
-            TransactionRowView(transaction: withdrawal)
-            TransactionRowView(transaction: payment)
+            TransactionRowView(currencyInfo: CurrencyInfo.zero(DEMOCURRENCY), transaction: withdrawal)
+            TransactionRowView(currencyInfo: CurrencyInfo.zero(DEMOCURRENCY), transaction: payment)
         }
     }
 }
