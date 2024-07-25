@@ -27,6 +27,7 @@ extension Transaction {             // for Dummys
 struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let transactionId: String
     let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let navTitle: String?
@@ -137,6 +138,7 @@ struct TransactionSummaryV: View {
                 }    .listRowSeparator(.hidden)
                     .talerFont(.title)
                 TypeDetail(stack: stack.push(),
+                    currencyInfo: currencyInfo,
                      transaction: $transaction,
                          hasDone: hasDone)
 
@@ -267,6 +269,7 @@ struct TransactionSummaryV: View {
 
     struct TypeDetail: View {
         let stack: CallStack
+        let currencyInfo: CurrencyInfo
         @Binding var transaction: Transaction
         let hasDone: Bool
         @Environment(\.colorScheme) private var colorScheme
@@ -302,37 +305,55 @@ struct TransactionSummaryV: View {
                             PendingWithdrawalDetails(transaction: $transaction, details: details)
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Chosen:", comment: "mini"),
-                                        topTitle: String(localized: "Chosen amount to withdraw:"),
-                                         baseURL: details.exchangeBaseUrl, noFees: nil, large: false,
-                                         summary: nil, merchant: nil)
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Chosen:", comment: "mini"),
+                                       topTitle: String(localized: "Chosen amount to withdraw:"),
+                                        baseURL: details.exchangeBaseUrl,
+                                         noFees: nil,               // TODO: noFees
+                                          large: false,
+                                        summary: nil,
+                                       merchant: nil)
                     }
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
                         ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Deposit:", comment: "mini"),
-                                          topTitle: String(localized: "Amount to deposit:"),
-                                          baseURL: nil, noFees: nil, large: true,            // TODO: baseURL, noFees
-                                          summary: nil, merchant: nil)
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Deposit:", comment: "mini"),
+                                       topTitle: String(localized: "Amount to deposit:"),
+                                        baseURL: nil,               // TODO: baseURL
+                                         noFees: nil,               // TODO: noFees
+                                          large: true,
+                                        summary: nil,
+                                       merchant: nil)
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
                         TransactionDetailV(paymentTx: paymentTransaction)
                         ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Price:", comment: "mini"),
-                                        topTitle: String(localized: "Price (net):"),
-                                         baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
-                                         summary: details.info.summary,
-                                        merchant: details.info.merchant.name)
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Price:", comment: "mini"),
+                                       topTitle: String(localized: "Price (net):"),
+                                        baseURL: nil,               // TODO: baseURL
+                                         noFees: nil,               // TODO: noFees
+                                          large: true,
+                                        summary: details.info.summary,
+                                       merchant: details.info.merchant.name)
                     }
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                          common: common, topAbbrev: String(localized: "Refunded:", comment: "mini"),
-                                        topTitle: String(localized: "Refunded amount:"),
-                                         baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
-                                         summary: details.info?.summary,
-                                        merchant: details.info?.merchant.name)
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Refunded:", comment: "mini"),
+                                       topTitle: String(localized: "Refunded amount:"),
+                                        baseURL: nil,               // TODO: baseURL
+                                         noFees: nil,               // TODO: noFees
+                                          large: true,
+                                        summary: details.info?.summary,
+                                       merchant: details.info?.merchant.name)
                     }
                     case .refresh(let refreshTransaction): Group {
                         let labelColor = WalletColors().labelColor
@@ -343,6 +364,7 @@ struct TransactionSummaryV: View {
                                 .talerFont(.title)
                             let input = details.refreshInputAmount
                             AmountRowV(stack: stack.push(),
+                                currencyInfo: currencyInfo,
                                        title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
                                   isNegative: false,
@@ -350,6 +372,7 @@ struct TransactionSummaryV: View {
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
                                 AmountRowV(stack: stack.push(),
+                                    currencyInfo: currencyInfo,
                                            title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
                                       isNegative: !fee.isZero,
@@ -411,29 +434,38 @@ struct TransactionSummaryV: View {
                         let localizedType = transaction.isDone ? transaction.localizedTypePast
                                                                : transaction.localizedType
                         ThreeAmountsSheet(stack: stack.push(),
-                                          common: common,
-                                       topAbbrev: localizedType + colon,
-                                        topTitle: localizedType + colon,
-                                         baseURL: details.exchangeBaseUrl, noFees: nil,         // TODO: noFees
-                                           large: false,
-                                         summary: details.info.summary,
-                                        merchant: nil)
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: localizedType + colon,
+                                       topTitle: localizedType + colon,
+                                        baseURL: details.exchangeBaseUrl, noFees: nil,         // TODO: noFees
+                                          large: false,
+                                        summary: details.info.summary,
+                                       merchant: nil)
                     } // p2p
                     case .recoup(let recoupTransaction): Group {
                         let details = recoupTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                         common: common, topAbbrev: String(localized: "Recoup:", comment: "mini"),
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Recoup:", comment: "mini"),
                                        topTitle: String(localized: "Recoup:"),
-                                        baseURL: nil, noFees: nil, large: true,             // TODO: baseURL, noFees
+                                        baseURL: nil,
+                                         noFees: nil,
+                                          large: true,             // TODO: baseURL, noFees
                                         summary: nil,
                                        merchant: nil)
                     }
                     case .denomLoss(let denomLossTransaction): Group {
                         let details = denomLossTransaction.details              // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                         common: common, topAbbrev: String(localized: "Lost:", comment: "mini"),
+                                   currencyInfo: currencyInfo,
+                                         common: common,
+                                      topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),
-                                        baseURL: details.exchangeBaseUrl, noFees: nil, large: true,             // TODO: baseURL, noFees
+                                        baseURL: details.exchangeBaseUrl,
+                                         noFees: nil,
+                                          large: true,             // TODO: baseURL, noFees
                                         summary: details.lossEventType.rawValue,
                                        merchant: nil)
                     }

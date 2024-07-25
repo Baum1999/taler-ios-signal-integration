@@ -10,6 +10,7 @@ import taler_swift
 
 struct ThreeAmountsSheet: View {
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     var common: TransactionCommon
     var topAbbrev: String
     var topTitle: String
@@ -48,6 +49,7 @@ struct ThreeAmountsSheet: View {
         let txStateLcl = developerMode && pending ? (common.txState.minor?.localizedState ?? majorLcl)
                                                   : majorLcl
         ThreeAmountsSection(stack: stack.push(),
+                     currencyInfo: currencyInfo,
                          topTitle: topTitle,
                         topAbbrev: topAbbrev,
                         topAmount: raw,
@@ -68,6 +70,7 @@ struct ThreeAmountsSheet: View {
 // MARK: -
 struct ThreeAmountsSection: View {
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
@@ -107,6 +110,7 @@ struct ThreeAmountsSection: View {
                     .padding(.bottom)
             }
             AmountRowV(stack: stack.push(),
+                currencyInfo: currencyInfo,
                        title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
                   isNegative: !incoming,
@@ -118,6 +122,7 @@ struct ThreeAmountsSection: View {
                     let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
                                              : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")
                     AmountRowV(stack: stack.push(),
+                        currencyInfo: currencyInfo,
                                title: title,
                               amount: fee,
                           isNegative: !incoming,
@@ -127,6 +132,7 @@ struct ThreeAmountsSection: View {
                 }
                 if let bottomAmount {
                     AmountRowV(stack: stack.push(),
+                        currencyInfo: currencyInfo,
                                title: minimalistic ? bottomAbbrev : bottomTitle,
                               amount: bottomAmount,
                           isNegative: !incoming,
@@ -174,6 +180,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
         Group {
             List {
                 ThreeAmountsSheet(stack: CallStack("Preview"),
+                           currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
                                  common: common, topAbbrev: "Withdrawal",
                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, noFees: false,
                                   large: 1==0, summary: nil, merchant: nil)
