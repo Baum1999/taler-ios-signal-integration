@@ -16,7 +16,7 @@ fileprivate let showUpDown = 25     // show up+down buttons in the menubar if li
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    let currencyInfo: CurrencyInfo
     let navTitle: String
 
     let scopeInfo: ScopeInfo
@@ -24,6 +24,7 @@ struct TransactionsListView: View {
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var viewId = UUID()
 
     var body: some View {
@@ -36,6 +37,7 @@ struct TransactionsListView: View {
             List {
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
+                                  currencyInfo: currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: transactions,
                                reloadOneAction: reloadOneAction)
@@ -83,6 +85,7 @@ struct TransactionsListView: View {
 struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let scopeInfo: ScopeInfo
     let transactions: [Transaction]
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
@@ -102,6 +105,7 @@ struct TransactionsArraySliceV: View {
             NavigationLink {
                 LazyView {
                     TransactionSummaryV(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                   transactionId: transaction.id,
                                    reloadAction: reloadOneAction,
                                        navTitle: nil,
@@ -113,7 +117,7 @@ struct TransactionsArraySliceV: View {
                                    resumeAction: resumeAction)
                 }
             } label: {
-                TransactionRowView(transaction: transaction)
+                TransactionRowView(currencyInfo: currencyInfo, transaction: transaction)
             }
             .id(Int(index))
         }

@@ -80,6 +80,7 @@ extension OverviewSectionV: View {
             }
             CurrenciesNavigationLinksV(symLog: symLog,
                                          stack: stack.push(),
+                                  currencyInfo: currencyInfo,
                                        balance: balance,
                               amountToTransfer: $amountToTransfer,      // does still have the wrong currency
                                        summary: $summary,
@@ -122,6 +123,7 @@ extension OverviewSectionV: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
+                                  currencyInfo: currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)
@@ -142,6 +144,7 @@ extension OverviewSectionV: View {
 fileprivate struct CurrenciesNavigationLinksV: View {
     let symLog: SymLogV?
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let balance: Balance
     
 //    let sectionCount: Int
@@ -175,6 +178,7 @@ fileprivate struct CurrenciesNavigationLinksV: View {
         HStack(spacing: 0) {
             let balanceDest = LazyView {
                 TransactionsListView(stack: stack.push(),
+                              currencyInfo: currencyInfo,
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: scopeInfo,
                               transactions: completedTransactions,
@@ -185,14 +189,15 @@ fileprivate struct CurrenciesNavigationLinksV: View {
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
             OverviewRowV(stack: stack.push(),
-                          amount: balance.available,
-                      sendAction: {
-                            selectAndUpdate(1)      // trigger SendAmount NavigationLink
-                   }, recvAction: {
-                            selectAndUpdate(2)      // trigger RequestPayment NavigationLink
-                    }, rowAction: {
-                            buttonSelected = 3      // trigger TransactionList NavigationLink
-                  }, balanceDest: balanceDest)
+                  currencyInfo: currencyInfo,
+                        amount: balance.available,
+                    sendAction: {
+                        selectAndUpdate(1)      // trigger SendAmount NavigationLink
+                 }, recvAction: {
+                        selectAndUpdate(2)      // trigger RequestPayment NavigationLink
+                  }, rowAction: {
+                        buttonSelected = 3      // trigger TransactionList NavigationLink
+                }, balanceDest: balanceDest)
         }
     }
 }
