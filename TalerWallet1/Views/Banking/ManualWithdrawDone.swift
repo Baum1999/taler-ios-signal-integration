@@ -12,7 +12,7 @@ import SymLog
 struct ManualWithdrawDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Wire Transfer")
+    let currencyInfo: CurrencyInfo
 
     let exchange: Exchange
     let amountToTransfer: Amount
@@ -22,6 +22,8 @@ struct ManualWithdrawDone: View {
 
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State private var transactionId: String?
+
+    let navTitle = String(localized: "Wire Transfer")
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -35,15 +37,16 @@ struct ManualWithdrawDone: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                              transactionId: transactionId,
-                               reloadAction: reloadOneAction,
-                                   navTitle: navTitle,
-                                    hasDone: true,
-                                abortAction: nil,
-                               deleteAction: nil,
-                                 failAction: nil,
-                              suspendAction: nil,
-                               resumeAction: nil)
+                             currencyInfo: currencyInfo,
+                            transactionId: transactionId,
+                             reloadAction: reloadOneAction,
+                                 navTitle: navTitle,
+                                  hasDone: true,
+                              abortAction: nil,
+                             deleteAction: nil,
+                               failAction: nil,
+                            suspendAction: nil,
+                             resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
@@ -85,6 +88,7 @@ struct ManualWithdrawDone_Container : View {
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
+                    currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
                         exchange: exchange,
                 amountToTransfer: amountToTransfer)
     }

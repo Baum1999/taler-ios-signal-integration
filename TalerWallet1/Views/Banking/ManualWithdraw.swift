@@ -61,6 +61,7 @@ struct ManualWithdraw: View {
 //  let _ = print(selectedAge, restrictAge)
             let destination = LazyView {
                 ManualWithdrawDone(stack: stack.push(),
+                            currencyInfo: currencyInfo,
                                 exchange: exchange,
                         amountToTransfer: amountToTransfer)
 //                           restrictAge: restrictAge)

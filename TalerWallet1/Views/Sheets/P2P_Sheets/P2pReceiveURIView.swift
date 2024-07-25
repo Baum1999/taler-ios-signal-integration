@@ -11,7 +11,7 @@ import SymLog
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "P2P Receive")
+    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
@@ -24,6 +24,8 @@ struct P2pReceiveURIView: View {
 
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
     @State private var exchange: Exchange? = nil
+
+    let navTitle = String(localized: "P2P Receive")
 
     var body: some View {
         VStack {
@@ -42,6 +44,7 @@ struct P2pReceiveURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                      topTitle: String(localized: "Gross Amount to receive:"),
                                     topAbbrev: String(localized: "Receive gross:", comment: "mini"),
                                     topAmount: raw, fee: fee,

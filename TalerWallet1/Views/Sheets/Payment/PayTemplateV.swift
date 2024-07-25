@@ -80,15 +80,13 @@ struct PayTemplateV: View {
 
     var body: some View {
         if let templateContract {       // preparePayResult
-//            let effective = preparePayResult.amountEffective
-//            let baseURL = preparePayResult.contractTerms.exchanges.first?.url
-//            let raw = preparePayResult.amountRaw
-//            let currency = raw.currencyStr
-            let currencyInfo = controller.info(for: currencyName, controller.currencyTicker)
+            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? "UNKNOWN"
+            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to pay:")
             let finalDestinationI = LazyView {
                 PaymentView(stack: stack.push(),
+                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountToTransfer,
@@ -98,6 +96,7 @@ struct PayTemplateV: View {
             }  // final destination with amountToTransfer, after user input of amount
             let finalDestinationS = LazyView {
                 PaymentView(stack: stack.push(),
+                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountShortcut,
@@ -107,7 +106,9 @@ struct PayTemplateV: View {
             }  // final destination with amountShortcut, when user tapped a shortcut
 
             let inputDestination = LazyView {
-                SubjectInputV(stack: stack.push(), url: url,
+                SubjectInputV(stack: stack.push(),
+                       currencyInfo: currencyInfo,
+                                url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountToTransfer,
                         amountLabel: amountLabel,
@@ -115,11 +116,12 @@ struct PayTemplateV: View {
 //                       insufficient: $insufficient,
 //                          feeAmount: $feeAmount,
                        feeIsNotZero: true, // TODO: feeIsNotZero()
-                       currencyInfo: currencyInfo,
                          targetView: finalDestinationI)
             }   // destination to subject input
             let shortcutDestination = LazyView {
-                SubjectInputV(stack: stack.push(), url: url,
+                SubjectInputV(stack: stack.push(),
+                       currencyInfo: currencyInfo,
+                                url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountShortcut,
                         amountLabel: amountLabel,
@@ -127,7 +129,6 @@ struct PayTemplateV: View {
 //                       insufficient: $insufficient,
 //                          feeAmount: $feeAmount,
                        feeIsNotZero: true, // TODO: feeIsNotZero()
-                       currencyInfo: currencyInfo,
                          targetView: finalDestinationS)
             }// destination to subject input, when user tapped an amount shortcut
           Group {
@@ -172,6 +173,7 @@ struct PayTemplateV: View {
             } else {    // both template contract amount and summary are fixed => directly show the payment
                 // Attention: contains a List, thus mustn't be included in a ScrollView
                 PaymentView(stack: stack.push(),
+                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountToTransfer,

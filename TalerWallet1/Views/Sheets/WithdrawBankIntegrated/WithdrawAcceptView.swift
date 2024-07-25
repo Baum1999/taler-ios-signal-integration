@@ -12,6 +12,7 @@ import SymLog
 struct WithdrawAcceptView: View {
     private let symLog = SymLogV()
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website
@@ -55,6 +56,7 @@ struct WithdrawAcceptView: View {
                     let inColor = WalletColors().transactionColor(true)
 
                     ThreeAmountsSection(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                      topTitle: String(localized: "Chosen amount to withdraw:"),
                                     topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                     topAmount: raw, fee: fee,
@@ -79,6 +81,7 @@ struct WithdrawAcceptView: View {
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         WithdrawAcceptDone(stack: stack.push(),
+                                    currencyInfo: currencyInfo,
                                  exchangeBaseUrl: exchange.exchangeBaseUrl,
                                              url: url,
                                 amountToTransfer: amountToTransfer)

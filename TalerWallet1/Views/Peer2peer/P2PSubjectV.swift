@@ -113,6 +113,7 @@ struct P2PSubjectV: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
                     P2PReadyV(stack: stack.push(),
+                       currencyInfo: currencyInfo,
                             summary: summary,
                          expireDays: expireDays,
                        amountToSend: amountToSend,

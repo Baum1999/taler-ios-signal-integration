@@ -11,7 +11,7 @@ import SymLog
 struct P2pPayURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
+    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
@@ -23,6 +23,8 @@ struct P2pPayURIView: View {
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
+    let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
+
     var body: some View {
         VStack {
             if let peerPullDebitResponse {
@@ -32,6 +34,7 @@ struct P2pPayURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                      topTitle: String(localized: "Amount to pay:"),
                                     topAbbrev: String(localized: "Pay:", comment: "mini"),
                                     topAmount: raw, fee: fee,

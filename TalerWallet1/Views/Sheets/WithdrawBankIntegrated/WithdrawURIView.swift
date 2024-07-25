@@ -99,13 +99,17 @@ struct WithdrawURIView: View {
                                 await loadExchange(defaultBaseUrl)
                             }
                     } // load defaultBaseUrl
-                    let acceptDestination = WithdrawAcceptView(stack: stack.push(), url: url,
+                    let acceptDestination = WithdrawAcceptView(stack: stack.push(),
+                                                        currencyInfo: currencyInfo,
+                                                                 url: url,
                                                     amountToTransfer: $amountToTransfer,
                                                             exchange: $exchange)
                     if amountIsEditable {
                       ScrollView {
                         let shortcutDestination = LazyView {
-                            WithdrawAcceptView(stack: stack.push(), url: url,
+                            WithdrawAcceptView(stack: stack.push(),
+                                        currencyInfo: currencyInfo,
+                                                 url: url,
                                     amountToTransfer: $amountShortcut,
                                             exchange: $exchange)
                         }

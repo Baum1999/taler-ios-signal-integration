@@ -15,27 +15,34 @@ struct RefundURIView: View {
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
 
 //    let navTitle = String(localized: "Refund", comment:"receive refund")
 
     @State var refundTransactionId: String? = nil
+    @State var transaction: Transaction?
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
     var body: some View {
-        if let refundTransactionId {
+        if let refundTransactionId, let transaction {
+            let common = transaction.common
+            let raw = common.amountRaw
+            let currency = raw.currencyStr
+            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             TransactionSummaryV(stack: stack.push(),
-                          transactionId: refundTransactionId,
-                           reloadAction: reloadOneAction,
-                               navTitle: nil,   // navTitle,
-                                hasDone: true,
-                            abortAction: model.abortTransaction,
-                           deleteAction: model.deleteTransaction,
-                             failAction: model.failTransaction,
-                          suspendAction: model.suspendTransaction,
-                           resumeAction: model.resumeTransaction)
+                         currencyInfo: currencyInfo,
+                        transactionId: refundTransactionId,
+                         reloadAction: reloadOneAction,
+                             navTitle: nil,   // navTitle,
+                              hasDone: true,
+                          abortAction: model.abortTransaction,
+                         deleteAction: model.deleteTransaction,
+                           failAction: model.failTransaction,
+                        suspendAction: model.suspendTransaction,
+                         resumeAction: model.resumeTransaction)
             .safeAreaInset(edge: .bottom) {
                 Button("Done", action: { dismissTop(stack.push()) } )           // ViewState.shared.popToRootView ?
                     .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -47,6 +54,7 @@ struct RefundURIView: View {
                     symLog.log(".task")
                     if let result = try? await model.startRefundForUriM(url: url.absoluteString) {
                         refundTransactionId = result
+                        transaction = try? await model.getTransactionByIdM(result)
                     }
                 }
         }

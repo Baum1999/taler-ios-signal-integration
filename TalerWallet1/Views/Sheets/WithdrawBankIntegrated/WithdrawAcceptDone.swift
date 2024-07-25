@@ -12,7 +12,7 @@ import SymLog
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Authorize with Bank", comment: "Nav title")
+    let currencyInfo: CurrencyInfo
 
     let exchangeBaseUrl: String?
     let url: URL
@@ -23,6 +23,8 @@ struct WithdrawAcceptDone: View {
 
     @State private var transactionId: String? = nil
     @State private var transaction: Transaction? = nil
+
+    let navTitle = String(localized: "Authorize with Bank", comment: "Nav title")
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         let response = try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -38,15 +40,16 @@ struct WithdrawAcceptDone: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                              transactionId: transactionId,
-                               reloadAction: reloadOneAction,
-                                   navTitle: navTitle,
-                                    hasDone: true,
-                                abortAction: nil,
-                               deleteAction: nil,
-                                 failAction: nil,
-                              suspendAction: nil,
-                               resumeAction: nil)
+                             currencyInfo: currencyInfo,
+                            transactionId: transactionId,
+                             reloadAction: reloadOneAction,
+                                 navTitle: navTitle,
+                                  hasDone: true,
+                              abortAction: nil,
+                             deleteAction: nil,
+                               failAction: nil,
+                            suspendAction: nil,
+                             resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
@@ -85,6 +88,7 @@ struct WithdrawAcceptDone: View {
 struct WithdrawAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
         WithdrawAcceptDone(stack: CallStack("Preview"),
+                    currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
                  exchangeBaseUrl: DEMOEXCHANGE,
                              url: URL(string: DEMOSHOP)!,
                 amountToTransfer: nil)

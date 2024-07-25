@@ -12,6 +12,7 @@ import SymLog
 struct SubjectInputV<TargetView: View>: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let currencyInfo: CurrencyInfo
     // the scanned URL
     let url: URL?
     let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount
@@ -21,7 +22,6 @@ struct SubjectInputV<TargetView: View>: View {
 //    @Binding var insufficient: Bool
 //    @Binding var feeAmount: Amount?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
-    let currencyInfo: CurrencyInfo
 
     var targetView: TargetView
 

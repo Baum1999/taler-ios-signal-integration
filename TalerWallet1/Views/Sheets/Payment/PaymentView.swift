@@ -70,7 +70,7 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
 struct PaymentView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
+    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
@@ -85,6 +85,8 @@ struct PaymentView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State var preparePayResult: PreparePayResult? = nil
+
+    let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
     var body: some View {
       Group {
@@ -103,6 +105,7 @@ struct PaymentView: View {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     ThreeAmountsSection(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw, fee: fee,
@@ -122,6 +125,7 @@ struct PaymentView: View {
                     Text("You don't have enough \(currency).")
                         .talerFont(.headline)
                     ThreeAmountsSection(stack: stack.push(),
+                                 currencyInfo: currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw, fee: nil,
@@ -147,6 +151,7 @@ struct PaymentView: View {
                 if let effective {
                     NavigationLink(destination: LazyView {
                         PaymentDone(stack: stack.push(),
+                             currencyInfo: currencyInfo,
                             transactionId: preparePayResult.transactionId)
                     }) {
                         Text(navTitle)      // Confirm Payment
