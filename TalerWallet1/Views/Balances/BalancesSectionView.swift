@@ -83,6 +83,7 @@ extension BalancesSectionView: View {
 
         let balanceDest = LazyView {
             TransactionsListView(stack: stack.push("\(Self.className())()"),
+                          currencyInfo: currencyInfo,
                               navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                              scopeInfo: scopeInfo,
                           transactions: completedTransactions,
@@ -197,6 +198,7 @@ extension BalancesSectionView: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
+                                  currencyInfo: currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)

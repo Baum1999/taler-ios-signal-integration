@@ -61,6 +61,7 @@ struct BalancesPendingRowV: View {
         if let reloadOneAction {
             let destination = LazyView {
                 TransactionsListView(stack: stack.push(),
+                              currencyInfo: currencyInfo,
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
                               transactions: pendingTransactions,
