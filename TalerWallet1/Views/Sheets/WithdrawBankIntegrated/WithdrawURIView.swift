@@ -39,7 +39,7 @@ struct WithdrawURIView: View {
     @State private var exchange: Exchange? = nil
     @State private var possibleExchanges: [Exchange] = []
     @State private var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     @State private var feeAmount: Amount? = nil
 

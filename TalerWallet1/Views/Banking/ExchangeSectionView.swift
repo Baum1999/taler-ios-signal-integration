@@ -20,6 +20,8 @@ struct ExchangeSectionView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var shouldReloadBalances: Int = 0
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
 
     func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
         if let exchange {

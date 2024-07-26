@@ -21,6 +21,7 @@ struct P2pPayURIView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
     let navTitle = String(localized: "Pay P2P", comment: "Nav Title")

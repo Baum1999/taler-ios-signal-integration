@@ -39,6 +39,8 @@ struct OverviewSectionV {
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
 
     func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -68,8 +70,8 @@ extension OverviewSectionV: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencyName = currencyInfo.scope.currency
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//        let currencyName = currencyInfo.scope.currency
 
         Section {
             if scopeInfo.type == .exchange {

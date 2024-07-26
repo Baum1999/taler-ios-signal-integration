@@ -19,6 +19,7 @@ struct WithdrawExchangeV: View {
     @EnvironmentObject private var model: WalletModel
     @State private var amountToTransfer = Amount.zero(currency: "")
     @State private var exchange: Exchange? = nil
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     var body: some View {
 #if PRINT_CHANGES

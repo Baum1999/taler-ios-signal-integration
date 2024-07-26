@@ -40,6 +40,7 @@ struct PayTemplateV: View {
     @State private var summary: String = EMPTYSTRING       // templateParam
 
     @State private var feeAmount: Amount? = nil
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 //    @State private var feeStr: String = EMPTYSTRING
 
     private func shortcutAction(_ shortcut: Amount) {

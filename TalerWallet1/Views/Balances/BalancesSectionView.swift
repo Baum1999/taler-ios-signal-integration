@@ -45,8 +45,8 @@ struct BalancesSectionView {
     @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero("UNKNOWN")
-    @State private var currencyName: String = "UNKNOWN"
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
 //    @State private var buttonSelected: Int? = nil
 
     private static func className() -> String {"\(self)"}

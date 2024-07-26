@@ -20,6 +20,9 @@ public let THIRTYDAYS: UInt = 30    // 10..30
 
 public let EMPTYSTRING = ""                         // avoid automatic translation of empty "" textLiterals in Text()
 public let NONBREAKING: Character = "\u{00A0}"
+public let UNKNOWN = String(localized: "UNKNOWN", comment: "merchant didn't specify the currency, use ALL CAPS")
+
+
 public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionSummary
 //public let PENDING_INCOMING = "plus.diamond"      // 􀡿 􀢀

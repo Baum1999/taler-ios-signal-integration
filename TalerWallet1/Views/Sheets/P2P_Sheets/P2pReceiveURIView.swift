@@ -22,6 +22,7 @@ struct P2pReceiveURIView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
     @State private var exchange: Exchange? = nil
 
