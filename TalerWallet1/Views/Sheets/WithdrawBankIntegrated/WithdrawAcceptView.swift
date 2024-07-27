@@ -18,6 +18,7 @@ struct WithdrawAcceptView: View {
     // the URL from the bank website
     let url: URL
     @Binding var amountToTransfer: Amount
+    @Binding var wireFee: Amount?
     @Binding var exchange: Exchange?
 
     @EnvironmentObject private var controller: Controller
@@ -71,13 +72,10 @@ struct WithdrawAcceptView: View {
                                    txStateLcl: nil,        // common.txState.major.localizedState
                                       summary: nil,
                                      merchant: nil)
-                    let coinData = CoinData(details: withdrawalAmountDetails)
-                    QuiteSomeCoins(currencyInfo: $currencyInfo,
-//                                amountEffective: effective,
-                                       currency: currency,
-                                       coinData: coinData,
-                                  shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
-                                  feeIsNegative: true)
+                    if let wireFee {
+                        let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
+                        Text("Your bank's wire fee: \(feeStr)")
+                    }
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

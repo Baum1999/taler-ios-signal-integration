@@ -128,6 +128,7 @@ struct WithdrawURIView: View {
                                                         currencyInfo: $currencyInfo,
                                                                  url: url,
                                                     amountToTransfer: $amountToTransfer,
+                                                             wireFee: $wireFee,
                                                             exchange: $exchange)
                     if amountIsEditable {
                         ScrollView {
@@ -136,6 +137,7 @@ struct WithdrawURIView: View {
                                             currencyInfo: $currencyInfo,
                                                      url: url,
                                         amountToTransfer: $amountShortcut,
+                                                 wireFee: $wireFee,
                                                 exchange: $exchange)
                             }
                             // TODO: input amount, then
