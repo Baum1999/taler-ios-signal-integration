@@ -23,7 +23,7 @@ struct RequestPayment: View {
 
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
-    @State private var feeAmount: Amount? = nil
+//    @State private var feeAmount: Amount? = nil
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
@@ -59,7 +59,7 @@ struct RequestPayment: View {
             peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amount,
                                                                   cancellationId: "cancel")
 
-//            return ComputeFeeResult(insufficient: false, feeAmount: <#T##Amount?#>, feeStr: <#T##String#>)
+//            return ComputeFeeResult(insufficient: false, feeStr: feeLabel(feeStr), numCoins: details.numCoins)
         }
         return nil
     }
@@ -82,7 +82,9 @@ struct RequestPayment: View {
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
                  currencyInfo: $currencyInfo,
-                     feeLabel: coinData.feeLabel(currencyInfo),
+                     feeLabel: coinData.feeLabel(currencyInfo,
+                                         feeZero: String(localized: "No payment fee"),
+                                      isNegative: false),
                  feeIsNotZero: feeIsNotZero(),
                      outgoing: false,
              amountToTransfer: $amountToTransfer,
@@ -106,17 +108,14 @@ struct RequestPayment: View {
                                            : String(localized: "Amount to request:")
             AmountInputV(stack: stack.push(),
                   currencyInfo: $currencyInfo,
-                           url: nil,
                amountAvailable: nil,
+                   amountLabel: amountLabel,
               amountToTransfer: $amountToTransfer,
                        wireFee: nil,
-                   amountLabel: amountLabel,
-             summaryIsEditable: true,
                        summary: $summary,
-//                  insufficient: $insufficient,
-                     feeAmount: $feeAmount,
                 shortcutAction: shortcutAction,
                   buttonAction: buttonAction,
+                 feeIsNegative: true,
                     computeFee: computeFeeRequest)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()

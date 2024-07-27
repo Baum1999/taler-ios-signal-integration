@@ -41,7 +41,8 @@ struct WithdrawURIView: View {
     @State private var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
-    @State private var feeAmount: Amount? = nil
+//    @State private var feeAmount: Amount? = nil
+    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 
     let navTitle = String(localized: "Withdrawal")
 
@@ -70,9 +71,19 @@ struct WithdrawURIView: View {
             if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
                                                                       amount: amount) {
                 let fee = try? details.amountRaw - details.amountEffective
-                let feeStr = fee?.readableDescription ?? "nix"
+                let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? "nix"
                 symLog.log("Fee = \(feeStr)")
+                let insufficient = if let amountAvailable {
+                    (try? details.amountRaw < amountAvailable) ?? true
+                } else {
+                    false
+                }
+                withdrawalAmountDetails = details
+                return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
+                                        feeStr: feeLabel(feeStr), numCoins: details.numCoins)
             }
+        } else {
+            symLog.log("No exchange!")
         }
         return nil
     }
@@ -85,7 +96,7 @@ struct WithdrawURIView: View {
         if possibleExchanges.count > 0 {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
                 VStack {
-                    let title = String(localized: "Exchange")
+                    let title = String(localized: "using:", comment: "using: exchange.taler.net")
                     if possibleExchanges.count > 1 {
                         Picker(title, selection: $selectedExchange) {
                             ForEach(possibleExchanges, id: \.self) { exchange in
@@ -104,10 +115,14 @@ struct WithdrawURIView: View {
                             }
                         }
                     } else {
-                        Text(defaultBaseUrl)
-                            .task {
-                                await loadExchange(defaultBaseUrl)
-                            }
+                        HStack {
+                            Text(title)
+                            Text(defaultBaseUrl.trimURL())
+                        }
+                        .talerFont(.body)
+//                        .task {
+//                            await loadExchange(defaultBaseUrl)
+//                        }
                     } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(),
                                                         currencyInfo: $currencyInfo,
@@ -115,38 +130,35 @@ struct WithdrawURIView: View {
                                                     amountToTransfer: $amountToTransfer,
                                                             exchange: $exchange)
                     if amountIsEditable {
-                      ScrollView {
-                        let shortcutDestination = LazyView {
-                            WithdrawAcceptView(stack: stack.push(),
-                                        currencyInfo: $currencyInfo,
-                                                 url: url,
-                                    amountToTransfer: $amountShortcut,
-                                            exchange: $exchange)
-                        }
-                        // TODO: input amount, then
-                        let amountLabel = minimalistic ? String(localized: "Amount:")
-                                                       : String(localized: "Amount to withdraw:")
-                        AmountInputV(stack: stack.push(),
-                              currencyInfo: $currencyInfo,
-                                       url: nil,
-                           amountAvailable: amountAvailable,
-                          amountToTransfer: $amountToTransfer,
-                                   wireFee: wireFee,
-                               amountLabel: amountLabel,
-                         summaryIsEditable: false,
-                                   summary: $summary,
-//                              insufficient: $insufficient,
-                                 feeAmount: $feeAmount,
-                            shortcutAction: shortcutAction,
-                              buttonAction: buttonAction,
-                                computeFee: computeFeeWithdraw)
-                        .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        ) // shortcutDestination
-                        .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
-                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        ) // acceptDestination
-                      }
+                        ScrollView {
+                            let shortcutDestination = LazyView {
+                                WithdrawAcceptView(stack: stack.push(),
+                                            currencyInfo: $currencyInfo,
+                                                     url: url,
+                                        amountToTransfer: $amountShortcut,
+                                                exchange: $exchange)
+                            }
+                            // TODO: input amount, then
+                            let amountLabel = minimalistic ? String(localized: "Amount:")
+                                                           : String(localized: "Amount to withdraw:")
+                            AmountInputV(stack: stack.push(),
+                                  currencyInfo: $currencyInfo,
+                               amountAvailable: amountAvailable,
+                                   amountLabel: amountLabel,
+                              amountToTransfer: $amountToTransfer,
+                                       wireFee: wireFee,
+                                       summary: $summary,
+                                shortcutAction: shortcutAction,
+                                  buttonAction: buttonAction,
+                                 feeIsNegative: true,
+                                    computeFee: computeFeeWithdraw)
+                            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                            ) // shortcutDestination
+                            .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
+                                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                            ) // acceptDestination
+                        } // ScrollView
                     } else {
                         acceptDestination
                     } // directly show the accept view
@@ -180,13 +192,14 @@ struct WithdrawURIView: View {
                         let amount = uriInfoResponse.amount
                         let currency = amount?.currencyStr ?? uriInfoResponse.currency
                         amountToTransfer = amount ?? Amount.zero(currency: currency)
+                        amountIsEditable = uriInfoResponse.editableAmount
                         amountAvailable = uriInfoResponse.maxAmount     // may be nil
                         wireFee = uriInfoResponse.wireFee               // may be nil
                         let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
                                    ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
                         defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
                         possibleExchanges = uriInfoResponse.possibleExchanges
-                        amountIsEditable = uriInfoResponse.editableAmount
+                        await loadExchange(baseUrl)
                         symLog.log("\(baseUrl.trimURL()) loaded")
                         await controller.checkInfo(for: baseUrl, model: model)
                         symLog.log("Info(for: \(baseUrl.trimURL())) loaded")

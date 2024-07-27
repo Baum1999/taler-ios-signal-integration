@@ -30,7 +30,7 @@ struct SendAmount: View {
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
     @State private var expireDays = SEVENDAYS
     @State private var insufficient = false
-    @State private var feeAmount: Amount? = nil
+//    @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
@@ -54,12 +54,11 @@ struct SendAmount: View {
         do {
             if let ppCheck {
                 // Outgoing: fee = effective - raw
-                feeAmount = try ppCheck.amountEffective - ppCheck.amountRaw
-                return feeAmount
+                let fee = try ppCheck.amountEffective - ppCheck.amountRaw
+                return fee
             }
         } catch {}
-        feeAmount = nil
-        return feeAmount
+        return nil
     }
 
     private func feeIsNotZero() -> Bool? {
@@ -68,8 +67,8 @@ struct SendAmount: View {
                 return nil      // this exchange never has fees
             }
         }
-        return peerPushCheck != nil ? (!(feeAmount?.isZero ?? false))
-                                    : false
+        return peerPushCheck == nil ? false
+                                    : true // TODO: !(feeAmount?.isZero ?? false)
     }
 
     private func computeFeeSend(_ amount: Amount) async -> ComputeFeeResult? {
@@ -150,17 +149,14 @@ struct SendAmount: View {
                                            : String(localized: "Amount to send:")
             AmountInputV(stack: stack.push(),
                   currencyInfo: $currencyInfo,
-                           url: nil,
                amountAvailable: amountAvailable,
+                   amountLabel: amountLabel,
               amountToTransfer: $amountToTransfer,
                        wireFee: nil,
-                   amountLabel: amountLabel,
-             summaryIsEditable: true,
                        summary: $summary,
-//                  insufficient: $insufficient,
-                     feeAmount: $feeAmount,
                 shortcutAction: shortcutAction,
                   buttonAction: buttonAction,
+                 feeIsNegative: false,
                     computeFee: computeFeeSend)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()

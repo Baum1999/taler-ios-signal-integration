@@ -73,10 +73,11 @@ struct WithdrawAcceptView: View {
                                      merchant: nil)
                     let coinData = CoinData(details: withdrawalAmountDetails)
                     QuiteSomeCoins(currencyInfo: $currencyInfo,
+//                                amountEffective: effective,
                                        currency: currency,
                                        coinData: coinData,
                                   shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
-                                amountEffective: effective)
+                                  feeIsNegative: true)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)

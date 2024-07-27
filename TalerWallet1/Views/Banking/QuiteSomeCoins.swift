@@ -18,12 +18,11 @@ struct CoinData {
     var tooMany:   Bool { numCoins > 999 }
 
     let fee: Amount?
-    func feeLabel(_ currencyInfo: CurrencyInfo?) -> String {
+    func feeLabel(_ currencyInfo: CurrencyInfo, feeZero: String?, isNegative: Bool = false) -> String {
        return if let fee {
-                invalid ? String(localized: "Amount too small!")
-              : tooMany ? String(localized: "Amount too big for a single withdrawal!")
-           : fee.isZero ? String(localized: "No withdrawal fee")
-                        : String(localized: "- \(fee.formatted(currencyInfo, isNegative: false)) fee")
+           fee.isZero ? feeZero ?? EMPTYSTRING    // String(localized: "No withdrawal fee")
+         : isNegative ? String(localized: "- \(fee.formatted(currencyInfo, isNegative: false)) fee")
+                      : String(localized: "+ \(fee.formatted(currencyInfo, isNegative: false)) fee")
        } else {
            EMPTYSTRING
        }
@@ -31,6 +30,10 @@ struct CoinData {
 }
 
 extension CoinData {
+    init(coins numCoins: Int?, fee: Amount?) {
+        self.init(numCoins: numCoins ?? -1, fee: fee)           // either the number of coins, or unknown
+    }
+
     init(details: WithdrawalAmountDetails?) {
         do {
             if let details {
@@ -61,30 +64,33 @@ extension CoinData {
 struct QuiteSomeCoins: View {
     private let symLog = SymLogV(0)
     @Binding var currencyInfo: CurrencyInfo
+//    let amountEffective: Amount?
     let currency: String
     let coinData: CoinData
     let shouldShowFee: Bool
-    let amountEffective: Amount?
+    let feeIsNegative: Bool
 
     var body: some View {
-        if !coinData.invalid {
-            if !coinData.tooMany {
-                if coinData.manyCoins {
-                    Text(coinData.quiteSome ? "Note: It will take quite some time to withdraw this amount! Be more patient..."
-                                             : "Note: It will take some time to withdraw this amount. Be patient...")
-                    .foregroundColor(coinData.quiteSome ? .red : .primary)
-                    .talerFont(.body)
-                    .multilineTextAlignment(.leading)
-                    .padding(.vertical, 6)
-                } // warnings
+        let isError = coinData.invalid || coinData.tooMany
+        let showFee = shouldShowFee && !isError
+        if showFee {
+            if let fee = coinData.fee {
+                Text(coinData.feeLabel(currencyInfo,
+                               feeZero: String(localized: "No withdrawal fee"),
+                            isNegative: feeIsNegative))
+                .foregroundColor(.primary)
+                .talerFont(.body)
             }
         }
-        if shouldShowFee {
-            if let fee = coinData.fee {
-                Text(coinData.feeLabel(currencyInfo))
-                    .foregroundColor((coinData.invalid || coinData.tooMany || !fee.isZero) ? .red : .primary)
-                    .talerFont(.body)
-            }
+        if isError || coinData.quiteSome || coinData.manyCoins {
+            Text(coinData.invalid ? "Amount too small!"
+               : coinData.tooMany ? "Amount too big for a single withdrawal!"
+             : coinData.quiteSome ? "Note: It will take quite some time to prepare this amount! Be more patient..."
+                                  : "Note: It will take some time to prepare this amount. Be patient...")
+                .foregroundColor(isError || coinData.quiteSome ? .red : .primary)
+                .talerFont(.body)
+                .multilineTextAlignment(.leading)
+                .padding(.vertical, 6)
         }
     }
 }

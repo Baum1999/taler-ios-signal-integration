@@ -80,10 +80,11 @@ struct ManualWithdraw: View {
                                     shortcutAction: nil)
                         .padding(.top)
                     QuiteSomeCoins(currencyInfo: $currencyInfo,
+//                                amountEffective: withdrawalAmountDetails?.amountEffective,
                                        currency: currency,
                                        coinData: coinData,
                                   shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
-                                amountEffective: withdrawalAmountDetails?.amountEffective)
+                                  feeIsNegative: true)
 //                  agePicker
                     NavigationLink(destination: destination) {
                         Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT

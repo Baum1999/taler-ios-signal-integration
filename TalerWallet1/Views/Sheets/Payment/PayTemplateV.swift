@@ -39,8 +39,8 @@ struct PayTemplateV: View {
     @State private var summaryIsEditable = false
     @State private var summary: String = EMPTYSTRING       // templateParam
 
-    @State private var feeAmount: Amount? = nil
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+//    @State private var feeAmount: Amount? = nil
 //    @State private var feeStr: String = EMPTYSTRING
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -134,17 +134,15 @@ struct PayTemplateV: View {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
                 let amountInput = AmountInputV(stack: stack.push(),
                                         currencyInfo: $currencyInfo,
-                                                 url: url,
+//                                                 url: url,
                                      amountAvailable: nil,
+                                         amountLabel: amountLabel,
                                     amountToTransfer: $amountToTransfer,
                                              wireFee: nil,
-                                         amountLabel: amountLabel,
-                                   summaryIsEditable: summaryIsEditable,
                                              summary: $summary,
-//                                        insufficient: $insufficient,
-                                           feeAmount: $feeAmount,
                                       shortcutAction: shortcutAction,
                                         buttonAction: buttonAction1,
+                                       feeIsNegative: false,
                                           computeFee: computeFeePayTemplate)
                 ScrollView {
                     if summaryIsEditable {  // after amount input,
