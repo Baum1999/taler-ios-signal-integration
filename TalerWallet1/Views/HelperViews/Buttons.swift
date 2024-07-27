@@ -28,6 +28,34 @@ struct HamburgerButton : View  {
     }
 }
 
+struct ConfirmationButton: View {
+    let destination: URL
+    let hintTitle: String
+    let buttonTitle: String
+    let a11yHint: String
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            if !minimalistic {      // show hint that the user should authorize on bank website
+                Text(hintTitle)
+//                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                    .multilineTextAlignment(.leading)                   // otherwise
+                    .listRowSeparator(.hidden)
+            }
+            Link(destination: destination) {
+                HStack(spacing: 8.0) {
+                    Image(systemName: "link")
+                    Text(buttonTitle)
+                }
+            }
+            .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
+            .accessibilityHint(a11yHint)
+        }
+    }
+}
+
 struct QRButton : View  {
     let action: () -> Void
 

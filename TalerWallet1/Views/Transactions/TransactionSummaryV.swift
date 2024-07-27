@@ -218,24 +218,6 @@ struct TransactionSummaryV: View {
         }
     }
 
-    struct ConfirmationButton: View {
-        let destination: URL
-        @AppStorage("minimalistic") var minimalistic: Bool = false
-
-        var body: some View {
-            VStack(alignment: .leading) {
-                if !minimalistic {      // show hint that the user should authorize on bank website
-                    Text("The bank is waiting for your authorization.")
-//                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                        .multilineTextAlignment(.leading)                   // otherwise
-                        .listRowSeparator(.hidden)
-                }
-                Link("Authorize now: 􀉣", destination: destination)
-                    .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
-                    .accessibilityHint(String(localized: "Will go to bank website to authorize this withdrawal."))
-            }
-        }
-    }
 
     struct PendingWithdrawalDetails: View {
         @Binding var transaction: Transaction
@@ -261,7 +243,10 @@ struct TransactionSummaryV: View {
                         if !confirmed {
                             if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                 if let destination = URL(string: confirmationUrl) {
-                                    ConfirmationButton(destination: destination)
+                                    ConfirmationButton(destination: destination,
+                                                         hintTitle: String(localized: "The bank is waiting for your authorization."),
+                                                       buttonTitle: String(localized: "Authorize now"),
+                                                          a11yHint: String(localized: "Will go to bank website to authorize this withdrawal."))
                                 }   }   }   }
             } // switch
         }
