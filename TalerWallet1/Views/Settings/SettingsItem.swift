@@ -6,25 +6,40 @@ import SwiftUI
 
 struct SettingsItem<Content: View>: View {
     var name: String
-    var id1: String? = nil
+    var id1: String?
+    var imageName: String?
     var description: String?
     var content: () -> Content
     
-    init(name: String, id1: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    init(name: String, id1: String, imageName: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
         self.name = name
         self.id1 = id1
+        self.imageName = imageName
         self.description = description
         self.content = content
     }
     
+    init(name: String, id1: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+        self.name = name
+        self.id1 = id1
+        self.imageName = nil
+        self.description = description
+        self.content = content
+    }
+
     var body: some View {
         HStack {
             VStack {
                 let isWeb = id1?.hasPrefix("web") ?? false
                 let foreColor = isWeb ? WalletColors().tint
                                       : .primary
-                Text(name)
-                    .id(id1)
+                HStack(spacing: 8.0) {
+                    if let imageName {
+                        Image(systemName: imageName)
+                    }
+                    Text(name)
+                        .id(id1)
+                }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(foreColor)
                     .talerFont(.title2)

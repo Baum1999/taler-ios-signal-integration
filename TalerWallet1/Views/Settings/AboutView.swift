@@ -39,8 +39,10 @@ struct AboutView: View {
                     // has its own accessibilityLabel
                     .frame(maxWidth: .infinity, alignment: .center)
                     .onTapGesture(count: 1) { rotationEnabled.toggle() }
-                SettingsItem(name: String(localized: "Visit the taler.net website"), id1: "web",
-                             description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }
+                SettingsItem(name: String(localized: "Visit the taler.net website"),
+                              id1: "web",
+                        imageName: "link",
+                      description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {
