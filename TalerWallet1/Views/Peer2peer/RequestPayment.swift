@@ -124,27 +124,6 @@ struct RequestPayment: View {
             .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
             ) // inputDestination
-
-//        VStack(alignment: .trailing) {
-//            CurrencyInputView(amount: $amountToTransfer,
-//                           available: nil,
-//                               title: minimalistic ? String(localized: "Amount:")
-//                                                   : String(localized: "Amount to request:"),
-//                      shortcutAction: shortcutAction)
-//                .padding(.top)
-//            QuiteSomeCoins(currencyInfo: currencyInfo,
-//                               currency: currency,
-//                               coinData: coinData,
-//                          shouldShowFee: true,           // always true since the requester pays fees
-//                        amountEffective: peerPullCheck?.amountEffective)
-//            NavigationLink(destination: inputDestination) { Text("Next") }
-//                .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
-//                .disabled(disabled)
-//                .background(NavigationLink(destination: shortcutDestination, isActive: $buttonSelected)
-//                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-//                )
-//        }.padding(.horizontal)
-
         } // ScrollView
         .frame(maxWidth: .infinity, alignment: .leading)
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4

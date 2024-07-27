@@ -201,7 +201,7 @@ struct PayTemplateV: View {
                         summaryIsEditable = contract.summary == nil
                         let defaults = details.templateDetails.editableDefaults     // might be nil, or its fields might be nil
                         // TODO: let the user choose a currency from supportedCurrencies[]
-                        let prepCurrency = contract.currency ?? defaults?.currency ?? 
+                        let prepCurrency = contract.currency ?? defaults?.currency ??
                                     (details.supportedCurrencies.count > 0 ? details.supportedCurrencies[0]
                                                                            : UNKNOWN)
                         let zeroAmount = Amount(currency: prepCurrency, cent: 0)
