@@ -13,7 +13,7 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
 
     let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
     @Binding var amountToTransfer: Amount
@@ -121,7 +121,7 @@ struct SendAmount: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                 currencyInfo: currencyInfo,
+                 currencyInfo: $currencyInfo,
                      feeLabel: feeLabel(feeStr),
                  feeIsNotZero: feeIsNotZero(),
                  amountToSend: true,
@@ -131,7 +131,7 @@ struct SendAmount: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                 currencyInfo: currencyInfo,
+                 currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
                  amountToSend: true,
@@ -144,7 +144,7 @@ struct SendAmount: View {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to send:")
             AmountInputV(stack: stack.push(),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                            url: nil,
                amountAvailable: amountAvailable,
               amountToTransfer: $amountToTransfer,
@@ -219,6 +219,7 @@ struct SendAmount: View {
 fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
     @State private var summary: String = ""
+    @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
 
     private func checkCameraAvailable() -> Void {
         // Open Camera when QR-Button was tapped
@@ -235,7 +236,7 @@ fileprivate struct Preview_Content: View {
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
         SendAmount(stack: CallStack("Preview"),
-            currencyInfo: currencyInfo,
+            currencyInfo: $currencyInfoL,
          amountAvailable: amount,
         amountToTransfer: $amountToPreview,
                  summary: $summary,

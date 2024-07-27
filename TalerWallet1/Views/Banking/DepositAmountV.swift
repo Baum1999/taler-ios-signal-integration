@@ -13,7 +13,7 @@ import SymLog
 struct DepositAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
 
 //    let exchangeBaseUrl: String
     let paytoUri: String?
@@ -105,7 +105,7 @@ struct DepositAmountV: View {
                 Text("Available:\t\(available)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
-                CurrencyInputView(currencyInfo: currencyInfo,
+                CurrencyInputView(currencyInfo: $currencyInfo,
                                         amount: $amountToTransfer,
                                      available: nil,  // amountAvailable,
                                          title: minimalistic ? String(localized: "Amount:")

@@ -11,12 +11,12 @@ import SymLog
 struct P2pPayURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
 
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -35,7 +35,7 @@ struct P2pPayURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                 currencyInfo: $currencyInfo,
                                      topTitle: String(localized: "Amount to pay:"),
                                     topAbbrev: String(localized: "Pay:", comment: "mini"),
                                     topAmount: raw, fee: fee,
@@ -59,6 +59,11 @@ struct P2pPayURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
+                .task(id: controller.currencyTicker) {
+                    let currency = peerPullDebitResponse.amountRaw.currencyStr
+                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                currencyName = currencyInfo.scope.currency
+                }
 
                 NavigationLink(destination: LazyView {
                     P2pAcceptDone(stack: stack.push(),

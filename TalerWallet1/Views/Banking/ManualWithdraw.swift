@@ -14,6 +14,7 @@ import SymLog
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    @Binding var currencyInfo: CurrencyInfo
     let isSheet: Bool
 //    let exchangeBaseUrl: String
     let scopeInfo: ScopeInfo?
@@ -61,7 +62,7 @@ struct ManualWithdraw: View {
 //  let _ = print(selectedAge, restrictAge)
             let destination = LazyView {
                 ManualWithdrawDone(stack: stack.push(),
-                            currencyInfo: currencyInfo,
+                            currencyInfo: $currencyInfo,
                                 exchange: exchange,
                         amountToTransfer: amountToTransfer)
 //                           restrictAge: restrictAge)
@@ -73,14 +74,14 @@ struct ManualWithdraw: View {
                     .multilineTextAlignment(.center)
                     .talerFont(.body)
                 if tosAccepted {
-                    CurrencyInputView(currencyInfo: currencyInfo,
+                    CurrencyInputView(currencyInfo: $currencyInfo,
                                             amount: $amountToTransfer,
                                          available: nil,
                                              title: minimalistic ? String(localized: "Amount:")
                                                                  : String(localized: "Amount to withdraw:"),
                                     shortcutAction: nil)
                         .padding(.top)
-                    QuiteSomeCoins(currencyInfo: currencyInfo,
+                    QuiteSomeCoins(currencyInfo: $currencyInfo,
                                        currency: currency,
                                        coinData: coinData,
                                   shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees

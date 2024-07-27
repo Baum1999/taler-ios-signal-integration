@@ -27,7 +27,7 @@ extension Transaction {             // for Dummys
 struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let transactionId: String
     let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let navTitle: String?
@@ -138,7 +138,7 @@ struct TransactionSummaryV: View {
                 }    .listRowSeparator(.hidden)
                     .talerFont(.title)
                 TypeDetail(stack: stack.push(),
-                    currencyInfo: currencyInfo,
+                    currencyInfo: $currencyInfo,
                      transaction: $transaction,
                          hasDone: hasDone)
 
@@ -230,7 +230,7 @@ struct TransactionSummaryV: View {
                         .multilineTextAlignment(.leading)                   // otherwise
                         .listRowSeparator(.hidden)
                 }
-                Link("Authorize now", destination: destination)
+                Link("Authorize now: 􀉣", destination: destination)
                     .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
                     .accessibilityHint(String(localized: "Will go to bank website to authorize this withdrawal."))
             }
@@ -269,7 +269,7 @@ struct TransactionSummaryV: View {
 
     struct TypeDetail: View {
         let stack: CallStack
-        let currencyInfo: CurrencyInfo
+        @Binding var currencyInfo: CurrencyInfo
         @Binding var transaction: Transaction
         let hasDone: Bool
         @Environment(\.colorScheme) private var colorScheme
@@ -305,7 +305,7 @@ struct TransactionSummaryV: View {
                             PendingWithdrawalDetails(transaction: $transaction, details: details)
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                        topTitle: String(localized: "Chosen amount to withdraw:"),
@@ -318,7 +318,7 @@ struct TransactionSummaryV: View {
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Deposit:", comment: "mini"),
                                        topTitle: String(localized: "Amount to deposit:"),
@@ -332,7 +332,7 @@ struct TransactionSummaryV: View {
                         let details = paymentTransaction.details
                         TransactionDetailV(paymentTx: paymentTransaction)
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Price:", comment: "mini"),
                                        topTitle: String(localized: "Price (net):"),
@@ -345,7 +345,7 @@ struct TransactionSummaryV: View {
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                        topTitle: String(localized: "Refunded amount:"),
@@ -364,7 +364,7 @@ struct TransactionSummaryV: View {
                                 .talerFont(.title)
                             let input = details.refreshInputAmount
                             AmountRowV(stack: stack.push(),
-                                currencyInfo: currencyInfo,
+                                currencyInfo: $currencyInfo,
                                        title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
                                   isNegative: false,
@@ -372,7 +372,7 @@ struct TransactionSummaryV: View {
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
                                 AmountRowV(stack: stack.push(),
-                                    currencyInfo: currencyInfo,
+                                    currencyInfo: $currencyInfo,
                                            title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
                                       isNegative: !fee.isZero,
@@ -402,6 +402,7 @@ struct TransactionSummaryV: View {
                             }
                         }
                     }
+
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
                         if !transaction.isDone {
@@ -434,7 +435,7 @@ struct TransactionSummaryV: View {
                         let localizedType = transaction.isDone ? transaction.localizedTypePast
                                                                : transaction.localizedType
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: localizedType + colon,
                                        topTitle: localizedType + colon,
@@ -443,10 +444,11 @@ struct TransactionSummaryV: View {
                                         summary: details.info.summary,
                                        merchant: nil)
                     } // p2p
+
                     case .recoup(let recoupTransaction): Group {
                         let details = recoupTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Recoup:", comment: "mini"),
                                        topTitle: String(localized: "Recoup:"),
@@ -459,7 +461,7 @@ struct TransactionSummaryV: View {
                     case .denomLoss(let denomLossTransaction): Group {
                         let details = denomLossTransaction.details              // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: currencyInfo,
+                                   currencyInfo: $currencyInfo,
                                          common: common,
                                       topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),

@@ -12,7 +12,7 @@ import SymLog
 struct SubjectInputV<TargetView: View>: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     // the scanned URL
     let url: URL?
     let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount

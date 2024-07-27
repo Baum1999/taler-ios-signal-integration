@@ -16,7 +16,7 @@ fileprivate let showUpDown = 25     // show up+down buttons in the menubar if li
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let navTitle: String
 
     let scopeInfo: ScopeInfo
@@ -37,7 +37,7 @@ struct TransactionsListView: View {
             List {
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: currencyInfo,
+                                  currencyInfo: $currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: transactions,
                                reloadOneAction: reloadOneAction)
@@ -85,7 +85,7 @@ struct TransactionsListView: View {
 struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let scopeInfo: ScopeInfo
     let transactions: [Transaction]
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
@@ -105,7 +105,7 @@ struct TransactionsArraySliceV: View {
             NavigationLink {
                 LazyView {
                     TransactionSummaryV(stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                 currencyInfo: $currencyInfo,
                                   transactionId: transaction.id,
                                    reloadAction: reloadOneAction,
                                        navTitle: nil,
@@ -117,7 +117,7 @@ struct TransactionsArraySliceV: View {
                                    resumeAction: resumeAction)
                 }
             } label: {
-                TransactionRowView(currencyInfo: currencyInfo, transaction: transaction)
+                TransactionRowView(currencyInfo: $currencyInfo, transaction: transaction)
             }
             .id(Int(index))
         }

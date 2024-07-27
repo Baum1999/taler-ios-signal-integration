@@ -100,7 +100,7 @@ struct WithdrawURIView: View {
                             }
                     } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(),
-                                                        currencyInfo: currencyInfo,
+                                                        currencyInfo: $currencyInfo,
                                                                  url: url,
                                                     amountToTransfer: $amountToTransfer,
                                                             exchange: $exchange)
@@ -108,7 +108,7 @@ struct WithdrawURIView: View {
                       ScrollView {
                         let shortcutDestination = LazyView {
                             WithdrawAcceptView(stack: stack.push(),
-                                        currencyInfo: currencyInfo,
+                                        currencyInfo: $currencyInfo,
                                                  url: url,
                                     amountToTransfer: $amountShortcut,
                                             exchange: $exchange)
@@ -117,7 +117,7 @@ struct WithdrawURIView: View {
                         let amountLabel = minimalistic ? String(localized: "Amount:")
                                                        : String(localized: "Amount to withdraw:")
                         AmountInputV(stack: stack.push(),
-                              currencyInfo: currencyInfo,
+                              currencyInfo: $currencyInfo,
                                        url: nil,
                            amountAvailable: amountAvailable,
                           amountToTransfer: $amountToTransfer,

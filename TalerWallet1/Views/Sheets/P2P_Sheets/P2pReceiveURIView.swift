@@ -11,7 +11,6 @@ import SymLog
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
@@ -45,7 +44,7 @@ struct P2pReceiveURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                 currencyInfo: $currencyInfo,
                                      topTitle: String(localized: "Gross Amount to receive:"),
                                     topAbbrev: String(localized: "Receive gross:", comment: "mini"),
                                     topAmount: raw, fee: fee,
@@ -69,6 +68,11 @@ struct P2pReceiveURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
+                .task(id: controller.currencyTicker) {
+                    let currency = peerPushCreditResponse.amountRaw.currencyStr
+                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                  currencyName = currencyInfo.scope.currency
+                }
                 if tosAccepted {
                     NavigationLink(destination: LazyView {
                         P2pAcceptDone(stack: stack.push(),

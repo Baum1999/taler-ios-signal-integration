@@ -10,7 +10,7 @@ import taler_swift
 
 struct AmountV: View {
     let stack: CallStack?
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let amount: Amount
     let isNegative: Bool        // if true, show a "-" before the amount
     let large: Bool             // set to false for QR or IBAN
@@ -27,9 +27,9 @@ struct AmountV: View {
     }
 }
 extension AmountV {
-    init(_ currencyInfo: CurrencyInfo, _ amount: Amount, isNegative: Bool) {
+    init(_ currencyInfo: Binding<CurrencyInfo>, _ amount: Amount, isNegative: Bool) {
         self.stack = nil
-        self.currencyInfo = currencyInfo
+        self._currencyInfo = currencyInfo
         self.amount = amount
         self.isNegative = isNegative
         self.large = false

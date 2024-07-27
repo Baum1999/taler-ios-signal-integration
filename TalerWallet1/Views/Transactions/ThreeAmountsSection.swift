@@ -10,7 +10,7 @@ import taler_swift
 
 struct ThreeAmountsSheet: View {
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     var common: TransactionCommon
     var topAbbrev: String
     var topTitle: String
@@ -49,7 +49,7 @@ struct ThreeAmountsSheet: View {
         let txStateLcl = developerMode && pending ? (common.txState.minor?.localizedState ?? majorLcl)
                                                   : majorLcl
         ThreeAmountsSection(stack: stack.push(),
-                     currencyInfo: currencyInfo,
+                     currencyInfo: $currencyInfo,
                          topTitle: topTitle,
                         topAbbrev: topAbbrev,
                         topAmount: raw,
@@ -70,7 +70,7 @@ struct ThreeAmountsSheet: View {
 // MARK: -
 struct ThreeAmountsSection: View {
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
@@ -110,7 +110,7 @@ struct ThreeAmountsSection: View {
                     .padding(.bottom)
             }
             AmountRowV(stack: stack.push(),
-                currencyInfo: currencyInfo,
+                currencyInfo: $currencyInfo,
                        title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
                   isNegative: !incoming,
@@ -122,7 +122,7 @@ struct ThreeAmountsSection: View {
                     let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
                                              : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")
                     AmountRowV(stack: stack.push(),
-                        currencyInfo: currencyInfo,
+                        currencyInfo: $currencyInfo,
                                title: title,
                               amount: fee,
                           isNegative: !incoming,
@@ -132,7 +132,7 @@ struct ThreeAmountsSection: View {
                 }
                 if let bottomAmount {
                     AmountRowV(stack: stack.push(),
-                        currencyInfo: currencyInfo,
+                        currencyInfo: $currencyInfo,
                                title: minimalistic ? bottomAbbrev : bottomTitle,
                               amount: bottomAmount,
                           isNegative: !incoming,
@@ -168,19 +168,27 @@ struct ThreeAmountsSection: View {
     }
 }
 // MARK: -
+#if  DEBUG
 struct ThreeAmounts_Previews: PreviewProvider {
-    static var previews: some View {
-        let common = TransactionCommon(type: .withdrawal,
-                                    txState: TransactionState(major: .done),
-                            amountEffective: Amount(currency: LONGCURRENCY, cent: 10),
-                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 20),
-                              transactionId: "someTxID",
-                                  timestamp: Timestamp(from: 1_666_666_000_000),
-                                  txActions: [])
-        Group {
+    @MainActor
+    struct StateContainer: View {
+        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+
+        var body: some View {
+            let common = TransactionCommon(type: .withdrawal,
+                                        txState: TransactionState(major: .done),
+                                amountEffective: Amount(currency: LONGCURRENCY, cent: 10),
+                                      amountRaw: Amount(currency: LONGCURRENCY, cent: 20),
+                                  transactionId: "someTxID",
+                                      timestamp: Timestamp(from: 1_666_666_000_000),
+                                      txActions: [])
+//            let test = Amount(currency: TESTCURRENCY, cent: 123)
+//            let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
+
             List {
                 ThreeAmountsSheet(stack: CallStack("Preview"),
-                           currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
+                           currencyInfo: $currencyInfoD,
                                  common: common, topAbbrev: "Withdrawal",
                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, noFees: false,
                                   large: 1==0, summary: nil, merchant: nil)
@@ -193,4 +201,10 @@ struct ThreeAmounts_Previews: PreviewProvider {
             }
         }
     }
+
+    static var previews: some View {
+        StateContainer()
+        //            .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
+    }
 }
+#endif

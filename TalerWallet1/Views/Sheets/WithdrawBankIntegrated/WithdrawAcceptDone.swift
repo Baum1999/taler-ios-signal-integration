@@ -12,7 +12,7 @@ import SymLog
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
 
     let exchangeBaseUrl: String?
     let url: URL
@@ -40,7 +40,7 @@ struct WithdrawAcceptDone: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: currencyInfo,
+                             currencyInfo: $currencyInfo,
                             transactionId: transactionId,
                              reloadAction: reloadOneAction,
                                  navTitle: navTitle,
@@ -85,12 +85,28 @@ struct WithdrawAcceptDone: View {
     }
 }
 // MARK: -
+#if DEBUG
 struct WithdrawAcceptDone_Previews: PreviewProvider {
+    @MainActor
+    struct StateContainer: View {
+        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+
+        var body: some View {
+//            let test = Amount(currency: TESTCURRENCY, cent: 123)
+//            let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
+
+            WithdrawAcceptDone(stack: CallStack("Preview"),
+                        currencyInfo: $currencyInfoD,
+                     exchangeBaseUrl: DEMOEXCHANGE,
+                                 url: URL(string: DEMOSHOP)!,
+                    amountToTransfer: nil)
+        }
+    }
+
     static var previews: some View {
-        WithdrawAcceptDone(stack: CallStack("Preview"),
-                    currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
-                 exchangeBaseUrl: DEMOEXCHANGE,
-                             url: URL(string: DEMOSHOP)!,
-                amountToTransfer: nil)
+        StateContainer()
+//            .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
     }
 }
+#endif

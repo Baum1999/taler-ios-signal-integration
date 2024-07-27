@@ -81,13 +81,12 @@ struct PayTemplateV: View {
 
     var body: some View {
         if let templateContract {       // preparePayResult
-            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? "UNKNOWN"
-            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? UNKNOWN
+//            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to pay:")
             let finalDestinationI = LazyView {
                 PaymentView(stack: stack.push(),
-                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountToTransfer,
@@ -97,7 +96,6 @@ struct PayTemplateV: View {
             }  // final destination with amountToTransfer, after user input of amount
             let finalDestinationS = LazyView {
                 PaymentView(stack: stack.push(),
-                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountShortcut,
@@ -108,7 +106,7 @@ struct PayTemplateV: View {
 
             let inputDestination = LazyView {
                 SubjectInputV(stack: stack.push(),
-                       currencyInfo: currencyInfo,
+                       currencyInfo: $currencyInfo,
                                 url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountToTransfer,
@@ -121,7 +119,7 @@ struct PayTemplateV: View {
             }   // destination to subject input
             let shortcutDestination = LazyView {
                 SubjectInputV(stack: stack.push(),
-                       currencyInfo: currencyInfo,
+                       currencyInfo: $currencyInfo,
                                 url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountShortcut,
@@ -135,7 +133,7 @@ struct PayTemplateV: View {
           Group {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
                 let amountInput = AmountInputV(stack: stack.push(),
-                                        currencyInfo: currencyInfo,
+                                        currencyInfo: $currencyInfo,
                                                  url: url,
                                      amountAvailable: nil,
                                     amountToTransfer: $amountToTransfer,
@@ -174,7 +172,6 @@ struct PayTemplateV: View {
             } else {    // both template contract amount and summary are fixed => directly show the payment
                 // Attention: contains a List, thus mustn't be included in a ScrollView
                 PaymentView(stack: stack.push(),
-                     currencyInfo: currencyInfo,
                               url: url,
                          template: true,
                  amountToTransfer: $amountToTransfer,
@@ -185,6 +182,11 @@ struct PayTemplateV: View {
           }.navigationTitle(navTitle)
           .frame(maxWidth: .infinity, alignment: .leading)
           .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+          .task(id: controller.currencyTicker) {
+              let currency = amountToTransfer.currencyStr
+              currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                currencyName = currencyInfo.scope.currency
+          }
           .onAppear() {
               symLog.log("onAppear")
               DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)

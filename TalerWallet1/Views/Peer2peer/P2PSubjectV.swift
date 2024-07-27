@@ -21,7 +21,7 @@ func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
     let amountToSend: Bool
@@ -113,7 +113,7 @@ struct P2PSubjectV: View {
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
                 NavigationLink(destination: LazyView {
                     P2PReadyV(stack: stack.push(),
-                       currencyInfo: currencyInfo,
+                       currencyInfo: $currencyInfo,
                             summary: summary,
                          expireDays: expireDays,
                        amountToSend: amountToSend,

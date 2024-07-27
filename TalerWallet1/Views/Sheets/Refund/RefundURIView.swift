@@ -21,6 +21,7 @@ struct RefundURIView: View {
 
     @State var refundTransactionId: String? = nil
     @State var transaction: Transaction?
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -31,9 +32,9 @@ struct RefundURIView: View {
             let common = transaction.common
             let raw = common.amountRaw
             let currency = raw.currencyStr
-            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             TransactionSummaryV(stack: stack.push(),
-                         currencyInfo: currencyInfo,
+                         currencyInfo: $currencyInfo,
                         transactionId: refundTransactionId,
                          reloadAction: reloadOneAction,
                              navTitle: nil,   // navTitle,
@@ -47,6 +48,10 @@ struct RefundURIView: View {
                 Button("Done", action: { dismissTop(stack.push()) } )           // ViewState.shared.popToRootView ?
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
+            }
+            .task(id: controller.currencyTicker) {
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                currencyName = currencyInfo.scope.currency
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)

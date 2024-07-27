@@ -82,7 +82,7 @@ extension OverviewSectionV: View {
             }
             CurrenciesNavigationLinksV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: currencyInfo,
+                                  currencyInfo: $currencyInfo,
                                        balance: balance,
                               amountToTransfer: $amountToTransfer,      // does still have the wrong currency
                                        summary: $summary,
@@ -92,7 +92,7 @@ extension OverviewSectionV: View {
             if pendingTransactions.count > 0 {
                 BalancesPendingRowV(//symLog: symLog,
                                     stack: stack.push(),
-                             currencyInfo: currencyInfo,
+                             currencyInfo: $currencyInfo,
                                   balance: balance,
                       pendingTransactions: $pendingTransactions,
                             reloadPending: reloadPending,
@@ -103,6 +103,10 @@ extension OverviewSectionV: View {
             BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
                            shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
+        .task(id: controller.currencyTicker) {
+            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyName = currencyInfo.scope.currency
+        }
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {
                 symLog.log(".task for BalancesSectionView - reload Transactions")
@@ -125,7 +129,7 @@ extension OverviewSectionV: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: currencyInfo,
+                                  currencyInfo: $currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)
@@ -146,7 +150,7 @@ extension OverviewSectionV: View {
 fileprivate struct CurrenciesNavigationLinksV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let balance: Balance
     
 //    let sectionCount: Int
@@ -180,7 +184,7 @@ fileprivate struct CurrenciesNavigationLinksV: View {
         HStack(spacing: 0) {
             let balanceDest = LazyView {
                 TransactionsListView(stack: stack.push(),
-                              currencyInfo: currencyInfo,
+                              currencyInfo: $currencyInfo,
                                   navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: scopeInfo,
                               transactions: completedTransactions,
@@ -191,7 +195,7 @@ fileprivate struct CurrenciesNavigationLinksV: View {
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()           // TransactionsListView
 
             OverviewRowV(stack: stack.push(),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                         amount: balance.available,
                     sendAction: {
                         selectAndUpdate(1)      // trigger SendAmount NavigationLink

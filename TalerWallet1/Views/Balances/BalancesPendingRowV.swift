@@ -9,7 +9,7 @@ import taler_swift
 struct BalancesPendingRowV: View {
 //    let symLog: SymLogV?            // inherited from BalancesSectionView
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let balance: Balance
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
@@ -30,14 +30,14 @@ struct BalancesPendingRowV: View {
 
         VStack(spacing: 6) {
             if hasIncoming {
-                PendingRowView(currencyInfo: currencyInfo,
+                PendingRowView(currencyInfo: $currencyInfo,
                                      amount: pendingIncoming,
                                    incoming: true,
                               shouldConfirm: shouldConfirm,
                                    needsKYC: needsKYCin)
             }
             if hasOutgoing {
-                PendingRowView(currencyInfo: currencyInfo,
+                PendingRowView(currencyInfo: $currencyInfo,
                                      amount: pendingOutgoing,
                                    incoming: false,
                               shouldConfirm: false,
@@ -61,7 +61,7 @@ struct BalancesPendingRowV: View {
         if let reloadOneAction {
             let destination = LazyView {
                 TransactionsListView(stack: stack.push(),
-                              currencyInfo: currencyInfo,
+                              currencyInfo: $currencyInfo,
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
                               transactions: pendingTransactions,
@@ -77,10 +77,12 @@ struct BalancesPendingRowV: View {
 } // BalancesPendingRowV
 
 // MARK: -
-struct BalancesPendingRowV_Previews: PreviewProvider {
+#if DEBUG
+fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     @MainActor
-    fileprivate struct BindingViewContainer: View {
+    struct BindingViewContainer: View {
         @State private var pendingTransactions: [Transaction] = []
+        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
 
@@ -92,7 +94,7 @@ struct BalancesPendingRowV_Previews: PreviewProvider {
                                       flags: flags)
             BalancesPendingRowV(//symLog: nil,
                                  stack: CallStack("Preview"),
-                          currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
+                          currencyInfo: $currencyInfoD,
                                balance: balance,
                    pendingTransactions: $pendingTransactions,
                          reloadPending: {stack in },
@@ -109,3 +111,4 @@ struct BalancesPendingRowV_Previews: PreviewProvider {
         }
     }
 }
+#endif

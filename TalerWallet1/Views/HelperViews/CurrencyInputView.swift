@@ -11,7 +11,7 @@ import taler_swift
 fileprivate let shortcuts = [5000,2500,1000,500]        // TODO: adapt for ¥
 
 struct ShortcutButton: View {
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let currency: String
     let currencyField: CurrencyField
     let shortcut: Int
@@ -19,7 +19,7 @@ struct ShortcutButton: View {
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {
-        ShortcutButton(currencyInfo: currencyInfo,
+        ShortcutButton(currencyInfo: $currencyInfo,
                            currency: currency,
                       currencyField: currencyField,
                            shortcut: newShortcut,
@@ -55,7 +55,7 @@ struct ShortcutButton: View {
 }
 // MARK: -
 struct CurrencyInputView: View {
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     @Binding var amount: Amount         // the `value´
     let available: Amount?
     let title: String
@@ -81,7 +81,7 @@ struct CurrencyInputView: View {
 
     var body: some View {
         let currency = amount.currencyStr
-        let currencyField = CurrencyField(currencyInfo: currencyInfo, amount: $amount)
+        let currencyField = CurrencyField($currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
             Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,7 +102,7 @@ struct CurrencyInputView: View {
                     showKeyboard += 1
                 }
             if #available(iOS 16.0, *) {
-                let shortcutButton = ShortcutButton(currencyInfo: currencyInfo,
+                let shortcutButton = ShortcutButton(currencyInfo: $currencyInfo,
                                                         currency: currency,
                                                    currencyField: currencyField,
                                                         shortcut: 0,
@@ -169,10 +169,9 @@ fileprivate struct Previews: PreviewProvider {
     @MainActor
     struct StateContainer: View {
         @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
+        @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
         var body: some View {
-            let currencyInfo = CurrencyInfo.zero(LONGCURRENCY)
-
-            CurrencyInputView(currencyInfo: currencyInfo,
+            CurrencyInputView(currencyInfo: $currencyInfoL,
                                     amount: $amountToTransfer,
                                  available: Amount(currency: LONGCURRENCY, cent: 2000),
                                      title: "Amount to withdraw:",

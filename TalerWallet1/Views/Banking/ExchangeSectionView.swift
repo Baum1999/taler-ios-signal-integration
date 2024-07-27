@@ -47,12 +47,12 @@ struct ExchangeSectionView: View {
 #endif
         let scopeInfo = exchange.scopeInfo
         let currency = scopeInfo.currency
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencyName = currencyInfo.scope.currency
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//        let currencyName = currencyInfo.scope.currency
         Section {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
-                         currencyInfo: currencyInfo,
+                         currencyInfo: $currencyInfo,
                              exchange: exchange,
                       amountAvailable: amountAvailable(exchange, currency: currency),
 //                          depositIBAN: $depositIBAN,
@@ -78,6 +78,10 @@ struct ExchangeSectionView: View {
         } header: {
             BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
                            shouldReloadBalances: $shouldReloadBalances)
+        }
+        .task(id: controller.currencyTicker) {
+            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyName = currencyInfo.scope.currency
         }
     }
 }

@@ -18,7 +18,7 @@ struct ComputeFeeResult {
 struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL?
@@ -62,7 +62,7 @@ struct AmountInputV: View {
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
         let flags = checkAvailable(amount: amountToTransfer)
@@ -79,7 +79,7 @@ struct AmountInputV: View {
                     .padding(.bottom, 2)
 //                  .accessibility(sortPriority: 3)
             } // available
-            CurrencyInputView(currencyInfo: currencyInfo,
+            CurrencyInputView(currencyInfo: $currencyInfo,
                                     amount: $amountToTransfer,
                                  available: amountAvailable,
                                      title: amountLabel,

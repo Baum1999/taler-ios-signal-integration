@@ -30,6 +30,7 @@ struct WithdrawExchangeV: View {
         Group {
             if exchange != nil {
                 ManualWithdraw(stack: stack.push(),
+                        currencyInfo: $currencyInfo,
                              isSheet: true,
                            scopeInfo: exchange!.scopeInfo,
                             exchange: $exchange,

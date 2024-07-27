@@ -11,7 +11,7 @@ import taler_swift
 // Title and Amount
 struct AmountRowV: View {
     let stack: CallStack?
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let title: String
     let amount: Amount
     let isNegative: Bool        // if true, show a "-" before the amount
@@ -23,7 +23,7 @@ struct AmountRowV: View {
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
         let amountV = AmountV(stack: stack?.push(),
-                       currencyInfo: currencyInfo,
+                       currencyInfo: $currencyInfo,
                              amount: amount,
                          isNegative: isNegative,
                               large: large)
@@ -62,9 +62,9 @@ struct AmountRowV: View {
     }
 }
 extension AmountRowV {
-    init(_ currencyInfo: CurrencyInfo, title: String, amount: Amount, isNegative: Bool, color: Color) {
+    init(_ currencyInfo: Binding<CurrencyInfo>, title: String, amount: Amount, isNegative: Bool, color: Color) {
         self.stack = nil
-        self.currencyInfo = currencyInfo
+        self._currencyInfo = currencyInfo
         self.title = title
         self.amount = amount
         self.isNegative = isNegative
@@ -82,14 +82,25 @@ fileprivate func talerFromStr(_ from: String) -> Amount {
         return Amount(currency: "Taler", cent: 480)
     }
 }
-#Preview {
-    List {
+
+#if DEBUG
+@MainActor
+fileprivate struct BindingViewContainer: View {
+    @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+    var body: some View {
         let fee = Amount(currency: "Taler", cent: 20)
         let currencyInfo = CurrencyInfo.zero("Taler")
-        AmountRowV(stack: nil, currencyInfo: currencyInfo, title: "Fee", amount: fee, isNegative: true, color: Color("Outgoing"), large: false)
+        AmountRowV(stack: nil, currencyInfo: $currencyInfoD, title: "Fee", amount: fee, isNegative: true, color: Color("Outgoing"), large: false)
         let cents = Amount(currency: "Taler", cent: 480)
-        AmountRowV(currencyInfo, title: "Cents", amount: cents, isNegative: false, color: Color("Incoming"))
+        AmountRowV($currencyInfoD, title: "Cents", amount: cents, isNegative: false, color: Color("Incoming"))
         let amount = talerFromStr("Taler:4.80")
-        AmountRowV(currencyInfo, title: "Chosen amount to withdraw", amount: amount, isNegative: false, color: Color("Incoming"))
+        AmountRowV($currencyInfoD, title: "Chosen amount to withdraw", amount: amount, isNegative: false, color: Color("Incoming"))
     }
 }
+
+#Preview {
+    List {
+        BindingViewContainer()
+    }
+}
+#endif

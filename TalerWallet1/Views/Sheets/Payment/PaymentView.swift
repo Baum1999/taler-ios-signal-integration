@@ -70,7 +70,6 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
 struct PaymentView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
 
     // the scanned URL
     let url: URL
@@ -84,6 +83,7 @@ struct PaymentView: View {
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var preparePayResult: PreparePayResult? = nil
 
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
@@ -105,7 +105,7 @@ struct PaymentView: View {
                     // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                 currencyInfo: $currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw, fee: fee,
@@ -125,7 +125,7 @@ struct PaymentView: View {
                     Text("You don't have enough \(currency).")
                         .talerFont(.headline)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: currencyInfo,
+                                 currencyInfo: $currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw, fee: nil,
@@ -151,7 +151,7 @@ struct PaymentView: View {
                 if let effective {
                     NavigationLink(destination: LazyView {
                         PaymentDone(stack: stack.push(),
-                             currencyInfo: currencyInfo,
+                             currencyInfo: $currencyInfo,
                             transactionId: preparePayResult.transactionId)
                     }) {
                         Text(navTitle)      // Confirm Payment
@@ -167,6 +167,11 @@ struct PaymentView: View {
                 } // Cancel
             }
             .navigationTitle(navTitle)
+            .task(id: controller.currencyTicker) {
+                let currency = amountToTransfer.currencyStr
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                currencyName = currencyInfo.scope.currency
+            }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
             .task { // this runs only once

@@ -12,7 +12,7 @@ import SymLog
 struct DepositWithdrawV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let amountAvailable: Amount?
 //    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
@@ -55,7 +55,7 @@ struct DepositWithdrawV: View {
         let withdrawTitle = minimalistic ? withdrawTitle0 : withdrawTitle1
         let depositDest = LazyView {
             DepositIbanV(stack: stack.push(),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                       feeLabel: nil,
                   feeIsNotZero: nil,
                amountAvailable: amountAvailable,
@@ -65,6 +65,7 @@ struct DepositWithdrawV: View {
         }
         let manualWithdrawDest = LazyView {
             ManualWithdraw(stack: stack.push(),
+                    currencyInfo: $currencyInfo,
                          isSheet: false,
                        scopeInfo: scope,
                         exchange: $myExchange,

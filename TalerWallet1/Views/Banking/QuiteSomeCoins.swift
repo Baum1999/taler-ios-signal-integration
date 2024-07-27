@@ -60,7 +60,7 @@ extension CoinData {
 // MARK: -
 struct QuiteSomeCoins: View {
     private let symLog = SymLogV(0)
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let currency: String
     let coinData: CoinData
     let shouldShowFee: Bool

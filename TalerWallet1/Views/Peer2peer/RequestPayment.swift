@@ -10,6 +10,7 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    @Binding var currencyInfo: CurrencyInfo
 
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
@@ -69,7 +70,7 @@ struct RequestPayment: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amountToTransfer.currencyStr
-        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
         let navTitle = String(localized: "NavTitle_Request_Currency",
                            defaultValue: "Request \(currencySymbol)",
@@ -80,7 +81,7 @@ struct RequestPayment: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                 currencyInfo: currencyInfo,
+                 currencyInfo: $currencyInfo,
                      feeLabel: coinData.feeLabel(currencyInfo),
                  feeIsNotZero: feeIsNotZero(),
                  amountToSend: false,
@@ -90,7 +91,7 @@ struct RequestPayment: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
-                 currencyInfo: currencyInfo,
+                 currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
                  amountToSend: false,
@@ -104,7 +105,7 @@ struct RequestPayment: View {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to request:")
             AmountInputV(stack: stack.push(),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                            url: nil,
                amountAvailable: nil,
               amountToTransfer: $amountToTransfer,

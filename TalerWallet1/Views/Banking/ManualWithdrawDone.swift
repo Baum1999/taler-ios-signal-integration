@@ -12,7 +12,7 @@ import SymLog
 struct ManualWithdrawDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
 
     let exchange: Exchange
     let amountToTransfer: Amount
@@ -37,7 +37,7 @@ struct ManualWithdrawDone: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: currencyInfo,
+                             currencyInfo: $currencyInfo,
                             transactionId: transactionId,
                              reloadAction: reloadOneAction,
                                  navTitle: navTitle,
@@ -74,8 +74,11 @@ struct ManualWithdrawDone: View {
 
 // MARK: -
 #if DEBUG
-struct ManualWithdrawDone_Container : View {
-    @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
+fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
+    @MainActor
+    struct BindingViewContainer : View {
+        @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
+        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
@@ -88,15 +91,14 @@ struct ManualWithdrawDone_Container : View {
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
-                    currencyInfo: CurrencyInfo.zero(DEMOCURRENCY),
+                    currencyInfo: $currencyInfoD,
                         exchange: exchange,
                 amountToTransfer: amountToTransfer)
     }
 }
 
-struct ManualWithdrawDone_Previews: PreviewProvider {
     static var previews: some View {
-        ManualWithdrawDone_Container()
+        BindingViewContainer()
     }
 }
 #endif

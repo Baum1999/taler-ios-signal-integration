@@ -11,7 +11,7 @@ import SymLog
 
 struct BalanceCellV: View {
     let stack: CallStack?
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let amount: Amount
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
@@ -25,7 +25,7 @@ struct BalanceCellV: View {
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
         let amountV = AmountV(stack: stack?.push("AmountV"),
-                       currencyInfo: currencyInfo,
+                       currencyInfo: $currencyInfo,
                              amount: amount,
                          isNegative: false,
                               large: true)

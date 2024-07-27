@@ -83,7 +83,7 @@ extension BalancesSectionView: View {
 
         let balanceDest = LazyView {
             TransactionsListView(stack: stack.push("\(Self.className())()"),
-                          currencyInfo: currencyInfo,
+                          currencyInfo: $currencyInfo,
                               navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                              scopeInfo: scopeInfo,
                           transactions: completedTransactions,
@@ -99,7 +99,7 @@ extension BalancesSectionView: View {
 //                    .listRowSeparator(.hidden)
             }
             BalanceCellV(stack: stack.push("BalanceCell"),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                         amount: balance.available,
 //                        sizeCategory: sizeCategory,
 //                     rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
@@ -108,7 +108,7 @@ extension BalancesSectionView: View {
 //            .border(.red)
 
             SendRequestV(stack: stack.push(),
-                  currencyInfo: currencyInfo,
+                  currencyInfo: $currencyInfo,
                amountAvailable: balance.available,
               amountToTransfer: $amountToTransfer,
                        summary: $summary,
@@ -129,7 +129,7 @@ extension BalancesSectionView: View {
             if pendingTransactions.count > 0 {
                 BalancesPendingRowV(//symLog: symLog,
                                      stack: stack.push(),
-                              currencyInfo: currencyInfo,
+                              currencyInfo: $currencyInfo,
                                    balance: balance,
                        pendingTransactions: $pendingTransactions,
                              reloadPending: reloadPending,
@@ -162,7 +162,7 @@ extension BalancesSectionView: View {
                 .listRowSeparator(.hidden)
             }
             DepositWithdrawV(stack: stack.push(),
-                      currencyInfo: currencyInfo,
+                      currencyInfo: $currencyInfo,
 //                         scopeInfo: balance.scopeInfo,
                    amountAvailable: balance.available,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
@@ -198,7 +198,7 @@ extension BalancesSectionView: View {
                 let threeTransactions = Array(slice)
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: currencyInfo,
+                                  currencyInfo: $currencyInfo,
                                      scopeInfo: scopeInfo,
                                   transactions: threeTransactions,
                                reloadOneAction: reloadOneAction)

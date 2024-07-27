@@ -13,7 +13,7 @@ import SymLog
 struct P2PReadyV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let summary: String
     let expireDays: UInt
     let amountToSend: Bool
@@ -43,7 +43,7 @@ struct P2PReadyV: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: currencyInfo,
+                             currencyInfo: $currencyInfo,
                               transactionId: transactionId,
                                reloadAction: reloadOneAction,
                                    navTitle: navTitle,

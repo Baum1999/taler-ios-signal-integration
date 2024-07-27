@@ -13,7 +13,7 @@ import SymLog
 struct DepositIbanV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
     let amountAvailable: Amount?
@@ -54,7 +54,7 @@ struct DepositIbanV: View {
 #endif
         let destination = LazyView {
             DepositAmountV(stack: stack.push(),
-                    currencyInfo: currencyInfo,
+                    currencyInfo: $currencyInfo,
                         paytoUri: paytoUri,
 //                 exchangeBaseUrl: baseURL,
                  amountAvailable: amountAvailable,

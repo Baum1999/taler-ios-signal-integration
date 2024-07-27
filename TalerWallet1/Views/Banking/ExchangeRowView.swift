@@ -12,7 +12,7 @@ import SymLog
 struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let exchange: Exchange
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
@@ -54,7 +54,7 @@ struct ExchangeRowView: View {
             .listRowSeparator(.hidden)
 
             DepositWithdrawV(stack: stack.push(),
-                      currencyInfo: currencyInfo,
+                      currencyInfo: $currencyInfo,
 //                         scopeInfo: exchange.scopeInfo,
                    amountAvailable: amountAvailable,
                   amountToTransfer: $amountToTransfer)
@@ -75,45 +75,48 @@ struct ExchangeRowView: View {
 }
 // MARK: -
 #if DEBUG
-fileprivate struct ExchangeRow_Container : View {
-    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
-    @State private var depositIBAN = "DE1234567890"
-    @State private var accountHolder = "Marc Stibane"
+fileprivate struct ExchangeRow_Previews: PreviewProvider {
+    @MainActor
+    struct BindingViewContainer : View {
+        @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
+        @State private var depositIBAN = "DE1234567890"
+        @State private var accountHolder = "Marc Stibane"
+        @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
-    var body: some View {
-        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
-        let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
-                                       masterPub: "masterPub",
-                                       scopeInfo: scopeInfo,
-                                       paytoUris: [],
-                                       tosStatus: .pending,
-                             exchangeEntryStatus: .preset,
-                            exchangeUpdateStatus: .initial,
-                           ageRestrictionOptions: [12,16])
-        let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
-                                       masterPub: "masterPub",
-                                       scopeInfo: scopeInfo,
-                                       paytoUris: [],
-                                       tosStatus: .proposed,
-                             exchangeEntryStatus: .ephemeral,
-                            exchangeUpdateStatus: .ready,
-                           ageRestrictionOptions: [])
-        ExchangeRowView(stack: CallStack("Preview"),
-                 currencyInfo: CurrencyInfo.zero(LONGCURRENCY),
-                     exchange: exchange1,
-              amountAvailable: Amount(currency: LONGCURRENCY, cent: 5000),      // 50,00
-                     currency: LONGCURRENCY,
-//                  depositIBAN: $depositIBAN,
-//                accountHolder: $accountHolder,
-             amountToTransfer: $amountToPreview)
+        var body: some View {
+            let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
+            let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
+                                           masterPub: "masterPub",
+                                           scopeInfo: scopeInfo,
+                                           paytoUris: [],
+                                           tosStatus: .pending,
+                                 exchangeEntryStatus: .preset,
+                                exchangeUpdateStatus: .initial,
+                               ageRestrictionOptions: [12,16])
+            let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
+                                           masterPub: "masterPub",
+                                           scopeInfo: scopeInfo,
+                                           paytoUris: [],
+                                           tosStatus: .proposed,
+                                 exchangeEntryStatus: .ephemeral,
+                                exchangeUpdateStatus: .ready,
+                               ageRestrictionOptions: [])
+            ExchangeRowView(stack: CallStack("Preview"),
+                     currencyInfo: $currencyInfoL,
+                         exchange: exchange1,
+                  amountAvailable: Amount(currency: LONGCURRENCY, cent: 5000),      // 50,00
+                         currency: LONGCURRENCY,
+//                      depositIBAN: $depositIBAN,
+//                    accountHolder: $accountHolder,
+                 amountToTransfer: $amountToPreview)
+        }
     }
-}
 
-fileprivate struct ExchangeRow_Previews: PreviewProvider {
+    @MainActor
     static var previews: some View {
         List {
-            ExchangeRow_Container()
+            BindingViewContainer()
         }
     }
 }

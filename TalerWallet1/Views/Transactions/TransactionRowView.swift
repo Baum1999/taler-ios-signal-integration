@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 
 struct TransactionRowView: View {
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let transaction : Transaction
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -55,7 +55,7 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV(currencyInfo, common.amountEffective, isNegative: !incoming)
+        let amountV = AmountV($currencyInfo, common.amountEffective, isNegative: !incoming)
             .foregroundColor(foreColor)
 
         let topString = topString()
@@ -178,11 +178,23 @@ struct TransactionRow_Previews: PreviewProvider {
                                       pending: false,
                                            id: "some payment ID",
                                          time: Timestamp(from: 1_666_666_000_000))
-    static var previews: some View {
-        List {
-            TransactionRowView(currencyInfo: CurrencyInfo.zero(DEMOCURRENCY), transaction: withdrawal)
-            TransactionRowView(currencyInfo: CurrencyInfo.zero(DEMOCURRENCY), transaction: payment)
+    @MainActor
+    struct StateContainer: View {
+        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+
+        var body: some View {
+            List {
+                TransactionRowView(currencyInfo: $currencyInfoD, transaction: withdrawal)
+                TransactionRowView(currencyInfo: $currencyInfoT, transaction: payment)
+
+            }
         }
+    }
+
+    static var previews: some View {
+        StateContainer()
+//            .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
     }
 }
 // MARK: -

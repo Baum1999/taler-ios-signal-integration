@@ -12,7 +12,7 @@ import SymLog
 struct SendRequestV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo
     let amountAvailable: Amount
     //    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
@@ -60,7 +60,7 @@ struct SendRequestV: View {
         let requTitle = minimalistic ? requTitle0 : requTitle1
         let sendDest = LazyView {
             SendAmount(stack: stack.push("\(Self.className())()"),
-                currencyInfo: currencyInfo,
+                currencyInfo: $currencyInfo,
              amountAvailable: amountAvailable,
             amountToTransfer: $amountToTransfer,        // with correct currency
                      summary: $summary,
@@ -69,6 +69,7 @@ struct SendRequestV: View {
         }
         let requestDest = LazyView {
             RequestPayment(stack: stack.push("\(Self.className())()"),
+                    currencyInfo: $currencyInfo,
                 amountToTransfer: $amountToTransfer,    // with correct currency
                         summary: $summary,
                       scopeInfo: scope,
