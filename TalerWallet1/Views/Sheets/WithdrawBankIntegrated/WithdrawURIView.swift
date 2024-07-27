@@ -59,6 +59,11 @@ struct WithdrawURIView: View {
         buttonSelected = true
     }
 
+    private func feeLabel(_ feeString: String) -> String {
+        feeString.count > 0 ? String(localized: "\(feeString) fee")
+        : EMPTYSTRING
+    }
+
     private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
         if let exchange {
             if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,

@@ -49,6 +49,11 @@ struct DepositAmountV: View {
         return feeAmount
     }
 
+    private func feeLabel(_ feeString: String) -> String {
+        feeString.count > 0 ? String(localized: "+ \(feeString) fee")
+                            : EMPTYSTRING
+    }
+
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {
             if hasNoFees {

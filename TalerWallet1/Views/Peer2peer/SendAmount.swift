@@ -45,6 +45,11 @@ struct SendAmount: View {
         buttonSelected = true
     }
 
+    private func feeLabel(_ feeString: String) -> String {
+        feeString.count > 0 ? String(localized: "+ \(feeString) fee")
+                            : EMPTYSTRING
+    }
+
     private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
         do {
             if let ppCheck {

@@ -11,7 +11,7 @@ import SymLog
 
 typealias Announce = (_ this: String) -> ()
 
-func feeLabel(_ feeString: String) -> String {
+fileprivate func feeLabel(_ feeString: String) -> String {
     feeString.count > 0 ? String(localized: "+ \(feeString) fee")
     : EMPTYSTRING
 }

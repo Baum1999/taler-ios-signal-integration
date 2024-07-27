@@ -86,13 +86,13 @@ struct AmountInputV: View {
                             shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
 
-            let color = flags.insufficient || !(feeAmount?.isZero ?? true) ? .red
-                      : WalletColors().secondary(colorScheme, colorSchemeContrast)
-            Text(flags.insufficient ? insufficientLabel : feeLabel(feeStr))
-                .talerFont(.body)
-                .foregroundColor(color)
-                .padding(4)
-                .accessibility(sortPriority: 1)
+//            let color = flags.insufficient || !(feeAmount?.isZero ?? true) ? .red
+//                      : WalletColors().secondary(colorScheme, colorSchemeContrast)
+//            Text(flags.insufficient ? insufficientLabel : feeLabel(feeStr))
+//                .talerFont(.body)
+//                .foregroundColor(color)
+//                .padding(4)
+//                .accessibility(sortPriority: 1)
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
