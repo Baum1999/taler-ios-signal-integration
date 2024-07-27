@@ -106,7 +106,7 @@ struct AmountInputV: View {
         .task(id: amountToTransfer.value) {
             // re-compute the fees on every tapped digit or backspace
             if let computeFee {
-                symLog.log(".task computeFee")
+                symLog.log(".task \(amountToTransfer.value)")
                 if let result: ComputeFeeResult = await computeFee(amountToTransfer) {
                     symLog.log("computeFee() finished")
                     feeStr = result.feeStr

@@ -47,6 +47,7 @@ struct WithdrawURIView: View {
 
     func loadExchange(_ baseUrl: String) async {        // TODO: throws?
         if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
+            symLog.log("Loaded \(baseUrl.trimURL())")
             exchange = someExchange
         }
     }
@@ -77,6 +78,10 @@ struct WithdrawURIView: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         if possibleExchanges.count > 0 {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
                 VStack {
@@ -182,7 +187,9 @@ struct WithdrawURIView: View {
                         defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
                         possibleExchanges = uriInfoResponse.possibleExchanges
                         amountIsEditable = uriInfoResponse.editableAmount
+                        symLog.log("\(baseUrl.trimURL()) loaded")
                         await controller.checkInfo(for: baseUrl, model: model)
+                        symLog.log("Info(for: \(baseUrl.trimURL())) loaded")
                     }
 
                     // TODO: amount = nil ==> show amount input
