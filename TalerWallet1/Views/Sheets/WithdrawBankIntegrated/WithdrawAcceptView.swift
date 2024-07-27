@@ -34,7 +34,6 @@ struct WithdrawAcceptView: View {
         }
     }
 
-    fileprivate let sheetID = SHEET_WITHDRAW_ACCEPT                             // 132 WithdrawAcceptView
     var body: some View {
         if let exchange, let withdrawalAmountDetails {
             VStack {
@@ -94,7 +93,7 @@ struct WithdrawAcceptView: View {
             }
             .onAppear() {
                 symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(sheetID)
+                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)             // 132 WithdrawAcceptView
             }
         } else {        // no details or no exchange
 #if DEBUG

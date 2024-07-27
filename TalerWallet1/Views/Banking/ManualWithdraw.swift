@@ -29,8 +29,6 @@ struct ManualWithdraw: View {
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
 
-    fileprivate let sheetID = SHEET_WITHDRAW_EXCHANGE                           // 135 WithdrawExchangeV
-    fileprivate let viewID = VIEW_WITHDRAWAL                                    // 30 WithdrawAmount
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -108,9 +106,10 @@ struct ManualWithdraw: View {
             .navigationTitle(navTitle)
             .onAppear {
                 if isSheet {
-                    DebugViewC.shared.setSheetID(sheetID)
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)         // 132 WithdrawAcceptView
                 } else {
-                    DebugViewC.shared.setViewID(viewID, stack: stack.push())
+                    DebugViewC.shared.setViewID(VIEW_WITHDRAWAL,                // 30 WithdrawAmount
+                                                stack: stack.push())
                 }
                 symLog.log("❗️ \(navTitle) onAppear")
             }
