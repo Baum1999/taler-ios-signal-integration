@@ -24,7 +24,7 @@ struct P2PSubjectV: View {
     @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
-    let amountToSend: Bool
+    let outgoing: Bool
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     @Binding var expireDays: UInt
@@ -40,20 +40,20 @@ struct P2PSubjectV: View {
 
     private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: false, useISO: true)
-        return amountToSend ? String(localized: "Send \(amountWithCurrency) now",
-                                       comment: "amount with currency")
-                            : String(localized: "Request \(amountWithCurrency)",
-                                       comment: "amount with currency")
+        return outgoing ? String(localized: "Send \(amountWithCurrency) now",
+                                   comment: "amount with currency")
+                        : String(localized: "Request \(amountWithCurrency)",
+                                   comment: "amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
         let amountStr = amount.formatted(currencyInfo, isNegative: false)
-        return amountToSend ? String(localized: "NavTitle_Send_AmountStr",
-                                  defaultValue: "Send \(amountStr)",
-                                       comment: "NavTitle: Send 'amountStr'")
-                            : String(localized: "NavTitle_Request_AmountStr",
-                                  defaultValue: "Request \(amountStr)",
-                                       comment: "NavTitle: Request 'amountStr'")
+        return outgoing ? String(localized: "NavTitle_Send_AmountStr",
+                              defaultValue: "Send \(amountStr)",
+                                   comment: "NavTitle: Send 'amountStr'")
+                        : String(localized: "NavTitle_Request_AmountStr",
+                              defaultValue: "Request \(amountStr)",
+                                   comment: "NavTitle: Request 'amountStr'")
     }
 
     var body: some View {
@@ -106,7 +106,7 @@ struct P2PSubjectV: View {
                     .accessibilityValue(String(localized: "\(summary.count) characters of 100"))
 
                 // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
-                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: amountToSend)
+                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: outgoing)
                     .disabled(false)
                     .padding(.bottom)
 
@@ -116,7 +116,7 @@ struct P2PSubjectV: View {
                        currencyInfo: $currencyInfo,
                             summary: summary,
                          expireDays: expireDays,
-                       amountToSend: amountToSend,
+                           outgoing: outgoing,
                    amountToTransfer: amountToTransfer,
                  transactionStarted: $transactionStarted)
                 }) {
@@ -137,7 +137,7 @@ struct P2PSubjectV: View {
 //            print("❗️ P2PSubjectV onDisappear")
         }
         .task(id: amountToTransfer.value) {
-            if amountToSend && feeLabel == nil {
+            if outgoing && feeLabel == nil {
                 if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
                         let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)

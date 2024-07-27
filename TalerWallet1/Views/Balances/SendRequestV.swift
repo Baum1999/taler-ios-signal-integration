@@ -71,9 +71,9 @@ struct SendRequestV: View {
             RequestPayment(stack: stack.push("\(Self.className())()"),
                     currencyInfo: $currencyInfo,
                 amountToTransfer: $amountToTransfer,    // with correct currency
-                        summary: $summary,
-                      scopeInfo: scope,
-                   cameraAction: cameraAction)
+                         summary: $summary,
+                       scopeInfo: scope,
+                    cameraAction: cameraAction)
          }
         let disableSend = amountAvailable.isZero //?? false
         let twoRowButtons = TwoRowButtons(stack: stack.push(),

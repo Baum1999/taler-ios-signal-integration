@@ -84,7 +84,7 @@ struct RequestPayment: View {
                  currencyInfo: $currencyInfo,
                      feeLabel: coinData.feeLabel(currencyInfo),
                  feeIsNotZero: feeIsNotZero(),
-                 amountToSend: false,
+                     outgoing: false,
              amountToTransfer: $amountToTransfer,
                       summary: $summary,
                    expireDays: $expireDays)
@@ -94,7 +94,7 @@ struct RequestPayment: View {
                  currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
-                 amountToSend: false,
+                     outgoing: false,
              amountToTransfer: $amountShortcut,
                       summary: $summary,
                    expireDays: $expireDays)

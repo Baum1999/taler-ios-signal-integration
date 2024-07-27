@@ -93,24 +93,24 @@ struct OverviewRowV: View {
 #if  DEBUG
 struct OverviewRowV_Previews: PreviewProvider {
     @MainActor
-  struct StateContainer: View {
+    struct StateContainer: View {
         @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
 
-    var body: some View {
-        let test = Amount(currency: TESTCURRENCY, cent: 123)
-        let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
+        var body: some View {
+            let test = Amount(currency: TESTCURRENCY, cent: 123)
+            let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
 
-        List {
-            Section {
-                OverviewRowV(stack: CallStack("Preview"), currencyInfo: $currencyInfoD, amount: demo,
+            List {
+                Section {
+                    OverviewRowV(stack: CallStack("Preview"), currencyInfo: $currencyInfoD, amount: demo,
+                            sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
+                }
+                OverviewRowV(stack: CallStack("Preview"), currencyInfo: $currencyInfoT, amount: test,
                         sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
             }
-            OverviewRowV(stack: CallStack("Preview"), currencyInfo: $currencyInfoT, amount: test,
-                    sendAction: {}, recvAction: {}, rowAction: {}, balanceDest: nil)
         }
     }
-  }
 
     static var previews: some View {
         StateContainer()

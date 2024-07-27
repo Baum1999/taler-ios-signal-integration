@@ -397,7 +397,7 @@ struct PaymentTransactionDetails: Decodable {
     var refundQueryActive: Bool?
     var posConfirmation: String?
 }
-struct PaymentTransaction : Sendable{
+struct PaymentTransaction : Sendable {
     var common: TransactionCommon
     var details: PaymentTransactionDetails
 }

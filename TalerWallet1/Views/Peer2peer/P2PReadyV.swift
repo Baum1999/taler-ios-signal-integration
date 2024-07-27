@@ -16,7 +16,7 @@ struct P2PReadyV: View {
     @Binding var currencyInfo: CurrencyInfo
     let summary: String
     let expireDays: UInt
-    let amountToSend: Bool
+    let outgoing: Bool
     let amountToTransfer: Amount
     @Binding var transactionStarted: Bool
 
@@ -91,7 +91,7 @@ struct P2PReadyV: View {
             let terms = PeerContractTerms(amount: amountToTransfer,
                                          summary: summary,
                                 purse_expiration: timestamp)
-            if amountToSend {
+            if outgoing {
                 // TODO: let user choose baseURL
                 if let response = try? await model.initiatePeerPushDebitM(nil, terms: terms) {
                     // will switch from WithdrawProgressView to TransactionSummaryV

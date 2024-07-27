@@ -124,7 +124,7 @@ struct SendAmount: View {
                  currencyInfo: $currencyInfo,
                      feeLabel: feeLabel(feeStr),
                  feeIsNotZero: feeIsNotZero(),
-                 amountToSend: true,
+                     outgoing: true,
              amountToTransfer: $amountToTransfer,       // from the textedit
                       summary: $summary,
                    expireDays: $expireDays)
@@ -134,7 +134,7 @@ struct SendAmount: View {
                  currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
-                 amountToSend: true,
+                     outgoing: true,
              amountToTransfer: $amountShortcut,         // from the tapped shortcut button
                       summary: $summary,
                    expireDays: $expireDays)

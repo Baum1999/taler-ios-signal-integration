@@ -192,12 +192,12 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                  common: common, topAbbrev: "Withdrawal",
                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, noFees: false,
                                   large: 1==0, summary: nil, merchant: nil)
-                    .safeAreaInset(edge: .bottom) {
-                        Button(String(localized: "Accept"), action: {})
-                            .buttonStyle(TalerButtonStyle(type: .prominent))
-                            .padding(.horizontal)
-                            .disabled(true)
-                    }
+                .safeAreaInset(edge: .bottom) {
+                    Button(String(localized: "Accept"), action: {})
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
+                        .disabled(true)
+                }
             }
         }
     }

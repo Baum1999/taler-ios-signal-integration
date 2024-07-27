@@ -161,7 +161,7 @@ struct PayTemplateV: View {
                             .background(NavigationLink(destination: finalDestinationI, isActive: $buttonSelected1)
                                         { EmptyView() }.frame(width: 0).opacity(0).hidden())
                     }
-                }
+                } // ScrollView
             } else if summaryIsEditable {   // template contract summary is not fixed => let the user input a summary
                 ScrollView {
                     inputDestination
@@ -195,17 +195,21 @@ struct PayTemplateV: View {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {
                     if let details = try? await model.checkPayForTemplateM(url.absoluteString) {
+                        /// checkPayForTemplateM does not provide fees (yet)
                         let contract = details.templateDetails.templateContract     // specifies fixed amount/summary
                         amountIsEditable = contract.amount == nil
                         summaryIsEditable = contract.summary == nil
                         let defaults = details.templateDetails.editableDefaults     // might be nil, or its fields might be nil
+                        // TODO: let the user choose a currency from supportedCurrencies[]
                         let prepCurrency = contract.currency ?? defaults?.currency ?? 
                                     (details.supportedCurrencies.count > 0 ? details.supportedCurrencies[0]
-                                                                           : String(localized: "UNKNOWN", comment: "merchant didn't specify the currency, use ALL CAPS"))
+                                                                           : UNKNOWN)
                         let zeroAmount = Amount(currency: prepCurrency, cent: 0)
                         let prepAmount = contract.amount ?? defaults?.amount        // might be nil
                         let prepSummary = contract.summary ?? defaults?.summary     // might be nil
 //                        symLog.log("LoadingView.task preparePayForTemplate")
+                        /// preparePayForTemplate will make a network call to the merchant and create a TX
+                        ///  -> we only want to do this after the user entered amount and subject - but before confirmation of course
 //                        if let result = await preparePayForTemplate(model: model,
 //                                                                      url: url,
 //                                                                   amount: amountIsEditable ? prepAmount ?? zeroAmount

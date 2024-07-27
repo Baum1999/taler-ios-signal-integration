@@ -153,7 +153,7 @@ struct CurrencyInputView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     hasBeenShown = true
                     if !currencyField.becomeFirstResponder() {
-                        print("❗️Yikes❗️")
+                        print("❗️Yikes❗️ cannot becomeFirstResponder")
                     }
                 }
             }
