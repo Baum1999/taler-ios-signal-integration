@@ -26,39 +26,42 @@ struct WithdrawExchangeV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-
-        Group {
-            if exchange != nil {
+        if let exchange {
+            let currency = exchange.scopeInfo.currency
+            Group {
                 ManualWithdraw(stack: stack.push(),
                         currencyInfo: $currencyInfo,
                              isSheet: true,
-                           scopeInfo: exchange!.scopeInfo,
+                           scopeInfo: exchange.scopeInfo,
                             exchange: $exchange,
                     amountToTransfer: $amountToTransfer)
-            } else {
-                // TODO: Error
-                LoadingView(scopeInfo: nil, message: "No exchangeBaseUrl!")
             }
-        }
-        .task {
-            if exchange == nil {
-                symLog.log(".task")
-                if let withdrawExchange = try? await model.loadWithdrawalExchangeForUriM(url.absoluteString) {
-                    let baseUrl = withdrawExchange.exchangeBaseUrl
-                    symLog.log("getExchangeByUrl(\(baseUrl))")
-                    if let exc = try? await model.getExchangeByUrl(url: baseUrl) {
-                        // let the controller collect CurrencyInfo from this formerly unknown exchange
-                        let _ = try? await controller.getInfo(from: baseUrl, model: model)
-                        if let amount = withdrawExchange.amount {
-                            amountToTransfer = amount
+            .task(id: controller.currencyTicker) {
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+//                currencyName = currencyInfo.scope.currency
+            }
+        } else {
+            LoadingView(scopeInfo: nil, message: "No exchangeBaseUrl!")
+            .task {
+                if exchange == nil {
+                    symLog.log(".task")
+                    if let withdrawExchange = try? await model.loadWithdrawalExchangeForUriM(url.absoluteString) {
+                        let baseUrl = withdrawExchange.exchangeBaseUrl
+                        symLog.log("getExchangeByUrl(\(baseUrl))")
+                        if let exc = try? await model.getExchangeByUrl(url: baseUrl) {
+                            // let the controller collect CurrencyInfo from this formerly unknown exchange
+                            let _ = try? await controller.getInfo(from: baseUrl, model: model)
+                            if let amount = withdrawExchange.amount {
+                                amountToTransfer = amount
+                            } else {
+                                let currency = exc.scopeInfo.currency
+                                amountToTransfer.setCurrency(currency)
+                                // is already Amount.zero(currency: "")
+                            }
+                            exchange = exc
                         } else {
-                            let currency = exc.scopeInfo.currency
-                            amountToTransfer.setCurrency(currency)
-                            // is already Amount.zero(currency: "")
+                            exchange = nil
                         }
-                        exchange = exc
-                    } else {
-                        exchange = nil
                     }
                 }
             }
