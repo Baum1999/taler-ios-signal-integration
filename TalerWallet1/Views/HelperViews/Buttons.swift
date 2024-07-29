@@ -40,7 +40,7 @@ struct ConfirmationButton: View {
         VStack(alignment: .leading) {
             if !minimalistic {      // show hint that the user should authorize on bank website
                 Text(hintTitle)
-//                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
+                    .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                     .multilineTextAlignment(.leading)                   // otherwise
                     .listRowSeparator(.hidden)
             }
