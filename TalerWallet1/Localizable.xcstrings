@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "\nWarnings can be switched off in Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\\nWarnungen können in den Einstellungen ausgeschaltet werden"
+          }
+        }
+      }
+    },
     "- %@ fee" : {
       "localizations" : {
         "de" : {
@@ -30,6 +40,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ", cancelado"
+          }
+        }
+      }
+    },
+    ". Needs bank authorization" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Benötigt die Autorisierung der Bank"
           }
         }
       }
@@ -246,6 +267,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ fee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Gebühr"
           }
         }
       }
@@ -708,6 +739,7 @@
       }
     },
     "Amount to be withdrawn:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -735,6 +767,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a depositar:"
+          }
+        }
+      }
+    },
+    "Amount to obtain:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu erhaltender Betrag:"
           }
         }
       }
@@ -927,6 +969,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seguro que quiere fallar esta transacción?"
+          }
+        }
+      }
+    },
+    "Authorize at Bank" : {
+      "comment" : "Nav title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei der Bank autorisieren"
           }
         }
       }
@@ -1185,40 +1238,6 @@
         }
       }
     },
-    "Confirm later" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Später bestätigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirmar después"
-          }
-        }
-      }
-    },
-    "Confirm now" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jetzt bestätigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirmar ahora"
-          }
-        }
-      }
-    },
     "Confirm Payment" : {
       "comment" : "pay P2P request/invoice\npay merchant",
       "localizations" : {
@@ -1236,23 +1255,6 @@
         }
       }
     },
-    "Confirm with Bank" : {
-      "comment" : "Nav title",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit der Bank bestätigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirmar con Banco"
-          }
-        }
-      }
-    },
     "Confirm Withdrawal" : {
       "localizations" : {
         "de" : {
@@ -1265,6 +1267,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar Extracción"
+          }
+        }
+      }
+    },
+    "Confirmation:" : {
+      "comment" : "purchase may have a pos validation / confirmation",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestätigung:"
           }
         }
       }
@@ -1570,7 +1583,7 @@
       }
     },
     "DepositButton_Short" : {
-      "comment" : "Abbreviation of `Deposit (currency)´",
+      "comment" : "Abbreviation of button `Deposit (currency)´",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -2004,18 +2017,38 @@
         }
       }
     },
-    "Exchange" : {
+    "Exchange fee (long):" : {
+      "comment" : "long version",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Service Provider"
+            "value" : "Gebühr:"
           }
         },
-        "es" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fee:"
+          }
+        }
+      }
+    },
+    "Exchange fee (short):" : {
+      "comment" : "short version",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Proveedor de Pagos"
+            "value" : "Gebühr:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fee:"
           }
         }
       }
@@ -2055,7 +2088,7 @@
     },
     "Fee (long):" : {
       "comment" : "long version",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2079,7 +2112,7 @@
     },
     "Fee (short):" : {
       "comment" : "short version",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2259,6 +2292,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Código de error interno"
+          }
+        }
+      }
+    },
+    "It seems you wanted to request money - but this transaction will let you pay..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es scheint als wollten Sie Geld anfordern - aber diese Transaktion lässt Sie bezahlen..."
           }
         }
       }
@@ -3084,6 +3127,16 @@
         }
       }
     },
+    "No payment fee" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Zahlungsgebühr"
+          }
+        }
+      }
+    },
     "No withdrawal fee" : {
       "localizations" : {
         "de" : {
@@ -3100,7 +3153,18 @@
         }
       }
     },
+    "Note: It will take quite some time to prepare this amount! Be more patient..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis: Es braucht eine ganze Weile um diesen Betrag vorzubereiten. Seien Sie noch geduldiger..."
+          }
+        }
+      }
+    },
     "Note: It will take quite some time to withdraw this amount! Be more patient..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3116,7 +3180,18 @@
         }
       }
     },
+    "Note: It will take some time to prepare this amount. Be patient..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinweis: Es braucht eine Weile um diesen Betrag vorzubereiten. Seien Sie geduldig..."
+          }
+        }
+      }
+    },
     "Note: It will take some time to withdraw this amount. Be patient..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3144,6 +3219,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Observe walletCore"
+          }
+        }
+      }
+    },
+    "Obtain:" : {
+      "comment" : "Amount to obtain:",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalten:"
           }
         }
       }
@@ -3289,6 +3375,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir Camara"
+          }
+        }
+      }
+    },
+    "Order-ID:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestellnummer:"
           }
         }
       }
@@ -3691,6 +3787,16 @@
         }
       }
     },
+    "Progress indicator" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortschrittsanzeige"
+          }
+        }
+      }
+    },
     "QR Code" : {
       "localizations" : {
         "de" : {
@@ -3992,31 +4098,31 @@
       }
     },
     "RequestButton_Full" : {
-      "comment" : "`Request Payment´ in Balances - set exactly 1 \\t for line break",
+      "comment" : "`Request (currency)´ in Balances - must have ONE \\t and ONE %@",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zahlung\tanfordern"
+            "value" : "%@\tanfordern"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Request\tPayment"
+            "value" : "Request\t%@"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Pedir\tPago"
           }
         }
       }
     },
     "RequestButton_Short" : {
-      "comment" : "Abbreviation of button `Request Payment´",
+      "comment" : "Abbreviation of button `Request (currency)´",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -4284,31 +4390,31 @@
       }
     },
     "SendButton_Full" : {
-      "comment" : "`Send Money´ in Balances - set exactly 1 \\t for line break",
+      "comment" : "`Send (currency)´ in Balances - must have ONE \\t and ONE %@",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geld\tsenden"
+            "value" : "%@\tsenden"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Send\tMoney"
+            "value" : "Send\t%@"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Enviar\tDinero"
           }
         }
       }
     },
     "SendButton_Short" : {
-      "comment" : "Abbreviation of button `Send Money´",
+      "comment" : "Abbreviation of button `Send (currency)´",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -4527,7 +4633,18 @@
         }
       }
     },
+    "Status:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status:"
+          }
+        }
+      }
+    },
     "Status: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4657,6 +4774,16 @@
         }
       }
     },
+    "The exchange will send your money back if it won't get collected in time, or when you abort the operation." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Exchange wird Ihr Geld zurücksenden wenn es nicht bis zum Ablaufdatum abgeholt wird, oder wenn Sie die Operation abbrechen."
+          }
+        }
+      }
+    },
     "The Payment Service Provider is waiting for your wire-transfer." : {
       "localizations" : {
         "de" : {
@@ -4749,6 +4876,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta operación no puede ser deshecha"
+          }
+        }
+      }
+    },
+    "This request will be cancelled if it doesn't get paid in time, or when you abort the operation." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Anforderung wird abgebrochen wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
           }
         }
       }
@@ -5354,6 +5491,17 @@
         }
       }
     },
+    "using:" : {
+      "comment" : "using: exchange.taler.net",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mit:"
+          }
+        }
+      }
+    },
     "via %@" : {
       "localizations" : {
         "de" : {
@@ -5613,6 +5761,17 @@
         }
       }
     },
+    "Withdraw:" : {
+      "comment" : "Chosen amount to withdraw:",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abheben:"
+          }
+        }
+      }
+    },
     "Withdrawal" : {
       "comment" : "TransactionType",
       "localizations" : {
@@ -5631,7 +5790,7 @@
       }
     },
     "WithdrawButton_Short" : {
-      "comment" : "Abbreviation of `Withdraw (currency)´",
+      "comment" : "Abbreviation of button `Withdraw (currency)´",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -5817,6 +5976,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Necesita transferir %1$@ desde una cuenta bancaria regular al Proveedor de Servicio de Pago para recibir %2$@ en forma de dinero electrónico."
+          }
+        }
+      }
+    },
+    "Your bank's wire fee: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisungsgebühren ihrer Bank: %@"
           }
         }
       }
