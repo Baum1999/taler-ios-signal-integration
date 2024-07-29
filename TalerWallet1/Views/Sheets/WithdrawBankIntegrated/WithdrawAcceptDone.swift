@@ -24,7 +24,7 @@ struct WithdrawAcceptDone: View {
     @State private var transactionId: String? = nil
     @State private var transaction: Transaction? = nil
 
-    let navTitle = String(localized: "Authorize with Bank", comment: "Nav title")
+    let navTitle = String(localized: "Authorize at Bank", comment: "Nav title")
 
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         let response = try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
