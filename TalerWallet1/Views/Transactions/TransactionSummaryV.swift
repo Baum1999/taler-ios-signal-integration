@@ -127,15 +127,31 @@ struct TransactionSummaryV: View {
                     let state = developerMode ? transaction.isPending ? minorState ?? majorState
                                                                       : majorState
                                               : majorState
-                    HStack {
-                        Text(Image(common.type.iconName()))
-                            .accessibilityHidden(true)
-                        Spacer()
-                        Text("Status: \(state)")
+                    let statusT = Text(state)
+                                    .multilineTextAlignment(.trailing)
+                    let imageT = Text(Image(common.type.iconName()))
+                                    .accessibilityHidden(true)
+                    let prefixT = Text("Status:")
+                    let vLayout = VStack(alignment: .leading, spacing: 0) {
+                        HStack {
+                            imageT
+                            prefixT
+                        } // Icon + State
+                        statusT
                             .frame(maxWidth: .infinity, alignment: .trailing)
-                            .multilineTextAlignment(.trailing)
-                    } // Icon + State
-                }    .listRowSeparator(.hidden)
+                    }
+                    if #available(iOS 16.0, *) {
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: HSPACING) {
+                                imageT
+                                Spacer()
+                                prefixT
+                                statusT
+                            }
+                            vLayout
+                        }
+                    } else { vLayout } // view for iOS 15
+                }   .listRowSeparator(.hidden)
                     .talerFont(.title)
                 TypeDetail(stack: stack.push(),
                     currencyInfo: $currencyInfo,
