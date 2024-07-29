@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 
@@ -12,7 +15,7 @@ struct LaunchAnimationView: View {
             RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250,
                       progress: true,
                rotationEnabled: $rotationEnabled)
-//                .accessibilityLabel("Progress indicator")
+                .accessibilityLabel("Progress indicator")
         }
     }
 }
@@ -20,6 +23,7 @@ struct LaunchAnimationView: View {
 struct RotatingTaler: View {
     let size: CGFloat
     let progress: Bool
+
     @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
 #if TALER_WALLET
