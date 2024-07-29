@@ -8,7 +8,7 @@
 import SwiftUI
 import taler_swift
 
-struct ThreeAmountsSheet: View {
+struct ThreeAmountsSheet: View {    // should be in a separate file
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
     var common: TransactionCommon
@@ -18,6 +18,7 @@ struct ThreeAmountsSheet: View {
     var bottomAbbrev: String?
     let baseURL: String?
     let noFees: Bool?                       // true if exchange charges no fees at all
+    var feeIsNegative: Bool?                // show fee with minus (or plus) sign, or no sign if nil
     let large: Bool               // set to false for QR or IBAN
     let summary: String?
     let merchant: String?
@@ -53,7 +54,9 @@ struct ThreeAmountsSheet: View {
                          topTitle: topTitle,
                         topAbbrev: topAbbrev,
                         topAmount: raw,
+                           noFees: noFees,
                               fee: fee,
+                    feeIsNegative: feeIsNegative,
                       bottomTitle: bottomTitle ?? defaultBottomTitle,
                      bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
                      bottomAmount: incomplete ? nil : effective,
@@ -61,7 +64,6 @@ struct ThreeAmountsSheet: View {
                           pending: pending,
                          incoming: incoming,
                           baseURL: baseURL,
-                           noFees: noFees,
                        txStateLcl: txStateLcl,
                           summary: summary,
                          merchant: merchant)
@@ -74,7 +76,9 @@ struct ThreeAmountsSection: View {
     var topTitle: String
     var topAbbrev: String
     var topAmount: Amount
+    let noFees: Bool?                       // true if exchange charges no fees at all
     var fee: Amount?                        // nil = don't show fee line, zero = no fee for this tx
+    var feeIsNegative: Bool?                // show fee with minus (or plus) sign, or no sign if nil
     var bottomTitle: String
     var bottomAbbrev: String
     var bottomAmount: Amount?               // nil = incomplete (aborted, timed out)
@@ -82,7 +86,6 @@ struct ThreeAmountsSection: View {
     let pending: Bool
     let incoming: Bool
     let baseURL: String?
-    let noFees: Bool?                       // true if exchange charges no fees at all
     let txStateLcl: String?                 // localizedState
     let summary: String?
     let merchant: String?
@@ -113,7 +116,7 @@ struct ThreeAmountsSection: View {
                 currencyInfo: $currencyInfo,
                        title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
-                  isNegative: !incoming,
+                  isNegative: nil,
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
@@ -125,7 +128,7 @@ struct ThreeAmountsSection: View {
                         currencyInfo: $currencyInfo,
                                title: title,
                               amount: fee,
-                          isNegative: !incoming,
+                          isNegative: fee.isZero ? nil : feeIsNegative,
                                color: labelColor,
                                large: false)
                     .padding(.bottom, 4)
@@ -135,7 +138,7 @@ struct ThreeAmountsSection: View {
                         currencyInfo: $currencyInfo,
                                title: minimalistic ? bottomAbbrev : bottomTitle,
                               amount: bottomAmount,
-                          isNegative: !incoming,
+                          isNegative: nil,
                                color: foreColor,
                                large: large)
                 }

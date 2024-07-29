@@ -14,7 +14,7 @@ struct AmountRowV: View {
     @Binding var currencyInfo: CurrencyInfo
     let title: String
     let amount: Amount
-    let isNegative: Bool        // if true, show a "-" before the amount
+    let isNegative: Bool?        // show fee with minus (or plus) sign, or no sign if nil
     let color: Color
     let large: Bool      // set to false for QR or IBAN
 

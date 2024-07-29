@@ -108,7 +108,9 @@ struct PaymentView: View {
                                  currencyInfo: $currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
-                                    topAmount: raw, fee: fee,
+                                    topAmount: raw,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                          fee: fee,
                                   bottomTitle: String(localized: "Amount to spend:"),
                                  bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                                  bottomAmount: effective,
@@ -116,7 +118,6 @@ struct PaymentView: View {
                                       pending: false,
                                      incoming: false,
                                       baseURL: baseURL,
-                                       noFees: nil,        // TODO: check baseURL for fees
                                    txStateLcl: nil,
                                       summary: terms.summary,
                                      merchant: terms.merchant.name)
@@ -128,7 +129,9 @@ struct PaymentView: View {
                                  currencyInfo: $currencyInfo,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
-                                    topAmount: raw, fee: nil,
+                                    topAmount: raw,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                          fee: nil,
                                   bottomTitle: String(localized: "Amount available:"),
                                  bottomAbbrev: String(localized: "Available:", comment: "mini"),
                                  bottomAmount: balanceDetails.balanceAvailable,
@@ -136,7 +139,6 @@ struct PaymentView: View {
                                       pending: false,
                                      incoming: false,
                                       baseURL: baseURL,
-                                       noFees: nil,        // TODO: check baseURL for fees
                                    txStateLcl: nil,
                                       summary: terms.summary,
                                      merchant: terms.merchant.name)

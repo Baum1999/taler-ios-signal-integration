@@ -46,7 +46,8 @@ struct TransactionRowView: View {
                : colorScheme == .dark ? .secondary
                   : increasedContrast ? Color(.darkGray)
                                       : .secondary  // Color(.tertiaryLabel)
-        let refreshZero = common.type.isRefresh && common.amountEffective.isZero
+        let isZero = common.amountEffective.isZero
+        let refreshZero = common.type.isRefresh && isZero
         let foreColor = refreshZero ? textColor
                           : pending ? WalletColors().pendingColor(incoming)
                              : done ? WalletColors().transactionColor(incoming)
@@ -55,7 +56,7 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV($currencyInfo, common.amountEffective, isNegative: !incoming)
+        let amountV = AmountV($currencyInfo, common.amountEffective, isNegative: isZero ? nil : !incoming)
             .foregroundColor(foreColor)
 
         let topString = topString()

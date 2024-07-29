@@ -12,13 +12,19 @@ struct AmountV: View {
     let stack: CallStack?
     @Binding var currencyInfo: CurrencyInfo
     let amount: Amount
-    let isNegative: Bool        // if true, show a "-" before the amount
+    let isNegative: Bool?        // if true, show a "-" before the amount
     let large: Bool             // set to false for QR or IBAN
 
     @EnvironmentObject private var controller: Controller
 
     var body: some View {
-        Text(amount.formatted(currencyInfo, isNegative: isNegative))
+        let dontShow = (isNegative == nil)
+        let showSign: Bool = isNegative ?? false
+        let amountFormatted = amount.formatted(currencyInfo, isNegative: false)
+        let amountStr = dontShow ?      amountFormatted
+                      : showSign ? "- \(amountFormatted)"
+                                 : "+ \(amountFormatted)"
+        Text(amountStr)
             .multilineTextAlignment(.center)
             .talerFont(large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
@@ -27,7 +33,7 @@ struct AmountV: View {
     }
 }
 extension AmountV {
-    init(_ currencyInfo: Binding<CurrencyInfo>, _ amount: Amount, isNegative: Bool) {
+    init(_ currencyInfo: Binding<CurrencyInfo>, _ amount: Amount, isNegative: Bool?) {
         self.stack = nil
         self._currencyInfo = currencyInfo
         self.amount = amount

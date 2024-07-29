@@ -38,13 +38,14 @@ struct P2pPayURIView: View {
                                  currencyInfo: $currencyInfo,
                                      topTitle: String(localized: "Amount to pay:"),
                                     topAbbrev: String(localized: "Pay:", comment: "mini"),
-                                    topAmount: raw, fee: fee,
+                                    topAmount: raw,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                          fee: fee,
                                   bottomTitle: String(localized: "Amount to be spent:"),
                                  bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                                  bottomAmount: effective,
                                         large: false, pending: false, incoming: false,
                                       baseURL: nil,
-                                       noFees: nil,        // TODO: check baseURL for fees
                                    txStateLcl: nil,
                                       summary: peerPullDebitResponse.contractTerms.summary,
                                      merchant: nil)

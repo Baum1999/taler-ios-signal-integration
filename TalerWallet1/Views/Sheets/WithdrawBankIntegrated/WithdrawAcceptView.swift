@@ -60,6 +60,7 @@ struct WithdrawAcceptView: View {
                                      topTitle: String(localized: "Chosen amount to withdraw:"),
                                     topAbbrev: String(localized: "Withdraw:", comment: "Chosen amount to withdraw:"),
                                     topAmount: raw,
+                                       noFees: exchange.noFees,
                                           fee: fee,
                                   bottomTitle: String(localized: "Amount to obtain:"),
                                  bottomAbbrev: String(localized: "Obtain:", comment: "Amount to obtain:"),
@@ -68,7 +69,6 @@ struct WithdrawAcceptView: View {
                                       pending: false,
                                      incoming: true,
                                       baseURL: exchange.exchangeBaseUrl,
-                                       noFees: exchange.noFees,
                                    txStateLcl: nil,        // common.txState.major.localizedState
                                       summary: nil,
                                      merchant: nil)

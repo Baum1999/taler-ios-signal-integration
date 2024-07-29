@@ -312,6 +312,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Chosen amount to withdraw:"),
                                         baseURL: details.exchangeBaseUrl,
                                          noFees: nil,               // TODO: noFees
+                                  feeIsNegative: true,
                                           large: false,
                                         summary: nil,
                                        merchant: nil)
@@ -325,6 +326,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Amount to deposit:"),
                                         baseURL: nil,               // TODO: baseURL
                                          noFees: nil,               // TODO: noFees
+                                  feeIsNegative: false,
                                           large: true,
                                         summary: nil,
                                        merchant: nil)
@@ -339,6 +341,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Price (net):"),
                                         baseURL: nil,               // TODO: baseURL
                                          noFees: nil,               // TODO: noFees
+                                  feeIsNegative: false,
                                           large: true,
                                         summary: details.info.summary,
                                        merchant: details.info.merchant.name)
@@ -352,6 +355,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Refunded amount:"),
                                         baseURL: nil,               // TODO: baseURL
                                          noFees: nil,               // TODO: noFees
+                                  feeIsNegative: true,
                                           large: true,
                                         summary: details.info?.summary,
                                        merchant: details.info?.merchant.name)
@@ -368,7 +372,7 @@ struct TransactionSummaryV: View {
                                 currencyInfo: $currencyInfo,
                                        title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
-                                  isNegative: false,
+                                  isNegative: nil,
                                        color: labelColor,
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
@@ -376,7 +380,7 @@ struct TransactionSummaryV: View {
                                     currencyInfo: $currencyInfo,
                                            title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
-                                      isNegative: !fee.isZero,
+                                      isNegative: fee.isZero ? nil : true,
                                            color: labelColor,
                                            large: true)
                             }
@@ -440,7 +444,9 @@ struct TransactionSummaryV: View {
                                          common: common,
                                       topAbbrev: localizedType + colon,
                                        topTitle: localizedType + colon,
-                                        baseURL: details.exchangeBaseUrl, noFees: nil,         // TODO: noFees
+                                        baseURL: details.exchangeBaseUrl,
+                                         noFees: nil,         // TODO: noFees
+                                  feeIsNegative: true,
                                           large: false,
                                         summary: details.info.summary,
                                        merchant: nil)
@@ -455,6 +461,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Recoup:"),
                                         baseURL: nil,
                                          noFees: nil,
+                                  feeIsNegative: nil,
                                           large: true,             // TODO: baseURL, noFees
                                         summary: nil,
                                        merchant: nil)
@@ -468,6 +475,7 @@ struct TransactionSummaryV: View {
                                        topTitle: String(localized: "Money lost:"),
                                         baseURL: details.exchangeBaseUrl,
                                          noFees: nil,
+                                  feeIsNegative: nil,
                                           large: true,             // TODO: baseURL, noFees
                                         summary: details.lossEventType.rawValue,
                                        merchant: nil)

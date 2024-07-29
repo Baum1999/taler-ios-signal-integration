@@ -47,13 +47,14 @@ struct P2pReceiveURIView: View {
                                  currencyInfo: $currencyInfo,
                                      topTitle: String(localized: "Gross Amount to receive:"),
                                     topAbbrev: String(localized: "Receive gross:", comment: "mini"),
-                                    topAmount: raw, fee: fee,
+                                    topAmount: raw,
+                                       noFees: nil,        // TODO: check baseURL for fees
+                                          fee: fee,
                                   bottomTitle: String(localized: "Net Amount to receive:"),
                                  bottomAbbrev: String(localized: "Receive net:", comment: "mini"),
                                  bottomAmount: effective,
                                         large: false, pending: false, incoming: true,
                                       baseURL: nil,
-                                       noFees: nil,        // TODO: check baseURL for fees
                                    txStateLcl: nil,
                                       summary: peerPushCreditResponse.contractTerms.summary,
                                      merchant: nil)
