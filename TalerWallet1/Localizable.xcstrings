@@ -3505,6 +3505,9 @@
         }
       }
     },
+    "Pay %@ now" : {
+
+    },
     "Pay P2P" : {
       "comment" : "Nav Title",
       "localizations" : {
@@ -3639,6 +3642,9 @@
           }
         }
       }
+    },
+    "Payment is made in %@" : {
+
     },
     "Payment provider:" : {
       "localizations" : {

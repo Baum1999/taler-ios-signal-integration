@@ -91,12 +91,12 @@ struct PaymentView: View {
     var body: some View {
       Group {
         if let preparePayResult {
+            let raw = preparePayResult.amountRaw
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
             List {
                 // TODO: show balanceDetails.balanceAvailable
                 let baseURL = preparePayResult.contractTerms.exchanges.first?.url
-                let raw = preparePayResult.amountRaw
                 let status = preparePayResult.status
                 let currency = raw.currencyStr
                 let topTitle = String(localized: "Amount to pay:")
@@ -151,15 +151,20 @@ struct PaymentView: View {
             .listStyle(myListStyle.style).anyView
             .safeAreaInset(edge: .bottom) {
                 if let effective {
-                    NavigationLink(destination: LazyView {
-                        PaymentDone(stack: stack.push(),
-                             currencyInfo: $currencyInfo,
-                            transactionId: preparePayResult.transactionId)
-                    }) {
-                        Text(navTitle)      // Confirm Payment
+                    VStack {
+                        NavigationLink(destination: LazyView {
+                            PaymentDone(stack: stack.push(),
+                                 currencyInfo: $currencyInfo,
+                                transactionId: preparePayResult.transactionId)
+                        }) {
+                            let formatted = raw.formatted(currencyInfo, isNegative: false)
+                            Text("Pay \(formatted) now")
+                        }
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                        Text("Payment is made in \(currencyInfo.scope.currency)")
+                            .talerFont(.callout)
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
                 } else {
                     Button("Cancel", action: {
                         dismissTop(stack.push())
