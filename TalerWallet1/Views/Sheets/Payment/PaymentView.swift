@@ -88,6 +88,20 @@ struct PaymentView: View {
 
     let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
+    func checkCurrencyInfo(for result: PreparePayResult) async {
+        let exchanges = result.contractTerms.exchanges
+        for exchange in exchanges {
+            let baseUrl = exchange.url
+            if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
+                symLog.log("\(baseUrl.trimURL()) loaded")
+                await controller.checkCurrencyInfo(for: baseUrl, model: model)
+                symLog.log("Info(for: \(baseUrl.trimURL())) loaded")
+                return
+            }
+        }
+        symLog.log("Couldn't load Info(for: \(result.amountRaw.currencyStr))")
+    }
+
     var body: some View {
       Group {
         if let preparePayResult {
@@ -177,6 +191,7 @@ struct PaymentView: View {
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.scope.currency)")
 //                currencyName = currencyInfo.scope.currency
             }
         } else {
@@ -187,10 +202,13 @@ struct PaymentView: View {
                     if let result = try? await model.preparePayForTemplateM(url.absoluteString,
                                                                      amount: amountIsEditable ? amountToTransfer : nil,
                                                                     summary: summaryIsEditable ? summary : nil) {
+                        await checkCurrencyInfo(for: result)
                         preparePayResult = result
                     }
                 } else {
                     if let result = try? await model.preparePayForUriM(url.absoluteString) {
+                        amountToTransfer = result.amountRaw
+                        await checkCurrencyInfo(for: result)
                         preparePayResult = result
                     }
                 }
