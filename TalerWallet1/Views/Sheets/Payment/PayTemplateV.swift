@@ -159,14 +159,14 @@ struct PayTemplateV: View {
                             .background(NavigationLink(destination: finalDestinationI, isActive: $buttonSelected1)
                                         { EmptyView() }.frame(width: 0).opacity(0).hidden())
                     }
-                } // ScrollView
+                } // amountInput
             } else if summaryIsEditable {   // template contract summary is not fixed => let the user input a summary
                 ScrollView {
                     inputDestination
                         .background(NavigationLink(destination: finalDestinationI, isActive: $buttonSelected2)
                                     { EmptyView() }.frame(width: 0).opacity(0).hidden()
                         )
-                }
+                } // inputDestination
             } else {    // both template contract amount and summary are fixed => directly show the payment
                 // Attention: contains a List, thus mustn't be included in a ScrollView
                 PaymentView(stack: stack.push(),
@@ -177,18 +177,18 @@ struct PayTemplateV: View {
                  amountIsEditable: amountIsEditable,
                 summaryIsEditable: summaryIsEditable)
             }
-          }.navigationTitle(navTitle)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-          .task(id: controller.currencyTicker) {
-              let currency = amountToTransfer.currencyStr
-              currencyInfo = controller.info(for: currency, controller.currencyTicker)
+          } .navigationTitle(navTitle)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .task(id: controller.currencyTicker) {
+                let currency = amountToTransfer.currencyStr
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
 //                currencyName = currencyInfo.scope.currency
-          }
-          .onAppear() {
-              symLog.log("onAppear")
-              DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
-          }
+            }
+            .onAppear() {
+                symLog.log("onAppear")
+                DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
+            }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
                 .task {

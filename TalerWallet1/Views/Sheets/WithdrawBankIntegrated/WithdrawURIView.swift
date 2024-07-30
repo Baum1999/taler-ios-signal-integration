@@ -188,7 +188,7 @@ struct WithdrawURIView: View {
             let message: String? = nil
 #endif
             LoadingView(scopeInfo: nil, message: message)
-                .task {
+                .task { // this runs only once
                     symLog.log(".task")
                     if let uriInfoResponse = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
                         let amount = uriInfoResponse.amount
