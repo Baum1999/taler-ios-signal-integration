@@ -100,7 +100,7 @@ struct GradientBorder_Previews: PreviewProvider {
 //                  lineWidth: 2,
                       color: .blue,
                  background: .yellow) {
-            Text("Preview")
+            Text(verbatim: "Preview")
         }
     }
 }
