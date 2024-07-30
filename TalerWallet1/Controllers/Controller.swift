@@ -173,7 +173,7 @@ class Controller: ObservableObject {
         }
     }
 
-    func checkInfo(for baseUrl: String, model: WalletModel) async {
+    func checkCurrencyInfo(for baseUrl: String, model: WalletModel) async {
         if let exchange = await exchange(for: baseUrl, model: model) {
             let scope = exchange.scopeInfo
             for info in currencyInfos {

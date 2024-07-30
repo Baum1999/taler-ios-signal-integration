@@ -203,7 +203,7 @@ struct WithdrawURIView: View {
                         possibleExchanges = uriInfoResponse.possibleExchanges
                         await loadExchange(baseUrl)
                         symLog.log("\(baseUrl.trimURL()) loaded")
-                        await controller.checkInfo(for: baseUrl, model: model)
+                        await controller.checkCurrencyInfo(for: baseUrl, model: model)
                         symLog.log("Info(for: \(baseUrl.trimURL())) loaded")
                     }
 
