@@ -333,7 +333,7 @@ struct TransactionCommon: Decodable, Sendable {
             || type == .scanPushCredit
     }
 }
-
+// MARK: - Withdrawal
 struct WithdrawalDetails: Decodable {
     enum WithdrawalType: String, Decodable {
         case manual = "manual-transfer"
@@ -361,7 +361,7 @@ struct WithdrawalTransaction : Sendable {
     var common: TransactionCommon
     var details: WithdrawalTransactionDetails
 }
-
+// MARK: - Deposit
 struct TrackingState : Decodable {
     var wireTransferId: String
     var timestampExecuted: Timestamp
@@ -380,7 +380,7 @@ struct DepositTransaction : Sendable {
     var common: TransactionCommon
     var details: DepositTransactionDetails
 }
-
+// MARK: - Payment
 struct RefundInfo: Decodable {
     var amountEffective: Amount
     var amountRaw: Amount
@@ -401,7 +401,7 @@ struct PaymentTransaction : Sendable {
     var common: TransactionCommon
     var details: PaymentTransactionDetails
 }
-
+// MARK: - Refund
 struct RefundTransactionDetails: Decodable {
     var refundedTransactionId: String
     var refundPending: Amount?
@@ -409,11 +409,11 @@ struct RefundTransactionDetails: Decodable {
     var amountInvalid: Amount?
     var info: OrderShortInfo?       // TODO: is this still here?
 }
-struct RefundTransaction : Sendable{
+struct RefundTransaction : Sendable {
     var common: TransactionCommon
     var details: RefundTransactionDetails
 }
-
+// MARK: - Refresh
 enum RefreshReason: String, Decodable {
     case manual
     case payMerchant = "pay-merchant"
@@ -476,7 +476,7 @@ struct RefreshTransaction : Sendable {
     var common: TransactionCommon
     var details: RefreshTransactionDetails
 }
-
+// MARK: - P2P
 struct P2pShortInfo: Codable, Sendable {
     var summary: String
     var expiration: Timestamp
@@ -490,7 +490,7 @@ struct P2PTransaction : Sendable {
     var common: TransactionCommon
     var details: P2PTransactionDetails
 }
-
+// MARK: - Recoup
 struct RecoupTransactionDetails: Decodable {
     var recoupReason: String?
 }
@@ -498,7 +498,7 @@ struct RecoupTransaction : Sendable {
     var common: TransactionCommon
     var details: RecoupTransactionDetails
 }
-
+// MARK: - DenomLoss
 enum DenomLossEventType: String, Decodable {
     case denomExpired = "denom-expired"
     case denomVanished = "denom-vanished"
@@ -512,11 +512,11 @@ struct DenomLossTransaction : Sendable {
     var common: TransactionCommon
     var details: DenomLossTransactionDetails
 }
-
-struct DummyTransaction : Sendable{
+// MARK: - Dummy
+struct DummyTransaction : Sendable {
     var common: TransactionCommon
 }
-
+// MARK: - Transaction
 enum Transaction: Decodable, Hashable, Identifiable, Sendable {
     case dummy (DummyTransaction)
     case withdrawal (WithdrawalTransaction)

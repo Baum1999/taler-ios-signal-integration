@@ -11,7 +11,7 @@ import SymLog
 
 // Called either when scanning a QR code or tapping the provided link, both from the bank's website.
 // We show the user the bank-integrated withdrawal details in a sheet - but first the ToS must be accepted.
-// After the user confirmed the withdrawal, we show a button to return to the bank website to confirm there, too
+// After the user confirmed the withdrawal, we show a button to return to the bank website to authorize (2FA)
 struct WithdrawURIView: View {
     private let symLog = SymLogV()
     let stack: CallStack
@@ -57,9 +57,7 @@ struct WithdrawURIView: View {
         amountShortcut = shortcut
         shortcutSelected = true
     }
-    private func buttonAction() {
-        buttonSelected = true
-    }
+    private func buttonAction() { buttonSelected = true }
 
     private func feeLabel(_ feeString: String) -> String {
         feeString.count > 0 ? String(localized: "\(feeString) fee")

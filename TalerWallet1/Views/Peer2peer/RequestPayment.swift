@@ -33,9 +33,7 @@ struct RequestPayment: View {
         amountShortcut = shortcut
         shortcutSelected = true
     }
-    private func buttonAction() {
-        buttonSelected = true
-    }
+    private func buttonAction() { buttonSelected = true }
 
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {

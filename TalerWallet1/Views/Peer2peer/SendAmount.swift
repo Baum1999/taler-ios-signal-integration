@@ -41,9 +41,7 @@ struct SendAmount: View {
         amountShortcut = shortcut
         shortcutSelected = true
     }
-    private func buttonAction() {
-        buttonSelected = true
-    }
+    private func buttonAction() { buttonSelected = true }
 
     private func feeLabel(_ feeString: String) -> String {
         feeString.count > 0 ? String(localized: "+ \(feeString) fee")
