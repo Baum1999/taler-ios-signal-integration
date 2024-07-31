@@ -14,6 +14,19 @@ struct ComputeFeeResult {
     let feeAmount: Amount?
     let feeStr: String
     let numCoins: Int?
+
+    static func zero() -> ComputeFeeResult {
+        ComputeFeeResult(insufficient: false,
+                            feeAmount: nil,
+                               feeStr: EMPTYSTRING,
+                             numCoins: 0)
+    }
+    static func insufficient() -> ComputeFeeResult {
+        ComputeFeeResult(insufficient: true,
+                            feeAmount: nil,
+                               feeStr: EMPTYSTRING,
+                             numCoins: -1)
+    }
 }
 
 struct AmountInputV: View {
@@ -47,23 +60,32 @@ struct AmountInputV: View {
         let disabled: Bool
     }
 
-    func checkAvailable(_ amount: Amount, _ coinData: CoinData) -> Flags {
+    func checkAvailable(_ coinData: CoinData) -> Flags {
+        let isZero = amountToTransfer.isZero
         if let amountAvailable {
             do {
-                let insufficient = try amount > amountAvailable
-                let disabled = insufficient || amount.isZero || coinData.invalid || coinData.tooMany
+                let insufficient: Bool
+                if let feeAmount {
+                    if feeIsNegative {
+                        insufficient = try amountToTransfer > amountAvailable
+                    } else {
+                        insufficient = try (amountToTransfer + feeAmount) > amountAvailable
+                    }
+                } else {
+                    insufficient = try amountToTransfer > amountAvailable
+                }
+                let disabled = insufficient || isZero || coinData.invalid || coinData.tooMany
                 return Flags(insufficient: insufficient, disabled: disabled)
             } catch {
                 // TODO: error Amounts don't match
             }
         }
-        return Flags(insufficient: false, disabled: amount.isZero)
+        return Flags(insufficient: false, disabled: isZero)
     }
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
-//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let insufficientLabel = String(localized: "You don't have enough \(currency).")
+//        let insufficientLabel = String(localized: "You don't have enough \(currency).")
         let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
         VStack(alignment: .trailing) {
             if summary.count > 0 {
@@ -92,7 +114,7 @@ struct AmountInputV: View {
                                coinData: coinData,
                           shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                           feeIsNegative: feeIsNegative)
-            let flags = checkAvailable(amountToTransfer, coinData)
+            let flags = checkAvailable(coinData)
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
