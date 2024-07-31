@@ -48,13 +48,10 @@ struct SendAmount: View {
                             : EMPTYSTRING
     }
 
-    private func fee(ppCheck: CheckPeerPushDebitResponse?) -> Amount? {
-        do {
-            if let ppCheck {
-                // Outgoing: fee = effective - raw
-                let fee = try ppCheck.amountEffective - ppCheck.amountRaw
-                return fee
-            }
+    private func fee(raw: Amount, effective: Amount) -> Amount? {
+        do {     // Outgoing: fee = effective - raw
+            let fee = try effective - raw
+            return fee
         } catch {}
         return nil
     }
@@ -70,38 +67,34 @@ struct SendAmount: View {
     }
 
     private func computeFeeSend(_ amount: Amount) async -> ComputeFeeResult? {
-        if exchange == nil {
-            if let url = currencyInfo.scope.url {
-                exchange = try? await model.getExchangeByUrl(url: url)
-            }
+        if amount.isZero {
+            return ComputeFeeResult.zero()
+        }
+        let insufficient = (try? amount > amountAvailable) ?? true
+        if insufficient {
+            return ComputeFeeResult.insufficient()
         }
         do {
-            insufficient = try amount > amountAvailable
-        } catch {
-            print("Yikes❗️ insufficient failed❗️")
-            insufficient = true
-        }
+            let ppCheck = try await model.checkPeerPushDebitM(amount, cancellationId: "cancel", viewHandles: true)
+            let raw = ppCheck.amountRaw
+            let effective = ppCheck.amountEffective
+            if let fee = fee(raw: raw, effective: effective) {
+                feeStr = fee.formatted(currencyInfo, isNegative: false)
+                symLog.log("Fee = \(feeStr)")
+                let insufficient = (try? effective > amountAvailable) ?? true
 
-        if insufficient {
-//            announce("\(amountVoiceOver), \(insufficientLabel2)")
-        } else if amount.isZero {
-            feeStr = EMPTYSTRING
-        } else {
-            if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
-                // TODO: set from exchange
-//                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-                if let feeAmount = fee(ppCheck: ppCheck) {
-                    feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-                    let feeLabel = feeLabel(feeStr)
-//                    announce("\(amountVoiceOver), \(feeLabel)")
-                } else {
-                    feeStr = EMPTYSTRING
-//                    announce(amountVoiceOver)
-                }
                 peerPushCheck = ppCheck
+                let feeLabel = feeLabel(feeStr)
+//                announce("\(amountVoiceOver), \(feeLabel)")
+                return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
+                                        feeStr: feeLabel, numCoins: nil)
             } else {
                 peerPushCheck = nil
             }
+        } catch {
+            // handle cancel, errors
+            symLog.log("❗️ \(error)")
+
         }
         return nil
     }
