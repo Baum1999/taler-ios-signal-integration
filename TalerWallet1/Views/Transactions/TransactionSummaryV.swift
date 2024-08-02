@@ -288,6 +288,19 @@ struct TransactionSummaryV: View {
             return nil
         }
 
+        func abortedHint(_ delay: RelativeTime?) -> String? {
+            if let delay {
+                if let microseconds = try? delay.microseconds() {
+                    let days = microseconds / (24 * 3600 * 1000 * 1000)
+                    if days > 0 {
+                        return String(days)
+                    }
+                }
+                return "a few"
+            }
+            return nil
+        }
+
         var body: some View {
             let common = transaction.common
             let pending = transaction.isPending
@@ -302,6 +315,12 @@ struct TransactionSummaryV: View {
                             // has its own accessibilityLabel
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
+                        if common.isAborted && details.withdrawalDetails.type == .manual {
+                            if let dayStr = abortedHint(details.withdrawalDetails.reserveClosingDelay) {
+                                Text("The withdrawal was aborted.\nIf you have already sent money to the exchange, it will wire it back in \(dayStr) days.")
+                                    .talerFont(.callout)
+                            }
+                        }
                         if pending {
                             PendingWithdrawalDetails(transaction: $transaction, details: details)
                         } // ManualDetails or Confirm now (with bank)
@@ -333,7 +352,7 @@ struct TransactionSummaryV: View {
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-                        TransactionDetailV(paymentTx: paymentTransaction)
+                        TransactionPayDetailV(paymentTx: paymentTransaction)
                         ThreeAmountsSheet(stack: stack.push(),
                                    currencyInfo: $currencyInfo,
                                          common: common,
