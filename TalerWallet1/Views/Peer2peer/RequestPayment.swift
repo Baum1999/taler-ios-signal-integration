@@ -146,8 +146,7 @@ struct RequestPayment: View {
 //            } else {
 //                let baseURL = exchange?.exchangeBaseUrl
 // //               peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
-//                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer,
-//                                                                       cancellationId: "cancel")
+//                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer)
 //            }
 //        }
     }
