@@ -75,7 +75,7 @@ struct SendAmount: View {
             return ComputeFeeResult.insufficient()
         }
         do {
-            let ppCheck = try await model.checkPeerPushDebitM(amount, cancellationId: "cancel", viewHandles: true)
+            let ppCheck = try await model.checkPeerPushDebitM(amount, viewHandles: true)
             let raw = ppCheck.amountRaw
             let effective = ppCheck.amountEffective
             if let fee = fee(raw: raw, effective: effective) {

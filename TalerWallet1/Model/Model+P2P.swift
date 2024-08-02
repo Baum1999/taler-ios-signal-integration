@@ -52,10 +52,9 @@ struct CheckPeerPushDebitResponse: Codable {
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
     func operation() -> String { "checkPeerPushDebit" }
-    func args() -> Args { Args(amount: amount, clientCancellationId: cancellationId) }
+    func args() -> Args { Args(amount: amount, clientCancellationId: "cancel") }
 
     var amount: Amount
-    var cancellationId: String?
     struct Args: Encodable {
         var amount: Amount
         var clientCancellationId: String?
@@ -63,9 +62,9 @@ fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     @MainActor          // M for MainActor
-    func checkPeerPushDebitM(_ amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
+    func checkPeerPushDebitM(_ amount: Amount, viewHandles: Bool = false)
       async throws -> CheckPeerPushDebitResponse {
-        let request = CheckPeerPushDebit(amount: amount, cancellationId: cancellationId)
+        let request = CheckPeerPushDebit(amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
@@ -116,12 +115,11 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
     func operation() -> String { "checkPeerPullCredit" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, scopeInfo: scopeInfo,
-                                        amount: amount, clientCancellationId: cancellationId) }
+                                        amount: amount, clientCancellationId: "cancel") }
 
     var exchangeBaseUrl: String?
     var scopeInfo: ScopeInfo?
     var amount: Amount
-    var cancellationId: String?
     struct Args: Encodable {
         var exchangeBaseUrl: String?
         var scopeInfo: ScopeInfo?
@@ -132,11 +130,10 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
 extension WalletModel {
     @MainActor           // M for MainActor
     func checkPeerPullCreditM(_ exchangeBaseUrl: String?, amount: Amount,
-                              cancellationId: String? = nil, viewHandles: Bool = false)
+                                    viewHandles: Bool = false)
       async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(exchangeBaseUrl: exchangeBaseUrl,
-                                                   amount: amount,
-                                           cancellationId: cancellationId)
+                                                   amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

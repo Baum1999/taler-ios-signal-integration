@@ -42,11 +42,11 @@ struct CheckDepositResult: Codable {
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
     typealias Response = CheckDepositResult
     func operation() -> String { "checkDeposit" }
-    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount, clientCancellationId: cancellationId) }
+    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount,
+                          clientCancellationId: "cancel") }
 
     var depositPaytoUri: String
     var amount: Amount
-    var cancellationId: String?
     struct Args: Encodable {
         var depositPaytoUri: String
         var amount: Amount
@@ -84,9 +84,9 @@ extension WalletModel {
 
     /// check fees for deposit. No Networking
     @MainActor    // M for MainActor
-    func checkDepositM(_ depositPaytoUri: String, amount: Amount, cancellationId: String? = nil, viewHandles: Bool = false)
+    func checkDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> CheckDepositResult {
-          let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount, cancellationId: cancellationId)
+          let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
     }

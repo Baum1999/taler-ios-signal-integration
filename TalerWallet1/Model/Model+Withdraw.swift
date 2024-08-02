@@ -105,11 +105,11 @@ struct WithdrawalAmountDetails: Decodable {
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
     typealias Response = WithdrawalAmountDetails
     func operation() -> String { "getWithdrawalDetailsForAmount" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount, clientCancellationId: cancellationId) }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount,
+                          clientCancellationId: "cancel") }
 
     var exchangeBaseUrl: String
     var amount: Amount
-    var cancellationId: String?
     struct Args: Encodable {
         var exchangeBaseUrl: String
         var amount: Amount
@@ -248,11 +248,10 @@ extension WalletModel {
     }
     @MainActor                     // M for MainActor
     func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount,
-                                           cancellationId: String? = nil, viewHandles: Bool = false)
+                                              viewHandles: Bool = false)
       async throws -> WithdrawalAmountDetails {
         let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
-                                                             amount: amount,
-                                                     cancellationId: cancellationId)
+                                                             amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

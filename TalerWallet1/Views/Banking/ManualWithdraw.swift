@@ -132,7 +132,6 @@ struct ManualWithdraw: View {
                     do {
                         let details = try await model.getWithdrawalDetailsForAmountM(exchangeBaseUrl,
                                                                               amount: amountToTransfer,
-                                                                      cancellationId: "cancel",
                                                                          viewHandles: true)
                         withdrawalAmountDetails = details
 //                      agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
