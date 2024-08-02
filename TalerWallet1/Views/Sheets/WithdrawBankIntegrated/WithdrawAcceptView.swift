@@ -62,6 +62,7 @@ struct WithdrawAcceptView: View {
                                     topAmount: raw,
                                        noFees: exchange.noFees,
                                           fee: fee,
+                                feeIsNegative: true,
                                   bottomTitle: String(localized: "Amount to obtain:"),
                                  bottomAbbrev: String(localized: "Obtain:", comment: "Amount to obtain:"),
                                  bottomAmount: effective,

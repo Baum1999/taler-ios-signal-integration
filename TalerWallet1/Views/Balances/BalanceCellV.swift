@@ -27,7 +27,7 @@ struct BalanceCellV: View {
         let amountV = AmountV(stack: stack?.push("AmountV"),
                        currencyInfo: $currencyInfo,
                              amount: amount,
-                         isNegative: false,
+                         isNegative: nil,           // don't show the + sign
                               large: true)
             .foregroundColor(.primary)
         let hLayout = amountV
