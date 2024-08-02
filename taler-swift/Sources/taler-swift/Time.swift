@@ -59,8 +59,17 @@ public enum RelativeTime: Codable, Hashable, Sendable {
     }
 }
 
-
-
+extension RelativeTime {
+    public func microseconds() throws -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us
+            case .forever:
+                throw TimestampError.invalidUInt64Value
+        }
+    }
+}
+// MARK: -
 /// A point in time, represented by milliseconds from January 1, 1970..
 public enum Timestamp: Codable, Hashable, Sendable {
     case milliseconds(UInt64)
@@ -129,7 +138,6 @@ extension Timestamp {
         return Timestamp.milliseconds(now + (UInt64(minutes) * seconds * 1000))
     }
 
-
     /// convenience initializer from UInt64 (milliseconds from January 1, 1970)
     public init(from: UInt64) {
         self = Timestamp.milliseconds(from)
@@ -145,7 +153,7 @@ extension Timestamp {
         }
     }
 }
-
+// MARK: -
 /// extend iOS Date to work with milliseconds since 1970
 extension Date {
     public var millisecondsSince1970: UInt64 {
@@ -156,7 +164,7 @@ extension Date {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }
-
+// MARK: -
 /// A duration of time, measured in milliseconds.
 public enum Duration: Equatable {
     case milliseconds(UInt64)
