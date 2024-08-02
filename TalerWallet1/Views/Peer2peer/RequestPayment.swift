@@ -24,6 +24,7 @@ struct RequestPayment: View {
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
 //    @State private var feeAmount: Amount? = nil
+    @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
@@ -34,6 +35,19 @@ struct RequestPayment: View {
         shortcutSelected = true
     }
     private func buttonAction() { buttonSelected = true }
+
+    private func feeLabel(_ feeString: String) -> String {
+        feeString.count > 0 ? String(localized: "- \(feeString) fee")
+        : EMPTYSTRING
+    }
+
+    private func fee(raw: Amount, effective: Amount) -> Amount? {
+        do {     // Incoming: fee = raw - effective
+            let fee = try raw - effective
+            return fee
+        } catch {}
+        return nil
+    }
 
     private func feeIsNotZero() -> Bool? {
         if let hasNoFees = exchange?.noFees {
@@ -51,13 +65,28 @@ struct RequestPayment: View {
             }
         }
         if amount.isZero {
-//            fee = EMPTYSTRING
-        } else {
+            return ComputeFeeResult.zero()
+        }
+        do {
             let baseURL = exchange?.exchangeBaseUrl
-            peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amount,
-                                                                  cancellationId: "cancel")
+            let ppCheck = try await model.checkPeerPullCreditM(baseURL, amount: amount)
+            let raw = ppCheck.amountRaw
+            let effective = ppCheck.amountEffective
+            if let fee = fee(raw: raw, effective: effective) {
+                feeStr = fee.formatted(currencyInfo, isNegative: true)
+                symLog.log("Fee = \(feeStr)")
 
-//            return ComputeFeeResult(insufficient: false, feeStr: feeLabel(feeStr), numCoins: details.numCoins)
+                peerPullCheck = ppCheck
+                return ComputeFeeResult(insufficient: false,
+                                           feeAmount: fee,
+                                              feeStr: feeLabel(feeStr),
+                                            numCoins: ppCheck.numCoins)
+            } else {
+                peerPullCheck = nil
+            }
+        } catch {
+            // handle cancel, errors
+            symLog.log("❗️ \(error)")
         }
         return nil
     }
@@ -99,7 +128,6 @@ struct RequestPayment: View {
                       summary: $summary,
                    expireDays: $expireDays)
         }
-        let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
 
         ScrollView {
             let amountLabel = minimalistic ? String(localized: "Amount:")
