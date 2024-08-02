@@ -18,7 +18,7 @@ struct TransactionDetailV: View {
         let info = details.info
         Section {
             if let posConfirmation = details.posConfirmation {
-                Text("Confirmation:")
+                Text("Confirmation:", comment: "purchase may have a pos validation / confirmation")
                     .talerFont(.title3)
                     .listRowSeparator(.hidden)
                 Text(posConfirmation)

@@ -12,6 +12,7 @@ import AVFoundation
 
 struct QRCodeDetailView: View {
     let talerURI: String
+    let talerCopyShare: String
     let incoming: Bool
     let amount: Amount
 
@@ -36,7 +37,7 @@ struct QRCodeDetailView: View {
                     .talerFont(.title3)
 //                    .padding(.vertical)
                     .listRowSeparator(.hidden)
-                CopyShare(textToCopy: talerURI)
+                CopyShare(textToCopy: talerCopyShare)
                     .disabled(false)
 //                    .padding(.bottom)
                     .listRowSeparator(.hidden)
@@ -87,12 +88,12 @@ struct QRCodeDetailView: View {
 // MARK: -
 #if DEBUG
 fileprivate struct ContentView: View {
-    @State var talerURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
+    @State var previewURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
 
     var body: some View {
         let amount = Amount(currency: LONGCURRENCY, cent: 123)
         List {
-            QRCodeDetailView(talerURI: talerURI, incoming: false, amount: amount)
+            QRCodeDetailView(talerURI: previewURI, talerCopyShare: previewURI, incoming: false, amount: amount)
         }
     }
 }

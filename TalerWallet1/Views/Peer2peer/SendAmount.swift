@@ -86,15 +86,16 @@ struct SendAmount: View {
                 peerPushCheck = ppCheck
                 let feeLabel = feeLabel(feeStr)
 //                announce("\(amountVoiceOver), \(feeLabel)")
-                return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
-                                        feeStr: feeLabel, numCoins: nil)
+                return ComputeFeeResult(insufficient: insufficient,
+                                           feeAmount: fee,
+                                              feeStr: feeLabel,
+                                            numCoins: nil)
             } else {
                 peerPushCheck = nil
             }
         } catch {
             // handle cancel, errors
             symLog.log("❗️ \(error)")
-
         }
         return nil
     }

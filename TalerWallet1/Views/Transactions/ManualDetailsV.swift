@@ -209,6 +209,9 @@ struct ManualDetailsV: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .accessibilityLabel("QR Code")
                                 .listRowSeparator(.hidden)
+                            CopyShare(textToCopy: spec.qrContent)
+                                .disabled(false)
+//                    .padding(.bottom)
 
 //                            Text(specDetails)
 //                                .listRowSeparator(.automatic)
