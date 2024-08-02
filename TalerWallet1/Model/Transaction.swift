@@ -343,9 +343,11 @@ struct WithdrawalDetails: Decodable {
     /// The public key of the reserve.
     var reservePub: String
     var reserveIsReady: Bool
+    var exchangeCreditAccountDetails: [WithdrawalExchangeAccountDetails]?
 
   /// Details for manual withdrawals:
-    var exchangeCreditAccountDetails: [WithdrawalExchangeAccountDetails]?
+    var reserveClosingDelay: RelativeTime?
+    var exchangePaytoUris: [String]?
 
   /// Details for bank-integrated withdrawals:
     /// Whether the bank has confirmed the withdrawal.
