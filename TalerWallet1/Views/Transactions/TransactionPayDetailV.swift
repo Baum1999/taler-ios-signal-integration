@@ -9,7 +9,7 @@
  */
 import SwiftUI
 
-struct TransactionDetailV: View {
+struct TransactionPayDetailV: View {
     let paymentTx: PaymentTransaction
 
     var body: some View {
