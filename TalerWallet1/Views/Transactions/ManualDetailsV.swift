@@ -148,6 +148,7 @@ struct TransferRestrictionsV: View {
 }
 // MARK: -
 struct ManualDetailsV: View {
+    let stack: CallStack
     var common : TransactionCommon
     var details : WithdrawalDetails
 
@@ -376,7 +377,7 @@ struct ManualDetails_Previews: PreviewProvider {
                               reserveIsReady: false,
                                    confirmed: false)
         List {
-            ManualDetailsV(common: common, details: details)
+            ManualDetailsV(stack: CallStack("Preview"), common: common, details: details)
         }
     }
 }

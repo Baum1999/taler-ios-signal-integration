@@ -236,6 +236,7 @@ struct TransactionSummaryV: View {
 
 
     struct PendingWithdrawalDetails: View {
+        let stack: CallStack
         @Binding var transaction: Transaction
         let details: WithdrawalTransactionDetails
 
@@ -251,7 +252,7 @@ struct TransactionSummaryV: View {
             let withdrawalDetails = details.withdrawalDetails
             switch withdrawalDetails.type {
                 case .manual:               // "Make a wire transfer of \(amount) to"
-                    ManualDetailsV(common: common, details: withdrawalDetails)
+                    ManualDetailsV(stack: stack.push(), common: common, details: withdrawalDetails)
 
                 case .bankIntegrated:       // "Authorize now" (with bank)
                     if !transaction.isPendingKYC {              // cannot authorize if KYC is needed first
@@ -322,7 +323,9 @@ struct TransactionSummaryV: View {
                             }
                         }
                         if pending {
-                            PendingWithdrawalDetails(transaction: $transaction, details: details)
+                            PendingWithdrawalDetails(stack: stack.push(),
+                                               transaction: $transaction,
+                                                   details: details)
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(stack: stack.push(),
                                    currencyInfo: $currencyInfo,
