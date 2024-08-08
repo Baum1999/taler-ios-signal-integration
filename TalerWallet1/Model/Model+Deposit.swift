@@ -15,7 +15,7 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 struct ValidateIbanResult: Codable {
     let valid: Bool
 }
-/// A request to get an validate an IBAN.
+/// A request to validate an IBAN.
 fileprivate struct ValidateIban: WalletBackendFormattedRequest {
     typealias Response = ValidateIbanResult
     func operation() -> String { "validateIban" }
@@ -26,7 +26,45 @@ fileprivate struct ValidateIban: WalletBackendFormattedRequest {
         var iban: String
     }
 }
+extension WalletModel {
+    /// validate IBAN. No Networking
+    @MainActor    // M for MainActor
+    func validateIbanM(_ iban: String, viewHandles: Bool = false)
+    async throws -> Bool {
+        let request = ValidateIban(iban: iban)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.valid
+    }
+}
+// MARK: - Deposit
 
+struct DepositWireTypesForCurrencyResponse: Codable {
+    /// can be used to pre-filter payment target types to offer the user as an input option
+    let wireTypes: [String]
+}
+/// A request to get wire types that can be used for a deposit operation.
+fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
+    typealias Response = DepositWireTypesForCurrencyResponse
+    func operation() -> String { "getDepositWireTypesForCurrency" }
+    func args() -> Args { Args(currency: currency, scopeInfo: scopeInfo) }
+
+    var currency: String
+    var scopeInfo: ScopeInfo?
+    struct Args: Encodable {
+        var currency: String
+        var scopeInfo: ScopeInfo?
+    }
+}
+extension WalletModel {
+    /// Get wire types that can be used for a deposit operation
+    @MainActor                   // M for MainActor
+    func depositWireTypesForCurrencyM(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
+      async throws -> [String] {
+        let request = DepositWireTypesForCurrency(currency: currency, scopeInfo: scopeInfo)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.wireTypes
+    }
+}
 // MARK: - Deposit
 struct DepositFees: Codable {
     let coin: Amount
@@ -73,15 +111,6 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
 }
 // MARK: -
 extension WalletModel {
-    /// validate IBAN. No Networking
-    @MainActor    // M for MainActor
-    func validateIbanM(_ iban: String, viewHandles: Bool = false)
-    async throws -> Bool {
-        let request = ValidateIban(iban: iban)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-        return response.valid
-    }
-
     /// check fees for deposit. No Networking
     @MainActor    // M for MainActor
     func checkDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
