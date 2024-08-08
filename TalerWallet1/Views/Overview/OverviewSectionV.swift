@@ -41,6 +41,7 @@ struct OverviewSectionV {
     @State private var pendingTransactions: [Transaction] = []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 
     func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
@@ -100,12 +101,16 @@ extension OverviewSectionV: View {
                     .padding(.leading, ICONLEADING)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
-                           shouldReloadBalances: $shouldReloadBalances)
+            BarGraphHeader(stack: stack.push(),
+                       scopeInfo: scopeInfo,
+                    currencyName: $currencyName,
+                  currencySymbol: $currencySymbol,
+            shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .task(id: controller.currencyTicker) {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
+            currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {

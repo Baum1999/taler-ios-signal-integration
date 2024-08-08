@@ -98,7 +98,7 @@ struct RequestPayment: View {
 #endif
         let currency = amountToTransfer.currencyStr
 //        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currency
+        let currencySymbol = currencyInfo.altUnitSymbol ?? currency
         let navTitle = String(localized: "NavTitle_Request_Currency",
                            defaultValue: "Request \(currencySymbol)",
                                 comment: "NavTitle: Request 'currencySymbol'")

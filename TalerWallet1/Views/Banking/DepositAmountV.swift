@@ -90,7 +90,7 @@ struct DepositAmountV: View {
 
         } else {
             let currency = amountToTransfer.currencyStr
-            let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyInfo.specs.name
+            let currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
             let navTitle = String(localized: "NavTitle_Deposit_Currency",
                                   defaultValue: "Deposit \(currencySymbol)",
                                   comment: "NavTitle: Deposit 'currencySymbol'")

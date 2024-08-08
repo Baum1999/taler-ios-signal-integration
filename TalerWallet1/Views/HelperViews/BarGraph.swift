@@ -11,7 +11,8 @@ struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let scopeInfo: ScopeInfo?
-    let currencyName: String
+    @Binding var currencyName: String
+    @Binding var currencySymbol: String
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -25,7 +26,7 @@ struct BarGraphHeader: View {
 
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
-            if !minimalistic {
+            if !minimalistic || currencyName != currencySymbol {
                 Text(currencyName)
                     .talerFont(.title2)
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
@@ -84,13 +85,13 @@ struct BarGraph: View {
                         let width = barHeight / 3
                         Rectangle()
                             .opacity(0.001)
-                            .frame (width: width, height: incoming ? valueTransparent : barHeight)
+                            .frame(width: width, height: incoming ? valueTransparent : barHeight)
                         Rectangle()
                             .foregroundColor(incoming ? .green : .red)
-                            .frame (width: width, height: valueColored)
+                            .frame(width: width, height: valueColored)
                         Rectangle()
                             .opacity(0.001)
-                            .frame (width: width, height: incoming ? barHeight : valueTransparent)
+                            .frame(width: width, height: incoming ? barHeight : valueTransparent)
                     }
                 }
             }

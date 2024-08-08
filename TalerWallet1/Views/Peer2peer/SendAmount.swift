@@ -105,7 +105,7 @@ struct SendAmount: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currencySymbol = currencyInfo.specs.altUnitNames?[0] ?? currencyInfo.specs.name
+        let currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
         let navTitle = String(localized: "NavTitle_Send_Currency",
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")

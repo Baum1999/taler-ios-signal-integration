@@ -47,6 +47,7 @@ struct BalancesSectionView {
     @State private var pendingTransactions: [Transaction] = []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 //    @State private var buttonSelected: Int? = nil
 
     private static func className() -> String {"\(self)"}
@@ -168,13 +169,17 @@ extension BalancesSectionView: View {
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
 
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
-                           shouldReloadBalances: $shouldReloadBalances)
+            BarGraphHeader(stack: stack.push(),
+                       scopeInfo: scopeInfo,
+                    currencyName: $currencyName,
+                  currencySymbol: $currencySymbol,
+            shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .listRowSeparator(.hidden)
         .task(id: controller.currencyTicker) {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
+            currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
         .task(id: shouldReloadBalances + 1_000_000) {
 //            if shownSectionID != sectionID {

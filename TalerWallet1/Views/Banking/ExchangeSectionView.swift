@@ -22,6 +22,7 @@ struct ExchangeSectionView: View {
     @State private var shouldReloadBalances: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 
     func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
         if let exchange {
@@ -76,12 +77,16 @@ struct ExchangeSectionView: View {
                 .padding(.top)
             }
         } header: {
-            BarGraphHeader(stack: stack.push(), scopeInfo: scopeInfo, currencyName: currencyName,
-                           shouldReloadBalances: $shouldReloadBalances)
+            BarGraphHeader(stack: stack.push(),
+                       scopeInfo: scopeInfo,
+                    currencyName: $currencyName,
+                  currencySymbol: $currencySymbol,
+            shouldReloadBalances: $shouldReloadBalances)
         }
         .task(id: controller.currencyTicker) {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
+            currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
     }
 }

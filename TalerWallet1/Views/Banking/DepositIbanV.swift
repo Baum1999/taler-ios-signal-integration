@@ -40,10 +40,13 @@ struct DepositIbanV: View {
         return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
-    private func subjectTitle(_ amount: Amount) -> String {
-//        let amountStr = amount.formatted(currencyInfo, isNegative: true)
+    private var subjectTitle: String {
+//        let currencyName = currencyInfo.scope.currency
+//        let currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         return String(localized: "NavTitle_Deposit_AmountStr",
-                   defaultValue: "Deposit", comment: "NavTitle: Deposit")
+//                   defaultValue: "Deposit \(currencySymbol)",
+                   defaultValue: "Deposit IBAN",
+                        comment: "NavTitle: Deposit")
 //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
     }
 
@@ -120,7 +123,7 @@ struct DepositIbanV: View {
                 .accessibilityHint(disabled ? String(localized: "enabled when account holder and IBAN are set") : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .navigationTitle(subjectTitle(amountToTransfer))
+        .navigationTitle(subjectTitle)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT_ACCEPT, stack: stack.push())
