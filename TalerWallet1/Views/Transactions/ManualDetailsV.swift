@@ -10,7 +10,7 @@ import OrderedCollections
 import taler_swift
 
 struct SegmentControl: View {
-    let value: Int
+    @Binding var value: Int
     let accountDetails: [WithdrawalExchangeAccountDetails]
     let action: (Int) -> Void
 
@@ -64,7 +64,9 @@ struct SegmentControl: View {
             }
         }
         .onAppear() {
-            withAnimation { selectedAccount = value }
+            if selectedAccount != value {
+                withAnimation { selectedAccount = value }
+            }
         }
         .onChange(of: selectedAccount) { selected in
             action(selected)
@@ -77,7 +79,7 @@ struct SegmentControl: View {
 }
 struct AccountPicker: View {
     let title: String
-    let value: Int
+    @Binding var value: Int
     let accountDetails: [WithdrawalExchangeAccountDetails]
     let action: (Int) -> Void
 
@@ -107,42 +109,6 @@ struct AccountPicker: View {
         }
         .onChange(of: selectedAccount) { selected in
             action(selected)
-        }
-    }
-}
-// MARK: -
-struct TransferRestrictionsV: View {
-    let amountStr: String
-    let obtainStr: String
-    let restrictions: [AccountRestriction]?
-
-    @AppStorage("minimalistic") var minimalistic: Bool = false
-
-    @State private var selectedLanguage = Locale.preferredLanguageCode
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            let amountNBS = amountStr.nbs
-            let obtainNBS = obtainStr.nbs
-            Text(minimalistic ? "Transfer \(amountNBS) to the Payment Service."
-                              : "You need to transfer \(amountNBS) from your regular bank account to the Payment Service Provider to receive \(obtainNBS) as electronic cash in this wallet.")
-            .multilineTextAlignment(.leading)
-            if let restrictions {
-                ForEach(restrictions) { restriction in
-                    if let hintsI18 = restriction.human_hint_i18n {
-//                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18.keys, values: hintsI18.values)
-//                        var sorted: OrderedDictionary<String:String>
-                        let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18.sorted { $0.key < $1.key })
-                        Picker("Restriction:", selection: $selectedLanguage) {
-                            ForEach(sortedDict.keys, id: \.self) {
-                                Text(sortedDict[$0] ?? "missing hint")
-                            }
-                        }
-                    } else if let hint = restriction.human_hint {
-                        Text(hint)
-                    }
-                }
-            }
         }
     }
 }
@@ -177,8 +143,8 @@ struct ManualDetailsV: View {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
-                    let amountStr = amount.formatted(specs: specs, isNegative: false)
-                    let obtainStr = common.amountRaw.formatted(isNegative: false)
+                    let amountStr = common.amountRaw.formatted(specs: specs, isNegative: false)
+                    let obtainStr = common.amountEffective.formatted(specs: specs, isNegative: false)
 //            let _ = print(amountStr, " | ", obtainStr)
                     if !minimalistic {
                         Text("The Payment Service Provider is waiting for your wire-transfer.")
@@ -188,11 +154,11 @@ struct ManualDetailsV: View {
                     }
                     if validDetails.count > 1 {
                         if validDetails.count > 3 { // too many for SegmentControl
-                            AccountPicker(title: String(localized: "Bank"), value: accountID,
-                                          accountDetails: validDetails, action: redraw)
+                            AccountPicker(title: String(localized: "Bank"), value: $accountID,
+                                 accountDetails: validDetails, action: redraw)
                             .listRowSeparator(.hidden)
                         } else {
-                            SegmentControl(value: accountID, accountDetails: validDetails, action: redraw)
+                            SegmentControl(value: $accountID, accountDetails: validDetails, action: redraw)
                                 .listRowSeparator(.hidden)
                         }
                     } else if let amount = account.transferAmount {
@@ -221,6 +187,7 @@ struct ManualDetailsV: View {
                             NavigationLink(destination: wireDetails) {
                                 Text(minimalistic ? "Instructions"
                                                   : "Wire transfer instructions")
+                                .talerFont(.title3)
                             }
 
                             if qrCodeSpecs.count > 0 {
@@ -228,6 +195,7 @@ struct ManualDetailsV: View {
                                 NavigationLink(destination: qrCodesForPayto) {
                                     Text(minimalistic ? "QR"
                                                       : "Wire transfer QR codes")
+                                    .talerFont(.title3)
                                 }
                                 .listRowSeparator(.visible)
                             }

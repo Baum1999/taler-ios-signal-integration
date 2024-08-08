@@ -9,6 +9,42 @@ import SwiftUI
 import OrderedCollections
 import taler_swift
 
+struct TransferRestrictionsV: View {
+    let amountStr: String
+    let obtainStr: String
+    let restrictions: [AccountRestriction]?
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    @State private var selectedLanguage = Locale.preferredLanguageCode
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            let amountNBS = amountStr.nbs
+            let obtainNBS = obtainStr.nbs
+            Text(minimalistic ? "Transfer \(amountNBS) to the Payment Service."
+                 : "You need to transfer \(amountNBS) from your regular bank account to the Payment Service Provider to receive \(obtainNBS) as electronic cash in this wallet.")
+            .multilineTextAlignment(.leading)
+            if let restrictions {
+                ForEach(restrictions) { restriction in
+                    if let hintsI18 = restriction.human_hint_i18n {
+                        //                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18.keys, values: hintsI18.values)
+                        //                        var sorted: OrderedDictionary<String:String>
+                        let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18.sorted { $0.key < $1.key })
+                        Picker("Restriction:", selection: $selectedLanguage) {
+                            ForEach(sortedDict.keys, id: \.self) {
+                                Text(sortedDict[$0] ?? "missing hint")
+                            }
+                        }
+                    } else if let hint = restriction.human_hint {
+                        Text(hint)
+                    }
+                }
+            }
+        }
+    }
+}
+// MARK: -
 struct ManualDetailsWireV: View {
     let stack: CallStack
     let details : WithdrawalDetails
