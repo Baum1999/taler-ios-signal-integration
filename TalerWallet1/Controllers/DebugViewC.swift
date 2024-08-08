@@ -44,7 +44,8 @@ public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 23 Transa
 // receive coins from bank ==> shows payee, IBAN + Purpose/Subject for manual wire transfer
 public let VIEW_WITHDRAWAL = VIEW_EMPTY_HISTORY + 10                // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
-public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32
+public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32 ManualWithdrawDone
+public let VIEW_WITHDRAW_INSTRUCTIONS = VIEW_WITHDRAW_ACCEPT + 1    // 33 ManualDetailsWireV
 
 // MARK: Manual Deposit (from Banking / ExchangeList)
 // send coins back to customer ==> instruct exchange to make the wire transfer to the customer's bank account

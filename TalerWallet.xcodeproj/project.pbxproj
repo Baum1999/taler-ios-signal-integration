@@ -178,6 +178,8 @@
 		4E8C17222A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */; };
 		4E8C17232A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */; };
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
+		4E8EADA52C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */; };
+		4E8EADA62C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */; };
 		4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320422A14F6EA00A87B0E /* WalletColors.swift */; };
 		4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
 		4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583B2B79656E00404A68 /* DepositAmountV.swift */; };
@@ -401,6 +403,7 @@
 		4E8C171E2A6509BB005B2392 /* Atkinson-Hyperlegible-Bold-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-Bold-102.otf"; sourceTree = "<group>"; };
 		4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-BoldItalic-102.otf"; sourceTree = "<group>"; };
 		4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualIconWidthDomain.swift; sourceTree = "<group>"; };
+		4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetailsWireV.swift; sourceTree = "<group>"; };
 		4E9320422A14F6EA00A87B0E /* WalletColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletColors.swift; sourceTree = "<group>"; };
 		4E9320442A1645B600A87B0E /* RequestPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPayment.swift; sourceTree = "<group>"; };
 		4E96583B2B79656E00404A68 /* DepositAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAmountV.swift; sourceTree = "<group>"; };
@@ -791,6 +794,7 @@
 				4E6EF56D2B669C7000AF252A /* TransactionPayDetailV.swift */,
 				4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */,
 				4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */,
+				4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */,
 				4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */,
 			);
 			path = Transactions;
@@ -1244,6 +1248,7 @@
 				4E3EAE502A990778009F1BE8 /* Model+Transactions.swift in Sources */,
 				4E6EF56E2B669C7000AF252A /* TransactionPayDetailV.swift in Sources */,
 				4E3EAE512A990778009F1BE8 /* Controller+playSound.swift in Sources */,
+				4E8EADA52C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */,
 				4EE77E882C101F5B007C9064 /* OverviewSectionV.swift in Sources */,
 				4E3EAE522A990778009F1BE8 /* WalletEmptyView.swift in Sources */,
 				4E3EAE532A990778009F1BE8 /* CurrencySpecification.swift in Sources */,
@@ -1373,6 +1378,7 @@
 				4EB095592989CBFE0043A8A1 /* Model+Transactions.swift in Sources */,
 				4E6EF56F2B669C7000AF252A /* TransactionPayDetailV.swift in Sources */,
 				4E578E922A481D8600F21F1C /* Controller+playSound.swift in Sources */,
+				4E8EADA62C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */,
 				4EE77E892C101F5B007C9064 /* OverviewSectionV.swift in Sources */,
 				4EB0955F2989CBFE0043A8A1 /* WalletEmptyView.swift in Sources */,
 				4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */,
