@@ -217,7 +217,18 @@
         }
       }
     },
+    "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 3:** Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt. Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
+          }
+        }
+      }
+    },
     "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -559,6 +570,7 @@
       }
     },
     "Accept" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2247,6 +2259,16 @@
         }
       }
     },
+    "If your banking software runs on another device, you can scan one of these QR codes:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn Ihre Banking-Software auf einem anderen Gerät läuft, können Sie einen dieser QR-Codes scannen:"
+          }
+        }
+      }
+    },
     "In progress" : {
       "comment" : "VoiceOver",
       "localizations" : {
@@ -2276,6 +2298,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de inicialización"
+          }
+        }
+      }
+    },
+    "Instructions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anleitung"
           }
         }
       }
@@ -3506,7 +3538,14 @@
       }
     },
     "Pay %@ now" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt %@ bezahlen"
+          }
+        }
+      }
     },
     "Pay P2P" : {
       "comment" : "Nav Title",
@@ -3644,7 +3683,14 @@
       }
     },
     "Payment is made in %@" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Zahlung wird in %@ durchgeführt"
+          }
+        }
+      }
     },
     "Payment provider:" : {
       "localizations" : {
@@ -3803,12 +3849,22 @@
         }
       }
     },
+    "QR" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        }
+      }
+    },
     "QR Code" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Code"
+            "value" : "QR-Code"
           }
         },
         "es" : {
@@ -3824,7 +3880,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR Code und Link können auch aus der Umsatzliste kopiert/geteilt werden."
+            "value" : "QR-Code und Link können auch aus der Umsatzliste kopiert/geteilt werden."
           }
         },
         "es" : {
@@ -4492,6 +4548,17 @@
         }
       }
     },
+    "Share PayTo" : {
+      "comment" : "mini",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PayTo teilen"
+          }
+        }
+      }
+    },
     "Share the PayTo URL" : {
       "comment" : "VoiceOver",
       "localizations" : {
@@ -4802,6 +4869,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El Proveedor de Servicio de Pago esta esperando por su transferencia bancaria."
+          }
+        }
+      }
+    },
+    "The withdrawal was aborted.\nIf you have already sent money to the exchange, it will wire it back in %@ days." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Abhebung wurde abgebrochen. Wenn Sie bereits Geld an die Exchange überwiesen haben, wird es in %@ Tagen zurückgeschickt."
           }
         }
       }
@@ -5734,6 +5811,17 @@
         }
       }
     },
+    "Wire transfer" : {
+      "comment" : "ViewTitle of wire-transfer QR codes\nViewTitle of wire-transfer instructions",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisung"
+          }
+        }
+      }
+    },
     "Wire Transfer" : {
       "localizations" : {
         "de" : {
@@ -5746,6 +5834,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferencia bancaria"
+          }
+        }
+      }
+    },
+    "Wire transfer instructions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisungsanleitung"
+          }
+        }
+      }
+    },
+    "Wire transfer QR codes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-Codes für die Überweisung"
           }
         }
       }
