@@ -48,6 +48,16 @@ struct CopyButton: View {
 struct ShareButton: View {
     private let symLog = SymLogV(0)
     let textToShare: String
+    let title: String
+
+    init(textToShare: String) {
+        self.textToShare = textToShare
+        self.title = String(localized: "Share")
+    }
+    init(textToShare: String, title: String) {
+        self.textToShare = textToShare
+        self.title = title
+    }
 
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
@@ -63,7 +73,7 @@ struct ShareButton: View {
             HStack {
                 Image(systemName: "square.and.arrow.up")
                     .accessibility(hidden: true)
-                Text("Share")
+                Text(title)
             }
         }
         .talerFont(.body)
