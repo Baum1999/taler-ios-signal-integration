@@ -1,3 +1,14 @@
+Version 0.12.0 (wallet-core 0.12.9)
+
+• New icons for actions
+• New withdrawal workflow - enter amount in the wallet app
+• show how long exchange takes to wire back funds for aborted withdrawals
+- Bugfixes
+- lots of layout improvements
+- Fee computation works again
+- Amounts should no longer mix even if exchanges have the same currency name
+
+
 Version 0.11.2 (wallet-core 0.11.4)
 
 - Bugfix: Send P2P had the comparison (amount <= available) wrong
