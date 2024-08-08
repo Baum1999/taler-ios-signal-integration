@@ -46,6 +46,7 @@ public let VIEW_WITHDRAWAL = VIEW_EMPTY_HISTORY + 10                // 30 Withdr
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
 public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32 ManualWithdrawDone
 public let VIEW_WITHDRAW_INSTRUCTIONS = VIEW_WITHDRAW_ACCEPT + 1    // 33 ManualDetailsWireV
+public let VIEW_WITHDRAW_QRCODES = VIEW_WITHDRAW_INSTRUCTIONS + 1   // 34 QRcodesForPayto
 
 // MARK: Manual Deposit (from Banking / ExchangeList)
 // send coins back to customer ==> instruct exchange to make the wire transfer to the customer's bank account

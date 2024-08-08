@@ -180,6 +180,8 @@
 		4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
 		4E8EADA52C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */; };
 		4E8EADA62C6470B900C6CDC4 /* ManualDetailsWireV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */; };
+		4E8EADA82C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA72C64744700C6CDC4 /* QRcodesForPayto.swift */; };
+		4E8EADA92C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8EADA72C64744700C6CDC4 /* QRcodesForPayto.swift */; };
 		4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320422A14F6EA00A87B0E /* WalletColors.swift */; };
 		4E9320452A1645B600A87B0E /* RequestPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9320442A1645B600A87B0E /* RequestPayment.swift */; };
 		4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E96583B2B79656E00404A68 /* DepositAmountV.swift */; };
@@ -404,6 +406,7 @@
 		4E8C171F2A6509BB005B2392 /* Atkinson-Hyperlegible-BoldItalic-102.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Atkinson-Hyperlegible-BoldItalic-102.otf"; sourceTree = "<group>"; };
 		4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualIconWidthDomain.swift; sourceTree = "<group>"; };
 		4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualDetailsWireV.swift; sourceTree = "<group>"; };
+		4E8EADA72C64744700C6CDC4 /* QRcodesForPayto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRcodesForPayto.swift; sourceTree = "<group>"; };
 		4E9320422A14F6EA00A87B0E /* WalletColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletColors.swift; sourceTree = "<group>"; };
 		4E9320442A1645B600A87B0E /* RequestPayment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestPayment.swift; sourceTree = "<group>"; };
 		4E96583B2B79656E00404A68 /* DepositAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAmountV.swift; sourceTree = "<group>"; };
@@ -795,6 +798,7 @@
 				4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */,
 				4E6EDD842A3615BE0031D520 /* ManualDetailsV.swift */,
 				4E8EADA42C6470B800C6CDC4 /* ManualDetailsWireV.swift */,
+				4E8EADA72C64744700C6CDC4 /* QRcodesForPayto.swift */,
 				4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */,
 			);
 			path = Transactions;
@@ -1187,6 +1191,7 @@
 				4EE77E852C101493007C9064 /* OverviewListV.swift in Sources */,
 				4E3EAE252A990778009F1BE8 /* WithdrawAcceptDone.swift in Sources */,
 				4E3EAE262A990778009F1BE8 /* Transaction.swift in Sources */,
+				4E8EADA82C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */,
 				4E605DB72AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
 				4E3EAE272A990778009F1BE8 /* WalletColors.swift in Sources */,
@@ -1317,6 +1322,7 @@
 				4EE77E862C101493007C9064 /* OverviewListV.swift in Sources */,
 				4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */,
 				4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */,
+				4E8EADA92C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */,
 				4E605DB82AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
 				4E9320432A14F6EA00A87B0E /* WalletColors.swift in Sources */,

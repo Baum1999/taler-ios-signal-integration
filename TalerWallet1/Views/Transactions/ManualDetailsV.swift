@@ -198,27 +198,11 @@ struct ManualDetailsV: View {
                     } else if let amount = account.transferAmount {
                         if let bankName = account.bankLabel {
                             Text(bankName + ":   " + amountStr)
-                        } else {
-                            Text(amountStr)
+//                        } else {
+//                            Text(amountStr)
                         }
                     }
                     let payto = account.paytoUri
-                    let qrCodesForPayto = Group {
-                        ForEach(qrCodeSpecs, id: \.self) { spec in
-                            let specDetails = String("❗️\(spec.type)❗️\(spec.qrContent)❗️")
-                            QRGeneratorView(text: spec.qrContent)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .accessibilityLabel("QR Code")
-                                .listRowSeparator(.hidden)
-                            CopyShare(textToCopy: spec.qrContent)
-                                .disabled(false)
-//                    .padding(.bottom)
-
-//                            Text(specDetails)
-//                                .listRowSeparator(.automatic)
-                        }
-                    }
-
                     let payURL = URL(string: payto)
                     if let queryParameters = payURL?.queryParameters {
                         let iban = payURL?.iban
@@ -238,6 +222,15 @@ struct ManualDetailsV: View {
                                 Text(minimalistic ? "Instructions"
                                                   : "Wire transfer instructions")
                             }
+
+                            if qrCodeSpecs.count > 0 {
+                                let qrCodesForPayto = QRcodesForPayto(stack: stack.push(), qrCodeSpecs: $qrCodeSpecs)
+                                NavigationLink(destination: qrCodesForPayto) {
+                                    Text(minimalistic ? "QR"
+                                                      : "Wire transfer QR codes")
+                                }
+                                .listRowSeparator(.visible)
+                            }
                             Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
                                     : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
                                 .multilineTextAlignment(.leading)
@@ -246,10 +239,10 @@ struct ManualDetailsV: View {
                             let title = String(localized: "Share the PayTo URL", comment: "VoiceOver")
                             let minTitle = String(localized: "Share PayTo", comment: "mini")
                             ShareButton(textToShare: payto, title: minimalistic ? minTitle : title)
-                                    .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(maxWidth: .infinity, alignment: .center)
                                 .accessibilityLabel(Text(title))
-                                    .disabled(false)
-                            qrCodesForPayto
+                                .disabled(false)
+                                .listRowSeparator(.hidden)
                         }.id(listID)
                             .talerFont(.body)
                             .task {
