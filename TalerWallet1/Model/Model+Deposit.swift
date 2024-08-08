@@ -79,7 +79,7 @@ struct CheckDepositResult: Codable {
 /// A request to get an exchange's deposit contract terms.
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
     typealias Response = CheckDepositResult
-    func operation() -> String { "checkDeposit" }
+    func operation() -> String { "prepareDeposit" }         // checkDeposit
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount,
                           clientCancellationId: "cancel") }
 
