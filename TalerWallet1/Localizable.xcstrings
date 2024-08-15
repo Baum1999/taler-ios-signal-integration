@@ -8,6 +8,12 @@
             "state" : "translated",
             "value" : "\\nWarnungen können in den Einstellungen ausgeschaltet werden"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\nПопередження можна вимкнути в Налаштуваннях"
+          }
         }
       }
     },
@@ -23,6 +29,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "- %@ comisión"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- %@ комісія"
           }
         }
       }
@@ -41,6 +53,12 @@
             "state" : "translated",
             "value" : ", cancelado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", скасовано"
+          }
         }
       }
     },
@@ -51,6 +69,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ". Benötigt die Autorisierung der Bank"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Потрібна авторизація банку"
           }
         }
       }
@@ -69,6 +93,12 @@
             "state" : "translated",
             "value" : ". Necesita confirmación bancaria"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Потрібно підтвердження банку"
+          }
         }
       }
     },
@@ -86,6 +116,12 @@
             "state" : "translated",
             "value" : ". Necesita K Y C"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Потрібно K Y C"
+          }
         }
       }
     },
@@ -101,6 +137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Alternativa:** Si tu banco ya soporta PayTo, puedes usar este PayTo-Link:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Альтернатива:** Якщо ваш банк вже підтримує PayTo, ви можете використовувати цей PayTo-лінк:"
           }
         }
       }
@@ -118,6 +160,12 @@
             "state" : "translated",
             "value" : "**Alternativa:** Usar este PayTo-Link:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Альтернатива:** Використовуйте цей PayTo-лінк:"
+          }
         }
       }
     },
@@ -133,6 +181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 1:** Copiar este código y pegarlo en el campo asunto de tu aplicación bancaria:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 1:** Скопіюйте цей код і вставте його в поле призначення/цілі в вашому банківському додатку або на вебсайті банку:"
           }
         }
       }
@@ -150,6 +204,12 @@
             "state" : "translated",
             "value" : "**Paso 1:** Copia y pega este asunto:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 1:** Скопіюйте та вставте це призначення:"
+          }
         }
       }
     },
@@ -165,6 +225,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y la cuenta en sus campos correspondientes en tu aplicación bancaria:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 2:** Скопіюйте та вставте отримувача та рахунок у відповідні поля в вашому банківському додатку або на вебсайті:"
           }
         }
       }
@@ -182,6 +248,12 @@
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y cuenta:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 2:** Скопіюйте та вставте отримувача та рахунок:"
+          }
         }
       }
     },
@@ -197,6 +269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y IBAN:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 2:** Скопіюйте та вставте отримувача та IBAN:"
           }
         }
       }
@@ -214,6 +292,12 @@
             "state" : "translated",
             "value" : "**Paso 2:** Si todavía no la tienes en tu lista de favoritos, entonces copia y pega el beneficiario y IBAN en los campos correspondientes en tu aplicación bancaria (y guardalos en favoritos para la próxima vez):"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 2:** Якщо ви ще не маєте цього в списку улюблених у вашому банківському додатку, скопіюйте та вставте отримувача та IBAN у відповідні поля (і збережіть як улюблене на наступний раз):"
+          }
         }
       }
     },
@@ -223,6 +307,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Schritt 3:** Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt. Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 3:** Завершіть переказ %@ у вашому банківському додатку або на вебсайті, тоді це зняття буде виконано автоматично. Залежно від вашого банку, переказ може зайняти від декількох хвилин до двох робочих днів, будь ласка, наберіться терпіння."
           }
         }
       }
@@ -241,6 +331,12 @@
             "state" : "translated",
             "value" : "**Paso 3:** Completa la transferencia por %@ en tu aplicación bancaria, entonces esta extracción procedera automaticamente. Dependiendo de tu bank la transferencia puede tardar desde minutos hasta dos días hábiles, por favor se paciente."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 3:** Завершіть переказ %@ у вашому банківському додатку або на вебсайті, тоді це зняття буде виконано автоматично. Залежно від вашого банку, переказ може зайняти від декількох хвилин до двох робочих днів, будь ласка, наберіться терпіння."
+          }
         }
       }
     },
@@ -256,6 +352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 3:** Transferir %@."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 3:** Перекажіть %@."
           }
         }
       }
@@ -279,6 +381,12 @@
             "state" : "translated",
             "value" : "%1$@ %2$@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
         }
       }
     },
@@ -288,6 +396,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Gebühr"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ комісія"
           }
         }
       }
@@ -305,6 +419,12 @@
             "state" : "translated",
             "value" : "%lld caracteres de 100"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld символів із 100"
+          }
         }
       }
     },
@@ -320,6 +440,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace %lld días"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld днів тому"
           }
         }
       }
@@ -337,6 +463,12 @@
             "state" : "translated",
             "value" : "hace %lld horas"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld годин тому"
+          }
         }
       }
     },
@@ -353,6 +485,12 @@
             "state" : "translated",
             "value" : "hace %lld minutos"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld хвилин тому"
+          }
         }
       }
     },
@@ -368,6 +506,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld años"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld років"
           }
         }
       }
@@ -386,6 +530,24 @@
             "state" : "translated",
             "value" : "%llu Día"
           }
+        },
+        "uk" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "%llu День"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%llu День"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -403,6 +565,36 @@
             "state" : "translated",
             "value" : "%llu Días"
           }
+        },
+        "uk" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "%llu Дн."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "%llu Дн."
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "%llu Дн."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%llu Дн."
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -418,6 +610,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "+ %@ comisión"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ комісія"
           }
         }
       }
@@ -435,6 +633,12 @@
             "state" : "translated",
             "value" : "hace 1 hora"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 година тому"
+          }
         }
       }
     },
@@ -450,6 +654,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace 1 minuto"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 хвилина тому"
           }
         }
       }
@@ -468,6 +678,12 @@
             "state" : "translated",
             "value" : "Detener deposito"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати внесок"
+          }
         }
       }
     },
@@ -484,6 +700,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detener Envío P2P"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати відправку P2P"
           }
         }
       }
@@ -502,6 +724,12 @@
             "state" : "translated",
             "value" : "Detener Pago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати платіж"
+          }
         }
       }
     },
@@ -517,6 +745,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hace %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Про %@"
           }
         }
       }
@@ -534,6 +768,12 @@
             "state" : "translated",
             "value" : "Hace 1½ horas"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приблизно 1½ години тому"
+          }
         }
       }
     },
@@ -549,6 +789,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "HAce 2 horas"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приблизно 2 години тому"
           }
         }
       }
@@ -566,11 +812,16 @@
             "state" : "translated",
             "value" : "Hace una hora"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приблизно годину тому"
+          }
         }
       }
     },
     "Accept" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -582,6 +833,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aceptar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прийняти"
           }
         }
       }
@@ -598,6 +855,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aceptar Recepción P2P"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прийняти P2P отримання"
           }
         }
       }
@@ -616,6 +879,12 @@
             "state" : "translated",
             "value" : "Aceptar Terminos de Servicio"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прийняти умови надання послуг"
+          }
         }
       }
     },
@@ -631,6 +900,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dueño de la cuenta:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Власник рахунку:"
           }
         }
       }
@@ -649,6 +924,12 @@
             "state" : "translated",
             "value" : "cuenta del beneficiario"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "рахунок отримувача"
+          }
         }
       }
     },
@@ -664,6 +945,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuenta:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рахунок:"
           }
         }
       }
@@ -682,6 +969,12 @@
             "state" : "translated",
             "value" : "Agregar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати"
+          }
         }
       }
     },
@@ -699,6 +992,12 @@
             "state" : "translated",
             "value" : "Agregar Servicio de Pagos"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати платіжну послугу"
+          }
         }
       }
     },
@@ -714,6 +1013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dirección de Servicio de Pagos"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Адреса платіжної послуги"
           }
         }
       }
@@ -731,6 +1036,12 @@
             "state" : "translated",
             "value" : "Monto disponible:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна сума:"
+          }
         }
       }
     },
@@ -746,6 +1057,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до витрати:"
           }
         }
       }
@@ -764,6 +1081,12 @@
             "state" : "translated",
             "value" : "Monto a extraer:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до зняття:"
+          }
         }
       }
     },
@@ -780,6 +1103,12 @@
             "state" : "translated",
             "value" : "Monto a depositar:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до внесення:"
+          }
         }
       }
     },
@@ -789,6 +1118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zu erhaltender Betrag:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до отримання:"
           }
         }
       }
@@ -806,6 +1141,12 @@
             "state" : "translated",
             "value" : "Monto a pagar:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до оплати:"
+          }
         }
       }
     },
@@ -821,6 +1162,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a pedir:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до запиту:"
           }
         }
       }
@@ -838,6 +1185,12 @@
             "state" : "translated",
             "value" : "Monto a envíar:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до відправлення:"
+          }
         }
       }
     },
@@ -853,6 +1206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до витрати:"
           }
         }
       }
@@ -870,6 +1229,12 @@
             "state" : "translated",
             "value" : "Monto a extraer:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до зняття:"
+          }
         }
       }
     },
@@ -885,6 +1250,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto demasiado grande para una única extracción!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума занадто велика для одного зняття!"
           }
         }
       }
@@ -902,6 +1273,12 @@
             "state" : "translated",
             "value" : "Monto demasiado pequeño!"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума занадто мала!"
+          }
         }
       }
     },
@@ -917,6 +1294,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума:"
           }
         }
       }
@@ -934,6 +1317,12 @@
             "state" : "translated",
             "value" : "Versión App"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія додатку"
+          }
         }
       }
     },
@@ -949,6 +1338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seguro que quiere detener esta transacción?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви впевнені, що хочете скасувати цю транзакцію?"
           }
         }
       }
@@ -966,6 +1361,12 @@
             "state" : "translated",
             "value" : "Seguro que quiere borrar esta transacción?"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви впевнені, що хочете видалити цю транзакцію?"
+          }
         }
       }
     },
@@ -982,6 +1383,12 @@
             "state" : "translated",
             "value" : "Seguro que quiere fallar esta transacción?"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви впевнені, що хочете провалити цю транзакцію?"
+          }
         }
       }
     },
@@ -993,6 +1400,12 @@
             "state" : "translated",
             "value" : "Bei der Bank autorisieren"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизувати в банку"
+          }
         }
       }
     },
@@ -1002,6 +1415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Später autorisieren"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизувати пізніше"
           }
         }
       }
@@ -1018,6 +1437,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Confirmar ahora"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Авторизувати зараз"
           }
         }
       }
@@ -1036,6 +1461,12 @@
             "state" : "translated",
             "value" : "Disponible:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно:"
+          }
         }
       }
     },
@@ -1051,6 +1482,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Disponible:\t%@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно: %@"
           }
         }
       }
@@ -1069,6 +1506,12 @@
             "state" : "translated",
             "value" : "Resguardo restaurado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Резервну копію відновлено"
+          }
         }
       }
     },
@@ -1086,6 +1529,12 @@
             "state" : "translated",
             "value" : "Balance:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Баланс:"
+          }
         }
       }
     },
@@ -1101,6 +1550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Banco"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банк"
           }
         }
       }
@@ -1118,6 +1573,12 @@
             "state" : "translated",
             "value" : "pero sólo tiene %@ para depositar."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "але у вас є лише %@ для внесення."
+          }
         }
       }
     },
@@ -1133,6 +1594,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "pero sólo tiene %@ para enviar."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "але у вас є лише %@ для відправлення."
           }
         }
       }
@@ -1150,6 +1617,12 @@
             "state" : "translated",
             "value" : "Caneclar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати"
+          }
         }
       }
     },
@@ -1165,6 +1638,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verificando Link"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірка посилання"
           }
         }
       }
@@ -1182,6 +1661,12 @@
             "state" : "translated",
             "value" : "Elija un tiempo de expiración"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виберіть тривалість терміну дії"
+          }
         }
       }
     },
@@ -1197,6 +1682,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Elija un monto a extraer:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обрана сума для зняття:"
           }
         }
       }
@@ -1215,6 +1706,12 @@
             "state" : "translated",
             "value" : "Elegido:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обрано:"
+          }
         }
       }
     },
@@ -1231,6 +1728,12 @@
             "state" : "translated",
             "value" : "Cerrar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрити"
+          }
         }
       }
     },
@@ -1246,6 +1749,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrando cámara"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закриття камери"
           }
         }
       }
@@ -1264,6 +1773,12 @@
             "state" : "translated",
             "value" : "Confirmar Pago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підтвердити платіж"
+          }
         }
       }
     },
@@ -1280,6 +1795,12 @@
             "state" : "translated",
             "value" : "Confirmar Extracción"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підтвердити зняття"
+          }
         }
       }
     },
@@ -1290,6 +1811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bestätigung:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підтвердження:"
           }
         }
       }
@@ -1306,6 +1833,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contactando..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Контактую..."
           }
         }
       }
@@ -1324,6 +1857,12 @@
             "state" : "translated",
             "value" : "Copiar la cuenta"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати рахунок"
+          }
         }
       }
     },
@@ -1340,6 +1879,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el cryptocode"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати криптокод"
           }
         }
       }
@@ -1358,6 +1903,12 @@
             "state" : "translated",
             "value" : "Copiar el error"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати помилку"
+          }
         }
       }
     },
@@ -1373,6 +1924,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el error JSON"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати помилку JSON"
           }
         }
       }
@@ -1391,6 +1948,12 @@
             "state" : "translated",
             "value" : "Copiar el IBAN"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати IBAN"
+          }
         }
       }
     },
@@ -1407,6 +1970,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el beneficiario"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати отримувача"
           }
         }
       }
@@ -1432,6 +2001,12 @@
             "state" : "translated",
             "value" : "Copiar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Копіювати"
+          }
         }
       }
     },
@@ -1456,6 +2031,12 @@
             "state" : "translated",
             "value" : "Copiar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коп."
+          }
         }
       }
     },
@@ -1472,6 +2053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cryptocode"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Криптокод"
           }
         }
       }
@@ -1490,6 +2077,12 @@
             "state" : "translated",
             "value" : "Monto personalizado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Індивідуальна сума"
+          }
         }
       }
     },
@@ -1507,6 +2100,12 @@
             "state" : "translated",
             "value" : "Descripción personalizado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Індивідуальний підсумок"
+          }
         }
       }
     },
@@ -1522,6 +2121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Demo: recibir billetes digitales para experimentar como pagar con el dinero del futuro."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Демонстрація: отримайте цифрові гроші, щоб дізнатися, як платити грошима майбутнього."
           }
         }
       }
@@ -1540,6 +2145,12 @@
             "state" : "translated",
             "value" : "Depositar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит"
+          }
         }
       }
     },
@@ -1556,6 +2167,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depositar\t%@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит\t%@"
           }
         }
       }
@@ -1574,6 +2191,12 @@
             "state" : "translated",
             "value" : "Depositar %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит %@"
+          }
         }
       }
     },
@@ -1590,6 +2213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depositar:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит:"
           }
         }
       }
@@ -1615,6 +2244,12 @@
             "state" : "translated",
             "value" : "Depositar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит"
+          }
         }
       }
     },
@@ -1630,6 +2265,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de deserialización"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка десеріалізації"
           }
         }
       }
@@ -1647,6 +2288,12 @@
             "state" : "translated",
             "value" : "Terminado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
         }
       }
     },
@@ -1663,6 +2310,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Efectivo:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чинний:"
           }
         }
       }
@@ -1687,6 +2340,12 @@
             "state" : "translated",
             "value" : "Proporcione este link de pago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надати це посилання для оплати"
+          }
         }
       }
     },
@@ -1709,6 +2368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "al beneficiario, o"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отримувачу, або"
           }
         }
       }
@@ -1734,6 +2399,12 @@
             "state" : "translated",
             "value" : "deje que el beneficiario escanee este código QR para recibir %@."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дозволити отримувачу сканувати цей QR-код, щоб отримати %@."
+          }
         }
       }
     },
@@ -1758,6 +2429,12 @@
             "state" : "translated",
             "value" : "También"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Або"
+          }
         }
       }
     },
@@ -1780,6 +2457,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o escanee este"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "або скануйте це"
           }
         }
       }
@@ -1805,6 +2488,12 @@
             "state" : "translated",
             "value" : "para reciribr %@."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отримати %@."
+          }
         }
       }
     },
@@ -1828,6 +2517,12 @@
             "state" : "translated",
             "value" : "Proporcione este link the pago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надати це посилання для оплати"
+          }
         }
       }
     },
@@ -1850,6 +2545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "al pagador, o"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "платнику, або"
           }
         }
       }
@@ -1875,6 +2576,12 @@
             "state" : "translated",
             "value" : "deje que el pagador escanee este código QR para pagar %@."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "дозволити платнику сканувати цей QR-код, щоб оплатити %@."
+          }
         }
       }
     },
@@ -1899,6 +2606,12 @@
             "state" : "translated",
             "value" : "También"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Або"
+          }
         }
       }
     },
@@ -1921,6 +2634,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "o escanee este"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "або скануйте це"
           }
         }
       }
@@ -1946,6 +2665,12 @@
             "state" : "translated",
             "value" : "para pagar %@."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "оплатити %@."
+          }
         }
       }
     },
@@ -1961,6 +2686,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "habilitado cuando el dueño de la cuenta y el IBAN estan completos"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "доступно, коли встановлено власника рахунку та IBAN"
           }
         }
       }
@@ -1978,6 +2709,12 @@
             "state" : "translated",
             "value" : "habilitado cuando el monto no es cero, pero no mas alto del monto disponible"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "доступно, коли сума не дорівнює нулю, але не перевищує доступну суму"
+          }
         }
       }
     },
@@ -1993,6 +2730,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "habilitado cuando el asunto y la expiración esta completos"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "доступно, коли встановлено призначення та термін дії"
           }
         }
       }
@@ -2010,6 +2753,12 @@
             "state" : "translated",
             "value" : "Ingrese asunto:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введіть призначення:"
+          }
         }
       }
     },
@@ -2025,6 +2774,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка"
           }
         }
       }
@@ -2044,6 +2799,12 @@
             "state" : "new",
             "value" : "Fee:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія обміну:"
+          }
         }
       }
     },
@@ -2062,6 +2823,12 @@
             "state" : "new",
             "value" : "Fee:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія:"
+          }
         }
       }
     },
@@ -2077,6 +2844,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expira en:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закінчується через:"
           }
         }
       }
@@ -2094,6 +2867,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expira: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закінчується: %@"
           }
         }
       }
@@ -2119,6 +2898,12 @@
             "state" : "translated",
             "value" : "Comisión:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія:"
+          }
         }
       }
     },
@@ -2143,6 +2928,12 @@
             "state" : "translated",
             "value" : "Comisión:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія:"
+          }
         }
       }
     },
@@ -2158,6 +2949,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para botones Borrar, Fallar & Detener"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для кнопок Видалити, Провалити та Скасувати"
           }
         }
       }
@@ -2175,6 +2972,12 @@
             "state" : "translated",
             "value" : "desde %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "від %@"
+          }
         }
       }
     },
@@ -2191,6 +2994,12 @@
             "state" : "translated",
             "value" : "Monto bruto a recibir:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Загальна сума до отримання:"
+          }
         }
       }
     },
@@ -2206,6 +3015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hápticos"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вібрації"
           }
         }
       }
@@ -2224,6 +3039,12 @@
             "state" : "translated",
             "value" : "IBAN del beneficiario"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN отримувача"
+          }
         }
       }
     },
@@ -2236,6 +3057,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN:"
+          }
+        },
+        "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "IBAN:"
@@ -2256,6 +3083,12 @@
             "state" : "translated",
             "value" : "Si esta billetera pertenece a un niño/a o adolecente, el dinero electrónico generado deberá ser restringido por edad:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Якщо цей гаманець належить дитині або підлітку, то створена електронна готівка повинна мати вікове обмеження."
+          }
         }
       }
     },
@@ -2265,6 +3098,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wenn Ihre Banking-Software auf einem anderen Gerät läuft, können Sie einen dieser QR-Codes scannen:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Якщо ваше банківське програмне забезпечення працює на іншому пристрої, ви можете сканувати один з цих QR-кодів:"
           }
         }
       }
@@ -2283,6 +3122,12 @@
             "state" : "translated",
             "value" : "En progreso"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У процесі"
+          }
         }
       }
     },
@@ -2299,6 +3144,12 @@
             "state" : "translated",
             "value" : "Error de inicialización"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка ініціалізації"
+          }
         }
       }
     },
@@ -2308,6 +3159,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anleitung"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інструкції"
           }
         }
       }
@@ -2325,6 +3182,12 @@
             "state" : "translated",
             "value" : "Código de error interno"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Внутрішня помилка ядра"
+          }
         }
       }
     },
@@ -2334,6 +3197,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Es scheint als wollten Sie Geld anfordern - aber diese Transaktion lässt Sie bezahlen..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Здається, ви хотіли запросити гроші – але ця транзакція дозволить вам здійснити оплату..."
           }
         }
       }
@@ -2351,6 +3220,12 @@
             "state" : "translated",
             "value" : "KYC"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC (Знай свого клієнта)"
+          }
         }
       }
     },
@@ -2367,6 +3242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lenguaje:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мова:"
           }
         }
       }
@@ -2391,6 +3272,12 @@
             "state" : "translated",
             "value" : "Sitio web Banco Demo"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вебсайт демонстраційного банку"
+          }
         }
       }
     },
@@ -2413,6 +3300,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gastar dinero de prueba"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Витратити демонстраційні гроші"
           }
         }
       }
@@ -2437,6 +3330,12 @@
             "state" : "translated",
             "value" : "Obtener dinero de prueba"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримати демонстраційні гроші"
+          }
         }
       }
     },
@@ -2453,6 +3352,12 @@
             "state" : "translated",
             "value" : "Estilo de Lista:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стиль списку"
+          }
         }
       }
     },
@@ -2468,6 +3373,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cargando…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завантаження..."
           }
         }
       }
@@ -2486,6 +3397,12 @@
             "state" : "translated",
             "value" : "Perdido:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Втрачено:"
+          }
         }
       }
     },
@@ -2501,6 +3418,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu principal"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Головне меню"
           }
         }
       }
@@ -2526,6 +3449,12 @@
             "state" : "translated",
             "value" : "Detenido"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасовано"
+          }
         }
       }
     },
@@ -2549,6 +3478,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deteniendo"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасовується"
           }
         }
       }
@@ -2574,6 +3509,12 @@
             "state" : "translated",
             "value" : "Borrado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Видалено"
+          }
         }
       }
     },
@@ -2597,6 +3538,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diálogo"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Діалог"
           }
         }
       }
@@ -2622,6 +3569,12 @@
             "state" : "translated",
             "value" : "Terminado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виконано"
+          }
         }
       }
     },
@@ -2645,6 +3598,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expirado"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Термін дії закінчився"
           }
         }
       }
@@ -2670,6 +3629,12 @@
             "state" : "translated",
             "value" : "Falló"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Провалено"
+          }
         }
       }
     },
@@ -2687,6 +3652,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Finalizing"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершується"
           }
         }
       }
@@ -2712,6 +3683,12 @@
             "state" : "translated",
             "value" : "Pendiente"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікується"
+          }
         }
       }
     },
@@ -2727,6 +3704,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Administrar proveedores de servicio de pago..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Управління постачальниками платіжних послуг..."
           }
         }
       }
@@ -2745,6 +3728,12 @@
             "state" : "translated",
             "value" : "Comerciante"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продавець"
+          }
         }
       }
     },
@@ -2760,6 +3749,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimalistico"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мінімалістично"
           }
         }
       }
@@ -2785,6 +3780,12 @@
             "state" : "translated",
             "value" : "Requiere AML"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Потрібна перевірка AML"
+          }
         }
       }
     },
@@ -2808,6 +3809,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando la transferencia bancaria"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікування банківського переказу"
           }
         }
       }
@@ -2833,6 +3840,12 @@
             "state" : "translated",
             "value" : "Requiere KYC"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Потрібна перевірка KYC"
+          }
         }
       }
     },
@@ -2850,6 +3863,12 @@
             "state" : "translated",
             "value" : "Dinero perdido"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Втрачені кошти"
+          }
         }
       }
     },
@@ -2865,6 +3884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero perdido:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Втрачені кошти:"
           }
         }
       }
@@ -2882,6 +3907,12 @@
             "state" : "translated",
             "value" : "Mas información acerca de GNU Taler en general..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Більше інформації про GNU Taler загалом..."
+          }
         }
       }
     },
@@ -2898,6 +3929,12 @@
             "state" : "translated",
             "value" : "Mas información acerca de esta aplicación..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Більше інформації про цей додаток..."
+          }
         }
       }
     },
@@ -2913,6 +3950,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hace mas de una semana"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Більше тижня тому"
           }
         }
       }
@@ -2938,6 +3981,12 @@
             "state" : "translated",
             "value" : "Depositar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит"
+          }
         }
       }
     },
@@ -2961,6 +4010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depositar %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Депозит %@"
           }
         }
       }
@@ -2986,6 +4041,12 @@
             "state" : "translated",
             "value" : "Pedir %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запит %@"
+          }
         }
       }
     },
@@ -3009,6 +4070,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedir %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запит %@"
           }
         }
       }
@@ -3034,6 +4101,12 @@
             "state" : "translated",
             "value" : "Senviar %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відправити %@"
+          }
         }
       }
     },
@@ -3057,6 +4130,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviar %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відправити %@"
           }
         }
       }
@@ -3082,6 +4161,12 @@
             "state" : "translated",
             "value" : "Extraer %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняти %@"
+          }
         }
       }
     },
@@ -3106,6 +4191,12 @@
             "state" : "translated",
             "value" : "Extraer %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняти %@"
+          }
         }
       }
     },
@@ -3121,6 +4212,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto Neto a recirbir:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чиста сума до отримання:"
           }
         }
       }
@@ -3139,6 +4236,12 @@
             "state" : "translated",
             "value" : "Siguiente"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Далі"
+          }
         }
       }
     },
@@ -3156,6 +4259,12 @@
             "state" : "translated",
             "value" : "Sin fecha"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає дати"
+          }
         }
       }
     },
@@ -3165,6 +4274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kein Zahlungsgebühr"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без комісії за оплату"
           }
         }
       }
@@ -3182,6 +4297,12 @@
             "state" : "translated",
             "value" : "Sin comisión de extracción"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без комісії за зняття"
+          }
         }
       }
     },
@@ -3191,6 +4312,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hinweis: Es braucht eine ganze Weile um diesen Betrag vorzubereiten. Seien Sie noch geduldiger..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примітка: Підготовки цієї суми займе деякий час! Будьте більш терплячі..."
           }
         }
       }
@@ -3209,6 +4336,12 @@
             "state" : "translated",
             "value" : "Nota: Tomará algo de tiempo para extraer este monto! Sea paciente..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примітка: Зняття цієї суми займе деякий час! Будьте більш терплячі..."
+          }
         }
       }
     },
@@ -3218,6 +4351,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hinweis: Es braucht eine Weile um diesen Betrag vorzubereiten. Seien Sie geduldig..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примітка: Підготовка цієї суми займе деякий час! Будьте терплячі..."
           }
         }
       }
@@ -3236,6 +4375,12 @@
             "state" : "translated",
             "value" : "Nota: Tomará algo de tiempo estraer este monto. Sea paciente..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примітка: Зняття цієї суми займе деякий час! Будьте терплячі..."
+          }
         }
       }
     },
@@ -3252,6 +4397,12 @@
             "state" : "translated",
             "value" : "Observe walletCore"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спостерігати за walletCore"
+          }
         }
       }
     },
@@ -3262,6 +4413,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erhalten:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримати:"
           }
         }
       }
@@ -3278,6 +4435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto obtenido:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримана сума:"
           }
         }
       }
@@ -3296,6 +4459,12 @@
             "state" : "translated",
             "value" : "Obtenido:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримано:"
+          }
         }
       }
     },
@@ -3308,6 +4477,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -3328,6 +4503,12 @@
             "state" : "translated",
             "value" : "Omitir texto cuando es posible"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виключіть текст, де це можливо"
+          }
         }
       }
     },
@@ -3343,6 +4524,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "en LocalConsole"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "на LocalConsole"
           }
         }
       }
@@ -3360,6 +4547,12 @@
             "state" : "translated",
             "value" : "Abrir sitio web KYC"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити вебсайт KYC"
+          }
         }
       }
     },
@@ -3375,6 +4568,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir sitio web del comerciante"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити вебсайт продавця"
           }
         }
       }
@@ -3392,6 +4591,12 @@
             "state" : "translated",
             "value" : "Abrir Configuración"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити налаштування"
+          }
         }
       }
     },
@@ -3408,6 +4613,12 @@
             "state" : "translated",
             "value" : "Abrir Camara"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкриття камери"
+          }
         }
       }
     },
@@ -3417,6 +4628,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bestellnummer:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ІD замовлення:"
           }
         }
       }
@@ -3434,6 +4651,12 @@
             "state" : "translated",
             "value" : "P2P Listo"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P готовий"
+          }
         }
       }
     },
@@ -3449,6 +4672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "P2P Recibir"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P2P отримати "
           }
         }
       }
@@ -3467,6 +4696,12 @@
             "state" : "translated",
             "value" : "Pagado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачено"
+          }
         }
       }
     },
@@ -3482,6 +4717,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pagado:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплачена сума:"
           }
         }
       }
@@ -3500,6 +4741,12 @@
             "state" : "translated",
             "value" : "Pagado P2P"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачено P2P"
+          }
         }
       }
     },
@@ -3516,6 +4763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedido Pagado"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачений запит"
           }
         }
       }
@@ -3534,6 +4787,12 @@
             "state" : "translated",
             "value" : "Pagado:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплачено:"
+          }
         }
       }
     },
@@ -3543,6 +4802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jetzt %@ bezahlen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити %@ зараз"
           }
         }
       }
@@ -3561,6 +4826,12 @@
             "state" : "translated",
             "value" : "Pagar P2P"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити P2P"
+          }
         }
       }
     },
@@ -3577,6 +4848,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar Peer-Pull"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити Peer-Pull"
           }
         }
       }
@@ -3595,6 +4872,12 @@
             "state" : "translated",
             "value" : "Pagar Peer-Push"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити Peer-Push"
+          }
         }
       }
     },
@@ -3611,6 +4894,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedido pagado"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити запит"
           }
         }
       }
@@ -3629,6 +4918,12 @@
             "state" : "translated",
             "value" : "Pagar:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сплатити:"
+          }
         }
       }
     },
@@ -3646,6 +4941,12 @@
             "state" : "translated",
             "value" : "Beneficiario"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримувач"
+          }
         }
       }
     },
@@ -3661,6 +4962,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beneficiario:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримувач:"
           }
         }
       }
@@ -3679,6 +4986,12 @@
             "state" : "translated",
             "value" : "Pago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платіж"
+          }
         }
       }
     },
@@ -3688,6 +5001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Zahlung wird in %@ durchgeführt"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платіж здійснюється у %@"
           }
         }
       }
@@ -3704,6 +5023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proveedor de pagos:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Постачальник платіжних послуг:"
           }
         }
       }
@@ -3722,6 +5047,12 @@
             "state" : "translated",
             "value" : "Pendiente"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікується"
+          }
         }
       }
     },
@@ -3737,6 +5068,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pendiente a obtener:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікувана сума до отримання"
           }
         }
       }
@@ -3755,6 +5092,12 @@
             "state" : "translated",
             "value" : "Pendiente:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікується:"
+          }
         }
       }
     },
@@ -3770,6 +5113,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reproducir Sonidos de Pago"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відтворювати звуки платежу"
           }
         }
       }
@@ -3787,6 +5136,12 @@
             "state" : "translated",
             "value" : "Por favor permita el acceso a la cámara desde configuración."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будь ласка, дозвольте доступ до камери в налаштуваннях."
+          }
         }
       }
     },
@@ -3803,6 +5158,12 @@
             "state" : "translated",
             "value" : "Por favor ingrese la URL"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введіть URL-адресу"
+          }
         }
       }
     },
@@ -3818,6 +5179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Precio (neto):"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ціна (нетто):"
           }
         }
       }
@@ -3836,6 +5203,12 @@
             "state" : "translated",
             "value" : "Precio:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ціна:"
+          }
         }
       }
     },
@@ -3846,12 +5219,24 @@
             "state" : "translated",
             "value" : "Fortschrittsanzeige"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Індикатор прогресу"
+          }
         }
       }
     },
     "QR" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        },
+        "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR"
@@ -3872,6 +5257,12 @@
             "state" : "translated",
             "value" : "Código QR"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-код"
+          }
         }
       }
     },
@@ -3887,6 +5278,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El código QR y el link también pueden ser escaneados o copiados / compartidos desde Transacciones después."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-код та посилання також можуть бути відскановані або скопійовані / поширені з Транзакцій пізніше."
           }
         }
       }
@@ -3905,6 +5302,12 @@
             "state" : "translated",
             "value" : "Recibir (bruto):"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримати брутто:"
+          }
         }
       }
     },
@@ -3921,6 +5324,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recibir Dinero"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримати гроші"
           }
         }
       }
@@ -3939,6 +5348,12 @@
             "state" : "translated",
             "value" : "Recibir (neto):"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримати нетто:"
+          }
         }
       }
     },
@@ -3955,6 +5370,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero recibido"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримано гроші"
           }
         }
       }
@@ -3973,6 +5394,12 @@
             "state" : "translated",
             "value" : "Recibido P2P"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримано P2P"
+          }
         }
       }
     },
@@ -3989,6 +5416,12 @@
             "state" : "translated",
             "value" : "%lld transacciones recientes"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Останні %lld транзакції"
+          }
         }
       }
     },
@@ -4004,6 +5437,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transacciones recientes"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остання транзакція"
           }
         }
       }
@@ -4022,6 +5461,12 @@
             "state" : "translated",
             "value" : "Compensación"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відшкодувати"
+          }
         }
       }
     },
@@ -4038,6 +5483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compensación:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відшкодувати:"
           }
         }
       }
@@ -4056,6 +5507,12 @@
             "state" : "translated",
             "value" : "Actualizar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оновити"
+          }
         }
       }
     },
@@ -4073,6 +5530,12 @@
             "state" : "translated",
             "value" : "Devolución"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повернення коштів"
+          }
         }
       }
     },
@@ -4088,6 +5551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto devuelto:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повернена сума"
           }
         }
       }
@@ -4106,6 +5575,12 @@
             "state" : "translated",
             "value" : "Devuelto:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повернено:"
+          }
         }
       }
     },
@@ -4121,6 +5596,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recargar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезавантажити"
           }
         }
       }
@@ -4139,6 +5620,12 @@
             "state" : "translated",
             "value" : "Pedir %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запит %@"
+          }
         }
       }
     },
@@ -4155,6 +5642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedir dinero"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запитати гроші"
           }
         }
       }
@@ -4180,6 +5673,12 @@
             "state" : "needs_review",
             "value" : "Pedir\tPago"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запит %@"
+          }
         }
       }
     },
@@ -4204,6 +5703,12 @@
             "state" : "translated",
             "value" : "Pedir"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запит"
+          }
         }
       }
     },
@@ -4221,6 +5726,12 @@
             "state" : "translated",
             "value" : "Dinero pedido"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запитані гроші"
+          }
         }
       }
     },
@@ -4236,6 +5747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скидання"
           }
         }
       }
@@ -4253,6 +5770,12 @@
             "state" : "translated",
             "value" : "Reiniciar Billetera"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скидання гаманця"
+          }
         }
       }
     },
@@ -4268,6 +5791,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restricción:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обмеження:"
           }
         }
       }
@@ -4285,6 +5814,12 @@
             "state" : "translated",
             "value" : "Ahora mismo"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зараз"
+          }
         }
       }
     },
@@ -4300,6 +5835,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Guardar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зберегти"
           }
         }
       }
@@ -4317,6 +5858,12 @@
             "state" : "needs_review",
             "value" : "Scan QR"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканувати QR"
+          }
         }
       }
     },
@@ -4333,6 +5880,12 @@
             "state" : "translated",
             "value" : "Escanear códigos QR"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканувати QR-коди"
+          }
         }
       }
     },
@@ -4348,6 +5901,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escaneando códigos QR requiere acceso a la cámara"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканування QR-кодів вимагає доступу до камери"
           }
         }
       }
@@ -4366,6 +5925,12 @@
             "state" : "translated",
             "value" : "Programado"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заплановано"
+          }
         }
       }
     },
@@ -4381,6 +5946,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desplazar hacia abajo"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прогорнути вниз"
           }
         }
       }
@@ -4398,6 +5969,12 @@
             "state" : "translated",
             "value" : "Desplazar hacia arriba"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прогорнути вгору"
+          }
         }
       }
     },
@@ -4413,6 +5990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccione edad"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обрати вік"
           }
         }
       }
@@ -4431,6 +6014,12 @@
             "state" : "translated",
             "value" : "Enviar %@ ahora"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати %@ зараз"
+          }
         }
       }
     },
@@ -4447,6 +6036,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviar Dinero"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати гроші"
           }
         }
       }
@@ -4472,6 +6067,12 @@
             "state" : "needs_review",
             "value" : "Enviar\tDinero"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати\t%@"
+          }
         }
       }
     },
@@ -4496,6 +6097,12 @@
             "state" : "translated",
             "value" : "Enviar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати"
+          }
         }
       }
     },
@@ -4513,6 +6120,12 @@
             "state" : "translated",
             "value" : "Enviar Dinero"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гроші надіслані"
+          }
         }
       }
     },
@@ -4528,6 +6141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de serialización"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка серіалізації"
           }
         }
       }
@@ -4545,6 +6164,12 @@
             "state" : "translated",
             "value" : "Compartir"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитися"
+          }
         }
       }
     },
@@ -4555,6 +6180,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "PayTo teilen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитися PayTo"
           }
         }
       }
@@ -4573,6 +6204,12 @@
             "state" : "translated",
             "value" : "Compartir la URL PayTo"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитися URL-адресою PayTo"
+          }
         }
       }
     },
@@ -4586,6 +6223,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sheet.ID."
+          }
+        },
+        "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sheet.ID."
@@ -4607,6 +6250,12 @@
             "state" : "translated",
             "value" : "Atajo"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ярлик"
+          }
         }
       }
     },
@@ -4622,6 +6271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar logs"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати журнали"
           }
         }
       }
@@ -4639,6 +6294,12 @@
             "state" : "translated",
             "value" : "Mostrar advertencias"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати попередження"
+          }
         }
       }
     },
@@ -4654,6 +6315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar en que vista estás actualmente."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показує, на якому перегляді ви зараз перебуваєте."
           }
         }
       }
@@ -4671,6 +6338,12 @@
             "state" : "translated",
             "value" : "Como el bank de demo esta integrado con Taler, puede comenzar una extracción directamente en el"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оскільки демонстраційний банк підтримує інтеграцію Taler, ви можете розпочати зняття коштів безпосередньо на"
+          }
         }
       }
     },
@@ -4686,6 +6359,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algunas transacciones pendientes"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Деякі очікувані транзакції"
           }
         }
       }
@@ -4703,6 +6382,12 @@
             "state" : "translated",
             "value" : "Fuente iOS Standard"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стандартний шрифт iOS"
+          }
         }
       }
     },
@@ -4712,6 +6397,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Status:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус:"
           }
         }
       }
@@ -4730,6 +6421,12 @@
             "state" : "translated",
             "value" : "Estado: %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус: %@"
+          }
         }
       }
     },
@@ -4746,6 +6443,12 @@
             "state" : "translated",
             "value" : "Asunto"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Призначення"
+          }
         }
       }
     },
@@ -4761,6 +6464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resumen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підсумок"
           }
         }
       }
@@ -4779,6 +6488,12 @@
             "state" : "translated",
             "value" : "Logo Taler"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Логотип Taler"
+          }
         }
       }
     },
@@ -4794,6 +6509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toque el boton para ir la sitio web KYC."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натисніть кнопку, щоб перейти на сайт KYC."
           }
         }
       }
@@ -4811,6 +6532,12 @@
             "state" : "translated",
             "value" : "Términos de servicio"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Умови надання послуг"
+          }
         }
       }
     },
@@ -4826,6 +6553,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "El banco esta esperando su confirmación."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банк чекає на вашу авторизацію."
           }
         }
       }
@@ -4844,6 +6577,12 @@
             "state" : "translated",
             "value" : "El banco esta esperando su confirmación."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банк чекає на ваше підтвердження."
+          }
         }
       }
     },
@@ -4853,6 +6592,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Exchange wird Ihr Geld zurücksenden wenn es nicht bis zum Ablaufdatum abgeholt wird, oder wenn Sie die Operation abbrechen."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обмінник поверне ваші гроші, якщо вони не будуть зібрані вчасно, або коли ви скасуєте операцію."
           }
         }
       }
@@ -4870,6 +6615,12 @@
             "state" : "translated",
             "value" : "El Proveedor de Servicio de Pago esta esperando por su transferencia bancaria."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Постачальник платіжних послуг чекає на ваш банківський переказ."
+          }
         }
       }
     },
@@ -4879,6 +6630,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Abhebung wurde abgebrochen. Wenn Sie bereits Geld an die Exchange überwiesen haben, wird es in %@ Tagen zurückgeschickt."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняття коштів було скасовано. Якщо ви вже відправили гроші на обмінник, він поверне їх протягом %@ днів."
           }
         }
       }
@@ -4896,6 +6653,12 @@
             "state" : "translated",
             "value" : "No hay Servicios de Pago todavía."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платіжні послуги ще не доступні."
+          }
         }
       }
     },
@@ -4911,6 +6674,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay transacciones para %@."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає транзакцій для %@."
           }
         }
       }
@@ -4928,6 +6697,12 @@
             "state" : "translated",
             "value" : "No hay dinero digital en tu billetera."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вашому гаманці немає електронних грошей."
+          }
         }
       }
     },
@@ -4943,6 +6718,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esto es obligatorio, sino su dinero no llegará a la billetera."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Це обов’язково, інакше Ваші гроші не надійдуть у цей гаманець."
           }
         }
       }
@@ -4960,6 +6741,12 @@
             "state" : "translated",
             "value" : "Esta operación no puede ser deshecha"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цю операцію неможливо скасувати"
+          }
         }
       }
     },
@@ -4969,6 +6756,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diese Anforderung wird abgebrochen wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей запит буде скасовано, якщо він не буде оплачений вчасно або якщо ви скасуєте операцію."
           }
         }
       }
@@ -4985,6 +6778,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta transacción no esta lista..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ця транзакція ще не готова..."
           }
         }
       }
@@ -5009,6 +6808,12 @@
             "state" : "translated",
             "value" : "Saldos"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Баланси"
+          }
         }
       }
     },
@@ -5031,6 +6836,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servicios de Pago"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Платіжні послуги"
           }
         }
       }
@@ -5056,6 +6867,12 @@
             "state" : "translated",
             "value" : "Pendiente\tentrante"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікується\tвхідний"
+          }
         }
       }
     },
@@ -5079,6 +6896,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entrante"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вхідний"
           }
         }
       }
@@ -5104,6 +6927,12 @@
             "state" : "translated",
             "value" : "Pendiente\tsaliente"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікується\tвихідний"
+          }
         }
       }
     },
@@ -5128,6 +6957,12 @@
             "state" : "translated",
             "value" : "Saliente"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вихідний"
+          }
         }
       }
     },
@@ -5144,6 +6979,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Overview"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Огляд"
           }
         }
       }
@@ -5168,6 +7009,12 @@
             "state" : "translated",
             "value" : "Configuración"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Налаштування"
+          }
         }
       }
     },
@@ -5183,6 +7030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lista de transacciones"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Список транзакцій"
           }
         }
       }
@@ -5201,6 +7054,12 @@
             "state" : "translated",
             "value" : "Transacciones"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Транзакції"
+          }
         }
       }
     },
@@ -5216,6 +7075,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferir %@ al Servicio de Pagos."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевести %@ на платіжний сервіс."
           }
         }
       }
@@ -5241,6 +7106,12 @@
             "state" : "translated",
             "value" : "Detener"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати"
+          }
         }
       }
     },
@@ -5264,6 +7135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Borrar del historial"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Видалити з історії"
           }
         }
       }
@@ -5289,6 +7166,12 @@
             "state" : "translated",
             "value" : "Fallar"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Провалити"
+          }
         }
       }
     },
@@ -5312,6 +7195,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reintentar ahora"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторити зараз"
           }
         }
       }
@@ -5337,6 +7226,12 @@
             "state" : "translated",
             "value" : "Detención pendiente..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасовується..."
+          }
         }
       }
     },
@@ -5360,6 +7255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Borrado de la lista"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Видалено зі списку"
           }
         }
       }
@@ -5385,6 +7286,12 @@
             "state" : "translated",
             "value" : "Fallando..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Провалюється..."
+          }
         }
       }
     },
@@ -5409,6 +7316,12 @@
             "state" : "translated",
             "value" : "Reintentando..."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторна спроба..."
+          }
         }
       }
     },
@@ -5426,6 +7339,12 @@
             "state" : "needs_review",
             "value" : "DESCONOCIDO"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "НЕВІДОМО"
+          }
         }
       }
     },
@@ -5441,6 +7360,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "comando desconocido"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "невідома команда"
           }
         }
       }
@@ -5458,6 +7383,12 @@
             "state" : "translated",
             "value" : "Error desconocido"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Невідома помилка"
+          }
         }
       }
     },
@@ -5473,6 +7404,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "método de pago desconocido"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "невідомий метод оплати"
           }
         }
       }
@@ -5491,6 +7428,12 @@
             "state" : "translated",
             "value" : "Proveedor de Pagos desconocido"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Невідомий постачальник платіжних послуг"
+          }
         }
       }
     },
@@ -5506,6 +7449,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servicio de Pago Desconocido"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Невідома платіжна послуга"
           }
         }
       }
@@ -5523,6 +7472,12 @@
             "state" : "translated",
             "value" : "sin restricción"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "без обмежень"
+          }
         }
       }
     },
@@ -5538,6 +7493,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use el botón Agregar para agregar un servicio."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовуйте кнопку «Додати», щоб додати послугу."
           }
         }
       }
@@ -5555,6 +7516,12 @@
             "state" : "translated",
             "value" : "Use el botón de escaneo de código QR para comenzar una extracción si su banco ya soporta sistema Taler."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовуйте кнопку сканування QR-коду, щоб розпочати зняття коштів, якщо ваш банк вже підтримує платежі Taler."
+          }
         }
       }
     },
@@ -5571,6 +7538,12 @@
             "state" : "translated",
             "value" : "Usando proveedor de servicio de pago:"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використаний постачальник платіжних послуг:"
+          }
         }
       }
     },
@@ -5581,6 +7554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "mit:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "використовуючи:"
           }
         }
       }
@@ -5598,6 +7577,12 @@
             "state" : "translated",
             "value" : "vía %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "через %@"
+          }
         }
       }
     },
@@ -5614,6 +7599,12 @@
             "state" : "translated",
             "value" : "Vibración"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зворотній зв'язок через вібрацію"
+          }
         }
       }
     },
@@ -5627,6 +7618,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View.ID."
+          }
+        },
+        "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "View.ID."
@@ -5647,6 +7644,12 @@
             "state" : "translated",
             "value" : "Visite el sitio web taler.net"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відвідайте вебсайт taler.net"
+          }
         }
       }
     },
@@ -5662,6 +7665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versión WalletCore"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія WalletCore"
           }
         }
       }
@@ -5679,6 +7688,12 @@
             "state" : "translated",
             "value" : "Cuando una trasacción termina"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коли транзакція завершена"
+          }
         }
       }
     },
@@ -5694,6 +7709,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Irá al sitio web del bank para confirmar esta extracción."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт банку для авторизації цього зняття."
           }
         }
       }
@@ -5712,6 +7733,12 @@
             "state" : "translated",
             "value" : "Irá al sitio web del bank para confirmar esta extracción."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт банку для підтвердження цього зняття."
+          }
         }
       }
     },
@@ -5727,6 +7754,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá a ver el detalle."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде до детального перегляду."
           }
         }
       }
@@ -5744,6 +7777,12 @@
             "state" : "translated",
             "value" : "Irá al sitio web KYC para confirmar esta extracción"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт KYC для підтвердження цього зняття."
+          }
         }
       }
     },
@@ -5759,6 +7798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá a la lista de transacciones principal."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде до основного списку транзакцій."
           }
         }
       }
@@ -5776,6 +7821,12 @@
             "state" : "translated",
             "value" : "Irá a transacciones pendientes."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде до очікуваних транзакцій."
+          }
         }
       }
     },
@@ -5791,6 +7842,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá al sitio web del comerciante demo."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт демонстраційного магазину."
           }
         }
       }
@@ -5808,6 +7865,12 @@
             "state" : "translated",
             "value" : "Irá al sitio web del comerciante."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт продавця."
+          }
         }
       }
     },
@@ -5818,6 +7881,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Überweisung"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банківський переказ"
           }
         }
       }
@@ -5835,6 +7904,12 @@
             "state" : "translated",
             "value" : "Transferencia bancaria"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Банківський переказ"
+          }
         }
       }
     },
@@ -5845,6 +7920,12 @@
             "state" : "translated",
             "value" : "Überweisungsanleitung"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інструкції щодо банківського переказу"
+          }
         }
       }
     },
@@ -5854,6 +7935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR-Codes für die Überweisung"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-коди для банківського переказу"
           }
         }
       }
@@ -5872,6 +7959,12 @@
             "state" : "translated",
             "value" : "Extraer\t%@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняти %@"
+          }
         }
       }
     },
@@ -5882,6 +7975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abheben:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняття:"
           }
         }
       }
@@ -5899,6 +7998,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Extracción"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняття коштів"
           }
         }
       }
@@ -5924,6 +8029,12 @@
             "state" : "translated",
             "value" : "Extraer"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зняття"
+          }
         }
       }
     },
@@ -5939,6 +8050,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ayer"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вчора"
           }
         }
       }
@@ -5956,6 +8073,12 @@
             "state" : "translated",
             "value" : "También puede agregar un servicio de pago manualmente en Configuración."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви також можете додати платіжну послугу вручну в налаштуваннях."
+          }
         }
       }
     },
@@ -5971,6 +8094,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "También puede escanear el código QR de extracción desde to banco on la solapa de Banaces para agregar un servicio de pago automaticamente."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви також можете сканувати QR-код для зняття з вашого банку на вкладці \"Баланси\", щоб автоматично додати платіжну послугу."
           }
         }
       }
@@ -5988,6 +8117,12 @@
             "state" : "translated",
             "value" : "Puede gastar estos %@ en el comercio Demo, o enviarlos a otra billetera."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви можете витратити ці %@ в демонстраційному магазині або відправити їх на інший гаманець."
+          }
         }
       }
     },
@@ -6003,6 +8138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No tiene suficiente %@."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас недостатньо %@."
           }
         }
       }
@@ -6021,6 +8162,12 @@
             "state" : "translated",
             "value" : "Debe aceptar los Términos de Servicio del Proveedor de Servicio de Pago antes de recibir dinero electrónico en su billetera."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спочатку ви повинні прийняти умови надання послуг постачальника платіжних послуг, перш ніж ви зможете отримати електронні гроші в своєму гаманці."
+          }
         }
       }
     },
@@ -6036,6 +8183,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Debe aceptar los Términos de Servicio del Proveedor de Servicio de Pago antes de que pueda usarlo para extraer dinero electrónico en su billetera."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спочатку ви повинні прийняти умови надання послуг постачальника платіжних послуг, перш ніж зможете використовувати його для зняття електронних грошей на свій гаманець."
           }
         }
       }
@@ -6053,6 +8206,12 @@
             "state" : "translated",
             "value" : "Debe aceptar los Términos de Servicio del Servicio de PAgo antes."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви повинні спочатку прийняти умови надання послуг платіжної служби."
+          }
         }
       }
     },
@@ -6068,6 +8227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Necesita pasar un un procedimiento de KYC"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви повинні пройти процедуру KYC"
           }
         }
       }
@@ -6091,6 +8256,12 @@
             "state" : "translated",
             "value" : "Necesita transferir %1$@ desde una cuenta bancaria regular al Proveedor de Servicio de Pago para recibir %2$@ en forma de dinero electrónico."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вам потрібно перевести %1$@ з вашого основного банківського рахунку на постачальника платіжних послуг, щоб отримати %2$@ як електронні гроші в цьому гаманці."
+          }
         }
       }
     },
@@ -6100,6 +8271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Überweisungsgebühren ihrer Bank: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія вашого банку за переказ: %@"
           }
         }
       }
