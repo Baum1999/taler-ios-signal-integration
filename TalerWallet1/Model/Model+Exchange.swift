@@ -30,6 +30,7 @@ enum ExchangeUpdateStatus: String, Codable {
     case outdatedUpdate = "outdated-update"
     case ready
     case readyUpdate = "ready-update"
+    case unavailableUpdate = "unavailable-update"
 }
 
 struct ExchangeState: Codable, Hashable {
