@@ -1,3 +1,8 @@
+Version 0.12.1 (wallet-core 0.12.9)
+
+• Ukrainian localization - Slava Ukraini!
+
+
 Version 0.12.0 (wallet-core 0.12.9)
 
 • New icons for actions
@@ -11,7 +16,7 @@ Version 0.12.0 (wallet-core 0.12.9)
 
 Version 0.11.2 (wallet-core 0.11.4)
 
-- Bugfix: Send P2P had the comparison (amount <= available) wrong
+- Bugfix: Send P2P had the comparison (amount vs available) wrong
 
 
 Version 0.11.1 (wallet-core 0.11.3)
