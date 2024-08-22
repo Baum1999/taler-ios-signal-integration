@@ -1,0 +1,3613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="TalerWallet1/GNU_Taler InfoPlist.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.4" build-num="15F31d"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>GNU Taler</source>
+        <target state="new">GNU Taler</target>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>GNU_Taler</source>
+        <target state="new">GNU_Taler</target>
+        <note>Bundle name</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>Scan QR Codes</source>
+        <target state="new">Scan QR Codes</target>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
+        <source>© Taler-Systems.com</source>
+        <target state="new">© Taler-Systems.com</target>
+        <note>Copyright (human-readable)</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="TalerWallet1/Localizable.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.4" build-num="15F31d"/>
+    </header>
+    <body>
+      <trans-unit id="&#10;Warnings can be switched off in Settings" xml:space="preserve">
+        <source>
+Warnings can be switched off in Settings</source>
+        <target state="new">
+Warnings can be switched off in Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ %@" xml:space="preserve">
+        <source>%1$@ %2$@</source>
+        <target state="new">%1$@ %2$@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ fee" xml:space="preserve">
+        <source>%@ fee</source>
+        <target state="new">%@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld characters of 100" xml:space="preserve">
+        <source>%lld characters of 100</source>
+        <target state="new">%lld characters of 100</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld days ago" xml:space="preserve">
+        <source>%lld days ago</source>
+        <target state="new">%lld days ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld hours ago" xml:space="preserve">
+        <source>%lld hours ago</source>
+        <target state="new">%lld hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld minutes ago" xml:space="preserve">
+        <source>%lld minutes ago</source>
+        <target state="new">%lld minutes ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld years" xml:space="preserve">
+        <source>%lld years</source>
+        <target state="new">%lld years</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%llu Day" xml:space="preserve">
+        <source>%llu Day</source>
+        <target state="new">%llu Day</target>
+        <note>1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer</note>
+      </trans-unit>
+      <trans-unit id="%llu Days" xml:space="preserve">
+        <source>%llu Days</source>
+        <target state="new">%llu Days</target>
+        <note>7 Days, always plural (3..9), 4 letters max., abbreviate if longer</note>
+      </trans-unit>
+      <trans-unit id="**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:" xml:space="preserve">
+        <source>**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:</source>
+        <target state="new">**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Alternative:** Use this PayTo-Link:" xml:space="preserve">
+        <source>**Alternative:** Use this PayTo-Link:</source>
+        <target state="new">**Alternative:** Use this PayTo-Link:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:" xml:space="preserve">
+        <source>**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:</source>
+        <target state="new">**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 1:** Copy+Paste this subject:" xml:space="preserve">
+        <source>**Step 1:** Copy+Paste this subject:</source>
+        <target state="new">**Step 1:** Copy+Paste this subject:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:" xml:space="preserve">
+        <source>**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:</source>
+        <target state="new">**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy+Paste payee and IBAN:" xml:space="preserve">
+        <source>**Step 2:** Copy+Paste payee and IBAN:</source>
+        <target state="new">**Step 2:** Copy+Paste payee and IBAN:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy+Paste payee and account:" xml:space="preserve">
+        <source>**Step 2:** Copy+Paste payee and account:</source>
+        <target state="new">**Step 2:** Copy+Paste payee and account:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):" xml:space="preserve">
+        <source>**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):</source>
+        <target state="new">**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." xml:space="preserve">
+        <source>**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</source>
+        <target state="new">**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." xml:space="preserve">
+        <source>**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</source>
+        <target state="new">**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 3:** Transfer %@." xml:space="preserve">
+        <source>**Step 3:** Transfer %@.</source>
+        <target state="new">**Step 3:** Transfer %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="+ %@ fee" xml:space="preserve">
+        <source>+ %@ fee</source>
+        <target state="new">+ %@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id=", canceled" xml:space="preserve">
+        <source>, canceled</source>
+        <target state="new">, canceled</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="- %@ fee" xml:space="preserve">
+        <source>- %@ fee</source>
+        <target state="new">- %@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id=". Needs K Y C" xml:space="preserve">
+        <source>. Needs K Y C</source>
+        <target state="new">. Needs K Y C</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id=". Needs bank authorization" xml:space="preserve">
+        <source>. Needs bank authorization</source>
+        <target state="new">. Needs bank authorization</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id=". Needs bank confirmation" xml:space="preserve">
+        <source>. Needs bank confirmation</source>
+        <target state="new">. Needs bank confirmation</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="1 hour ago" xml:space="preserve">
+        <source>1 hour ago</source>
+        <target state="new">1 hour ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="1 minute ago" xml:space="preserve">
+        <source>1 minute ago</source>
+        <target state="new">1 minute ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Abort Deposit" xml:space="preserve">
+        <source>Abort Deposit</source>
+        <target state="new">Abort Deposit</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Abort P2P Send" xml:space="preserve">
+        <source>Abort P2P Send</source>
+        <target state="new">Abort P2P Send</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Abort Payment" xml:space="preserve">
+        <source>Abort Payment</source>
+        <target state="new">Abort Payment</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="About %@" xml:space="preserve">
+        <source>About %@</source>
+        <target state="new">About %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About 1½ hours ago" xml:space="preserve">
+        <source>About 1½ hours ago</source>
+        <target state="new">About 1½ hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About 2 hours ago" xml:space="preserve">
+        <source>About 2 hours ago</source>
+        <target state="new">About 2 hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About an hour ago" xml:space="preserve">
+        <source>About an hour ago</source>
+        <target state="new">About an hour ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept" xml:space="preserve">
+        <source>Accept</source>
+        <target state="new">Accept</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept P2P Receive" xml:space="preserve">
+        <source>Accept P2P Receive</source>
+        <target state="new">Accept P2P Receive</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept Terms of Service" xml:space="preserve">
+        <source>Accept Terms of Service</source>
+        <target state="new">Accept Terms of Service</target>
+        <note>Button</note>
+      </trans-unit>
+      <trans-unit id="Account holder:" xml:space="preserve">
+        <source>Account holder:</source>
+        <target state="new">Account holder:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Account:" xml:space="preserve">
+        <source>Account:</source>
+        <target state="new">Account:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Add" xml:space="preserve">
+        <source>Add</source>
+        <target state="new">Add</target>
+        <note>button in the addExchange alert</note>
+      </trans-unit>
+      <trans-unit id="Add Payment Service" xml:space="preserve">
+        <source>Add Payment Service</source>
+        <target state="new">Add Payment Service</target>
+        <note>VoiceOver for the + button</note>
+      </trans-unit>
+      <trans-unit id="Address of Payment Service" xml:space="preserve">
+        <source>Address of Payment Service</source>
+        <target state="new">Address of Payment Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount available:" xml:space="preserve">
+        <source>Amount available:</source>
+        <target state="new">Amount available:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to be spent:" xml:space="preserve">
+        <source>Amount to be spent:</source>
+        <target state="new">Amount to be spent:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to be withdrawn:" xml:space="preserve">
+        <source>Amount to be withdrawn:</source>
+        <target state="new">Amount to be withdrawn:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to deposit:" xml:space="preserve">
+        <source>Amount to deposit:</source>
+        <target state="new">Amount to deposit:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to obtain:" xml:space="preserve">
+        <source>Amount to obtain:</source>
+        <target state="new">Amount to obtain:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to pay:" xml:space="preserve">
+        <source>Amount to pay:</source>
+        <target state="new">Amount to pay:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to request:" xml:space="preserve">
+        <source>Amount to request:</source>
+        <target state="new">Amount to request:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to send:" xml:space="preserve">
+        <source>Amount to send:</source>
+        <target state="new">Amount to send:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to spend:" xml:space="preserve">
+        <source>Amount to spend:</source>
+        <target state="new">Amount to spend:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to withdraw:" xml:space="preserve">
+        <source>Amount to withdraw:</source>
+        <target state="new">Amount to withdraw:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount too big for a single withdrawal!" xml:space="preserve">
+        <source>Amount too big for a single withdrawal!</source>
+        <target state="new">Amount too big for a single withdrawal!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount too small!" xml:space="preserve">
+        <source>Amount too small!</source>
+        <target state="new">Amount too small!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount:" xml:space="preserve">
+        <source>Amount:</source>
+        <target state="new">Amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="App Version" xml:space="preserve">
+        <source>App Version</source>
+        <target state="new">App Version</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to abort this transaction?" xml:space="preserve">
+        <source>Are you sure you want to abort this transaction?</source>
+        <target state="new">Are you sure you want to abort this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to delete this transaction?" xml:space="preserve">
+        <source>Are you sure you want to delete this transaction?</source>
+        <target state="new">Are you sure you want to delete this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to fail this transaction?" xml:space="preserve">
+        <source>Are you sure you want to fail this transaction?</source>
+        <target state="new">Are you sure you want to fail this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Authorize at Bank" xml:space="preserve">
+        <source>Authorize at Bank</source>
+        <target state="new">Authorize at Bank</target>
+        <note>Nav title</note>
+      </trans-unit>
+      <trans-unit id="Authorize later" xml:space="preserve">
+        <source>Authorize later</source>
+        <target state="new">Authorize later</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Authorize now" xml:space="preserve">
+        <source>Authorize now</source>
+        <target state="new">Authorize now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Available:" xml:space="preserve">
+        <source>Available:</source>
+        <target state="new">Available:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Available:&#9;%@" xml:space="preserve">
+        <source>Available:	%@</source>
+        <target state="new">Available:	%@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Backup restored" xml:space="preserve">
+        <source>Backup restored</source>
+        <target state="new">Backup restored</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Balance:" xml:space="preserve">
+        <source>Balance:</source>
+        <target state="new">Balance:</target>
+        <note>Main view</note>
+      </trans-unit>
+      <trans-unit id="Bank" xml:space="preserve">
+        <source>Bank</source>
+        <target state="new">Bank</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Cancel" xml:space="preserve">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Checking Link" xml:space="preserve">
+        <source>Checking Link</source>
+        <target state="new">Checking Link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Choose the expiration duration" xml:space="preserve">
+        <source>Choose the expiration duration</source>
+        <target state="new">Choose the expiration duration</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Chosen amount to withdraw:" xml:space="preserve">
+        <source>Chosen amount to withdraw:</source>
+        <target state="new">Chosen amount to withdraw:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Chosen:" xml:space="preserve">
+        <source>Chosen:</source>
+        <target state="new">Chosen:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Close" xml:space="preserve">
+        <source>Close</source>
+        <target state="new">Close</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Closing Camera" xml:space="preserve">
+        <source>Closing Camera</source>
+        <target state="new">Closing Camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Confirm Payment" xml:space="preserve">
+        <source>Confirm Payment</source>
+        <target state="new">Confirm Payment</target>
+        <note>pay P2P request/invoice
+pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Confirm Withdrawal" xml:space="preserve">
+        <source>Confirm Withdrawal</source>
+        <target state="new">Confirm Withdrawal</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Confirmation:" xml:space="preserve">
+        <source>Confirmation:</source>
+        <target state="new">Confirmation:</target>
+        <note>purchase may have a pos validation / confirmation</note>
+      </trans-unit>
+      <trans-unit id="Contacting..." xml:space="preserve">
+        <source>Contacting...</source>
+        <target state="new">Contacting...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Copy the IBAN" xml:space="preserve">
+        <source>Copy the IBAN</source>
+        <target state="new">Copy the IBAN</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the account" xml:space="preserve">
+        <source>Copy the account</source>
+        <target state="new">Copy the account</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the cryptocode" xml:space="preserve">
+        <source>Copy the cryptocode</source>
+        <target state="new">Copy the cryptocode</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the error" xml:space="preserve">
+        <source>Copy the error</source>
+        <target state="new">Copy the error</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the error JSON" xml:space="preserve">
+        <source>Copy the error JSON</source>
+        <target state="new">Copy the error JSON</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Copy the payee" xml:space="preserve">
+        <source>Copy the payee</source>
+        <target state="new">Copy the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy.long" xml:space="preserve">
+        <source>Copy</source>
+        <target state="new">Copy</target>
+        <note>may be a bit longer</note>
+      </trans-unit>
+      <trans-unit id="Copy.short" xml:space="preserve">
+        <source>Copy</source>
+        <target state="new">Copy</target>
+        <note>5 letters max, else abbreviate</note>
+      </trans-unit>
+      <trans-unit id="Cryptocode" xml:space="preserve">
+        <source>Cryptocode</source>
+        <target state="new">Cryptocode</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Custom Amount" xml:space="preserve">
+        <source>Custom Amount</source>
+        <target state="new">Custom Amount</target>
+        <note>pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Custom Summary" xml:space="preserve">
+        <source>Custom Summary</source>
+        <target state="new">Custom Summary</target>
+        <note>pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Demo: get digital cash to experience how to pay with the money of the future." xml:space="preserve">
+        <source>Demo: get digital cash to experience how to pay with the money of the future.</source>
+        <target state="new">Demo: get digital cash to experience how to pay with the money of the future.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Deposit" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Deposit&#9;%@" xml:space="preserve">
+        <source>Deposit	%@</source>
+        <target state="new">Deposit	%@</target>
+        <note>Button `Deposit (currency)´, must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="Deposit %@" xml:space="preserve">
+        <source>Deposit %@</source>
+        <target state="new">Deposit %@</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Deposit:" xml:space="preserve">
+        <source>Deposit:</source>
+        <target state="new">Deposit:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="DepositButton_Short" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>Abbreviation of button `Deposit (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Deserialization error" xml:space="preserve">
+        <source>Deserialization error</source>
+        <target state="new">Deserialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Done" xml:space="preserve">
+        <source>Done</source>
+        <target state="new">Done</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Effective:" xml:space="preserve">
+        <source>Effective:</source>
+        <target state="new">Effective:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 1" xml:space="preserve">
+        <source>Either provide this payment link</source>
+        <target state="new">Either provide this payment link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 2" xml:space="preserve">
+        <source>to the payee, or</source>
+        <target state="new">to the payee, or</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 3" xml:space="preserve">
+        <source>let the payee scan this QR code to receive %@.</source>
+        <target state="new">let the payee scan this QR code to receive %@.</target>
+        <note>e.g. '$ 7.41'</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 1" xml:space="preserve">
+        <source>Either</source>
+        <target state="new">Either</target>
+        <note>Either (copy/share this link to the payee)</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 2" xml:space="preserve">
+        <source>or scan this</source>
+        <target state="new">or scan this</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 3" xml:space="preserve">
+        <source>to receive %@.</source>
+        <target state="new">to receive %@.</target>
+        <note>e.g. '$ 7.41'</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 1" xml:space="preserve">
+        <source>Either provide this payment link</source>
+        <target state="new">Either provide this payment link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 2" xml:space="preserve">
+        <source>to the payer, or</source>
+        <target state="new">to the payer, or</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 3" xml:space="preserve">
+        <source>let the payer scan this QR code to pay %@.</source>
+        <target state="new">let the payer scan this QR code to pay %@.</target>
+        <note>e.g. '5,3 €'</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 1" xml:space="preserve">
+        <source>Either</source>
+        <target state="new">Either</target>
+        <note>Either (copy/share this link to the payer)</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 2" xml:space="preserve">
+        <source>or scan this</source>
+        <target state="new">or scan this</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 3" xml:space="preserve">
+        <source>to pay %@.</source>
+        <target state="new">to pay %@.</target>
+        <note>e.g. '5,3 €'</note>
+      </trans-unit>
+      <trans-unit id="Enter subject:" xml:space="preserve">
+        <source>Enter subject:</source>
+        <target state="new">Enter subject:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Error" xml:space="preserve">
+        <source>Error</source>
+        <target state="new">Error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Exchange fee (long):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>long version</note>
+      </trans-unit>
+      <trans-unit id="Exchange fee (short):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>short version</note>
+      </trans-unit>
+      <trans-unit id="Expires in:" xml:space="preserve">
+        <source>Expires in:</source>
+        <target state="new">Expires in:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Expires: %@" xml:space="preserve">
+        <source>Expires: %@</source>
+        <target state="new">Expires: %@</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Fee (long):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>long version</note>
+      </trans-unit>
+      <trans-unit id="Fee (short):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>short version</note>
+      </trans-unit>
+      <trans-unit id="For Delete, Fail &amp; Abort buttons" xml:space="preserve">
+        <source>For Delete, Fail &amp; Abort buttons</source>
+        <target state="new">For Delete, Fail &amp; Abort buttons</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Gross Amount to receive:" xml:space="preserve">
+        <source>Gross Amount to receive:</source>
+        <target state="new">Gross Amount to receive:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Haptics" xml:space="preserve">
+        <source>Haptics</source>
+        <target state="new">Haptics</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="IBAN of the payee" xml:space="preserve">
+        <source>IBAN of the payee</source>
+        <target state="new">IBAN of the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="IBAN:" xml:space="preserve">
+        <source>IBAN:</source>
+        <target state="new">IBAN:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:" xml:space="preserve">
+        <source>If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:</source>
+        <target state="new">If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If your banking software runs on another device, you can scan one of these QR codes:" xml:space="preserve">
+        <source>If your banking software runs on another device, you can scan one of these QR codes:</source>
+        <target state="new">If your banking software runs on another device, you can scan one of these QR codes:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="In progress" xml:space="preserve">
+        <source>In progress</source>
+        <target state="new">In progress</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Initialization error" xml:space="preserve">
+        <source>Initialization error</source>
+        <target state="new">Initialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Instructions" xml:space="preserve">
+        <source>Instructions</source>
+        <target state="new">Instructions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Internal core error" xml:space="preserve">
+        <source>Internal core error</source>
+        <target state="new">Internal core error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="It seems you wanted to request money - but this transaction will let you pay..." xml:space="preserve">
+        <source>It seems you wanted to request money - but this transaction will let you pay...</source>
+        <target state="new">It seems you wanted to request money - but this transaction will let you pay...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="KYC" xml:space="preserve">
+        <source>KYC</source>
+        <target state="new">KYC</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Language:" xml:space="preserve">
+        <source>Language:</source>
+        <target state="new">Language:</target>
+        <note>title of ToS language selection</note>
+      </trans-unit>
+      <trans-unit id="LinkTitle_DEMOBANK" xml:space="preserve">
+        <source>Demo Bank Website</source>
+        <target state="new">Demo Bank Website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="LinkTitle_DEMOSHOP" xml:space="preserve">
+        <source>Spend demo money</source>
+        <target state="new">Spend demo money</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="LinkTitle_Test_Money" xml:space="preserve">
+        <source>Get demo money</source>
+        <target state="new">Get demo money</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="List Style:" xml:space="preserve">
+        <source>List Style:</source>
+        <target state="new">List Style:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Loading…" xml:space="preserve">
+        <source>Loading…</source>
+        <target state="new">Loading…</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Lost:" xml:space="preserve">
+        <source>Lost:</source>
+        <target state="new">Lost:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Main Menu" xml:space="preserve">
+        <source>Main Menu</source>
+        <target state="new">Main Menu</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="MajorState.Aborted" xml:space="preserve">
+        <source>Aborted</source>
+        <target state="new">Aborted</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Aborting" xml:space="preserve">
+        <source>Aborting</source>
+        <target state="new">Aborting</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Deleted" xml:space="preserve">
+        <source>Deleted</source>
+        <target state="new">Deleted</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Dialog" xml:space="preserve">
+        <source>Dialog</source>
+        <target state="new">Dialog</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Done" xml:space="preserve">
+        <source>Done</source>
+        <target state="new">Done</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Expired" xml:space="preserve">
+        <source>Expired</source>
+        <target state="new">Expired</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Failed" xml:space="preserve">
+        <source>Failed</source>
+        <target state="new">Failed</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Finalizing" xml:space="preserve">
+        <source>Finalizing</source>
+        <target state="new">Finalizing</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Pending" xml:space="preserve">
+        <source>Pending</source>
+        <target state="new">Pending</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="Manage payment service providers..." xml:space="preserve">
+        <source>Manage payment service providers...</source>
+        <target state="new">Manage payment service providers...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Merchant" xml:space="preserve">
+        <source>Merchant</source>
+        <target state="new">Merchant</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Minimalistic" xml:space="preserve">
+        <source>Minimalistic</source>
+        <target state="new">Minimalistic</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="MinorState.aml" xml:space="preserve">
+        <source>AML required</source>
+        <target state="new">AML required</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="MinorState.bankConfirmTransfer" xml:space="preserve">
+        <source>Waiting for bank transfer</source>
+        <target state="new">Waiting for bank transfer</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="MinorState.kyc" xml:space="preserve">
+        <source>KYC required</source>
+        <target state="new">KYC required</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="Money lost" xml:space="preserve">
+        <source>Money lost</source>
+        <target state="new">Money lost</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Money lost:" xml:space="preserve">
+        <source>Money lost:</source>
+        <target state="new">Money lost:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More info about GNU Taler in general..." xml:space="preserve">
+        <source>More info about GNU Taler in general...</source>
+        <target state="new">More info about GNU Taler in general...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More info about this app..." xml:space="preserve">
+        <source>More info about this app...</source>
+        <target state="new">More info about this app...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More than a week ago" xml:space="preserve">
+        <source>More than a week ago</source>
+        <target state="new">More than a week ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="NavTitle_Deposit_AmountStr" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>NavTitle: Deposit</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Deposit_Currency" xml:space="preserve">
+        <source>Deposit %@</source>
+        <target state="new">Deposit %@</target>
+        <note>NavTitle: Deposit 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Request_AmountStr" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>NavTitle: Request 'amountStr'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Request_Currency" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>NavTitle: Request 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Send_AmountStr" xml:space="preserve">
+        <source>Send %@</source>
+        <target state="new">Send %@</target>
+        <note>NavTitle: Send 'amountStr'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Send_Currency" xml:space="preserve">
+        <source>Send %@</source>
+        <target state="new">Send %@</target>
+        <note>NavTitle: Send 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Withdraw (currency)" xml:space="preserve">
+        <source>Withdraw %@</source>
+        <target state="new">Withdraw %@</target>
+        <note>NavTitle: Withdraw 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Withdraw (currency) A11y" xml:space="preserve">
+        <source>Withdraw %@</source>
+        <target state="new">Withdraw %@</target>
+        <note>NavTitle: Withdraw 'currency'</note>
+      </trans-unit>
+      <trans-unit id="Net Amount to receive:" xml:space="preserve">
+        <source>Net Amount to receive:</source>
+        <target state="new">Net Amount to receive:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Next" xml:space="preserve">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note>advance Deposit to Amount</note>
+      </trans-unit>
+      <trans-unit id="No date" xml:space="preserve">
+        <source>No date</source>
+        <target state="new">No date</target>
+        <note>Timestamp missing or invalid</note>
+      </trans-unit>
+      <trans-unit id="No payment fee" xml:space="preserve">
+        <source>No payment fee</source>
+        <target state="new">No payment fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="No withdrawal fee" xml:space="preserve">
+        <source>No withdrawal fee</source>
+        <target state="new">No withdrawal fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take quite some time to prepare this amount! Be more patient..." xml:space="preserve">
+        <source>Note: It will take quite some time to prepare this amount! Be more patient...</source>
+        <target state="new">Note: It will take quite some time to prepare this amount! Be more patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take quite some time to withdraw this amount! Be more patient..." xml:space="preserve">
+        <source>Note: It will take quite some time to withdraw this amount! Be more patient...</source>
+        <target state="new">Note: It will take quite some time to withdraw this amount! Be more patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take some time to prepare this amount. Be patient..." xml:space="preserve">
+        <source>Note: It will take some time to prepare this amount. Be patient...</source>
+        <target state="new">Note: It will take some time to prepare this amount. Be patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take some time to withdraw this amount. Be patient..." xml:space="preserve">
+        <source>Note: It will take some time to withdraw this amount. Be patient...</source>
+        <target state="new">Note: It will take some time to withdraw this amount. Be patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="OK" xml:space="preserve">
+        <source>OK</source>
+        <target state="new">OK</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Observe walletCore" xml:space="preserve">
+        <source>Observe walletCore</source>
+        <target state="new">Observe walletCore</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Obtain:" xml:space="preserve">
+        <source>Obtain:</source>
+        <target state="new">Obtain:</target>
+        <note>Amount to obtain:</note>
+      </trans-unit>
+      <trans-unit id="Obtained amount:" xml:space="preserve">
+        <source>Obtained amount:</source>
+        <target state="new">Obtained amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Obtained:" xml:space="preserve">
+        <source>Obtained:</source>
+        <target state="new">Obtained:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Omit text where possible" xml:space="preserve">
+        <source>Omit text where possible</source>
+        <target state="new">Omit text where possible</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open KYC website" xml:space="preserve">
+        <source>Open KYC website</source>
+        <target state="new">Open KYC website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open Settings" xml:space="preserve">
+        <source>Open Settings</source>
+        <target state="new">Open Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open merchant website" xml:space="preserve">
+        <source>Open merchant website</source>
+        <target state="new">Open merchant website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Opening Camera" xml:space="preserve">
+        <source>Opening Camera</source>
+        <target state="new">Opening Camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Order-ID:" xml:space="preserve">
+        <source>Order-ID:</source>
+        <target state="new">Order-ID:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="P2P Ready" xml:space="preserve">
+        <source>P2P Ready</source>
+        <target state="new">P2P Ready</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="P2P Receive" xml:space="preserve">
+        <source>P2P Receive</source>
+        <target state="new">P2P Receive</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Paid" xml:space="preserve">
+        <source>Paid</source>
+        <target state="new">Paid</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Paid P2P" xml:space="preserve">
+        <source>Paid P2P</source>
+        <target state="new">Paid P2P</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Paid Request" xml:space="preserve">
+        <source>Paid Request</source>
+        <target state="new">Paid Request</target>
+        <note>TransactionType, paid invoice from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Paid amount:" xml:space="preserve">
+        <source>Paid amount:</source>
+        <target state="new">Paid amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Paid:" xml:space="preserve">
+        <source>Paid:</source>
+        <target state="new">Paid:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Pay %@ now" xml:space="preserve">
+        <source>Pay %@ now</source>
+        <target state="new">Pay %@ now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pay P2P" xml:space="preserve">
+        <source>Pay P2P</source>
+        <target state="new">Pay P2P</target>
+        <note>Nav Title</note>
+      </trans-unit>
+      <trans-unit id="Pay Peer-Pull" xml:space="preserve">
+        <source>Pay Peer-Pull</source>
+        <target state="new">Pay Peer-Pull</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Pay Peer-Push" xml:space="preserve">
+        <source>Pay Peer-Push</source>
+        <target state="new">Pay Peer-Push</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Pay Request" xml:space="preserve">
+        <source>Pay Request</source>
+        <target state="new">Pay Request</target>
+        <note>TransactionType, scan invoice to pay to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Pay:" xml:space="preserve">
+        <source>Pay:</source>
+        <target state="new">Pay:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Payee" xml:space="preserve">
+        <source>Payee</source>
+        <target state="new">Payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Payee:" xml:space="preserve">
+        <source>Payee:</source>
+        <target state="new">Payee:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Payment" xml:space="preserve">
+        <source>Payment</source>
+        <target state="new">Payment</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Payment is made in %@" xml:space="preserve">
+        <source>Payment is made in %@</source>
+        <target state="new">Payment is made in %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Payment provider:" xml:space="preserve">
+        <source>Payment provider:</source>
+        <target state="new">Payment provider:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pending" xml:space="preserve">
+        <source>Pending</source>
+        <target state="new">Pending</target>
+        <note>ViewTitle of TransactionList</note>
+      </trans-unit>
+      <trans-unit id="Pending amount to obtain:" xml:space="preserve">
+        <source>Pending amount to obtain:</source>
+        <target state="new">Pending amount to obtain:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pending:" xml:space="preserve">
+        <source>Pending:</source>
+        <target state="new">Pending:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Play Payment Sounds" xml:space="preserve">
+        <source>Play Payment Sounds</source>
+        <target state="new">Play Payment Sounds</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Please allow camera access in settings." xml:space="preserve">
+        <source>Please allow camera access in settings.</source>
+        <target state="new">Please allow camera access in settings.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Please allow camera access in settings1." xml:space="preserve">
+        <source>Please allow camera access in settings1.</source>
+        <target state="new">Please allow camera access in settings1.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Please enter the URL" xml:space="preserve">
+        <source>Please enter the URL</source>
+        <target state="new">Please enter the URL</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Price (net):" xml:space="preserve">
+        <source>Price (net):</source>
+        <target state="new">Price (net):</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Price:" xml:space="preserve">
+        <source>Price:</source>
+        <target state="new">Price:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Progress indicator" xml:space="preserve">
+        <source>Progress indicator</source>
+        <target state="new">Progress indicator</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR" xml:space="preserve">
+        <source>QR</source>
+        <target state="new">QR</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR Code" xml:space="preserve">
+        <source>QR Code</source>
+        <target state="new">QR Code</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR code and link can also be scanned or copied / shared from Transactions later." xml:space="preserve">
+        <source>QR code and link can also be scanned or copied / shared from Transactions later.</source>
+        <target state="new">QR code and link can also be scanned or copied / shared from Transactions later.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Receive Money" xml:space="preserve">
+        <source>Receive Money</source>
+        <target state="new">Receive Money</target>
+        <note>TransactionType, scan to receive coins sent from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Receive gross:" xml:space="preserve">
+        <source>Receive gross:</source>
+        <target state="new">Receive gross:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Receive net:" xml:space="preserve">
+        <source>Receive net:</source>
+        <target state="new">Receive net:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Received Money" xml:space="preserve">
+        <source>Received Money</source>
+        <target state="new">Received Money</target>
+        <note>TransactionType, received coins sent from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Received P2P" xml:space="preserve">
+        <source>Received P2P</source>
+        <target state="new">Received P2P</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Recent %lld transactions" xml:space="preserve">
+        <source>Recent %lld transactions</source>
+        <target state="new">Recent %lld transactions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Recent transaction" xml:space="preserve">
+        <source>Recent transaction</source>
+        <target state="new">Recent transaction</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Recoup" xml:space="preserve">
+        <source>Recoup</source>
+        <target state="new">Recoup</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Recoup:" xml:space="preserve">
+        <source>Recoup:</source>
+        <target state="new">Recoup:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Refresh" xml:space="preserve">
+        <source>Refresh</source>
+        <target state="new">Refresh</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Refund" xml:space="preserve">
+        <source>Refund</source>
+        <target state="new">Refund</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Refunded amount:" xml:space="preserve">
+        <source>Refunded amount:</source>
+        <target state="new">Refunded amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Refunded:" xml:space="preserve">
+        <source>Refunded:</source>
+        <target state="new">Refunded:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Reload" xml:space="preserve">
+        <source>Reload</source>
+        <target state="new">Reload</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Request %@" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Request Money" xml:space="preserve">
+        <source>Request Money</source>
+        <target state="new">Request Money</target>
+        <note>TransactionType, send invoice to another wallet</note>
+      </trans-unit>
+      <trans-unit id="RequestButton_Full" xml:space="preserve">
+        <source>Request	%@</source>
+        <target state="new">Request	%@</target>
+        <note>`Request (currency)´ in Balances - must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="RequestButton_Short" xml:space="preserve">
+        <source>Request</source>
+        <target state="new">Request</target>
+        <note>Abbreviation of button `Request (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Requested Money" xml:space="preserve">
+        <source>Requested Money</source>
+        <target state="new">Requested Money</target>
+        <note>TransactionType, sent invoice to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Reset" xml:space="preserve">
+        <source>Reset</source>
+        <target state="new">Reset</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Reset Wallet" xml:space="preserve">
+        <source>Reset Wallet</source>
+        <target state="new">Reset Wallet</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Restriction:" xml:space="preserve">
+        <source>Restriction:</source>
+        <target state="new">Restriction:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Right now" xml:space="preserve">
+        <source>Right now</source>
+        <target state="new">Right now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Save" xml:space="preserve">
+        <source>Save</source>
+        <target state="new">Save</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scan QR" xml:space="preserve">
+        <source>Scan QR</source>
+        <target state="new">Scan QR</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scan QR codes" xml:space="preserve">
+        <source>Scan QR codes</source>
+        <target state="new">Scan QR codes</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scanning QR-codes requires access to the camera" xml:space="preserve">
+        <source>Scanning QR-codes requires access to the camera</source>
+        <target state="new">Scanning QR-codes requires access to the camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scheduled" xml:space="preserve">
+        <source>Scheduled</source>
+        <target state="new">Scheduled</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Scroll down" xml:space="preserve">
+        <source>Scroll down</source>
+        <target state="new">Scroll down</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scroll up" xml:space="preserve">
+        <source>Scroll up</source>
+        <target state="new">Scroll up</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Select age" xml:space="preserve">
+        <source>Select age</source>
+        <target state="new">Select age</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Send %@ now" xml:space="preserve">
+        <source>Send %@ now</source>
+        <target state="new">Send %@ now</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Send Money" xml:space="preserve">
+        <source>Send Money</source>
+        <target state="new">Send Money</target>
+        <note>TransactionType, send coins to another wallet</note>
+      </trans-unit>
+      <trans-unit id="SendButton_Full" xml:space="preserve">
+        <source>Send	%@</source>
+        <target state="new">Send	%@</target>
+        <note>`Send (currency)´ in Balances - must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="SendButton_Short" xml:space="preserve">
+        <source>Send</source>
+        <target state="new">Send</target>
+        <note>Abbreviation of button `Send (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Sent Money" xml:space="preserve">
+        <source>Sent Money</source>
+        <target state="new">Sent Money</target>
+        <note>TransactionType, sent coins to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Serialization error" xml:space="preserve">
+        <source>Serialization error</source>
+        <target state="new">Serialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Share" xml:space="preserve">
+        <source>Share</source>
+        <target state="new">Share</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Share PayTo" xml:space="preserve">
+        <source>Share PayTo</source>
+        <target state="new">Share PayTo</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Share the PayTo URL" xml:space="preserve">
+        <source>Share the PayTo URL</source>
+        <target state="new">Share the PayTo URL</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Sheet.ID." xml:space="preserve">
+        <source>Sheet.ID.</source>
+        <target state="new">Sheet.ID.</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Shortcut" xml:space="preserve">
+        <source>Shortcut</source>
+        <target state="new">Shortcut</target>
+        <note>VoiceOver: $50,$25,$10,$5 shortcut buttons</note>
+      </trans-unit>
+      <trans-unit id="Show Warnings" xml:space="preserve">
+        <source>Show Warnings</source>
+        <target state="new">Show Warnings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Show logs" xml:space="preserve">
+        <source>Show logs</source>
+        <target state="new">Show logs</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Shows which view you currently are on." xml:space="preserve">
+        <source>Shows which view you currently are on.</source>
+        <target state="new">Shows which view you currently are on.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Since the demo bank supports the Taler integration, you can start a withdrawal directly on the" xml:space="preserve">
+        <source>Since the demo bank supports the Taler integration, you can start a withdrawal directly on the</source>
+        <target state="new">Since the demo bank supports the Taler integration, you can start a withdrawal directly on the</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Some pending transactions" xml:space="preserve">
+        <source>Some pending transactions</source>
+        <target state="new">Some pending transactions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Standard iOS Font" xml:space="preserve">
+        <source>Standard iOS Font</source>
+        <target state="new">Standard iOS Font</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Status:" xml:space="preserve">
+        <source>Status:</source>
+        <target state="new">Status:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Status: %@" xml:space="preserve">
+        <source>Status: %@</source>
+        <target state="new">Status: %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Subject" xml:space="preserve">
+        <source>Subject</source>
+        <target state="new">Subject</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Summary" xml:space="preserve">
+        <source>Summary</source>
+        <target state="new">Summary</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Taler Logo" xml:space="preserve">
+        <source>Taler Logo</source>
+        <target state="new">Taler Logo</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Tap the button to go to the KYC website." xml:space="preserve">
+        <source>Tap the button to go to the KYC website.</source>
+        <target state="new">Tap the button to go to the KYC website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Terms of Service" xml:space="preserve">
+        <source>Terms of Service</source>
+        <target state="new">Terms of Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The Payment Service Provider is waiting for your wire-transfer." xml:space="preserve">
+        <source>The Payment Service Provider is waiting for your wire-transfer.</source>
+        <target state="new">The Payment Service Provider is waiting for your wire-transfer.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The bank is waiting for your authorization." xml:space="preserve">
+        <source>The bank is waiting for your authorization.</source>
+        <target state="new">The bank is waiting for your authorization.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The bank is waiting for your confirmation." xml:space="preserve">
+        <source>The bank is waiting for your confirmation.</source>
+        <target state="new">The bank is waiting for your confirmation.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The exchange will send your money back if it won't get collected in time, or when you abort the operation." xml:space="preserve">
+        <source>The exchange will send your money back if it won't get collected in time, or when you abort the operation.</source>
+        <target state="new">The exchange will send your money back if it won't get collected in time, or when you abort the operation.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The withdrawal was aborted.&#10;If you have already sent money to the exchange, it will wire it back in %@ days." xml:space="preserve">
+        <source>The withdrawal was aborted.
+If you have already sent money to the exchange, it will wire it back in %@ days.</source>
+        <target state="new">The withdrawal was aborted.
+If you have already sent money to the exchange, it will wire it back in %@ days.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There are no Payment Services yet." xml:space="preserve">
+        <source>There are no Payment Services yet.</source>
+        <target state="new">There are no Payment Services yet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There are no transactions for %@." xml:space="preserve">
+        <source>There are no transactions for %@.</source>
+        <target state="new">There are no transactions for %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There is no digital cash in your wallet." xml:space="preserve">
+        <source>There is no digital cash in your wallet.</source>
+        <target state="new">There is no digital cash in your wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This is mandatory, otherwise your money will not arrive in this wallet." xml:space="preserve">
+        <source>This is mandatory, otherwise your money will not arrive in this wallet.</source>
+        <target state="new">This is mandatory, otherwise your money will not arrive in this wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This operation cannot be undone" xml:space="preserve">
+        <source>This operation cannot be undone</source>
+        <target state="new">This operation cannot be undone</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This request will be cancelled if it doesn't get paid in time, or when you abort the operation." xml:space="preserve">
+        <source>This request will be cancelled if it doesn't get paid in time, or when you abort the operation.</source>
+        <target state="new">This request will be cancelled if it doesn't get paid in time, or when you abort the operation.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This transaction is not yet ready..." xml:space="preserve">
+        <source>This transaction is not yet ready...</source>
+        <target state="new">This transaction is not yet ready...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleBalances" xml:space="preserve">
+        <source>Balances</source>
+        <target state="new">Balances</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleExchanges" xml:space="preserve">
+        <source>Payment Services</source>
+        <target state="new">Payment Services</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleIncoming_Full" xml:space="preserve">
+        <source>Pending	incoming</source>
+        <target state="new">Pending	incoming</target>
+        <note>`Pending incoming´ in Balances - set exactly 1 \t for line break</note>
+      </trans-unit>
+      <trans-unit id="TitleIncoming_Short" xml:space="preserve">
+        <source>Incoming</source>
+        <target state="new">Incoming</target>
+        <note>Abbreviation of `Pending incoming´ in Balances</note>
+      </trans-unit>
+      <trans-unit id="TitleOutgoing_Full" xml:space="preserve">
+        <source>Pending	outgoing</source>
+        <target state="new">Pending	outgoing</target>
+        <note>`Pending outgoing´ in Balances - set exactly 1 \t for line break</note>
+      </trans-unit>
+      <trans-unit id="TitleOutgoing_Short" xml:space="preserve">
+        <source>Outgoing</source>
+        <target state="new">Outgoing</target>
+        <note>Abbreviation of `Pending outgoing´ in Balances</note>
+      </trans-unit>
+      <trans-unit id="TitleOverview" xml:space="preserve">
+        <source>Overview</source>
+        <target state="new">Overview</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleSettings" xml:space="preserve">
+        <source>Settings</source>
+        <target state="new">Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Transaction list" xml:space="preserve">
+        <source>Transaction list</source>
+        <target state="new">Transaction list</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Transactions" xml:space="preserve">
+        <source>Transactions</source>
+        <target state="new">Transactions</target>
+        <note>ViewTitle of TransactionList</note>
+      </trans-unit>
+      <trans-unit id="Transfer %@ to the Payment Service." xml:space="preserve">
+        <source>Transfer %@ to the Payment Service.</source>
+        <target state="new">Transfer %@ to the Payment Service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TxAction.Abort" xml:space="preserve">
+        <source>Abort</source>
+        <target state="new">Abort</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Delete" xml:space="preserve">
+        <source>Delete from history</source>
+        <target state="new">Delete from history</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Fail" xml:space="preserve">
+        <source>Fail</source>
+        <target state="new">Fail</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Retry" xml:space="preserve">
+        <source>Retry now</source>
+        <target state="new">Retry now</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Abort" xml:space="preserve">
+        <source>Abort pending...</source>
+        <target state="new">Abort pending...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Delete" xml:space="preserve">
+        <source>Deleted from list</source>
+        <target state="new">Deleted from list</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Fail" xml:space="preserve">
+        <source>Failing...</source>
+        <target state="new">Failing...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Retry" xml:space="preserve">
+        <source>Retrying...</source>
+        <target state="new">Retrying...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="UNKNOWN" xml:space="preserve">
+        <source>UNKNOWN</source>
+        <target state="new">UNKNOWN</target>
+        <note>merchant didn't specify the currency, use ALL CAPS</note>
+      </trans-unit>
+      <trans-unit id="Unknown Payment Provider" xml:space="preserve">
+        <source>Unknown Payment Provider</source>
+        <target state="new">Unknown Payment Provider</target>
+        <note>exchange url</note>
+      </trans-unit>
+      <trans-unit id="Unknown Payment Service" xml:space="preserve">
+        <source>Unknown Payment Service</source>
+        <target state="new">Unknown Payment Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Unknown error" xml:space="preserve">
+        <source>Unknown error</source>
+        <target state="new">Unknown error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Use the Add button to add a service." xml:space="preserve">
+        <source>Use the Add button to add a service.</source>
+        <target state="new">Use the Add button to add a service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Use the QR code scan button to start a withdrawal if your bank already supports Taler payments." xml:space="preserve">
+        <source>Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.</source>
+        <target state="new">Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Using payment service provider:" xml:space="preserve">
+        <source>Using payment service provider:</source>
+        <target state="new">Using payment service provider:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Vibration Feedback" xml:space="preserve">
+        <source>Vibration Feedback</source>
+        <target state="new">Vibration Feedback</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="View.ID." xml:space="preserve">
+        <source>View.ID.</source>
+        <target state="new">View.ID.</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Visit the taler.net website" xml:space="preserve">
+        <source>Visit the taler.net website</source>
+        <target state="new">Visit the taler.net website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="WalletCore Version" xml:space="preserve">
+        <source>WalletCore Version</source>
+        <target state="new">WalletCore Version</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="When a transaction finished" xml:space="preserve">
+        <source>When a transaction finished</source>
+        <target state="new">When a transaction finished</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to KYC website to confirm this withdrawal." xml:space="preserve">
+        <source>Will go to KYC website to confirm this withdrawal.</source>
+        <target state="new">Will go to KYC website to confirm this withdrawal.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to Pending transactions." xml:space="preserve">
+        <source>Will go to Pending transactions.</source>
+        <target state="new">Will go to Pending transactions.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to bank website to authorize this withdrawal." xml:space="preserve">
+        <source>Will go to bank website to authorize this withdrawal.</source>
+        <target state="new">Will go to bank website to authorize this withdrawal.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to bank website to confirm this withdrawal." xml:space="preserve">
+        <source>Will go to bank website to confirm this withdrawal.</source>
+        <target state="new">Will go to bank website to confirm this withdrawal.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to detail view." xml:space="preserve">
+        <source>Will go to detail view.</source>
+        <target state="new">Will go to detail view.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to main transactions list." xml:space="preserve">
+        <source>Will go to main transactions list.</source>
+        <target state="new">Will go to main transactions list.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to the demo shop website." xml:space="preserve">
+        <source>Will go to the demo shop website.</source>
+        <target state="new">Will go to the demo shop website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to the merchant website." xml:space="preserve">
+        <source>Will go to the merchant website.</source>
+        <target state="new">Will go to the merchant website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire Transfer" xml:space="preserve">
+        <source>Wire Transfer</source>
+        <target state="new">Wire Transfer</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire transfer" xml:space="preserve">
+        <source>Wire transfer</source>
+        <target state="new">Wire transfer</target>
+        <note>ViewTitle of wire-transfer QR codes
+ViewTitle of wire-transfer instructions</note>
+      </trans-unit>
+      <trans-unit id="Wire transfer QR codes" xml:space="preserve">
+        <source>Wire transfer QR codes</source>
+        <target state="new">Wire transfer QR codes</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire transfer instructions" xml:space="preserve">
+        <source>Wire transfer instructions</source>
+        <target state="new">Wire transfer instructions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Withdraw&#9;%@" xml:space="preserve">
+        <source>Withdraw	%@</source>
+        <target state="new">Withdraw	%@</target>
+        <note>Button `Withdraw (currency)´, must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="Withdraw:" xml:space="preserve">
+        <source>Withdraw:</source>
+        <target state="new">Withdraw:</target>
+        <note>Chosen amount to withdraw:</note>
+      </trans-unit>
+      <trans-unit id="WithdrawButton_Short" xml:space="preserve">
+        <source>Withdraw</source>
+        <target state="new">Withdraw</target>
+        <note>Abbreviation of button `Withdraw (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Withdrawal" xml:space="preserve">
+        <source>Withdrawal</source>
+        <target state="new">Withdrawal</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Yesterday" xml:space="preserve">
+        <source>Yesterday</source>
+        <target state="new">Yesterday</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can also add a payment service manually in the Settings." xml:space="preserve">
+        <source>You can also add a payment service manually in the Settings.</source>
+        <target state="new">You can also add a payment service manually in the Settings.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service." xml:space="preserve">
+        <source>You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.</source>
+        <target state="new">You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can spend these %@ in the Demo shop, or send them to another wallet." xml:space="preserve">
+        <source>You can spend these %@ in the Demo shop, or send them to another wallet.</source>
+        <target state="new">You can spend these %@ in the Demo shop, or send them to another wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You don't have enough %@." xml:space="preserve">
+        <source>You don't have enough %@.</source>
+        <target state="new">You don't have enough %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet." xml:space="preserve">
+        <source>You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.</source>
+        <target state="new">You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.</target>
+        <note>P2P Receive</note>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet." xml:space="preserve">
+        <source>You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.</source>
+        <target state="new">You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service's Terms of Service first." xml:space="preserve">
+        <source>You must accept the Payment Service's Terms of Service first.</source>
+        <target state="new">You must accept the Payment Service's Terms of Service first.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You need to pass a KYC procedure" xml:space="preserve">
+        <source>You need to pass a KYC procedure</source>
+        <target state="new">You need to pass a KYC procedure</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You need to transfer %@ from your regular bank account to the Payment Service Provider to receive %@ as electronic cash in this wallet." xml:space="preserve">
+        <source>You need to transfer %1$@ from your regular bank account to the Payment Service Provider to receive %2$@ as electronic cash in this wallet.</source>
+        <target state="new">You need to transfer %1$@ from your regular bank account to the Payment Service Provider to receive %2$@ as electronic cash in this wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Your bank's wire fee: %@" xml:space="preserve">
+        <source>Your bank's wire fee: %@</source>
+        <target state="new">Your bank's wire fee: %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="account of the payee" xml:space="preserve">
+        <source>account of the payee</source>
+        <target state="new">account of the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="but you only have %@ to deposit." xml:space="preserve">
+        <source>but you only have %@ to deposit.</source>
+        <target state="new">but you only have %@ to deposit.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="but you only have %@ to send." xml:space="preserve">
+        <source>but you only have %@ to send.</source>
+        <target state="new">but you only have %@ to send.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when account holder and IBAN are set" xml:space="preserve">
+        <source>enabled when account holder and IBAN are set</source>
+        <target state="new">enabled when account holder and IBAN are set</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when amount is non-zero, but not higher than your available amount" xml:space="preserve">
+        <source>enabled when amount is non-zero, but not higher than your available amount</source>
+        <target state="new">enabled when amount is non-zero, but not higher than your available amount</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when subject and expiration are set" xml:space="preserve">
+        <source>enabled when subject and expiration are set</source>
+        <target state="new">enabled when subject and expiration are set</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="from %@" xml:space="preserve">
+        <source>from %@</source>
+        <target state="new">from %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="on LocalConsole" xml:space="preserve">
+        <source>on LocalConsole</source>
+        <target state="new">on LocalConsole</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unknown command" xml:space="preserve">
+        <source>unknown command</source>
+        <target state="new">unknown command</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unknown payment method" xml:space="preserve">
+        <source>unknown payment method</source>
+        <target state="new">unknown payment method</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unrestricted" xml:space="preserve">
+        <source>unrestricted</source>
+        <target state="new">unrestricted</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="using:" xml:space="preserve">
+        <source>using:</source>
+        <target state="new">using:</target>
+        <note>using: exchange.taler.net</note>
+      </trans-unit>
+      <trans-unit id="via %@" xml:space="preserve">
+        <source>via %@</source>
+        <target state="new">via %@</target>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="TalerWallet1/Resources/Localizable.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.4" build-num="15F31d"/>
+    </header>
+    <body>
+      <trans-unit id="&#10;Warnings can be switched off in Settings" xml:space="preserve">
+        <source>
+Warnings can be switched off in Settings</source>
+        <target state="new">
+Warnings can be switched off in Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ %@" xml:space="preserve">
+        <source>%1$@ %2$@</source>
+        <target state="new">%1$@ %2$@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%@ fee" xml:space="preserve">
+        <source>%@ fee</source>
+        <target state="new">%@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld characters of 100" xml:space="preserve">
+        <source>%lld characters of 100</source>
+        <target state="new">%lld characters of 100</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld days ago" xml:space="preserve">
+        <source>%lld days ago</source>
+        <target state="new">%lld days ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld hours ago" xml:space="preserve">
+        <source>%lld hours ago</source>
+        <target state="new">%lld hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld minutes ago" xml:space="preserve">
+        <source>%lld minutes ago</source>
+        <target state="new">%lld minutes ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%lld years" xml:space="preserve">
+        <source>%lld years</source>
+        <target state="new">%lld years</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%llu Day" xml:space="preserve">
+        <source>%llu Day</source>
+        <target state="new">%llu Day</target>
+        <note>1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer</note>
+      </trans-unit>
+      <trans-unit id="%llu Days" xml:space="preserve">
+        <source>%llu Days</source>
+        <target state="new">%llu Days</target>
+        <note>7 Days, always plural (3..9), 4 letters max., abbreviate if longer</note>
+      </trans-unit>
+      <trans-unit id="**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:" xml:space="preserve">
+        <source>**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:</source>
+        <target state="new">**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Alternative:** Use this PayTo-Link:" xml:space="preserve">
+        <source>**Alternative:** Use this PayTo-Link:</source>
+        <target state="new">**Alternative:** Use this PayTo-Link:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:" xml:space="preserve">
+        <source>**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:</source>
+        <target state="new">**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 1:** Copy+Paste this subject:" xml:space="preserve">
+        <source>**Step 1:** Copy+Paste this subject:</source>
+        <target state="new">**Step 1:** Copy+Paste this subject:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:" xml:space="preserve">
+        <source>**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:</source>
+        <target state="new">**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy+Paste payee and IBAN:" xml:space="preserve">
+        <source>**Step 2:** Copy+Paste payee and IBAN:</source>
+        <target state="new">**Step 2:** Copy+Paste payee and IBAN:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** Copy+Paste payee and account:" xml:space="preserve">
+        <source>**Step 2:** Copy+Paste payee and account:</source>
+        <target state="new">**Step 2:** Copy+Paste payee and account:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):" xml:space="preserve">
+        <source>**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):</source>
+        <target state="new">**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." xml:space="preserve">
+        <source>**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</source>
+        <target state="new">**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="**Step 3:** Transfer %@." xml:space="preserve">
+        <source>**Step 3:** Transfer %@.</source>
+        <target state="new">**Step 3:** Transfer %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="+ %@ fee" xml:space="preserve">
+        <source>+ %@ fee</source>
+        <target state="new">+ %@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id=", canceled" xml:space="preserve">
+        <source>, canceled</source>
+        <target state="new">, canceled</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="- %@ fee" xml:space="preserve">
+        <source>- %@ fee</source>
+        <target state="new">- %@ fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id=". Needs K Y C" xml:space="preserve">
+        <source>. Needs K Y C</source>
+        <target state="new">. Needs K Y C</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id=". Needs bank authorization" xml:space="preserve">
+        <source>. Needs bank authorization</source>
+        <target state="new">. Needs bank authorization</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id=". Needs bank confirmation" xml:space="preserve">
+        <source>. Needs bank confirmation</source>
+        <target state="new">. Needs bank confirmation</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="1 hour ago" xml:space="preserve">
+        <source>1 hour ago</source>
+        <target state="new">1 hour ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="1 minute ago" xml:space="preserve">
+        <source>1 minute ago</source>
+        <target state="new">1 minute ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Abort Deposit" xml:space="preserve">
+        <source>Abort Deposit</source>
+        <target state="new">Abort Deposit</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Abort P2P Send" xml:space="preserve">
+        <source>Abort P2P Send</source>
+        <target state="new">Abort P2P Send</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Abort Payment" xml:space="preserve">
+        <source>Abort Payment</source>
+        <target state="new">Abort Payment</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="About %@" xml:space="preserve">
+        <source>About %@</source>
+        <target state="new">About %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About 1½ hours ago" xml:space="preserve">
+        <source>About 1½ hours ago</source>
+        <target state="new">About 1½ hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About 2 hours ago" xml:space="preserve">
+        <source>About 2 hours ago</source>
+        <target state="new">About 2 hours ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="About an hour ago" xml:space="preserve">
+        <source>About an hour ago</source>
+        <target state="new">About an hour ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept" xml:space="preserve">
+        <source>Accept</source>
+        <target state="new">Accept</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept P2P Receive" xml:space="preserve">
+        <source>Accept P2P Receive</source>
+        <target state="new">Accept P2P Receive</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Accept Terms of Service" xml:space="preserve">
+        <source>Accept Terms of Service</source>
+        <target state="new">Accept Terms of Service</target>
+        <note>Button</note>
+      </trans-unit>
+      <trans-unit id="Account holder:" xml:space="preserve">
+        <source>Account holder:</source>
+        <target state="new">Account holder:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Account:" xml:space="preserve">
+        <source>Account:</source>
+        <target state="new">Account:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Add" xml:space="preserve">
+        <source>Add</source>
+        <target state="new">Add</target>
+        <note>button in the addExchange alert</note>
+      </trans-unit>
+      <trans-unit id="Add Payment Service" xml:space="preserve">
+        <source>Add Payment Service</source>
+        <target state="new">Add Payment Service</target>
+        <note>VoiceOver for the + button</note>
+      </trans-unit>
+      <trans-unit id="Address of Payment Service" xml:space="preserve">
+        <source>Address of Payment Service</source>
+        <target state="new">Address of Payment Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount available:" xml:space="preserve">
+        <source>Amount available:</source>
+        <target state="new">Amount available:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to be spent:" xml:space="preserve">
+        <source>Amount to be spent:</source>
+        <target state="new">Amount to be spent:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to deposit:" xml:space="preserve">
+        <source>Amount to deposit:</source>
+        <target state="new">Amount to deposit:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to obtain:" xml:space="preserve">
+        <source>Amount to obtain:</source>
+        <target state="new">Amount to obtain:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to pay:" xml:space="preserve">
+        <source>Amount to pay:</source>
+        <target state="new">Amount to pay:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to request:" xml:space="preserve">
+        <source>Amount to request:</source>
+        <target state="new">Amount to request:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to send:" xml:space="preserve">
+        <source>Amount to send:</source>
+        <target state="new">Amount to send:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to spend:" xml:space="preserve">
+        <source>Amount to spend:</source>
+        <target state="new">Amount to spend:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount to withdraw:" xml:space="preserve">
+        <source>Amount to withdraw:</source>
+        <target state="new">Amount to withdraw:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount too big for a single withdrawal!" xml:space="preserve">
+        <source>Amount too big for a single withdrawal!</source>
+        <target state="new">Amount too big for a single withdrawal!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount too small!" xml:space="preserve">
+        <source>Amount too small!</source>
+        <target state="new">Amount too small!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Amount:" xml:space="preserve">
+        <source>Amount:</source>
+        <target state="new">Amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="App Version" xml:space="preserve">
+        <source>App Version</source>
+        <target state="new">App Version</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to abort this transaction?" xml:space="preserve">
+        <source>Are you sure you want to abort this transaction?</source>
+        <target state="new">Are you sure you want to abort this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to delete this transaction?" xml:space="preserve">
+        <source>Are you sure you want to delete this transaction?</source>
+        <target state="new">Are you sure you want to delete this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Are you sure you want to fail this transaction?" xml:space="preserve">
+        <source>Are you sure you want to fail this transaction?</source>
+        <target state="new">Are you sure you want to fail this transaction?</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Authorize at Bank" xml:space="preserve">
+        <source>Authorize at Bank</source>
+        <target state="new">Authorize at Bank</target>
+        <note>Nav title</note>
+      </trans-unit>
+      <trans-unit id="Authorize later" xml:space="preserve">
+        <source>Authorize later</source>
+        <target state="new">Authorize later</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Authorize now" xml:space="preserve">
+        <source>Authorize now</source>
+        <target state="new">Authorize now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Available:" xml:space="preserve">
+        <source>Available:</source>
+        <target state="new">Available:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Available:&#9;%@" xml:space="preserve">
+        <source>Available:	%@</source>
+        <target state="new">Available:	%@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Backup restored" xml:space="preserve">
+        <source>Backup restored</source>
+        <target state="new">Backup restored</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Balance:" xml:space="preserve">
+        <source>Balance:</source>
+        <target state="new">Balance:</target>
+        <note>Main view</note>
+      </trans-unit>
+      <trans-unit id="Bank" xml:space="preserve">
+        <source>Bank</source>
+        <target state="new">Bank</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Cancel" xml:space="preserve">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Checking Link" xml:space="preserve">
+        <source>Checking Link</source>
+        <target state="new">Checking Link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Choose the expiration duration" xml:space="preserve">
+        <source>Choose the expiration duration</source>
+        <target state="new">Choose the expiration duration</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Chosen amount to withdraw:" xml:space="preserve">
+        <source>Chosen amount to withdraw:</source>
+        <target state="new">Chosen amount to withdraw:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Chosen:" xml:space="preserve">
+        <source>Chosen:</source>
+        <target state="new">Chosen:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Close" xml:space="preserve">
+        <source>Close</source>
+        <target state="new">Close</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Closing Camera" xml:space="preserve">
+        <source>Closing Camera</source>
+        <target state="new">Closing Camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Confirm Payment" xml:space="preserve">
+        <source>Confirm Payment</source>
+        <target state="new">Confirm Payment</target>
+        <note>pay P2P request/invoice
+pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Confirm Withdrawal" xml:space="preserve">
+        <source>Confirm Withdrawal</source>
+        <target state="new">Confirm Withdrawal</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Confirmation:" xml:space="preserve">
+        <source>Confirmation:</source>
+        <target state="new">Confirmation:</target>
+        <note>purchase may have a pos validation / confirmation</note>
+      </trans-unit>
+      <trans-unit id="Contacting..." xml:space="preserve">
+        <source>Contacting...</source>
+        <target state="new">Contacting...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Copy the IBAN" xml:space="preserve">
+        <source>Copy the IBAN</source>
+        <target state="new">Copy the IBAN</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the account" xml:space="preserve">
+        <source>Copy the account</source>
+        <target state="new">Copy the account</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the cryptocode" xml:space="preserve">
+        <source>Copy the cryptocode</source>
+        <target state="new">Copy the cryptocode</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the error" xml:space="preserve">
+        <source>Copy the error</source>
+        <target state="new">Copy the error</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy the error JSON" xml:space="preserve">
+        <source>Copy the error JSON</source>
+        <target state="new">Copy the error JSON</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Copy the payee" xml:space="preserve">
+        <source>Copy the payee</source>
+        <target state="new">Copy the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Copy.long" xml:space="preserve">
+        <source>Copy</source>
+        <target state="new">Copy</target>
+        <note>may be a bit longer</note>
+      </trans-unit>
+      <trans-unit id="Copy.short" xml:space="preserve">
+        <source>Copy</source>
+        <target state="new">Copy</target>
+        <note>5 letters max, else abbreviate</note>
+      </trans-unit>
+      <trans-unit id="Cryptocode" xml:space="preserve">
+        <source>Cryptocode</source>
+        <target state="new">Cryptocode</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Custom Amount" xml:space="preserve">
+        <source>Custom Amount</source>
+        <target state="new">Custom Amount</target>
+        <note>pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Custom Summary" xml:space="preserve">
+        <source>Custom Summary</source>
+        <target state="new">Custom Summary</target>
+        <note>pay merchant</note>
+      </trans-unit>
+      <trans-unit id="Demo: get digital cash to experience how to pay with the money of the future." xml:space="preserve">
+        <source>Demo: get digital cash to experience how to pay with the money of the future.</source>
+        <target state="new">Demo: get digital cash to experience how to pay with the money of the future.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Deposit" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Deposit&#9;%@" xml:space="preserve">
+        <source>Deposit	%@</source>
+        <target state="new">Deposit	%@</target>
+        <note>Button `Deposit (currency)´, must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="Deposit %@" xml:space="preserve">
+        <source>Deposit %@</source>
+        <target state="new">Deposit %@</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Deposit:" xml:space="preserve">
+        <source>Deposit:</source>
+        <target state="new">Deposit:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="DepositButton_Short" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>Abbreviation of button `Deposit (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Deserialization error" xml:space="preserve">
+        <source>Deserialization error</source>
+        <target state="new">Deserialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Done" xml:space="preserve">
+        <source>Done</source>
+        <target state="new">Done</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Effective:" xml:space="preserve">
+        <source>Effective:</source>
+        <target state="new">Effective:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 1" xml:space="preserve">
+        <source>Either provide this payment link</source>
+        <target state="new">Either provide this payment link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 2" xml:space="preserve">
+        <source>to the payee, or</source>
+        <target state="new">to the payee, or</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Long 3" xml:space="preserve">
+        <source>let the payee scan this QR code to receive %@.</source>
+        <target state="new">let the payee scan this QR code to receive %@.</target>
+        <note>e.g. '$ 7.41'</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 1" xml:space="preserve">
+        <source>Either</source>
+        <target state="new">Either</target>
+        <note>Either (copy/share this link to the payee)</note>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 2" xml:space="preserve">
+        <source>or scan this</source>
+        <target state="new">or scan this</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payee) Mini 3" xml:space="preserve">
+        <source>to receive %@.</source>
+        <target state="new">to receive %@.</target>
+        <note>e.g. '$ 7.41'</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 1" xml:space="preserve">
+        <source>Either provide this payment link</source>
+        <target state="new">Either provide this payment link</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 2" xml:space="preserve">
+        <source>to the payer, or</source>
+        <target state="new">to the payer, or</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Long 3" xml:space="preserve">
+        <source>let the payer scan this QR code to pay %@.</source>
+        <target state="new">let the payer scan this QR code to pay %@.</target>
+        <note>e.g. '5,3 €'</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 1" xml:space="preserve">
+        <source>Either</source>
+        <target state="new">Either</target>
+        <note>Either (copy/share this link to the payer)</note>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 2" xml:space="preserve">
+        <source>or scan this</source>
+        <target state="new">or scan this</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Either (payer) Mini 3" xml:space="preserve">
+        <source>to pay %@.</source>
+        <target state="new">to pay %@.</target>
+        <note>e.g. '5,3 €'</note>
+      </trans-unit>
+      <trans-unit id="Enter subject:" xml:space="preserve">
+        <source>Enter subject:</source>
+        <target state="new">Enter subject:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Error" xml:space="preserve">
+        <source>Error</source>
+        <target state="new">Error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Exchange fee (long):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>long version</note>
+      </trans-unit>
+      <trans-unit id="Exchange fee (short):" xml:space="preserve">
+        <source>Fee:</source>
+        <target state="new">Fee:</target>
+        <note>short version</note>
+      </trans-unit>
+      <trans-unit id="Expires in:" xml:space="preserve">
+        <source>Expires in:</source>
+        <target state="new">Expires in:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Expires: %@" xml:space="preserve">
+        <source>Expires: %@</source>
+        <target state="new">Expires: %@</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="For Delete, Fail &amp; Abort buttons" xml:space="preserve">
+        <source>For Delete, Fail &amp; Abort buttons</source>
+        <target state="new">For Delete, Fail &amp; Abort buttons</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Gross Amount to receive:" xml:space="preserve">
+        <source>Gross Amount to receive:</source>
+        <target state="new">Gross Amount to receive:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Haptics" xml:space="preserve">
+        <source>Haptics</source>
+        <target state="new">Haptics</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="IBAN of the payee" xml:space="preserve">
+        <source>IBAN of the payee</source>
+        <target state="new">IBAN of the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="IBAN:" xml:space="preserve">
+        <source>IBAN:</source>
+        <target state="new">IBAN:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:" xml:space="preserve">
+        <source>If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:</source>
+        <target state="new">If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="If your banking software runs on another device, you can scan one of these QR codes:" xml:space="preserve">
+        <source>If your banking software runs on another device, you can scan one of these QR codes:</source>
+        <target state="new">If your banking software runs on another device, you can scan one of these QR codes:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="In progress" xml:space="preserve">
+        <source>In progress</source>
+        <target state="new">In progress</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Initialization error" xml:space="preserve">
+        <source>Initialization error</source>
+        <target state="new">Initialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Instructions" xml:space="preserve">
+        <source>Instructions</source>
+        <target state="new">Instructions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Internal core error" xml:space="preserve">
+        <source>Internal core error</source>
+        <target state="new">Internal core error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="It seems you wanted to request money - but this transaction will let you pay..." xml:space="preserve">
+        <source>It seems you wanted to request money - but this transaction will let you pay...</source>
+        <target state="new">It seems you wanted to request money - but this transaction will let you pay...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="KYC" xml:space="preserve">
+        <source>KYC</source>
+        <target state="new">KYC</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Language:" xml:space="preserve">
+        <source>Language:</source>
+        <target state="new">Language:</target>
+        <note>title of ToS language selection</note>
+      </trans-unit>
+      <trans-unit id="LinkTitle_DEMOBANK" xml:space="preserve">
+        <source>Demo Bank Website</source>
+        <target state="new">Demo Bank Website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="LinkTitle_DEMOSHOP" xml:space="preserve">
+        <source>Spend demo money</source>
+        <target state="new">Spend demo money</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="LinkTitle_Test_Money" xml:space="preserve">
+        <source>Get demo money</source>
+        <target state="new">Get demo money</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="List Style:" xml:space="preserve">
+        <source>List Style:</source>
+        <target state="new">List Style:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Loading…" xml:space="preserve">
+        <source>Loading…</source>
+        <target state="new">Loading…</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Lost:" xml:space="preserve">
+        <source>Lost:</source>
+        <target state="new">Lost:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Main Menu" xml:space="preserve">
+        <source>Main Menu</source>
+        <target state="new">Main Menu</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="MajorState.Aborted" xml:space="preserve">
+        <source>Aborted</source>
+        <target state="new">Aborted</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Aborting" xml:space="preserve">
+        <source>Aborting</source>
+        <target state="new">Aborting</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Deleted" xml:space="preserve">
+        <source>Deleted</source>
+        <target state="new">Deleted</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Dialog" xml:space="preserve">
+        <source>Dialog</source>
+        <target state="new">Dialog</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Done" xml:space="preserve">
+        <source>Done</source>
+        <target state="new">Done</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Expired" xml:space="preserve">
+        <source>Expired</source>
+        <target state="new">Expired</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Failed" xml:space="preserve">
+        <source>Failed</source>
+        <target state="new">Failed</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Finalizing" xml:space="preserve">
+        <source>Finalizing</source>
+        <target state="new">Finalizing</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="MajorState.Pending" xml:space="preserve">
+        <source>Pending</source>
+        <target state="new">Pending</target>
+        <note>TxMajorState heading</note>
+      </trans-unit>
+      <trans-unit id="Manage payment service providers..." xml:space="preserve">
+        <source>Manage payment service providers...</source>
+        <target state="new">Manage payment service providers...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Merchant" xml:space="preserve">
+        <source>Merchant</source>
+        <target state="new">Merchant</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Minimalistic" xml:space="preserve">
+        <source>Minimalistic</source>
+        <target state="new">Minimalistic</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="MinorState.aml" xml:space="preserve">
+        <source>AML required</source>
+        <target state="new">AML required</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="MinorState.bankConfirmTransfer" xml:space="preserve">
+        <source>Waiting for bank transfer</source>
+        <target state="new">Waiting for bank transfer</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="MinorState.kyc" xml:space="preserve">
+        <source>KYC required</source>
+        <target state="new">KYC required</target>
+        <note>TxMinorState heading</note>
+      </trans-unit>
+      <trans-unit id="Money lost" xml:space="preserve">
+        <source>Money lost</source>
+        <target state="new">Money lost</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Money lost:" xml:space="preserve">
+        <source>Money lost:</source>
+        <target state="new">Money lost:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More info about GNU Taler in general..." xml:space="preserve">
+        <source>More info about GNU Taler in general...</source>
+        <target state="new">More info about GNU Taler in general...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More info about this app..." xml:space="preserve">
+        <source>More info about this app...</source>
+        <target state="new">More info about this app...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="More than a week ago" xml:space="preserve">
+        <source>More than a week ago</source>
+        <target state="new">More than a week ago</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="NavTitle_Deposit_AmountStr" xml:space="preserve">
+        <source>Deposit</source>
+        <target state="new">Deposit</target>
+        <note>NavTitle: Deposit</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Deposit_Currency" xml:space="preserve">
+        <source>Deposit %@</source>
+        <target state="new">Deposit %@</target>
+        <note>NavTitle: Deposit 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Request_AmountStr" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>NavTitle: Request 'amountStr'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Request_Currency" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>NavTitle: Request 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Send_AmountStr" xml:space="preserve">
+        <source>Send %@</source>
+        <target state="new">Send %@</target>
+        <note>NavTitle: Send 'amountStr'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Send_Currency" xml:space="preserve">
+        <source>Send %@</source>
+        <target state="new">Send %@</target>
+        <note>NavTitle: Send 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Withdraw (currency)" xml:space="preserve">
+        <source>Withdraw %@</source>
+        <target state="new">Withdraw %@</target>
+        <note>NavTitle: Withdraw 'currencySymbol'</note>
+      </trans-unit>
+      <trans-unit id="NavTitle_Withdraw (currency) A11y" xml:space="preserve">
+        <source>Withdraw %@</source>
+        <target state="new">Withdraw %@</target>
+        <note>NavTitle: Withdraw 'currency'</note>
+      </trans-unit>
+      <trans-unit id="Net Amount to receive:" xml:space="preserve">
+        <source>Net Amount to receive:</source>
+        <target state="new">Net Amount to receive:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Next" xml:space="preserve">
+        <source>Next</source>
+        <target state="new">Next</target>
+        <note>advance Deposit to Amount</note>
+      </trans-unit>
+      <trans-unit id="No date" xml:space="preserve">
+        <source>No date</source>
+        <target state="new">No date</target>
+        <note>Timestamp missing or invalid</note>
+      </trans-unit>
+      <trans-unit id="No payment fee" xml:space="preserve">
+        <source>No payment fee</source>
+        <target state="new">No payment fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="No withdrawal fee" xml:space="preserve">
+        <source>No withdrawal fee</source>
+        <target state="new">No withdrawal fee</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take quite some time to prepare this amount! Be more patient..." xml:space="preserve">
+        <source>Note: It will take quite some time to prepare this amount! Be more patient...</source>
+        <target state="new">Note: It will take quite some time to prepare this amount! Be more patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Note: It will take some time to prepare this amount. Be patient..." xml:space="preserve">
+        <source>Note: It will take some time to prepare this amount. Be patient...</source>
+        <target state="new">Note: It will take some time to prepare this amount. Be patient...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="OK" xml:space="preserve">
+        <source>OK</source>
+        <target state="new">OK</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Observe walletCore" xml:space="preserve">
+        <source>Observe walletCore</source>
+        <target state="new">Observe walletCore</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Obtain:" xml:space="preserve">
+        <source>Obtain:</source>
+        <target state="new">Obtain:</target>
+        <note>Amount to obtain:</note>
+      </trans-unit>
+      <trans-unit id="Obtained amount:" xml:space="preserve">
+        <source>Obtained amount:</source>
+        <target state="new">Obtained amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Obtained:" xml:space="preserve">
+        <source>Obtained:</source>
+        <target state="new">Obtained:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Omit text where possible" xml:space="preserve">
+        <source>Omit text where possible</source>
+        <target state="new">Omit text where possible</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open KYC website" xml:space="preserve">
+        <source>Open KYC website</source>
+        <target state="new">Open KYC website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open Settings" xml:space="preserve">
+        <source>Open Settings</source>
+        <target state="new">Open Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Open merchant website" xml:space="preserve">
+        <source>Open merchant website</source>
+        <target state="new">Open merchant website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Opening Camera" xml:space="preserve">
+        <source>Opening Camera</source>
+        <target state="new">Opening Camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Order-ID:" xml:space="preserve">
+        <source>Order-ID:</source>
+        <target state="new">Order-ID:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="P2P Ready" xml:space="preserve">
+        <source>P2P Ready</source>
+        <target state="new">P2P Ready</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="P2P Receive" xml:space="preserve">
+        <source>P2P Receive</source>
+        <target state="new">P2P Receive</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Paid" xml:space="preserve">
+        <source>Paid</source>
+        <target state="new">Paid</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Paid P2P" xml:space="preserve">
+        <source>Paid P2P</source>
+        <target state="new">Paid P2P</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Paid Request" xml:space="preserve">
+        <source>Paid Request</source>
+        <target state="new">Paid Request</target>
+        <note>TransactionType, paid invoice from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Paid amount:" xml:space="preserve">
+        <source>Paid amount:</source>
+        <target state="new">Paid amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Paid:" xml:space="preserve">
+        <source>Paid:</source>
+        <target state="new">Paid:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Pay %@ now" xml:space="preserve">
+        <source>Pay %@ now</source>
+        <target state="new">Pay %@ now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pay P2P" xml:space="preserve">
+        <source>Pay P2P</source>
+        <target state="new">Pay P2P</target>
+        <note>Nav Title</note>
+      </trans-unit>
+      <trans-unit id="Pay Peer-Pull" xml:space="preserve">
+        <source>Pay Peer-Pull</source>
+        <target state="new">Pay Peer-Pull</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Pay Peer-Push" xml:space="preserve">
+        <source>Pay Peer-Push</source>
+        <target state="new">Pay Peer-Push</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Pay Request" xml:space="preserve">
+        <source>Pay Request</source>
+        <target state="new">Pay Request</target>
+        <note>TransactionType, scan invoice to pay to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Pay:" xml:space="preserve">
+        <source>Pay:</source>
+        <target state="new">Pay:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Payee" xml:space="preserve">
+        <source>Payee</source>
+        <target state="new">Payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Payee:" xml:space="preserve">
+        <source>Payee:</source>
+        <target state="new">Payee:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Payment" xml:space="preserve">
+        <source>Payment</source>
+        <target state="new">Payment</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Payment is made in %@" xml:space="preserve">
+        <source>Payment is made in %@</source>
+        <target state="new">Payment is made in %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Payment provider:" xml:space="preserve">
+        <source>Payment provider:</source>
+        <target state="new">Payment provider:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pending" xml:space="preserve">
+        <source>Pending</source>
+        <target state="new">Pending</target>
+        <note>ViewTitle of TransactionList</note>
+      </trans-unit>
+      <trans-unit id="Pending amount to obtain:" xml:space="preserve">
+        <source>Pending amount to obtain:</source>
+        <target state="new">Pending amount to obtain:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Pending:" xml:space="preserve">
+        <source>Pending:</source>
+        <target state="new">Pending:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Play Payment Sounds" xml:space="preserve">
+        <source>Play Payment Sounds</source>
+        <target state="new">Play Payment Sounds</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Please allow camera access in settings1." xml:space="preserve">
+        <source>Please allow camera access in settings1.</source>
+        <target state="new">Please allow camera access in settings1.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Please enter the URL" xml:space="preserve">
+        <source>Please enter the URL</source>
+        <target state="new">Please enter the URL</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Price (net):" xml:space="preserve">
+        <source>Price (net):</source>
+        <target state="new">Price (net):</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Price:" xml:space="preserve">
+        <source>Price:</source>
+        <target state="new">Price:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Progress indicator" xml:space="preserve">
+        <source>Progress indicator</source>
+        <target state="new">Progress indicator</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR" xml:space="preserve">
+        <source>QR</source>
+        <target state="new">QR</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR Code" xml:space="preserve">
+        <source>QR Code</source>
+        <target state="new">QR Code</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="QR code and link can also be scanned or copied / shared from Transactions later." xml:space="preserve">
+        <source>QR code and link can also be scanned or copied / shared from Transactions later.</source>
+        <target state="new">QR code and link can also be scanned or copied / shared from Transactions later.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Receive Money" xml:space="preserve">
+        <source>Receive Money</source>
+        <target state="new">Receive Money</target>
+        <note>TransactionType, scan to receive coins sent from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Receive gross:" xml:space="preserve">
+        <source>Receive gross:</source>
+        <target state="new">Receive gross:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Receive net:" xml:space="preserve">
+        <source>Receive net:</source>
+        <target state="new">Receive net:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Received Money" xml:space="preserve">
+        <source>Received Money</source>
+        <target state="new">Received Money</target>
+        <note>TransactionType, received coins sent from another wallet</note>
+      </trans-unit>
+      <trans-unit id="Received P2P" xml:space="preserve">
+        <source>Received P2P</source>
+        <target state="new">Received P2P</target>
+        <note>Title, short</note>
+      </trans-unit>
+      <trans-unit id="Recent %lld transactions" xml:space="preserve">
+        <source>Recent %lld transactions</source>
+        <target state="new">Recent %lld transactions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Recent transaction" xml:space="preserve">
+        <source>Recent transaction</source>
+        <target state="new">Recent transaction</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Recoup" xml:space="preserve">
+        <source>Recoup</source>
+        <target state="new">Recoup</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Recoup:" xml:space="preserve">
+        <source>Recoup:</source>
+        <target state="new">Recoup:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Refresh" xml:space="preserve">
+        <source>Refresh</source>
+        <target state="new">Refresh</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Refund" xml:space="preserve">
+        <source>Refund</source>
+        <target state="new">Refund</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Refunded amount:" xml:space="preserve">
+        <source>Refunded amount:</source>
+        <target state="new">Refunded amount:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Refunded:" xml:space="preserve">
+        <source>Refunded:</source>
+        <target state="new">Refunded:</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Reload" xml:space="preserve">
+        <source>Reload</source>
+        <target state="new">Reload</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Request %@" xml:space="preserve">
+        <source>Request %@</source>
+        <target state="new">Request %@</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Request Money" xml:space="preserve">
+        <source>Request Money</source>
+        <target state="new">Request Money</target>
+        <note>TransactionType, send invoice to another wallet</note>
+      </trans-unit>
+      <trans-unit id="RequestButton_Full" xml:space="preserve">
+        <source>Request	%@</source>
+        <target state="new">Request	%@</target>
+        <note>`Request (currency)´ in Balances - must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="RequestButton_Short" xml:space="preserve">
+        <source>Request</source>
+        <target state="new">Request</target>
+        <note>Abbreviation of button `Request (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Requested Money" xml:space="preserve">
+        <source>Requested Money</source>
+        <target state="new">Requested Money</target>
+        <note>TransactionType, sent invoice to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Reset" xml:space="preserve">
+        <source>Reset</source>
+        <target state="new">Reset</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Reset Wallet" xml:space="preserve">
+        <source>Reset Wallet</source>
+        <target state="new">Reset Wallet</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Restriction:" xml:space="preserve">
+        <source>Restriction:</source>
+        <target state="new">Restriction:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Right now" xml:space="preserve">
+        <source>Right now</source>
+        <target state="new">Right now</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Save" xml:space="preserve">
+        <source>Save</source>
+        <target state="new">Save</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scan QR" xml:space="preserve">
+        <source>Scan QR</source>
+        <target state="new">Scan QR</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scan QR codes" xml:space="preserve">
+        <source>Scan QR codes</source>
+        <target state="new">Scan QR codes</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scanning QR-codes requires access to the camera" xml:space="preserve">
+        <source>Scanning QR-codes requires access to the camera</source>
+        <target state="new">Scanning QR-codes requires access to the camera</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scheduled" xml:space="preserve">
+        <source>Scheduled</source>
+        <target state="new">Scheduled</target>
+        <note>RefreshReason</note>
+      </trans-unit>
+      <trans-unit id="Scroll down" xml:space="preserve">
+        <source>Scroll down</source>
+        <target state="new">Scroll down</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Scroll up" xml:space="preserve">
+        <source>Scroll up</source>
+        <target state="new">Scroll up</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Select age" xml:space="preserve">
+        <source>Select age</source>
+        <target state="new">Select age</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Send %@ now" xml:space="preserve">
+        <source>Send %@ now</source>
+        <target state="new">Send %@ now</target>
+        <note>amount with currency</note>
+      </trans-unit>
+      <trans-unit id="Send Money" xml:space="preserve">
+        <source>Send Money</source>
+        <target state="new">Send Money</target>
+        <note>TransactionType, send coins to another wallet</note>
+      </trans-unit>
+      <trans-unit id="SendButton_Full" xml:space="preserve">
+        <source>Send	%@</source>
+        <target state="new">Send	%@</target>
+        <note>`Send (currency)´ in Balances - must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="SendButton_Short" xml:space="preserve">
+        <source>Send</source>
+        <target state="new">Send</target>
+        <note>Abbreviation of button `Send (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Sent Money" xml:space="preserve">
+        <source>Sent Money</source>
+        <target state="new">Sent Money</target>
+        <note>TransactionType, sent coins to another wallet</note>
+      </trans-unit>
+      <trans-unit id="Serialization error" xml:space="preserve">
+        <source>Serialization error</source>
+        <target state="new">Serialization error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Share" xml:space="preserve">
+        <source>Share</source>
+        <target state="new">Share</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Share PayTo" xml:space="preserve">
+        <source>Share PayTo</source>
+        <target state="new">Share PayTo</target>
+        <note>mini</note>
+      </trans-unit>
+      <trans-unit id="Share the PayTo URL" xml:space="preserve">
+        <source>Share the PayTo URL</source>
+        <target state="new">Share the PayTo URL</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Sheet.ID." xml:space="preserve">
+        <source>Sheet.ID.</source>
+        <target state="new">Sheet.ID.</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Shortcut" xml:space="preserve">
+        <source>Shortcut</source>
+        <target state="new">Shortcut</target>
+        <note>VoiceOver: $50,$25,$10,$5 shortcut buttons</note>
+      </trans-unit>
+      <trans-unit id="Show Warnings" xml:space="preserve">
+        <source>Show Warnings</source>
+        <target state="new">Show Warnings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Show logs" xml:space="preserve">
+        <source>Show logs</source>
+        <target state="new">Show logs</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Shows which view you currently are on." xml:space="preserve">
+        <source>Shows which view you currently are on.</source>
+        <target state="new">Shows which view you currently are on.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Since the demo bank supports the Taler integration, you can start a withdrawal directly on the" xml:space="preserve">
+        <source>Since the demo bank supports the Taler integration, you can start a withdrawal directly on the</source>
+        <target state="new">Since the demo bank supports the Taler integration, you can start a withdrawal directly on the</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Some pending transactions" xml:space="preserve">
+        <source>Some pending transactions</source>
+        <target state="new">Some pending transactions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Standard iOS Font" xml:space="preserve">
+        <source>Standard iOS Font</source>
+        <target state="new">Standard iOS Font</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Status:" xml:space="preserve">
+        <source>Status:</source>
+        <target state="new">Status:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Subject" xml:space="preserve">
+        <source>Subject</source>
+        <target state="new">Subject</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Summary" xml:space="preserve">
+        <source>Summary</source>
+        <target state="new">Summary</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Taler Logo" xml:space="preserve">
+        <source>Taler Logo</source>
+        <target state="new">Taler Logo</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Tap the button to go to the KYC website." xml:space="preserve">
+        <source>Tap the button to go to the KYC website.</source>
+        <target state="new">Tap the button to go to the KYC website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Terms of Service" xml:space="preserve">
+        <source>Terms of Service</source>
+        <target state="new">Terms of Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The Payment Service Provider is waiting for your wire-transfer." xml:space="preserve">
+        <source>The Payment Service Provider is waiting for your wire-transfer.</source>
+        <target state="new">The Payment Service Provider is waiting for your wire-transfer.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The bank is waiting for your authorization." xml:space="preserve">
+        <source>The bank is waiting for your authorization.</source>
+        <target state="new">The bank is waiting for your authorization.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The exchange will send your money back if it won't get collected in time, or when you abort the operation." xml:space="preserve">
+        <source>The exchange will send your money back if it won't get collected in time, or when you abort the operation.</source>
+        <target state="new">The exchange will send your money back if it won't get collected in time, or when you abort the operation.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="The withdrawal was aborted.&#10;If you have already sent money to the exchange, it will wire it back in %@ days." xml:space="preserve">
+        <source>The withdrawal was aborted.
+If you have already sent money to the exchange, it will wire it back in %@ days.</source>
+        <target state="new">The withdrawal was aborted.
+If you have already sent money to the exchange, it will wire it back in %@ days.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There are no Payment Services yet." xml:space="preserve">
+        <source>There are no Payment Services yet.</source>
+        <target state="new">There are no Payment Services yet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There are no transactions for %@." xml:space="preserve">
+        <source>There are no transactions for %@.</source>
+        <target state="new">There are no transactions for %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="There is no digital cash in your wallet." xml:space="preserve">
+        <source>There is no digital cash in your wallet.</source>
+        <target state="new">There is no digital cash in your wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This is mandatory, otherwise your money will not arrive in this wallet." xml:space="preserve">
+        <source>This is mandatory, otherwise your money will not arrive in this wallet.</source>
+        <target state="new">This is mandatory, otherwise your money will not arrive in this wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This operation cannot be undone" xml:space="preserve">
+        <source>This operation cannot be undone</source>
+        <target state="new">This operation cannot be undone</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This request will be cancelled if it doesn't get paid in time, or when you abort the operation." xml:space="preserve">
+        <source>This request will be cancelled if it doesn't get paid in time, or when you abort the operation.</source>
+        <target state="new">This request will be cancelled if it doesn't get paid in time, or when you abort the operation.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="This transaction is not yet ready..." xml:space="preserve">
+        <source>This transaction is not yet ready...</source>
+        <target state="new">This transaction is not yet ready...</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleBalances" xml:space="preserve">
+        <source>Balances</source>
+        <target state="new">Balances</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleExchanges" xml:space="preserve">
+        <source>Payment Services</source>
+        <target state="new">Payment Services</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleIncoming_Full" xml:space="preserve">
+        <source>Pending	incoming</source>
+        <target state="new">Pending	incoming</target>
+        <note>`Pending incoming´ in Balances - set exactly 1 \t for line break</note>
+      </trans-unit>
+      <trans-unit id="TitleIncoming_Short" xml:space="preserve">
+        <source>Incoming</source>
+        <target state="new">Incoming</target>
+        <note>Abbreviation of `Pending incoming´ in Balances</note>
+      </trans-unit>
+      <trans-unit id="TitleOutgoing_Full" xml:space="preserve">
+        <source>Pending	outgoing</source>
+        <target state="new">Pending	outgoing</target>
+        <note>`Pending outgoing´ in Balances - set exactly 1 \t for line break</note>
+      </trans-unit>
+      <trans-unit id="TitleOutgoing_Short" xml:space="preserve">
+        <source>Outgoing</source>
+        <target state="new">Outgoing</target>
+        <note>Abbreviation of `Pending outgoing´ in Balances</note>
+      </trans-unit>
+      <trans-unit id="TitleOverview" xml:space="preserve">
+        <source>Overview</source>
+        <target state="new">Overview</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TitleSettings" xml:space="preserve">
+        <source>Settings</source>
+        <target state="new">Settings</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Transaction list" xml:space="preserve">
+        <source>Transaction list</source>
+        <target state="new">Transaction list</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Transactions" xml:space="preserve">
+        <source>Transactions</source>
+        <target state="new">Transactions</target>
+        <note>ViewTitle of TransactionList</note>
+      </trans-unit>
+      <trans-unit id="Transfer %@ to the Payment Service." xml:space="preserve">
+        <source>Transfer %@ to the Payment Service.</source>
+        <target state="new">Transfer %@ to the Payment Service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="TxAction.Abort" xml:space="preserve">
+        <source>Abort</source>
+        <target state="new">Abort</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Delete" xml:space="preserve">
+        <source>Delete from history</source>
+        <target state="new">Delete from history</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Fail" xml:space="preserve">
+        <source>Fail</source>
+        <target state="new">Fail</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxAction.Retry" xml:space="preserve">
+        <source>Retry now</source>
+        <target state="new">Retry now</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Abort" xml:space="preserve">
+        <source>Abort pending...</source>
+        <target state="new">Abort pending...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Delete" xml:space="preserve">
+        <source>Deleted from list</source>
+        <target state="new">Deleted from list</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Fail" xml:space="preserve">
+        <source>Failing...</source>
+        <target state="new">Failing...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="TxActionDone.Retry" xml:space="preserve">
+        <source>Retrying...</source>
+        <target state="new">Retrying...</target>
+        <note>TxAction button</note>
+      </trans-unit>
+      <trans-unit id="UNKNOWN" xml:space="preserve">
+        <source>UNKNOWN</source>
+        <target state="new">UNKNOWN</target>
+        <note>merchant didn't specify the currency, use ALL CAPS</note>
+      </trans-unit>
+      <trans-unit id="Unknown Payment Provider" xml:space="preserve">
+        <source>Unknown Payment Provider</source>
+        <target state="new">Unknown Payment Provider</target>
+        <note>exchange url</note>
+      </trans-unit>
+      <trans-unit id="Unknown Payment Service" xml:space="preserve">
+        <source>Unknown Payment Service</source>
+        <target state="new">Unknown Payment Service</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Unknown error" xml:space="preserve">
+        <source>Unknown error</source>
+        <target state="new">Unknown error</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Use the Add button to add a service." xml:space="preserve">
+        <source>Use the Add button to add a service.</source>
+        <target state="new">Use the Add button to add a service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Use the QR code scan button to start a withdrawal if your bank already supports Taler payments." xml:space="preserve">
+        <source>Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.</source>
+        <target state="new">Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Using payment service provider:" xml:space="preserve">
+        <source>Using payment service provider:</source>
+        <target state="new">Using payment service provider:</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Vibration Feedback" xml:space="preserve">
+        <source>Vibration Feedback</source>
+        <target state="new">Vibration Feedback</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="View.ID." xml:space="preserve">
+        <source>View.ID.</source>
+        <target state="new">View.ID.</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="Visit the taler.net website" xml:space="preserve">
+        <source>Visit the taler.net website</source>
+        <target state="new">Visit the taler.net website</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="WalletCore Version" xml:space="preserve">
+        <source>WalletCore Version</source>
+        <target state="new">WalletCore Version</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="When a transaction finished" xml:space="preserve">
+        <source>When a transaction finished</source>
+        <target state="new">When a transaction finished</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to KYC website to confirm this withdrawal." xml:space="preserve">
+        <source>Will go to KYC website to confirm this withdrawal.</source>
+        <target state="new">Will go to KYC website to confirm this withdrawal.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to Pending transactions." xml:space="preserve">
+        <source>Will go to Pending transactions.</source>
+        <target state="new">Will go to Pending transactions.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to bank website to authorize this withdrawal." xml:space="preserve">
+        <source>Will go to bank website to authorize this withdrawal.</source>
+        <target state="new">Will go to bank website to authorize this withdrawal.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to detail view." xml:space="preserve">
+        <source>Will go to detail view.</source>
+        <target state="new">Will go to detail view.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to main transactions list." xml:space="preserve">
+        <source>Will go to main transactions list.</source>
+        <target state="new">Will go to main transactions list.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to the demo shop website." xml:space="preserve">
+        <source>Will go to the demo shop website.</source>
+        <target state="new">Will go to the demo shop website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Will go to the merchant website." xml:space="preserve">
+        <source>Will go to the merchant website.</source>
+        <target state="new">Will go to the merchant website.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire Transfer" xml:space="preserve">
+        <source>Wire Transfer</source>
+        <target state="new">Wire Transfer</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire transfer" xml:space="preserve">
+        <source>Wire transfer</source>
+        <target state="new">Wire transfer</target>
+        <note>ViewTitle of wire-transfer QR codes
+ViewTitle of wire-transfer instructions</note>
+      </trans-unit>
+      <trans-unit id="Wire transfer QR codes" xml:space="preserve">
+        <source>Wire transfer QR codes</source>
+        <target state="new">Wire transfer QR codes</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Wire transfer instructions" xml:space="preserve">
+        <source>Wire transfer instructions</source>
+        <target state="new">Wire transfer instructions</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Withdraw&#9;%@" xml:space="preserve">
+        <source>Withdraw	%@</source>
+        <target state="new">Withdraw	%@</target>
+        <note>Button `Withdraw (currency)´, must have ONE \t and ONE %@</note>
+      </trans-unit>
+      <trans-unit id="Withdraw:" xml:space="preserve">
+        <source>Withdraw:</source>
+        <target state="new">Withdraw:</target>
+        <note>Chosen amount to withdraw:</note>
+      </trans-unit>
+      <trans-unit id="WithdrawButton_Short" xml:space="preserve">
+        <source>Withdraw</source>
+        <target state="new">Withdraw</target>
+        <note>Abbreviation of button `Withdraw (currency)´</note>
+      </trans-unit>
+      <trans-unit id="Withdrawal" xml:space="preserve">
+        <source>Withdrawal</source>
+        <target state="new">Withdrawal</target>
+        <note>TransactionType</note>
+      </trans-unit>
+      <trans-unit id="Yesterday" xml:space="preserve">
+        <source>Yesterday</source>
+        <target state="new">Yesterday</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can also add a payment service manually in the Settings." xml:space="preserve">
+        <source>You can also add a payment service manually in the Settings.</source>
+        <target state="new">You can also add a payment service manually in the Settings.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service." xml:space="preserve">
+        <source>You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.</source>
+        <target state="new">You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You can spend these %@ in the Demo shop, or send them to another wallet." xml:space="preserve">
+        <source>You can spend these %@ in the Demo shop, or send them to another wallet.</source>
+        <target state="new">You can spend these %@ in the Demo shop, or send them to another wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You don't have enough %@." xml:space="preserve">
+        <source>You don't have enough %@.</source>
+        <target state="new">You don't have enough %@.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet." xml:space="preserve">
+        <source>You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.</source>
+        <target state="new">You must accept the Payment Service Provider's Terms of Service first before you can receive electronic cash in your wallet.</target>
+        <note>P2P Receive</note>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet." xml:space="preserve">
+        <source>You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.</source>
+        <target state="new">You must accept the Payment Service Provider's Terms of Service first before you can use it to withdraw electronic cash to your wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You must accept the Payment Service's Terms of Service first." xml:space="preserve">
+        <source>You must accept the Payment Service's Terms of Service first.</source>
+        <target state="new">You must accept the Payment Service's Terms of Service first.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You need to pass a KYC procedure" xml:space="preserve">
+        <source>You need to pass a KYC procedure</source>
+        <target state="new">You need to pass a KYC procedure</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="You need to transfer %@ from your regular bank account to the Payment Service Provider to receive %@ as electronic cash in this wallet." xml:space="preserve">
+        <source>You need to transfer %1$@ from your regular bank account to the Payment Service Provider to receive %2$@ as electronic cash in this wallet.</source>
+        <target state="new">You need to transfer %1$@ from your regular bank account to the Payment Service Provider to receive %2$@ as electronic cash in this wallet.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Your bank's wire fee: %@" xml:space="preserve">
+        <source>Your bank's wire fee: %@</source>
+        <target state="new">Your bank's wire fee: %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="account of the payee" xml:space="preserve">
+        <source>account of the payee</source>
+        <target state="new">account of the payee</target>
+        <note>VoiceOver</note>
+      </trans-unit>
+      <trans-unit id="but you only have %@ to deposit." xml:space="preserve">
+        <source>but you only have %@ to deposit.</source>
+        <target state="new">but you only have %@ to deposit.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="but you only have %@ to send." xml:space="preserve">
+        <source>but you only have %@ to send.</source>
+        <target state="new">but you only have %@ to send.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when account holder and IBAN are set" xml:space="preserve">
+        <source>enabled when account holder and IBAN are set</source>
+        <target state="new">enabled when account holder and IBAN are set</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when amount is non-zero, but not higher than your available amount" xml:space="preserve">
+        <source>enabled when amount is non-zero, but not higher than your available amount</source>
+        <target state="new">enabled when amount is non-zero, but not higher than your available amount</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="enabled when subject and expiration are set" xml:space="preserve">
+        <source>enabled when subject and expiration are set</source>
+        <target state="new">enabled when subject and expiration are set</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="from %@" xml:space="preserve">
+        <source>from %@</source>
+        <target state="new">from %@</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="on LocalConsole" xml:space="preserve">
+        <source>on LocalConsole</source>
+        <target state="new">on LocalConsole</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unknown command" xml:space="preserve">
+        <source>unknown command</source>
+        <target state="new">unknown command</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unknown payment method" xml:space="preserve">
+        <source>unknown payment method</source>
+        <target state="new">unknown payment method</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="unrestricted" xml:space="preserve">
+        <source>unrestricted</source>
+        <target state="new">unrestricted</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="using:" xml:space="preserve">
+        <source>using:</source>
+        <target state="new">using:</target>
+        <note>using: exchange.taler.net</note>
+      </trans-unit>
+      <trans-unit id="via %@" xml:space="preserve">
+        <source>via %@</source>
+        <target state="new">via %@</target>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="TalerWallet1/Taler_Wallet InfoPlist.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.4" build-num="15F31d"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>Taler Wallet</source>
+        <target state="new">Taler Wallet</target>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>Taler_Wallet</source>
+        <target state="new">Taler_Wallet</target>
+        <note>Bundle name</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>Scan QR Codes</source>
+        <target state="new">Scan QR Codes</target>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
+        <source>© Taler-Systems.com</source>
+        <target state="new">© Taler-Systems.com</target>
+        <note>Copyright (human-readable)</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
