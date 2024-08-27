@@ -16,6 +16,7 @@ struct ExchangeSectionView: View {
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
+    @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -23,6 +24,9 @@ struct ExchangeSectionView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
+    @State private var didDelete: Bool = false
+    @State private var disabled: Bool = false
+    @State private var purge: Bool = false
 
     func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
         if let exchange {
@@ -39,6 +43,19 @@ struct ExchangeSectionView: View {
             }
         }
         return nil
+    }
+
+    private func deleteExchange() {
+        disabled = true     // don't try this more than once
+        Task { // runs on MainActor
+            if let _ = try? await model.deleteExchange(url: exchange.exchangeBaseUrl, purge: purge) {
+//                symLog.log("\(executed) \(transactionId)")
+                didDelete = true             // change button text
+            } else {
+                purge = true
+                disabled = false
+            }
+        }
     }
 
     var body: some View {
@@ -76,6 +93,14 @@ struct ExchangeSectionView: View {
                 .accessibilityLabel(bankingHint + " " + linkTitle)
                 .padding(.top)
             }
+
+            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete Payment Provider", comment: "Action button")
+            WarningButton(warningText: String(localized: "Are you sure you want to delete this payment provider?"),
+                          buttonTitle: buttonTitle,
+                           buttonIcon: "trash",
+                                 role: .destructive,
+                             disabled: $disabled,
+                               action: deleteExchange)
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,

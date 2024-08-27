@@ -161,6 +161,21 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
     }
 }
 
+/// A request to delete an exchange.
+fileprivate struct DeleteExchange: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
+    func operation() -> String { "deleteExchange" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, purge: purge) }
+
+    var exchangeBaseUrl: String
+    var purge: Bool
+
+    struct Args: Encodable {
+        var exchangeBaseUrl: String
+        var purge: Bool
+    }
+}
+
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
     struct Response: Codable, Sendable {
@@ -211,6 +226,14 @@ extension WalletModel {
     async throws {
         let request = AddExchange(exchangeBaseUrl: url)
         logger.info("adding exchange: \(url, privacy: .public)")
+        _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+
+    /// add a new exchange with URL to the wallet's list of known exchanges
+    func deleteExchange(url: String, purge: Bool = false, viewHandles: Bool = false)
+    async throws {
+        let request = DeleteExchange(exchangeBaseUrl: url, purge: purge)
+        logger.info("deleting exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 

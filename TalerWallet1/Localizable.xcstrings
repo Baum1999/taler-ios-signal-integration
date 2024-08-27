@@ -1348,6 +1348,16 @@
         }
       }
     },
+    "Are you sure you want to delete this payment provider?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diesen Zahlungsdienst löschen wollen?"
+          }
+        }
+      }
+    },
     "Are you sure you want to delete this transaction?" : {
       "localizations" : {
         "de" : {
@@ -2828,6 +2838,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Комісія:"
+          }
+        }
+      }
+    },
+    "Exchange.Delete" : {
+      "comment" : "Action button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienst löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete Payment Provider"
           }
         }
       }
