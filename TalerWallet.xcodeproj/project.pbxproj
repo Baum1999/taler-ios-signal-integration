@@ -1087,6 +1087,7 @@
 				Base,
 				de,
 				es,
+				uk,
 			);
 			mainGroup = D14AFD1424D232B300C51073;
 			packageReferences = (

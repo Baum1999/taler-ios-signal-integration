@@ -133,7 +133,7 @@ struct ManualDetailsWireV: View {
                 .padding(.top)
             let amountNBS = amountStr.nbs
             let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountNBS)."
-                             : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+                             : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
                 .multilineTextAlignment(.leading)
                 .padding(.top)
 

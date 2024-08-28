@@ -301,24 +301,7 @@
         }
       }
     },
-    "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this     withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**Schritt 3:** Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt. Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**Крок 3:** Завершіть переказ %@ у вашому банківському додатку або на вебсайті, тоді це зняття буде виконано автоматично. Залежно від вашого банку, переказ може зайняти від декількох хвилин до двох робочих днів, будь ласка, наберіться терпіння."
-          }
-        }
-      }
-    },
     "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -822,6 +805,7 @@
       }
     },
     "Accept" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4350,29 +4334,6 @@
         }
       }
     },
-    "Note: It will take quite some time to withdraw this amount! Be more patient..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hinweis: Es braucht eine ganze Weile um diesen Betrag abzuheben. Seien Sie noch geduldiger..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nota: Tomará algo de tiempo para extraer este monto! Sea paciente..."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Примітка: Зняття цієї суми займе деякий час! Будьте більш терплячі..."
-          }
-        }
-      }
-    },
     "Note: It will take some time to prepare this amount. Be patient..." : {
       "localizations" : {
         "de" : {
@@ -4385,29 +4346,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Примітка: Підготовка цієї суми займе деякий час! Будьте терплячі..."
-          }
-        }
-      }
-    },
-    "Note: It will take some time to withdraw this amount. Be patient..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hinweis: Es braucht eine Weile um diesen Betrag abzuheben. Seien Sie geduldig..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nota: Tomará algo de tiempo estraer este monto. Sea paciente..."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Примітка: Зняття цієї суми займе деякий час! Будьте терплячі..."
           }
         }
       }
@@ -6817,7 +6755,6 @@
       }
     },
     "TitleBalances" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6827,7 +6764,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Balances"
           }
         },
@@ -7743,29 +7680,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Перейде на вебсайт банку для авторизації цього зняття."
-          }
-        }
-      }
-    },
-    "Will go to bank website to confirm this withdrawal." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geht zur Bank-Webseite um diese Abhebung zu bestätigen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Irá al sitio web del bank para confirmar esta extracción."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Перейде на вебсайт банку для підтвердження цього зняття."
           }
         }
       }
