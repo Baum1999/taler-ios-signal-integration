@@ -1,4 +1,10 @@
-Version 0.12.1 (wallet-core 0.12.9)
+Version 0.13.0 (wallet-core 0.13.0)
+
+• KYC for balances - use bank.kyctest.taler.net to withdraw
+• Exchanges can be deleted
+
+
+Version 0.12.1 (wallet-core 0.12.12)
 
 • Ukrainian localization - Slava Ukraini!
 
