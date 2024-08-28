@@ -805,7 +805,6 @@
       }
     },
     "Accept" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7057,7 +7056,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abbrechen"
+            "value" : "Abbruch ausführen"
           }
         },
         "en" : {
