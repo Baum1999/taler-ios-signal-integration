@@ -28,11 +28,12 @@ struct HamburgerButton : View  {
     }
 }
 
-struct ConfirmationButton: View {
+struct LinkButton: View {
     let destination: URL
     let hintTitle: String
     let buttonTitle: String
     let a11yHint: String
+    let badge: String
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
@@ -50,7 +51,7 @@ struct ConfirmationButton: View {
                     Text(buttonTitle)
                 }
             }
-            .buttonStyle(TalerButtonStyle(type: .prominent, badge: CONFIRM_BANK))
+            .buttonStyle(TalerButtonStyle(type: .prominent, badge: badge))
             .accessibilityHint(a11yHint)
         }
     }

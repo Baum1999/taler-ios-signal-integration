@@ -212,28 +212,6 @@ struct TransactionSummaryV: View {
             symLog.log("onDisappear")
         }
     }
-//}
-//
-//extension TransactionSummaryV {
-    struct KycButton: View {
-        let destination: URL
-        @AppStorage("minimalistic") var minimalistic: Bool = false
-
-        var body: some View {
-            VStack(alignment: .leading) {  // Show Hint that User must pass KYC on website
-                if !minimalistic {
-                    Text("You need to pass a KYC procedure")
-                        .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
-                        .multilineTextAlignment(.leading)                   // otherwise
-                        .listRowSeparator(.hidden)
-                }
-                Link("Open KYC website", destination: destination)
-                    .buttonStyle(TalerButtonStyle(type: .prominent, badge: NEEDS_KYC))
-                    .accessibilityHint(String(localized: "Will go to KYC website to confirm this withdrawal."))
-            }
-        }
-    }
-
 
     struct PendingWithdrawalDetails: View {
         let stack: CallStack
@@ -245,10 +223,12 @@ struct TransactionSummaryV: View {
             if transaction.isPendingKYC {
                 if let kycUrl = common.kycUrl {
                     if let destination = URL(string: kycUrl) {
-                        KycButton(destination: destination)
-                    }
-                }
-            }
+                        LinkButton(destination: destination,
+                                     hintTitle: String(localized: "You need to pass a KYC procedure."),
+                                   buttonTitle: String(localized: "Open KYC website"),
+                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal."),
+                                         badge: NEEDS_KYC)
+            }   }   }
             let withdrawalDetails = details.withdrawalDetails
             switch withdrawalDetails.type {
                 case .manual:               // "Make a wire transfer of \(amount) to"
@@ -260,11 +240,12 @@ struct TransactionSummaryV: View {
                         if !confirmed {
                             if let confirmationUrl = withdrawalDetails.bankConfirmationUrl {
                                 if let destination = URL(string: confirmationUrl) {
-                                    ConfirmationButton(destination: destination,
-                                                         hintTitle: String(localized: "The bank is waiting for your authorization."),
-                                                       buttonTitle: String(localized: "Authorize now"),
-                                                          a11yHint: String(localized: "Will go to bank website to authorize this withdrawal."))
-                                }   }   }   }
+                                    LinkButton(destination: destination,
+                                                 hintTitle: String(localized: "The bank is waiting for your authorization."),
+                                               buttonTitle: String(localized: "Authorize now"),
+                                                  a11yHint: String(localized: "Will go to bank website to authorize this withdrawal."),
+                                                     badge: CONFIRM_BANK)
+                    }   }   }   }
             } // switch
         }
     }
