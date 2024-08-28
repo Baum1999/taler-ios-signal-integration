@@ -317,7 +317,7 @@ extension MainView {
                     }
                 }
             }
-            .alert("You need to pass a KYC procedure",
+            .alert("You need to pass a KYC procedure.",
                  isPresented: $showKycAlert,
                  actions: {   openKycButton
                               dismissAlertButton },

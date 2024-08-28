@@ -7792,23 +7792,23 @@
         }
       }
     },
-    "Will go to KYC website to confirm this withdrawal." : {
+    "Will go to KYC website to permit this withdrawal." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geht zur KYC-Webseite um diese Abhebung zu bestätigen."
+            "value" : "Geht zur KYC-Webseite um diese Abhebung zu erlauben."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Irá al sitio web KYC para confirmar esta extracción"
+            "state" : "needs_review",
+            "value" : "Irá al sitio web KYC para confirmar esta extracción."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Перейде на вебсайт KYC для підтвердження цього зняття."
           }
         }
@@ -8243,24 +8243,24 @@
         }
       }
     },
-    "You need to pass a KYC procedure" : {
+    "You need to pass a KYC procedure." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen ein KYC-Verfahren durchlaufen"
+            "value" : "Sie müssen ein KYC-Verfahren durchlaufen."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Necesita pasar un un procedimiento de KYC"
+            "value" : "Necesita pasar un un procedimiento de KYC."
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ви повинні пройти процедуру KYC"
+            "value" : "Ви повинні пройти процедуру KYC."
           }
         }
       }

@@ -155,7 +155,7 @@ struct SettingsView: View {
 #if DEBUG
                     if showDevelopItems {
                         let banks = ["taler.fdold.eu", "regio-taler.fdold.eu", "taler.grothoff.org", "taler.ar",
-                                     "head.taler.net", "test.taler.net", "demo.taler.net"]
+                                     "head.taler.net", "test.taler.net", "demo.taler.net", "kyctest.taler.net"]
                         ForEach(banks, id: \.self) { bank in
                             let urlStr = "https://bank." + bank
                             Link(bank, destination: URL(string: urlStr)!)

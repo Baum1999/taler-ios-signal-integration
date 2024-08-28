@@ -24,7 +24,9 @@ enum TransactionMinorState: String, Codable {
     case deposit
     case aml        // AmlRequired
     case kyc        // KycRequired
-    case mergeKycRequired = "merge-kyc"     // same as KYC but for P2P
+    case balanceKyc = "balance-kyc"             // show kycUrl
+    case balanceKycInit = "balance-kyc-init"    // kycUrl not yet ready
+    case mergeKycRequired = "merge-kyc"         // same as KYC but for P2P
     case track
     case submitPayment = "submit-payment"
     case rebindSession = "rebind-session"
@@ -59,8 +61,9 @@ enum TransactionMinorState: String, Codable {
         switch self {
             case .unknown:                  return self.rawValue
             case .deposit:                  return self.rawValue
-            case .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
+            case .balanceKyc, .balanceKycInit,
+                 .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .track:                    return self.rawValue
             case .submitPayment:            return self.rawValue
             case .rebindSession:            return self.rawValue
@@ -258,7 +261,7 @@ struct TransactionCommon: Decodable, Sendable {
 
     var isPending       : Bool { txState.major == .pending }
     var isPendingReady  : Bool { isPending && txState.minor == .ready }
-    var isPendingKYC    : Bool { isPending && txState.minor == .kyc }
+    var isPendingKYC    : Bool { isPending && (txState.minor == .kyc || txState.minor == .balanceKyc || txState.minor == .mergeKycRequired) }
     var isDone          : Bool { txState.major == .done }
     var isAborting      : Bool { txState.major == .aborting }
     var isAborted       : Bool { txState.major == .aborted }
