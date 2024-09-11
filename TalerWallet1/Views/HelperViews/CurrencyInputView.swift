@@ -32,6 +32,7 @@ struct ShortcutButton: View {
             do {
                 return try available < shortie
             } catch {
+                print("❗️Cannot compare available.\(available.currencyStr) to shortie.\(shortie.currencyStr))")
                 return true
             }
         }
@@ -39,6 +40,10 @@ struct ShortcutButton: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         let shortie = Amount(currency: currency, cent: UInt64(shortcut))        // TODO: adapt for ¥
         let title = shortie.formatted(currencyInfo, isNegative: false)
         let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
@@ -80,6 +85,10 @@ struct CurrencyInputView: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         let currency = amount.currencyStr
         let currencyField = CurrencyField($currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons

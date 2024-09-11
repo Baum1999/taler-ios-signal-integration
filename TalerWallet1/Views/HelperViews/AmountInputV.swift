@@ -77,6 +77,7 @@ struct AmountInputV: View {
                 return Flags(insufficient: insufficient, disabled: disabled)
             } catch {
                 // TODO: error Amounts don't match
+                symLog.log("❗️Cannot compare amountAvailable.\(amountAvailable.currencyStr) to amountToTransfer.\(amountToTransfer.currencyStr))")
             }
         }
         return Flags(insufficient: false, disabled: isZero)
