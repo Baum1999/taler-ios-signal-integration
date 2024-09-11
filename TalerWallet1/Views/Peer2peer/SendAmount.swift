@@ -13,8 +13,7 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-//    @Binding var currencyInfo: CurrencyInfo
-
+    let balances: [Balance]
     let available: Amount?
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
@@ -38,9 +37,10 @@ struct SendAmount: View {
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var currencyName: String = UNKNOWN
-    @State private var currencySymbol: String = UNKNOWN
+    @State private var balanceIndex = 0
+    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName = UNKNOWN
+    @State private var currencySymbol = UNKNOWN
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -110,13 +110,16 @@ struct SendAmount: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
-        let navTitle = String(localized: "NavTitle_Send_Currency",
-                           defaultValue: "Send \(currencySymbol)",
-                                comment: "NavTitle: Send 'currencySymbol'")
+        let nonZeroBalances = Balance.nonZeroBalances(balances)
+        let count = nonZeroBalances.count
+        let index = balanceIndex < count ? balanceIndex : 0
+        let balance = nonZeroBalances[index]
+        let scopeInfo = balance.scopeInfo
+        let currency = scopeInfo.currency
+        let navTitle = String(localized: "NavTitle_Send",
+                           defaultValue: "Send",
+                                comment: "NavTitle: Send")
         let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
-//        let _ = print("available: \(availableStr)")
-//        let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(availableStr)")
         let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
         let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
@@ -144,6 +147,8 @@ struct SendAmount: View {
         }
 
         ScrollView {
+            ScopePicker(stack: stack.push(), balances: nonZeroBalances, selected: $balanceIndex)
+
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to send:")
             AmountInputV(stack: stack.push(),
@@ -186,6 +191,16 @@ struct SendAmount: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .navigationBarItems(trailing: QRButton(action: cameraAction))
+        .task(id: balanceIndex + (10 * controller.currencyTicker)) {
+            let balance = nonZeroBalances[index]
+            let scopeInfo = balance.scopeInfo
+            let currency = scopeInfo.currency
+            amountAvailable = balance.available
+            amountToTransfer.setCurrency(currency)
+            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyName = currencyInfo.scope.currency
+            currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
+        }
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {
 //                if let url = scopeInfo.url {
@@ -226,16 +241,17 @@ struct SendAmount: View {
 // MARK: -
 #if DEBUG
 fileprivate struct Preview_Content: View {
-    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
+    @State private var amountToPreview = Amount(currency: DEMOCURRENCY, cent: 510)
     @State private var summary: String = ""
-    @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
+    @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
 
     private func checkCameraAvailable() -> Void {
         // Open Camera when QR-Button was tapped
     }
     var body: some View {
-        let amount = Amount(currency: LONGCURRENCY, cent: 1000)
-        let currencyInfo = CurrencyInfo.zero(LONGCURRENCY)
+        let amount = Amount(currency: DEMOCURRENCY, cent: 1000)
+        let pending = Amount(currency: DEMOCURRENCY, cent: 0)
+        let currencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
                                        masterPub: "masterPub",
                                        scopeInfo: currencyInfo.scope,
@@ -244,7 +260,14 @@ fileprivate struct Preview_Content: View {
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
+        let scopeInfo = ScopeInfo(type: .exchange, url: DEMOEXCHANGE, currency: DEMOCURRENCY)
+        let balance = Balance(scopeInfo: scopeInfo,
+                              available: amount,
+                        pendingIncoming: pending,
+                        pendingOutgoing: pending,
+                                  flags: [])
         SendAmount(stack: CallStack("Preview"),
+                balances: [balance],
 //            currencyInfo: $currencyInfoL,
                available: amount,
         amountToTransfer: $amountToPreview,

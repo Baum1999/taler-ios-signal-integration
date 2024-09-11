@@ -58,6 +58,7 @@ struct BalancesListView: View {
                           currency: DEMOCURRENCY)
         let sendDest = LazyView {
             SendAmount(stack: stack.push("\(Self.className())()"),
+                    balances: balances,
 //              currencyInfo: $currencyInfo,
 //           amountAvailable: amountAvailable,
                    available: nil,
