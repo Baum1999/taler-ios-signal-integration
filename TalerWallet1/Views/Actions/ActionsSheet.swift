@@ -36,6 +36,7 @@ struct ActionsSheet: View {
                     Text("You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
                         .talerFont(.body)
                         .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight doesn't work
                         .listRowSeparator(.hidden)
                 }
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
@@ -54,7 +55,7 @@ struct ActionsSheet: View {
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                 .accessibilityHint(String(localized: "Will go to the demo shop website."))
                 .listRowSeparator(.hidden)
-                .padding(.bottom, 10)
+                .padding(.bottom, 20)
             }
 
             SendRequestV(stack: stack.push(),
@@ -71,7 +72,7 @@ struct ActionsSheet: View {
 //                       scopeInfo: balance.scopeInfo,
 //                 amountAvailable: balance.available,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
-            .padding(.bottom, 32)
+            .padding(.bottom, 12)
         }
         .task {
             print("ActionsSheet.task❓HideTabBarView")
