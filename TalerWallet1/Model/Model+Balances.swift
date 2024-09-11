@@ -39,6 +39,13 @@ struct Balance: Decodable, Hashable, Sendable {
         hasher.combine(flags)
     }
 }
+extension Balance {
+    static func nonZeroBalances(_ balances: [Balance]) -> [Balance] {
+        balances.filter { balance in
+            !balance.available.isZero
+        }
+    }
+}
 // MARK: -
 /// A request to get the balances held in the wallet.
 fileprivate struct Balances: WalletBackendFormattedRequest {
