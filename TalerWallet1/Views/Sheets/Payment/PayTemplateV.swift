@@ -33,7 +33,7 @@ struct PayTemplateV: View {
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
-    @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // TODO: set correct available amount (like in SendAmountV)
     @State private var shortcutSelected = false
     @State private var buttonSelected1 = false
     @State private var buttonSelected2 = false
@@ -135,7 +135,7 @@ struct PayTemplateV: View {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
                 let amountInput = AmountInputV(stack: stack.push(),
                                         currencyInfo: $currencyInfo,
-                                     amountAvailable: $amountZero,
+                                     amountAvailable: $amountAvailable,
                                          amountLabel: amountLabel,
                                     amountToTransfer: $amountToTransfer,
                                              wireFee: nil,
