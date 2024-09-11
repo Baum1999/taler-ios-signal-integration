@@ -86,8 +86,8 @@ struct AccountPicker: View {
     @State private var selectedAccount = 0
 
     var body: some View {
-        Picker(title, selection: $selectedAccount, content: {
-            ForEach(0..<accountDetails.count, id: \.self, content: { index in
+        Picker(title, selection: $selectedAccount) {
+            ForEach(0..<accountDetails.count, id: \.self) { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
                         let amountStr = amount.formatted(isNegative: false, useISO: false)
@@ -100,8 +100,8 @@ struct AccountPicker: View {
                                 .tag(index)
                         }
                     }
-            })
-        })
+            }
+        }
         .talerFont(.title3)
         .pickerStyle(.menu)
         .onAppear() {

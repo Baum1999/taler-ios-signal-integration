@@ -94,12 +94,6 @@ struct AmountInputV: View {
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                     .padding(4)
             }
-            if let available {
-                Text("Available:\t\(available)")
-                    .talerFont(.title3)
-                    .padding(.bottom, 2)
-//                  .accessibility(sortPriority: 3)
-            } // available
             CurrencyInputView(currencyInfo: $currencyInfo,
                                     amount: $amountToTransfer,
                                  available: amountAvailable,

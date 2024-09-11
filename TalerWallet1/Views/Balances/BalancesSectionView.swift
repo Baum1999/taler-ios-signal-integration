@@ -45,7 +45,7 @@ struct BalancesSectionView {
     @State private var completedTransactions: [Transaction] = []
     @State private var recentTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
 //    @State private var buttonSelected: Int? = nil
@@ -184,6 +184,7 @@ extension BalancesSectionView: View {
 //                .accessibilityHint(String(localized: "Will go to the demo shop website."))
 //                .listRowSeparator(.hidden)
 //            }
+
 //            DepositWithdrawV(stack: stack.push(),
 //                      currencyInfo: $currencyInfo,
 //                         scopeInfo: balance.scopeInfo,
