@@ -145,6 +145,9 @@ struct P2PSubjectV: View {
                         let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
                         myFeeLabel = String(localized: "+ \(feeStr) fee")
                     } else { myFeeLabel = EMPTYSTRING }
+                } else {
+                    print("❗️ checkPeerPushDebitM failed")
+
                 }
             }
         }

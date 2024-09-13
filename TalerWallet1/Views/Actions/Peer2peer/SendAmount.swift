@@ -14,11 +14,13 @@ struct SendAmount: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balances: [Balance]
-    let available: Amount?
+    @Binding var selectedBalance: Balance?
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
     let cameraAction: () -> Void
+
+    // TODO: call getMaxPeerPushDebitAmountM
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -100,7 +102,18 @@ struct SendAmount: View {
             }
         } catch {
             // handle cancel, errors
-            symLog.log("❗️ \(error)")
+            symLog.log("❗️ \(error), \(error.localizedDescription)")
+            switch error {
+                case let walletError as WalletBackendError:
+                    switch walletError {
+                        case .walletCoreError(let wError): 
+                            if wError?.code == 7027 {
+                                return ComputeFeeResult.insufficient()
+                            }
+                        default: break
+                    }
+                default: break
+            }
         }
         return nil
     }
@@ -146,7 +159,7 @@ struct SendAmount: View {
                    expireDays: $expireDays)
         }
 
-        ScrollView {
+        let sendAmountView = ScrollView {
             ScopePicker(stack: stack.push(), balances: nonZeroBalances, selected: $balanceIndex)
 
             let amountLabel = minimalistic ? String(localized: "Amount:")
@@ -179,7 +192,7 @@ struct SendAmount: View {
                                                                         scope: scopeInfo, viewHandles: true)
                 amountAvailable = amount
             } catch {
-                amountAvailable = available ?? Amount.zero(currency: amountToTransfer.currencyStr)
+                amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
             }
         }
         .onAppear {
@@ -191,7 +204,7 @@ struct SendAmount: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .navigationBarItems(trailing: QRButton(action: cameraAction))
-        .task(id: balanceIndex + (10 * controller.currencyTicker)) {
+        .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
             let balance = nonZeroBalances[index]
             let scopeInfo = balance.scopeInfo
             let currency = scopeInfo.currency
@@ -236,6 +249,13 @@ struct SendAmount: View {
 //                }
 //            }
 //        }
+
+        if #available(iOS 16.0, *) {
+            sendAmountView.toolbar(.hidden, for: .tabBar)
+        } else {
+            sendAmountView
+        }
+
     }
 }
 // MARK: -
@@ -244,6 +264,7 @@ fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: DEMOCURRENCY, cent: 510)
     @State private var summary: String = ""
     @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+    @State private var selectedBalance: Balance? = nil
 
     private func checkCameraAvailable() -> Void {
         // Open Camera when QR-Button was tapped
@@ -268,8 +289,7 @@ fileprivate struct Preview_Content: View {
                                   flags: [])
         SendAmount(stack: CallStack("Preview"),
                 balances: [balance],
-//            currencyInfo: $currencyInfoL,
-               available: amount,
+         selectedBalance: $selectedBalance,
         amountToTransfer: $amountToPreview,
                  summary: $summary,
                scopeInfo: currencyInfo.scope,

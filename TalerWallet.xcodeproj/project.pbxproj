@@ -748,7 +748,6 @@
 				4EB0952E2989CBFE0043A8A1 /* Transactions */,
 				4EB095272989CBFE0043A8A1 /* Banking */,
 				4EB095242989CBFE0043A8A1 /* Settings */,
-				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
 				4EB095462989CBFE0043A8A1 /* HelperViews */,
 			);
@@ -889,6 +888,7 @@
 			children = (
 				4E2B337C2C8B1D5500186A3E /* ActionsSheet.swift */,
 				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
+				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
 			);
 			path = Actions;

@@ -10,7 +10,8 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-//    @Binding var currencyInfo: CurrencyInfo
+    let balances: [Balance]
+    @Binding var selectedBalance: Balance?
 
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
