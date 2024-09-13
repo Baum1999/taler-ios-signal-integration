@@ -14,7 +14,7 @@ struct SendAmount: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balances: [Balance]
-    @Binding var selectedBalance: Balance?
+    @Binding var selectedBalance: Balance?      // selected balance when the action button is tapped in Transactions
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
@@ -264,7 +264,7 @@ fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: DEMOCURRENCY, cent: 510)
     @State private var summary: String = ""
     @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
-    @State private var selectedBalance: Balance? = nil
+    @State private var noBalance: Balance? = nil
 
     private func checkCameraAvailable() -> Void {
         // Open Camera when QR-Button was tapped
@@ -289,7 +289,7 @@ fileprivate struct Preview_Content: View {
                                   flags: [])
         SendAmount(stack: CallStack("Preview"),
                 balances: [balance],
-         selectedBalance: $selectedBalance,
+         selectedBalance: $noBalance,
         amountToTransfer: $amountToPreview,
                  summary: $summary,
                scopeInfo: currencyInfo.scope,

@@ -15,7 +15,7 @@ struct SubjectInputV<TargetView: View>: View {
     @Binding var currencyInfo: CurrencyInfo
     // the scanned URL
     let url: URL?
-    let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount
+    let amountAvailable: Amount?            // TODO: getMaxDepositAmountM, getMaxPeerPushDebitAmountM
     @Binding var amountToTransfer: Amount
     let amountLabel: String
     @Binding var summary: String

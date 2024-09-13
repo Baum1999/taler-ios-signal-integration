@@ -8,6 +8,10 @@
 import SwiftUI
 import taler_swift
 
+/// This view shows the action sheet
+/// optional:   [􀰟Spend KUDOS]
+///    [􁉇Send]  [􁉅Request]
+/// [􁾭Withdraw]  [􁾩Deposit]
 struct ActionsSheet: View {
     let stack: CallStack
     @Binding var balances: [Balance]
@@ -60,17 +64,12 @@ struct ActionsSheet: View {
 
             SendRequestV(stack: stack.push(),
                       balances: $balances,
-//                currencyInfo: $currencyInfo,
-//             amountAvailable: balance.available,
               amountToTransfer: $amountToTransfer,   // does still have the wrong currency
                        summary: $summary,
                   cameraAction: cameraAction)
 
             DepositWithdrawV(stack: stack.push(),
                           balances: $balances,
-//                    currencyInfo: $currencyInfo,
-//                       scopeInfo: balance.scopeInfo,
-//                 amountAvailable: balance.available,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
             .padding(.bottom, 12)
         }

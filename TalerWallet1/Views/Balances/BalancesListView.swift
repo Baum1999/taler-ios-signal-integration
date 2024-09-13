@@ -51,7 +51,7 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group { // necessary for .backslide transition (bug in SwiftUI)
+        Group {
             let count = balances.count
             if balances.isEmpty {
                 WalletEmptyView(stack: stack.push("isEmpty"))

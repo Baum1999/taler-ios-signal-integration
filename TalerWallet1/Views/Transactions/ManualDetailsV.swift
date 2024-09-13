@@ -83,10 +83,10 @@ struct AccountPicker: View {
     let accountDetails: [WithdrawalExchangeAccountDetails]
     let action: (Int) -> Void
 
-    @State private var selectedAccount = 0
+    @State private var selected = 0
 
     var body: some View {
-        Picker(title, selection: $selectedAccount) {
+        Picker(title, selection: $selected) {
             ForEach(0..<accountDetails.count, id: \.self) { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
@@ -105,10 +105,10 @@ struct AccountPicker: View {
         .talerFont(.title3)
         .pickerStyle(.menu)
         .onAppear() {
-            withAnimation { selectedAccount = value }
+            withAnimation { selected = value }
         }
-        .onChange(of: selectedAccount) { selected in
-            action(selected)
+        .onChange(of: selected) { newValue in
+            action(newValue)
         }
     }
 }

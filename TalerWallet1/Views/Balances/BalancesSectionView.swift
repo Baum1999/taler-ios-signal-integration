@@ -12,13 +12,9 @@ import SymLog
 /// This view shows a currency section
 ///     Currency Name
 /// "Balance"                   $balance                    // leads to completed Transactions (.done)
-/// [􁉇Send $currency]  [􁉅Request $currency]
 /// optional:   Pending Incoming
 /// optional:   Pending Outgoing
-/// optional:   [􀰟Spend KUDOS]
-/// [􁾭Withdraw $currency]  [􁾩Deposit $currency]
 /// optional?:   Suspended / Aborting / Aborted / Expired
-
 struct BalancesSectionView {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -49,7 +45,6 @@ struct BalancesSectionView {
     @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
-//    @State private var buttonSelected: Int? = nil
 
     private static func className() -> String {"\(self)"}
 
@@ -127,30 +122,11 @@ extension BalancesSectionView: View {
             BalanceCellV(stack: stack.push("BalanceCell"),
                   currencyInfo: $currencyInfo,
                         amount: balance.available,
-//                        sizeCategory: sizeCategory,
-//                     rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
+//                sizeCategory: sizeCategory,
+//                   rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
                    balanceDest: balanceDest)
 //            .listRowSeparator(.hidden)
 //            .border(.red)
-
-//            SendRequestV(stack: stack.push(),
-//                  currencyInfo: $currencyInfo,
-//               amountAvailable: balance.available,
-//              amountToTransfer: $amountToTransfer,
-//                       summary: $summary,
-//                  cameraAction: cameraAction)
-//            .listRowSeparator(.hidden)
-
-//            BalancesNavigationLinksV(symLog: symLog,
-//                                         stack: stack.push("Section"),
-//                                  currencyInfo: currencyInfo,
-//                                       balance: balance,
-//                              amountToTransfer: $amountToTransfer,      // does still have the wrong currency
-//                                       summary: $summary,
-//                         completedTransactions: $completedTransactions,
-//                               reloadAllAction: reloadCompleted,
-//                               reloadOneAction: reloadOneAction,
-//                                  cameraAction: cameraAction)
 
             if pendingTransactions.count > 0 {
                 BalancesPendingRowV(//symLog: symLog,
@@ -163,38 +139,6 @@ extension BalancesSectionView: View {
                            reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
-//            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
-//            if showSpendingButton {
-//                if !minimalistic && showSpendingHint {
-//                    Text("You can spend these \(currencyName) in the Demo shop, or send them to another wallet.")
-//                        .talerFont(.body)
-//                        .multilineTextAlignment(.leading)
-//                        .listRowSeparator(.hidden)
-//                }
-//                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
-//                let action = {
-//                    showSpendingHint = false
-//                    UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
-//                }
-//                Button(action: action) {
-//                    HStack {
-//                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
-//                        Spacer()
-//                        Text(title)
-//                        Spacer()
-//                    }
-//                }
-//                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-//                .accessibilityHint(String(localized: "Will go to the demo shop website."))
-//                .listRowSeparator(.hidden)
-//            }
-
-//            DepositWithdrawV(stack: stack.push(),
-//                      currencyInfo: $currencyInfo,
-//                         scopeInfo: balance.scopeInfo,
-//                   amountAvailable: balance.available,
-//                  amountToTransfer: $amountToTransfer)   // does still have the wrong currency
-
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,

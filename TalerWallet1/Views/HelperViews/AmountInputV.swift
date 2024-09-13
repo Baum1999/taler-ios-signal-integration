@@ -28,7 +28,7 @@ struct ComputeFeeResult {
                              numCoins: -1)
     }
 }
-
+// MARK: -
 struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -123,11 +123,11 @@ struct AmountInputV: View {
                 if let result: ComputeFeeResult = await computeFee(amountToTransfer) {
                     symLog.log("computeFee() finished")
                     feeStr = result.feeStr
-//                    insufficient = result.insufficient
+//                    insufficient = result.insufficient    // TODO: insufficient
                     feeAmount = result.feeAmount
                     numCoins = result.numCoins
                 } else {
-                    symLog.log("computeFee() failed")
+                    symLog.log("computeFee() failed ❗️") //  \(error)")
                 }
             }
         }
