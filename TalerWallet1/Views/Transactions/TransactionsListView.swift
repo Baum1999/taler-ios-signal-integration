@@ -16,6 +16,8 @@ fileprivate let showUpDown = 25     // show up+down buttons in the menubar if li
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let balance: Balance                            // this is the currency to be used
+    @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     @Binding var currencyInfo: CurrencyInfo
     let navTitle: String
 
@@ -65,7 +67,7 @@ struct TransactionsListView: View {
                     }
                 })
             }
-        } // ScrollView
+        } // ScrollViewReader
         .navigationTitle(navTitle)
         .accessibilityHint(String(localized: "Transaction list"))
         .task {
@@ -79,6 +81,7 @@ struct TransactionsListView: View {
         }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST, stack: stack.push())
+            selectedBalance = balance           // balance fixed for send/request/deposit/withdraw
         }
     }
 }

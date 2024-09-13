@@ -14,6 +14,8 @@ import SymLog
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let balances: [Balance]
+    @Binding var selectedBalance: Balance?
 //    @Binding var currencyInfo: CurrencyInfo
     let isSheet: Bool
 //    let exchangeBaseUrl: String

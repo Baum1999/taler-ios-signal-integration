@@ -15,6 +15,7 @@ struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var balances: [Balance]
+    @Binding var selectedBalance: Balance?
 //    @Binding var shouldReloadPending: Int
     @Binding var shouldReloadBalances: Int
     let cameraAction: () -> Void
@@ -24,10 +25,8 @@ struct BalancesListView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var lastReloadedBalances = 0
-    @State private var actionSelected: Int? = nil
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary: String = ""
-    @State private var myExchange: Exchange? = nil
 
     /// runs on MainActor if called in some Task {}
     @discardableResult
@@ -52,51 +51,6 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
-                            noFees: false,
-                               url: DEMOEXCHANGE,
-                          currency: DEMOCURRENCY)
-        let sendDest = LazyView {
-            SendAmount(stack: stack.push("\(Self.className())()"),
-                    balances: balances,
-//              currencyInfo: $currencyInfo,
-//           amountAvailable: amountAvailable,
-                   available: nil,
-            amountToTransfer: $amountToTransfer,        // with correct currency
-                     summary: $summary,
-                   scopeInfo: scope,
-                cameraAction: cameraAction)
-        }
-
-        let requestDest = LazyView {
-            RequestPayment(stack: stack.push("\(Self.className())()"),
-//                  currencyInfo: $currencyInfo,
-                amountToTransfer: $amountToTransfer,    // with correct currency
-                         summary: $summary,
-                       scopeInfo: scope,
-                    cameraAction: cameraAction)
-        }
-
-        let depositDest = LazyView {
-            DepositIbanV(stack: stack.push(),
-//                currencyInfo: $currencyInfo,
-                      feeLabel: nil,
-                  feeIsNotZero: nil,
-//             amountAvailable: amountAvailable,
-//                 depositIBAN: $depositIBAN,
-//               accountHolder: $accountHolder,
-              amountToTransfer: $amountToTransfer)
-        }
-
-        let manualWithdrawDest = LazyView {
-            ManualWithdraw(stack: stack.push(),
-//                  currencyInfo: $currencyInfo,
-                         isSheet: false,
-                       scopeInfo: scope,
-                        exchange: $myExchange,
-                amountToTransfer: $amountToTransfer)
-        }
-
         Group { // necessary for .backslide transition (bug in SwiftUI)
             let count = balances.count
             if balances.isEmpty {
@@ -105,6 +59,7 @@ struct BalancesListView: View {
                 List(balances, id: \.self) { balance in
                     BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                       balance: balance,                     // this is the currency to be used
+                              selectedBalance: $selectedBalance,
                                  sectionCount: count,
                              amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                       summary: $summary,
@@ -114,24 +69,11 @@ struct BalancesListView: View {
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
                     controller.frontendState = 0                            // neutral
+                    selectedBalance = nil
                 }
                 .listStyle(myListStyle.style).anyView
             }
         }
-        .background( Group {
-            NavigationLink(destination: sendDest, tag: 1, selection: $actionSelected)
-            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            NavigationLink(destination: requestDest, tag: 2, selection: $actionSelected)
-            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            NavigationLink(destination: depositDest, tag: 3, selection: $actionSelected)
-            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $actionSelected)
-            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-        })
-        .onNotification(.SendAction) { actionSelected = 1 }
-        .onNotification(.RequestAction) { actionSelected = 2 }
-        .onNotification(.DepositAction) { actionSelected = 3 }
-        .onNotification(.WithdrawAction) { actionSelected = 4 }
 #if REFRESHABLE
         .refreshable {  // already async
             symLog.log("refreshing balances")

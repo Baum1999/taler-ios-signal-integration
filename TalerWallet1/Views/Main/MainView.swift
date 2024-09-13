@@ -38,6 +38,8 @@ struct MainView: View {
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
+    @State private var balances: [Balance] = []
+    @State private var selectedBalance: Balance? = nil
     @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
     @State private var showQRScanner: Bool = false
@@ -109,6 +111,8 @@ struct MainView: View {
         Group {
             if controller.backendState == .ready {
                 Content(logger: logger, stack: stack.push("Content"),
+                      balances: $balances,
+               selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
                   cameraAction: checkCameraAvailable)
                     .onAppear() {
@@ -125,7 +129,9 @@ struct MainView: View {
                                             dismissAlertButton },
                                message: {   Text("Please allow camera access in settings.") }) // Scanning QR-codes
                     .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
-                        let sheet = AnyView(QRSheet(stack: stack.push(".sheet")))
+                        let sheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+                                                 balances: $balances,
+                                          selectedBalance: $selectedBalance))
                         Sheet(stack: stack.push(), sheetView: sheet)
                     } // sheet
             } else if controller.backendState == .error {
@@ -148,7 +154,10 @@ struct MainView: View {
             urlToOpen = url     // raise sheet
         }
         .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
-            let sheet = AnyView(URLSheet(stack: stack.push(), urlToOpen: url))
+            let sheet = AnyView(URLSheet(stack: stack.push(),
+                                      balances: $balances,
+                               selectedBalance: $selectedBalance,
+                                     urlToOpen: url))
             Sheet(stack: stack.push(), sheetView: sheet)
         }
         .sheet(isPresented: $model.showError) {
@@ -208,6 +217,8 @@ extension MainView {
     struct Content: View {
         let logger: Logger
         let stack: CallStack
+        @Binding var balances: [Balance]
+        @Binding var selectedBalance: Balance?
         @Binding var talerFontIndex: Int
         let cameraAction: () -> Void
 
@@ -224,7 +235,6 @@ extension MainView {
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadPending = 0
-        @State private var balances: [Balance] = []
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -234,6 +244,8 @@ extension MainView {
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = ""
         @State private var showSpendingHint = true
+        @State private var actionSelected: Int? = nil
+        @State private var myExchange: Exchange? = nil
 
         private var openKycButton: some View {
             Button("KYC") {
@@ -276,6 +288,7 @@ extension MainView {
             }
         }
 
+        private static func className() -> String {"\(self)"}
         var body: some View {
 #if PRINT_CHANGES
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
@@ -299,38 +312,77 @@ extension MainView {
                     selectedTab = .balances
                 }
                 // TODO: check NavigationStack, pop only if necessary
-                ViewState.shared.popToRootView(nil)
+//                ViewState.shared.popToRootView(nil)   either do this after any of the buttons was operated, or don't do it at all
                 showActionSheet = true
             }
+
+            let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
+                                noFees: false,
+                                   url: DEMOEXCHANGE,
+                              currency: DEMOCURRENCY)
+
+            let sendDest = SendAmount(stack: stack.push("\(Self.className())()"),
+                                   balances: balances,
+                            selectedBalance: $selectedBalance,          // if nil shows currency picker
+                           amountToTransfer: $amountToTransfer,         // with correct currency
+                                    summary: $summary,
+                                  scopeInfo: scope,
+                               cameraAction: cameraAction)
+
+            let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
+                                          balances: balances,
+                                   selectedBalance: $selectedBalance,
+                                  amountToTransfer: $amountToTransfer,    // with correct currency
+                                           summary: $summary,
+                                         scopeInfo: scope,
+                                      cameraAction: cameraAction)
+
+            let depositDest = DepositIbanV(stack: stack.push(),
+                                        balances: balances,
+                                 selectedBalance: $selectedBalance,
+                                        feeLabel: nil,
+                                    feeIsNotZero: nil,
+                //                   depositIBAN: $depositIBAN,
+                //                 accountHolder: $accountHolder,
+                                amountToTransfer: $amountToTransfer)
+
+            let manualWithdrawDest = ManualWithdraw(stack: stack.push(),
+                                                 balances: balances,
+                                          selectedBalance: $selectedBalance,
+                                                  isSheet: false,
+                                                scopeInfo: scope,
+                                                 exchange: $myExchange,
+                                         amountToTransfer: $amountToTransfer)
+
             ZStack(alignment: .bottom) {
                 TabView(selection: tabSelection()) {
                     NavigationView {
                         BalancesListView(stack: stack.push(balancesTitle),
                                       balances: $balances,
+                               selectedBalance: $selectedBalance,
 //                         shouldReloadPending: $shouldReloadPending,
                           shouldReloadBalances: $shouldReloadBalances,
                                   cameraAction: cameraAction)
                         .navigationTitle(balancesTitle)
+                        .background( Group {
+                            NavigationLink(destination: sendDest, tag: 1, selection: $actionSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                            NavigationLink(destination: requestDest, tag: 2, selection: $actionSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                            NavigationLink(destination: depositDest, tag: 3, selection: $actionSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $actionSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                        })
+                        .onNotification(.SendAction) { actionSelected = 1 }
+                        .onNotification(.RequestAction) { actionSelected = 2 }
+                        .onNotification(.DepositAction) { actionSelected = 3 }
+                        .onNotification(.WithdrawAction) { actionSelected = 4 }
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.balances)
-//                    .badge(0)         // TODO: set badge if transaction finished in background        (not here, but in the     overlayed tabView instead)
 
-                    EmptyView()
-                        .tag(Tab.actions)
-//                     if balances.count > 1 {
-//                    let overviewTitle = Tab.overview.title
-//                    NavigationView {
-//                        OverviewListV(stack: stack.push(overviewTitle),
-//                                   balances: $balances,
-//                        shouldReloadPending: $shouldReloadPending,
-//                       shouldReloadBalances: $shouldReloadBalances,
-//                               cameraAction: cameraAction)
-//                        .navigationTitle(overviewTitle)
-//                    }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-//                    .navigationViewStyle(.stack)
-//                    .tag(Tab.overview)
-//                }
+                    EmptyView().tag(Tab.actions)
 
                     NavigationView {
                         SettingsView(stack: stack.push(),
@@ -340,9 +392,13 @@ extension MainView {
                     .navigationViewStyle(.stack)
                     .tag(Tab.settings)
                 } // TabView
-                    .padding(.bottom, 16)
+//                    .ignoresSafeArea(.keyboard, edges: .bottom)
+//                    .padding(.bottom, 10)
                 tabBarView
+//                    .ignoresSafeArea(.keyboard, edges: .bottom)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
             .onNotification(.KYCrequired) { notification in
               // show an alert with the KYC link (button) which opens in Safari
                 if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {

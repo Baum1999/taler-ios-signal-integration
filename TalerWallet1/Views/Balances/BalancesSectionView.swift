@@ -23,6 +23,7 @@ struct BalancesSectionView {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance                            // this is the currency to be used
+    @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
@@ -105,6 +106,8 @@ extension BalancesSectionView: View {
 
         let balanceDest = LazyView {
             TransactionsListView(stack: stack.push("\(Self.className())()"),
+                               balance: balance,
+                       selectedBalance: $selectedBalance,
                           currencyInfo: $currencyInfo,
                               navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                              scopeInfo: scopeInfo,
@@ -154,6 +157,7 @@ extension BalancesSectionView: View {
                                      stack: stack.push(),
                               currencyInfo: $currencyInfo,
                                    balance: balance,
+                           selectedBalance: $selectedBalance,
                        pendingTransactions: $pendingTransactions,
                              reloadPending: loadPending,
                            reloadOneAction: reloadOneAction)

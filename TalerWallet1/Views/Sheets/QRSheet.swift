@@ -10,6 +10,9 @@ import AVFoundation
 struct QRSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    @Binding var balances: [Balance]
+    @Binding var selectedBalance: Balance?
+
     @State private var scannedCode: String?
 
     func codeToURL(_ code: String) -> URL? {
@@ -32,7 +35,10 @@ struct QRSheet: View {
                 if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
-                        URLSheet(stack: stack.push(), urlToOpen: scannedURL)
+                        URLSheet(stack: stack.push(),
+                              balances: $balances,
+                       selectedBalance: $selectedBalance,
+                             urlToOpen: scannedURL)
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
                         ErrorView(errortext: scannedURL.absoluteString)

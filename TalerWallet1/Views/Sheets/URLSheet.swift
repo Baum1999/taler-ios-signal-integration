@@ -12,7 +12,8 @@ import SymLog
 struct URLSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Checking Link")
+    @Binding var balances: [Balance]
+    @Binding var selectedBalance: Balance?
     var urlToOpen: URL
 
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
@@ -21,6 +22,8 @@ struct URLSheet: View {
     @State private var summary = EMPTYSTRING
     @State private var showAlert: Bool = false
     @State private var urlCommand: UrlCommand = .unknown
+
+    let navTitle = String(localized: "Checking Link")
 
     var body: some View {
 #if PRINT_CHANGES
@@ -31,12 +34,14 @@ struct URLSheet: View {
 
         Group {
             switch urlCommand {
-                case .withdraw:
+                case .termsExchange,      // TODO: just check the ToS
+                     .withdraw:
                     WithdrawURIView(stack: stack.push(), url: urlToOpen)
                 case .withdrawExchange:
-                    WithdrawExchangeV(stack: stack.push(), url: urlToOpen)
-                case .termsExchange:
-                    WithdrawExchangeV(stack: stack.push(), url: urlToOpen)      // TODO: just check the ToS
+                    WithdrawExchangeV(stack: stack.push(),
+                                   balances: $balances,
+                            selectedBalance: $selectedBalance,
+                                        url: urlToOpen)
                 case .pay:
                     PaymentView(stack: stack.push(), url: urlToOpen,
                              template: false, amountToTransfer: $amountToTransfer, summary: $summary,

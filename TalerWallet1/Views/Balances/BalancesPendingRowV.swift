@@ -11,6 +11,7 @@ struct BalancesPendingRowV: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
     let balance: Balance
+    @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)?
@@ -61,6 +62,8 @@ struct BalancesPendingRowV: View {
         if let reloadOneAction {
             let destination = LazyView {
                 TransactionsListView(stack: stack.push(),
+                                   balance: balance,
+                           selectedBalance: $selectedBalance,
                               currencyInfo: $currencyInfo,
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
@@ -83,6 +86,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     struct BindingViewContainer: View {
         @State private var previewTransactions: [Transaction] = []
         @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var selectedBalance: Balance? = nil
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
 
@@ -96,6 +100,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
                                  stack: CallStack("Preview"),
                           currencyInfo: $currencyInfoD,
                                balance: balance,
+                       selectedBalance: $selectedBalance,
                    pendingTransactions: $previewTransactions,
                          reloadPending: {stack in },
                        reloadOneAction: nil)

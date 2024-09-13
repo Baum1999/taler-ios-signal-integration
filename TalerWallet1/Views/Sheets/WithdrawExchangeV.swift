@@ -9,10 +9,12 @@ import SwiftUI
 import taler_swift
 import SymLog
 
+// Will be called when a withdraw-exchange QR was scanned
 struct WithdrawExchangeV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle = String(localized: "Checking Link")
+    @Binding var balances: [Balance]
+    @Binding var selectedBalance: Balance?
     var url: URL
 
     @EnvironmentObject private var controller: Controller
@@ -20,6 +22,8 @@ struct WithdrawExchangeV: View {
     @State private var amountToTransfer = Amount.zero(currency: "")
     @State private var exchange: Exchange? = nil
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+
+    let navTitle = String(localized: "Checking Link")
 
     var body: some View {
 #if PRINT_CHANGES
@@ -30,6 +34,8 @@ struct WithdrawExchangeV: View {
             let currency = exchange.scopeInfo.currency
             Group {
                 ManualWithdraw(stack: stack.push(),
+                            balances: balances,
+                     selectedBalance: $selectedBalance,
 //                      currencyInfo: $currencyInfo,
                              isSheet: true,
                            scopeInfo: exchange.scopeInfo,
