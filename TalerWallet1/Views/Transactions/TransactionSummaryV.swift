@@ -52,6 +52,7 @@ struct TransactionSummaryV: View {
     @State private var didDelete: Bool = false
     @State var transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
+    @Namespace var topID
 
     func loadTransaction() async {
         if let reloadedTransaction = try? await reloadAction(transactionId, false) {
@@ -117,7 +118,7 @@ struct TransactionSummaryV: View {
         let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.isDone ? transaction.localizedTypePast
                                            : transaction.localizedType
-        Group {
+        ScrollViewReader { scrollView in
             List {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
@@ -140,6 +141,7 @@ struct TransactionSummaryV: View {
                         .talerFont(.body)
                         .accessibilityLabel(a11yDate)
                         .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                        .id(topID)
                     let majorState = common.txState.major.localizedState
                     let minorState = common.txState.minor?.localizedState ?? nil
                     let state = developerMode ? transaction.isPending ? minorState ?? majorState
@@ -171,6 +173,11 @@ struct TransactionSummaryV: View {
                     } else { vLayout } // view for iOS 15
                 }   .listRowSeparator(.hidden)
                     .talerFont(.title)
+                    .onAppear {     // doesn't work - view still jumps
+//                        scrollView.scrollTo(topID)
+//                        withAnimation { scrollView.scrollTo(topID) }
+                    }
+
                 TypeDetail(stack: stack.push(),
                     currencyInfo: $currencyInfo,
                      transaction: $transaction,
