@@ -154,32 +154,32 @@ struct StyleSizeBold {
     let bold: Bool
     let italic: Bool = false
 
-    static var largeTitle:  StyleSizeBold { StyleSizeBold(style: .largeTitle, size: 38, bold: false) }      // 34 -> 38
-    static var title:       StyleSizeBold { StyleSizeBold(style: .title1, size: 31, bold: false) }          // 28 -> 31
-    static var title2:      StyleSizeBold { StyleSizeBold(style: .title2, size: 25, bold: false) }          // 22 -> 25
-    static var title3:      StyleSizeBold { StyleSizeBold(style: .title3, size: 23, bold: false) }          // 20 -> 23
-    static var headline:    StyleSizeBold { StyleSizeBold(style: .headline, size: 19, bold: true) }         // 17 bold -> 19 bold
-    static var body:        StyleSizeBold { StyleSizeBold(style: .body, size: 19, bold: false) }            // 17 -> 19
-    static var callout:     StyleSizeBold { StyleSizeBold(style: .callout, size: 18, bold: false) }         // 16 -> 18
-    static var subheadline: StyleSizeBold { StyleSizeBold(style: .subheadline, size: 17, bold: false) }     // 15 -> 17
-    static var footnote:    StyleSizeBold { StyleSizeBold(style: .footnote, size: 15, bold: false) }        // 13 -> 15
-    static var caption:     StyleSizeBold { StyleSizeBold(style: .caption1, size: 13, bold: false) }        // 12 -> 13
-//    static var caption2:    AccessibleFont { AccessibleFont(fontName, size: 12, relativeTo: .caption2) }    // 11 -> 12
+    static var largeTitle:  StyleSizeBold { StyleSizeBold(style: .largeTitle, size: 34, bold: false) }      // 34 -> 38
+    static var title:       StyleSizeBold { StyleSizeBold(style: .title1, size: 28, bold: false) }          // 28 -> 31
+    static var title2:      StyleSizeBold { StyleSizeBold(style: .title2, size: 22, bold: false) }          // 22 -> 25
+    static var title3:      StyleSizeBold { StyleSizeBold(style: .title3, size: 20, bold: false) }          // 20 -> 23
+    static var headline:    StyleSizeBold { StyleSizeBold(style: .headline, size: 17, bold: true) }         // 17 bold -> 19 bold
+    static var body:        StyleSizeBold { StyleSizeBold(style: .body, size: 17, bold: false) }            // 17 -> 19
+    static var callout:     StyleSizeBold { StyleSizeBold(style: .callout, size: 16, bold: false) }         // 16 -> 18
+    static var subheadline: StyleSizeBold { StyleSizeBold(style: .subheadline, size: 15, bold: false) }     // 15 -> 17
+    static var footnote:    StyleSizeBold { StyleSizeBold(style: .footnote, size: 13, bold: false) }        // 13 -> 15
+    static var caption:     StyleSizeBold { StyleSizeBold(style: .caption1, size: 12, bold: false) }        // 12 -> 13
+//    static var caption2:    AccessibleFont { AccessibleFont(fontName, size: 11, relativeTo: .caption2) }    // 11 -> 12
 }
 
 extension TalerFont {   // old running
     static var fontName: String { NUNITO }
 
-    static var largeTitle:  TalerFont { TalerFont(fontName, size: 38, relativeTo: .largeTitle) }  // 34 -> 38
-    static var title:       TalerFont { TalerFont(fontName, size: 31, relativeTo: .title) }       // 28 -> 31
-    static var title2:      TalerFont { TalerFont(fontName, size: 25, relativeTo: .title2) }      // 22 -> 25
-    static var title3:      TalerFont { TalerFont(fontName, size: 23, relativeTo: .title3) }      // 20 -> 23
-    static var headline:    TalerFont { TalerFont(fontName, size: 19, relativeTo: .headline, isBold: true) } // 17 bold -> 19 bold
-    static var body:        TalerFont { TalerFont(fontName, size: 19, relativeTo: .body) }        // 17 -> 19
-    static var callout:     TalerFont { TalerFont(fontName, size: 18, relativeTo: .callout) }     // 16 -> 18
-    static var subheadline: TalerFont { TalerFont(fontName, size: 17, relativeTo: .subheadline) } // 15 -> 17
-    static var footnote:    TalerFont { TalerFont(fontName, size: 15, relativeTo: .footnote) }    // 13 -> 15
-    static var caption:     TalerFont { TalerFont(fontName, size: 13, relativeTo: .caption) }     // 12 -> 13
+    static var largeTitle:  TalerFont { TalerFont(fontName, size: 34, relativeTo: .largeTitle) }  // 34 -> 38
+    static var title:       TalerFont { TalerFont(fontName, size: 28, relativeTo: .title) }       // 28 -> 31
+    static var title2:      TalerFont { TalerFont(fontName, size: 22, relativeTo: .title2) }      // 22 -> 25
+    static var title3:      TalerFont { TalerFont(fontName, size: 20, relativeTo: .title3) }      // 20 -> 23
+    static var headline:    TalerFont { TalerFont(fontName, size: 17, relativeTo: .headline, isBold: true) } // 17 bold -> 19 bold
+    static var body:        TalerFont { TalerFont(fontName, size: 17, relativeTo: .body) }        // 17 -> 19
+    static var callout:     TalerFont { TalerFont(fontName, size: 16, relativeTo: .callout) }     // 16 -> 18
+    static var subheadline: TalerFont { TalerFont(fontName, size: 15, relativeTo: .subheadline) } // 15 -> 17
+    static var footnote:    TalerFont { TalerFont(fontName, size: 13, relativeTo: .footnote) }    // 13 -> 15
+    static var caption:     TalerFont { TalerFont(fontName, size: 12, relativeTo: .caption) }     // 12 -> 13
 }
 
 struct StyleSizeBoldViewModifier: ViewModifier {
