@@ -37,7 +37,6 @@ extension WalletModel {
     }
 }
 // MARK: - Deposit
-
 struct DepositWireTypesForCurrencyResponse: Codable {
     /// can be used to pre-filter payment target types to offer the user as an input option
     let wireTypes: [String]
@@ -85,9 +84,9 @@ fileprivate struct GetMaxDepositAmount: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor            // M for MainActor
+    @MainActor           // M for MainActor
     func getMaxDepositAmountM(_ currency: String, scope: ScopeInfo, viewHandles: Bool = false)
-    async throws -> Amount {
+      async throws -> Amount {
         let request = GetMaxDepositAmount(currency: currency, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.rawAmount
