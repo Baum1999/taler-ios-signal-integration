@@ -17,7 +17,7 @@ struct PeerContractTerms: Codable {
     let summary: String
     let purse_expiration: Timestamp
 }
-// MARK: - PeerPushDebit
+// MARK: - max PeerPushDebit amount
 /// Check if initiating a peer push payment is possible, check fees
 fileprivate struct AmountResponse: Codable {
     let effectiveAmount: Amount?
@@ -44,7 +44,7 @@ extension WalletModel {
         return response.rawAmount
     }
 } // getMaxPeerPushAmountM
-// - - - - - -
+// MARK: - check PeerPushDebit
 struct CheckPeerPushDebitResponse: Codable {
     let exchangeBaseUrl: String?                // API "2:0:1"
     let amountRaw: Amount
@@ -73,7 +73,7 @@ extension WalletModel {
         return response
     }
 } // checkPeerPushDebitM
-// - - - - - -
+// MARK: - Initiate PeerPushDebit
 /// Initiate an outgoing peer push payment, send coins
 struct InitiatePeerPushDebitResponse: Codable {
     let contractPriv: String
