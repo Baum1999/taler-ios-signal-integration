@@ -10,7 +10,7 @@ import taler_swift
 import SymLog
 
 // Called when tapping "Send Coins" in the balances list
-struct SendAmount: View {
+struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balances: [Balance]
@@ -33,7 +33,7 @@ struct SendAmount: View {
         let sendAmountView = ScrollView {
             let count = nonZeroBalances.count
             if let selectedBalance {
-                let urlOrCurrency = selectedBalance.scopeInfo.url?.trimURL()
+                let urlOrCurrency = selectedBalance.scopeInfo.url?.trimURL
                                  ?? selectedBalance.scopeInfo.currency
                 let amount = selectedBalance.available
                 let formattedAmount = amount.formatted(isNegative: false, useISO: false)
@@ -52,6 +52,7 @@ struct SendAmount: View {
                        balanceIndex: $balanceIndex,
                    amountToTransfer: $amountToTransfer,
                             summary: $summary,
+                          scopeInfo: scopeInfo,
                        cameraAction: cameraAction)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -88,6 +89,7 @@ struct SendAmountContent: View {
     @Binding var balanceIndex: Int
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    let scopeInfo: ScopeInfo
     let cameraAction: () -> Void
 
     // TODO: call getMaxPeerPushDebitAmountM
@@ -341,13 +343,13 @@ fileprivate struct Preview_Content: View {
                         pendingIncoming: pending,
                         pendingOutgoing: pending,
                                   flags: [])
-        SendAmount(stack: CallStack("Preview"),
-                balances: [balance],
-         selectedBalance: $noBalance,
-        amountToTransfer: $amountToPreview,
-                 summary: $summary,
-               scopeInfo: currencyInfo.scope,
-            cameraAction: checkCameraAvailable)
+        SendAmountV(stack: CallStack("Preview"),
+                 balances: [balance],
+          selectedBalance: $noBalance,
+         amountToTransfer: $amountToPreview,
+                  summary: $summary,
+                scopeInfo: currencyInfo.scope,
+             cameraAction: checkCameraAvailable)
     }
 }
 

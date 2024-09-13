@@ -53,7 +53,7 @@
 		4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC82A42BC4800CC88B8 /* Model+Exchange.swift */; };
 		4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5A88F42A38A4FD00072618 /* QRCodeDetailView.swift */; };
 		4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */; };
-		4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
+		4E3EAE312A990778009F1BE8 /* SendAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */; };
 		4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E25322A1CD39700A27BFA /* EqualIconWidthDomain.swift */; };
 		4E3EAE342A990778009F1BE8 /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
 		4E3EAE352A990778009F1BE8 /* P2pPayURIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E578E932A4822D500F21F1C /* P2pPayURIView.swift */; };
@@ -140,7 +140,7 @@
 		4E3EAEA52AA12582009F1BE8 /* Nunito-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E3EAEA12AA12582009F1BE8 /* Nunito-BoldItalic.ttf */; };
 		4E3EAEA82AA70157009F1BE8 /* Binding+onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */; };
 		4E3EAEA92AA70157009F1BE8 /* Binding+onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */; };
-		4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmount.swift */; };
+		4E40E0BE29F25ABB00B85369 /* SendAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */; };
 		4E448AB72C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
 		4E448AB82C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
 		4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
@@ -377,7 +377,7 @@
 		4E3EAEA02AA12582009F1BE8 /* Nunito-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Italic.ttf"; sourceTree = "<group>"; };
 		4E3EAEA12AA12582009F1BE8 /* Nunito-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Binding+onChange.swift"; sourceTree = "<group>"; };
-		4E40E0BD29F25ABB00B85369 /* SendAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmount.swift; sourceTree = "<group>"; };
+		4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmountV.swift; sourceTree = "<group>"; };
 		4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesPendingRowV.swift; sourceTree = "<group>"; };
 		4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Condition.swift"; sourceTree = "<group>"; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
@@ -875,7 +875,7 @@
 		4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */ = {
 			isa = PBXGroup;
 			children = (
-				4E40E0BD29F25ABB00B85369 /* SendAmount.swift */,
+				4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */,
 				4E9320442A1645B600A87B0E /* RequestPayment.swift */,
 				4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */,
 				4EB3136029FEE79B007D68BC /* P2PReadyV.swift */,
@@ -1216,7 +1216,7 @@
 				4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB02C8982180020D340 /* View+fixedInnerHeight.swift in Sources */,
 				4E605DAF2AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
-				4E3EAE312A990778009F1BE8 /* SendAmount.swift in Sources */,
+				4E3EAE312A990778009F1BE8 /* SendAmountV.swift in Sources */,
 				4E3EAE332A990778009F1BE8 /* EqualIconWidthDomain.swift in Sources */,
 				4EEC11932B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
 				E3E48FB52B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */,
@@ -1348,7 +1348,7 @@
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB12C8982180020D340 /* View+fixedInnerHeight.swift in Sources */,
 				4E605DB02AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
-				4E40E0BE29F25ABB00B85369 /* SendAmount.swift in Sources */,
+				4E40E0BE29F25ABB00B85369 /* SendAmountV.swift in Sources */,
 				4E8E25332A1CD39700A27BFA /* EqualIconWidthDomain.swift in Sources */,
 				4EEC11942B83FB7A00146CFF /* SubjectInputV.swift in Sources */,
 				E3E48FB62B9B7D5000898A0F /* Encodable+toJSON.swift in Sources */,

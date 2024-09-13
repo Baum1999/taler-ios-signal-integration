@@ -321,18 +321,18 @@ extension MainView {
                                    url: DEMOEXCHANGE,
                               currency: DEMOCURRENCY)
 
-            let sendDest = SendAmount(stack: stack.push("\(Self.className())()"),
-                                   balances: balances,
-                            selectedBalance: $selectedBalance,          // if nil shows currency picker
-                           amountToTransfer: $amountToTransfer,         // with correct currency
-                                    summary: $summary,
-                                  scopeInfo: scope,
-                               cameraAction: cameraAction)
+            let sendDest = SendAmountV(stack: stack.push("\(Self.className())()"),
+                                    balances: balances,
+                             selectedBalance: $selectedBalance,             // if nil shows currency picker
+                            amountToTransfer: $amountToTransfer,            // currency needs to be updated!
+                                     summary: $summary,
+                                   scopeInfo: scope,
+                                cameraAction: cameraAction)
 
             let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
                                           balances: balances,
                                    selectedBalance: $selectedBalance,
-                                  amountToTransfer: $amountToTransfer,    // with correct currency
+                                  amountToTransfer: $amountToTransfer,      // currency needs to be updated!
                                            summary: $summary,
                                          scopeInfo: scope,
                                       cameraAction: cameraAction)
