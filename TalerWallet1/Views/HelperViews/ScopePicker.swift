@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ScopePicker: View {
-    let stack: CallStack
+    @Binding var value: Int
     let balances: [Balance]
+    let action: (Int) -> Void
 
-    @Binding var selected: Int
-//    @State private var selected = 0
+    @State private var selected = 0
 
     func formattedAmount(_ balance: Balance) -> String {
         let amount = balance.available
@@ -27,18 +27,22 @@ struct ScopePicker: View {
 
     var body: some View {
         HStack {
-            Text("From: ")
+            Text("Use: ", comment: "ScopePicker")
             Spacer()
-            if (balances.count > 1) {
+            if (balances.count > 0) {
                 Picker(EMPTYSTRING, selection: $selected) {
                     ForEach(0..<balances.count, id: \.self) { index in
                         Text(label(balance: balances[index]))
                             .tag(index)
                     }
                 }
-            } else { // only 1 choice, no need for a picker
-                Text(label(balance: balances[0]))
-                    .tag(0)
+                .pickerStyle(.menu)
+                .onAppear() {
+                    withAnimation { selected = value }
+                }
+                .onChange(of: selected) { newValue in
+                    action(newValue)
+                }
             }
         }
         .padding(.leading)

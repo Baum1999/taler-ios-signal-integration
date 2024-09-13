@@ -20,6 +20,76 @@ struct SendAmount: View {
     let scopeInfo: ScopeInfo
     let cameraAction: () -> Void
 
+    @State private var balanceIndex = 0
+    @State private var nonZeroBalances: [Balance] = []
+    @State private var balance: Balance? = nil
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+#endif
+//        nonZeroBalances.count > 0
+//        let balance = selectedBalance ?? nonZeroBalances[balanceIndex]
+        let sendAmountView = ScrollView {
+            let count = nonZeroBalances.count
+            if let selectedBalance {
+                let urlOrCurrency = selectedBalance.scopeInfo.url?.trimURL()
+                                 ?? selectedBalance.scopeInfo.currency
+                let amount = selectedBalance.available
+                let formattedAmount = amount.formatted(isNegative: false, useISO: false)
+                let label = String("\(urlOrCurrency):\t\(formattedAmount.nbs)")
+                Text(label)
+//                    .padding(.leading)
+                    .talerFont(.title3)
+            } else if count > 0 {
+                ScopePicker(value: $balanceIndex, balances: nonZeroBalances) { index in
+                    balanceIndex = index
+                    balance = nonZeroBalances[index]
+                }
+            }
+            SendAmountContent(stack: stack.push(),
+                            balance: $balance,
+                       balanceIndex: $balanceIndex,
+                   amountToTransfer: $amountToTransfer,
+                            summary: $summary,
+                       cameraAction: cameraAction)
+        } // ScrollView
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
+            .task {
+                if selectedBalance == nil {
+                    nonZeroBalances = Balance.nonZeroBalances(balances)
+                    let count = nonZeroBalances.count
+                    if balanceIndex >= count {
+                        balanceIndex = 0
+                    }
+                    if count > 0 {
+                        balance = nonZeroBalances[balanceIndex]
+                    } else {
+                        balance = nil
+                    }
+                } else {
+                    balance = selectedBalance
+                }
+            }
+
+        if #available(iOS 16.0, *) {
+            sendAmountView.toolbar(.hidden, for: .tabBar)
+        } else {
+            sendAmountView
+        }
+    }
+}
+// MARK: -
+struct SendAmountContent: View {
+    private let symLog = SymLogV()
+    let stack: CallStack
+    @Binding var balance: Balance?
+    @Binding var balanceIndex: Int
+    @Binding var amountToTransfer: Amount
+    @Binding var summary: String
+    let cameraAction: () -> Void
+
     // TODO: call getMaxPeerPushDebitAmountM
 
     @EnvironmentObject private var controller: Controller
@@ -39,7 +109,6 @@ struct SendAmount: View {
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
-    @State private var balanceIndex = 0
     @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName = UNKNOWN
     @State private var currencySymbol = UNKNOWN
@@ -123,12 +192,6 @@ struct SendAmount: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let nonZeroBalances = Balance.nonZeroBalances(balances)
-        let count = nonZeroBalances.count
-        let index = balanceIndex < count ? balanceIndex : 0
-        let balance = nonZeroBalances[index]
-        let scopeInfo = balance.scopeInfo
-        let currency = scopeInfo.currency
         let navTitle = String(localized: "NavTitle_Send",
                            defaultValue: "Send",
                                 comment: "NavTitle: Send")
@@ -159,9 +222,7 @@ struct SendAmount: View {
                    expireDays: $expireDays)
         }
 
-        let sendAmountView = ScrollView {
-            ScopePicker(stack: stack.push(), balances: nonZeroBalances, selected: $balanceIndex)
-
+        Group {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to send:")
             AmountInputV(stack: stack.push(),
@@ -181,9 +242,8 @@ struct SendAmount: View {
             .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
             ) // inputDestination
-        } // ScrollView
+        }
         .frame(maxWidth: .infinity, alignment: .leading)
-//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .task {
@@ -205,14 +265,15 @@ struct SendAmount: View {
         }
         .navigationBarItems(trailing: QRButton(action: cameraAction))
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-            let balance = nonZeroBalances[index]
-            let scopeInfo = balance.scopeInfo
-            let currency = scopeInfo.currency
-            amountAvailable = balance.available
-            amountToTransfer.setCurrency(currency)
-            currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            currencyName = currencyInfo.scope.currency
-            currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
+            if let balance {
+                let scopeInfo = balance.scopeInfo
+                let currency = scopeInfo.currency
+                amountAvailable = balance.available
+                amountToTransfer.setCurrency(currency)
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyName = currencyInfo.scope.currency
+                currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
+            }
         }
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {
@@ -249,13 +310,6 @@ struct SendAmount: View {
 //                }
 //            }
 //        }
-
-        if #available(iOS 16.0, *) {
-            sendAmountView.toolbar(.hidden, for: .tabBar)
-        } else {
-            sendAmountView
-        }
-
     }
 }
 // MARK: -
