@@ -109,7 +109,7 @@ extension BalancesSectionView: View {
                                balance: balance,
                        selectedBalance: $selectedBalance,
                           currencyInfo: $currencyInfo,
-                              navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
+                              navTitle: currency,   // String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                              scopeInfo: scopeInfo,
                           transactions: $completedTransactions,
                        reloadAllAction: loadCompleted,
