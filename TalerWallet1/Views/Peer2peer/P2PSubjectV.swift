@@ -21,6 +21,7 @@ func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let scope: ScopeInfo
     @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
@@ -138,7 +139,7 @@ struct P2PSubjectV: View {
         }
         .task(id: amountToTransfer.value) {
             if outgoing && feeLabel == nil {
-                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
+                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer, scope: scope) {
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
                         let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
                         myFeeLabel = String(localized: "+ \(feeStr) fee")

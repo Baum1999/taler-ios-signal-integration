@@ -52,19 +52,21 @@ struct CheckPeerPushDebitResponse: Codable {
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
     func operation() -> String { "checkPeerPushDebit" }
-    func args() -> Args { Args(amount: amount, clientCancellationId: "cancel") }
+    func args() -> Args { Args(amount: amount, restrictScope: scope, clientCancellationId: "cancel") }
 
     var amount: Amount
+    var scope: ScopeInfo
     struct Args: Encodable {
         var amount: Amount
+        var restrictScope: ScopeInfo
         var clientCancellationId: String?
     }
 }
 extension WalletModel {
     @MainActor          // M for MainActor
-    func checkPeerPushDebitM(_ amount: Amount, viewHandles: Bool = false)
+    func checkPeerPushDebitM(_ amount: Amount, scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> CheckPeerPushDebitResponse {
-        let request = CheckPeerPushDebit(amount: amount)
+        let request = CheckPeerPushDebit(amount: amount, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

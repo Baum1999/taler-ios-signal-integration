@@ -75,7 +75,7 @@ struct SendAmount: View {
             return ComputeFeeResult.insufficient()
         }
         do {
-            let ppCheck = try await model.checkPeerPushDebitM(amount, viewHandles: true)
+            let ppCheck = try await model.checkPeerPushDebitM(amount, scope: scopeInfo, viewHandles: true)
             let raw = ppCheck.amountRaw
             let effective = ppCheck.amountEffective
             if let fee = fee(raw: raw, effective: effective) {
@@ -117,6 +117,7 @@ struct SendAmount: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                        scope: scopeInfo,
                  currencyInfo: $currencyInfo,
                      feeLabel: feeLabel(feeStr),
                  feeIsNotZero: feeIsNotZero(),
@@ -127,6 +128,7 @@ struct SendAmount: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                        scope: scopeInfo,
                  currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
