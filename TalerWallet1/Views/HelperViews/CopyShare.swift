@@ -65,7 +65,7 @@ struct ShareButton: View {
     func shareAction() -> Void {
         symLog.log(textToShare)
         controller.hapticFeedback(.soft)
-        ShareSheet.shareSheet(url: textToShare)
+        ShareSheet.shareSheet(textToShare: textToShare)
     }
 
     var body: some View {

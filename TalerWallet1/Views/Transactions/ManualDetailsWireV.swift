@@ -48,7 +48,7 @@ struct TransferRestrictionsV: View {
 struct ManualDetailsWireV: View {
     let stack: CallStack
     let details : WithdrawalDetails
-    let queryParameters: [String:String]
+    let receiverStr: String
     let iban: String?
     let xTaler: String
     let amountStr: String
@@ -60,11 +60,6 @@ struct ManualDetailsWireV: View {
 
     var body: some View {
         List {
-            let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING).replacingOccurrences(of: "+", with: " ")
-//            let amountStr = queryParameters["amount"] ?? EMPTYSTRING
-//            let messageStr = queryParameters["message"] ?? EMPTYSTRING
-//            let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
-
             let cryptocode = HStack {
                 Text(details.reservePub)
                     .monospacedDigit()
@@ -185,13 +180,13 @@ struct ManualDetailsWireV: View {
 //                                   confirmed: false)
 //        List {
 //            ManualDetailsWireV(stack: CallStack("Preview"),
-//                               details: details,
-//                               queryParameters: <#T##[String : String]#>,
-//                               iban: <#T##String?#>,
-//                               xTaler: <#T##String#>,
-//                               amountStr: <#T##String#>,
-//                               obtainStr: <#T##String#>,
-//                               account: <#T##WithdrawalExchangeAccountDetails#>)
+//                             details: details,
+//                         receiverStr: <#T##String#>,
+//                                iban: <#T##String?#>,
+//                              xTaler: <#T##String#>,
+//                           amountStr: <#T##String#>,
+//                           obtainStr: <#T##String#>,
+//                             account: <#T##WithdrawalExchangeAccountDetails#>)
 //        }
 //    }
 //}

@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import Foundation
 import UIKit
@@ -19,11 +22,9 @@ import SymLog
 
 
 public class ShareSheet: ObservableObject {
-    private let symLog = SymLogC()
 
-    @MainActor static func shareSheet(url: String) {
-        let url = URL(string: url)
-        let activityView = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
+    @MainActor static func shareSheet(textToShare: String) {
+        let activityView = UIActivityViewController(activityItems: [textToShare], applicationActivities: nil)
 
         let allScenes = UIApplication.shared.connectedScenes
         let scene = allScenes.first { $0.activationState == .foregroundActive }
@@ -34,7 +35,5 @@ public class ShareSheet: ObservableObject {
     }
 
     init() {
-        symLog.log("init")
-
     }
 }

@@ -175,9 +175,14 @@ struct ManualDetailsV: View {
                         let xTaler = payURL?.xTaler ??
 //                                   payURL?.host() ??
                                      String(localized: "unknown payment method")
+                        let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING)
+                                            .replacingOccurrences(of: "+", with: " ")
+//                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
+//                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
+//                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
                                                            details: details,
-                                                   queryParameters: queryParameters,
+                                                       receiverStr: receiverStr,
                                                               iban: iban,
                                                             xTaler: xTaler,
                                                          amountStr: amountStr,
@@ -197,20 +202,24 @@ struct ManualDetailsV: View {
                                                       : "Wire transfer QR codes")
                                     .talerFont(.title3)
                                 }
-                                .listRowSeparator(.visible)
+                                .listRowSeparator(.automatic)
                             }
-                            Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
+                            if let iban {
+                                Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
                                     : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
-                                .multilineTextAlignment(.leading)
-                                .padding(.top)
-                                .listRowSeparator(.hidden)
-                            let title = String(localized: "Share the PayTo URL", comment: "VoiceOver")
-                            let minTitle = String(localized: "Share PayTo", comment: "mini")
-                            ShareButton(textToShare: payto, title: minimalistic ? minTitle : title)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .accessibilityLabel(Text(title))
-                                .disabled(false)
-                                .listRowSeparator(.hidden)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.top)
+                                    .listRowSeparator(.hidden)
+                                let title = String(localized: "Share the PayTo URL", comment: "VoiceOver")
+                                let minTitle = String(localized: "Share PayTo", comment: "mini")
+                                let textToShare = String("\(payto)\n\nIBAN: \(iban)\nReceiver: \(receiverStr)\nAmount: \(amountStr)\nSubject: \(details.reservePub)")
+                                let _ = print(textToShare)
+                                ShareButton(textToShare: textToShare, title: minimalistic ? minTitle : title)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .accessibilityLabel(Text(title))
+                                    .disabled(false)
+                                    .listRowSeparator(.hidden)
+                            }
                         }.id(listID)
                             .talerFont(.body)
                             .task {
