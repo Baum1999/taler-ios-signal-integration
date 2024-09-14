@@ -141,13 +141,13 @@ struct ExchangeFeeGapEstimate: Codable {
 struct PreparePayResult: Codable {
     let status: PreparePayResultType
     let transactionId: String
-    let contractTerms: MerchantContractTerms
-    let contractTermsHash: String?                              // only if status != insufficientBalance
     let amountRaw: Amount
     let amountEffective: Amount?                                // only if status != insufficientBalance
-    let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
     let paid: Bool?                                             // only if status == alreadyConfirmed
-//    let talerUri: String?
+    let talerUri: String?
+    let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
+    let contractTermsHash: String?                              // only if status != insufficientBalance
+    let contractTerms: MerchantContractTerms
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {

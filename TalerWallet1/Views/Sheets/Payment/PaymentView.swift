@@ -86,7 +86,6 @@ struct PaymentView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var preparePayResult: PreparePayResult? = nil
 
-    let navTitle = String(localized: "Confirm Payment", comment:"pay merchant")
 
     func checkCurrencyInfo(for result: PreparePayResult) async {
         let exchanges = result.contractTerms.exchanges
@@ -105,18 +104,36 @@ struct PaymentView: View {
     var body: some View {
       Group {
         if let preparePayResult {
+            let status = preparePayResult.status
             let raw = preparePayResult.amountRaw
+            let currency = raw.currencyStr
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
+            let baseURL = terms.exchanges.first?.url
+            let paid = status == .alreadyConfirmed
+            let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
+                                : String(localized: "Confirm Payment", comment:"pay merchant navTitle")
             List {
+                if paid {
+                    Text("You already paid for this article.")
+                        .talerFont(.headline)
+                    if let fulfillmentUrl = terms.fulfillmentURL {
+                        if let destination = URL(string: fulfillmentUrl) {
+                            let buttonTitle = terms.fulfillmentMessage ?? String(localized: "Open merchant website")
+                            Link(buttonTitle, destination: destination)
+                                .buttonStyle(TalerButtonStyle(type: .bordered))
+                                .accessibilityHint(String(localized: "Will go to the merchant website."))
+                        }
+                    }
+                }
                 // TODO: show balanceDetails.balanceAvailable
-                let baseURL = preparePayResult.contractTerms.exchanges.first?.url
-                let status = preparePayResult.status
-                let currency = raw.currencyStr
-                let topTitle = String(localized: "Amount to pay:")
-                let topAbbrev = String(localized: "Pay:", comment: "mini")
+                let topTitle = paid ? String(localized: "Paid amount:")
+                                    : String(localized: "Amount to pay:")
+                let topAbbrev =  paid ? String(localized: "Paid:", comment: "mini")
+                                      : String(localized: "Pay:", comment: "mini")
+                let bottomTitle = paid ? String(localized: "Spent amount:")
+                                       : String(localized: "Amount to spend:")
                 if let effective {
-                    // TODO: already paid
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     ThreeAmountsSection(stack: stack.push(),
                                  currencyInfo: $currencyInfo,
@@ -125,7 +142,7 @@ struct PaymentView: View {
                                     topAmount: raw,
                                        noFees: nil,        // TODO: check baseURL for fees
                                           fee: fee,
-                                  bottomTitle: String(localized: "Amount to spend:"),
+                                  bottomTitle: bottomTitle,
                                  bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                                  bottomAmount: effective,
                                         large: false,
