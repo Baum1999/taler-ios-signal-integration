@@ -14,6 +14,7 @@ struct P2PReadyV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo
     let summary: String
     let expireDays: UInt
     let outgoing: Bool
@@ -66,7 +67,7 @@ struct P2PReadyV: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(scopeInfo: nil, message: message)
+                LoadingView(scopeInfo: scope, message: message)
             }
         }
         .navigationTitle(navTitle)
@@ -93,7 +94,7 @@ struct P2PReadyV: View {
                                 purse_expiration: timestamp)
             if outgoing {
                 // TODO: let user choose baseURL
-                if let response = try? await model.initiatePeerPushDebitM(nil, terms: terms) {
+                if let response = try? await model.initiatePeerPushDebitM(scope: scope, terms: terms) {
                     // will switch from WithdrawProgressView to TransactionSummaryV
                     transactionId = response.transactionId
                 }

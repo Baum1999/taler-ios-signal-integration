@@ -115,6 +115,7 @@ struct P2PSubjectV: View {
                 NavigationLink(destination: LazyView {
                     P2PReadyV(stack: stack.push(),
                        currencyInfo: $currencyInfo,
+                              scope: scope,
                             summary: summary,
                          expireDays: expireDays,
                            outgoing: outgoing,

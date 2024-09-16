@@ -84,22 +84,26 @@ struct InitiatePeerPushDebitResponse: Codable {
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPushDebitResponse
     func operation() -> String { "initiatePeerPushDebit" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
-                          partialContractTerms: partialContractTerms) }
+    func args() -> Args { Args(//exchangeBaseUrl: baseURL,
+                                 restrictScope: scope,
+                          partialContractTerms: terms) }
 
-    var exchangeBaseUrl: String?
-    var partialContractTerms: PeerContractTerms
+    var scope: ScopeInfo
+//    var baseURL: String?
+    var terms: PeerContractTerms
     struct Args: Encodable {
-        var exchangeBaseUrl: String?
+//        var exchangeBaseUrl: String?
+        var restrictScope: ScopeInfo
         var partialContractTerms: PeerContractTerms
     }
 }
 extension WalletModel {
     @MainActor             // M for MainActor
-    func initiatePeerPushDebitM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)
+    func initiatePeerPushDebitM(/*_ baseURL: String?,*/ scope: ScopeInfo, terms: PeerContractTerms, viewHandles: Bool = false)
     async throws -> InitiatePeerPushDebitResponse {
-        let request = InitiatePeerPushDebit(exchangeBaseUrl: baseURL,
-                                            partialContractTerms: terms)
+        let request = InitiatePeerPushDebit(//exchangeBaseUrl: baseURL,
+                                                      scope: scope,
+                                                      terms: terms)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

@@ -108,6 +108,7 @@ struct RequestPayment: View {
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                        scope: scopeInfo,
                  currencyInfo: $currencyInfo,
                      feeLabel: coinData.feeLabel(currencyInfo,
                                          feeZero: String(localized: "No payment fee"),
@@ -120,6 +121,7 @@ struct RequestPayment: View {
         }
         let shortcutDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
+                        scope: scopeInfo,
                  currencyInfo: $currencyInfo,
                      feeLabel: nil,
                  feeIsNotZero: feeIsNotZero(),
