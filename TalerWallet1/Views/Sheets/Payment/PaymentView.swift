@@ -181,28 +181,30 @@ struct PaymentView: View {
             }
             .listStyle(myListStyle.style).anyView
             .safeAreaInset(edge: .bottom) {
-                if let effective {
-                    VStack {
-                        NavigationLink(destination: LazyView {
-                            PaymentDone(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
-                                transactionId: preparePayResult.transactionId)
-                        }) {
-                            let formatted = raw.formatted(currencyInfo, isNegative: false)
-                            Text("Pay \(formatted) now")
+                if !paid {
+                    if let effective {
+                        VStack {
+                            NavigationLink(destination: LazyView {
+                                PaymentDone(stack: stack.push(),
+                                            currencyInfo: $currencyInfo,
+                                            transactionId: preparePayResult.transactionId)
+                            }) {
+                                let formatted = raw.formatted(currencyInfo, isNegative: false)
+                                Text("Pay \(formatted) now")
+                            }
+                                .buttonStyle(TalerButtonStyle(type: .prominent))
+                                .padding(.horizontal)
+                            Text("Payment is made in \(currencyInfo.scope.currency)")
+                                .talerFont(.callout)
                         }
-                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                    } else {
+                        Button("Cancel") {
+                            dismissTop(stack.push())
+                        }
+                            .buttonStyle(TalerButtonStyle(type: .bordered))
                             .padding(.horizontal)
-                        Text("Payment is made in \(currencyInfo.scope.currency)")
-                            .talerFont(.callout)
-                    }
-                } else {
-                    Button("Cancel", action: {
-                        dismissTop(stack.push())
-                    })
-                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .padding(.horizontal)
-                } // Cancel
+                    } // Cancel
+                }
             }
             .navigationTitle(navTitle)
             .task(id: controller.currencyTicker) {

@@ -54,7 +54,7 @@ struct PaymentDone: View {
                 LoadingView(scopeInfo: nil, message: "Paying...")
                     .task {
                         if let confirmPayResult = try? await model.confirmPayM(transactionId) {
-                            //                          symLog.log(confirmPayResult as Any)
+//                          symLog.log(confirmPayResult as Any)
                             if confirmPayResult.type == "done" {
                                 paymentDone = true
                             }
