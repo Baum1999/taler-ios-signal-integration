@@ -1,3 +1,9 @@
+Version 0.13.1 (wallet-core 0.13.3)
+
+• Repurchase
+• Payto-sharing adds human readable text
+
+
 Version 0.13.0 (wallet-core 0.13.0)
 
 • KYC for balances - use bank.kyctest.taler.net to withdraw
