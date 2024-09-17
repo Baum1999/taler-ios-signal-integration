@@ -35,6 +35,21 @@ struct ActionsSheet: View {
 
     var body: some View {
         VStack {
+            HStack(spacing: 0) {
+                let width = UIScreen.screenWidth / 3
+                let height = 4.0
+                Rectangle()
+                    .opacity(0.001)
+                    .frame(width: width, height: height)
+                RoundedRectangle(cornerRadius: 2)
+                    .foregroundColor(.primary)
+                    .frame(width: width, height: height)
+                Rectangle()
+                    .opacity(0.001)
+                    .frame(width: width, height: height)
+            } // drop bar
+            .listRowSeparator(.hidden)
+
             if hasKudos {
                 if !minimalistic && showSpendingHint {
                     Text("You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
