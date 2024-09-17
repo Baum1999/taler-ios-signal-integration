@@ -11,8 +11,9 @@ struct TabBarView: View {
     @Binding var selection: Tab
     let onActionTab: () -> Void
 
+    @Environment(\.keyboardShowing) var keyboardShowing
+
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @State private var isHidden = 0
 
     private func tabBarItem(for tab: Tab) -> some View {
         VStack(spacing: 0) {
@@ -50,7 +51,7 @@ struct TabBarView: View {
 
     var body: some View {
         Group {
-            if isHidden > 0 {
+            if keyboardShowing {
                 EmptyView()
             } else {
                 HStack(alignment: .bottom) {
@@ -68,16 +69,6 @@ struct TabBarView: View {
                     }
                 }
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.bottom))
-            }
-        }
-        .onNotification(.HideTabBarView) {
-            isHidden += 1
-            print("❗️HideTabBarView \(isHidden)")
-        }
-        .onNotification(.ShowTabBarView) {
-            if isHidden > 0 {
-                isHidden -= 1
-                print("❗️ShowTabBarView \(isHidden)")
             }
         }
     }

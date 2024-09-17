@@ -395,7 +395,7 @@ extension MainView {
 //                    .ignoresSafeArea(.keyboard, edges: .bottom)
 //                    .padding(.bottom, 10)
                 tabBarView
-//                    .ignoresSafeArea(.keyboard, edges: .bottom)
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
@@ -418,6 +418,7 @@ extension MainView {
                  actions: {   openKycButton
                               dismissAlertButton },
                  message: {   Text("Tap the button to go to the KYC website.") })
+//            .sheet(isPresented: $showActionSheet, onDismiss: { tabBarView.show() }) {
             .sheet(isPresented: $showActionSheet) {
                 let content = VStack {
                     ActionsSheet(stack: stack.push(),

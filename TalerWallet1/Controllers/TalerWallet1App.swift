@@ -42,6 +42,7 @@ struct TalerWallet1App: App {
                 .environmentObject(viewState2)      // popToRoot
                 .environmentObject(controller)
                 .environmentObject(model)
+                .addKeyboardVisibilityToEnvironment()
                     /// external events are taler:// or payto:// URLs passed to this app
                     /// we handle them in .onOpenURL in MainView.swift
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])

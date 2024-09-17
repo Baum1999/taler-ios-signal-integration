@@ -118,8 +118,6 @@ struct ManualWithdraw: View {
                                                 stack: stack.push())
                 }
                 symLog.log("❗️ \(navTitle) onAppear")
-                print("ManualWithdraw.task❓HideTabBarView")
-                NotificationCenter.default.post(name: .HideTabBarView, object: nil)
             }
             .onDisappear {
                 symLog.log("❗️ \(navTitle) onDisappear")

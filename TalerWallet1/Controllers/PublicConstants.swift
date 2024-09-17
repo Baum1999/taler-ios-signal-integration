@@ -126,6 +126,4 @@ extension Notification.Name {
     static let RequestAction = Notification.Name("requestAction")
     static let DepositAction = Notification.Name("depositAction")
     static let WithdrawAction = Notification.Name("withdrawAction")
-    static let HideTabBarView = Notification.Name("hideTabBarView")
-    static let ShowTabBarView = Notification.Name("showTabBarView")
 }

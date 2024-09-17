@@ -88,10 +88,6 @@ struct ActionsSheet: View {
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
             .padding(.bottom, 12)
         }
-        .task {
-            print("ActionsSheet.task❓HideTabBarView")
-            NotificationCenter.default.post(name: .HideTabBarView, object: nil)
-        }
     }
 }
 // MARK: -
