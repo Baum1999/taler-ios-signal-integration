@@ -1006,6 +1006,17 @@
         }
       }
     },
+    "Already paid" : {
+      "comment" : "pay merchant navTitle",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereits bezahlt"
+          }
+        }
+      }
+    },
     "Amount available:" : {
       "localizations" : {
         "de" : {
@@ -1753,7 +1764,7 @@
       }
     },
     "Confirm Payment" : {
-      "comment" : "pay P2P request/invoice\npay merchant",
+      "comment" : "pay P2P request/invoice\npay merchant navTitle",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6334,6 +6345,16 @@
         }
       }
     },
+    "Spent amount:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgegebener Betrag"
+          }
+        }
+      }
+    },
     "Standard iOS Font" : {
       "localizations" : {
         "de" : {
@@ -7997,6 +8018,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вчора"
+          }
+        }
+      }
+    },
+    "You already paid for this article." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie haben diesen Artikel bereits bezahlt."
           }
         }
       }
