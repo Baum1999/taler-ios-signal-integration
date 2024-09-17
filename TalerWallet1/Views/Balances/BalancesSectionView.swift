@@ -115,7 +115,7 @@ extension BalancesSectionView: View {
             if scopeInfo.type == .exchange {
                 let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
                 Text(baseURL)
-                    .talerFont(.body)
+                    .talerFont(.subheadline)
                     .foregroundColor(.secondary)
 //                    .listRowSeparator(.hidden)
             }
