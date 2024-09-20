@@ -170,7 +170,7 @@ struct TransactionSummaryV: View {
                 } } // Abort button
                 if transaction.isFailable { if let failAction {
                     TransactionButton(transactionId: common.transactionId, command: .fail,
-                                      warning: String(localized: "Are you sure you want to fail this transaction?"),
+                                      warning: String(localized: "Are you sure you want to abandon this transaction?"),
                                       action: failAction)
                 } } // Fail button
                 if transaction.isDeleteable { if let deleteAction {

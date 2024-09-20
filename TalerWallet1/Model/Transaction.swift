@@ -126,7 +126,7 @@ enum TransactionMajorState: String, Codable {
             case .suspended: return                   "Suspended"
             case .dialog:    return String(localized: "MajorState.Dialog", defaultValue: "Dialog", comment: "TxMajorState heading")
             case .suspendedAborting: return           "AbortingSuspended"
-            case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Failed", comment: "TxMajorState heading")
+            case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Abandoned", comment: "TxMajorState heading")
             case .expired:   return String(localized: "MajorState.Expired", defaultValue: "Expired", comment: "TxMajorState heading")
             case .deleted:   return String(localized: "MajorState.Deleted", defaultValue: "Deleted", comment: "TxMajorState heading")
         }
@@ -166,7 +166,7 @@ enum TxAction: String, Codable {
             case .resume:   String("Resume")
             case .abort:    String(localized: "TxAction.Abort", defaultValue: "Abort", comment: "TxAction button")
 //            case .revive:   String(localized: "TxAction.Revive", defaultValue: "Revive", comment: "TxAction button")
-            case .fail:     String(localized: "TxAction.Fail", defaultValue: "Fail", comment: "TxAction button")
+            case .fail:     String(localized: "TxAction.Fail", defaultValue: "Abandon", comment: "TxAction button")
             case .retry:    String(localized: "TxAction.Retry", defaultValue: "Retry now", comment: "TxAction button")
         }
     }
@@ -193,7 +193,7 @@ enum TxAction: String, Codable {
             case .resume:   return String("Resuming...")
             case .abort:    return String(localized: "TxActionDone.Abort", defaultValue: "Abort pending...", comment: "TxAction button")
 //            case .revive:   return String(localized: "TxActionDone.Revive", defaultValue: "Revive", comment: "TxAction button")
-            case .fail:     return String(localized: "TxActionDone.Fail", defaultValue: "Failing...", comment: "TxAction button")
+            case .fail:     return String(localized: "TxActionDone.Fail", defaultValue: "Abandoning...", comment: "TxAction button")
             case .retry:    return String(localized: "TxActionDone.Retry", defaultValue: "Retrying...", comment: "TxAction button")
         }
     }

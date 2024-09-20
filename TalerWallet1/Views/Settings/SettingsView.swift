@@ -122,7 +122,7 @@ struct SettingsView: View {
                 SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB, id1: "playSounds",
                                description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
-                        description: hideDescriptions ? nil : String(localized: "For Delete, Fail & Abort buttons"))
+                        description: hideDescriptions ? nil : String(localized: "For Delete, Abandon & Abort buttons"))
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
                 SettingsStyle(title: String(localized: "List Style:"), myListStyle: $myListStyle)

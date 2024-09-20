@@ -1320,6 +1320,28 @@
         }
       }
     },
+    "Are you sure you want to abandon this transaction?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diese Transaktion aufgeben wollen?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguro que quiere fallar esta transacción?"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви впевнені, що хочете провалити цю транзакцію?"
+          }
+        }
+      }
+    },
     "Are you sure you want to abort this transaction?" : {
       "localizations" : {
         "de" : {
@@ -1370,28 +1392,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ви впевнені, що хочете видалити цю транзакцію?"
-          }
-        }
-      }
-    },
-    "Are you sure you want to fail this transaction?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sind Sie sicher, dass Sie diese Transaktion scheitern lassen wollen?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seguro que quiere fallar esta transacción?"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ви впевнені, що хочете провалити цю транзакцію?"
           }
         }
       }
@@ -2959,12 +2959,12 @@
         }
       }
     },
-    "For Delete, Fail & Abort buttons" : {
+    "For Delete, Abandon & Abort buttons" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für Löschen, Scheitern und Annullieren"
+            "value" : "Für Löschen, Aufgeben und Annullieren"
           }
         },
         "es" : {
@@ -3637,24 +3637,24 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gescheitert"
+            "value" : "Aufgegeben"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Failed"
+            "value" : "Abandoned"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Falló"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Провалено"
           }
         }
@@ -7137,24 +7137,24 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scheitern"
+            "value" : "Aufgeben"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Fail"
+            "value" : "Abandon"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Fallar"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Провалити"
           }
         }
@@ -7257,24 +7257,24 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scheitern..."
+            "value" : "Aufgeben..."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Failing..."
+            "value" : "Abandoning..."
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Fallando..."
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Провалюється..."
           }
         }
