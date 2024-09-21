@@ -83,15 +83,21 @@ struct BarGraph: View {
 //                    let _ = print("max: \(maxValue), ", incoming ? "+" : "-", netto)
                     VStack(spacing: 0) {
                         let width = barHeight / 3
-                        Rectangle()
-                            .opacity(0.001)
-                            .frame(width: width, height: incoming ? valueTransparent : barHeight)
+                        let topHeight = incoming ? valueTransparent : barHeight
+                        let botHeight = incoming ? barHeight : valueTransparent
+                        if topHeight > 0 {
+                            Rectangle()
+                                .opacity(0.001)
+                                .frame(width: width, height: topHeight)
+                        }
                         Rectangle()
                             .foregroundColor(incoming ? .green : .red)
                             .frame(width: width, height: valueColored)
-                        Rectangle()
-                            .opacity(0.001)
-                            .frame(width: width, height: incoming ? barHeight : valueTransparent)
+                        if botHeight > 0 {
+                            Rectangle()
+                                .opacity(0.001)
+                                .frame(width: width, height: botHeight)
+                        }
                     }
                 }
             }
