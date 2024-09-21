@@ -1,3 +1,8 @@
+Version 0.13.2 (wallet-core 0.13.4)
+
+- bugfix for deposit
+
+
 Version 0.13.1 (wallet-core 0.13.3)
 
 • Repurchase
