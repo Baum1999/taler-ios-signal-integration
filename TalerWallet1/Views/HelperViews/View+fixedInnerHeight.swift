@@ -31,12 +31,13 @@ extension View {
     @available(iOS 16.0, *)
     func fixedInnerHeight(_ sheetHeight: Binding<CGFloat>) -> some View {
         padding()
-            .background {
+            .overlay {      // .background doesn't work
                 GeometryReader { proxy in
                     Color.clear.preference(key: InnerHeightPreferenceKey.self, value: proxy.size.height)
                 }
             }
             .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+//                print("InnerHeightPreferenceKey \(newHeight)")
                 sheetHeight.wrappedValue = newHeight
             }
             .presentationDetents([.height(sheetHeight.wrappedValue)])
