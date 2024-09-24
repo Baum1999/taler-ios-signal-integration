@@ -63,12 +63,16 @@ struct CurrencyField: View {
         ZStack {
             // Text view to display the formatted currency
             // Set as priority so CurrencyInputField size doesn't affect parent
-            Text(amount.formatted(currencyInfo, isNegative: false))
-                .layoutPriority(1)
-                // make the textfield use the whole width for tapping inside to become active
-                .frame(maxWidth: .infinity, alignment: .trailing)
-//                .background(.clear) this is not the problem of the white corners
-
+            let text = Text(amount.formatted(currencyInfo, isNegative: false))
+                        .layoutPriority(1)
+            // make the textfield use the whole width for tapping inside to become active
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(4)
+            text
+                .background(WalletColors().fieldBackground)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10)
+                        .stroke(WalletColors().fieldForeground, lineWidth: 1))
             // Input text field to handle UI
             currencyFieldRepresentable
 //                .accessibilityHidden(true)
@@ -126,14 +130,14 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         textField.delegate = context.coordinator
 
         // Set keyboard type
-        textField.keyboardType = .numberPad
+        textField.keyboardType = .asciiCapableNumberPad //  numberPad
 
         // Make visual components invisible...
         textField.tintColor = .clear
         textField.textColor = .clear
         textField.backgroundColor = .clear
         // ... except for the bezel around the textfield
-        textField.borderStyle = .roundedRect
+        textField.borderStyle = .none   // .roundedRect
 //        textField.textFieldStyle(.roundedBorder)
 
 #if DEBUG

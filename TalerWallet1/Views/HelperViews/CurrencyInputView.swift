@@ -87,11 +87,12 @@ struct CurrencyInputView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .talerFont(.title3)
                 .accessibilityHidden(true)
+                .padding(.bottom, -6)
             currencyField
                 .accessibilityLabel(title)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
+//                .background(WalletColors().fieldBackground)       // problem: white corners
                 .talerFont(.title2)
                 .textFieldStyle(.roundedBorder)
                 .onTapGesture {
@@ -144,6 +145,7 @@ struct CurrencyInputView: View {
                         }
                     }
                 }
+                .padding(.top, 6)
             } // iOS 16+ only
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
