@@ -65,6 +65,34 @@ extension WalletModel {
         return response.wireTypes
     }
 }
+// MARK: - max Deposit amount
+/// Check if initiating a deposit is possible, check fees
+fileprivate struct AmountResponse: Codable {
+    let effectiveAmount: Amount?
+    let rawAmount: Amount
+}
+fileprivate struct GetMaxDepositAmount: WalletBackendFormattedRequest {
+    typealias Response = AmountResponse
+    func operation() -> String { "getMaxDepositAmount" }
+    func args() -> Args { Args(currency: currency, restrictScope: scope) }
+
+    var currency: String
+    var scope: ScopeInfo
+    struct Args: Encodable {
+        var currency: String
+        var restrictScope: ScopeInfo
+//        var depositPaytoUri: String
+    }
+}
+extension WalletModel {
+    @MainActor            // M for MainActor
+    func getMaxDepositAmountM(_ currency: String, scope: ScopeInfo, viewHandles: Bool = false)
+    async throws -> Amount {
+        let request = GetMaxDepositAmount(currency: currency, scope: scope)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.rawAmount
+    }
+} // getMaxDepositAmountM
 // MARK: - Deposit
 struct DepositFees: Codable {
     let coin: Amount

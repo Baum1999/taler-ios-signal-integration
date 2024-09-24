@@ -19,27 +19,29 @@ struct PeerContractTerms: Codable {
 }
 // MARK: - PeerPushDebit
 /// Check if initiating a peer push payment is possible, check fees
-struct AmountResponse: Codable {
-    let effectiveAmount: Amount
+fileprivate struct AmountResponse: Codable {
+    let effectiveAmount: Amount?
     let rawAmount: Amount
 }
-fileprivate struct GetMaxPeerPushAmount: WalletBackendFormattedRequest {
+fileprivate struct GetMaxPeerPushDebitAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
-    func operation() -> String { "GetMaxPeerPushAmount" }
-    func args() -> Args { Args(currency: currency) }
+    func operation() -> String { "getMaxPeerPushDebitAmount" }
+    func args() -> Args { Args(currency: currency, restrictScope: scope) }
 
     var currency: String
+    var scope: ScopeInfo
     struct Args: Encodable {
         var currency: String
+        var restrictScope: ScopeInfo
     }
 }
 extension WalletModel {
-    @MainActor            // M for MainActor
-    func getMaxPeerPushAmountM(_ currency: String, viewHandles: Bool = false)
-      async throws -> AmountResponse {
-        let request = GetMaxPeerPushAmount(currency: currency)
+    @MainActor                 // M for MainActor
+    func getMaxPeerPushDebitAmountM(_ currency: String, scope: ScopeInfo, viewHandles: Bool = false)
+      async throws -> Amount {
+        let request = GetMaxPeerPushDebitAmount(currency: currency, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-        return response
+        return response.rawAmount
     }
 } // getMaxPeerPushAmountM
 // - - - - - -
