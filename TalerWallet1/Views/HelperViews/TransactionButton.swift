@@ -57,6 +57,7 @@ struct TransactionButton: View {
     let transactionId: String
     let command: TxAction
     let warning: String?
+    @Binding var didExecute: Bool
     let action: (_ transactionId: String, _ viewHandles: Bool) async throws -> Void
 
     @State private var disabled: Bool = false
@@ -69,6 +70,7 @@ struct TransactionButton: View {
             if let _ = try? await action(transactionId, false) {
 //                symLog.log("\(executed) \(transactionId)")
                 executed = true             // change button text
+                didExecute = true
             }
         }
     }
@@ -91,18 +93,19 @@ struct TransactionButton: View {
 }
 // MARK: -
 #if DEBUG
-struct TransactionButton_Previews: PreviewProvider {
-
-    static func action(_ transactionId: String, _ viewHandles: Bool) async throws {
-        print(transactionId)
-    }
-
-    static var previews: some View {
-        List {
-            TransactionButton(transactionId: "Button pressed", command: .abort,
-                              warning: "Are you sure you want to abort this transaction?",
-                              action: action)
-        }
-    }
-}
+//struct TransactionButton_Previews: PreviewProvider {
+//
+//    static func action(_ transactionId: String, _ viewHandles: Bool) async throws {
+//        print(transactionId)
+//    }
+//
+//    static var previews: some View {
+//        List {
+//            TransactionButton(transactionId: "Button pressed", command: .abort,
+//                              warning: "Are you sure you want to abort this transaction?",
+//                              didExecute: <#Binding<Bool>#>,
+//                              action: action)
+//        }
+//    }
+//}
 #endif

@@ -40,6 +40,7 @@ struct TransactionSummaryV: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -47,7 +48,9 @@ struct TransactionSummaryV: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
 
-    @State var transaction: Transaction = Transaction(dummyCurrency: DEMOCURRENCY)
+    @State private var ignoreThis: Bool = false
+    @State private var didDelete: Bool = false
+    @State var transaction = Transaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
 
     func loadTransaction() async {
@@ -74,6 +77,15 @@ struct TransactionSummaryV: View {
             checkReload(notification, logStr)
         }
         return false
+    }
+
+    @MainActor
+    private func dismiss(_ stack: CallStack) {
+        if hasDone {        // if this view is in a sheet then dissmiss the whole sheet
+            dismissTop(stack.push())
+        } else {            // on a NavigationStack just pop
+            presentationMode.wrappedValue.dismiss()
+        }
     }
 
     func checkReload(_ notification: Notification, _ logStr: String = "") {
@@ -110,11 +122,17 @@ struct TransactionSummaryV: View {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
                         TransactionButton(transactionId: common.transactionId,
-                                          command: .suspend, warning: nil, action: suspendAction)
+                                                command: .suspend,
+                                                warning: nil,
+                                             didExecute: $ignoreThis,
+                                                 action: suspendAction)
                     } }
                     if transaction.isResumable { if let resumeAction {
                         TransactionButton(transactionId: common.transactionId,
-                                          command: .resume, warning: nil, action: resumeAction)
+                                                command: .resume,
+                                                warning: nil,
+                                             didExecute: $ignoreThis,
+                                                 action: resumeAction)
                     } }
                 } // Suspend + Resume buttons
                 Group {
@@ -164,19 +182,31 @@ struct TransactionSummaryV: View {
 //                                      warning: nil, action: abortAction)
 //                } } // Retry button
                 if transaction.isAbortable { if let abortAction {
-                    TransactionButton(transactionId: common.transactionId, command: .abort,
-                                      warning: String(localized: "Are you sure you want to abort this transaction?"),
-                                      action: abortAction)
+                    TransactionButton(transactionId: common.transactionId,
+                                            command: .abort,
+                                            warning: String(localized: "Are you sure you want to abort this transaction?"),
+                                         didExecute: $ignoreThis,
+                                             action: abortAction)
                 } } // Abort button
                 if transaction.isFailable { if let failAction {
-                    TransactionButton(transactionId: common.transactionId, command: .fail,
-                                      warning: String(localized: "Are you sure you want to abandon this transaction?"),
-                                      action: failAction)
+                    TransactionButton(transactionId: common.transactionId,
+                                            command: .fail,
+                                            warning: String(localized: "Are you sure you want to abandon this transaction?"),
+                                         didExecute: $ignoreThis,
+                                             action: failAction)
                 } } // Fail button
                 if transaction.isDeleteable { if let deleteAction {
-                    TransactionButton(transactionId: common.transactionId, command: .delete,
-                                      warning: String(localized: "Are you sure you want to delete this transaction?"),
-                                      action: deleteAction)
+                    TransactionButton(transactionId: common.transactionId,
+                                            command: .delete,
+                                            warning: String(localized: "Are you sure you want to delete this transaction?"),
+                                         didExecute: $didDelete,
+                                             action: deleteAction)
+                    .onChange(of: didDelete) { wasDeleted in
+                        if wasDeleted {
+                            symLog.log("wasDeleted -> dismiss view")
+                            dismiss(stack)
+                        }
+                    }
                 } } // Delete button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
