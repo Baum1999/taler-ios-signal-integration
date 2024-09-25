@@ -270,11 +270,16 @@ struct SendAmountContent: View {
             if let balance {
                 scopeInfo = balance.scopeInfo
                 let currency = scopeInfo.currency
-                amountAvailable = balance.available
                 amountToTransfer.setCurrency(currency)
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
                 currencyName = currencyInfo.scope.currency
                 currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
+                do {
+                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(currency, scope: scopeInfo)
+                } catch {
+                    // TODO: Error
+                    amountAvailable = balance.available
+                }
             }
         }
 //        .task(id: amountToTransfer.value) {
