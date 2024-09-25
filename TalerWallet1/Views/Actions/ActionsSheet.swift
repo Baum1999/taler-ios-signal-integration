@@ -35,20 +35,11 @@ struct ActionsSheet: View {
 
     var body: some View {
         VStack {
-            HStack(spacing: 0) {
-                let width = UIScreen.screenWidth / 3
-                let height = 4.0
-                Rectangle()
-                    .opacity(0.001)
-                    .frame(width: width, height: height)
-                RoundedRectangle(cornerRadius: 2)
-                    .foregroundColor(.primary)
-                    .frame(width: width, height: height)
-                Rectangle()
-                    .opacity(0.001)
-                    .frame(width: width, height: height)
-            } // drop bar
-            .listRowSeparator(.hidden)
+            let width = UIScreen.screenWidth / 3
+            RoundedRectangle(cornerRadius: 8)                                   // dropBar
+                .foregroundColor(.primary)
+                .frame(width: width + 6.5, height: 5)
+                .padding(.bottom, 10)
 
             if hasKudos {
                 if !minimalistic && showSpendingHint {
@@ -56,7 +47,6 @@ struct ActionsSheet: View {
                         .talerFont(.body)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight doesn't work
-                        .listRowSeparator(.hidden)
                 }
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let action = {
@@ -74,7 +64,6 @@ struct ActionsSheet: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                 .accessibilityHint(String(localized: "Will go to the demo shop website."))
-                .listRowSeparator(.hidden)
                 .padding(.bottom, 20)
             }
 
@@ -87,7 +76,6 @@ struct ActionsSheet: View {
             DepositWithdrawV(stack: stack.push(),
                           balances: $balances,
                   amountToTransfer: $amountToTransfer)   // does still have the wrong currency
-            .padding(.bottom, 12)
         }
     }
 }
