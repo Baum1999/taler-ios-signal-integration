@@ -34,11 +34,10 @@ struct AmountInputV: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
 
-    let amountAvailable: Amount?                    // TODO: GetMaxPeerPushAmount
+    @Binding var amountAvailable: Amount
     let amountLabel: String
     @Binding var amountToTransfer: Amount
     let wireFee: Amount?
-//    let summaryIsEditable: Bool                      // if true we call SubjectInputV next
     @Binding var summary: String
 //    @Binding var insufficient: Bool
 //    @Binding var feeAmount: Amount?
@@ -62,18 +61,18 @@ struct AmountInputV: View {
 
     func checkAvailable(_ coinData: CoinData) -> Flags {
         let isZero = amountToTransfer.isZero
-        if let amountAvailable {
+        if !amountAvailable.isZero {
             do {
                 let insufficient: Bool
-                if let feeAmount {
-                    if feeIsNegative {
-                        insufficient = try amountToTransfer > amountAvailable
-                    } else {
-                        insufficient = try (amountToTransfer + feeAmount) > amountAvailable
-                    }
-                } else {
+//                if let feeAmount {
+//                    if feeIsNegative {
+//                        insufficient = try amountToTransfer > amountAvailable
+//                    } else {
+//                        insufficient = try (amountToTransfer + feeAmount) > amountAvailable
+//                    }
+//                } else {
                     insufficient = try amountToTransfer > amountAvailable
-                }
+//                }
                 let disabled = insufficient || isZero || coinData.invalid || coinData.tooMany
                 return Flags(insufficient: insufficient, disabled: disabled)
             } catch {
@@ -86,7 +85,8 @@ struct AmountInputV: View {
     var body: some View {
         let currency = amountToTransfer.currencyStr
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
-        let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
+        let available = amountAvailable.isZero ? nil
+                                               : amountAvailable.formatted(currencyInfo, isNegative: false)
         VStack(alignment: .trailing) {
             if summary.count > 0 {
                 Text(summary)

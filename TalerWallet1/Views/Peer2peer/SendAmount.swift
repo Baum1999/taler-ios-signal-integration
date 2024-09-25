@@ -15,7 +15,7 @@ struct SendAmount: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
 
-    let amountAvailable: Amount // TODO: GetMaxPeerPushAmount
+    let available: Amount
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
@@ -35,6 +35,7 @@ struct SendAmount: View {
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -109,11 +110,11 @@ struct SendAmount: View {
         let navTitle = String(localized: "NavTitle_Send_Currency",
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")
-        let available = amountAvailable.formatted(currencyInfo, isNegative: false)
+        let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
 //        let _ = print("available: \(available)")
         let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(available)")
         let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-        let insufficientLabel2 = String(localized: "but you only have \(available) to send.")
+        let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
         let inputDestination = LazyView {
             P2PSubjectV(stack: stack.push(),
@@ -143,7 +144,7 @@ struct SendAmount: View {
                                            : String(localized: "Amount to send:")
             AmountInputV(stack: stack.push(),
                   currencyInfo: $currencyInfo,
-               amountAvailable: amountAvailable,
+               amountAvailable: $amountAvailable,
                    amountLabel: amountLabel,
               amountToTransfer: $amountToTransfer,
                        wireFee: nil,
@@ -163,6 +164,15 @@ struct SendAmount: View {
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
+        .task {
+            do {
+                let amount = try await model.getMaxPeerPushDebitAmountM(amountToTransfer.currencyStr,
+                                                                        scope: scopeInfo, viewHandles: true)
+                amountAvailable = amount
+            } catch {
+                amountAvailable = available
+            }
+        }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
             // if we set >> controller.frontendState = -1 << here, then becomeFirstResponder won't work!
@@ -232,7 +242,7 @@ fileprivate struct Preview_Content: View {
                            ageRestrictionOptions: [])
         SendAmount(stack: CallStack("Preview"),
             currencyInfo: $currencyInfoL,
-         amountAvailable: amount,
+               available: amount,
         amountToTransfer: $amountToPreview,
                  summary: $summary,
                scopeInfo: currencyInfo.scope,

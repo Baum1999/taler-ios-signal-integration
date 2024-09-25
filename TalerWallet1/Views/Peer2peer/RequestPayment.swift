@@ -28,6 +28,7 @@ struct RequestPayment: View {
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -136,7 +137,7 @@ struct RequestPayment: View {
                                            : String(localized: "Amount to request:")
             AmountInputV(stack: stack.push(),
                   currencyInfo: $currencyInfo,
-               amountAvailable: nil,
+               amountAvailable: $amountZero,
                    amountLabel: amountLabel,
               amountToTransfer: $amountToTransfer,
                        wireFee: nil,

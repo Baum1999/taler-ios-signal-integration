@@ -61,7 +61,7 @@ struct SendRequestV: View {
         let sendDest = LazyView {
             SendAmount(stack: stack.push("\(Self.className())()"),
                 currencyInfo: $currencyInfo,
-             amountAvailable: amountAvailable,
+                   available: amountAvailable,
             amountToTransfer: $amountToTransfer,        // with correct currency
                      summary: $summary,
                    scopeInfo: scope,

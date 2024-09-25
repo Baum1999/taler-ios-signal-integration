@@ -29,6 +29,7 @@ struct WithdrawURIView: View {
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountAvailable: Amount? = nil
@@ -143,7 +144,7 @@ struct WithdrawURIView: View {
                                                            : String(localized: "Amount to withdraw:")
                             AmountInputV(stack: stack.push(),
                                   currencyInfo: $currencyInfo,
-                               amountAvailable: amountAvailable,
+                               amountAvailable: $amountZero,
                                    amountLabel: amountLabel,
                               amountToTransfer: $amountToTransfer,
                                        wireFee: wireFee,
