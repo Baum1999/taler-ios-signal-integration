@@ -214,6 +214,19 @@ enum Tab: String, Hashable, CaseIterable {
 
 // MARK: - Content
 extension MainView {
+    class NavigationModel: ObservableObject {
+        @Published var tabBarHidden = 0
+
+        @Published var actionSelected: Int? = nil {
+            didSet {
+                if actionSelected != nil {
+                    tabBarHidden += 1
+                } else {
+                    tabBarHidden = 0
+                }
+            }
+        }
+    }
     struct Content: View {
         let logger: Logger
         let stack: CallStack
@@ -233,6 +246,8 @@ extension MainView {
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
         @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
 
+        @StateObject var navModel = NavigationModel()
+
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadPending = 0
         @State private var selectedTab: Tab = .balances
@@ -244,7 +259,6 @@ extension MainView {
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = ""
         @State private var showSpendingHint = true
-        @State private var actionSelected: Int? = nil
         @State private var myExchange: Exchange? = nil
 
         private var openKycButton: some View {
@@ -307,7 +321,7 @@ extension MainView {
             let balancesTitle = Tab.balances.title
 //            let actionTitle = Tab.actions.title
             let settingsTitle = Tab.settings.title
-            let tabBarView = TabBarView(selection: $selectedTab) {
+            let tabBarView = TabBarView(selection: tabSelection(), hidden: $navModel.tabBarHidden) {
                 if selectedTab != .balances {
                     selectedTab = .balances
                 }
@@ -364,19 +378,19 @@ extension MainView {
                                   cameraAction: cameraAction)
                         .navigationTitle(balancesTitle)
                         .background( Group {
-                            NavigationLink(destination: sendDest, tag: 1, selection: $actionSelected)
+                            NavigationLink(destination: sendDest, tag: 1, selection: $navModel.actionSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: requestDest, tag: 2, selection: $actionSelected)
+                            NavigationLink(destination: requestDest, tag: 2, selection: $navModel.actionSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: depositDest, tag: 3, selection: $actionSelected)
+                            NavigationLink(destination: depositDest, tag: 3, selection: $navModel.actionSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $actionSelected)
+                            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $navModel.actionSelected)
                             { EmptyView() }.frame(width: 0).opacity(0).hidden()
                         })
-                        .onNotification(.SendAction) { actionSelected = 1 }
-                        .onNotification(.RequestAction) { actionSelected = 2 }
-                        .onNotification(.DepositAction) { actionSelected = 3 }
-                        .onNotification(.WithdrawAction) { actionSelected = 4 }
+                        .onNotification(.SendAction)    { navModel.actionSelected = 1 }
+                        .onNotification(.RequestAction) { navModel.actionSelected = 2 }
+                        .onNotification(.DepositAction) { navModel.actionSelected = 3 }
+                        .onNotification(.WithdrawAction){ navModel.actionSelected = 4 }
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.balances)

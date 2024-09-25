@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TabBarView: View {
     @Binding var selection: Tab
+    @Binding var hidden: Int
     let onActionTab: () -> Void
 
     @Environment(\.keyboardShowing) var keyboardShowing
@@ -38,7 +39,6 @@ struct TabBarView: View {
                     Text(tab.title)
                         .lineLimit(1)
                         .talerFont(.body)
-                    //                        .padding(.top, 2)
                 }
             }
         }
@@ -51,7 +51,7 @@ struct TabBarView: View {
 
     var body: some View {
         Group {
-            if keyboardShowing {
+            if keyboardShowing || hidden > 0 {
                 EmptyView()
             } else {
                 HStack(alignment: .bottom) {
