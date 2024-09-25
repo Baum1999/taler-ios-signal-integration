@@ -57,7 +57,7 @@ struct P2PReadyV: View {
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .safeAreaInset(edge: .bottom) {
-                    Button("Done", action: { dismissTop(stack.push()) } )       // ViewState.shared.popToRootView ?
+                    Button("Done", action: { dismissTop(stack.push()) } )
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }

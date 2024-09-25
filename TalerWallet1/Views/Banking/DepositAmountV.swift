@@ -85,9 +85,6 @@ struct DepositAmountV: View {
             LoadingView(scopeInfo: nil, message: "Depositing...")
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-
-//            ViewState2.shared.popToRootView
-
         } else {
             let currency = amountToTransfer.currencyStr
             let currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name

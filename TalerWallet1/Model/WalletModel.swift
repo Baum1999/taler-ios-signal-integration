@@ -112,7 +112,7 @@ extension WalletModel {
     }
     /// get the specified transaction from Wallet-Core. No networking involved
     @MainActor func getTransactionByIdM(_ transactionId: String, viewHandles: Bool = false)
-    async throws -> Transaction {                // M for MainActor
+      async throws -> Transaction {                // M for MainActor
         return try await getTransactionByIdT(transactionId, viewHandles: viewHandles)      // call GetTransactionById on main thread
     }
 }

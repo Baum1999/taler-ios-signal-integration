@@ -68,7 +68,7 @@ struct BalancesListView: View {
         }
 #if REFRESHABLE
         .refreshable {  // already async
-            symLog?.log("refreshing balances")
+            symLog.log("refreshing balances")
             let count = await reloadBalances(stack.push("refreshing balances"), true)
             if let count, count > 0 {
                 NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
