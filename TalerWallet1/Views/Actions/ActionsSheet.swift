@@ -62,6 +62,7 @@ struct ActionsSheet: View {
                 let action = {
                     showSpendingHint = false
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
+                    dismissTop(stack.push())
                 }
                 Button(action: action) {
                     HStack {
