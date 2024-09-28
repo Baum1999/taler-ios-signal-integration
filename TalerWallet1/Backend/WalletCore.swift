@@ -39,6 +39,8 @@ class WalletCore: QuickjsMessageHandler {
     var isLogging: Bool
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
+    private var expired: [String] = []      // save txID of expired items to not beep twice
+
     private struct FullRequest: Encodable {
         let operation: String
         let id: UInt
@@ -225,7 +227,12 @@ extension WalletCore {
                             if let newMinor {
                                 if newMinor == .refreshExpired {
                                     logger.warning("RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                                    Controller.shared.playSound(0)
+                                    if let index = expired.firstIndex(of: components[2]) {
+                                        expired.remove(at: index)               // don't beep twice
+                                    } else {
+                                        expired.append(components[2])
+                                        Controller.shared.playSound(0)          // beep at first sight
+                                    }
                                     postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 }
@@ -234,9 +241,13 @@ extension WalletCore {
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         case .expired:
                             logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                            Controller.shared.playSound(0)
+                            if let index = expired.firstIndex(of: components[2]) {
+                                expired.remove(at: index)                       // don't beep twice
+                            } else {
+                                expired.append(components[2])
+                                Controller.shared.playSound(0)                  // beep at first sight
+                            }
                             postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
-                            return
                         case .pending:
                             if let newMinor {
                                 if newMinor == .ready {
