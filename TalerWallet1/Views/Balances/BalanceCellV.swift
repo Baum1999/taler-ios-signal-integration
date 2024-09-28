@@ -28,6 +28,7 @@ struct BalanceCellV: View {
                        currencyInfo: $currencyInfo,
                              amount: amount,
                          isNegative: nil,           // don't show the + sign
+                      strikethrough: false,
                               large: true)
             .foregroundColor(.primary)
         let hLayout = amountV

@@ -26,6 +26,7 @@ struct AmountRowV: View {
                        currencyInfo: $currencyInfo,
                              amount: amount,
                          isNegative: isNegative,
+                      strikethrough: false,
                               large: large)
                         .foregroundColor(color)
         let verticalV = VStack(alignment: .leading) {
