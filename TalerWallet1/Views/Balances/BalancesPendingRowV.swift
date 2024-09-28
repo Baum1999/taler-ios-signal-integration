@@ -64,7 +64,7 @@ struct BalancesPendingRowV: View {
                               currencyInfo: $currencyInfo,
                                   navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                  scopeInfo: balance.scopeInfo,
-                              transactions: pendingTransactions,
+                              transactions: $pendingTransactions,
                            reloadAllAction: reloadPending,
                            reloadOneAction: reloadOneAction)
             }
@@ -81,7 +81,7 @@ struct BalancesPendingRowV: View {
 fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     @MainActor
     struct BindingViewContainer: View {
-        @State private var pendingTransactions: [Transaction] = []
+        @State private var previewTransactions: [Transaction] = []
         @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
@@ -96,7 +96,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
                                  stack: CallStack("Preview"),
                           currencyInfo: $currencyInfoD,
                                balance: balance,
-                   pendingTransactions: $pendingTransactions,
+                   pendingTransactions: $previewTransactions,
                          reloadPending: {stack in },
                        reloadOneAction: nil)
         }

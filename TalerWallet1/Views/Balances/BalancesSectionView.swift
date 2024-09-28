@@ -42,8 +42,8 @@ struct BalancesSectionView {
 
     @State private var showSpendingHint = true
     @State private var isShowingDetailView = false
-    @State private var transactions: [Transaction] = []
     @State private var completedTransactions: [Transaction] = []
+    @State private var recentTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
@@ -59,21 +59,32 @@ struct BalancesSectionView {
     @State private var sectionID = UUID()
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
-    func reloadCompleted(_ stack: CallStack) async -> () {
+    func loadRecent(_ stack: CallStack) async -> () {
+        if let transactions = try? await model.transactionsT(stack.push(),
+                                                   scopeInfo: balance.scopeInfo,
+//                                             filterByState: .done,            // TODO: .done
+                                            includeRefreshes: false) {
+            let recent = WalletModel.completedTransactions(transactions)
+            // TODO: only load the MAXRECENT most recent transactions
+            let slice = recent.prefix(MAXRECENT)         // already sorted
+            withAnimation { recentTransactions = Array(slice) }
+        }
+    }
+    func loadCompleted(_ stack: CallStack) async -> () {
         if let transactions = try? await model.transactionsT(stack.push(),
                                                    scopeInfo: balance.scopeInfo,
 //                                             filterByState: .final,           // TODO: .final
-                                            includeRefreshes: false) {
-            completedTransactions = WalletModel.completedTransactions(transactions)
+                                            includeRefreshes: developerMode) {
+            let completed = WalletModel.completedTransactions(transactions)
+            withAnimation { completedTransactions = completed }
         }
     }
-
-    func reloadPending(_ stack: CallStack) async -> () {
+    func loadPending(_ stack: CallStack) async -> () {
         if let transactions = try? await model.transactionsT(stack.push(),
                                                    scopeInfo: balance.scopeInfo,
                                                filterByState: .nonfinal,
                                             includeRefreshes: developerMode) {
-            pendingTransactions = WalletModel.pendingTransactions(transactions)
+            withAnimation { pendingTransactions = WalletModel.pendingTransactions(transactions) }
         }
     }
 }
@@ -93,8 +104,8 @@ extension BalancesSectionView: View {
                           currencyInfo: $currencyInfo,
                               navTitle: String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
                              scopeInfo: scopeInfo,
-                          transactions: completedTransactions,
-                       reloadAllAction: reloadCompleted,
+                          transactions: $completedTransactions,
+                       reloadAllAction: loadCompleted,
                        reloadOneAction: reloadOneAction)
         }
 
@@ -139,7 +150,7 @@ extension BalancesSectionView: View {
                               currencyInfo: $currencyInfo,
                                    balance: balance,
                        pendingTransactions: $pendingTransactions,
-                             reloadPending: reloadPending,
+                             reloadPending: loadPending,
                            reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
@@ -188,37 +199,29 @@ extension BalancesSectionView: View {
             currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
         .task(id: shouldReloadBalances + 1_000_000) {
-//            if shownSectionID != sectionID {
-                symLog.log(".task for BalancesSectionView - reload Transactions")
-            // TODO: only load the MAXRECENT most recent transactions
-            if let response = try? await model.transactionsT(stack.push(".task - reload Transactions"), scopeInfo: scopeInfo, includeRefreshes: developerMode) {
-                transactions = response
-                pendingTransactions = WalletModel.pendingTransactions(response)
-                completedTransactions = WalletModel.completedTransactions(response)
-                shownSectionID = sectionID
-            }
-//            } else {
-//                symLog.log("task for BalancesSectionView \(sectionID) ❗️ skip reloading Transactions")
-//            }
+            symLog.log(".task for BalancesSectionView - load recent+completed+pending")
+            await loadRecent(stack.push(".task - load recent"))
+            await loadCompleted(stack.push(".task - load completed"))
+            await loadPending(stack.push(".task - load pending"))
         }
-        let transactionCount = completedTransactions.count
         /// if there is only one currency, then show MAXRECENT recent transactions
-        if sectionCount == 1 && transactionCount > 0 {
+        if sectionCount == 1 && recentTransactions.count > 0 {
             Section {
-                let slice = completedTransactions.prefix(MAXRECENT)         // already sorted
-                let threeTransactions = Array(slice)
+                let _ = symLog.log("recent transactions")
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
                                   currencyInfo: $currencyInfo,
                                      scopeInfo: scopeInfo,
-                                  transactions: threeTransactions,
+                                  transactions: $recentTransactions,
+                               reloadAllAction: loadRecent,
                                reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             } header: {
                 if !minimalistic {
-                    let count = transactionCount > MAXRECENT ? MAXRECENT : transactionCount
-                    Text(count > 1 ? "Recent \(count) transactions"
-                                   : "Recent transaction")
+                    let recentHeader = recentTransactions.count > 1
+                        ? String(localized: "Recent transactions", comment: "section header plural")
+                        : String(localized: "Recent transaction", comment: "section header singular")
+                    Text(recentHeader)
                         .talerFont(.title3)
                         .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                 }

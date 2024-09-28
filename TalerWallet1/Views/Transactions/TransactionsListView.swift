@@ -20,7 +20,8 @@ struct TransactionsListView: View {
     let navTitle: String
 
     let scopeInfo: ScopeInfo
-    let transactions: [Transaction]
+    @Binding var transactions: [Transaction]
+
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
@@ -39,7 +40,8 @@ struct TransactionsListView: View {
                                          stack: stack.push(),
                                   currencyInfo: $currencyInfo,
                                      scopeInfo: scopeInfo,
-                                  transactions: transactions,
+                                  transactions: $transactions,
+                               reloadAllAction: reloadAllAction,
                                reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
@@ -67,7 +69,7 @@ struct TransactionsListView: View {
         .navigationTitle(navTitle)
         .accessibilityHint(String(localized: "Transaction list"))
         .task {
-            symLog.log(".task ")
+            symLog.log("❗️.task List❗️")
             await reloadAllAction(stack.push())
         }
         .overlay {
@@ -87,10 +89,12 @@ struct TransactionsArraySliceV: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
     let scopeInfo: ScopeInfo
-    let transactions: [Transaction]
+    @Binding var transactions: [Transaction]
+    let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @EnvironmentObject private var model: WalletModel
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -101,25 +105,38 @@ struct TransactionsArraySliceV: View {
         let failAction = model.failTransaction
         let suspendAction = model.suspendTransaction
         let resumeAction = model.resumeTransaction
-        ForEach(Array(zip(transactions.indices, transactions)), id: \.1) { index, transaction in
-            NavigationLink {
-                LazyView {
-                    TransactionSummaryV(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
-                                  transactionId: transaction.id,
-                                   reloadAction: reloadOneAction,
-                                       navTitle: nil,
-                                        hasDone: false,
-                                    abortAction: abortAction,
-                                   deleteAction: deleteAction,
-                                     failAction: failAction,
-                                  suspendAction: suspendAction,
-                                   resumeAction: resumeAction)
-                }
-            } label: {
+
+        ForEach(transactions, id: \.self) { transaction in
+            let destination = TransactionSummaryV(stack: stack.push(),
+                                           currencyInfo: $currencyInfo,
+                                          transactionId: transaction.id,
+                                           reloadAction: reloadOneAction,
+                                               navTitle: nil,
+                                                hasDone: false,
+                                            abortAction: abortAction,
+                                           deleteAction: deleteAction,
+                                             failAction: failAction,
+                                          suspendAction: suspendAction,
+                                           resumeAction: resumeAction)
+            let row = NavigationLink { destination } label: {
                 TransactionRowView(currencyInfo: $currencyInfo, transaction: transaction)
+            }.id(transaction.id)
+            if transaction.isDeleteable {
+                row.swipeActions(edge: .trailing) {
+                        Button {
+                            symLog?.log("deleteAction")
+                            Task { // runs on MainActor
+                                let _ = try? await deleteAction(transaction.id, false)
+                                await reloadAllAction(stack.push())
+                            }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                        .tint(.red)
+                    }
+            } else {
+                row
             }
-            .id(Int(index))
         }
     }
 }
