@@ -12,8 +12,9 @@ import SymLog
 struct SendRequestV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
-    let amountAvailable: Amount
+    @Binding var balances: [Balance]
+//    @Binding var currencyInfo: CurrencyInfo
+//    let amountAvailable: Amount
     //    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
     @Binding var summary: String
@@ -22,14 +23,19 @@ struct SendRequestV: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @State private var buttonSelected: Int? = nil
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // Update currency when used
 
     func selectAndUpdate(_ button: Int) {
         let scope = currencyInfo.scope
         let currency = scope.currency
         amountToTransfer.setCurrency(currency)
-        buttonSelected = button      // will trigger NavigationLink
-                                     // after user tapped a button, while navigation animation runs, contact Exchange to update Fees
+        dismissTop(stack.push())
+        NotificationCenter.default.post(name: button == 1 ? .SendAction : .RequestAction,
+                                      object: nil)                              // will trigger NavigationLink
+        // after user tapped a button, while navigation animation runs, contact Exchange to update Fees
         if let url = scope.url {
             Task { // runs on MainActor
                 do {
@@ -42,50 +48,32 @@ struct SendRequestV: View {
         }
     }
 
-    private static func className() -> String {"\(self)"}
+    private var canSend: Bool {
+        for balance in balances {
+            if !balance.available.isZero {
+                return true
+            }
+        }
+        return false
+    }
 
     var body: some View {
         let scope = currencyInfo.scope
         let currencyName = currencyInfo.specs.name
-        let sendTitle0 = String(localized: "SendButton_Short", defaultValue: "Send",
-                                  comment: "Abbreviation of button `Send (currency)´")
-        let sendTitle1 = String(localized: "SendButton_Full", defaultValue: "Send\t\(currencyName)",
-                                  comment: "`Send (currency)´ in Balances - must have ONE \\t and ONE %@")
-        let sendTitle = minimalistic ? sendTitle0 : sendTitle1
-
-        let requTitle0 = String(localized: "RequestButton_Short", defaultValue: "Request",
-                                  comment: "Abbreviation of button `Request (currency)´")
-        let requTitle1 = String(localized: "RequestButton_Full", defaultValue: "Request\t\(currencyName)",
-                                  comment: "`Request (currency)´ in Balances - must have ONE \\t and ONE %@")
-        let requTitle = minimalistic ? requTitle0 : requTitle1
-        let sendDest = LazyView {
-            SendAmount(stack: stack.push("\(Self.className())()"),
-                currencyInfo: $currencyInfo,
-                   available: amountAvailable,
-            amountToTransfer: $amountToTransfer,        // with correct currency
-                     summary: $summary,
-                   scopeInfo: scope,
-                cameraAction: cameraAction)
-        }
-        let requestDest = LazyView {
-            RequestPayment(stack: stack.push("\(Self.className())()"),
-                    currencyInfo: $currencyInfo,
-                amountToTransfer: $amountToTransfer,    // with correct currency
-                         summary: $summary,
-                       scopeInfo: scope,
-                    cameraAction: cameraAction)
-         }
-        let disableSend = amountAvailable.isZero //?? false
+        let sendTitle = String(localized: "SendButton_Short", defaultValue: "Send",
+                                 comment: "Abbreviation of button `Send (currency)´")
+        let requTitle = String(localized: "RequestButton_Short", defaultValue: "Request",
+                                 comment: "Abbreviation of button `Request (currency)´")
         let twoRowButtons = TwoRowButtons(stack: stack.push(),
                                       sendTitle: sendTitle,
                                        sendType: .peerPushDebit,
-                                       sendA11y: sendTitle1.tabbed(oneLine: true),
+                                       sendA11y: sendTitle,//1.tabbed(oneLine: true),
                                       recvTitle: requTitle,
                                        recvType: .peerPullCredit,
-                                       recvA11y: requTitle1.tabbed(oneLine: true),
+                                       recvA11y: requTitle,//1.tabbed(oneLine: true),
                                  fitsSideBySide: false,
                                       lineLimit: 5,
-                                   sendDisabled: disableSend,
+                                   sendDisabled: !canSend,
                                      sendAction: { controller.frontendState = -1; selectAndUpdate(1)  },
                                      recvAction: { controller.frontendState = 1; selectAndUpdate(2) })
         Group {
@@ -102,12 +90,6 @@ struct SendRequestV: View {
                 VStack { twoRowButtons }
             }
         }
-        .background( Group {
-            NavigationLink(destination: sendDest, tag: 1, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            NavigationLink(destination: requestDest, tag: 2, selection: $buttonSelected)
-                { EmptyView() }.frame(width: 0).opacity(0).hidden()
-        })
     }
 }
 // MARK: -

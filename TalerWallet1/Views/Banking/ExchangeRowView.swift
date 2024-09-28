@@ -53,11 +53,11 @@ struct ExchangeRowView: View {
             }
             .listRowSeparator(.hidden)
 
-            DepositWithdrawV(stack: stack.push(),
-                      currencyInfo: $currencyInfo,
+//            DepositWithdrawV(stack: stack.push(),
+//                      currencyInfo: $currencyInfo,
 //                         scopeInfo: exchange.scopeInfo,
-                   amountAvailable: amountAvailable,
-                  amountToTransfer: $amountToTransfer)
+//                   amountAvailable: amountAvailable,
+//                  amountToTransfer: $amountToTransfer)
         }
         .task {
             if controller.info(for: currency) == nil {

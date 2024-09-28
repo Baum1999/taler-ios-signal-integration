@@ -129,12 +129,12 @@ extension BalancesSectionView: View {
 //            .listRowSeparator(.hidden)
 //            .border(.red)
 
-            SendRequestV(stack: stack.push(),
-                  currencyInfo: $currencyInfo,
-               amountAvailable: balance.available,
-              amountToTransfer: $amountToTransfer,
-                       summary: $summary,
-                  cameraAction: cameraAction)
+//            SendRequestV(stack: stack.push(),
+//                  currencyInfo: $currencyInfo,
+//               amountAvailable: balance.available,
+//              amountToTransfer: $amountToTransfer,
+//                       summary: $summary,
+//                  cameraAction: cameraAction)
 //            .listRowSeparator(.hidden)
 
 //            BalancesNavigationLinksV(symLog: symLog,
@@ -183,11 +183,11 @@ extension BalancesSectionView: View {
                 .accessibilityHint(String(localized: "Will go to the demo shop website."))
                 .listRowSeparator(.hidden)
             }
-            DepositWithdrawV(stack: stack.push(),
-                      currencyInfo: $currencyInfo,
-//                         scopeInfo: balance.scopeInfo,
-                   amountAvailable: balance.available,
-                  amountToTransfer: $amountToTransfer)   // does still have the wrong currency
+//            DepositWithdrawV(stack: stack.push(),
+//                      currencyInfo: $currencyInfo,
+////                         scopeInfo: balance.scopeInfo,
+//                   amountAvailable: balance.available,
+//                  amountToTransfer: $amountToTransfer)   // does still have the wrong currency
 
         } header: {
             BarGraphHeader(stack: stack.push(),

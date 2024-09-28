@@ -765,7 +765,6 @@
 				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
 				4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */,
 				4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */,
-				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
 				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
 				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
 				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
@@ -808,7 +807,6 @@
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */,
 				4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */,
-				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
 				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4EB095382989CBFE0043A8A1 /* PendingRowView.swift */,
 			);
@@ -882,6 +880,8 @@
 			isa = PBXGroup;
 			children = (
 				4E2B337C2C8B1D5500186A3E /* ActionsSheet.swift */,
+				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
+				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
