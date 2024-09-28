@@ -60,13 +60,19 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func reloadCompleted(_ stack: CallStack) async -> () {
-        if let transactions = try? await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode) {
+        if let transactions = try? await model.transactionsT(stack.push(),
+                                                   scopeInfo: balance.scopeInfo,
+//                                             filterByState: .final,           // TODO: .final
+                                            includeRefreshes: false) {
             completedTransactions = WalletModel.completedTransactions(transactions)
         }
     }
 
     func reloadPending(_ stack: CallStack) async -> () {
-        if let transactions = try? await model.transactionsT(stack.push(), scopeInfo: balance.scopeInfo, includeRefreshes: developerMode) {
+        if let transactions = try? await model.transactionsT(stack.push(),
+                                                   scopeInfo: balance.scopeInfo,
+                                               filterByState: .nonfinal,
+                                            includeRefreshes: developerMode) {
             pendingTransactions = WalletModel.pendingTransactions(transactions)
         }
     }

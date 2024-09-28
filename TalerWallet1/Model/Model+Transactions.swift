@@ -22,22 +22,31 @@ extension WalletModel {
 }
 
 // MARK: -
+
+enum TransactionStateFilter: String, Codable {
+    case done
+    case final          // done, aborted, expired, ...
+    case nonfinal       // pending, dialog, suspended, aborting
+}
+
 /// A request to get the transactions in the wallet's history.
 fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     func operation() -> String { "getTransactions" }
 //    func operation() -> String { "testingGetSampleTransactions" }
-    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search, sort: sort, includeRefreshes: includeRefreshes) }
-
+    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search,
+                                    sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes) }
     var scopeInfo: ScopeInfo?
     var currency: String?
     var search: String?
     var sort: String?
+    var filterByState: TransactionStateFilter?
     var includeRefreshes: Bool?
     struct Args: Encodable {
         var scopeInfo: ScopeInfo?
         var currency: String?
         var search: String?
         var sort: String?
+        var filterByState: TransactionStateFilter?
         var includeRefreshes: Bool?
     }
 
@@ -104,16 +113,21 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
     func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
-                       sort: String = "descending", includeRefreshes: Bool = false, viewHandles: Bool = false)
+                          sort: String = "descending", filterByState: TransactionStateFilter? = nil,
+              includeRefreshes: Bool = false, viewHandles: Bool = false)
     async throws -> [Transaction] {
-        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString, sort: sort, includeRefreshes: includeRefreshes)
+        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString,
+                                           sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.transactions
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil, sort: String = "descending", viewHandles: Bool = false)
+    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
+                                      sort: String = "descending", filterByState: TransactionStateFilter? = nil,
+                               viewHandles: Bool = false)
     async throws -> [Transaction] {    // M for MainActor
-        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString, sort: sort, viewHandles: viewHandles)
+        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString,
+                                       sort: sort, filterByState: filterByState, viewHandles: viewHandles)
     }
 
     /// abort the specified transaction from Wallet-Core. No networking involved
