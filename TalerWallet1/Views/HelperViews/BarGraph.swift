@@ -74,7 +74,7 @@ struct BarGraph: View {
 
         HStack(alignment: .center, spacing: 1) {
             if count > 0 {
-                ForEach(Array(zip(slice.indices, slice)), id: \.0) { index, transaction in
+                ForEach(tenTransactions, id: \.self) {transaction in
                     let common = transaction.common
                     let incoming = common.incoming()
                     let netto = common.amountEffective.value
