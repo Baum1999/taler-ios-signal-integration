@@ -117,7 +117,8 @@ extension BalancesSectionView: View {
             if scopeInfo.type == .exchange {
                 let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
                 Text(baseURL)
-                    .talerFont(.headline)
+                    .talerFont(.body)
+                    .foregroundColor(.secondary)
 //                    .listRowSeparator(.hidden)
             }
             BalanceCellV(stack: stack.push("BalanceCell"),
@@ -158,34 +159,34 @@ extension BalancesSectionView: View {
                            reloadOneAction: reloadOneAction)
                     .padding(.leading, ICONLEADING)
             }
-            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
-            if showSpendingButton {
-                if !minimalistic && showSpendingHint {
-                    Text("You can spend these \(currencyName) in the Demo shop, or send them to another wallet.")
-                        .talerFont(.body)
-                        .multilineTextAlignment(.leading)
-                        .listRowSeparator(.hidden)
-                }
-                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
-                let action = {
-                    showSpendingHint = false
-                    UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
-                }
-                Button(action: action) {
-                    HStack {
-                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
-                        Spacer()
-                        Text(title)
-                        Spacer()
-                    }
-                }
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-                .accessibilityHint(String(localized: "Will go to the demo shop website."))
-                .listRowSeparator(.hidden)
-            }
+//            let showSpendingButton = DEMOCURRENCY == currency && !balance.available.isZero
+//            if showSpendingButton {
+//                if !minimalistic && showSpendingHint {
+//                    Text("You can spend these \(currencyName) in the Demo shop, or send them to another wallet.")
+//                        .talerFont(.body)
+//                        .multilineTextAlignment(.leading)
+//                        .listRowSeparator(.hidden)
+//                }
+//                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
+//                let action = {
+//                    showSpendingHint = false
+//                    UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
+//                }
+//                Button(action: action) {
+//                    HStack {
+//                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
+//                        Spacer()
+//                        Text(title)
+//                        Spacer()
+//                    }
+//                }
+//                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+//                .accessibilityHint(String(localized: "Will go to the demo shop website."))
+//                .listRowSeparator(.hidden)
+//            }
 //            DepositWithdrawV(stack: stack.push(),
 //                      currencyInfo: $currencyInfo,
-////                         scopeInfo: balance.scopeInfo,
+//                         scopeInfo: balance.scopeInfo,
 //                   amountAvailable: balance.available,
 //                  amountToTransfer: $amountToTransfer)   // does still have the wrong currency
 

@@ -13,10 +13,10 @@ import SymLog
 struct DepositIbanV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+//    @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
-    let amountAvailable: Amount?
+//    let amountAvailable: Amount?
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount
@@ -33,6 +33,10 @@ struct DepositIbanV: View {
     @State private var transactionStarted: Bool = false
     @State private var paytoUri: String? = nil
     @FocusState private var isFocused: Bool
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func buttonTitle(_ amount: Amount) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)

@@ -13,9 +13,9 @@ import SymLog
 struct SendAmount: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+//    @Binding var currencyInfo: CurrencyInfo
 
-    let available: Amount
+    let available: Amount?
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
@@ -37,6 +37,10 @@ struct SendAmount: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
+
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -111,8 +115,8 @@ struct SendAmount: View {
                            defaultValue: "Send \(currencySymbol)",
                                 comment: "NavTitle: Send 'currencySymbol'")
         let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
-//        let _ = print("available: \(available)")
-        let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(available)")
+//        let _ = print("available: \(availableStr)")
+//        let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(availableStr)")
         let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
         let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
@@ -170,7 +174,7 @@ struct SendAmount: View {
                                                                         scope: scopeInfo, viewHandles: true)
                 amountAvailable = amount
             } catch {
-                amountAvailable = available
+                amountAvailable = available ?? Amount.zero(currency: amountToTransfer.currencyStr)
             }
         }
         .onAppear {
@@ -241,7 +245,7 @@ fileprivate struct Preview_Content: View {
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
         SendAmount(stack: CallStack("Preview"),
-            currencyInfo: $currencyInfoL,
+//            currencyInfo: $currencyInfoL,
                available: amount,
         amountToTransfer: $amountToPreview,
                  summary: $summary,

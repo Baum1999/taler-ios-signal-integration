@@ -10,7 +10,7 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+//    @Binding var currencyInfo: CurrencyInfo
 
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
@@ -30,6 +30,9 @@ struct RequestPayment: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var exchange: Exchange? = nil                                // wg. noFees
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut

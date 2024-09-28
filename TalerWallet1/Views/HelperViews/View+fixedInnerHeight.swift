@@ -23,8 +23,10 @@ import SwiftUI
 import UIKit
 
 struct InnerHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = .zero
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+    static var defaultValue: CGFloat = 400
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
 }
 
 extension View {

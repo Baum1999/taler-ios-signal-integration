@@ -14,7 +14,7 @@ import SymLog
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+//    @Binding var currencyInfo: CurrencyInfo
     let isSheet: Bool
 //    let exchangeBaseUrl: String
     let scopeInfo: ScopeInfo?
@@ -28,6 +28,9 @@ struct ManualWithdraw: View {
     @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var currencyName: String = UNKNOWN
+    @State private var currencySymbol: String = UNKNOWN
 
     var body: some View {
 #if PRINT_CHANGES
@@ -113,6 +116,8 @@ struct ManualWithdraw: View {
                                                 stack: stack.push())
                 }
                 symLog.log("❗️ \(navTitle) onAppear")
+                print("ManualWithdraw.task❓HideTabBarView")
+                NotificationCenter.default.post(name: .HideTabBarView, object: nil)
             }
             .onDisappear {
                 symLog.log("❗️ \(navTitle) onDisappear")

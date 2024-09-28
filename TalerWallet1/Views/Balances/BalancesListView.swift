@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -21,8 +24,10 @@ struct BalancesListView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var lastReloadedBalances = 0
+    @State private var actionSelected: Int? = nil
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary: String = ""
+    @State private var myExchange: Exchange? = nil
 
     /// runs on MainActor if called in some Task {}
     @discardableResult
@@ -40,11 +45,57 @@ struct BalancesListView: View {
         return nil
     }
 
+    private static func className() -> String {"\(self)"}
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
+                            noFees: false,
+                               url: DEMOEXCHANGE,
+                          currency: DEMOCURRENCY)
+        let sendDest = LazyView {
+            SendAmount(stack: stack.push("\(Self.className())()"),
+//              currencyInfo: $currencyInfo,
+//           amountAvailable: amountAvailable,
+                   available: nil,
+            amountToTransfer: $amountToTransfer,        // with correct currency
+                     summary: $summary,
+                   scopeInfo: scope,
+                cameraAction: cameraAction)
+        }
+
+        let requestDest = LazyView {
+            RequestPayment(stack: stack.push("\(Self.className())()"),
+//                  currencyInfo: $currencyInfo,
+                amountToTransfer: $amountToTransfer,    // with correct currency
+                         summary: $summary,
+                       scopeInfo: scope,
+                    cameraAction: cameraAction)
+        }
+
+        let depositDest = LazyView {
+            DepositIbanV(stack: stack.push(),
+//                currencyInfo: $currencyInfo,
+                      feeLabel: nil,
+                  feeIsNotZero: nil,
+//             amountAvailable: amountAvailable,
+//                 depositIBAN: $depositIBAN,
+//               accountHolder: $accountHolder,
+              amountToTransfer: $amountToTransfer)
+        }
+
+        let manualWithdrawDest = LazyView {
+            ManualWithdraw(stack: stack.push(),
+//                  currencyInfo: $currencyInfo,
+                         isSheet: false,
+                       scopeInfo: scope,
+                        exchange: $myExchange,
+                amountToTransfer: $amountToTransfer)
+        }
+
         Group { // necessary for .backslide transition (bug in SwiftUI)
             let count = balances.count
             if balances.isEmpty {
@@ -66,6 +117,20 @@ struct BalancesListView: View {
                 .listStyle(myListStyle.style).anyView
             }
         }
+        .background( Group {
+            NavigationLink(destination: sendDest, tag: 1, selection: $actionSelected)
+            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            NavigationLink(destination: requestDest, tag: 2, selection: $actionSelected)
+            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            NavigationLink(destination: depositDest, tag: 3, selection: $actionSelected)
+            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $actionSelected)
+            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+        })
+        .onNotification(.SendAction) { actionSelected = 1 }
+        .onNotification(.RequestAction) { actionSelected = 2 }
+        .onNotification(.DepositAction) { actionSelected = 3 }
+        .onNotification(.WithdrawAction) { actionSelected = 4 }
 #if REFRESHABLE
         .refreshable {  // already async
             symLog.log("refreshing balances")

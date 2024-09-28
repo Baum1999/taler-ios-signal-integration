@@ -10,6 +10,7 @@ import SwiftUI
 import os.log
 import SymLog
 import AVFoundation
+import taler_swift
 
 // Use this to delay instantiation when using `NavigationLink`, etc...
 struct LazyView<Content: View>: View {
@@ -162,10 +163,119 @@ struct MainView: View {
     } // body
 }
 // MARK: - TabBar
-enum Tab {
+enum Tab: String, Hashable, CaseIterable {
     case balances
-    case overview
+    case actions
+//    case overview
     case settings
+
+    var index: Int {
+        switch self {
+            case .balances: return 0
+            case .actions:  return 1
+//            case .overview: return 1
+            case .settings: return 2
+        }
+    }
+
+    var title: String {
+        switch self {
+            case .balances: return String(localized: "TitleBalances", defaultValue: "Balances")
+            case .actions:  return String(localized: "TitleActions", defaultValue: "Actions")
+//            case .overview: return String(localized: "TitleOverview", defaultValue: "Overview")
+            case .settings: return String(localized: "TitleSettings", defaultValue: "Settings")
+        }
+    }
+
+    var image: Image {
+#if TALER_WALLET
+        let logo = "taler-logo-2023-blue"
+#else       // GNU Taler
+        let logo = "taler-logo-2023-red"
+#endif
+        switch self {
+            case .balances: return Image(systemName: "chart.bar.xaxis")
+            case .actions:  return Image(logo)
+//            case .overview: return Image(systemName: "dollarsign")
+            case .settings: return Image(systemName: "gear")
+        }
+    }
+
+}
+
+struct TabBarView: View {
+    @Binding var selection: Tab
+    let onActionTab: () -> Void
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    @State private var isHidden = 0
+
+    private func tabBarItem(for tab: Tab) -> some View {
+        VStack(spacing: 0) {
+            if tab == .actions {
+                let width = 72.0
+                let height = 57.6
+                tab.image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: width, height: height)
+                    .clipped() // Crop the image to the frame size
+                    .padding(.bottom, 4)
+            } else {
+                let size = minimalistic ? 36.0 : 24.0
+                tab.image
+                    .resizable()
+                    .renderingMode(.template)
+                    .tint(.black)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: size, height: size)
+                if !minimalistic {
+                    Text(tab.title)
+                        .lineLimit(1)
+                        .talerFont(.body)
+//                        .padding(.top, 2)
+                }
+            }
+        }
+        .foregroundColor(selection == tab ? .accentColor : .secondary)
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .combine)
+        .accessibility(label: Text(tab.title))
+        .accessibility(addTraits: [.isButton])
+    }
+
+    var body: some View {
+        Group {
+            if isHidden > 0 {
+                EmptyView()
+            } else {
+                HStack(alignment: .bottom) {
+                    ForEach(Tab.allCases, id: \.self) { tab in
+                        tabBarItem(for: tab)
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if tab == .actions {
+                                    onActionTab()
+                                } else {
+                                    selection = tab
+                                }
+                            }
+                    }
+                }
+                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.bottom))
+            }
+        }
+        .onNotification(.HideTabBarView) {
+            isHidden += 1
+            print("❗️HideTabBarView \(isHidden)")
+        }
+        .onNotification(.ShowTabBarView) {
+            if isHidden > 0 {
+                isHidden -= 1
+                print("❗️ShowTabBarView \(isHidden)")
+            }
+        }
+    }
 }
 
 // MARK: - Content
@@ -194,6 +304,11 @@ extension MainView {
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
 
+        @State private var showActionSheet = false
+        @State private var sheetHeight: CGFloat = .zero
+        @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+        @State private var summary: String = ""
+        @State private var showSpendingHint = true
 
         private var openKycButton: some View {
             Button("KYC") {
@@ -251,59 +366,59 @@ extension MainView {
 #else
             let delay: UInt = 0     // no delay for release builds
 #endif
-            let balancesTitle = String(localized: "TitleBalances", defaultValue: "Balances")
-            let overviewTitle = String(localized: "TitleOverview", defaultValue: "Overview")
-            let settingsTitle = String(localized: "TitleSettings", defaultValue: "Settings")
-          Group {
-//            let labelStyle = minimalistic ? IconOnlyLabelStyle() : TitleAndIconLabelStyle()    // labelStyle doesn't work
-            TabView(selection: tabSelection()) {
-                NavigationView {
-                    BalancesListView(stack: stack.push(balancesTitle),
-                                  balances: $balances,
-//                       shouldReloadPending: $shouldReloadPending,
-                      shouldReloadBalances: $shouldReloadBalances,
-                              cameraAction: cameraAction)
-                    .navigationTitle(balancesTitle)
-                }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                .navigationViewStyle(.stack)
-                .tabItem {
-                    Image(systemName: "chart.bar.xaxis")             // iOS will automatically use filled variant
-                        .accessibilityLabel(balancesTitle)
-                    if !minimalistic { Text(balancesTitle) }
+            let balancesTitle = Tab.balances.title
+//            let actionTitle = Tab.actions.title
+            let settingsTitle = Tab.settings.title
+            let tabBarView = TabBarView(selection: $selectedTab) {
+                if selectedTab != .balances {
+                    selectedTab = .balances
                 }
-                .tag(Tab.balances)
-                .badge(0)         // TODO: set badge if transaction finished in background
-//                if balances.count > 1 {
+                // TODO: check NavigationStack, pop only if necessary
+                ViewState.shared.popToRootView(nil)
+                showActionSheet = true
+            }
+            ZStack(alignment: .bottom) {
+                TabView(selection: tabSelection()) {
+                    NavigationView {
+                        BalancesListView(stack: stack.push(balancesTitle),
+                                      balances: $balances,
+//                         shouldReloadPending: $shouldReloadPending,
+                          shouldReloadBalances: $shouldReloadBalances,
+                                  cameraAction: cameraAction)
+                        .navigationTitle(balancesTitle)
+                    }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
+                    .navigationViewStyle(.stack)
+                    .tag(Tab.balances)
+//                    .badge(0)         // TODO: set badge if transaction finished in background        (not here, but in the     overlayed tabView instead)
+
+                    EmptyView()
+                        .tag(Tab.actions)
+//                     if balances.count > 1 {
+//                    let overviewTitle = Tab.overview.title
 //                    NavigationView {
 //                        OverviewListV(stack: stack.push(overviewTitle),
 //                                   balances: $balances,
-////                        shouldReloadPending: $shouldReloadPending,
+//                        shouldReloadPending: $shouldReloadPending,
 //                       shouldReloadBalances: $shouldReloadBalances,
 //                               cameraAction: cameraAction)
 //                        .navigationTitle(overviewTitle)
 //                    }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
 //                    .navigationViewStyle(.stack)
-//                    .tabItem {
-//                        Image(systemName: "dollarsign")
-//                            .accessibilityLabel(overviewTitle)
-//                        if !minimalistic { Text(overviewTitle) }
-//                    }
 //                    .tag(Tab.overview)
 //                }
-                NavigationView {
-                    SettingsView(stack: stack.push(),
-                              balances: $balances,
-                              navTitle: settingsTitle)
-                }.navigationViewStyle(.stack)
-                .tabItem {
-                    Image(systemName: "gear")                   // system will automatically use filled variant
-                        .accessibilityLabel(settingsTitle)
-                    if !minimalistic { Text(settingsTitle) }
-                }
-                .tag(Tab.settings)
+
+                    NavigationView {
+                        SettingsView(stack: stack.push(),
+                                  balances: $balances,
+                                  navTitle: settingsTitle)
+                    }.id(viewState2.rootViewId)               // any change to rootViewId triggers popToRootView behaviour
+                    .navigationViewStyle(.stack)
+                    .tag(Tab.settings)
+                } // TabView
+                    .padding(.bottom, 16)
+                tabBarView
             }
-//            .animation(.linear(duration: LAUNCHDURATION), value: selectedTab)     doesn't work. Needs CustomTabView
-          } .onNotification(.KYCrequired) { notification in
+            .onNotification(.KYCrequired) { notification in
               // show an alert with the KYC link (button) which opens in Safari
                 if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                     if let kycString = transition.experimentalUserData {
@@ -322,6 +437,22 @@ extension MainView {
                  actions: {   openKycButton
                               dismissAlertButton },
                  message: {   Text("Tap the button to go to the KYC website.") })
+            .sheet(isPresented: $showActionSheet) {
+                let content = VStack {
+                    ActionsSheet(stack: stack.push(),
+                              balances: $balances,
+                      showSpendingHint: $showSpendingHint,
+                      amountToTransfer: $amountToTransfer,
+                               summary: $summary,
+                          cameraAction: cameraAction)
+                    .padding(.bottom, 32)
+                }
+                if #available(iOS 16, *) {
+                    content.fixedInnerHeight($sheetHeight)
+                } else {
+                    content
+                }
+            }
             .onNotification(.BalanceChange) { notification in
               // reload balances on receiving BalanceChange notification ...
                 logger.info(".onNotification(.BalanceChange) ==> reload")

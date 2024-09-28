@@ -30,7 +30,7 @@ struct WithdrawExchangeV: View {
             let currency = exchange.scopeInfo.currency
             Group {
                 ManualWithdraw(stack: stack.push(),
-                        currencyInfo: $currencyInfo,
+//                      currencyInfo: $currencyInfo,
                              isSheet: true,
                            scopeInfo: exchange.scopeInfo,
                             exchange: $exchange,

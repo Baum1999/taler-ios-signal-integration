@@ -24,7 +24,8 @@ struct TransferRestrictionsV: View {
             let obtainNBS = obtainStr.nbs
             Text(minimalistic ? "Transfer \(amountNBS) to the Payment Service."
                  : "You need to transfer \(amountNBS) from your regular bank account to the Payment Service Provider to receive \(obtainNBS) as electronic cash in this wallet.")
-            .multilineTextAlignment(.leading)
+                .talerFont(.body)
+                .multilineTextAlignment(.leading)
             if let restrictions {
                 ForEach(restrictions) { restriction in
                     if let hintsI18 = restriction.human_hint_i18n {
@@ -113,22 +114,27 @@ struct ManualDetailsWireV: View {
             }   .padding(.top, -8)
             let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
                              : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+                .talerFont(.body)
                 .multilineTextAlignment(.leading)
             let mandatory = Text("This is mandatory, otherwise your money will not arrive in this wallet.")
                 .bold()
+                .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste payee and IBAN:"
                               : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):")
+                .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
             let step2x = Text(minimalistic ? "**Step 2:** Copy+Paste payee and account:"
                               : "**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:")
+                .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
             let amountNBS = amountStr.nbs
             let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountNBS)."
                              : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+                .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
 
