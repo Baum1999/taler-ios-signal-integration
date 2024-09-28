@@ -273,23 +273,23 @@ extension MainView {
                 }
                 .tag(Tab.balances)
                 .badge(0)         // TODO: set badge if transaction finished in background
-                if balances.count > 1 {
-                    NavigationView {
-                        OverviewListV(stack: stack.push(overviewTitle),
-                                   balances: $balances,
-//                        shouldReloadPending: $shouldReloadPending,
-                       shouldReloadBalances: $shouldReloadBalances,
-                               cameraAction: cameraAction)
-                        .navigationTitle(overviewTitle)
-                    }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                    .navigationViewStyle(.stack)
-                    .tabItem {
-                        Image(systemName: "dollarsign")
-                            .accessibilityLabel(overviewTitle)
-                        if !minimalistic { Text(overviewTitle) }
-                    }
-                    .tag(Tab.overview)
-                }
+//                if balances.count > 1 {
+//                    NavigationView {
+//                        OverviewListV(stack: stack.push(overviewTitle),
+//                                   balances: $balances,
+////                        shouldReloadPending: $shouldReloadPending,
+//                       shouldReloadBalances: $shouldReloadBalances,
+//                               cameraAction: cameraAction)
+//                        .navigationTitle(overviewTitle)
+//                    }.id(viewState2.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
+//                    .navigationViewStyle(.stack)
+//                    .tabItem {
+//                        Image(systemName: "dollarsign")
+//                            .accessibilityLabel(overviewTitle)
+//                        if !minimalistic { Text(overviewTitle) }
+//                    }
+//                    .tag(Tab.overview)
+//                }
                 NavigationView {
                     SettingsView(stack: stack.push(),
                               balances: $balances,
