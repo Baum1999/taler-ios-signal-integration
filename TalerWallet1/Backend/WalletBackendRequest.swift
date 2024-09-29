@@ -36,6 +36,9 @@ struct ScopeInfo: Codable, Hashable {
     var url: String?            // only for "exchange" and "auditor"
     var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
 
+    public static func zero() -> ScopeInfo {
+        ScopeInfo(type: .madeUp, currency: UNKNOWN)
+    }
     public static func < (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
         if lhs.type == .global {
             if rhs.type == .global {        // both global ==> alphabetic currency

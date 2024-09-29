@@ -326,7 +326,6 @@ extension MainView {
                              selectedBalance: $selectedBalance,             // if nil shows currency picker
                             amountToTransfer: $amountToTransfer,            // currency needs to be updated!
                                      summary: $summary,
-                                   scopeInfo: scope,
                                 cameraAction: cameraAction)
 
             let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),

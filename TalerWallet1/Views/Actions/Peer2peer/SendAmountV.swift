@@ -17,12 +17,11 @@ struct SendAmountV: View {
     @Binding var selectedBalance: Balance?      // selected balance when the action button is tapped in Transactions
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
-    let scopeInfo: ScopeInfo
     let cameraAction: () -> Void
 
     @State private var balanceIndex = 0
     @State private var nonZeroBalances: [Balance] = []
-    @State private var balance: Balance? = nil
+    @State private var balance: Balance? = nil      // nil only when (balances / nonZeroBalances) == []
 
     var body: some View {
 #if PRINT_CHANGES
@@ -52,7 +51,6 @@ struct SendAmountV: View {
                        balanceIndex: $balanceIndex,
                    amountToTransfer: $amountToTransfer,
                             summary: $summary,
-                          scopeInfo: scopeInfo,
                        cameraAction: cameraAction)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -89,7 +87,6 @@ struct SendAmountContent: View {
     @Binding var balanceIndex: Int
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
-    let scopeInfo: ScopeInfo
     let cameraAction: () -> Void
 
     // TODO: call getMaxPeerPushDebitAmountM
@@ -114,6 +111,7 @@ struct SendAmountContent: View {
     @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName = UNKNOWN
     @State private var currencySymbol = UNKNOWN
+    @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -197,53 +195,55 @@ struct SendAmountContent: View {
         let navTitle = String(localized: "NavTitle_Send",
                            defaultValue: "Send",
                                 comment: "NavTitle: Send")
-        let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
-        let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-        let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
-
-        let inputDestination = LazyView {
-            P2PSubjectV(stack: stack.push(),
-                        scope: scopeInfo,
-                 currencyInfo: $currencyInfo,
-                     feeLabel: feeLabel(feeStr),
-                 feeIsNotZero: feeIsNotZero(),
-                     outgoing: true,
-             amountToTransfer: $amountToTransfer,       // from the textedit
-                      summary: $summary,
-                   expireDays: $expireDays)
-        }
-        let shortcutDestination = LazyView {
-            P2PSubjectV(stack: stack.push(),
-                        scope: scopeInfo,
-                 currencyInfo: $currencyInfo,
-                     feeLabel: nil,
-                 feeIsNotZero: feeIsNotZero(),
-                     outgoing: true,
-             amountToTransfer: $amountShortcut,         // from the tapped shortcut button
-                      summary: $summary,
-                   expireDays: $expireDays)
-        }
-
         Group {
-            let amountLabel = minimalistic ? String(localized: "Amount:")
-                                           : String(localized: "Amount to send:")
-            AmountInputV(stack: stack.push(),
-                  currencyInfo: $currencyInfo,
-               amountAvailable: $amountAvailable,
-                   amountLabel: amountLabel,
-              amountToTransfer: $amountToTransfer,
-                       wireFee: nil,
-                       summary: $summary,
-                shortcutAction: shortcutAction,
-                  buttonAction: buttonAction,
-                 feeIsNegative: false,
-                    computeFee: computeFeeSend)
-            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            ) // shortcutDestination
-            .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            ) // inputDestination
+            if let balance {
+                let scopeInfo = balance.scopeInfo
+                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
+                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
+                let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
+
+                let inputDestination = P2PSubjectV(stack: stack.push(),
+                                                   scope: scopeInfo,
+                                            currencyInfo: $currencyInfo,
+                                                feeLabel: feeLabel(feeStr),
+                                            feeIsNotZero: feeIsNotZero(),
+                                                outgoing: true,
+                                        amountToTransfer: $amountToTransfer,    // from the textedit
+                                                 summary: $summary,
+                                              expireDays: $expireDays)
+                let shortcutDestination = P2PSubjectV(stack: stack.push(),
+                                                      scope: scopeInfo,
+                                               currencyInfo: $currencyInfo,
+                                                   feeLabel: nil,
+                                               feeIsNotZero: feeIsNotZero(),
+                                                   outgoing: true,
+                                           amountToTransfer: $amountShortcut,   // from the tapped shortcut button
+                                                    summary: $summary,
+                                                 expireDays: $expireDays)
+                Group {
+                    let amountLabel = minimalistic ? String(localized: "Amount:")
+                                                   : String(localized: "Amount to send:")
+                    AmountInputV(stack: stack.push(),
+                          currencyInfo: $currencyInfo,
+                       amountAvailable: $amountAvailable,
+                           amountLabel: amountLabel,
+                      amountToTransfer: $amountToTransfer,
+                               wireFee: nil,
+                               summary: $summary,
+                        shortcutAction: shortcutAction,
+                          buttonAction: buttonAction,
+                         feeIsNegative: false,
+                            computeFee: computeFeeSend)
+                    .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                        ) // shortcutDestination
+                    .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
+                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                        ) // inputDestination
+                }
+            } else {    // no balance - Yikes
+                Text("No balance. There seems to be a problem with the database...")
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -268,7 +268,7 @@ struct SendAmountContent: View {
         .navigationBarItems(trailing: QRButton(action: cameraAction))
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
             if let balance {
-                let scopeInfo = balance.scopeInfo
+                scopeInfo = balance.scopeInfo
                 let currency = scopeInfo.currency
                 amountAvailable = balance.available
                 amountToTransfer.setCurrency(currency)
@@ -348,7 +348,6 @@ fileprivate struct Preview_Content: View {
           selectedBalance: $noBalance,
          amountToTransfer: $amountToPreview,
                   summary: $summary,
-                scopeInfo: currencyInfo.scope,
              cameraAction: checkCameraAvailable)
     }
 }
