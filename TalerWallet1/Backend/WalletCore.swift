@@ -323,6 +323,9 @@ extension WalletCore {
                 case Notification.Name.ExchangeAdded.rawValue:
                     symLog.log(anyPayload)
                     postNotification(.ExchangeAdded)
+                case Notification.Name.ExchangeDeleted.rawValue:
+                    symLog.log(anyPayload)
+                    postNotification(.ExchangeDeleted)
                 case Notification.Name.ReserveNotYetFound.rawValue:
                     if let reservePub = payload.reservePub {
                         let userInfo = ["reservePub" : reservePub]

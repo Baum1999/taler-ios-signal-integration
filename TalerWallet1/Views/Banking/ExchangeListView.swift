@@ -27,6 +27,7 @@ struct ExchangeListView: View {
             if let _ = try? await model.addExchange(url: exchange) {
                 symLog.log("added: \(exchange)")
                 announce("added: \(exchange)")
+                NotificationCenter.default.post(name: .ExchangeAdded, object: nil, userInfo: nil)
             }
         }
     }
@@ -84,7 +85,7 @@ struct ExchangeListCommonV {
 
     func reloadExchanges() async -> Void {
         if let exc = try? await model.listExchangesM() {
-            exchanges = exc
+            withAnimation { exchanges = exc }
         }
     }
 }
@@ -144,6 +145,11 @@ extension ExchangeListCommonV: View {
         .onNotification(.ExchangeAdded) { notification in
             // doesn't need to be received on main thread because we just reload in the background anyway
             symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
+            Task { await reloadExchanges() } // runs on MainActor
+        }
+        .onNotification(.ExchangeDeleted) { notification in
+            // doesn't need to be received on main thread because we just reload in the background anyway
+            symLog?.log(".onNotification(.ExchangeDeleted) ==> reloading exchanges")
             Task { await reloadExchanges() } // runs on MainActor
         }
         .task {

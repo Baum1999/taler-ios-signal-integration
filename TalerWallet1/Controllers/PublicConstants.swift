@@ -93,6 +93,7 @@ extension Notification.Name {
     static let Idle = Notification.Name("idle")
     static let BalanceChange = Notification.Name("balance-change")
     static let ExchangeAdded = Notification.Name("exchange-added")
+    static let ExchangeDeleted = Notification.Name("exchange-deleted")
     static let ExchangeStateTransition = Notification.Name(ExchangeTransition.TransitionType.transition.rawValue)
     static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
     static let TransactionDone = Notification.Name("transaction-done")
