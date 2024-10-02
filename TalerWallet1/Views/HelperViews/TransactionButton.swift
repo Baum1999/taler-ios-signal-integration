@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -34,9 +37,9 @@ struct WarningButton: View {
                     Image(systemName: buttonIcon)
                 }
             }
+            .frame(maxWidth: .infinity)
         }
         .talerFont(.title2)
-        .frame(maxWidth: .infinity)
         .buttonStyle(.bordered)
         .controlSize(.large)
         .disabled(disabled)
