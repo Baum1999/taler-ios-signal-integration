@@ -6759,6 +6759,16 @@
         }
       }
     },
+    "This payment provider is in use. Delete anyway?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Zahlungsdienst ist in Verwendung. Trotzdem löschen?"
+          }
+        }
+      }
+    },
     "This request will be cancelled if it doesn't get paid in time, or when you abort the operation." : {
       "localizations" : {
         "de" : {
@@ -8256,6 +8266,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вам потрібно перевести %1$@ з вашого основного банківського рахунку на постачальника платіжних послуг, щоб отримати %2$@ як електронні гроші в цьому гаманці."
+          }
+        }
+      }
+    },
+    "You will loose all %@ of this payment provider" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie verlieren alle %@ dieses Zahlungsdienstes"
           }
         }
       }
