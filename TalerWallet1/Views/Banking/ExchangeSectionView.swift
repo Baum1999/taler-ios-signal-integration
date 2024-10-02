@@ -52,10 +52,14 @@ struct ExchangeSectionView: View {
 
     private func deleteExchange() {
         disabled = true     // don't try this more than once
+        let doPurge = purge
         Task { // runs on MainActor
-            if let _ = try? await model.deleteExchange(url: exchange.exchangeBaseUrl, purge: purge) {
+            let baseUrl = exchange.exchangeBaseUrl
+            if let _ = try? await model.deleteExchange(url: baseUrl, purge: doPurge, viewHandles: !doPurge) {
                 symLog.log("deleted \(baseUrl.trimURL())")
                 didDelete = true             // change button text
+                NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
+                NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
             } else {
                 purge = true
                 disabled = false
@@ -97,15 +101,29 @@ struct ExchangeSectionView: View {
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(bankingHint + " " + linkTitle)
                 .padding(.top)
+                .listRowSeparator(.hidden)
             }
 
             let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete Payment Provider", comment: "Action button")
-            WarningButton(warningText: String(localized: "Are you sure you want to delete this payment provider?"),
+            let warningText1 = String(localized: "Are you sure you want to delete this payment provider?")
+            let warningText2 = String(localized: "This payment provider is in use. Delete anyway?")
+            WarningButton(warningText: warningText1,
                           buttonTitle: buttonTitle,
                            buttonIcon: "trash",
                                  role: .destructive,
                              disabled: $disabled,
                                action: deleteExchange)
+            .padding(.top)
+            .alert(warningText2, isPresented: $purge, actions: {
+                Button("Cancel", role: .cancel) {
+                    purge = false
+                }
+                Button(buttonTitle) {
+                    deleteExchange()
+                    purge = false
+                }
+              }, message: { Text("You will loose all \(currency) of this payment provider") }
+            )
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,

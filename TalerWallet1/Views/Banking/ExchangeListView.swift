@@ -97,50 +97,46 @@ extension ExchangeListCommonV: View {
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let sortedExchanges = exchanges.sorted { $0 < $1 }
+        let sortedList = List(sortedExchanges, id: \.self) { exchange in
+            ExchangeSectionView(stack: stack.push(),
+                             balances: $balances,
+                             exchange: exchange,
+//                        depositIBAN: $depositIBAN,
+//                      accountHolder: $accountHolder,
+                     amountToTransfer: $amountToTransfer)               // does still have the wrong currency
+        }
+
+        let emptyList = List {
+            Section {
+                Text("There are no Payment Services yet.")
+                    .talerFont(.title3)
+            }
+            Section {
+                Text("Use the Add button to add a service.")
+                    .talerFont(.body)
+                    .listRowSeparator(.hidden)
+                Text("You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.")
+                    .talerFont(.body)
+            }
+        }
+
         // TODO: Balances for amountAvailable for Deposit
         Group {
-            List(sortedExchanges, id: \.self) { exchange in
-                ExchangeSectionView(stack: stack.push(),
-                                 balances: $balances,
-                                 exchange: exchange,
-//                              depositIBAN: $depositIBAN,
-//                            accountHolder: $accountHolder,
-                         amountToTransfer: $amountToTransfer)               // does still have the wrong currency
+            if exchanges.isEmpty {
+                emptyList
+            } else {
+                sortedList
             }
-//#if REFRESHABLE
-            .refreshable {
-                symLog?.log("refreshing")
-                await reloadExchanges()
-            }
-//#endif
-            .listStyle(myListStyle.style).anyView
         }
+        .listStyle(myListStyle.style).anyView
+//#if REFRESHABLE
+        .refreshable {
+            symLog?.log("refreshing")
+            await reloadExchanges()
+        }
+//#endif
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_BANKING, stack: stack.push())
-        }
-        .overlay {
-            if exchanges.isEmpty {
-                List {
-                    Section {
-                        Text("There are no Payment Services yet.")
-                            .talerFont(.title3)
-                    }
-                    Section {
-                        Text("Use the Add button to add a service.")
-                            .talerFont(.body)
-                            .listRowSeparator(.hidden)
-                        Text("You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.")
-                            .talerFont(.body)
-                    }
-                }
-//#if REFRESHABLE
-                .refreshable {
-                    symLog?.log("refreshing")
-                    await reloadExchanges()
-                }
-//#endif
-                .listStyle(myListStyle.style).anyView
-            }
         }
         .onNotification(.ExchangeAdded) { notification in
             // doesn't need to be received on main thread because we just reload in the background anyway
