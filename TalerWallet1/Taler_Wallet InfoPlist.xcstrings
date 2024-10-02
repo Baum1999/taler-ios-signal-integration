@@ -5,6 +5,12 @@
       "comment" : "Bundle display name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taler Wallet"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -23,6 +29,12 @@
       "comment" : "Bundle name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taler_Wallet"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -41,6 +53,12 @@
       "comment" : "Privacy - Camera Usage Description",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-Codes scannen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -59,6 +77,12 @@
       "comment" : "Copyright (human-readable)",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "© Taler-Systems.com"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
