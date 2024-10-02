@@ -1,14 +1,19 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
+import SymLog
 
 /// This view shows the currency name in an exchange section
 ///         currency
 /// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
+    private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var balances: [Balance]
     let exchange: Exchange
@@ -49,7 +54,7 @@ struct ExchangeSectionView: View {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
             if let _ = try? await model.deleteExchange(url: exchange.exchangeBaseUrl, purge: purge) {
-//                symLog.log("\(executed) \(transactionId)")
+                symLog.log("deleted \(baseUrl.trimURL())")
                 didDelete = true             // change button text
             } else {
                 purge = true
@@ -109,6 +114,7 @@ struct ExchangeSectionView: View {
             shouldReloadBalances: $shouldReloadBalances)
         }
         .task(id: controller.currencyTicker) {
+            symLog.log("task \(didDelete ? 1 : 0)")
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
             currencySymbol = currencyInfo.altUnitSymbol ?? currencyName

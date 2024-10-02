@@ -132,7 +132,7 @@ class Controller: ObservableObject {
                 return info
             }
         }
-        logger.log("  ❗️ no info for \(currency)")
+//        logger.log("  ❗️ no info for \(currency)")
         return nil
     }
     func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
@@ -148,7 +148,7 @@ class Controller: ObservableObject {
                 return true
             }
         }
-        logger.log("  ❗️ no info for \(currency)")
+//        logger.log("  ❗️ no info for \(currency)")
         return false
     }
 
@@ -159,6 +159,7 @@ class Controller: ObservableObject {
                 return exchange1
             }
             if let exchange2 = try? await model.getExchangeByUrl(url: baseUrl) {
+//                logger.log("  ❗️ will add \(baseUrl)")
                 exchanges.append(exchange2)
                 return exchange2
             }
@@ -169,7 +170,7 @@ class Controller: ObservableObject {
     func updateInfo(_ scope: ScopeInfo, model: WalletModel) async {
         if let info = try? await model.getCurrencyInfoM(scope: scope) {
             await setInfo(info)
-            logger.log("  ❗️info set for \(scope.currency)")
+//            logger.log("  ❗️info set for \(scope.currency)")
         }
     }
 

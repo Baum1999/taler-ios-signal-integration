@@ -11,7 +11,7 @@ import SymLog
 
 // Called when tapping "Send Coins" in the balances list
 struct SendAmount: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
 

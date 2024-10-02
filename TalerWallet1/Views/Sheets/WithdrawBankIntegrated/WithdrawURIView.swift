@@ -13,7 +13,7 @@ import SymLog
 // We show the user the bank-integrated withdrawal details in a sheet - but first the ToS must be accepted.
 // After the user confirmed the withdrawal, we show a button to return to the bank website to authorize (2FA)
 struct WithdrawURIView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
 
     // the URL from the bank website
