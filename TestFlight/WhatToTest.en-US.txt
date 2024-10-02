@@ -1,3 +1,9 @@
+Version 0.13.3 (wallet-core 0.13.5)
+
+• Swipe left to delete transactions
+- bugfix for deleting payment providers
+
+
 Version 0.13.2 (wallet-core 0.13.4)
 
 - bugfix for deposit
