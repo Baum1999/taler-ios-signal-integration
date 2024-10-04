@@ -149,7 +149,7 @@ struct ThreeAmountsSection: View {
                     Text(minimalistic ? "Payment provider:" : "Using payment service provider:")
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
-                    Text(baseURL.trimURL())
+                    Text(baseURL.trimURL)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .multilineTextAlignment(.center)
                         .talerFont(large ? .title3 : .body)

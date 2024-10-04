@@ -49,7 +49,7 @@ struct WithdrawURIView: View {
 
     func loadExchange(_ baseUrl: String) async {        // TODO: throws?
         if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
-            symLog.log("Loaded \(baseUrl.trimURL())")
+            symLog.log("Loaded \(baseUrl.trimURL)")
             exchange = someExchange
         }
     }
@@ -116,7 +116,7 @@ struct WithdrawURIView: View {
                     } else {
                         HStack {
                             Text(title)
-                            Text(defaultBaseUrl.trimURL())
+                            Text(defaultBaseUrl.trimURL)
                         }
                         .talerFont(.body)
 //                        .task {
@@ -201,9 +201,9 @@ struct WithdrawURIView: View {
                         defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
                         possibleExchanges = uriInfoResponse.possibleExchanges
                         await loadExchange(baseUrl)
-                        symLog.log("\(baseUrl.trimURL()) loaded")
+                        symLog.log("\(baseUrl.trimURL) loaded")
                         await controller.checkCurrencyInfo(for: baseUrl, model: model)
-                        symLog.log("Info(for: \(baseUrl.trimURL())) loaded")
+                        symLog.log("Info(for: \(baseUrl.trimURL) loaded")
                     }
 
                     // TODO: amount = nil ==> show amount input

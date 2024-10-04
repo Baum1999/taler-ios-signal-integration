@@ -68,7 +68,7 @@ struct ManualWithdraw: View {
             let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
             let tosAccepted = exchange.tosStatus == .accepted
             ScrollView { VStack(alignment: .trailing) {
-                Text("via \(exchange.exchangeBaseUrl.trimURL())")
+                Text("via \(exchange.exchangeBaseUrl.trimURL)")
                     .multilineTextAlignment(.center)
                     .talerFont(.body)
                 if tosAccepted {

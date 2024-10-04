@@ -43,7 +43,7 @@ struct ExchangeRowView: View {
         Group {
             NavigationLink(destination: showToS) {
                 VStack(alignment: .leading) {
-                    Text(baseURL.trimURL())
+                    Text(baseURL.trimURL)
                         .talerFont(.headline)
                     if !minimalistic {
                         Text("Terms of Service")  // VIEW_WITHDRAW_TOS

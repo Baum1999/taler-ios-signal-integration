@@ -56,7 +56,7 @@ struct ManualWithdrawDone: View {
                             .padding(.horizontal)
                 }
             } else {
-                LoadingView(scopeInfo: nil, message: exchange.exchangeBaseUrl.trimURL())
+                LoadingView(scopeInfo: nil, message: exchange.exchangeBaseUrl.trimURL)
             }
         }.onAppear() {
             symLog.log("onAppear")

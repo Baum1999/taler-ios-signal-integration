@@ -56,7 +56,7 @@ struct ExchangeSectionView: View {
         Task { // runs on MainActor
             let baseUrl = exchange.exchangeBaseUrl
             if let _ = try? await model.deleteExchange(url: baseUrl, purge: doPurge, viewHandles: !doPurge) {
-                symLog.log("deleted \(baseUrl.trimURL())")
+                symLog.log("deleted \(baseUrl.trimURL)")
                 didDelete = true             // change button text
                 NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
                 NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)

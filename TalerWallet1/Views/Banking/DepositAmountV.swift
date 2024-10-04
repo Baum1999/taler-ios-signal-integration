@@ -100,7 +100,7 @@ struct DepositAmountV: View {
 
             let disabled = insufficient || amountToTransfer.isZero
             ScrollView { VStack(alignment: .trailing) {
-//                Text("via \(exchange.exchangeBaseUrl.trimURL())")
+//                Text("via \(exchange.exchangeBaseUrl.trimURL)")
 //                    .multilineTextAlignment(.center)
 //                    .talerFont(.body)
 

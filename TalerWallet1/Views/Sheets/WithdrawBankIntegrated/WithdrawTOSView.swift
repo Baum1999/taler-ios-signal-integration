@@ -62,7 +62,7 @@ struct WithdrawTOSView: View {
                 }
             }
         } else {
-            LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL()
+            LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL
                                               ?? "No exchangeBaseUrl!")
                 .task {
                     await loadToS(languageCode)

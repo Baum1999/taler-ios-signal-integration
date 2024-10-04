@@ -93,7 +93,7 @@ extension OverviewSectionV: View {
 
         Section {
             if scopeInfo.type == .exchange {
-                let baseURL = scopeInfo.url?.trimURL() ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
+                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown Payment Provider", comment: "exchange url")
                 Text(baseURL)
                     .talerFont(.headline)
                     .listRowSeparator(.hidden)

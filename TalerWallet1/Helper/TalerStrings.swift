@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 extension StringProtocol {
-    func trimURL() -> String {
+    var trimURL: String {
         if let url = URL(string: String(self)) {
             if let host = url.host {
                 return host

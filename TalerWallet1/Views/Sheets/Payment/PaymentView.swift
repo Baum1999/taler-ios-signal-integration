@@ -92,9 +92,9 @@ struct PaymentView: View {
         for exchange in exchanges {
             let baseUrl = exchange.url
             if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
-                symLog.log("\(baseUrl.trimURL()) loaded")
+                symLog.log("\(baseUrl.trimURL) loaded")
                 await controller.checkCurrencyInfo(for: baseUrl, model: model)
-                symLog.log("Info(for: \(baseUrl.trimURL())) loaded")
+                symLog.log("Info(for: \(baseUrl.trimURL) loaded")
                 return
             }
         }

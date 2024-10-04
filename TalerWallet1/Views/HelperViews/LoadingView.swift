@@ -27,7 +27,7 @@ struct LoadingView: View {
             Spacer()
             if let scopeInfo {
                 if let urlStr = scopeInfo.url {
-                    Text(urlStr.trimURL())
+                    Text(urlStr.trimURL)
                 } else {
                     Text(scopeInfo.currency)
                 }

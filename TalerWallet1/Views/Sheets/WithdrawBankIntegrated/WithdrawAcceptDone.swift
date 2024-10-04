@@ -65,7 +65,7 @@ struct WithdrawAcceptDone: View {
                     }
                 }
             } else {
-                LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL()
+                LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL
                                                   ?? "Bank Authorization")
             }
         }.onAppear() {
