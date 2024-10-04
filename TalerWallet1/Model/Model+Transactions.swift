@@ -20,19 +20,10 @@ extension WalletModel {
         }
     }
 }
-
 // MARK: -
-
-enum TransactionStateFilter: String, Codable {
-    case done
-    case final          // done, aborted, expired, ...
-    case nonfinal       // pending, dialog, suspended, aborting
-}
-
 /// A request to get the transactions in the wallet's history.
 fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     func operation() -> String { "getTransactions" }
-//    func operation() -> String { "testingGetSampleTransactions" }
     func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search,
                                     sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes) }
     var scopeInfo: ScopeInfo?
@@ -48,6 +39,43 @@ fileprivate struct GetTransactions: WalletBackendFormattedRequest {
         var sort: String?
         var filterByState: TransactionStateFilter?
         var includeRefreshes: Bool?
+    }
+
+    struct Response: Decodable {                    // list of transactions
+        var transactions: [Transaction]
+    }
+}
+enum TransactionStateFilter: String, Codable {
+    case done
+    case final          // done, aborted, expired, ...
+    case nonfinal       // pending, dialog, suspended, aborting
+}
+struct TransactionOffset: Codable {
+    var txID: String
+    var txTime: Timestamp
+}
+/// A request to get the transactions in the wallet's history.
+fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
+    func operation() -> String { "getTransactionsV2" }
+    func args() -> Args { Args(scopeInfo: scopeInfo,
+                           filterByState: filterByState,
+                        includeRefreshes: includeRefreshes,
+                                   limit: -limit,               // descending
+                     offsetTransactionId: offset?.txID,
+                         offsetTimestamp: offset?.txTime) }
+
+    var scopeInfo: ScopeInfo?
+    var filterByState: TransactionStateFilter?
+    var limit: Int
+    var offset: TransactionOffset?
+    var includeRefreshes: Bool?
+    struct Args: Encodable {
+        var scopeInfo: ScopeInfo?
+        var filterByState: TransactionStateFilter?
+        var includeRefreshes: Bool?
+        var limit: Int
+        var offsetTransactionId: String?
+        var offsetTimestamp: Timestamp?
     }
 
     struct Response: Decodable {                    // list of transactions
@@ -112,24 +140,41 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
+    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, // searchString: String? = nil,    <= never worked anyway
                           sort: String = "descending", filterByState: TransactionStateFilter? = nil,
               includeRefreshes: Bool = false, viewHandles: Bool = false)
-    async throws -> [Transaction] {
-        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, search: searchString,
+      async throws -> [Transaction] {
+        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, // search: searchString, <= never worked
                                            sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.transactions
     }
     /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsMA(_ stack: CallStack, scopeInfo: ScopeInfo, searchString: String? = nil,
+    @MainActor func transactionsM(_ stack: CallStack, scopeInfo: ScopeInfo, // searchString: String? = nil,
                                       sort: String = "descending", filterByState: TransactionStateFilter? = nil,
                                viewHandles: Bool = false)
-    async throws -> [Transaction] {    // M for MainActor
-        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, searchString: searchString,
+      async throws -> [Transaction] {    // M for MainActor
+        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, // searchString: searchString,
                                        sort: sort, filterByState: filterByState, viewHandles: viewHandles)
     }
-
+    /// ask wallet-core for its list of transactions filtered by searchString
+    func transactionsT2(_ stack: CallStack,
+                      scopeInfo: ScopeInfo,
+                  filterByState: TransactionStateFilter,
+                          limit: Int = 1_000_000,
+                         offset: TransactionOffset? = nil,
+               includeRefreshes: Bool = false,
+                    viewHandles: Bool = false)
+      async throws -> [Transaction] {
+        let request = GetTransactionsV2(scopeInfo: scopeInfo,
+                                    filterByState: filterByState,
+                                            limit: limit,
+                                           offset: offset,
+                                 includeRefreshes: includeRefreshes)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.transactions
+    }
+    // MARK: -
     /// abort the specified transaction from Wallet-Core. No networking involved
     func abortTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = AbortTransaction(transactionId: transactionId)
