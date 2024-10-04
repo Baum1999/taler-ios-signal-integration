@@ -60,31 +60,35 @@ struct BalancesSectionView {
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
     func loadRecent(_ stack: CallStack) async -> () {
-        if let transactions = try? await model.transactionsT(stack.push(),
-                                                   scopeInfo: balance.scopeInfo,
-//                                             filterByState: .done,            // TODO: .done
-                                            includeRefreshes: false) {
-            let recent = WalletModel.completedTransactions(transactions)
-            // TODO: only load the MAXRECENT most recent transactions
-            let slice = recent.prefix(MAXRECENT)         // already sorted
-            withAnimation { recentTransactions = Array(slice) }
+        if let transactions = try? await model.transactionsT2(stack.push("loadRecent - \(balance.scopeInfo.url?.trimURL)"),
+                                                    scopeInfo: balance.scopeInfo,
+                                                filterByState: .final,
+                                                        limit: MAXRECENT,
+                                             includeRefreshes: false) {
+//            let recent = WalletModel.completedTransactions(transactions)
+//            let slice = recent.prefix(MAXRECENT)         // already sorted
+//            withAnimation { recentTransactions = Array(slice) }
+            withAnimation { recentTransactions = transactions }
         }
     }
     func loadCompleted(_ stack: CallStack) async -> () {
-        if let transactions = try? await model.transactionsT(stack.push(),
-                                                   scopeInfo: balance.scopeInfo,
-//                                             filterByState: .final,           // TODO: .final
+        if let transactions = try? await model.transactionsT2(stack.push("loadCompleted - \(balance.scopeInfo.url?.trimURL)"),
+                                                    scopeInfo: balance.scopeInfo,
+                                                filterByState: .final,
                                             includeRefreshes: developerMode) {
-            let completed = WalletModel.completedTransactions(transactions)
-            withAnimation { completedTransactions = completed }
+//            let completed = WalletModel.completedTransactions(transactions)
+//            withAnimation { completedTransactions = completed }
+            withAnimation { completedTransactions = transactions }
         }
     }
     func loadPending(_ stack: CallStack) async -> () {
-        if let transactions = try? await model.transactionsT(stack.push(),
-                                                   scopeInfo: balance.scopeInfo,
-                                               filterByState: .nonfinal,
-                                            includeRefreshes: developerMode) {
-            withAnimation { pendingTransactions = WalletModel.pendingTransactions(transactions) }
+        if let transactions = try? await model.transactionsT2(stack.push("loadPending - \(balance.scopeInfo.url?.trimURL)"),
+                                                    scopeInfo: balance.scopeInfo,
+                                                filterByState: .nonfinal,
+                                             includeRefreshes: developerMode) {
+//            let pending = WalletModel.pendingTransactions(transactions)
+//            withAnimation { pendingTransactions = pending }
+            withAnimation { pendingTransactions = transactions }
         }
     }
 }

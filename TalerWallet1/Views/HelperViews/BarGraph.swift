@@ -41,8 +41,10 @@ struct BarGraphHeader: View {
             if let scopeInfo {
                 symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
                 // TODO: only load the 10 most recent transactions
-                if let response = try? await model.transactionsT(stack.push(".task - reload Transactions for \(scopeInfo.currency)"),
-                                                                 scopeInfo: scopeInfo) {
+                if let response = try? await model.transactionsT2(stack.push("BarGraphHeader - \(scopeInfo.url?.trimURL)"),
+                                                        scopeInfo: scopeInfo,
+                                                    filterByState: .done,
+                                                            limit: MAXBARS) {
                     completedTransactions = WalletModel.completedTransactions(response)
                 }
             }
