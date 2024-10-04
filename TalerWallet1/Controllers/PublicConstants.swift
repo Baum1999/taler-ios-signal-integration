@@ -54,13 +54,14 @@ public let DEMO = ".demo." + TALER
 public let TEST = ".test." + TALER
 public let HEAD = ".head." + TALER
 
+public let SANDBOX = "instances/sandbox/"
 public let DEMOBANK = HTTPS + "bank" + DEMO
 public let DEMOSHOP = HTTPS + "shop" + DEMO
-public let DEMOBACKEND = HTTPS + "backend" + DEMO
+public let DEMOBACKEND = HTTPS + "backend" + DEMO + SANDBOX
 public let DEMOEXCHANGE = HTTPS + "exchange" + DEMO
 public let TESTBANK = HTTPS + "bank" + TEST
 public let TESTSHOP = HTTPS + "shop" + TEST
-public let TESTBACKEND = HTTPS + "backend" + TEST
+public let TESTBACKEND = HTTPS + "backend" + TEST + SANDBOX
 public let TESTEXCHANGE = HTTPS + "exchange" + TEST
 public let HEADBANK = HTTPS + "bank" + HEAD
 public let HEADSHOP = HTTPS + "shop" + HEAD
