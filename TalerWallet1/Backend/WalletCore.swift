@@ -145,7 +145,7 @@ extension WalletCore {
         }
         do {
             let jsonData = try JSONEncoder().encode(result)
-            symLog.log("id:\(requestId)  \(result)")
+            symLog.log("\"id\":\(requestId)  \(result)")
 //            logger.info(result)   TODO: log result
             completion(requestId, timeSent, jsonData, nil)
         } catch {        // JSON encoding of response.result failed / should never happen
