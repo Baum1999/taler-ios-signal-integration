@@ -101,7 +101,9 @@ struct P2pReceiveURIView: View {
         .task { // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
             symLog.log(".task")
             if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {
-                exchange = try? await model.getExchangeByUrl(url: ppResponse.exchangeBaseUrl)
+                let baseUrl = ppResponse.exchangeBaseUrl
+                exchange = try? await model.getExchangeByUrl(url: baseUrl)
+                await controller.checkCurrencyInfo(for: baseUrl, model: model)
                 peerPushCreditResponse = ppResponse
             } else {
                 peerPushCreditResponse = nil

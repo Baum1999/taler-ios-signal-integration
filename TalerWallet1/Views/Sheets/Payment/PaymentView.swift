@@ -218,11 +218,11 @@ struct PaymentView: View {
             .task { // this runs only once
                 symLog.log(".task")
                 if template {
-                    if let result = try? await model.preparePayForTemplateM(url.absoluteString,
+                    if let payResponse = try? await model.preparePayForTemplateM(url.absoluteString,
                                                                      amount: amountIsEditable ? amountToTransfer : nil,
                                                                     summary: summaryIsEditable ? summary : nil) {
-                        await checkCurrencyInfo(for: result)
-                        preparePayResult = result
+                        await checkCurrencyInfo(for: payResponse)
+                        preparePayResult = payResponse
                     }
                 } else {
                     if let result = try? await model.preparePayForUriM(url.absoluteString) {
