@@ -31,6 +31,7 @@ struct ExchangeSectionView: View {
     @State private var currencySymbol: String = UNKNOWN
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
+    @State private var showAlert: Bool = false
     @State private var purge: Bool = false
 
     func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
@@ -52,16 +53,17 @@ struct ExchangeSectionView: View {
 
     private func deleteExchange() {
         disabled = true     // don't try this more than once
-        let doPurge = purge
         Task { // runs on MainActor
             let baseUrl = exchange.exchangeBaseUrl
-            if let _ = try? await model.deleteExchange(url: baseUrl, purge: doPurge, viewHandles: !doPurge) {
+            if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
+                purge = false
                 symLog.log("deleted \(baseUrl.trimURL)")
                 didDelete = true             // change button text
                 NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
                 NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
             } else {
                 purge = true
+                showAlert = true
                 disabled = false
             }
         }
@@ -114,13 +116,13 @@ struct ExchangeSectionView: View {
                              disabled: $disabled,
                                action: deleteExchange)
             .padding(.top)
-            .alert(warningText2, isPresented: $purge, actions: {
+            .alert(warningText2, isPresented: $showAlert, actions: {
                 Button("Cancel", role: .cancel) {
-                    purge = false
+                    showAlert = false
                 }
                 Button(buttonTitle) {
                     deleteExchange()
-                    purge = false
+                    showAlert = false
                 }
               }, message: { Text("You will loose all \(currency) of this payment provider") }
             )
@@ -136,6 +138,10 @@ struct ExchangeSectionView: View {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
             currencyName = currencyInfo.scope.currency
             currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
+        }
+        .onDisappear() {
+            disabled = false
+            purge = false
         }
     }
 }
