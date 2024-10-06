@@ -391,6 +391,7 @@ extension MainView {
                         .onNotification(.RequestAction) { navModel.actionSelected = 2 }
                         .onNotification(.DepositAction) { navModel.actionSelected = 3 }
                         .onNotification(.WithdrawAction){ navModel.actionSelected = 4 }
+                        .onNotification(.QrScanAction)  { cameraAction() }
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.balances)

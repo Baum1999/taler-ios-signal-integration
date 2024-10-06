@@ -126,4 +126,5 @@ extension Notification.Name {
     static let RequestAction = Notification.Name("requestAction")
     static let DepositAction = Notification.Name("depositAction")
     static let WithdrawAction = Notification.Name("withdrawAction")
+    static let QrScanAction = Notification.Name("qrScanAction")
 }

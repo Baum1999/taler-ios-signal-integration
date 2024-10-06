@@ -33,6 +33,13 @@ struct ActionsSheet: View {
         return false
     }
 
+    @MainActor
+    func qrButtonTapped() {
+        dismissTop(stack.push())
+        NotificationCenter.default.post(name: .QrScanAction,
+                                        object: nil)                              // will trigger NavigationLink
+    }
+
     var body: some View {
         VStack {
             let width = UIScreen.screenWidth / 3
@@ -66,6 +73,10 @@ struct ActionsSheet: View {
                 .accessibilityHint(String(localized: "Will go to the demo shop website."))
                 .padding(.bottom, 20)
             }
+
+            QRButton(action: qrButtonTapped)
+                .lineLimit(5)
+                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
 
             SendRequestV(stack: stack.push(),
                       balances: $balances,
