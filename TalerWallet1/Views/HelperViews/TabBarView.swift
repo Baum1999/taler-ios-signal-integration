@@ -47,6 +47,7 @@ struct TabBarView: View {
         .accessibilityElement(children: .combine)
         .accessibility(label: Text(tab.title))
         .accessibility(addTraits: [.isButton])
+        .accessibility(removeTraits: [.isImage])
     }
 
     var body: some View {
