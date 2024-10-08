@@ -21,6 +21,7 @@ struct ActionsSheet: View {
     let cameraAction: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
 
     private var hasKudos: Bool {
         for balance in balances {
@@ -48,7 +49,7 @@ struct ActionsSheet: View {
                 .frame(width: width + 6.5, height: 5)
                 .padding(.bottom, 10)
 
-            if hasKudos {
+            if hasKudos && !hideSpendingHint {
                 if !minimalistic && showSpendingHint {
                     Text("You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
                         .talerFont(.body)
@@ -57,7 +58,7 @@ struct ActionsSheet: View {
                 }
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let action = {
-                    showSpendingHint = false
+                    hideSpendingHint = true
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
                     dismissTop(stack.push())
                 }

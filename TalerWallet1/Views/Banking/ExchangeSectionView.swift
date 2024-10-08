@@ -24,6 +24,7 @@ struct ExchangeSectionView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
 
     @State private var shouldReloadBalances: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -61,6 +62,7 @@ struct ExchangeSectionView: View {
                 didDelete = true             // change button text
                 NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
                 NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
+                hideSpendingHint = false
             } else {
                 purge = true
                 showAlert = true
