@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import SymLog
@@ -9,18 +12,17 @@ import os.log
 struct Sheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    var sheetView: AnyView
+
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
     @EnvironmentObject private var model: WalletModel
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
-
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-
-    var sheetView: AnyView
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "Sheet")
 

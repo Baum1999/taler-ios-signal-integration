@@ -892,8 +892,8 @@
 			children = (
 				4E2B337C2C8B1D5500186A3E /* ActionsSheet.swift */,
 				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
-				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
+				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 			);
 			path = Actions;
 			sourceTree = "<group>";

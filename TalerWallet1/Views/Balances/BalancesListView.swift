@@ -18,7 +18,6 @@ struct BalancesListView: View {
     @Binding var selectedBalance: Balance?
 //    @Binding var shouldReloadPending: Int
     @Binding var shouldReloadBalances: Int
-    let cameraAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -63,8 +62,7 @@ struct BalancesListView: View {
                                  sectionCount: count,
                              amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                       summary: $summary,
-                         shouldReloadBalances: $shouldReloadBalances,
-                                 cameraAction: cameraAction)
+                         shouldReloadBalances: $shouldReloadBalances)
                 }
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
@@ -83,7 +81,6 @@ struct BalancesListView: View {
             }
         }
 #endif
-        .navigationBarItems(trailing: QRButton(action: cameraAction))
         .task(id: shouldReloadBalances) {
             symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
             let invalidateCache = (lastReloadedBalances != shouldReloadBalances)

@@ -17,7 +17,6 @@ struct SendAmountV: View {
     @Binding var selectedBalance: Balance?      // selected balance when the action button is tapped in Transactions
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
-    let cameraAction: () -> Void
 
     @State private var balanceIndex = 0
     @State private var nonZeroBalances: [Balance] = []
@@ -50,8 +49,7 @@ struct SendAmountV: View {
                             balance: $balance,
                        balanceIndex: $balanceIndex,
                    amountToTransfer: $amountToTransfer,
-                            summary: $summary,
-                       cameraAction: cameraAction)
+                            summary: $summary)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
@@ -87,7 +85,6 @@ struct SendAmountContent: View {
     @Binding var balanceIndex: Int
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
-    let cameraAction: () -> Void
 
     // TODO: call getMaxPeerPushDebitAmountM
 
@@ -265,7 +262,6 @@ struct SendAmountContent: View {
         .onDisappear {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
-        .navigationBarItems(trailing: QRButton(action: cameraAction))
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
             if let balance {
                 scopeInfo = balance.scopeInfo
@@ -327,9 +323,6 @@ fileprivate struct Preview_Content: View {
     @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
     @State private var noBalance: Balance? = nil
 
-    private func checkCameraAvailable() -> Void {
-        // Open Camera when QR-Button was tapped
-    }
     var body: some View {
         let amount = Amount(currency: DEMOCURRENCY, cent: 1000)
         let pending = Amount(currency: DEMOCURRENCY, cent: 0)
@@ -352,8 +345,7 @@ fileprivate struct Preview_Content: View {
                  balances: [balance],
           selectedBalance: $noBalance,
          amountToTransfer: $amountToPreview,
-                  summary: $summary,
-             cameraAction: checkCameraAvailable)
+                  summary: $summary)
     }
 }
 

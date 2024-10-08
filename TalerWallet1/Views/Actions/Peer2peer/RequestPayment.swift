@@ -16,7 +16,6 @@ struct RequestPayment: View {
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
     let scopeInfo: ScopeInfo
-    let cameraAction: () -> Void
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -169,7 +168,6 @@ struct RequestPayment: View {
         .onDisappear {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
-        .navigationBarItems(trailing: QRButton(action: cameraAction))
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {
 //                if let url = scopeInfo.url {

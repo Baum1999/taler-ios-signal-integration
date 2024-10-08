@@ -18,7 +18,6 @@ struct SendRequestV: View {
     //    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
     @Binding var summary: String
-    let cameraAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller

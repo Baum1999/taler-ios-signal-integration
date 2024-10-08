@@ -339,16 +339,14 @@ extension MainView {
                                     balances: balances,
                              selectedBalance: $selectedBalance,             // if nil shows currency picker
                             amountToTransfer: $amountToTransfer,            // currency needs to be updated!
-                                     summary: $summary,
-                                cameraAction: cameraAction)
+                                     summary: $summary)
 
             let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
                                           balances: balances,
                                    selectedBalance: $selectedBalance,
                                   amountToTransfer: $amountToTransfer,      // currency needs to be updated!
                                            summary: $summary,
-                                         scopeInfo: scope,
-                                      cameraAction: cameraAction)
+                                         scopeInfo: scope)
 
             let depositDest = DepositIbanV(stack: stack.push(),
                                         balances: balances,
@@ -374,8 +372,7 @@ extension MainView {
                                       balances: $balances,
                                selectedBalance: $selectedBalance,
 //                         shouldReloadPending: $shouldReloadPending,
-                          shouldReloadBalances: $shouldReloadBalances,
-                                  cameraAction: cameraAction)
+                          shouldReloadBalances: $shouldReloadBalances)
                         .navigationTitle(balancesTitle)
                         .background( Group {
                             NavigationLink(destination: sendDest, tag: 1, selection: $navModel.actionSelected)

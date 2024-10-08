@@ -39,8 +39,7 @@ struct BarGraphHeader: View {
 //        .headerProminence(.increased)         // unfortunately this is not useful
         .task(id: shouldReloadBalances + 2_000_000) {
             if let scopeInfo {
-                symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - reload Transactions")
-                // TODO: only load the 10 most recent transactions
+                symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - load \(MAXBARS) Transactions")
                 if let response = try? await model.transactionsT2(stack.push("BarGraphHeader - \(scopeInfo.url?.trimURL)"),
                                                         scopeInfo: scopeInfo,
                                                     filterByState: .done,

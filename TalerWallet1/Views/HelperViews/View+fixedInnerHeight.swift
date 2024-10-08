@@ -1,5 +1,6 @@
 /* MIT License
- * Copyright (c) 2023 mevmev
+ * Copyright (c) 2023 mevmev, Rahul Bir + Michal Šrůtek, jnpdx
+ * https://stackoverflow.com/questions/74471576/make-sheet-the-exact-size-of-the-content-inside
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +24,7 @@ import SwiftUI
 import UIKit
 
 struct InnerHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 200
+    static var defaultValue: CGFloat = .zero
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }

@@ -81,8 +81,7 @@ struct ActionsSheet: View {
             SendRequestV(stack: stack.push(),
                       balances: $balances,
               amountToTransfer: $amountToTransfer,   // does still have the wrong currency
-                       summary: $summary,
-                  cameraAction: cameraAction)
+                       summary: $summary)
 
             DepositWithdrawV(stack: stack.push(),
                           balances: $balances,

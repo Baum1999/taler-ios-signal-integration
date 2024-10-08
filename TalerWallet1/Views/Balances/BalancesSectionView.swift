@@ -24,7 +24,6 @@ struct BalancesSectionView {
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
     @Binding var shouldReloadBalances: Int
-    let cameraAction: () -> Void
 
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme

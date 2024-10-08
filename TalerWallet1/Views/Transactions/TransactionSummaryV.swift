@@ -57,9 +57,9 @@ struct TransactionSummaryV: View {
     func loadTransaction() async {
         if let reloadedTransaction = try? await reloadAction(transactionId, false) {
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
-            withAnimation() { transaction = reloadedTransaction; viewId = UUID() }      // redraw
+            withAnimation { transaction = reloadedTransaction; viewId = UUID() }      // redraw
         } else {
-            withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+            withAnimation{ transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
         }
     }
 
@@ -95,7 +95,7 @@ struct TransactionSummaryV: View {
                 let newMajor = transition.newTxState.major
                 Task { // runs on MainActor
                        // flush the screen first, then reload
-                    withAnimation() { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                    withAnimation { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
                     symLog.log("newState: \(newMajor), reloading transaction")
                     await loadTransaction()
                 }
