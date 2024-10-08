@@ -70,23 +70,15 @@ struct SendRequestV: View {
                                       recvTitle: requTitle,
                                        recvType: .peerPullCredit,
                                        recvA11y: requTitle,//1.tabbed(oneLine: true),
-                                 fitsSideBySide: false,
                                       lineLimit: 5,
                                    sendDisabled: !canSend,
                                      sendAction: { controller.frontendState = -1; selectAndUpdate(1)  },
                                      recvAction: { controller.frontendState = 1; selectAndUpdate(2) })
         Group {
             if #available(iOS 16.0, *) {
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: HSPACING) {
-                        twoRowButtons.makeCopy(fitsSideBySide: true)
-                    }
-//                        .border(.red)
-                    VStack { twoRowButtons }
-//                        .border(.red)
-                }
+                twoRowButtons
             } else { // view for iOS 15
-                VStack { twoRowButtons }
+                twoRowButtons
             }
         }
     }

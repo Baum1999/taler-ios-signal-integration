@@ -16,39 +16,68 @@ struct TypeButton: View {
     let disabled: Bool
     let action: () -> Void
 
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
     var body: some View {
+#if DEBUG
+        let debug = 1==0
+        let red = debug ? Color.red : Color.clear
+        let green = debug ? Color.green : Color.clear
+        let blue = debug ? Color.blue : Color.clear
+        let orange = debug ? Color.orange : Color.clear
+#endif
+        let badge = ButtonIconBadge(type: type, foreColor: .accentColor, done: false)
         let hLayout = HStack {
-            ButtonIconBadge(type: type, foreColor: .accentColor, done: false)
+            badge
             Spacer()
             Text(title)
+                .fixedSize(horizontal: true, vertical: false)
             Spacer()
         }
+#if DEBUG
+            .border(red)
+#endif
 
         let vLayout = VStack {
             let fragments = title.components(separatedBy: "\n")
             if fragments.count > 1 {
                 Text(fragments[0])
                 HStack {
-                    ButtonIconBadge(type: type, foreColor: .accentColor, done: false)
+                    badge
                     Spacer()
                     Text(fragments[1])
+                        .fixedSize(horizontal: true, vertical: false)
                     Spacer()
                 }
+#if DEBUG
+                .border(orange)
+#endif
                 if fragments.count > 2 {
                     Text(fragments[2])
+//                        .fixedSize(horizontal: true, vertical: false)
+#if DEBUG
+                        .border(green)
+#endif
                 }
             } else {
                 hLayout
             }
         }
+#if DEBUG
+            .border(red)
+#endif
 
         Button(action: action) {
-            if #available(iOS 16.0, *) {
-                ViewThatFits(in: .horizontal) {
-                    hLayout
-                    vLayout
-                }
-            } else { vLayout } // view for iOS 15
+            if minimalistic {
+                badge
+            } else {
+                if #available(iOS 16.0, *) {
+                    ViewThatFits(in: .horizontal) {
+                        hLayout
+                        vLayout
+                    }
+                } else { vLayout } // view for iOS 15
+            }
         }
         .accessibilityLabel(Text(a11y))
         .lineLimit(lineLimit)
@@ -69,44 +98,50 @@ struct TwoRowButtons: View {
     let recvTitle: String
     var recvType: TransactionType
     let recvA11y: String
-    let fitsSideBySide: Bool            // whether both buttons fit in one line
     let lineLimit: Int
     let sendDisabled: Bool
     let sendAction: () -> Void
     let recvAction: () -> Void
 
-//    @Environment(\.sizeCategory) var sizeCategory
-    func makeCopy(fitsSideBySide: Bool) -> TwoRowButtons {
-        TwoRowButtons(stack: stack.push(),
-                  sendTitle: sendTitle,
-                   sendType: sendType,
-                   sendA11y: sendA11y,
-                  recvTitle: recvTitle,
-                   recvType: recvType,
-                   recvA11y: recvA11y,
-             fitsSideBySide: fitsSideBySide,
-                  lineLimit: lineLimit,
-               sendDisabled: sendDisabled,
-                 sendAction: sendAction,
-                 recvAction: recvAction)
+    func sendButton(_ title: String) -> TypeButton {
+        TypeButton(title: title,
+                    a11y: sendA11y,
+               lineLimit: lineLimit,
+                    type: sendType,
+                disabled: sendDisabled,
+                  action: sendAction)
+    }
+
+    func recvButton(_ title: String) -> TypeButton {
+        TypeButton(title: title,
+                    a11y: recvA11y,
+               lineLimit: lineLimit,
+                    type: recvType,
+                disabled: false,
+                  action: recvAction)
     }
 
     var body: some View {
-        Group {
-            let sendButtonTitle = sendTitle.tabbed(oneLine: !fitsSideBySide)
-            TypeButton(title: sendButtonTitle,
-                        a11y: sendA11y,
-                   lineLimit: lineLimit,
-                        type: sendType,
-                    disabled: sendDisabled,
-                      action: sendAction)
-            let recvButtonTitle = recvTitle.tabbed(oneLine: !fitsSideBySide)
-            TypeButton(title: recvButtonTitle,
-                        a11y: recvA11y,
-                   lineLimit: lineLimit,
-                        type: recvType,
-                    disabled: false,
-                      action: recvAction)
+        let hLayout = HStack(spacing: HSPACING) {
+            // side by side, text in 1+ lines (\t -> \n)
+            sendButton(sendTitle.tabbed(oneLine: false))
+            recvButton(recvTitle.tabbed(oneLine: false))
+        }
+        let vLayout = VStack {
+            // one below the other, text in one line (\t -> " ")
+            sendButton(sendTitle.tabbed(oneLine: true))
+            recvButton(recvTitle.tabbed(oneLine: true))
+        }
+
+        if #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                hLayout
+//                    .border(.green)
+                vLayout
+//                    .border(.red)
+            }
+        } else { // iOS 15 has no ViewThatFits
+            vLayout
         }
     }
 }
@@ -122,7 +157,6 @@ struct TwoRowButtons_Previews: PreviewProvider {
                       recvTitle: "Request " + LONGCURRENCY,
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + LONGCURRENCY,
-                 fitsSideBySide: false,
                       lineLimit: 2, sendDisabled: true,
                      sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
@@ -133,7 +167,6 @@ struct TwoRowButtons_Previews: PreviewProvider {
                       recvTitle: "Request " + DEMOCURRENCY,
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + DEMOCURRENCY,
-                 fitsSideBySide: true,
                       lineLimit: 2, sendDisabled: true,
                      sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)

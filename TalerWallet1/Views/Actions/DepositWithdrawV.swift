@@ -68,21 +68,15 @@ struct DepositWithdrawV: View {
                                       recvTitle: withdrawTitle,
                                        recvType: .withdrawal,
                                        recvA11y: withdrawTitle,//1.tabbed(oneLine: true),
-                                 fitsSideBySide: false,
                                       lineLimit: 5,
                                    sendDisabled: !canDeposit,
                                      sendAction: { selectAndUpdate(3) },
                                      recvAction: { selectAndUpdate(4) })
         Group {
             if #available(iOS 16.0, *) {
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: HSPACING) {
-                        twoRowButtons.makeCopy(fitsSideBySide: true)
-                    }
-                    VStack { twoRowButtons }
-                }
+                twoRowButtons
             } else { // view for iOS 15
-                VStack { twoRowButtons }
+                twoRowButtons
             }
         }
     }
