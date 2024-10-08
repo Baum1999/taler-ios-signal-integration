@@ -5,7 +5,7 @@
 import SwiftUI
 import SymLog
 
-let MAXBARS = 10
+let MAXBARS = 15
 
 struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
@@ -44,7 +44,9 @@ struct BarGraphHeader: View {
                                                         scopeInfo: scopeInfo,
                                                     filterByState: .done,
                                                             limit: MAXBARS) {
-                    completedTransactions = WalletModel.completedTransactions(response)
+//                    let completed = WalletModel.completedTransactions(response)
+//                    completedTransactions = completed
+                    completedTransactions = response
                 }
             }
         }
