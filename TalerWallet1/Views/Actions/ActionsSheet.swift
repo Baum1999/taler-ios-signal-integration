@@ -75,7 +75,7 @@ struct ActionsSheet: View {
                 .padding(.bottom, 20)
             }
 
-            QRButton(action: qrButtonTapped)
+            QRButton(isNavBarItem: false, action: qrButtonTapped)
                 .lineLimit(5)
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
 

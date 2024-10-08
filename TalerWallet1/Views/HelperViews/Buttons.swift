@@ -58,20 +58,37 @@ struct LinkButton: View {
 }
 
 struct QRButton : View  {
+    let isNavBarItem: Bool
     let action: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
+        let scanText = String(localized: "Scan QR codes", comment: "Button title, a11y")
+        let qr = "qrcode.viewfinder"
         Button(action: action) {
-            if !minimalistic {
-                Text("Scan QR")
-                    .talerFont(.title3)
+            if isNavBarItem {
+                if !minimalistic {
+                    Text("Scan QR", comment: "Button title")
+                        .talerFont(.title3)
+                }
+                Text("\(Image(systemName: qr))")
+                    .talerFont(.title2)
+            } else if minimalistic {
+                let width = UIScreen.screenWidth / 7
+                Text("\(Image(systemName: qr))")
+                    .talerFont(.largeTitle)
+                    .padding(.horizontal, width)
+//                    .padding(.vertical)
+            } else {
+                HStack {
+                    Text("\(Image(systemName: qr))   ")
+                        .talerFont(.title)
+                    Text("\(scanText)  ")
+                }//.padding()
             }
-            Image(systemName: "qrcode.viewfinder")
-                .talerFont(.title2)
         }
-        .accessibilityLabel("Scan QR codes")
+        .accessibilityLabel(scanText)
     }
 }
 
