@@ -13,9 +13,8 @@ struct RequestPayment: View {
     let balances: [Balance]
     @Binding var selectedBalance: Balance?
 
-    @Binding var amountToTransfer: Amount
+    @Binding var amountLastUsed: Amount
     @Binding var summary: String
-    let scopeInfo: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -27,12 +26,14 @@ struct RequestPayment: View {
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var exchange: Exchange? = nil                                // wg. noFees
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
+    @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -143,6 +144,7 @@ struct RequestPayment: View {
                amountAvailable: $amountZero,
                    amountLabel: amountLabel,
               amountToTransfer: $amountToTransfer,
+                amountLastUsed: amountLastUsed,
                        wireFee: nil,
                        summary: $summary,
                 shortcutAction: shortcutAction,

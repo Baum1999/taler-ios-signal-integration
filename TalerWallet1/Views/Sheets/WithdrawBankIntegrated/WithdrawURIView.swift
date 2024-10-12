@@ -29,6 +29,7 @@ struct WithdrawURIView: View {
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
@@ -147,6 +148,7 @@ struct WithdrawURIView: View {
                                amountAvailable: $amountZero,
                                    amountLabel: amountLabel,
                               amountToTransfer: $amountToTransfer,
+                                amountLastUsed: amountLastUsed,
                                        wireFee: wireFee,
                                        summary: $summary,
                                 shortcutAction: shortcutAction,

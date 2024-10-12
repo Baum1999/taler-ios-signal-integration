@@ -21,7 +21,7 @@ struct DepositIbanV: View {
 //    let amountAvailable: Amount?
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
-    @Binding var amountToTransfer: Amount
+    @Binding var amountLastUsed: Amount
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -39,6 +39,7 @@ struct DepositIbanV: View {
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func buttonTitle(_ amount: Amount) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
@@ -69,7 +70,8 @@ struct DepositIbanV: View {
                  amountAvailable: amountAvailable,
 //                     depositIBAN: $depositIBAN,
 //                   accountHolder: $accountHolder,
-                amountToTransfer: $amountToTransfer)
+                amountToTransfer: $amountToTransfer,
+                  amountLastUsed: amountLastUsed)
         }
         ScrollView { VStack (alignment: .leading, spacing: 6) {
             if let feeIsNotZero {       // don't show fee if nil

@@ -62,6 +62,7 @@ struct ShortcutButton: View {
 struct CurrencyInputView: View {
     @Binding var currencyInfo: CurrencyInfo
     @Binding var amount: Amount         // the `value´
+    let amountLastUsed: Amount
     let available: Amount?
     let title: String
     let shortcutAction: ((_ amount: Amount) -> Void)?
@@ -179,11 +180,13 @@ struct CurrencyInputView: View {
 fileprivate struct Previews: PreviewProvider {
     @MainActor
     struct StateContainer: View {
-        @State var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 0)
+        @State var amountToPreview = Amount(currency: LONGCURRENCY, cent: 0)
+        @State var amountLastUsed = Amount(currency: LONGCURRENCY, cent: 170)
         @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
         var body: some View {
             CurrencyInputView(currencyInfo: $currencyInfoL,
-                                    amount: $amountToTransfer,
+                                    amount: $amountToPreview,
+                            amountLastUsed: amountLastUsed,
                                  available: Amount(currency: LONGCURRENCY, cent: 2000),
                                      title: "Amount to withdraw:",
                             shortcutAction: nil)

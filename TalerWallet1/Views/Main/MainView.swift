@@ -256,7 +256,8 @@ extension MainView {
 
         @State private var showActionSheet = false
         @State private var sheetHeight: CGFloat = .zero
-        @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+        @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)  // Update currency when used
+        @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = EMPTYSTRING
         @State private var showSpendingHint = true
         @State private var myExchange: Exchange? = nil
@@ -341,15 +342,14 @@ extension MainView {
             let sendDest = SendAmountV(stack: stack.push("\(Self.className())()"),
                                     balances: balances,
                              selectedBalance: $selectedBalance,             // if nil shows currency picker
-                            amountToTransfer: $amountToTransfer,            // currency needs to be updated!
+                              amountLastUsed: $amountLastUsed,              // currency needs to be updated!
                                      summary: $summary)
 
             let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
                                           balances: balances,
                                    selectedBalance: $selectedBalance,
-                                  amountToTransfer: $amountToTransfer,      // currency needs to be updated!
-                                           summary: $summary,
-                                         scopeInfo: scope)
+                                    amountLastUsed: $amountLastUsed,      // currency needs to be updated!
+                                           summary: $summary)
 
             let depositDest = DepositIbanV(stack: stack.push(),
                                         balances: balances,
@@ -358,7 +358,7 @@ extension MainView {
                                     feeIsNotZero: nil,
                 //                   depositIBAN: $depositIBAN,
                 //                 accountHolder: $accountHolder,
-                                amountToTransfer: $amountToTransfer)
+                                  amountLastUsed: $amountLastUsed)
 
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(),
                                                  balances: balances,
@@ -366,7 +366,8 @@ extension MainView {
                                                   isSheet: false,
                                                 scopeInfo: scope,
                                                  exchange: $myExchange,
-                                         amountToTransfer: $amountToTransfer)
+                                         amountToTransfer: $amountToTransfer,
+                                           amountLastUsed: $amountLastUsed)
 
             ZStack(alignment: .bottom) {
                 TabView(selection: tabSelection()) {

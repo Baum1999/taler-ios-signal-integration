@@ -21,6 +21,7 @@ struct DepositAmountV: View {
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
     @Binding var amountToTransfer: Amount
+    let amountLastUsed: Amount
 //    let scopeInfo: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
@@ -109,6 +110,7 @@ struct DepositAmountV: View {
                     .padding(.bottom, 2)
                 CurrencyInputView(currencyInfo: $currencyInfo,
                                         amount: $amountToTransfer,
+                                amountLastUsed: amountLastUsed,
                                      available: nil,  // amountAvailable,
                                          title: minimalistic ? String(localized: "Amount:")
                                                              : String(localized: "Amount to deposit:"),

@@ -33,10 +33,10 @@ struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
-
     @Binding var amountAvailable: Amount
     let amountLabel: String
     @Binding var amountToTransfer: Amount
+    let amountLastUsed: Amount
     let wireFee: Amount?
     @Binding var summary: String
 //    @Binding var insufficient: Bool
@@ -97,6 +97,7 @@ struct AmountInputV: View {
 //            }
             CurrencyInputView(currencyInfo: $currencyInfo,
                                     amount: $amountToTransfer,
+                            amountLastUsed: amountLastUsed,
                                  available: amountAvailable,
                                      title: amountLabel,
                             shortcutAction: shortcutAction)

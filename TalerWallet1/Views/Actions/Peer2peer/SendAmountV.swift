@@ -15,7 +15,7 @@ struct SendAmountV: View {
     let stack: CallStack
     let balances: [Balance]
     @Binding var selectedBalance: Balance?      // selected balance when the action button is tapped in Transactions
-    @Binding var amountToTransfer: Amount
+    @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
     @State private var balanceIndex = 0
@@ -48,7 +48,7 @@ struct SendAmountV: View {
             SendAmountContent(stack: stack.push(),
                             balance: $balance,
                        balanceIndex: $balanceIndex,
-                   amountToTransfer: $amountToTransfer,
+                     amountLastUsed: $amountLastUsed,
                             summary: $summary)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -83,7 +83,7 @@ struct SendAmountContent: View {
     let stack: CallStack
     @Binding var balance: Balance?
     @Binding var balanceIndex: Int
-    @Binding var amountToTransfer: Amount
+    @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
     // TODO: call getMaxPeerPushDebitAmountM
@@ -101,6 +101,7 @@ struct SendAmountContent: View {
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
@@ -225,6 +226,7 @@ struct SendAmountContent: View {
                        amountAvailable: $amountAvailable,
                            amountLabel: amountLabel,
                       amountToTransfer: $amountToTransfer,
+                        amountLastUsed: amountLastUsed,
                                wireFee: nil,
                                summary: $summary,
                         shortcutAction: shortcutAction,
@@ -344,7 +346,7 @@ fileprivate struct Preview_Content: View {
         SendAmountV(stack: CallStack("Preview"),
                  balances: [balance],
           selectedBalance: $noBalance,
-         amountToTransfer: $amountToPreview,
+           amountLastUsed: $amountToPreview,
                   summary: $summary)
     }
 }

@@ -22,6 +22,7 @@ struct ManualWithdraw: View {
     let scopeInfo: ScopeInfo?
     @Binding var exchange: Exchange?
     @Binding var amountToTransfer: Amount
+    @Binding var amountLastUsed: Amount
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -79,6 +80,7 @@ struct ManualWithdraw: View {
                 if tosAccepted {
                     CurrencyInputView(currencyInfo: $currencyInfo,
                                             amount: $amountToTransfer,
+                                    amountLastUsed: amountLastUsed,
                                          available: nil,
                                              title: minimalistic ? String(localized: "Amount:")
                                                                  : String(localized: "Amount to withdraw:"),

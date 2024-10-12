@@ -33,6 +33,7 @@ struct PayTemplateV: View {
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
+    @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // TODO: set correct available amount (like in SendAmountV)
     @State private var shortcutSelected = false
     @State private var buttonSelected1 = false
@@ -138,6 +139,7 @@ struct PayTemplateV: View {
                                      amountAvailable: $amountAvailable,
                                          amountLabel: amountLabel,
                                     amountToTransfer: $amountToTransfer,
+                                      amountLastUsed: amountLastUsed,
                                              wireFee: nil,
                                              summary: $summary,
                                       shortcutAction: shortcutAction,

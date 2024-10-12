@@ -22,6 +22,7 @@ struct WithdrawExchangeV: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var exchange: Exchange? = nil
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)
 
     let navTitle = String(localized: "Checking Link")
 
@@ -40,7 +41,8 @@ struct WithdrawExchangeV: View {
                              isSheet: true,
                            scopeInfo: exchange.scopeInfo,
                             exchange: $exchange,
-                    amountToTransfer: $amountToTransfer)
+                    amountToTransfer: $amountToTransfer,
+                      amountLastUsed: $amountLastUsed)
             }
             .task(id: controller.currencyTicker) {
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
