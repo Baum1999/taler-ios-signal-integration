@@ -31,18 +31,15 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 }
 
 extension View {
-    @available(iOS 16.0, *)
-    func fixedInnerHeight(_ sheetHeight: Binding<CGFloat>) -> some View {
-        padding()
-            .overlay {      // .background doesn't work
+    func innerHeight(_ height: Binding<CGFloat>) -> some View {
+        overlay {      // background doesn't work for sheets
                 GeometryReader { proxy in
                     Color.clear.preference(key: InnerHeightPreferenceKey.self, value: proxy.size.height)
                 }
             }
             .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
 //                print("InnerHeightPreferenceKey \(newHeight)")
-                sheetHeight.wrappedValue = newHeight
+            height.wrappedValue = newHeight
             }
-            .presentationDetents([.height(sheetHeight.wrappedValue)])
     }
 }

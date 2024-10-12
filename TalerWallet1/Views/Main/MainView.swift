@@ -40,12 +40,13 @@ struct MainView: View {
 
     @State private var balances: [Balance] = []
     @State private var selectedBalance: Balance? = nil
-    @State private var sheetPresented = false
     @State private var urlToOpen: URL? = nil
-    @State private var showQRScanner: Bool = false
-    @State private var showCameraAlert: Bool = false
+    @State private var sheetPresented = false
     @State private var showActionSheet = false
     @State private var showScanner = false
+//    @State private var showCameraAlert: Bool = false
+    @State private var qrButtonTapped = false
+    @State private var innerHeight: CGFloat = .zero
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -73,18 +74,12 @@ struct MainView: View {
                    showScanner: $showScanner)
                     .onAppear() {
 #if DEBUG
-                        if playSoundsI != 0  && playSoundsB && !soundPlayed {
-                            controller.playSound(1008)     // Startup chime
-                        }
-#endif
-                        soundPlayed = true
+                    if playSoundsI != 0  && playSoundsB && !soundPlayed {
+                        controller.playSound(1008)     // Startup chime
                     }
-                    .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
-                        let sheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                                 balances: $balances,
-                                          selectedBalance: $selectedBalance))
-                        Sheet(stack: stack.push(), sheetView: sheet)
-                    } // sheet
+#endif
+                    soundPlayed = true
+                }
             } else if controller.backendState == .error {
                 ErrorView(errortext: nil)            // TODO: show Error View
             } else {
@@ -120,6 +115,51 @@ struct MainView: View {
                 }.interactiveDismissDisabled()
             }
         }
+        .onChange(of: qrButtonTapped) { tapped in
+            if tapped {
+                let delay = if #available(iOS 16.4, *) { 0.5 } else { 0.01 }
+                withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
+                    showScanner = true      // switch to qrSheet => camera on
+        }   }   }
+        .sheet(isPresented: $showActionSheet,
+               onDismiss: { showScanner = false; qrButtonTapped = false }
+        ) {
+            let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+                                          balances: $balances,
+                                          selectedBalance: $selectedBalance))
+            if #available(iOS 16.4, *) {
+                if showScanner {
+                    let _ = logger.log("❗️showScanner: .large❗️")
+                    Sheet(stack: stack.push(), sheetView: qrSheet)
+                        .presentationDetents([.large])
+                        .transition(.opacity)
+                } else {
+                    let _ = logger.log("❗️actionsSheet: small❗️")
+                    DualHeightSheet(stack: stack.push(),
+                                 balances: $balances,
+                           qrButtonTapped: $qrButtonTapped)
+                }
+            } else {
+                if showScanner {
+                    Sheet(stack: stack.push(), sheetView: qrSheet)
+                        .transition(.opacity)
+                } else {
+                    Group {
+                        Spacer()
+                        ScrollView {
+                            ActionsSheet(stack: stack.push(),
+                                      balances: $balances,
+                                qrButtonTapped: $qrButtonTapped)
+                            .innerHeight($innerHeight)
+//                          .padding()
+                        }
+                        .frame(maxHeight: innerHeight)
+                        .edgesIgnoringSafeArea(.all)
+                    }
+                    .background(WalletColors().gray2)
+                }
+            }
+        }
     } // body
 }
 // MARK: - TabBar
@@ -142,7 +182,6 @@ enum Tab: String, Hashable, CaseIterable {
         switch self {
             case .balances: return String(localized: "TitleBalances", defaultValue: "Balances")
             case .actions:  return String(localized: "TitleActions", defaultValue: "Actions")
-//            case .overview: return String(localized: "TitleOverview", defaultValue: "Overview")
             case .settings: return String(localized: "TitleSettings", defaultValue: "Settings")
         }
     }
@@ -178,6 +217,7 @@ extension MainView {
             }
         }
     }
+
     struct Content: View {
         let logger: Logger
         let stack: CallStack
@@ -206,11 +246,9 @@ extension MainView {
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
 
-        @State private var sheetHeight: CGFloat = .zero
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)  // Update currency when used
         @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = EMPTYSTRING
-        @State private var showSpendingHint = true
         @State private var myExchange: Exchange? = nil
 
         private var openKycButton: some View {
@@ -281,8 +319,8 @@ extension MainView {
 //                ViewState.shared.popToRootView(nil)   either do this after any of the buttons was operated, or don't do it at all
                 showActionSheet = true
             } onActionDrag: {
-//                showScanner = true
-//                showActionSheet = true
+                showScanner = true
+                showActionSheet = true
             }
 
             let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
@@ -361,7 +399,7 @@ extension MainView {
 //                    .padding(.bottom, 10)
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)
-            }
+            } // ZStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             .onNotification(.KYCrequired) { notification in
@@ -383,30 +421,12 @@ extension MainView {
                  actions: {   openKycButton
                               dismissAlertButton },
                  message: {   Text("Tap the button to go to the KYC website.") })
-//            .sheet(isPresented: $showActionSheet, onDismiss: { tabBarView.show() }) {
-            .sheet(isPresented: $showActionSheet) {
-                let content = VStack {
-                    ActionsSheet(stack: stack.push(),
-                              balances: $balances,
-                      showSpendingHint: $showSpendingHint,
-                      amountToTransfer: $amountToTransfer,
-                               summary: $summary)
-                    .padding(.bottom, 32)
-                }
-                if #available(iOS 16, *) {
-                    content.fixedInnerHeight($sheetHeight)
-                } else {
-                    content
-                }
-            }
             .onNotification(.BalanceChange) { notification in
-              // reload balances on receiving BalanceChange notification ...
-                logger.info(".onNotification(.BalanceChange) ==> reload")
+                logger.info(".onNotification(.BalanceChange) ==> reload balances")
                 shouldReloadBalances += 1
             }
             .onNotification(.TransactionExpired) { notification in
-                // reload balances on receiving TransactionExpired notification ...
-                logger.info(".onNotification(.TransactionExpired) ==> reload")
+                logger.info(".onNotification(.TransactionExpired) ==> reload balances")
                 shouldReloadBalances += 1
                 shouldReloadPending += 1
             }
