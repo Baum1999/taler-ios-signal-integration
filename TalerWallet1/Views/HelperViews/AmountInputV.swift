@@ -89,12 +89,12 @@ struct AmountInputV: View {
         let available = amountAvailable.isZero ? nil
                                                : amountAvailable.formatted(currencyInfo, isNegative: false)
         VStack(alignment: .trailing) {
-            if summary.count > 0 {
-                Text(summary)
-                    .talerFont(.body)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                    .padding(4)
-            }
+//            if summary.count > 0 {
+//                Text(summary)
+//                    .talerFont(.body)
+//                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+//                    .padding(4)
+//            }
             CurrencyInputView(currencyInfo: $currencyInfo,
                                     amount: $amountToTransfer,
                                  available: amountAvailable,
