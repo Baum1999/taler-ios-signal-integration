@@ -27,6 +27,7 @@ struct TransactionsListView: View {
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
+    @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var viewId = UUID()
 
@@ -51,6 +52,7 @@ struct TransactionsListView: View {
             .listStyle(myListStyle.style).anyView
 #if REFRESHABLE
             .refreshable {
+                controller.hapticNotification(.success)
                 symLog.log("refreshing")
                 await reloadAllAction(stack.push())
             }

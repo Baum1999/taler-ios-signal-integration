@@ -131,6 +131,7 @@ extension ExchangeListCommonV: View {
         .listStyle(myListStyle.style).anyView
 //#if REFRESHABLE
         .refreshable {
+            controller.hapticNotification(.success)
             symLog?.log("refreshing")
             await reloadExchanges()
         }
