@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -12,7 +15,88 @@ struct RequestPayment: View {
     let stack: CallStack
     let balances: [Balance]
     @Binding var selectedBalance: Balance?
+    @Binding var amountLastUsed: Amount
+    @Binding var summary: String
 
+    @State private var balanceIndex = 0
+    @State private var pickerBalances: [Balance] = []
+    @State private var balance: Balance? = nil      // nil only when balances == []
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let scrollView = ScrollView {
+            let count = pickerBalances.count
+            let _ = symLog.log("count = \(count)")
+            if count > 0 {
+                let disabled = (count == 1 || selectedBalance != nil)
+                Group {
+                    let scopePicker = ScopePicker(value: $balanceIndex, balances: pickerBalances) { index in
+                        balanceIndex = index
+                        balance = pickerBalances[index]
+                    }
+                    let available = balance?.available
+                    let availableA11y = available?.formatted(isNegative: false, useISO: true, a11y: ".")
+
+                    let url = balance?.scopeInfo.url?.trimURL ?? EMPTYSTRING
+                    let a11yLabel = url + ", " + (availableA11y ?? EMPTYSTRING)
+                    HStack {
+                        Text("via", comment: "ScopePicker")
+                            .foregroundColor(disabled ? .secondary : .primary)
+                        Spacer(minLength: 2)
+                        scopePicker
+                            .disabled(disabled)
+                        Spacer(minLength: 2)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint(String(localized: "Choose the payment provider.", comment: "a11y"))
+                    .accessibilityLabel(a11yLabel)
+                }
+                .talerFont(.picker)
+//                .padding(.bottom)
+                .padding(.leading)
+            }
+            RequestPaymentContent(stack: stack.push(),
+                                balance: $balance,
+                           balanceIndex: $balanceIndex,
+                         amountLastUsed: $amountLastUsed,
+                                summary: $summary)
+        } // ScrollView
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+//          .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
+            .task {
+                if let selectedBalance {
+                    pickerBalances = [selectedBalance]
+                    balance = selectedBalance
+                } else {
+                    pickerBalances = balances
+                    let count = pickerBalances.count
+                    if balanceIndex >= count {
+                        balanceIndex = 0
+                    }
+                    if count > 0 {
+                        balance = pickerBalances[balanceIndex]
+                    } else {
+                        balance = nil
+                    }
+                }
+            }
+
+        if #available(iOS 16.0, *) {
+            scrollView.toolbar(.hidden, for: .tabBar)
+        } else {
+            scrollView
+        }
+    }
+}
+// MARK: -
+struct RequestPaymentContent: View {
+    private let symLog = SymLogV()
+    let stack: CallStack
+    @Binding var balance: Balance?
+    @Binding var balanceIndex: Int
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
@@ -30,6 +114,7 @@ struct RequestPayment: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var exchange: Exchange? = nil                                // wg. noFees
+
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
@@ -43,7 +128,7 @@ struct RequestPayment: View {
 
     private func feeLabel(_ feeString: String) -> String {
         feeString.count > 0 ? String(localized: "- \(feeString) fee")
-        : EMPTYSTRING
+                            : EMPTYSTRING
     }
 
     private func fee(raw: Amount, effective: Amount) -> Amount? {
@@ -91,7 +176,18 @@ struct RequestPayment: View {
             }
         } catch {
             // handle cancel, errors
-            symLog.log("❗️ \(error)")
+            symLog.log("❗️ \(error), \(error.localizedDescription)")
+            switch error {
+                case let walletError as WalletBackendError:
+                    switch walletError {
+                        case .walletCoreError(let wError):
+                            if wError?.code == 7027 {
+                                return ComputeFeeResult.insufficient()
+                            }
+                        default: break
+                    }
+                default: break
+            }
         }
         return nil
     }
@@ -111,32 +207,27 @@ struct RequestPayment: View {
         let _ = symLog.log("currency: \(currency)")
         let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
 
-        let inputDestination = LazyView {
-            P2PSubjectV(stack: stack.push(),
-                        scope: scopeInfo,
-                 currencyInfo: $currencyInfo,
-                     feeLabel: coinData.feeLabel(currencyInfo,
-                                         feeZero: String(localized: "No payment fee"),
-                                      isNegative: false),
-                 feeIsNotZero: feeIsNotZero(),
-                     outgoing: false,
-             amountToTransfer: $amountToTransfer,
-                      summary: $summary,
-                   expireDays: $expireDays)
-        }
-        let shortcutDestination = LazyView {
-            P2PSubjectV(stack: stack.push(),
-                        scope: scopeInfo,
-                 currencyInfo: $currencyInfo,
-                     feeLabel: nil,
-                 feeIsNotZero: feeIsNotZero(),
-                     outgoing: false,
-             amountToTransfer: $amountShortcut,
-                      summary: $summary,
-                   expireDays: $expireDays)
-        }
-
-        ScrollView {
+        let inputDestination = P2PSubjectV(stack: stack.push(),
+                                           scope: scopeInfo,
+                                    currencyInfo: $currencyInfo,
+                                        feeLabel: coinData.feeLabel(currencyInfo,
+                                                            feeZero: String(localized: "No payment fee"),
+                                                         isNegative: false),
+                                    feeIsNotZero: feeIsNotZero(),
+                                        outgoing: false,
+                                amountToTransfer: $amountToTransfer,
+                                         summary: $summary,
+                                      expireDays: $expireDays)
+        let shortcutDestination = P2PSubjectV(stack: stack.push(),
+                                              scope: scopeInfo,
+                                       currencyInfo: $currencyInfo,
+                                           feeLabel: nil,
+                                       feeIsNotZero: feeIsNotZero(),
+                                           outgoing: false,
+                                   amountToTransfer: $amountShortcut,
+                                            summary: $summary,
+                                         expireDays: $expireDays)
+        Group {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to request:")
             AmountInputV(stack: stack.push(),
@@ -152,14 +243,13 @@ struct RequestPayment: View {
                  feeIsNegative: true,
                     computeFee: computeFeeRequest)
             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            ) // shortcutDestination
+                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                ) // shortcutDestination
             .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-            ) // inputDestination
-        } // ScrollView
+                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                ) // inputDestination
+        } // Group
         .frame(maxWidth: .infinity, alignment: .leading)
-//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .onAppear {
@@ -169,6 +259,16 @@ struct RequestPayment: View {
         }
         .onDisappear {
             symLog.log("❗️ \(navTitle) onDisappear")
+        }
+        .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+            if let balance {
+                scopeInfo = balance.scopeInfo
+                let currency = scopeInfo.currency
+                amountToTransfer.setCurrency(currency)
+                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyName = currencyInfo.scope.currency
+//                currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
+            }
         }
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {

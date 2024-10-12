@@ -26,24 +26,36 @@ struct SendAmountV: View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
-//        nonZeroBalances.count > 0
-//        let balance = selectedBalance ?? nonZeroBalances[balanceIndex]
-        let sendAmountView = ScrollView {
+        let scrollView = ScrollView {
             let count = nonZeroBalances.count
-            if let selectedBalance {
-                let urlOrCurrency = selectedBalance.scopeInfo.url?.trimURL
-                                 ?? selectedBalance.scopeInfo.currency
-                let amount = selectedBalance.available
-                let formattedAmount = amount.formatted(isNegative: false, useISO: false)
-                let label = String("\(urlOrCurrency):\t\(formattedAmount.nbs)")
-                Text(label)
-//                    .padding(.leading)
-                    .talerFont(.title3)
-            } else if count > 0 {
-                ScopePicker(value: $balanceIndex, balances: nonZeroBalances) { index in
-                    balanceIndex = index
-                    balance = nonZeroBalances[index]
+            let _ = symLog.log("count = \(count)")
+            if count > 0 {
+                let disabled = (count == 1 || selectedBalance != nil)
+                Group {
+                    let scopePicker = ScopePicker(value: $balanceIndex, balances: nonZeroBalances) { index in
+                        balanceIndex = index
+                        balance = nonZeroBalances[index]
+                    }
+                    let available = balance?.available
+                    let availableA11y = available?.formatted(isNegative: false, useISO: true, a11y: ".")
+
+                    let url = balance?.scopeInfo.url?.trimURL ?? EMPTYSTRING
+                    let a11yLabel = url + ", " + (availableA11y ?? EMPTYSTRING)
+                    HStack {
+                        Text("via", comment: "ScopePicker")
+                            .foregroundColor(disabled ? .secondary : .primary)
+                        Spacer(minLength: 2)
+                        scopePicker
+                            .disabled(disabled)
+                        Spacer(minLength: 2)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint(String(localized: "Choose the payment provider.", comment: "a11y"))
+                    .accessibilityLabel(a11yLabel)
                 }
+                .talerFont(.picker)
+//                .padding(.bottom)
+                .padding(.leading)
             }
             SendAmountContent(stack: stack.push(),
                             balance: $balance,
@@ -52,9 +64,12 @@ struct SendAmountV: View {
                             summary: $summary)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
+//          .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
             .task {
-                if selectedBalance == nil {
+                if let selectedBalance {
+                    nonZeroBalances = [selectedBalance]
+                    balance = selectedBalance
+                } else {
                     nonZeroBalances = Balance.nonZeroBalances(balances)
                     let count = nonZeroBalances.count
                     if balanceIndex >= count {
@@ -65,15 +80,13 @@ struct SendAmountV: View {
                     } else {
                         balance = nil
                     }
-                } else {
-                    balance = selectedBalance
                 }
             }
 
         if #available(iOS 16.0, *) {
-            sendAmountView.toolbar(.hidden, for: .tabBar)
+            scrollView.toolbar(.hidden, for: .tabBar)
         } else {
-            sendAmountView
+            scrollView
         }
     }
 }
@@ -86,12 +99,8 @@ struct SendAmountContent: View {
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
-    // TODO: call getMaxPeerPushDebitAmountM
-
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
@@ -197,6 +206,7 @@ struct SendAmountContent: View {
             if let balance {
                 let scopeInfo = balance.scopeInfo
                 let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
+                let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
                 let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
                 let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
@@ -219,6 +229,11 @@ struct SendAmountContent: View {
                                                     summary: $summary,
                                                  expireDays: $expireDays)
                 Group {
+                    HStack {
+                        Spacer()
+                        Text("available: \(availableStr)")
+                            .accessibilityLabel("available: \(availableA11y)")
+                    }.padding(.horizontal)
                     let amountLabel = minimalistic ? String(localized: "Amount:")
                                                    : String(localized: "Amount to send:")
                     AmountInputV(stack: stack.push(),
@@ -248,12 +263,14 @@ struct SendAmountContent: View {
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .navigationTitle(navTitle)
         .task {
-            do {
-                let amount = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
-                amountAvailable = amount
-            } catch {
-                amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
+            if scopeInfo.type != .madeUp {
+                do {
+                    let amount = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
+                    amountAvailable = amount
+                    return
+                } catch {}
             }
+            amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
         }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
