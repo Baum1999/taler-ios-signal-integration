@@ -85,21 +85,21 @@ struct WalletBackendResponseError: Codable {
 extension WalletCore {
     static func serializeRequestError() -> WalletBackendResponseError {
         return WalletBackendResponseError(code: -1, when: Timestamp.now(),
-                                          hint: "Could not serialize request.", message: "")
+                                          hint: "Could not serialize request.", message: EMPTYSTRING)
     }
     
     static func parseResponseError() -> WalletBackendResponseError {
         return WalletBackendResponseError(code: -2, when: Timestamp.now(),
-                                          hint: "Could not parse response.", message: "")
+                                          hint: "Could not parse response.", message: EMPTYSTRING)
     }
     
     static func parseFailureError() -> WalletBackendResponseError {
         return WalletBackendResponseError(code: -3, when: Timestamp.now(),
-                                          hint: "Could not parse error detail.", message: "")
+                                          hint: "Could not parse error detail.", message: EMPTYSTRING)
     }
 
     static func walletError() -> WalletBackendResponseError {
         return WalletBackendResponseError(code: -4, when: Timestamp.now(),
-                                          hint: "Error detail.", message: "")
+                                          hint: "Error detail.", message: EMPTYSTRING)
     }
 }

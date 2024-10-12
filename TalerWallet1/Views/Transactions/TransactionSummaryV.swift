@@ -17,7 +17,7 @@ extension Transaction {             // for Dummys
                                     txState: TransactionState(major: .pending),
                             amountEffective: amount,
                                   amountRaw: amount,
-                              transactionId: "",
+                              transactionId: EMPTYSTRING,
                                   timestamp: now,
                                   txActions: [])
         self = .dummy(DummyTransaction(common: common))
@@ -65,7 +65,7 @@ struct TransactionSummaryV: View {
 
     @MainActor
     @discardableResult
-    func checkDismiss(_ notification: Notification, _ logStr: String = "") -> Bool {
+    func checkDismiss(_ notification: Notification, _ logStr: String = EMPTYSTRING) -> Bool {
         if hasDone {
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == transaction.common.transactionId {       // is the transition for THIS transaction?
@@ -89,7 +89,7 @@ struct TransactionSummaryV: View {
         }
     }
 
-    func checkReload(_ notification: Notification, _ logStr: String = "") {
+    func checkReload(_ notification: Notification, _ logStr: String = EMPTYSTRING) {
         if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
             if transition.transactionId == transactionId {       // is the transition for THIS transaction?
                 let newMajor = transition.newTxState.major

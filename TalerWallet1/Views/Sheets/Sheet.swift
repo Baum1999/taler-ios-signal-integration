@@ -35,7 +35,7 @@ struct Sheet: View {
 
     var body: some View {
         let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
-                                              : ""      // show nothing if 0
+                                              : EMPTYSTRING      // show nothing if 0
         NavigationView {
             Group {
                 if let error2 = model.error2 {

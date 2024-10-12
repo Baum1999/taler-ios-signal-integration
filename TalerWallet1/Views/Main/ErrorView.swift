@@ -18,6 +18,6 @@ struct ErrorView: View {
 
 struct ErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        ErrorView(errortext: "")
+        ErrorView(errortext: EMPTYSTRING)
     }
 }

@@ -167,7 +167,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         private var textfieldRepresentable: CurrencyTextfieldRepresentable
 
         // Last valid text input string to be displayed
-        private var lastValidInput: String? = ""
+        private var lastValidInput: String? = EMPTYSTRING
 
         init(_ representable: CurrencyTextfieldRepresentable) {
             self.textfieldRepresentable = representable
@@ -222,7 +222,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
             }
 
             // Iterate through each char of the new string and compare LTR with old string
-            let char = (textField.text ?? "").first { next in
+            let char = (textField.text ?? EMPTYSTRING).first { next in
                 // If old text is empty or its next character doesn't match new
                 if oldText.isEmpty || next != oldText.removeFirst() {
                     // Found the mismatching character

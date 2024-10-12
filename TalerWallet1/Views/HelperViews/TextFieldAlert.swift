@@ -61,7 +61,7 @@ extension View {
                                      title: String,
                                   doneText: String,
                                       text: Binding<String>,
-                               placeholder: String = "",
+                               placeholder: String = EMPTYSTRING,
                                     action: @escaping (String) -> Void
     ) -> some View {
         self.modifier(TextFieldAlert(isPresented: isPresented, title: title, doneText: doneText, text: text, placeholder: placeholder, action: action))

@@ -19,7 +19,7 @@ struct WithdrawExchangeV: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @State private var amountToTransfer = Amount.zero(currency: "")
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var exchange: Exchange? = nil
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
@@ -62,7 +62,7 @@ struct WithdrawExchangeV: View {
                             } else {
                                 let currency = exc.scopeInfo.currency
                                 amountToTransfer.setCurrency(currency)
-                                // is already Amount.zero(currency: "")
+                                // is already Amount.zero()
                             }
                             exchange = exc
                         } else {

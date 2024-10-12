@@ -157,7 +157,7 @@ struct P2PSubjectV: View {
 #if DEBUG
 //struct SendPurpose_Previews: PreviewProvider {
 //    static var previews: some View {
-//        @State var summary: String = ""
+//        @State var summary: String = EMPTYSTRING
 //        @State var expireDays: UInt = 0
 //        let amount = Amount(currency: LONGCURRENCY, integer: 10, fraction: 0)
 //        SendPurpose(amountAvailable: amount,

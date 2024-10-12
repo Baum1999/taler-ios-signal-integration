@@ -280,7 +280,7 @@ struct TransactionCommon: Decodable, Sendable {
 
     func localizedType(_ type: TransactionType) -> String {
         switch type {
-            case .dummy:          return String("")
+            case .dummy:          return String(EMPTYSTRING)
             case .withdrawal:     return String(localized: "Withdrawal",
                                                   comment: "TransactionType")
             case .deposit:        return String(localized: "Deposit",
@@ -686,7 +686,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
             case .peer2peer(let p2pTransaction):
                 result[EXCHANGEBASEURL] = p2pTransaction.details.exchangeBaseUrl
                 result["summary"] = p2pTransaction.details.info.summary
-                result[TALERURI] = p2pTransaction.details.talerUri ?? ""
+                result[TALERURI] = p2pTransaction.details.talerUri ?? EMPTYSTRING
             case .recoup(let recoupTransaction):
                 result["reason"] = recoupTransaction.details.recoupReason
             case .denomLoss(let denomLossTransaction):

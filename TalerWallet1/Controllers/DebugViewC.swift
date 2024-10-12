@@ -125,7 +125,7 @@ struct DebugViewV: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let viewIDString = debugViewC.viewID > 0 ? String(debugViewC.viewID)
-                                                 : ""
+                                                 : EMPTYSTRING
         HStack {
             Spacer()
             Spacer()

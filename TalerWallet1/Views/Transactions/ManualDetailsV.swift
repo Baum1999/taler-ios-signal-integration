@@ -38,7 +38,7 @@ struct SegmentControl: View {
                     let detail = accountDetails[index]
                     let specs = detail.currencySpecification
                     let amount = detail.transferAmount
-                    let amountStr = amount?.formatted(specs: specs, isNegative: false, useISO: false) ?? ""
+                    let amountStr = amount?.formatted(specs: specs, isNegative: false, useISO: false) ?? EMPTYSTRING
                     let bankName = detail.bankLabel
                     let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
 //            let _ = print(amountStr)

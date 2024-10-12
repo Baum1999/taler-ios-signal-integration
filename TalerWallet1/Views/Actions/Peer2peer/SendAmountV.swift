@@ -319,7 +319,7 @@ struct SendAmountContent: View {
 #if DEBUG
 fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: DEMOCURRENCY, cent: 510)
-    @State private var summary: String = ""
+    @State private var summary: String = EMPTYSTRING
     @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
     @State private var noBalance: Balance? = nil
 

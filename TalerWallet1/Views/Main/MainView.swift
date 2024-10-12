@@ -257,7 +257,7 @@ extension MainView {
         @State private var showActionSheet = false
         @State private var sheetHeight: CGFloat = .zero
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
-        @State private var summary: String = ""
+        @State private var summary: String = EMPTYSTRING
         @State private var showSpendingHint = true
         @State private var myExchange: Exchange? = nil
 

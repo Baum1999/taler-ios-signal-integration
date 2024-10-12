@@ -158,7 +158,6 @@ struct SettingsTriState: View {
     }
     var body: some View {
         let image = imageName(value)
-        let accHint = description ?? ""         // avoid automatic translation of "" in accessibilityHint
 
         VStack {
             HStack {
@@ -192,7 +191,7 @@ struct SettingsTriState: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(name)
         .accessibility(value: Text(image.1))
-        .accessibilityHint(accHint)
+        .accessibilityHint(description ?? EMPTYSTRING)
         .padding([.bottom], 4)
     }
 }
