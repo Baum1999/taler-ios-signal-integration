@@ -11,10 +11,14 @@ struct TabBarView: View {
     @Binding var selection: Tab
     @Binding var hidden: Int
     let onActionTab: () -> Void
+    let onActionDrag: () -> Void
 
     @Environment(\.keyboardShowing) var keyboardShowing
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    @State private var offset = CGSize.zero
+    @State private var didDrag = false
 
     private func tabBarItem(for tab: Tab) -> some View {
         VStack(spacing: 0) {
@@ -27,6 +31,31 @@ struct TabBarView: View {
                     .frame(width: width, height: height)
                     .clipped() // Crop the image to the frame size
                     .padding(.bottom, 4)
+                    .offset(offset)
+                    .opacity(1 - Double(abs(offset.height / 35)))
+                    .gesture(
+                        DragGesture()
+                            .onChanged { gesture in
+                                var trans = gesture.translation
+                                trans.width = .zero
+                                if abs(offset.height) > 30 {
+                                    offset = .zero
+                                    didDrag = true
+                                    onActionDrag()    // switch to camera
+                                } else {
+                                    offset = trans
+                                }
+                            }
+                            .onEnded { _ in
+                                if didDrag {
+                                    didDrag = false
+                                } else {
+                                    onActionTab()
+                                }
+                                offset = .zero
+                            }
+                    )
+
             } else {
                 let size = minimalistic ? 36.0 : 24.0
                 tab.image

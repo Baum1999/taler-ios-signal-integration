@@ -328,6 +328,9 @@ extension MainView {
                 // TODO: check NavigationStack, pop only if necessary
 //                ViewState.shared.popToRootView(nil)   either do this after any of the buttons was operated, or don't do it at all
                 showActionSheet = true
+            } onActionDrag: {
+//                showScanner = true
+//                showActionSheet = true
             }
 
             let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
