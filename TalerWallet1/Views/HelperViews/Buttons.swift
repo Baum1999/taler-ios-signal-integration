@@ -4,6 +4,7 @@
  */
 import SwiftUI
 import Foundation
+import AVFoundation
 
 extension ShapeStyle where Self == Color {
     static var random: Color {
@@ -62,11 +63,59 @@ struct QRButton : View  {
     let action: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @State private var showCameraAlert: Bool = false
+
+    private var openSettingsButton: some View {
+        Button("Open Settings") {
+            showCameraAlert = false
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
+    }
+    let closingAnnouncement = AttributedString(localized: "Closing Camera")
+    private var dismissAlertButton: some View {
+        Button("Cancel", role: .cancel) {
+            if #available(iOS 17.0, *) {
+                AccessibilityNotification.Announcement(closingAnnouncement).post()
+            }
+            showCameraAlert = false
+        }
+    }
+    var defaultPriorityAnnouncement = AttributedString(localized: "Opening Camera")
+    var lowPriorityAnnouncement: AttributedString {
+        var lowPriorityString = AttributedString ("Camera Loading")
+        if #available(iOS 17.0, *) {
+            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
+        }
+        return lowPriorityString
+    }
+    var highPriorityAnnouncement: AttributedString {
+        var highPriorityString = AttributedString("Camera Active")
+        if #available(iOS 17.0, *) {
+            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
+        }
+        return highPriorityString
+    }
+    private func checkCameraAvailable() -> Void {
+        // Open Camera when QR-Button was tapped
+        if #available(iOS 17.0, *) {
+            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
+        }
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
+            if granted {
+                action()
+                if #available(iOS 17.0, *) {
+                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                }
+            } else {
+                showCameraAlert = true
+            }
+        })
+    }
 
     var body: some View {
         let scanText = String(localized: "Scan QR codes", comment: "Button title, a11y")
         let qr = "qrcode.viewfinder"
-        Button(action: action) {
+        Button(action: checkCameraAvailable) {
             if isNavBarItem {
                 if !minimalistic {
                     Text("Scan QR", comment: "Button title")
@@ -89,6 +138,11 @@ struct QRButton : View  {
             }
         }
         .accessibilityLabel(scanText)
+        .alert("Scanning QR-codes requires access to the camera",
+               isPresented: $showCameraAlert,
+                   actions: {   openSettingsButton
+                                dismissAlertButton },
+                   message: {   Text("Please allow camera access in settings.") }) // Scanning QR-codes
     }
 }
 

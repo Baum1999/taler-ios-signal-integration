@@ -19,7 +19,6 @@ struct ActionsSheet: View {
     @Binding var showSpendingHint: Bool
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
     @Binding var summary: String
-    let cameraAction: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false

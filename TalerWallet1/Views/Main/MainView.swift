@@ -44,63 +44,18 @@ struct MainView: View {
     @State private var urlToOpen: URL? = nil
     @State private var showQRScanner: Bool = false
     @State private var showCameraAlert: Bool = false
+    @State private var showActionSheet = false
+    @State private var showScanner = false
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
         ViewState.shared.popToRootView(nil)
     }
 
-    private var openSettingsButton: some View {
-        Button("Open Settings") {
-            showCameraAlert = false
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-        }
-    }
-    let ClosingAnnouncement = AttributedString(localized: "Closing Camera")
-    private var dismissAlertButton: some View {
-        Button("Cancel", role: .cancel) {
-            if #available(iOS 17.0, *) {
-                AccessibilityNotification.Announcement(ClosingAnnouncement).post()
-            }
-            showCameraAlert = false
-        }
-    }
     private func dismissingSheet() {
-        if #available(iOS 17.0, *) {
-            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
-        }
-    }
-
-    var defaultPriorityAnnouncement = AttributedString(localized: "Opening Camera")
-    var lowPriorityAnnouncement: AttributedString {
-        var lowPriorityString = AttributedString ("Camera Loading")
-        if #available(iOS 17.0, *) {
-            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
-        }
-        return lowPriorityString
-    }
-    var highPriorityAnnouncement: AttributedString {
-        var highPriorityString = AttributedString("Camera Active")
-        if #available(iOS 17.0, *) {
-            highPriorityString.accessibilitySpeechAnnouncementPriority = .high
-        }
-        return highPriorityString
-    }
-    private func checkCameraAvailable() -> Void {
-        // Open Camera when QR-Button was tapped
-        if #available(iOS 17.0, *) {
-            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
-        }
-        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
-            if granted {
-                showQRScanner = true            // present sheet
-                if #available(iOS 17.0, *) {
-                    AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
-                }
-            } else {
-                showCameraAlert = true
-            }
-        })
+//        if #available(iOS 17.0, *) {
+//            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
+//        }
     }
 
     var body: some View {
@@ -114,7 +69,8 @@ struct MainView: View {
                       balances: $balances,
                selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
-                  cameraAction: checkCameraAvailable)
+               showActionSheet: $showActionSheet,
+                   showScanner: $showScanner)
                     .onAppear() {
 #if DEBUG
                         if playSoundsI != 0  && playSoundsB && !soundPlayed {
@@ -123,11 +79,6 @@ struct MainView: View {
 #endif
                         soundPlayed = true
                     }
-                    .alert("Scanning QR-codes requires access to the camera",
-                           isPresented: $showCameraAlert,
-                               actions: {   openSettingsButton
-                                            dismissAlertButton },
-                               message: {   Text("Please allow camera access in settings.") }) // Scanning QR-codes
                     .sheet(isPresented: $showQRScanner, onDismiss: dismissingSheet) {
                         let sheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                                  balances: $balances,
@@ -233,7 +184,8 @@ extension MainView {
         @Binding var balances: [Balance]
         @Binding var selectedBalance: Balance?
         @Binding var talerFontIndex: Int
-        let cameraAction: () -> Void
+        @Binding var showActionSheet: Bool
+        @Binding var showScanner: Bool
 
 #if DEBUG
         @AppStorage("developerMode") var developerMode: Bool = true
@@ -254,7 +206,6 @@ extension MainView {
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
 
-        @State private var showActionSheet = false
         @State private var sheetHeight: CGFloat = .zero
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)  // Update currency when used
         @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
@@ -392,7 +343,6 @@ extension MainView {
                         .onNotification(.RequestAction) { navModel.actionSelected = 2 }
                         .onNotification(.DepositAction) { navModel.actionSelected = 3 }
                         .onNotification(.WithdrawAction){ navModel.actionSelected = 4 }
-                        .onNotification(.QrScanAction)  { cameraAction() }
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.balances)
@@ -440,8 +390,7 @@ extension MainView {
                               balances: $balances,
                       showSpendingHint: $showSpendingHint,
                       amountToTransfer: $amountToTransfer,
-                               summary: $summary,
-                          cameraAction: cameraAction)
+                               summary: $summary)
                     .padding(.bottom, 32)
                 }
                 if #available(iOS 16, *) {
