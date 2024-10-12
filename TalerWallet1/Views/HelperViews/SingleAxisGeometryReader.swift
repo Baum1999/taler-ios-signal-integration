@@ -23,6 +23,9 @@ import SwiftUI
 import UIKit
 
 struct SingleAxisGeometryReader<Content: View>: View {
+    var axis: Axis = .horizontal
+    var alignment: Alignment = .center
+    let content: (CGFloat) -> Content
 
     private struct SizeKey: PreferenceKey {
         static var defaultValue: CGFloat { 10 }
@@ -31,11 +34,7 @@ struct SingleAxisGeometryReader<Content: View>: View {
         }
     }
 
-    @State private var viewSize: CGFloat = SizeKey.defaultValue
-
-    var axis: Axis = .horizontal
-    var alignment: Alignment = .center
-    let content: (CGFloat)->Content
+    @State private var viewSize = SizeKey.defaultValue
 
     var body: some View {
         content(viewSize)
