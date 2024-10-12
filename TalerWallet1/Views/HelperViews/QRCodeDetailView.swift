@@ -51,18 +51,18 @@ struct QRCodeDetailView: View {
                     .talerFont(.title3)
                     .listRowSeparator(.hidden)
                 Group {
-                    if #available(iOS 16.0, *) {
-                        let screenWidth = UIScreen.screenWidth
-                        GradientBorder(size: screenWidth/1.8,
-                                      color: .accentColor,
-                                 background: WalletColors().backgroundColor) {
-                            QRGeneratorView(text: talerURI)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        }
-                    } else {
+//                    if #available(iOS 16.0, *) {
+//                        let screenWidth = UIScreen.screenWidth
+//                        GradientBorder(size: screenWidth/1.8,
+//                                      color: .accentColor,
+//                                 background: WalletColors().backgroundColor) {
+//                            QRGeneratorView(text: talerURI)
+//                                .frame(maxWidth: .infinity, alignment: .center)
+//                        }
+//                    } else {
                         QRGeneratorView(text: talerURI)
                             .frame(maxWidth: .infinity, alignment: .center)
-                    }
+//                    }
                 }
                     .accessibilityLabel("QR Code")
                     .listRowSeparator(.hidden)
