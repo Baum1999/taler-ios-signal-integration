@@ -19,34 +19,32 @@ struct ScopePicker: View {
         return amount.formatted(isNegative: false, useISO: false)
     }
 
-    func label(balance: Balance) -> String {
-        let label = balance.scopeInfo.url?.trimURL
-                 ?? balance.scopeInfo.currency
-        return String("\(label):\t\(formattedAmount(balance).nbs)")
+    func row(_ balance: Balance) -> String {
+        let urlOrCurrency = balance.scopeInfo.url?.trimURL
+        ?? balance.scopeInfo.currency
+        return String("\(urlOrCurrency):\t\(formattedAmount(balance).nbs)")
     }
 
     var body: some View {
-        HStack {
-            Text("Use: ", comment: "ScopePicker")
-            Spacer()
-            if (balances.count > 0) {
+        if (balances.count > 0) {
+            Group {
                 Picker(EMPTYSTRING, selection: $selected) {
                     ForEach(0..<balances.count, id: \.self) { index in
-                        Text(label(balance: balances[index]))
+                        Text(row(balances[index]))
                             .tag(index)
                     }
                 }
+                .frame(width: .infinity)
                 .pickerStyle(.menu)
-                .onAppear() {
-                    withAnimation { selected = value }
-                }
-                .onChange(of: selected) { newValue in
-                    action(newValue)
-                }
+                .labelsHidden()
+            }
+            .onAppear() {
+                withAnimation { selected = value }
+            }
+            .onChange(of: selected) { newValue in
+                action(newValue)
             }
         }
-        .padding(.leading)
-        .talerFont(.title3)
     }
 }
 // MARK: -
