@@ -59,8 +59,14 @@ struct WalletEmptyView: View {
         .listStyle(myListStyle.style).anyView
         .talerFont(.title2)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .overlay(loadingOverlay)
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY_WALLET, stack: stack.push("onAppear"))     // 10
+        }
+    }
+    @ViewBuilder private var loadingOverlay: some View {
+        if withDrawDisabled {
+            RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawDisabled)
         }
     }
 }
