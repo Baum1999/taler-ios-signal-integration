@@ -36,18 +36,18 @@ extension Locale {
 }
 
 extension Amount {
-    func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool, useISO: Bool = false) -> String {
+    func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsFloatTuple, isNegative: isNegative, useISO: useISO)
+            return currencyInfo.string(for: valueAsFloatTuple, isNegative: isNegative, useISO: useISO, a11y: a11y)
         } else {
             return valueStr
         }
     }
 
-    func formatted(isNegative: Bool, useISO: Bool = false) -> String {
+    func formatted(isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
         let controller = Controller.shared
         if let currencyInfo = controller.info(for: self.currencyStr) {
-            return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO)
+            return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO, a11y: a11y)
         }
         return self.readableDescription
     }
@@ -172,7 +172,7 @@ public struct CurrencyInfo {
     }
 
     // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
-    func string(for valueTuple: (Double, Double), isNegative: Bool, useISO: Bool = false) -> String {
+    func string(for valueTuple: (Double, Double), isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
         formatter.setUseISO(useISO)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: isNegative ? -integer : integer) {
@@ -206,6 +206,9 @@ public struct CurrencyInfo {
                             }
                         }
 //            print(resultStr)
+                        if let a11y {
+                            resultStr.replacingOccurrences(of: decimalSeparator, with: a11y)
+                        }
                         return currencyString(resultStr, useISO: useISO)
                     }
                     // if we arrive here then fractionStr doesn't have a decimal separator. Yikes!
