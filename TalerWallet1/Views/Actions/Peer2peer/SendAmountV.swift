@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping "Send Coins" in the balances list
+// Called when tapping [􁉇Send]
 struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

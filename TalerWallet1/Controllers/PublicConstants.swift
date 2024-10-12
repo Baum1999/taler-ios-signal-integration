@@ -26,13 +26,13 @@ public let BALANCES = "chart.bar.xaxis"             // 􀣉                     
 public let SETTINGS = "gear"                        // 􀍟                       1.0 (iOS 13)
 public let QRBUTTON = "qrcode.viewfinder"           // 􀎻                       1.0 (iOS 13)
 
-public let CONFIRM_BANK = "circle.fill"             // badge in PendingRow, TransactionRow and TransactionSummary
-public let NEEDS_KYC = "star.fill"                  // badge in PendingRow, TransactionRow and TransactionSummary
-//public let PENDING_INCOMING = "plus.diamond"      // 􀡿 􀢀
-public let PENDING_INCOMING = "plus"                // 􀅼 􀢀
-public let PENDING_OUTGOING = "minus.diamond"       // 􀢁 􀢂
-public let DONE_INCOMING = "plus.circle.fill"       // 􀁌 􀁍
-public let DONE_OUTGOING = "minus.circle"           // 􀁎 􀁏
+public let CONFIRM_BANK = "circle.fill"             // 􀀁 badge in PendingRow, TransactionRow and TransactionSummary
+public let NEEDS_KYC = "star.fill"                  // 􀋃 badge in PendingRow, TransactionRow and TransactionSummary
+//public let PENDING_INCOMING = "plus.diamond"      // 􀡿 􀢀                    2.0 (iOS 14)
+public let PENDING_INCOMING = "plus"                // 􀅼                       1.0 (iOS 13)
+public let PENDING_OUTGOING = "minus.diamond"       // 􀢁 􀢂                    2.0 (iOS 14)
+public let DONE_INCOMING = "plus.circle.fill"       // 􀁌 􀁍                    1.0 (iOS 13)
+public let DONE_OUTGOING = "minus.circle"           // 􀁎 􀁏                    1.0 (iOS 13)
 
 public let ICONNAME_FILL = ".fill"
 public let ICONNAME_DUMMY = "taler.circle"                          // 􀀀 􀀁

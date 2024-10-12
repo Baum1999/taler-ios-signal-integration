@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping "Request Payment" in the balances list
+// Called when tapping [􁉅Request]
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
