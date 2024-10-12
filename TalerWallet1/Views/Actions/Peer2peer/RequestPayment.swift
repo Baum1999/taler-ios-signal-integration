@@ -74,7 +74,7 @@ struct RequestPayment: View {
         }
         do {
             let baseURL = exchange?.exchangeBaseUrl
-            let ppCheck = try await model.checkPeerPullCreditM(baseURL, amount: amount)
+            let ppCheck = try await model.checkPeerPullCreditM(amount, scope: scopeInfo, viewHandles: true)
             let raw = ppCheck.amountRaw
             let effective = ppCheck.amountEffective
             if let fee = fee(raw: raw, effective: effective) {

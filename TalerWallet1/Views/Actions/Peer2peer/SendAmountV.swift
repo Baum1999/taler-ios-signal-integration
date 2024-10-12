@@ -249,8 +249,7 @@ struct SendAmountContent: View {
         .navigationTitle(navTitle)
         .task {
             do {
-                let amount = try await model.getMaxPeerPushDebitAmountM(amountToTransfer.currencyStr,
-                                                                        scope: scopeInfo, viewHandles: true)
+                let amount = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
                 amountAvailable = amount
             } catch {
                 amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
@@ -273,7 +272,7 @@ struct SendAmountContent: View {
                 currencyName = currencyInfo.scope.currency
                 currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
                 do {
-                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(currency, scope: scopeInfo)
+                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
                 } catch {
                     // TODO: Error
                     amountAvailable = balance.available
