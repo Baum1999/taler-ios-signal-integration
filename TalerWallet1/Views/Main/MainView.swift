@@ -193,10 +193,9 @@ enum Tab: String, Hashable, CaseIterable {
         let logo = "taler-logo-2023-red"
 #endif
         switch self {
-            case .balances: return Image(systemName: "chart.bar.xaxis")
+            case .balances: return Image(systemName: BALANCES)                  // 􀣉  "chart.bar.xaxis"
             case .actions:  return Image(logo)
-//            case .overview: return Image(systemName: "dollarsign")
-            case .settings: return Image(systemName: "gear")
+            case .settings: return Image(systemName: SETTINGS)                  // 􀍟 "gear"
         }
     }
 
