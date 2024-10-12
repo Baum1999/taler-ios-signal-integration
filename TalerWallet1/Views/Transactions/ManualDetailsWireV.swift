@@ -22,8 +22,8 @@ struct TransferRestrictionsV: View {
         VStack(alignment: .leading) {
             let amountNBS = amountStr.nbs
             let obtainNBS = obtainStr.nbs
-            Text(minimalistic ? "Transfer \(amountNBS) to the Payment Service."
-                 : "You need to transfer \(amountNBS) from your regular bank account to the Payment Service Provider to receive \(obtainNBS) as electronic cash in this wallet.")
+            Text(minimalistic ? "Transfer \(amountNBS) to the payment service."
+                 : "You need to transfer \(amountNBS) from your regular bank account to the payment service provider to receive \(obtainNBS) as electronic cash in this wallet.")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
             if let restrictions {

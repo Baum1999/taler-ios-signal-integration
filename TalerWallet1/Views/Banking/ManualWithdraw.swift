@@ -41,7 +41,7 @@ struct ManualWithdraw: View {
 #endif
         let baseURL = exchange?.exchangeBaseUrl
                    ?? scopeInfo?.url
-                   ?? String(localized: "Unknown Payment Service")
+                   ?? String(localized: "Unknown payment service")
 
       Group {
         if let exchange {

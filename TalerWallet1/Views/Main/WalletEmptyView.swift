@@ -23,19 +23,20 @@ struct WalletEmptyView: View {
     var body: some View {
         List {
             Section {
-                Text("There is no digital cash in your wallet.")
+                Text("There is no digital cash in your wallet yet.")
                     .talerFont(.title3)
             }
             Section {
-                Text("Use the QR code scan button to start a withdrawal if your bank already supports Taler payments.")
+                let qrButton = Image(systemName: "qrcode.viewfinder")
+                let settings = Image(systemName: "gear")
+                Text("Use «\(qrButton) Scan QR codes» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
-                Text("You can also add a payment service manually in the Settings.")
+                Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
                     .talerFont(.body)
             }
             Section {
                 Text("Demo: get digital cash to experience how to pay with the money of the future.")
-//                Text("You can register an account in the demo bank, then withdraw some digital cash to experience how to pay with the money of the future.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
                 let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")

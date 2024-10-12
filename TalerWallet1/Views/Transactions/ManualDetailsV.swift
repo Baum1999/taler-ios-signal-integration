@@ -147,7 +147,7 @@ struct ManualDetailsV: View {
                     let obtainStr = common.amountEffective.formatted(specs: specs, isNegative: false)
 //            let _ = print(amountStr, " | ", obtainStr)
                     if !minimalistic {
-                        Text("The Payment Service Provider is waiting for your wire-transfer.")
+                        Text("The payment service provider is waiting for your wire-transfer.")
                             .bold()
                             .multilineTextAlignment(.leading)
                             .listRowSeparator(.hidden)

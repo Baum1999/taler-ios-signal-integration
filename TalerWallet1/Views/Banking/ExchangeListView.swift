@@ -33,18 +33,18 @@ struct ExchangeListView: View {
     }
 
     var body: some View {
-        let a11yLabelStr = String(localized: "Add Payment Service", comment: "VoiceOver for the + button")
+        let a11yLabelStr = String(localized: "Add payment service", comment: "VoiceOver for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
             showAlert = true
         }
-        let addTitleStr = String(localized: "Add Payment Service", comment: "title of the addExchange alert")
+        let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         if #available(iOS 16.0, *) {
             ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
-                    TextField("Address of Payment Service", text: $newExchange)
+                    TextField("Address of the payment service", text: $newExchange)
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
                     Button(addButtonStr) {
                         addExchange(newExchange)
@@ -108,14 +108,15 @@ extension ExchangeListCommonV: View {
 
         let emptyList = List {
             Section {
-                Text("There are no Payment Services yet.")
+                Text("There are no payment services yet.")
                     .talerFont(.title3)
             }
             Section {
-                Text("Use the Add button to add a service.")
+                let plus = Image(systemName: "plus")
+                Text("Use the \(plus) button to add a service.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
-                Text("You can also scan a withdrawal QR code from your bank on the Balances tab to automatically add a payment service.")
+                Text("You can also scan a withdrawal QR code from your bank in the Action menu to automatically add a payment service.")
                     .talerFont(.body)
             }
         }

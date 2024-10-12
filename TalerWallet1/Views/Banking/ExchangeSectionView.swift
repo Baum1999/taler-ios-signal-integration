@@ -108,7 +108,7 @@ struct ExchangeSectionView: View {
                 .listRowSeparator(.hidden)
             }
 
-            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete Payment Provider", comment: "Action button")
+            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete payment provider", comment: "Action button")
             let warningText1 = String(localized: "Are you sure you want to delete this payment provider?")
             let warningText2 = String(localized: "This payment provider is in use. Delete anyway?")
             WarningButton(warningText: warningText1,

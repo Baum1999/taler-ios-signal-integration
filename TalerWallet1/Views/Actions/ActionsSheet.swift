@@ -51,12 +51,12 @@ struct ActionsSheet: View {
                 .padding(.bottom, 10)
 
             if hasKudos && !hideSpendingHint {
-                if !minimalistic && showSpendingHint {
-                    Text("You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
-                        .talerFont(.body)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight doesn't work
-                }
+                Text(minimalistic ? "Spend your \(DEMOCURRENCY) in the Demo shop"
+                                  : "You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
+                    .talerFont(.body)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight won't work
+
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let action = {
                     hideSpendingHint = true
