@@ -45,7 +45,7 @@ struct Sheet: View {
                     }
                 } else {
                     sheetView
-                        .navigationBarItems(leading: cancelButton)
+//                        .navigationBarItems(leading: cancelButton)
                 }
             }
                 .navigationBarTitleDisplayMode(.automatic)
