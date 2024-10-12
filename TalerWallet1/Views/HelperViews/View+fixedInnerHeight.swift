@@ -20,12 +20,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/**
+ * @author Marc Stibane
+ */
 import SwiftUI
-import UIKit
 
-struct InnerHeightPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = .zero
+fileprivate struct InnerHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat { 10 }
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+fileprivate struct InnerWidthKey: PreferenceKey {
+    static var defaultValue: CGFloat { 10 }
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+fileprivate struct InnerSizeKey: PreferenceKey {
+    static var defaultValue: CGSize { CGSize(width: 10, height: 10) }
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
         value = nextValue()
     }
 }
@@ -33,13 +49,40 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 extension View {
     func innerHeight(_ height: Binding<CGFloat>) -> some View {
         overlay {      // background doesn't work for sheets
-                GeometryReader { proxy in
-                    Color.clear.preference(key: InnerHeightPreferenceKey.self, value: proxy.size.height)
-                }
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: InnerHeightKey.self, value: proxy.size.height)
             }
-            .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-//                print("InnerHeightPreferenceKey \(newHeight)")
-            height.wrappedValue = newHeight
+        }
+        .onPreferenceChange(InnerHeightKey.self) { newValue in
+ print("❗️InnerHeight \(newValue)❗️")
+            height.wrappedValue = newValue
+        }
+    }
+
+    func innerWidth(_ width: Binding<CGFloat>) -> some View {
+        overlay {      // background doesn't work for sheets
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: InnerWidthKey.self, value: proxy.size.width)
             }
+        }
+        .onPreferenceChange(InnerWidthKey.self) { newValue in
+  print("❗️InnerWidth \(newValue)❗️")
+            width.wrappedValue = newValue
+        }
+    }
+
+    func innerSize(_ size: Binding<CGSize>) -> some View {
+        overlay {      // background doesn't work for sheets
+            GeometryReader { proxy in
+                Color.clear
+                    .preference(key: InnerSizeKey.self, value: proxy.size)
+            }
+        }
+        .onPreferenceChange(InnerSizeKey.self) { newValue in
+  print("❗️InnerSize \(newValue)❗️")
+            size.wrappedValue = newValue
+        }
     }
 }
