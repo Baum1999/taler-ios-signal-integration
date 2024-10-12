@@ -22,34 +22,6 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             Section {
-                let eitherMini = incoming ? String(localized: "Either (payer) Mini 1",
-                                                defaultValue: "Either",
-                                                     comment: "Either (copy/share this link to the payer)")
-                                          : String(localized: "Either (payee) Mini 1",
-                                                defaultValue: "Either",
-                                                     comment: "Either (copy/share this link to the payee)")
-                let eitherLong = incoming ? String(localized: "Either (payer) Long 1",
-                                                defaultValue: "Either provide this payment link")
-                                          : String(localized: "Either (payee) Long 1",
-                                                defaultValue: "Either provide this payment link")
-                Text(minimalistic ? eitherMini : eitherLong)
-                    .multilineTextAlignment(.leading)
-                    .talerFont(.title3)
-//                    .padding(.vertical)
-                    .listRowSeparator(.hidden)
-                CopyShare(textToCopy: talerCopyShare)
-                    .disabled(false)
-//                    .padding(.bottom)
-                    .listRowSeparator(.hidden)
-
-                let otherPartyMini = incoming ? String(localized: "Either (payer) Mini 2", defaultValue: "or scan this")
-                                              : String(localized: "Either (payee) Mini 2", defaultValue: "or scan this")
-                let otherPartyLong = incoming ? String(localized: "Either (payer) Long 2", defaultValue: "to the payer, or")
-                                              : String(localized: "Either (payee) Long 2", defaultValue: "to the payee, or")
-                Text(minimalistic ? otherPartyMini : otherPartyLong)
-                    .multilineTextAlignment(.leading)
-                    .talerFont(.title3)
-                    .listRowSeparator(.hidden)
                 Group {
 //                    if #available(iOS 16.0, *) {
 //                        let screenWidth = UIScreen.screenWidth
@@ -64,23 +36,26 @@ struct QRCodeDetailView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
 //                    }
                 }
-                    .accessibilityLabel("QR Code")
+                .accessibilityLabel("QR Code")
+                .listRowSeparator(.hidden)
+                if !minimalistic {
+                    let amountStr = amount.formatted(isNegative: false)
+                    let scanLong = incoming ? String(localized: "(payer) 1",
+                                                  defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
+                                                       comment: "e.g. '5,3 €'")
+                                            : String(localized: "(payee) 1",
+                                                  defaultValue: "Let the payee scan this QR code to receive \(amountStr).",
+                                                       comment: "e.g. '$ 7.41'")
+                    Text(scanLong)
+                        .multilineTextAlignment(.leading)
+                        .talerFont(.title3)
+                        .listRowSeparator(.hidden)
+                }
+                CopyShare(textToCopy: talerCopyShare)
+                    .disabled(false)
+                //                    .padding(.bottom)
                     .listRowSeparator(.hidden)
-
-                let amountStr = amount.formatted(isNegative: false)
-                let scanMini = incoming ? String(localized: "Either (payer) Mini 3",
-                                              defaultValue: "to pay \(amountStr).", comment: "e.g. '5,3 €'")
-                                        : String(localized: "Either (payee) Mini 3",
-                                              defaultValue: "to receive \(amountStr).", comment: "e.g. '$ 7.41'")
-                let scanLong = incoming ? String(localized: "Either (payer) Long 3",
-                                              defaultValue: "let the payer scan this QR code to pay \(amountStr).",
-                                                   comment: "e.g. '5,3 €'")
-                                        : String(localized: "Either (payee) Long 3",
-                                              defaultValue: "let the payee scan this QR code to receive \(amountStr).",
-                                                   comment: "e.g. '$ 7.41'")
-                Text(minimalistic ? scanMini : scanLong)
-                    .multilineTextAlignment(.leading)
-                    .talerFont(.title3)
+                
             }
         }
     }
