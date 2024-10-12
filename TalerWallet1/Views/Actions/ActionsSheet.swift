@@ -6,6 +6,7 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import os.log
 import taler_swift
 
 /// This view shows the action sheet

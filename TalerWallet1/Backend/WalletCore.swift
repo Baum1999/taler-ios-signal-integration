@@ -145,7 +145,7 @@ extension WalletCore {
         }
         do {
             let jsonData = try JSONEncoder().encode(result)
-            symLog.log("\"id\":\(requestId)  \(result)")
+//            symLog.log("\"id\":\(requestId)  \(result)")
 //            logger.info(result)   TODO: log result
             completion(requestId, timeSent, jsonData, nil)
         } catch {        // JSON encoding of response.result failed / should never happen
@@ -411,16 +411,19 @@ print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")     
             let decoded = try JSONDecoder().decode(ResponseOrNotification.self, from: messageData)
             switch decoded.type {
                 case "error":
+                    symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
                     try handleError(decoded)
                 case "response":
+                    symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
                     try handleResponse(decoded)
                 case "notification":
+//                    symLog.log(message)
                     try handleNotification(decoded.payload)
                 case "tunnelHttp":          // TODO: Handle tunnelHttp
-                    symLog.log("Can't handle tunnelHttp: \(decoded)")    // TODO: .error
+                    symLog.log("Can't handle tunnelHttp: \(message)")    // TODO: .error
                     throw WalletBackendError.deserializationError
                 default:
-                    symLog.log("Unknown response type: \(decoded)")    // TODO: .error
+                    symLog.log("Unknown response type: \(message)")    // TODO: .error
                     throw WalletBackendError.deserializationError
             }
         } catch DecodingError.dataCorrupted(let context) {
