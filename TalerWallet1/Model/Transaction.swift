@@ -9,6 +9,7 @@ import Foundation
 import AnyCodable
 import taler_swift
 import SymLog
+import SwiftUI
 
 enum TransactionTypeError: Error {
     case unknownTypeError
@@ -228,24 +229,58 @@ enum TransactionType: String, Codable {
     var isP2pOutgoing: Bool { isSendCoins || isPayInvoice}
     var isP2pIncoming: Bool { isSendInvoice || isRcvCoins}
     var isIncoming   : Bool { isP2pIncoming || isWithdrawal || isRefund }
-    func iconName(_ done: Bool = false) -> String {
-        let iconName = switch self {
+    var iconName: String {
+        switch self {
             case .dummy:            ICONNAME_DUMMY
             case .withdrawal:       ICONNAME_WITHDRAWAL
             case .deposit:          ICONNAME_DEPOSIT
             case .payment:          ICONNAME_PAYMENT
             case .refund:           ICONNAME_REFUND
             case .refresh:          ICONNAME_REFRESH
-            case .peerPushDebit:    ICONNAME_OUTGOING_P2P
-            case .scanPushCredit:   ICONNAME_INCOMING_P2P
-            case .peerPullCredit:   ICONNAME_INCOMING_P2P
-            case .scanPullDebit:    ICONNAME_OUTGOING_P2P
+            case .peerPushDebit:    ICONNAME_OUTGOING
+            case .scanPushCredit:   ICONNAME_INCOMING
+            case .peerPullCredit:   ICONNAME_INCOMING
+            case .scanPullDebit:    ICONNAME_OUTGOING
             case .recoup:           ICONNAME_RECOUP
             case .denomLoss:        ICONNAME_DENOMLOSS
         }
-        return isRefresh ? iconName        // refresh has no fill
-                  : done ? iconName + ICONNAME_FILL
-                         : iconName
+    }
+    var sysIconName: String {
+        switch self {
+            case .dummy:            SYSTEM_DUMMY1
+            case .withdrawal:       SYSTEM_WITHDRAWAL5
+            case .deposit:          SYSTEM_DEPOSIT5
+            case .payment:          SYSTEM_PAYMENT2
+            case .refund:           SYSTEM_REFUND2
+            case .refresh:          SYSTEM_REFRESH6
+            case .peerPushDebit:    SYSTEM_OUTGOING4
+            case .scanPushCredit:   SYSTEM_INCOMING4
+            case .peerPullCredit:   SYSTEM_INCOMING4
+            case .scanPullDebit:    SYSTEM_OUTGOING4
+            case .recoup:           SYSTEM_RECOUP1
+            case .denomLoss:        SYSTEM_DENOMLOSS1
+        }
+    }
+    func icon(_ done: Bool = false) -> Image {
+        // try assets first
+        let name = done ? iconName + ICONNAME_FILL : iconName
+        if UIImage(named: name) != nil { return Image(name) }
+
+        // fallback to system icons
+        let sysName = isRefresh ? (done ? SYSTEM_REFRESH6_fill : SYSTEM_REFRESH6)
+                                : (done ? sysIconName + ICONNAME_FILL : sysIconName)
+        if UIImage(systemName: sysName) != nil { return Image(systemName: sysName) }
+//            .symbolVariant(done ? .fill : .none)
+
+        // on older iOS Versions, fallback to simpler icons
+        if isRefresh { return Image(systemName: FALLBACK_REFRESH) }
+        if isDeposit { return Image(systemName: FALLBACK_DEPOSIT) }
+        if isWithdrawal { return Image(systemName: FALLBACK_WITHDRAWAL) }
+        if isP2pOutgoing { return Image(systemName: FALLBACK_OUTGOING) }
+        if isP2pIncoming { return Image(systemName: FALLBACK_INCOMING) }
+
+        // finally, there's always dummy
+        return Image(systemName: SYSTEM_DUMMY1)
     }
 }
 

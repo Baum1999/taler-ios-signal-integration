@@ -15,16 +15,16 @@ struct PendingIconBadge: View {
     let needsKYC: Bool
 
     var body: some View {
-        let imageName = incoming && done ? DONE_INCOMING
-                                         : incoming ? PENDING_INCOMING
-                                        // since the money already left the wallet, show DONE
-                                         : DONE_OUTGOING        // PENDING_OUTGOING
-        IconBadge(imageName: imageName,
-                  isPending: true,
-                  foreColor: foreColor,
-              shouldConfirm: shouldConfirm,
-                   needsKYC: needsKYC,
-               wideIconName: nil)
+        let image = incoming && done ? Image(DONE_INCOMING)         // "plus.circle.fill"
+                          : incoming ? Image(PENDING_INCOMING)      // "plus"
+        // since the money already left the wallet, show DONE and not PENDING_OUTGOING
+                                     : Image(DONE_OUTGOING)         // "minus.circle"
+        IconBadge(image: image,
+                   done: false,
+              foreColor: foreColor,
+          shouldConfirm: shouldConfirm,
+               needsKYC: needsKYC,
+               wideIcon: nil)
     }
 }
 // MARK: -
@@ -37,13 +37,13 @@ struct TransactionIconBadge: View {
     let needsKYC: Bool
 
     var body: some View {
-        let imageName = type.iconName(done)
-        IconBadge(imageName: imageName,
-                  isPending: false,
-                  foreColor: foreColor,
-              shouldConfirm: shouldConfirm,
-                   needsKYC: needsKYC,
-               wideIconName: nil)
+        IconBadge(image: type.icon(done),
+                   done: true,
+              foreColor: foreColor,
+          shouldConfirm: shouldConfirm,
+               needsKYC: needsKYC,
+               wideIcon: TransactionType.refund.icon())
+                      // "arrowshape.turn.up.backward" is wider than all others
     }
 }
 // MARK: -
@@ -53,38 +53,36 @@ struct ButtonIconBadge: View {
     let done: Bool
 
     var body: some View {
-        let imageName = type.iconName(done)
-        IconBadge(imageName: imageName,
-                  isPending: false,
-                  foreColor: foreColor,
-              shouldConfirm: false,
-                   needsKYC: false,
-               wideIconName: ICONNAME_INCOMING_P2P)
+        IconBadge(image: type.icon(done),
+                   done: true,
+              foreColor: foreColor,
+          shouldConfirm: false,
+               needsKYC: false,
+               wideIcon: TransactionType.peerPushDebit.icon())
+                      // button never is payment or refund
     }
 }
 // MARK: -
 struct IconBadge: View {
-    let imageName: String
-    let isPending: Bool
+    let image: Image
+    let done: Bool
     let foreColor:Color
-//    let pending: Bool
     let shouldConfirm: Bool
     let needsKYC: Bool
-    let wideIconName: String?
+    let wideIcon: Image?
+
+    @ScaledMetric var spacing = 8       // relative to fontSize
 
     var body: some View {
-        HStack(alignment: .top, spacing: -8) {      // TODO: adapt spacing to dynamic fontsize
-            let image = isPending ? Image(systemName: imageName)
-                                  : Image(imageName)
+        HStack(alignment: .top, spacing: -spacing) {
             ZStack {
-                // "taler.turn.up.backward" is wider than all others
-                // ZStack centers the main icon, and the badge will always be at the same position
-                Image(wideIconName ?? ICONNAME_REFUND)
-                    .foregroundColor(.clear)
-                image
-                    .foregroundColor(foreColor)
+                if let wideIcon {
+                    wideIcon.foregroundColor(.clear)
+                }
+                image.foregroundColor(foreColor)
             }.talerFont(.title)
-            if wideIconName == nil {
+            if wideIcon == nil {
+                // ZStack centers the main icon, so the badge will always be at the same position
                 let badgeName = needsKYC ? NEEDS_KYC
                                          : CONFIRM_BANK
                 Image(systemName: badgeName)

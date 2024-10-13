@@ -149,7 +149,7 @@ struct TransactionSummaryV: View {
                                               : majorState
                     let statusT = Text(state)
                                     .multilineTextAlignment(.trailing)
-                    let imageT = Text(Image(common.type.iconName()))
+                    let imageT = Text(common.type.icon())
                                     .accessibilityHidden(true)
                     let prefixT = Text("Status:")
                     let vLayout = VStack(alignment: .leading, spacing: 0) {

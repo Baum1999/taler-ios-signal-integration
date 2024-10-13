@@ -35,18 +35,44 @@ public let DONE_INCOMING = "plus.circle.fill"       // 􀁌 􀁍                
 public let DONE_OUTGOING = "minus.circle"           // 􀁎 􀁏                    1.0 (iOS 13)
 
 public let ICONNAME_FILL = ".fill"
-public let ICONNAME_DUMMY = "taler.circle"                          // 􀀀 􀀁
-public let ICONNAME_WITHDRAWAL = "taler.down"                       // 􁾬 􁾭
-public let ICONNAME_DEPOSIT = "taler.up"                            // 􁾨 􁾩
-public let ICONNAME_REFUND = "taler.turn.up.backward"               // 􀰚 􀰛
-public let ICONNAME_PAYMENT = "taler.turn.up.forward"               // 􀉐 􀰟
-public let ICONNAME_INCOMING_P2P = "taler.backward"                 // 􁉈 􁉅
-public let ICONNAME_OUTGOING_P2P = "taler.forward"                  // 􁉆 􁉇
-public let ICONNAME_REFRESH = "taler.counterclockwise"              // 􁹠   no fill variant!
-//public let ICONNAME_REFRESH1 = "arrow.counterclockwise.circle"    // 􀚃 􀚄
-//public let ICONNAME_REFRESH2 = "arrow.counterclockwise.square"    // 􂅟 􂅠
-public let ICONNAME_RECOUP = "taler.exclamationmark.circle"         // 􀁞 􀁟
-public let ICONNAME_DENOMLOSS = "taler.exclamationmark.triangle"    // 􀇾 􀇿
+public let ICONNAME_DUMMY = "taler.dummy"                           // 􀀀 􀀁
+public let SYSTEM_DUMMY1 = "circle"                                 // 􀀀 􀀁    1.0 (iOS 13)
+
+public let ICONNAME_WITHDRAWAL = "taler.withdrawal"                 // 􁾬 􁾭
+public let SYSTEM_WITHDRAWAL5 = "arrowshape.down"                   // 􁾬 􁾭    5.0 (iOS 17)
+public let FALLBACK_WITHDRAWAL = "arrow.down"                       // 􀄩       1.0 (iOS 13)   no fill variant!
+//                             "arrow.down.to.line"                 //    􀅀    1.0 (iOS 13)
+
+public let ICONNAME_DEPOSIT = "taler.deposit"                       // 􁾨 􁾩
+public let SYSTEM_DEPOSIT5 = "arrowshape.up"                        // 􁾨 􁾩    5.0 (iOS 17)
+public let FALLBACK_DEPOSIT = "arrow.up"                            // 􀄨       1.0 (iOS 13)   no fill variant!
+//                             "arrow.up.to.line"                   //    􀄿    1.0 (iOS 13)
+
+public let ICONNAME_REFUND = "taler.refund"                         // 􀰚 􀰛
+public let SYSTEM_REFUND2 = "arrowshape.turn.up.backward"           // 􀰚 􀰛    2.0 (iOS 14)
+public let ICONNAME_PAYMENT = "taler.payment"                       // 􀉐 􀰟
+public let SYSTEM_PAYMENT2 = "arrowshape.turn.up.forward"           // 􀉐 􀰟    2.0 (iOS 14)
+
+public let ICONNAME_INCOMING = "taler.incoming"                     // 􁉈 􁉅
+public let SYSTEM_INCOMING4 = "arrowshape.backward"                 // 􁉈 􁉅    4.0 (iOS 16)
+public let FALLBACK_INCOMING = "arrow.backward"                     // 􀰌       2.0 (iOS 14)   no fill variant!
+//                             "arrow.backward.to.line"             //    􁂊    3.0 (iOS 15)
+
+public let ICONNAME_OUTGOING = "taler.outgoing"                     // 􁉆 􁉇
+public let SYSTEM_OUTGOING4 = "arrowshape.forward"                  // 􁉆 􁉇    4.0 (iOS 16)
+public let FALLBACK_OUTGOING = "arrow.forward"                      // 􀰑       2.0 (iOS 14)   no fill variant!
+//                             "arrow.forward.to.line"              //    􁂎    3.0 (iOS 15)
+
+public let ICONNAME_REFRESH = "taler.refresh"                       // 􀎀 􁣛
+public let SYSTEM_REFRESH6 = "arrow.trianglehead.counterclockwise"  // 􀎀       6.0 (iOS 18)
+public let SYSTEM_REFRESH6_fill = "checkmark.arrow.trianglehead.counterclockwise"  // 􁣛       6.0 (iOS 18)
+public let FALLBACK_REFRESH = "arrow.counterclockwise"              // 􁹠       1.0 (iOS 13)   no fill variant!
+//public let SYSTEM_REFRESH1 = "arrow.counterclockwise.circle"    // 􀚃 􀚄
+//public let SYSTEM_REFRESH2 = "arrow.counterclockwise.square"    // 􂅟 􂅠
+public let ICONNAME_RECOUP = "taler.recoup"                         // 􀁞 􀁟
+public let SYSTEM_RECOUP1 = "exclamationmark.circle"                // 􀁞 􀁟    1.0 (iOS 13)
+public let ICONNAME_DENOMLOSS = "taler.denomloss"                   // 􀇾 􀇿
+public let SYSTEM_DENOMLOSS1 = "exclamationmark.triangle"           // 􀇾 􀇿    1.0 (iOS 13)
 
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
