@@ -69,13 +69,13 @@ struct CurrencyField: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .padding(4)
             text
+                .accessibilityHidden(true)
                 .background(WalletColors().fieldBackground)
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10)
                         .stroke(WalletColors().fieldForeground, lineWidth: 1))
             // Input text field to handle UI
             currencyFieldRepresentable
-//                .accessibilityHidden(true)
         }
     }
 }
