@@ -8,7 +8,8 @@
 import SwiftUI
 import taler_swift
 
-fileprivate let shortcuts = [5000,2500,1000,500]        // TODO: adapt for ¥
+fileprivate let replaceable = 500
+fileprivate let shortcutValues = [5000,2500,1000]        // TODO: adapt for ¥
 
 struct ShortcutButton: View {
     @Binding var currencyInfo: CurrencyInfo
@@ -33,7 +34,7 @@ struct ShortcutButton: View {
                 return try available < shortie
             } catch {
                 print("❗️Cannot compare available.\(available.currencyStr) to shortie.\(shortie.currencyStr))")
-                return true
+                return false
             }
         }
         return false
@@ -64,7 +65,7 @@ struct CurrencyInputView: View {
     @Binding var amount: Amount         // the `value´
     let amountLastUsed: Amount
     let available: Amount?
-    let title: String
+    let title: String?
     let shortcutAction: ((_ amount: Amount) -> Void)?
 
 //    @EnvironmentObject private var controller: Controller
@@ -73,7 +74,8 @@ struct CurrencyInputView: View {
     @State private var showKeyboard = 0
     @State private var useShortcut = 0
 
-    @MainActor func action(shortcut: Int, currencyField: CurrencyField) {
+    @MainActor
+    func action(shortcut: Int, currencyField: CurrencyField) {
         let shortie = Amount(currency: amount.currencyStr, cent: UInt64(shortcut))      // TODO: adapt for ¥
         if let shortcutAction {
             shortcutAction(shortie)
@@ -85,6 +87,48 @@ struct CurrencyInputView: View {
         }
     }
 
+    @MainActor
+    func shortcut(for value: Int,_ currencyField: CurrencyField) -> ShortcutButton {
+        var shortcut = value
+        if value == replaceable {
+            if !amountLastUsed.isZero {
+                let lastUsedD = amountLastUsed.value
+                let lastUsedI = lround(lastUsedD * 100)
+                if !shortcutValues.contains(lastUsedI) {
+                    shortcut = lastUsedI
+        }   }   }
+        return ShortcutButton(currencyInfo: $currencyInfo,
+                                  currency: amount.currencyStr,
+                             currencyField: currencyField,
+                                  shortcut: shortcut,
+                                 available: available,
+                                    action: action)
+    }
+
+    @MainActor
+    func shortcuts(_ currencyField: CurrencyField) -> [ShortcutButton] {
+        var buttons = shortcutValues.map { value in
+            shortcut(for: value, currencyField)
+        }
+        buttons.append(shortcut(for: replaceable, currencyField))
+        return buttons
+    }
+
+    func heading() -> String? {
+        if let title {
+            return title
+        }
+        if let available {
+            let availableStr = available.formatted(currencyInfo, isNegative: false)
+            return String(localized: "Available: \(availableStr)")
+        }
+        return nil
+    }
+    var a11yLabel: String {        // format currency for a11y
+        let availableStr = available?.readableDescription ?? String(localized: "unknown")
+        return String(localized: "Available: \(availableStr)")
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -93,13 +137,18 @@ struct CurrencyInputView: View {
         let currency = amount.currencyStr
         let currencyField = CurrencyField($currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
-            Text(title)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .talerFont(.title3)
-                .accessibilityHidden(true)
-                .padding(.bottom, -6)
+            if let heading = heading() {
+                Text(heading)
+                    .padding(.horizontal, 4)
+                    .frame(maxWidth: .infinity, alignment: title != nil ? .leading : .trailing)
+                    .talerFont(.title2)
+                    .accessibilityAddTraits(.isHeader)
+                    .if(title == nil && available != nil) { view in
+                        view.accessibilityLabel(a11yLabel)
+                    }
+                    .padding(.bottom, -6)
+            }
             currencyField
-                .accessibilityLabel(title)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
 //                .background(WalletColors().fieldBackground)       // problem: white corners
@@ -113,17 +162,11 @@ struct CurrencyInputView: View {
                     showKeyboard += 1
                 }
             if #available(iOS 16.0, *) {
-                let shortcutButton = ShortcutButton(currencyInfo: $currencyInfo,
-                                                        currency: currency,
-                                                   currencyField: currencyField,
-                                                        shortcut: 0,
-                                                       available: available,
-                                                          action: action)
+                let shortcuts = shortcuts(currencyField)
                 ViewThatFits(in: .horizontal) {
                     HStack {
-                        ForEach(shortcuts, id: \.self) {
-                            shortcutButton.makeButton(with: $0)
-                                .accessibilityAddTraits($0 == useShortcut ? .isSelected : [])
+                        ForEach(shortcuts, id: \.shortcut) {
+                            $0.accessibilityAddTraits($0.shortcut == useShortcut ? .isSelected : [])
                         }
                     }
                     VStack {
@@ -133,8 +176,8 @@ struct CurrencyInputView: View {
                             Spacer()
                             ForEach(0..<half, id: \.self) { index in
                                 let thisShortcut = shortcuts[index]
-                                shortcutButton.makeButton(with: thisShortcut)
-                                    .accessibilityAddTraits(thisShortcut == useShortcut ? .isSelected : [])
+                                thisShortcut
+                                    .accessibilityAddTraits(thisShortcut.shortcut == useShortcut ? .isSelected : [])
                                 Spacer()
                             }
                         }
@@ -142,20 +185,19 @@ struct CurrencyInputView: View {
                             Spacer()
                             ForEach(half..<count, id: \.self) { index in
                                 let thisShortcut = shortcuts[index]
-                                shortcutButton.makeButton(with: thisShortcut)
-                                    .accessibilityAddTraits(thisShortcut == useShortcut ? .isSelected : [])
+                                thisShortcut
+                                    .accessibilityAddTraits(thisShortcut.shortcut == useShortcut ? .isSelected : [])
                                 Spacer()
                             }
                         }
                     }
                     VStack {
-                        ForEach(shortcuts, id: \.self) {
-                            shortcutButton.makeButton(with: $0)
-                                .accessibilityAddTraits($0 == useShortcut ? .isSelected : [])
+                        ForEach(shortcuts, id: \.shortcut) {
+                            $0.accessibilityAddTraits($0.shortcut == useShortcut ? .isSelected : [])
                         }
                     }
                 }
-                .padding(.top, 6)
+                .padding(.vertical, 6)
             } // iOS 16+ only
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
