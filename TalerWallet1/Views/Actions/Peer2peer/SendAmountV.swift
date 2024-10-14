@@ -14,48 +14,38 @@ struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balances: [Balance]
-    @Binding var selectedBalance: Balance?      // selected balance when the action button is tapped in Transactions
+    @Binding var selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
     @State private var balanceIndex = 0
-    @State private var nonZeroBalances: [Balance] = []
-    @State private var balance: Balance? = nil      // nil only when (balances / nonZeroBalances) == []
+    @State private var balance: Balance? = nil      // nil only when balances == []
+
+    func firstNonZero() -> Balance? {
+        for aBalance in balances {
+            if !aBalance.available.isZero {
+                return aBalance
+            }
+        }
+        return nil
+    }
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
+        let count = balances.count
+        let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
-            let count = nonZeroBalances.count
-            let _ = symLog.log("count = \(count)")
             if count > 0 {
-                let disabled = (count == 1 || selectedBalance != nil)
-                Group {
-                    let scopePicker = ScopePicker(value: $balanceIndex, balances: nonZeroBalances) { index in
-                        balanceIndex = index
-                        balance = nonZeroBalances[index]
-                    }
-                    let available = balance?.available
-                    let availableA11y = available?.formatted(isNegative: false, useISO: true, a11y: ".")
-
-                    let url = balance?.scopeInfo.url?.trimURL ?? EMPTYSTRING
-                    let a11yLabel = url + ", " + (availableA11y ?? EMPTYSTRING)
-                    HStack {
-                        Text("via", comment: "ScopePicker")
-                            .foregroundColor(disabled ? .secondary : .primary)
-                        Spacer(minLength: 2)
-                        scopePicker
-                            .disabled(disabled)
-                        Spacer(minLength: 2)
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityHint(String(localized: "Choose the payment provider.", comment: "a11y"))
-                    .accessibilityLabel(a11yLabel)
+                ScopePicker(value: $balanceIndex,
+                         balances: balances,
+                      onlyNonZero: true) { index in
+                    balanceIndex = index
+                    balance = balances[index]
                 }
-                .talerFont(.picker)
-//                .padding(.bottom)
-                .padding(.leading)
+                .padding(.horizontal)
+                .padding(.bottom, 4)
             }
             SendAmountContent(stack: stack.push(),
                             balance: $balance,
@@ -64,27 +54,32 @@ struct SendAmountV: View {
                             summary: $summary)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-//          .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
             .task {
                 if let selectedBalance {
-                    nonZeroBalances = [selectedBalance]
-                    balance = selectedBalance
-                } else {
-                    nonZeroBalances = Balance.nonZeroBalances(balances)
-                    let count = nonZeroBalances.count
-                    if balanceIndex >= count {
-                        balanceIndex = 0
-                    }
-                    if count > 0 {
-                        balance = nonZeroBalances[balanceIndex]
+                    if selectedBalance.available.isZero {
+                        // find another balance
+                        balance = firstNonZero()
                     } else {
-                        balance = nil
+                        balance = selectedBalance
                     }
+                } else {
+                    balance = firstNonZero()
+                }
+                if let balance {
+                    balanceIndex = balances.firstIndex(of: balance) ?? 0
+                } else {
+                    balanceIndex = 0
+                    balance = (count > 0) ? balances[0] : nil
                 }
             }
 
         if #available(iOS 16.0, *) {
-            scrollView.toolbar(.hidden, for: .tabBar)
+            if #available(iOS 16.4, *) {
+                scrollView.toolbar(.hidden, for: .tabBar)
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                scrollView.toolbar(.hidden, for: .tabBar)
+            }
         } else {
             scrollView
         }
@@ -92,7 +87,7 @@ struct SendAmountV: View {
 }
 // MARK: -
 struct SendAmountContent: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var balance: Balance?
     @Binding var balanceIndex: Int
@@ -229,17 +224,10 @@ struct SendAmountContent: View {
                                                     summary: $summary,
                                                  expireDays: $expireDays)
                 Group {
-                    HStack {
-                        Spacer()
-                        Text("available: \(availableStr)")
-                            .accessibilityLabel("available: \(availableA11y)")
-                    }.padding(.horizontal)
-                    let amountLabel = minimalistic ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to send:")
                     AmountInputV(stack: stack.push(),
                           currencyInfo: $currencyInfo,
                        amountAvailable: $amountAvailable,
-                           amountLabel: amountLabel,
+                           amountLabel: nil,        // will use "Available: xxx", trailing
                       amountToTransfer: $amountToTransfer,
                         amountLastUsed: amountLastUsed,
                                wireFee: nil,
@@ -281,6 +269,7 @@ struct SendAmountContent: View {
             symLog.log("❗️ \(navTitle) onDisappear")
         }
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+            symLog.log("❗️ task \(balanceIndex)")
             if let balance {
                 scopeInfo = balance.scopeInfo
                 let currency = scopeInfo.currency

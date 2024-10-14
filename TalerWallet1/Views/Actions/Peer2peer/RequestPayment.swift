@@ -19,44 +19,24 @@ struct RequestPayment: View {
     @Binding var summary: String
 
     @State private var balanceIndex = 0
-    @State private var pickerBalances: [Balance] = []
     @State private var balance: Balance? = nil      // nil only when balances == []
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let count = balances.count
+        let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
-            let count = pickerBalances.count
-            let _ = symLog.log("count = \(count)")
             if count > 0 {
-                let disabled = (count == 1 || selectedBalance != nil)
-                Group {
-                    let scopePicker = ScopePicker(value: $balanceIndex, balances: pickerBalances) { index in
+                ScopePicker(value: $balanceIndex,
+                         balances: balances,
+                      onlyNonZero: false) { index in
                         balanceIndex = index
-                        balance = pickerBalances[index]
-                    }
-                    let available = balance?.available
-                    let availableA11y = available?.formatted(isNegative: false, useISO: true, a11y: ".")
-
-                    let url = balance?.scopeInfo.url?.trimURL ?? EMPTYSTRING
-                    let a11yLabel = url + ", " + (availableA11y ?? EMPTYSTRING)
-                    HStack {
-                        Text("via", comment: "ScopePicker")
-                            .foregroundColor(disabled ? .secondary : .primary)
-                        Spacer(minLength: 2)
-                        scopePicker
-                            .disabled(disabled)
-                        Spacer(minLength: 2)
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityHint(String(localized: "Choose the payment provider.", comment: "a11y"))
-                    .accessibilityLabel(a11yLabel)
+                        balance = balances[index]
                 }
-                .talerFont(.picker)
-//                .padding(.bottom)
-                .padding(.leading)
+                .padding(.horizontal)
+                .padding(.bottom, 4)
             }
             RequestPaymentContent(stack: stack.push(),
                                 balance: $balance,
@@ -65,27 +45,23 @@ struct RequestPayment: View {
                                 summary: $summary)
         } // ScrollView
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-//          .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
             .task {
                 if let selectedBalance {
-                    pickerBalances = [selectedBalance]
                     balance = selectedBalance
+                    balanceIndex = balances.firstIndex(of: selectedBalance) ?? 0
                 } else {
-                    pickerBalances = balances
-                    let count = pickerBalances.count
-                    if balanceIndex >= count {
-                        balanceIndex = 0
-                    }
-                    if count > 0 {
-                        balance = pickerBalances[balanceIndex]
-                    } else {
-                        balance = nil
-                    }
+                    balanceIndex = 0
+                    balance = (count > 0) ? balances[0] : nil
                 }
             }
 
         if #available(iOS 16.0, *) {
-            scrollView.toolbar(.hidden, for: .tabBar)
+            if #available(iOS 16.4, *) {
+                scrollView.toolbar(.hidden, for: .tabBar)
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                scrollView.toolbar(.hidden, for: .tabBar)
+            }
         } else {
             scrollView
         }
