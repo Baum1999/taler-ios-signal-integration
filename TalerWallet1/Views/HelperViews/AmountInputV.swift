@@ -34,7 +34,7 @@ struct AmountInputV: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
     @Binding var amountAvailable: Amount
-    let amountLabel: String
+    let amountLabel: String?
     @Binding var amountToTransfer: Amount
     let amountLastUsed: Amount
     let wireFee: Amount?
@@ -86,8 +86,6 @@ struct AmountInputV: View {
     var body: some View {
         let currency = amountToTransfer.currencyStr
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
-        let available = amountAvailable.isZero ? nil
-                                               : amountAvailable.formatted(currencyInfo, isNegative: false)
         VStack(alignment: .trailing) {
 //            if summary.count > 0 {
 //                Text(summary)
@@ -111,7 +109,7 @@ struct AmountInputV: View {
                           shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                           feeIsNegative: feeIsNegative)
             let flags = checkAvailable(coinData)
-            Button("Next") { buttonAction() }
+            Button(coinData.invalid ? "Amount too small" : "Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
         }.padding(.horizontal)

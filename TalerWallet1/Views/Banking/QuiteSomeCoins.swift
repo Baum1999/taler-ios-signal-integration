@@ -71,7 +71,7 @@ struct QuiteSomeCoins: View {
     let feeIsNegative: Bool
 
     var body: some View {
-        let isError = coinData.invalid || coinData.tooMany
+        let isError = coinData.tooMany // || coinData.invalid 
         let showFee = shouldShowFee && !isError
         if showFee {
             if let fee = coinData.fee {
