@@ -11,13 +11,20 @@ import taler_swift
 let LINELIMIT = 5
 
 struct TypeButton: View {
+    let stack: CallStack
     let title: String
     let a11y: String
     var type: TransactionType
     let disabled: Bool
-    let action: () -> Void
+    let action: NSNotification.Name
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    @MainActor
+    func dismissAndPost() {
+        dismissTop(stack.push())
+        NotificationCenter.default.post(name: action, object: nil)                // will trigger NavigationLink
+    }
 
     var body: some View {
 #if DEBUG
@@ -68,7 +75,7 @@ struct TypeButton: View {
             .border(red)
 #endif
 
-        Button(action: action) {
+        Button(action: dismissAndPost) {
             if minimalistic {
                 badge
             } else {
@@ -89,8 +96,7 @@ struct TypeButton: View {
                                    aligned: .center))
     }
 }
-
-
+// MARK: -
 struct TwoRowButtons: View {
     let stack: CallStack
     let sendTitle: String
@@ -100,11 +106,12 @@ struct TwoRowButtons: View {
     var recvType: TransactionType
     let recvA11y: String
     let sendDisabled: Bool
-    let sendAction: () -> Void
-    let recvAction: () -> Void
+    let sendAction: NSNotification.Name
+    let recvAction: NSNotification.Name
 
     func sendButton(_ title: String) -> TypeButton {
-        TypeButton(title: title,
+        TypeButton(stack: stack.push(),
+                   title: title,
                     a11y: sendA11y,
                     type: sendType,
                 disabled: sendDisabled,
@@ -112,7 +119,8 @@ struct TwoRowButtons: View {
     }
 
     func recvButton(_ title: String) -> TypeButton {
-        TypeButton(title: title,
+        TypeButton(stack: stack.push(),
+                   title: title,
                     a11y: recvA11y,
                     type: recvType,
                 disabled: false,
@@ -154,7 +162,8 @@ struct TwoRowButtons_Previews: PreviewProvider {
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + LONGCURRENCY,
                    sendDisabled: true,
-                     sendAction: {}, recvAction: {})
+                     sendAction: .SendAction,
+                     recvAction: .RequestAction)
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
                       sendTitle: "Send " + DEMOCURRENCY,
@@ -164,7 +173,8 @@ struct TwoRowButtons_Previews: PreviewProvider {
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + DEMOCURRENCY,
                    sendDisabled: true,
-                     sendAction: {}, recvAction: {})
+                     sendAction: .SendAction,
+                     recvAction: .RequestAction)
                 .listRowSeparator(.hidden)
         }
     }

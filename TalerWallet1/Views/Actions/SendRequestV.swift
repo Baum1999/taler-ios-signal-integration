@@ -6,19 +6,10 @@
  * @author Marc Stibane
  */
 import SwiftUI
-import taler_swift
-import SymLog
 
 struct SendRequestV: View {
-    private let symLog = SymLogV(0)
     let stack: CallStack
-    let sendDisabled: Bool          // can't send/deposit if wallet has no coins
-
-    @MainActor
-    func dismissAndPost(_ name: NSNotification.Name) {
-        dismissTop(stack.push())
-        NotificationCenter.default.post(name: name, object: nil)              // will trigger NavigationLink
-    }
+    let sendDisabled: Bool   // can't send/deposit if wallet has no coins at all
 
     var body: some View {
         let sendTitle = String(localized: "SendButton_Short", defaultValue: "Send",
@@ -33,7 +24,7 @@ struct SendRequestV: View {
                    recvType: .peerPullCredit,
                    recvA11y: requTitle,
                sendDisabled: sendDisabled,
-                 sendAction: { dismissAndPost(.SendAction) },
-                 recvAction: { dismissAndPost(.RequestAction) })
+                 sendAction: .SendAction,
+                 recvAction: .RequestAction)
     }
 }
