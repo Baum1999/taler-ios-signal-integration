@@ -750,7 +750,6 @@
 				4EE77E832C1012F7007C9064 /* Actions */,
 				4EB095342989CBFE0043A8A1 /* Balances */,
 				4EB0952E2989CBFE0043A8A1 /* Transactions */,
-				4EB095272989CBFE0043A8A1 /* Exchange */,
 				4EB095242989CBFE0043A8A1 /* Settings */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
 				4EB095462989CBFE0043A8A1 /* HelperViews */,
@@ -764,6 +763,7 @@
 				4EB095252989CBFE0043A8A1 /* SettingsView.swift */,
 				4EC400882AE3E7E800DF72C7 /* AboutView.swift */,
 				4EB095262989CBFE0043A8A1 /* SettingsItem.swift */,
+				4EB095272989CBFE0043A8A1 /* Exchange */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
