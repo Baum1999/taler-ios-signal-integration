@@ -45,7 +45,7 @@ struct RefundURIView: View {
                         suspendAction: model.suspendTransaction,
                          resumeAction: model.resumeTransaction)
             .safeAreaInset(edge: .bottom) {
-                Button("Done", action: { dismissTop(stack.push()) } )
+                Button("Done") { dismissTop(stack.push()) }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
             }

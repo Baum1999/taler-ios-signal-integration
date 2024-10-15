@@ -50,7 +50,6 @@ class Controller: ObservableObject {
     private let symLog = SymLogC()
 
     @Published var backendState: BackendState = .none       // only used for launch animation
-    @Published var frontendState: Int = 0                   // 1 incoming, -1 outgoing, 0 Balances
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @Published var isConnected: Bool = true
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here

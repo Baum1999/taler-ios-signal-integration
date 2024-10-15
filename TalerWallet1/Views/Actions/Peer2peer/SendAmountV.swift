@@ -262,7 +262,6 @@ struct SendAmountContent: View {
         }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-            // if we set >> controller.frontendState = -1 << here, then becomeFirstResponder won't work!
             symLog.log("❗️ \(navTitle) onAppear")
         }
         .onDisappear {

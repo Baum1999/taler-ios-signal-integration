@@ -55,11 +55,11 @@ struct WithdrawAcceptDone: View {
                 .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
                     if let transaction {
-                        Button(transaction.shouldConfirm ? "Authorize later" : "Done", action: { dismissTop(stack.push()) } )
+                        Button(transaction.shouldConfirm ? "Authorize later" : "Done") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
                             .padding(.horizontal)
                     } else {
-                        Button("Cancel", action: { dismissTop(stack.push()) } )
+                        Button("Cancel") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: .bordered))
                             .padding(.horizontal)
                     }

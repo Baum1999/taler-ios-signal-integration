@@ -12,15 +12,12 @@ import SymLog
 struct DepositWithdrawV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let sendDisabled: Bool
+    let sendDisabled: Bool          // can't send/deposit if wallet has no coins
 
-    @EnvironmentObject private var model: WalletModel
-    @AppStorage("minimalistic") var minimalistic: Bool = false
-
-    func selectAndUpdate(_ button: Int) {
+    @MainActor
+    func dismissAndPost(_ name: NSNotification.Name) {
         dismissTop(stack.push())
-        NotificationCenter.default.post(name: button == 3 ? .DepositAction : .WithdrawAction,
-                                      object: nil)                              // will trigger NavigationLink
+        NotificationCenter.default.post(name: name, object: nil)              // will trigger NavigationLink
     }
 
     var body: some View {
@@ -31,13 +28,12 @@ struct DepositWithdrawV: View {
         TwoRowButtons(stack: stack.push(),
                   sendTitle: depositTitle,
                    sendType: .deposit,
-                   sendA11y: depositTitle,//1.tabbed(oneLine: true),
+                   sendA11y: depositTitle,
                   recvTitle: withdrawTitle,
                    recvType: .withdrawal,
-                   recvA11y: withdrawTitle,//1.tabbed(oneLine: true),
-                  lineLimit: 5,
+                   recvA11y: withdrawTitle,
                sendDisabled: sendDisabled,
-                 sendAction: { selectAndUpdate(3) },
-                 recvAction: { selectAndUpdate(4) })
+                 sendAction: { dismissAndPost(.DepositAction) },
+                 recvAction: { dismissAndPost(.WithdrawAction) })
     }
 }

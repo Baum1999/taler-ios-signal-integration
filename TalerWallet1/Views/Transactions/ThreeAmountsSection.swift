@@ -196,7 +196,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                topTitle: "Withdrawal", baseURL: DEMOEXCHANGE, noFees: false,
                                   large: 1==0, summary: nil, merchant: nil)
                 .safeAreaInset(edge: .bottom) {
-                    Button(String(localized: "Accept"), action: {})
+                    Button(String("Preview")) {}
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                         .disabled(true)

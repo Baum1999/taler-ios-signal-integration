@@ -8,10 +8,11 @@
 import SwiftUI
 import taler_swift
 
+let LINELIMIT = 5
+
 struct TypeButton: View {
     let title: String
     let a11y: String
-    let lineLimit: Int
     var type: TransactionType
     let disabled: Bool
     let action: () -> Void
@@ -80,7 +81,7 @@ struct TypeButton: View {
             }
         }
         .accessibilityLabel(Text(a11y))
-        .lineLimit(lineLimit)
+        .lineLimit(LINELIMIT)
         .disabled(disabled)
         .buttonStyle(TalerButtonStyle(type: .bordered,
                                     dimmed: false,
@@ -98,7 +99,6 @@ struct TwoRowButtons: View {
     let recvTitle: String
     var recvType: TransactionType
     let recvA11y: String
-    let lineLimit: Int
     let sendDisabled: Bool
     let sendAction: () -> Void
     let recvAction: () -> Void
@@ -106,7 +106,6 @@ struct TwoRowButtons: View {
     func sendButton(_ title: String) -> TypeButton {
         TypeButton(title: title,
                     a11y: sendA11y,
-               lineLimit: lineLimit,
                     type: sendType,
                 disabled: sendDisabled,
                   action: sendAction)
@@ -115,7 +114,6 @@ struct TwoRowButtons: View {
     func recvButton(_ title: String) -> TypeButton {
         TypeButton(title: title,
                     a11y: recvA11y,
-               lineLimit: lineLimit,
                     type: recvType,
                 disabled: false,
                   action: recvAction)
@@ -140,9 +138,7 @@ struct TwoRowButtons: View {
                 vLayout
 //                    .border(.red)
             }
-        } else { // iOS 15 has no ViewThatFits
-            vLayout
-        }
+        } else { vLayout } // iOS 15 has no ViewThatFits
     }
 }
 // MARK: -
@@ -157,7 +153,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                       recvTitle: "Request " + LONGCURRENCY,
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + LONGCURRENCY,
-                      lineLimit: 2, sendDisabled: true,
+                   sendDisabled: true,
                      sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
@@ -167,7 +163,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                       recvTitle: "Request " + DEMOCURRENCY,
                        recvType: .peerPullCredit,
                        recvA11y: "Request " + DEMOCURRENCY,
-                      lineLimit: 2, sendDisabled: true,
+                   sendDisabled: true,
                      sendAction: {}, recvAction: {})
                 .listRowSeparator(.hidden)
         }

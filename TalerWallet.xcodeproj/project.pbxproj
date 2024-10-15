@@ -816,7 +816,6 @@
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */,
 				4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */,
-				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4EB095382989CBFE0043A8A1 /* PendingRowView.swift */,
 			);
 			path = Balances;
@@ -893,6 +892,7 @@
 				4E2B337C2C8B1D5500186A3E /* ActionsSheet.swift */,
 				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
 				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
+				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
 				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 			);
 			path = Actions;

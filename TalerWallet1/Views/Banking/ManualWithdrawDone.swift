@@ -51,7 +51,7 @@ struct ManualWithdrawDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
 //                .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
-                    Button("Done", action: { dismissTop(stack.push()) } )
+                    Button("Done") { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
                 }
