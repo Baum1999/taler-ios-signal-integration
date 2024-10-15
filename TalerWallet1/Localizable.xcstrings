@@ -1,22 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "\nWarnings can be switched off in Settings" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "\\nWarnungen können in den Einstellungen ausgeschaltet werden"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "\nПопередження можна вимкнути в Налаштуваннях"
-          }
-        }
-      }
-    },
     "- %@ fee" : {
       "localizations" : {
         "de" : {
@@ -1057,29 +1041,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сума до витрати:"
-          }
-        }
-      }
-    },
-    "Amount to be withdrawn:" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abzuhebender Betrag:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Monto a extraer:"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сума до зняття:"
           }
         }
       }
@@ -2814,6 +2775,12 @@
             "value" : "Fee:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comisión:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2836,6 +2803,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Fee:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comisión:"
           }
         },
         "uk" : {
@@ -2905,66 +2878,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Закінчується: %@"
-          }
-        }
-      }
-    },
-    "Fee (long):" : {
-      "comment" : "long version",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebühr:"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fee:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comisión:"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Комісія:"
-          }
-        }
-      }
-    },
-    "Fee (short):" : {
-      "comment" : "short version",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gebühr:"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fee:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comisión:"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Комісія:"
           }
         }
       }
@@ -4308,6 +4221,12 @@
             "value" : "Kein Zahlungsgebühr"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sin comisión de "
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5389,29 +5308,6 @@
         }
       }
     },
-    "Recent %lld transactions" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktuellste %lld Umsätze"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld transacciones recientes"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Останні %lld транзакції"
-          }
-        }
-      }
-    },
     "Recent transaction" : {
       "comment" : "section header singular",
       "localizations" : {
@@ -5442,6 +5338,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktuelle Umsätze"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transacciones recientes"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Останні транзакції"
           }
         }
       }
@@ -6307,7 +6215,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zeigt bei welchen Dialog Sie gerade sind"
+            "value" : "Zeigt bei welchen Dialog Sie gerade sind."
           }
         },
         "es" : {
@@ -6408,33 +6316,16 @@
             "value" : "Status:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Статус:"
-          }
-        }
-      }
-    },
-    "Status: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estado: %@"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Статус: %@"
           }
         }
       }
@@ -6568,29 +6459,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Банк чекає на вашу авторизацію."
-          }
-        }
-      }
-    },
-    "The bank is waiting for your confirmation." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Bank wartet auf Ihre Freigabe."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El banco esta esperando su confirmación."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Банк чекає на ваше підтвердження."
           }
         }
       }
