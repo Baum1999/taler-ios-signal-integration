@@ -750,7 +750,7 @@
 				4EE77E832C1012F7007C9064 /* Actions */,
 				4EB095342989CBFE0043A8A1 /* Balances */,
 				4EB0952E2989CBFE0043A8A1 /* Transactions */,
-				4EB095272989CBFE0043A8A1 /* Banking */,
+				4EB095272989CBFE0043A8A1 /* Exchange */,
 				4EB095242989CBFE0043A8A1 /* Settings */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
 				4EB095462989CBFE0043A8A1 /* HelperViews */,
@@ -768,19 +768,14 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		4EB095272989CBFE0043A8A1 /* Banking */ = {
+		4EB095272989CBFE0043A8A1 /* Exchange */ = {
 			isa = PBXGroup;
 			children = (
 				4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */,
 				4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */,
 				4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */,
-				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
-				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
-				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
-				4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */,
-				4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */,
 			);
-			path = Banking;
+			path = Exchange;
 			sourceTree = "<group>";
 		};
 		4EB0952A2989CBFE0043A8A1 /* Payment */ = {
@@ -893,6 +888,7 @@
 				4EB095362989CBFE0043A8A1 /* SendRequestV.swift */,
 				4EA076B22BC0607400685A10 /* DepositWithdrawV.swift */,
 				4EB065432A4CD1A80039B91D /* TwoRowButtons.swift */,
+				4EFDC38E2CBE8D4E00BE8DBC /* Banking */,
 				4ECB627E2A0BA4DA004ABBB7 /* Peer2peer */,
 			);
 			path = Actions;
@@ -913,6 +909,18 @@
 				E3E48FB12B9B7B5400898A0F /* ErrorSheet.swift */,
 			);
 			path = Sheets;
+			sourceTree = "<group>";
+		};
+		4EFDC38E2CBE8D4E00BE8DBC /* Banking */ = {
+			isa = PBXGroup;
+			children = (
+				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
+				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
+				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
+				4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */,
+				4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */,
+			);
+			path = Banking;
 			sourceTree = "<group>";
 		};
 		D14AFD1424D232B300C51073 = {
