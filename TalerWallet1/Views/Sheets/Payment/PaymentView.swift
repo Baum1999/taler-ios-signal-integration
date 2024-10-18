@@ -211,7 +211,6 @@ struct PaymentView: View {
                 let currency = amountToTransfer.currencyStr
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.scope.currency)")
-//                currencyName = currencyInfo.scope.currency
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)

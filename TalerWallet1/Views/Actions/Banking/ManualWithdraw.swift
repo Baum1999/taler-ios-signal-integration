@@ -31,8 +31,6 @@ struct ManualWithdraw: View {
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var currencyName: String = UNKNOWN
-    @State private var currencySymbol: String = UNKNOWN
 
     var body: some View {
 #if PRINT_CHANGES
@@ -48,14 +46,12 @@ struct ManualWithdraw: View {
             let scopeInfo = exchange.scopeInfo
             let currency = scopeInfo.currency
             let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            let currencyName = currencyInfo.scope.currency
-            let currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
 
             let navTitle = String(localized: "NavTitle_Withdraw (currency)",
-                               defaultValue: "Withdraw \(currencySymbol)",
+                               defaultValue: "Withdraw \(currencyInfo.symbol)",
                                     comment: "NavTitle: Withdraw 'currencySymbol'")
             let navA11y = String(localized: "NavTitle_Withdraw (currency) A11y",
-                                 defaultValue: "Withdraw \(currencyName)",
+                                 defaultValue: "Withdraw \(currencyInfo.name)",
                                  comment: "NavTitle: Withdraw 'currency'")
 //          let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
 

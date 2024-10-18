@@ -42,8 +42,6 @@ struct BalancesSectionView {
     @State private var recentTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
     @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var currencyName: String = UNKNOWN
-    @State private var currencySymbol: String = UNKNOWN
 
     private static func className() -> String {"\(self)"}
 
@@ -141,15 +139,12 @@ extension BalancesSectionView: View {
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,
-                    currencyName: $currencyName,
-                  currencySymbol: $currencySymbol,
+                    currencyInfo: $currencyInfo,
             shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .listRowSeparator(.hidden)
         .task(id: controller.currencyTicker) {
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            currencyName = currencyInfo.scope.currency
-            currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
         .task(id: shouldReloadBalances + 1_000_000) {
             symLog.log(".task for BalancesSectionView - load recent+completed+pending")

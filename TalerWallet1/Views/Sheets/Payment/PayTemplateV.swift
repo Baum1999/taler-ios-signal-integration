@@ -29,7 +29,6 @@ struct PayTemplateV: View {
 //    @State private var insufficient = false
 //    @State private var preparePayResult: PreparePayResult? = nil
     @State private var templateContract: TemplateContractDetails? = nil
-    @State private var currencyName = EMPTYSTRING
     @State private var amountIsEditable = false
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
@@ -185,7 +184,6 @@ struct PayTemplateV: View {
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
-//                currencyName = currencyInfo.scope.currency
             }
             .onAppear() {
                 symLog.log("onAppear")
@@ -219,7 +217,6 @@ struct PayTemplateV: View {
 //                                                                 announce: announce)
 //                        {   symLog.log("preparePayForTemplate finished")
                             amountToTransfer = prepAmount ?? zeroAmount
-                            currencyName = prepCurrency
                             summary = prepSummary ?? EMPTYSTRING
                         templateContract = contract
 //                            insufficient = result.insufficient

@@ -111,8 +111,6 @@ struct SendAmountContent: View {
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
     @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var currencyName = UNKNOWN
-    @State private var currencySymbol = UNKNOWN
     @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -274,8 +272,6 @@ struct SendAmountContent: View {
                 let currency = scopeInfo.currency
                 amountToTransfer.setCurrency(currency)
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
-                currencyName = currencyInfo.scope.currency
-                currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
                 do {
                     amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
                 } catch {

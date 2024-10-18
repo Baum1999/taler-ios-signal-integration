@@ -27,8 +27,6 @@ struct ExchangeSectionView: View {
 
     @State private var shouldReloadBalances: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var currencyName: String = UNKNOWN
-    @State private var currencySymbol: String = UNKNOWN
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
@@ -78,7 +76,6 @@ struct ExchangeSectionView: View {
         let scopeInfo = exchange.scopeInfo
         let currency = scopeInfo.currency
 //        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-//        let currencyName = currencyInfo.scope.currency
         Section {
 //            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
@@ -130,15 +127,12 @@ struct ExchangeSectionView: View {
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,
-                    currencyName: $currencyName,
-                  currencySymbol: $currencySymbol,
+                    currencyInfo: $currencyInfo,
             shouldReloadBalances: $shouldReloadBalances)
         }
         .task(id: controller.currencyTicker) {
             symLog.log("task \(didDelete ? 1 : 0)")
             currencyInfo = controller.info(for: currency, controller.currencyTicker)
-            currencyName = currencyInfo.scope.currency
-            currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         }
         .onDisappear() {
             disabled = false

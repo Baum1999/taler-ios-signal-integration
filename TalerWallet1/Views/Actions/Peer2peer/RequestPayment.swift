@@ -241,8 +241,6 @@ struct RequestPaymentContent: View {
                 let currency = scopeInfo.currency
                 amountToTransfer.setCurrency(currency)
                 currencyInfo = controller.info(for: currency, controller.currencyTicker)
-                currencyName = currencyInfo.scope.currency
-//                currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
             }
         }
 //        .task(id: amountToTransfer.value) {
