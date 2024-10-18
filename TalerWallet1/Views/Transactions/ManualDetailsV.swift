@@ -90,7 +90,8 @@ struct AccountPicker: View {
             ForEach(0..<accountDetails.count, id: \.self) { index in
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
-                        let amountStr = amount.formatted(isNegative: false, useISO: false)
+                        let amountStr = amount.formatted(specs: detail.currencySpecification,
+                                                    isNegative: false, useISO: false)
 //            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
                             Text(bankName + ":   " + amountStr)

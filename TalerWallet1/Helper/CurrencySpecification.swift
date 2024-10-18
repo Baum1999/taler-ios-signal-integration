@@ -6,7 +6,21 @@
  * @author Marc Stibane
  */
 import Foundation
+import SwiftUI
 import taler_swift
+
+private struct CurrencyInfoKey: EnvironmentKey {
+    static let defaultValue: CurrencyInfo = {
+        return CurrencyInfo.zero(UNKNOWN)
+    }()
+}
+
+extension EnvironmentValues {
+    var currencyInfo: CurrencyInfo {
+        get { self[CurrencyInfoKey.self] }
+        set { self[CurrencyInfoKey.self] = newValue }
+    }
+}
 
 extension Locale {
     static var preferredLanguageCode: String {
@@ -44,9 +58,9 @@ extension Amount {
         }
     }
 
-    func formatted(isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
+    func formatted(_ scope: ScopeInfo, isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
         let controller = Controller.shared
-        if let currencyInfo = controller.info(for: self.currencyStr) {
+        if let currencyInfo = controller.info2(for: self.currencyStr) {
             return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO, a11y: a11y)
         }
         return self.readableDescription
@@ -58,8 +72,10 @@ extension Amount {
             let formatter = CurrencyFormatter.formatter(scope: myScope, specs: specs)
             let currencyInfo = CurrencyInfo(scope: myScope, specs: specs, formatter: formatter)
             return formatted(currencyInfo, isNegative: isNegative, useISO: useISO)
+        } else if let scope {
+            return formatted(scope, isNegative: isNegative, useISO: useISO)
         }
-        return formatted(isNegative: isNegative, useISO: useISO)
+        return self.readableDescription
     }
 
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
@@ -83,7 +99,7 @@ extension Amount {
     }
 }
 
-public struct CurrencyInfo {
+public struct CurrencyInfo: Sendable {
     let scope: ScopeInfo
     let specs: CurrencySpecification
     let formatter: CurrencyFormatter
@@ -123,6 +139,18 @@ public struct CurrencyInfo {
         let formatter = CurrencyFormatter.formatter(scope: scope, specs: specs)
         print(formatter.longName ?? formatter.altUnitSymbol ?? formatter.altUnitName0 ?? formatter.currencyName ?? currency)
         return CurrencyInfo(scope: scope, specs: specs, formatter: formatter)
+    }
+
+
+    var currency: String { scope.currency }
+    var name: String { specs.name }
+    var symbol: String { altUnitSymbol ?? specs.name }      // fall back to name if no symbol defined
+    var hasSymbol: Bool {
+        if symbol != name {
+            let count = symbol.count
+            return count > 0 && count <= 3
+        }
+        return false
     }
 
     /// returns all characters left from the decimalSeparator

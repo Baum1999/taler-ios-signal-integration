@@ -11,8 +11,7 @@ struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let scopeInfo: ScopeInfo?
-    @Binding var currencyName: String
-    @Binding var currencySymbol: String
+    @Binding var currencyInfo: CurrencyInfo
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -26,8 +25,8 @@ struct BarGraphHeader: View {
 
     var body: some View {
         HStack (alignment: .center, spacing: 10) {
-            if !minimalistic || currencyName != currencySymbol {
-                Text(currencyName)
+            if !minimalistic || currencyInfo.hasSymbol {
+                Text(currencyInfo.name)
                     .talerFont(.title2)
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
@@ -44,8 +43,6 @@ struct BarGraphHeader: View {
                                                         scopeInfo: scopeInfo,
                                                     filterByState: .done,
                                                             limit: MAXBARS) {
-//                    let completed = WalletModel.completedTransactions(response)
-//                    completedTransactions = completed
                     completedTransactions = response
                 }
             }
