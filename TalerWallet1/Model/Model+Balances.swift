@@ -45,6 +45,14 @@ extension Balance {
             !balance.available.isZero
         }
     }
+    static func firstNonZero(_ balances: [Balance]) -> Balance? {
+        for balance in balances {
+            if !balance.available.isZero {
+                return balance
+            }
+        }
+        return nil
+    }
 }
 // MARK: -
 /// A request to get the balances held in the wallet.
@@ -65,13 +73,8 @@ extension WalletModel {
       async throws -> [Balance] {          // M for MainActor
         await semaphore.wait()
         defer { semaphore.signal() }
-        if cachedBalances == nil {
-            let request = Balances()
-            let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-            cachedBalances = response.balances
-        } else {
-            logger.trace("returning cached Balances")
-        }
-        return cachedBalances ?? []
+        let request = Balances()
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.balances
     }
 }

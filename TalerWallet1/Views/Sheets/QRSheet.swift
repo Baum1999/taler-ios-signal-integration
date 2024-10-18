@@ -10,7 +10,6 @@ import AVFoundation
 struct QRSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     @Binding var selectedBalance: Balance?
 
     @State private var scannedCode: String?
@@ -36,7 +35,6 @@ struct QRSheet: View {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(),
-                              balances: $balances,
                        selectedBalance: $selectedBalance,
                              urlToOpen: scannedURL)
                     } else {

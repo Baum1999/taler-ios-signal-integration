@@ -13,16 +13,17 @@ import SymLog
 struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let balances: [Balance]
     @Binding var selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
+
+    @EnvironmentObject private var controller: Controller
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
 
     func firstNonZero() -> Balance? {
-        for aBalance in balances {
+        for aBalance in controller.balances {
             if !aBalance.available.isZero {
                 return aBalance
             }
@@ -34,15 +35,14 @@ struct SendAmountV: View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
-        let count = balances.count
+        let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
-                         balances: balances,
                       onlyNonZero: true) { index in
                     balanceIndex = index
-                    balance = balances[index]
+                    balance = controller.balances[index]
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
@@ -58,18 +58,18 @@ struct SendAmountV: View {
                 if let selectedBalance {
                     if selectedBalance.available.isZero {
                         // find another balance
-                        balance = firstNonZero()
+                        balance = Balance.firstNonZero(controller.balances)
                     } else {
                         balance = selectedBalance
                     }
                 } else {
-                    balance = firstNonZero()
+                    balance = Balance.firstNonZero(controller.balances)
                 }
                 if let balance {
-                    balanceIndex = balances.firstIndex(of: balance) ?? 0
+                    balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
                 } else {
                     balanceIndex = 0
-                    balance = (count > 0) ? balances[0] : nil
+                    balance = (count > 0) ? controller.balances[0] : nil
                 }
             }
 
@@ -348,7 +348,6 @@ fileprivate struct Preview_Content: View {
                         pendingOutgoing: pending,
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
-                 balances: [balance],
           selectedBalance: $noBalance,
            amountLastUsed: $amountToPreview,
                   summary: $summary)

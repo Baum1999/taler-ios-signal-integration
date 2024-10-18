@@ -16,14 +16,14 @@ import taler_swift
 ///        [􀎻  Scan QR ]
 struct ActionsSheet: View {
     let stack: CallStack
-    @Binding var balances: [Balance]
     @Binding var qrButtonTapped: Bool
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
+    @EnvironmentObject private var controller: Controller
 
     private var hasKudos: Bool {
-        for balance in balances {
+        for balance in controller.balances {
             if balance.scopeInfo.currency == DEMOCURRENCY {
                 if !balance.available.isZero {
                     return true
@@ -33,7 +33,7 @@ struct ActionsSheet: View {
         return false
     }
     private var canSend: Bool {     // canDeposit
-        for balance in balances {
+        for balance in controller.balances {
             if !balance.available.isZero {
                 return true
             }
@@ -92,7 +92,6 @@ struct ActionsSheet: View {
 @available(iOS 16.4, *)
 struct DualHeightSheet: View {
     let stack: CallStack
-    @Binding var balances: [Balance]
     @Binding var qrButtonTapped: Bool
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
@@ -117,7 +116,6 @@ struct DualHeightSheet: View {
     var body: some View {
         ScrollView {
             ActionsSheet(stack: stack.push(),
-                      balances: $balances,
                 qrButtonTapped: $qrButtonTapped2)
             .presentationDragIndicator(.hidden)
             .presentationBackground {
@@ -172,8 +170,3 @@ struct DualHeightSheet: View {
         .frame(maxHeight: innerHeight)
     }
 }
-// MARK: -
-//#Preview {
-//    @Previewable @State var balances: [Balance] = []
-//    Actions(stack: CallStack("Preview"), balances: $balances, ...)
-//}

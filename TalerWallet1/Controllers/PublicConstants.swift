@@ -150,7 +150,6 @@ extension Notification.Name {
 
 /// Notifications for internal synchronization
 extension Notification.Name {
-    static let BalanceReloaded = Notification.Name("balanceReloaded")
     static let SendAction = Notification.Name("sendAction")
     static let RequestAction = Notification.Name("requestAction")
     static let DepositAction = Notification.Name("depositAction")

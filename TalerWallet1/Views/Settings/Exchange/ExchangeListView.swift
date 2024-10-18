@@ -13,7 +13,6 @@ import SymLog
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     let navTitle: String
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -40,7 +39,7 @@ struct ExchangeListView: View {
         let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         if #available(iOS 16.0, *) {
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
+            ExchangeListCommonV(symLog: symLog, stack: stack.push())
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
@@ -54,7 +53,7 @@ struct ExchangeListView: View {
                     Text("Please enter the URL")
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), balances: $balances)
+            ExchangeListCommonV(symLog: symLog, stack: stack.push())
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .textFieldAlert(isPresented: $showAlert,
@@ -70,7 +69,6 @@ struct ExchangeListView: View {
 struct ExchangeListCommonV {
     let symLog: SymLogV?
     let stack: CallStack
-    @Binding var balances: [Balance]
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -99,7 +97,6 @@ extension ExchangeListCommonV: View {
         let sortedExchanges = exchanges.sorted { $0 < $1 }
         let sortedList = List(sortedExchanges, id: \.self) { exchange in
             ExchangeSectionView(stack: stack.push(),
-                             balances: $balances,
                              exchange: exchange,
 //                        depositIBAN: $depositIBAN,
 //                      accountHolder: $accountHolder,

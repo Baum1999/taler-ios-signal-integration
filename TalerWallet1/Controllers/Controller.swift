@@ -49,6 +49,8 @@ class Controller: ObservableObject {
     public static let shared = Controller()
     private let symLog = SymLogC()
 
+    @Published var balances: [Balance] = []
+
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @Published var isConnected: Bool = true
@@ -111,8 +113,24 @@ class Controller: ObservableObject {
         currencyTicker = 0
         currencyInfos = []
         exchanges = []
+        balances = []
 //        checkInternetConnection()
     }
+// MARK: -
+    /// runs on MainActor if called in some Task {}
+    @discardableResult
+    func loadBalances(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+        if let reloaded = try? await model.balancesM(stack.push()) {
+            for balance in reloaded {
+                let scope = balance.scopeInfo
+                checkInfo(for: scope, model: model)
+            }
+            balances = reloaded         // redraw
+            return reloaded.count
+        }
+        return nil
+    }
+
 // MARK: -
     func exchange(for baseUrl: String) -> Exchange? {
         for exchange in exchanges {

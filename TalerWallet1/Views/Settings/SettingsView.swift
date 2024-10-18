@@ -19,7 +19,6 @@ import LocalConsole
 struct SettingsView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
@@ -102,7 +101,6 @@ struct SettingsView: View {
                 let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
                 let exchangesDest = LazyView {
                     ExchangeListView(stack: stack.push(exchangesTitle),
-                                  balances: $balances,
                                   navTitle: exchangesTitle)
                 }
                 NavigationLink {        // whole row like in a tableView

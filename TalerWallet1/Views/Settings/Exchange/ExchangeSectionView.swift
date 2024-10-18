@@ -15,7 +15,6 @@ import SymLog
 struct ExchangeSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     let exchange: Exchange
 //    let exchanges: [Exchange]
 //    @Binding var depositIBAN: String
@@ -147,47 +146,3 @@ struct ExchangeSectionView: View {
         }
     }
 }
-// MARK: -
-#if false   // model crashes
-fileprivate struct ExchangeSection_Previews: PreviewProvider {
-fileprivate struct ExchangeRow_Container : View {
-    @State private var previewBalances: [Balance] = []
-    @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
-    @State private var depositIBAN = "DE1234567890"
-    @State private var accountHolder = "Marc Stibane"
-
-//    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
-    var body: some View {
-        let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
-        let exchange1 = Exchange(exchangeBaseUrl: ARS_AGE_EXCHANGE,
-                                       scopeInfo: scopeInfo,
-                                       paytoUris: [],
-                                       tosStatus: .pending,
-                             exchangeEntryStatus: .preset,
-                            exchangeUpdateStatus: .initial,
-                           ageRestrictionOptions: [12,16])
-        let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
-                                       scopeInfo: scopeInfo,
-                                       paytoUris: [],
-                                       tosStatus: .proposed,
-                             exchangeEntryStatus: .ephemeral,
-                            exchangeUpdateStatus: .ready,
-                           ageRestrictionOptions: [])
-        ExchangeSectionView(stack: CallStack("Preview"), 
-                         balances: $previewBalances,
-//                        scopeInfo: scopeInfo,
-                         exchange: exchange1,
-//                        exchanges: [exchange1, exchange2],
-//                      depositIBAN: $depositIBAN,
-//                    accountHolder: $accountHolder,
-                 amountToTransfer: $amountToPreview)
-    }
-}
-
-    static var previews: some View {
-        List {
-            ExchangeRow_Container()
-        }
-    }
-}
-#endif

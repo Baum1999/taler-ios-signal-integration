@@ -23,9 +23,10 @@ fileprivate func pickerRow(_ balance: Balance) -> String {
 struct ScopePicker: View {
 //    private let symLog = SymLogV(0)
     @Binding var value: Int
-    let balances: [Balance]
     let onlyNonZero: Bool
     let action: (Int) -> Void
+
+    @EnvironmentObject private var controller: Controller
 
     @State private var selected = 0
 
@@ -33,9 +34,9 @@ struct ScopePicker: View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
-        let count = balances.count
+        let count = controller.balances.count
         if (count > 0) {
-            let balance = balances[selected]
+            let balance = controller.balances[selected]
             let available = balance.available
             let availableA11y = available.formatted(isNegative: false, useISO: true, a11y: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
@@ -49,13 +50,12 @@ struct ScopePicker: View {
 
                 if #available(iOS 16.0, *) {
                     ScopeDropDown(selection: $selected,
-                                  balances: balances,
-                               onlyNonZero: onlyNonZero,
-                                  disabled: disabled)
+                                onlyNonZero: onlyNonZero,
+                                   disabled: disabled)
                 } else {
                     Picker(EMPTYSTRING, selection: $selected) {
-                        ForEach(0..<balances.count, id: \.self) { index in
-                            let balance = balances[index]
+                        ForEach(0..<controller.balances.count, id: \.self) { index in
+                            let balance = controller.balances[index]
                             Text(pickerRow(balance))
                                 .tag(index)
 //                              .selectionDisabled(balance.available.isZero)    needs iOS 17
@@ -84,11 +84,12 @@ struct ScopePicker: View {
 @available(iOS 16.0, *)
 struct  ScopeDropDown: View {
     @Binding  var selection: Int
-    let balances: [Balance]
     let onlyNonZero: Bool
     let disabled: Bool
 
 //    var maxItemDisplayed: Int = 3
+
+    @EnvironmentObject private var controller: Controller
 
     @State private var scrollPosition: Int?
     @State private var showDropdown = false
@@ -126,7 +127,7 @@ struct  ScopeDropDown: View {
             let chevron = Image(systemName: "chevron.up")
             let foreColor = disabled ? Color.secondary : Color.primary
             let backColor = disabled ? WalletColors().backgroundColor : WalletColors().gray4
-            let otherBalances = balances.filter { $0 != balances[selection] }
+            let otherBalances = controller.balances.filter { $0 != controller.balances[selection] }
             let theList = LazyVStack(spacing: 0) {
                 ForEach(0..<otherBalances.count, id: \.self) { index in
                     let item = otherBalances[index]
@@ -134,7 +135,7 @@ struct  ScopeDropDown: View {
                     Button(action: {
                         withAnimation {
                             showDropdown.toggle()
-                            selection = balances.firstIndex(of: item) ?? selection
+                            selection = controller.balances.firstIndex(of: item) ?? selection
                         }
                     }, label: {
                         HStack(alignment: .top) {
@@ -154,7 +155,7 @@ struct  ScopeDropDown: View {
             }
             VStack {
                 // selected item
-                let balance = balances[selection]
+                let balance = controller.balances[selection]
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
                         dropDownRow(balance)
@@ -171,16 +172,16 @@ struct  ScopeDropDown: View {
 //                .border(.red)
                 if (showDropdown) {
                     if #available(iOS 17.0, *) {
-//                      let toomany = balances.count > maxItemDisplayed
+//                      let toomany = controller.balances.count > maxItemDisplayed
 //                      let scrollViewHeight = buttonHeight * CGFloat(toomany ? maxItemDisplayed
-//                                                                            : balances.count)
+//                                                                            : controller.balances.count)
                         ScrollView {
                             theList
                                 .scrollTargetLayout()
                         }
 //                      .border(.red)
                         .scrollPosition(id: $scrollPosition)
-                        .scrollDisabled(balances.count <= 3)
+                        .scrollDisabled(controller.balances.count <= 3)
 //                      .frame(height: scrollViewHeight)
                         .onAppear {
                             scrollPosition = selection

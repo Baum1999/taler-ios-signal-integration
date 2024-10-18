@@ -13,7 +13,6 @@ import SymLog
 struct WithdrawExchangeV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     @Binding var selectedBalance: Balance?
     var url: URL
 
@@ -35,7 +34,6 @@ struct WithdrawExchangeV: View {
             let currency = exchange.scopeInfo.currency
             Group {
                 ManualWithdraw(stack: stack.push(),
-                            balances: balances,
                      selectedBalance: $selectedBalance,
 //                      currencyInfo: $currencyInfo,
                              isSheet: true,

@@ -13,10 +13,11 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let balances: [Balance]
     @Binding var selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
+
+    @EnvironmentObject private var controller: Controller
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
@@ -25,15 +26,14 @@ struct RequestPayment: View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
-        let count = balances.count
+        let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
-                         balances: balances,
                       onlyNonZero: false) { index in
                         balanceIndex = index
-                        balance = balances[index]
+                        balance = controller.balances[index]
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
@@ -48,10 +48,10 @@ struct RequestPayment: View {
             .task {
                 if let selectedBalance {
                     balance = selectedBalance
-                    balanceIndex = balances.firstIndex(of: selectedBalance) ?? 0
+                    balanceIndex = controller.balances.firstIndex(of: selectedBalance) ?? 0
                 } else {
                     balanceIndex = 0
-                    balance = (count > 0) ? balances[0] : nil
+                    balance = (count > 0) ? controller.balances[0] : nil
                 }
             }
 

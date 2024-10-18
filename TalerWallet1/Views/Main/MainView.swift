@@ -38,7 +38,6 @@ struct MainView: View {
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
-    @State private var balances: [Balance] = []
     @State private var selectedBalance: Balance? = nil
     @State private var urlToOpen: URL? = nil
     @State private var sheetPresented = false
@@ -67,7 +66,6 @@ struct MainView: View {
         Group {
             if controller.backendState == .ready {
                 Content(logger: logger, stack: stack.push("Content"),
-                      balances: $balances,
                selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
@@ -101,7 +99,6 @@ struct MainView: View {
         }
         .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
             let sheet = AnyView(URLSheet(stack: stack.push(),
-                                      balances: $balances,
                                selectedBalance: $selectedBalance,
                                      urlToOpen: url))
             Sheet(stack: stack.push(), sheetView: sheet)
@@ -125,7 +122,6 @@ struct MainView: View {
                onDismiss: { showScanner = false; qrButtonTapped = false }
         ) {
             let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                          balances: $balances,
                                           selectedBalance: $selectedBalance))
             if #available(iOS 16.4, *) {
                 if showScanner {
@@ -136,7 +132,6 @@ struct MainView: View {
                 } else {
                     let _ = logger.log("❗️actionsSheet: small❗️")
                     DualHeightSheet(stack: stack.push(),
-                                 balances: $balances,
                            qrButtonTapped: $qrButtonTapped)
                 }
             } else {
@@ -148,7 +143,6 @@ struct MainView: View {
                         Spacer()
                         ScrollView {
                             ActionsSheet(stack: stack.push(),
-                                      balances: $balances,
                                 qrButtonTapped: $qrButtonTapped)
                             .innerHeight($innerHeight)
 //                          .padding()
@@ -220,7 +214,6 @@ extension MainView {
     struct Content: View {
         let logger: Logger
         let stack: CallStack
-        @Binding var balances: [Balance]
         @Binding var selectedBalance: Balance?
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
@@ -328,19 +321,16 @@ extension MainView {
                               currency: DEMOCURRENCY)
 
             let sendDest = SendAmountV(stack: stack.push("\(Self.className())()"),
-                                    balances: balances,
                              selectedBalance: $selectedBalance,             // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,              // currency needs to be updated!
                                      summary: $summary)
 
             let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
-                                          balances: balances,
                                    selectedBalance: $selectedBalance,
                                     amountLastUsed: $amountLastUsed,      // currency needs to be updated!
                                            summary: $summary)
 
             let depositDest = DepositIbanV(stack: stack.push(),
-                                        balances: balances,
                                  selectedBalance: $selectedBalance,
                                         feeLabel: nil,
                                     feeIsNotZero: nil,
@@ -349,7 +339,6 @@ extension MainView {
                                   amountLastUsed: $amountLastUsed)
 
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(),
-                                                 balances: balances,
                                           selectedBalance: $selectedBalance,
                                                   isSheet: false,
                                                 scopeInfo: scope,
@@ -361,7 +350,6 @@ extension MainView {
                 TabView(selection: tabSelection()) {
                     NavigationView {
                         BalancesListView(stack: stack.push(balancesTitle),
-                                      balances: $balances,
                                selectedBalance: $selectedBalance,
 //                         shouldReloadPending: $shouldReloadPending,
                           shouldReloadBalances: $shouldReloadBalances)
@@ -388,7 +376,6 @@ extension MainView {
 
                     NavigationView {
                         SettingsView(stack: stack.push(),
-                                  balances: $balances,
                                   navTitle: settingsTitle)
                     }.id(viewState2.rootViewId)               // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
@@ -443,12 +430,10 @@ extension MainView {
                     controller.playSound(0)
                 }
             }
-            .onChange(of: balances) { newArray in
-                for balance in newArray {
-                    let scope = balance.scopeInfo
-                    controller.checkInfo(for: scope, model: model)
-                }
-            }
+            .task(id: shouldReloadBalances) {
+//                symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
+                await controller.loadBalances(stack.push("refreshing balances"), model)
+            } // task
         } // body
     } // Content
 }

@@ -25,7 +25,6 @@ class WalletModel: ObservableObject {
     public static let shared = WalletModel()
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletModel")
     let semaphore = AsyncSemaphore(value: 1)
-    var cachedBalances: [Balance]? = nil
 
     @Published var showError: Bool = false
     @Published var error2: ErrorData? = nil

@@ -14,7 +14,6 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balances: [Balance]
     @Binding var selectedBalance: Balance?
 //    @Binding var shouldReloadPending: Int
     @Binding var shouldReloadBalances: Int
@@ -23,25 +22,8 @@ struct BalancesListView: View {
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var lastReloadedBalances = 0
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
-
-    /// runs on MainActor if called in some Task {}
-    @discardableResult
-    private func reloadBalances(_ stack: CallStack, _ invalidateCache: Bool) async -> Int? {
-        if invalidateCache {
-            model.cachedBalances = nil
-        }
-
-        if let reloaded = try? await model.balancesM(stack.push()) {
-            let count = reloaded.count
-            balances = reloaded         // redraw
-            return count
-        }
-
-        return nil
-    }
 
     private static func className() -> String {"\(self)"}
 
@@ -51,11 +33,11 @@ struct BalancesListView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-            let count = balances.count
-            if balances.isEmpty {
+            let count = controller.balances.count
+            if controller.balances.isEmpty {
                 WalletEmptyView(stack: stack.push("isEmpty"))
             } else {
-                List(balances, id: \.self) { balance in
+                List(controller.balances, id: \.self) { balance in
                     BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                       balance: balance,                     // this is the currency to be used
                               selectedBalance: $selectedBalance,
@@ -75,17 +57,8 @@ struct BalancesListView: View {
         .refreshable {  // already async
             controller.hapticNotification(.success)
             symLog.log("refreshing balances")
-            let count = await reloadBalances(stack.push("refreshing balances"), true)
-            if let count, count > 0 {
-                NotificationCenter.default.post(name: .BalanceReloaded, object: nil)
-            }
+            await controller.loadBalances(stack.push("refreshing balances"), model)
         }
 #endif
-        .task(id: shouldReloadBalances) {
-            symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
-            let invalidateCache = (lastReloadedBalances != shouldReloadBalances)
-            lastReloadedBalances = shouldReloadBalances
-            await reloadBalances(stack.push(".task"), invalidateCache)
-        } // task
     }
 }
