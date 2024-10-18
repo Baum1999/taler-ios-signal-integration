@@ -32,22 +32,22 @@ struct ExchangeSectionView: View {
     @State private var showAlert: Bool = false
     @State private var purge: Bool = false
 
-    func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
-        if let exchange {
-            for balance in balances {
-                if let baseUrl = balance.scopeInfo.url {
-                    if baseUrl == exchange.exchangeBaseUrl {
-                        return balance.available
-                    }
-                } else if let currency {
-                    if currency == balance.scopeInfo.currency {
-                        return balance.available
-                    }
-                }
-            }
-        }
-        return nil
-    }
+//    func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
+//        if let exchange {
+//            for balance in balances {
+//                if let baseUrl = balance.scopeInfo.url {
+//                    if baseUrl == exchange.exchangeBaseUrl {
+//                        return balance.available
+//                    }
+//                } else if let currency {
+//                    if currency == balance.scopeInfo.currency {
+//                        return balance.available
+//                    }
+//                }
+//            }
+//        }
+//        return nil
+//    }
 
     private func deleteExchange() {
         disabled = true     // don't try this more than once
@@ -81,10 +81,6 @@ struct ExchangeSectionView: View {
                 ExchangeRowView(stack: stack.push(),
                          currencyInfo: $currencyInfo,
                              exchange: exchange,
-                      amountAvailable: amountAvailable(exchange, currency: currency),
-//                          depositIBAN: $depositIBAN,
-//                        accountHolder: $accountHolder,
-                             currency: currencyName,        // TODO: (balance.available) amount.isZero to disable Deposit-button
                      amountToTransfer: $amountToTransfer)   // does still have the wrong currency
                 .listRowSeparator(.hidden)
 //            }

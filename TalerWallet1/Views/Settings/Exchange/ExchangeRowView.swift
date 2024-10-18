@@ -14,10 +14,6 @@ struct ExchangeRowView: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
     let exchange: Exchange
-//    @Binding var depositIBAN: String
-//    @Binding var accountHolder: String
-    let amountAvailable: Amount?
-    let currency: String                        // this is the currency to be used
     @Binding var amountToTransfer: Amount       // does still have the wrong currency
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -53,23 +49,6 @@ struct ExchangeRowView: View {
             }
             .listRowSeparator(.hidden)
 
-//            DepositWithdrawV(stack: stack.push(),
-//                      currencyInfo: $currencyInfo,
-//                         scopeInfo: exchange.scopeInfo,
-//                   amountAvailable: amountAvailable,
-//                  amountToTransfer: $amountToTransfer)
-        }
-        .task {
-            if controller.info(for: currency) == nil {
-                symLog.log("fetching info for \(currency)")
-                // FIXME: remove fake ScopeInfo once the REAL one is in exchange.scopeInfo
-                let scopeInfo = exchange.scopeInfo
-                             ?? ScopeInfo(type: .global, currency: currency)
-                if let info = try? await model.getCurrencyInfoM(scope: scopeInfo, delay: delay) {
-//                    logger.info("got info: \(scope.currency, privacy: .public)")
-                    await controller.setInfo(info)
-                }
-            }
         }
     }
 }
@@ -105,8 +84,6 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
             ExchangeRowView(stack: CallStack("Preview"),
                      currencyInfo: $currencyInfoL,
                          exchange: exchange1,
-                  amountAvailable: Amount(currency: LONGCURRENCY, cent: 5000),      // 50,00
-                         currency: LONGCURRENCY,
 //                      depositIBAN: $depositIBAN,
 //                    accountHolder: $accountHolder,
                  amountToTransfer: $amountToPreview)
