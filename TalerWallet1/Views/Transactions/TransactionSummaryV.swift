@@ -463,7 +463,7 @@ struct TransactionSummaryV: View {
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {
-                                QRCodeDetails(transaction: transaction)
+                                QRCodeDetails(transaction: transaction, specs: currencyInfo.specs)
                                 if hasDone {
                                     Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                         .multilineTextAlignment(.leading)
@@ -527,6 +527,7 @@ struct TransactionSummaryV: View {
 
     struct QRCodeDetails: View {
         var transaction : Transaction
+        var specs: CurrencySpecification
         var body: some View {
             let details = transaction.detailsToShow()
             let keys = details.keys
@@ -536,7 +537,8 @@ struct TransactionSummaryV: View {
                         QRCodeDetailView(talerURI: talerURI,
                                    talerCopyShare: talerURI,
                                          incoming: transaction.isP2pIncoming,
-                                           amount: transaction.common.amountRaw)
+                                           amount: transaction.common.amountRaw,
+                                            specs: specs)
                     }
                 }
             } else if keys.contains(EXCHANGEBASEURL) {

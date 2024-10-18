@@ -15,6 +15,7 @@ struct QRCodeDetailView: View {
     let talerCopyShare: String
     let incoming: Bool
     let amount: Amount
+    let specs: CurrencySpecification
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -39,7 +40,7 @@ struct QRCodeDetailView: View {
                 .accessibilityLabel("QR Code")
                 .listRowSeparator(.hidden)
                 if !minimalistic {
-                    let amountStr = amount.formatted(isNegative: false)
+                    let amountStr = amount.formatted(specs: specs, isNegative: false)
                     let scanLong = incoming ? String(localized: "(payer) 1",
                                                   defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
                                                        comment: "e.g. '5,3 €'")
@@ -62,20 +63,20 @@ struct QRCodeDetailView: View {
 }
 // MARK: -
 #if DEBUG
-fileprivate struct ContentView: View {
-    @State var previewURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
-
-    var body: some View {
-        let amount = Amount(currency: LONGCURRENCY, cent: 123)
-        List {
-            QRCodeDetailView(talerURI: previewURI, talerCopyShare: previewURI, incoming: false, amount: amount)
-        }
-    }
-}
-struct QRCodeDetailView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        ContentView()
-    }
-}
+//fileprivate struct ContentView: View {
+//    @State var previewURI: String = "taler://pay-push/exchange.demo.taler.net/95ZG4D1AGFGZQ7CNQ1V49D3FT18HXKA6HQT4X3XME9YSJQVFQ520"
+//
+//    var body: some View {
+//        let amount = Amount(currency: LONGCURRENCY, cent: 123)
+//        List {
+//            QRCodeDetailView(talerURI: previewURI, talerCopyShare: previewURI, incoming: false, amount: amount)
+//        }
+//    }
+//}
+//struct QRCodeDetailView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
 #endif
