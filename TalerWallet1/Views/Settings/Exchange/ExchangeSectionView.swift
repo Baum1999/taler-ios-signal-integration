@@ -11,20 +11,17 @@ import SymLog
 
 /// This view shows the currency name in an exchange section
 ///         currency
-/// [Deposit Coins]  [Withdraw Coins]
 struct ExchangeSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let exchange: Exchange
-//    let exchanges: [Exchange]
-//    @Binding var depositIBAN: String
-//    @Binding var accountHolder: String
-    @Binding var amountToTransfer: Amount       // does still have the wrong currency
+    let balance: Balance
+
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
 
+    @State private var exchanges: [Exchange] = []
     @State private var shouldReloadBalances: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var didDelete: Bool = false
@@ -49,9 +46,20 @@ struct ExchangeSectionView: View {
 //        return nil
 //    }
 
+    private func viewDidLoad() async {
+        if let exc = try? await model.listExchangesM(scope: balance.scopeInfo) {
+            withAnimation { exchanges = exc }
+        }
+    }
+    private func currencyTickerChanged(_ scopeInfo: ScopeInfo) async {
+        symLog.log("task \(didDelete ? 1 : 0)")
+        currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+    }
     private func deleteExchange() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
+          if exchanges.count > 0 {
+            let exchange = exchanges[0]
             let baseUrl = exchange.exchangeBaseUrl
             if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
                 purge = false
@@ -65,6 +73,7 @@ struct ExchangeSectionView: View {
                 showAlert = true
                 disabled = false
             }
+          }
         }
     }
 
@@ -73,17 +82,16 @@ struct ExchangeSectionView: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let scopeInfo = exchange.scopeInfo
+        let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
 //        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         Section {
-//            ForEach(exchanges) { exchange in
+            ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
                          currencyInfo: $currencyInfo,
-                             exchange: exchange,
-                     amountToTransfer: $amountToTransfer)   // does still have the wrong currency
+                             exchange: exchange)
                 .listRowSeparator(.hidden)
-//            }
+            }
             if DEMOCURRENCY == currency {
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
@@ -118,18 +126,17 @@ struct ExchangeSectionView: View {
                     deleteExchange()
                     showAlert = false
                 }
-              }, message: { Text("You will loose all \(currency) of this payment provider") }
-            )
+            }, message: {
+                Text("You will loose all \(currency) of this payment provider")
+            })
         } header: {
             BarGraphHeader(stack: stack.push(),
                        scopeInfo: scopeInfo,
                     currencyInfo: $currencyInfo,
             shouldReloadBalances: $shouldReloadBalances)
         }
-        .task(id: controller.currencyTicker) {
-            symLog.log("task \(didDelete ? 1 : 0)")
-            currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-        }
+        .task { await viewDidLoad() }
+        .task(id: controller.currencyTicker) { await currencyTickerChanged(scopeInfo) }
         .onDisappear() {
             disabled = false
             purge = false

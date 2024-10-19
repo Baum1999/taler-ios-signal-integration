@@ -12,9 +12,8 @@ import SymLog
 struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+    @Binding var currencyInfo: CurrencyInfo              // this is the currency to be used
     let exchange: Exchange
-    @Binding var amountToTransfer: Amount       // does still have the wrong currency
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -30,26 +29,21 @@ struct ExchangeRowView: View {
         let delay: UInt = 0
 #endif
         let baseURL = exchange.exchangeBaseUrl
-        let showToS = LazyView {
-            WithdrawTOSView(stack: stack.push(),
-                  exchangeBaseUrl: baseURL,
-                           viewID: VIEW_WITHDRAW_TOS,
-                     acceptAction: nil)         // pop back to here
-        }
-        Group {
-            NavigationLink(destination: showToS) {
-                VStack(alignment: .leading) {
-                    Text(baseURL.trimURL)
-                        .talerFont(.headline)
-                    if !minimalistic {
-                        Text("Terms of Service")  // VIEW_WITHDRAW_TOS
-                            .talerFont(.body)
-                    }
-                }
+        let rowView = VStack(alignment: .leading) {
+            Text(baseURL.trimURL)
+                .talerFont(.headline)
+            if !minimalistic {
+                Text("Terms of Service")  // VIEW_WITHDRAW_TOS
+                    .talerFont(.body)
             }
-            .listRowSeparator(.hidden)
-
         }
+        let showToS = WithdrawTOSView(stack: stack.push(),
+                            exchangeBaseUrl: baseURL,
+                                     viewID: VIEW_WITHDRAW_TOS,
+                               acceptAction: nil)         // pop back to here
+        Group {
+            NavigationLink(destination: showToS) { rowView }
+        }.listRowSeparator(.hidden)
     }
 }
 // MARK: -
@@ -83,10 +77,7 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
                                ageRestrictionOptions: [])
             ExchangeRowView(stack: CallStack("Preview"),
                      currencyInfo: $currencyInfoL,
-                         exchange: exchange1,
-//                      depositIBAN: $depositIBAN,
-//                    accountHolder: $accountHolder,
-                 amountToTransfer: $amountToPreview)
+                         exchange: exchange1)
         }
     }
 

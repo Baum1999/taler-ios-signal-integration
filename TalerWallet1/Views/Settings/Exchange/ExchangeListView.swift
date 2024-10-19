@@ -66,41 +66,22 @@ struct ExchangeListView: View {
     }
 }
 // MARK: -
-struct ExchangeListCommonV {
+struct ExchangeListCommonV: View {
     let symLog: SymLogV?
     let stack: CallStack
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-//    @AppStorage("depositIBAN") var depositIBAN = EMPTYSTRING
-//    @AppStorage("accountHolder") var accountHolder = EMPTYSTRING
 
-    @State private var exchanges: [Exchange] = []
-
-    // source of truth for the value the user enters in currencyField for exchange withdrawals
-    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)     // TODO: Hold different values for different currencies?
-
-    func reloadExchanges() async -> Void {
-        if let exc = try? await model.listExchangesM() {
-            withAnimation { exchanges = exc }
-        }
-    }
-}
-// MARK: -
-extension ExchangeListCommonV: View {
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let sortedExchanges = exchanges.sorted { $0 < $1 }
-        let sortedList = List(sortedExchanges, id: \.self) { exchange in
+        let sortedList = List(controller.balances, id: \.self) { balance in
             ExchangeSectionView(stack: stack.push(),
-                             exchange: exchange,
-//                        depositIBAN: $depositIBAN,
-//                      accountHolder: $accountHolder,
-                     amountToTransfer: $amountToTransfer)               // does still have the wrong currency
+                             balance: balance)
         }
 
         let emptyList = List {
@@ -118,9 +99,8 @@ extension ExchangeListCommonV: View {
             }
         }
 
-        // TODO: Balances for amountAvailable for Deposit
         Group {
-            if exchanges.isEmpty {
+            if controller.balances.isEmpty {
                 emptyList
             } else {
                 sortedList
@@ -131,25 +111,26 @@ extension ExchangeListCommonV: View {
         .refreshable {
             controller.hapticNotification(.success)
             symLog?.log("refreshing")
-            await reloadExchanges()
+//            await reloadExchanges()
+            NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
         }
 //#endif
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_BANKING, stack: stack.push())
         }
-        .onNotification(.ExchangeAdded) { notification in
-            // doesn't need to be received on main thread because we just reload in the background anyway
-            symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
-            Task { await reloadExchanges() } // runs on MainActor
-        }
-        .onNotification(.ExchangeDeleted) { notification in
-            // doesn't need to be received on main thread because we just reload in the background anyway
-            symLog?.log(".onNotification(.ExchangeDeleted) ==> reloading exchanges")
-            Task { await reloadExchanges() } // runs on MainActor
-        }
-        .task {
-            symLog?.log(".task")
-            await reloadExchanges()
-        }
+//        .onNotification(.ExchangeAdded) { notification in
+//            // doesn't need to be received on main thread because we just reload in the background anyway
+//            symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
+//            Task { await reloadExchanges() } // runs on MainActor
+//        }
+//        .onNotification(.ExchangeDeleted) { notification in
+//            // doesn't need to be received on main thread because we just reload in the background anyway
+//            symLog?.log(".onNotification(.ExchangeDeleted) ==> reloading exchanges")
+//            Task { await reloadExchanges() } // runs on MainActor
+//        }
+//        .task {
+//            symLog?.log(".task")
+//            await reloadExchanges()
+//        }
     } // body
 }

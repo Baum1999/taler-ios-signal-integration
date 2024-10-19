@@ -87,34 +87,18 @@ struct Exchange: Codable, Hashable, Identifiable {
         return nil
     }
 }
-
-struct ExchangeUrlItem: Codable, Hashable, Identifiable {
-    var exchangeBaseUrl: String
-    var id: String { exchangeBaseUrl }
-}
 // MARK: -
 /// A request to list exchanges names for a currency
-fileprivate struct ListExchangesForScopedCurrency: WalletBackendFormattedRequest {
-    func operation() -> String { "listExchangesForScopedCurrency" }
-    func args() -> Args { Args(scope: scope) }
-
-    var scope: ScopeInfo
-
-    struct Args: Encodable {
-        var scope: ScopeInfo
-    }
-    struct Response: Decodable, Sendable {
-        var exchanges: [ExchangeUrlItem]              // list of Exchange names
-    }
-}
-
-/// A request to list exchanges.
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
     func operation() -> String { "listExchanges" }
-    func args() -> Args { Args() }
+    func args() -> Args { Args(filterByScope: scope, filterByExchangeEntryStatus: filterByStatus) }
 
-    struct Args: Encodable {}           // no arguments needed
-
+    var scope: ScopeInfo?
+    var filterByStatus: ExchangeEntryStatus?
+    struct Args: Encodable {
+        var filterByScope: ScopeInfo?
+        var filterByExchangeEntryStatus: ExchangeEntryStatus?
+    }
     struct Response: Decodable {        // list of known exchanges
         var exchanges: [Exchange]
     }
@@ -122,7 +106,6 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 
 /// A request to get info for one exchange.
 fileprivate struct GetExchangeByUrl: WalletBackendFormattedRequest {
-    typealias Response = Exchange
     func operation() -> String { "getExchangeEntryByUrl" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
@@ -131,85 +114,74 @@ fileprivate struct GetExchangeByUrl: WalletBackendFormattedRequest {
     struct Args: Encodable {
         var exchangeBaseUrl: String
     }
+    typealias Response = Exchange
 }
 
 /// A request to update a single exchange.
 fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
-    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { "updateExchangeEntry" }
 //    func args() -> Args { Args(scopeInfo: scopeInfo) }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
 //    var scopeInfo: ScopeInfo
     var exchangeBaseUrl: String
-
     struct Args: Encodable {
         var exchangeBaseUrl: String
     }
+    struct Response: Decodable {}   // no result - getting no error back means success
 }
 
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
-    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { "addExchange" }     // addExchangeEntry
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
     var exchangeBaseUrl: String
-
     struct Args: Encodable {
         var exchangeBaseUrl: String
     }
+    struct Response: Decodable {}   // no result - getting no error back means success
 }
 
 /// A request to delete an exchange.
 fileprivate struct DeleteExchange: WalletBackendFormattedRequest {
-    struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { "deleteExchange" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, purge: purge) }
 
     var exchangeBaseUrl: String
     var purge: Bool
-
     struct Args: Encodable {
         var exchangeBaseUrl: String
         var purge: Bool
     }
+    struct Response: Decodable {}   // no result - getting no error back means success
 }
 
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
-    struct Response: Codable, Sendable {
-        let currencySpecification: CurrencySpecification
-    }
     func operation() -> String { "getCurrencySpecification" }
     func args() -> Args { Args(scope: scope) }
 
     var scope: ScopeInfo
-
     struct Args: Encodable {
         var scope: ScopeInfo
+    }
+    struct Response: Codable, Sendable {
+        let currencySpecification: CurrencySpecification
     }
 }
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesForScopedCurrencyM(scope: ScopeInfo, viewHandles: Bool = false)
-      async -> [ExchangeUrlItem] {            // M for MainActor
+    @MainActor func listExchangesM(scope: ScopeInfo?, filterByStatus: ExchangeEntryStatus? = nil, viewHandles: Bool = false)
+      async -> [Exchange] {   // M for MainActor
         do {
-            let request = ListExchangesForScopedCurrency(scope: scope)
+            let request = ListExchanges(scope: scope, filterByStatus: filterByStatus)    // .used, .preset
             let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
             return response.exchanges
         } catch {
             return []               // empty, but not nil
         }
-    }
-
-    /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesM(devMode: Bool = false, viewHandles: Bool = false)
-      async throws -> [Exchange] {   // M for MainActor
-        let request = ListExchanges()
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-        return response.exchanges
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
@@ -258,5 +230,4 @@ extension WalletModel {
                         formatter: CurrencyFormatter.formatter(scope: scope,
                                                                specs: response.currencySpecification))
     }
-
 }
