@@ -6,18 +6,19 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import taler_swift
 
-fileprivate func formattedAmount(_ balance: Balance) -> String {
+fileprivate func formattedAmount(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> String {
     let amount = balance.available
-    return amount.formatted(isNegative: false, useISO: false)
+    return amount.formatted(currencyInfo, isNegative: false, useISO: false)
 }
 
 fileprivate func urlOrCurrency(_ balance: Balance) -> String {
     balance.scopeInfo.url?.trimURL ?? balance.scopeInfo.currency
 }
 
-fileprivate func pickerRow(_ balance: Balance) -> String {
-    String("\(urlOrCurrency(balance)):\t\(formattedAmount(balance).nbs)")
+fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> String {
+    String("\(urlOrCurrency(balance)):\t\(formattedAmount(balance, currencyInfo).nbs)")
 }
 
 struct ScopePicker: View {
@@ -37,8 +38,9 @@ struct ScopePicker: View {
         let count = controller.balances.count
         if (count > 0) {
             let balance = controller.balances[selected]
+            let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
             let available = balance.available
-            let availableA11y = available.formatted(isNegative: false, useISO: true, a11y: ".")
+            let availableA11y = available.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
             let a11yLabel = url + ", " + availableA11y
 
@@ -56,7 +58,8 @@ struct ScopePicker: View {
                     Picker(EMPTYSTRING, selection: $selected) {
                         ForEach(0..<controller.balances.count, id: \.self) { index in
                             let balance = controller.balances[index]
-                            Text(pickerRow(balance))
+                            let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
+                            Text(pickerRow(balance, currencyInfo))
                                 .tag(index)
 //                              .selectionDisabled(balance.available.isZero)    needs iOS 17
                         }
@@ -101,17 +104,17 @@ struct  ScopeDropDown: View {
     }
 
     @ViewBuilder
-    func dropDownRow(_ balance: Balance) -> some View {
+    func dropDownRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> some View {
         let hLayout = HStack(alignment: .top) {
             Text(urlOrCurrency(balance))
             Spacer()
-            Text(formattedAmount(balance).nbs)
+            Text(formattedAmount(balance, currencyInfo).nbs)
         }
         let vLayout = VStack(alignment: .leading) {
             Text(urlOrCurrency(balance))
             HStack {
                 Spacer()
-                Text(formattedAmount(balance).nbs)
+                Text(formattedAmount(balance, currencyInfo).nbs)
                 Spacer()
             }
         }
@@ -138,8 +141,9 @@ struct  ScopeDropDown: View {
                             selection = controller.balances.firstIndex(of: item) ?? selection
                         }
                     }, label: {
+                        let currencyInfo = controller.info(for: item.scopeInfo, controller.currencyTicker)
                         HStack(alignment: .top) {
-                            dropDownRow(item)   // .border(.random)
+                            dropDownRow(item, currencyInfo)   // .border(.random)
                                 .foregroundColor(rowDisabled ? .secondary : .primary)
                             Spacer()
                             chevron.foregroundColor(.clear)
@@ -156,9 +160,10 @@ struct  ScopeDropDown: View {
             VStack {
                 // selected item
                 let balance = controller.balances[selection]
+                let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
-                        dropDownRow(balance)
+                        dropDownRow(balance, currencyInfo)
                             .accessibilityAddTraits(.isSelected)
                         Spacer()
                         if !disabled {
@@ -202,8 +207,3 @@ struct  ScopeDropDown: View {
         .zIndex(100)
     }
 }
-
-// MARK: -
-//#Preview {
-//    ScopePicker()
-//}
