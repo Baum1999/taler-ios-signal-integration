@@ -209,7 +209,7 @@ struct PaymentView: View {
             .navigationTitle(navTitle)
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
-                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.scope.currency)")
             }
         } else {

@@ -168,7 +168,7 @@ struct WithdrawURIView: View {
                 .navigationTitle(navTitle)
                 .task(id: controller.currencyTicker) {
                     let currency = amountToTransfer.currencyStr
-                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
                 .onAppear() {
                     symLog.log("onAppear")

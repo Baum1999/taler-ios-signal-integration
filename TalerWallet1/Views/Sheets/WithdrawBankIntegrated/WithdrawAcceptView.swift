@@ -50,7 +50,7 @@ struct WithdrawAcceptView: View {
                     let raw = withdrawalAmountDetails.amountRaw
                     let effective = withdrawalAmountDetails.amountEffective
                     let currency = raw.currencyStr
-                    let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    let currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                     let fee = try! Amount.diff(raw, effective)
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)

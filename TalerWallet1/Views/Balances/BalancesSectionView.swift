@@ -144,7 +144,7 @@ extension BalancesSectionView: View {
         }.id(sectionID)
         .listRowSeparator(.hidden)
         .task(id: controller.currencyTicker) {
-            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyInfo = controller.info2(for: currency, controller.currencyTicker)
         }
         .task(id: shouldReloadBalances + 1_000_000) {
             symLog.log(".task for BalancesSectionView - load recent+completed+pending")

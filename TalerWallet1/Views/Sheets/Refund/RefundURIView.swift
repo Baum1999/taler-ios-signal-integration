@@ -50,7 +50,7 @@ struct RefundURIView: View {
                     .padding(.horizontal)
             }
             .task(id: controller.currencyTicker) {
-                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)

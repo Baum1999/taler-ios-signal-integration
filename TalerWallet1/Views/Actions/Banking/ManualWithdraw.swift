@@ -45,7 +45,7 @@ struct ManualWithdraw: View {
         if let exchange {
             let scopeInfo = exchange.scopeInfo
             let currency = scopeInfo.currency
-            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            let currencyInfo = controller.info2(for: currency, controller.currencyTicker)
 
             let navTitle = String(localized: "NavTitle_Withdraw (currency)",
                                defaultValue: "Withdraw \(currencyInfo.symbol)",

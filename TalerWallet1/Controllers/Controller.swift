@@ -141,7 +141,25 @@ class Controller: ObservableObject {
         return nil
     }
 
-    func info(for currency: String) -> CurrencyInfo? {
+    func info(for scope: ScopeInfo) -> CurrencyInfo? {
+//        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
+//        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
+        for info in currencyInfos {
+            if info.scope == scope {
+                return info
+            }
+        }
+//        logger.log("  ❗️ no info for \(currency)")
+        return nil
+    }
+    func info(for scope: ScopeInfo, _ ticker: Int) -> CurrencyInfo {
+        if ticker != currencyTicker {
+            print("  ❗️Yikes - race condition while getting info for \(scope.currency)")
+        }
+        return info(for: scope) ?? CurrencyInfo.zero(scope.currency)
+    }
+
+    func info2(for currency: String) -> CurrencyInfo? {
 //        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
 //        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
         for info in currencyInfos {
@@ -152,11 +170,11 @@ class Controller: ObservableObject {
 //        logger.log("  ❗️ no info for \(currency)")
         return nil
     }
-    func info(for currency: String, _ ticker: Int) -> CurrencyInfo {
+    func info2(for currency: String, _ ticker: Int) -> CurrencyInfo {
         if ticker != currencyTicker {
             print("  ❗️Yikes - race condition while getting info for \(currency)")
         }
-        return info(for: currency) ?? CurrencyInfo.zero(currency)
+        return info2(for: currency) ?? CurrencyInfo.zero(currency)
     }
 
     func hasInfo(for currency: String) -> Bool {
@@ -222,7 +240,7 @@ class Controller: ObservableObject {
     func getInfo(from exchangeBaseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
         let exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
         let scopeInfo = exchange.scopeInfo
-        if let info = info(for: scopeInfo.currency) {
+        if let info = info(for: scopeInfo) {
             return info
         }
         let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)

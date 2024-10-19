@@ -240,7 +240,7 @@ struct RequestPaymentContent: View {
                 scopeInfo = balance.scopeInfo
                 let currency = scopeInfo.currency
                 amountToTransfer.setCurrency(currency)
-                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
             }
         }
 //        .task(id: amountToTransfer.value) {

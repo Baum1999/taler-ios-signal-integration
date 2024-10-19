@@ -183,7 +183,7 @@ struct PayTemplateV: View {
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
-                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
             }
             .onAppear() {
                 symLog.log("onAppear")
@@ -218,7 +218,7 @@ struct PayTemplateV: View {
 //                        {   symLog.log("preparePayForTemplate finished")
                             amountToTransfer = prepAmount ?? zeroAmount
                             summary = prepSummary ?? EMPTYSTRING
-                        templateContract = contract
+                            templateContract = contract
 //                            insufficient = result.insufficient
 //                            feeAmount = result.feeAmount
 //                            feeStr = result.feeStr

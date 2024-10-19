@@ -43,7 +43,7 @@ struct WithdrawExchangeV: View {
                       amountLastUsed: $amountLastUsed)
             }
             .task(id: controller.currencyTicker) {
-                currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
             }
         } else {
             LoadingView(scopeInfo: nil, message: "No exchangeBaseUrl!")

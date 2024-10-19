@@ -71,7 +71,7 @@ struct P2pReceiveURIView: View {
                 .navigationTitle(navTitle)
                 .task(id: controller.currencyTicker) {
                     let currency = peerPushCreditResponse.amountRaw.currencyStr
-                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
                 if tosAccepted {
                     NavigationLink(destination: LazyView {

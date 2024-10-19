@@ -128,7 +128,7 @@ struct ExchangeSectionView: View {
         }
         .task(id: controller.currencyTicker) {
             symLog.log("task \(didDelete ? 1 : 0)")
-            currencyInfo = controller.info(for: currency, controller.currencyTicker)
+            currencyInfo = controller.info2(for: currency, controller.currencyTicker)
         }
         .onDisappear() {
             disabled = false

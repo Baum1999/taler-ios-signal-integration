@@ -62,7 +62,7 @@ struct P2pPayURIView: View {
                 .navigationTitle(navTitle)
                 .task(id: controller.currencyTicker) {
                     let currency = peerPullDebitResponse.amountRaw.currencyStr
-                    currencyInfo = controller.info(for: currency, controller.currencyTicker)
+                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
 
                 NavigationLink(destination: LazyView {
