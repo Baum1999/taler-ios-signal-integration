@@ -21,26 +21,31 @@ struct SendAmountV: View {
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
-    func firstNonZero() -> Balance? {
-        for aBalance in controller.balances {
-            if !aBalance.available.isZero {
-                return aBalance
-            }
-        }
-        return nil
+    func navTitle(_ currency: String, _ condition: Bool = false) -> String {
+        condition ? String(localized: "NavTitle_Send_Currency",
+                        defaultValue: "Send \(currency)",
+                             comment: "NavTitle: Send 'currency'")
+                  : String(localized: "NavTitle_Send",
+                        defaultValue: "Send",
+                             comment: "NavTitle: Send")
     }
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
+        let currencySymbol = currencyInfo.symbol
+        let navA11y = navTitle(currencyInfo.name)
+        let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
-                      onlyNonZero: true) { index in
+                      onlyNonZero: true)
+                { index in
                     balanceIndex = index
                     balance = controller.balances[index]
                 }
@@ -48,12 +53,22 @@ struct SendAmountV: View {
                 .padding(.bottom, 4)
             }
             SendAmountContent(stack: stack.push(),
+                       currencyInfo: $currencyInfo,
                             balance: $balance,
                        balanceIndex: $balanceIndex,
                      amountLastUsed: $amountLastUsed,
                             summary: $summary)
         } // ScrollView
+            .navigationTitle(navTitle)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .onAppear {
+                DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
+                symLog.log("❗️ \(navTitle) onAppear")
+            }
+            .onDisappear {
+                symLog.log("❗️ \(navTitle) onDisappear")
+            }
             .task {
                 if let selectedBalance {
                     if selectedBalance.available.isZero {
@@ -87,8 +102,9 @@ struct SendAmountV: View {
 }
 // MARK: -
 struct SendAmountContent: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     let stack: CallStack
+    @Binding var currencyInfo: CurrencyInfo
     @Binding var balance: Balance?
     @Binding var balanceIndex: Int
     @Binding var amountLastUsed: Amount
@@ -110,7 +126,6 @@ struct SendAmountContent: View {
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
-    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
 
     private func shortcutAction(_ shortcut: Amount) {
@@ -188,20 +203,17 @@ struct SendAmountContent: View {
     }
 
     var body: some View {
-#if true //PRINT_CHANGES
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let navTitle = String(localized: "NavTitle_Send",
-                           defaultValue: "Send",
-                                comment: "NavTitle: Send")
         Group {
             if let balance {
                 let scopeInfo = balance.scopeInfo
                 let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
-                let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
-                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-                let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
+//              let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
+//              let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
+//              let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
                 let inputDestination = P2PSubjectV(stack: stack.push(),
                                                    scope: scopeInfo,
@@ -221,57 +233,45 @@ struct SendAmountContent: View {
                                            amountToTransfer: $amountShortcut,   // from the tapped shortcut button
                                                     summary: $summary,
                                                  expireDays: $expireDays)
-                Group {
-                    AmountInputV(stack: stack.push(),
-                          currencyInfo: $currencyInfo,
-                       amountAvailable: $amountAvailable,
-                           amountLabel: nil,        // will use "Available: xxx", trailing
-                      amountToTransfer: $amountToTransfer,
-                        amountLastUsed: amountLastUsed,
-                               wireFee: nil,
-                               summary: $summary,
-                        shortcutAction: shortcutAction,
-                          buttonAction: buttonAction,
-                         feeIsNegative: false,
-                            computeFee: computeFeeSend)
-                    .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        ) // shortcutDestination
-                    .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        ) // inputDestination
-                }
+                AmountInputV(stack: stack.push(),
+                      currencyInfo: $currencyInfo,
+                   amountAvailable: $amountAvailable,
+                       amountLabel: nil,        // will use "Available: xxx", trailing
+                  amountToTransfer: $amountToTransfer,
+                    amountLastUsed: amountLastUsed,
+                           wireFee: nil,
+                           summary: $summary,
+                    shortcutAction: shortcutAction,
+                      buttonAction: buttonAction,
+                     feeIsNegative: false,
+                        computeFee: computeFeeSend)
+                .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                    ) // shortcutDestination
+                .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
+                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                    ) // inputDestination
             } else {    // no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        .navigationTitle(navTitle)
-        .task {
+        } // Group
+        .task { // getMaxPeerPushDebit on first appearance
             if scopeInfo.type != .madeUp {
                 do {
-                    let amount = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
-                    amountAvailable = amount
+                    symLog.log("❗️ task \(scopeInfo.currency)")
+                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
                     return
                 } catch {}
             }
             amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
         }
-        .onAppear {
-            DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-            symLog.log("❗️ \(navTitle) onAppear")
-        }
-        .onDisappear {
-            symLog.log("❗️ \(navTitle) onDisappear")
-        }
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+            // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
             symLog.log("❗️ task \(balanceIndex)")
             if let balance {
                 scopeInfo = balance.scopeInfo
-                let currency = scopeInfo.currency
-                amountToTransfer.setCurrency(currency)
-                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+                amountToTransfer.setCurrency(scopeInfo.currency)
+                currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
                 do {
                     amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
                 } catch {
@@ -315,7 +315,7 @@ struct SendAmountContent: View {
 //                }
 //            }
 //        }
-    }
+    } // body
 }
 // MARK: -
 #if DEBUG
