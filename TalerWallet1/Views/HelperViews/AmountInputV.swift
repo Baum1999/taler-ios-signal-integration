@@ -87,12 +87,6 @@ struct AmountInputV: View {
         let currency = amountToTransfer.currencyStr
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
         VStack(alignment: .trailing) {
-//            if summary.count > 0 {
-//                Text(summary)
-//                    .talerFont(.body)
-//                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-//                    .padding(4)
-//            }
             CurrencyInputView(currencyInfo: currencyInfo,
                                     amount: $amountToTransfer,
                             amountLastUsed: amountLastUsed,

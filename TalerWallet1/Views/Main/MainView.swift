@@ -285,6 +285,7 @@ extension MainView {
         }
 
         private static func className() -> String {"\(self)"}
+        private static var name: String { Self.className() }
         var body: some View {
 #if PRINT_CHANGES
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
@@ -320,17 +321,17 @@ extension MainView {
                                    url: DEMOEXCHANGE,
                               currency: DEMOCURRENCY)
 
-            let sendDest = SendAmountV(stack: stack.push("\(Self.className())()"),
-                             selectedBalance: $selectedBalance,             // if nil shows currency picker
-                              amountLastUsed: $amountLastUsed,              // currency needs to be updated!
+            let sendDest = SendAmountV(stack: stack.push(Self.name),
+                             selectedBalance: $selectedBalance,                 // if nil shows currency picker
+                              amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary)
 
-            let requestDest = RequestPayment(stack: stack.push("\(Self.className())()"),
+            let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: $selectedBalance,
-                                    amountLastUsed: $amountLastUsed,      // currency needs to be updated!
+                                    amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary)
 
-            let depositDest = DepositIbanV(stack: stack.push(),
+            let depositDest = DepositIbanV(stack: stack.push(Self.name),
                                  selectedBalance: $selectedBalance,
                                         feeLabel: nil,
                                     feeIsNotZero: nil,
@@ -338,7 +339,7 @@ extension MainView {
                 //                 accountHolder: $accountHolder,
                                   amountLastUsed: $amountLastUsed)
 
-            let manualWithdrawDest = ManualWithdraw(stack: stack.push(),
+            let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
                                           selectedBalance: $selectedBalance,
                                                   isSheet: false,
                                                 scopeInfo: scope,
