@@ -341,11 +341,8 @@ extension MainView {
 
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
                                           selectedBalance: $selectedBalance,
-                                                  isSheet: false,
-                                                scopeInfo: scope,
-                                                 exchange: $myExchange,
-                                         amountToTransfer: $amountToTransfer,
-                                           amountLastUsed: $amountLastUsed)
+                                           amountLastUsed: $amountLastUsed,     // currency needs to be updated!
+                                                  isSheet: false)
 
             ZStack(alignment: .bottom) {
                 TabView(selection: tabSelection()) {

@@ -31,19 +31,15 @@ struct WithdrawExchangeV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         if let exchange {
-            let currency = exchange.scopeInfo.currency
+            let scopeInfo = exchange.scopeInfo
             Group {
                 ManualWithdraw(stack: stack.push(),
                      selectedBalance: $selectedBalance,
-//                      currencyInfo: $currencyInfo,
-                             isSheet: true,
-                           scopeInfo: exchange.scopeInfo,
-                            exchange: $exchange,
-                    amountToTransfer: $amountToTransfer,
-                      amountLastUsed: $amountLastUsed)
+                      amountLastUsed: $amountLastUsed,
+                             isSheet: true)
             }
             .task(id: controller.currencyTicker) {
-                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+                currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
             }
         } else {
             LoadingView(scopeInfo: nil, message: "No exchangeBaseUrl!")
