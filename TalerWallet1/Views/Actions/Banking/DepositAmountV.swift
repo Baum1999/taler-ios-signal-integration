@@ -9,20 +9,120 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping "Deposit" in the exchanges list
+// Called from DepositIbanV
 struct DepositAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
-
-//    let exchangeBaseUrl: String
+    @Binding var selectedBalance: Balance?
+    @Binding var amountLastUsed: Amount
     let paytoUri: String?
-    let amountAvailable: Amount?
-//    @Binding var depositIBAN: String
-//    @Binding var accountHolder: String
+
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+
+    @State private var balanceIndex = 0
+    @State private var balance: Balance? = nil      // nil only when balances == []
+    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
+
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+#endif
+        let count = controller.balances.count
+        let _ = symLog.log("count = \(count)")
+        let navTitle = String(localized: "NavTitle_Deposit_Currency",
+                           defaultValue: "Deposit",     // \(currencySymbol)",
+                                comment: "NavTitle: Deposit 'currencySymbol'")
+        let scrollView = ScrollView {
+            if count > 0 {
+                ScopePicker(value: $balanceIndex,
+                      onlyNonZero: true)
+                { index in
+                    balanceIndex = index
+                    balance = controller.balances[index]
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 4)
+            }
+            DepositAmountContent(stack: stack.push(),
+                               balance: $balance,
+                          balanceIndex: $balanceIndex,
+                        amountLastUsed: $amountLastUsed,
+                      amountToTransfer: $amountToTransfer,
+                       amountAvailable: amountAvailable,
+                          currencyInfo: currencyInfo,
+                              paytoUri: paytoUri)
+            .environment(\.currencyInfo, currencyInfo)
+        } // ScrollView
+            .navigationTitle(navTitle)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .onAppear {
+                DebugViewC.shared.setViewID(VIEW_DEPOSIT, stack: stack.push())
+                symLog.log("❗️ \(navTitle) onAppear")
+            }
+            .onDisappear {
+                symLog.log("❗️ \(navTitle) onDisappear")
+            }
+            .task {
+                if let selectedBalance {
+                    if selectedBalance.available.isZero {
+                        // find another balance
+                        balance = Balance.firstNonZero(controller.balances)
+                    } else {
+                        balance = selectedBalance
+                    }
+                } else {
+                    balance = Balance.firstNonZero(controller.balances)
+                }
+                if let balance {
+                    balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
+                } else {
+                    balanceIndex = 0
+                    balance = (count > 0) ? controller.balances[0] : nil
+                }
+            }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+                symLog.log("❗️ task \(balanceIndex)")
+                if let balance {
+                    let scopeInfo = balance.scopeInfo
+                    amountToTransfer.setCurrency(scopeInfo.currency)
+                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+                    do {
+                        amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
+                    } catch {
+                        // TODO: Error
+                        amountAvailable = balance.available
+                    }
+                }
+            }
+
+        if #available(iOS 16.0, *) {
+            if #available(iOS 16.4, *) {
+                scrollView.toolbar(.hidden, for: .tabBar)
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                scrollView.toolbar(.hidden, for: .tabBar)
+            }
+        } else {
+            scrollView
+        }
+    }
+}
+// MARK: -
+struct DepositAmountContent: View {
+    private let symLog = SymLogV(0)
+    let stack: CallStack
+    @Binding var balance: Balance?
+    @Binding var balanceIndex: Int
+    @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
-    let amountLastUsed: Amount
-//    let scopeInfo: ScopeInfo
+    let amountAvailable: Amount
+    let currencyInfo: CurrencyInfo
+    let paytoUri: String?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -35,20 +135,7 @@ struct DepositAmountV: View {
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var depositStarted = false
-    @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees
-
-    private func fee(ppCheck: CheckDepositResult?) -> Amount? {
-        do {
-            if let ppCheck {
-                // Outgoing: fee = effective - raw
-                feeAmount = try ppCheck.fees.coin + ppCheck.fees.wire + ppCheck.fees.refresh
-                return feeAmount
-            }
-        } catch {}
-        feeAmount = nil
-        return feeAmount
-    }
 
     private func feeLabel(_ feeString: String) -> String {
         feeString.count > 0 ? String(localized: "+ \(feeString) fee")
@@ -61,20 +148,41 @@ struct DepositAmountV: View {
                 return nil      // this exchange never has fees
             }
         }
-        return checkDepositResult != nil ? (!(feeAmount?.isZero ?? false))
-                                    : false
+        return checkDepositResult == nil ? false
+                                         : true // TODO: !(feeAmount?.isZero ?? false)
+    }
+
+    private func computeFeeDeposit(_ amount: Amount) async -> ComputeFeeResult? {
+        if amount.isZero {
+            return ComputeFeeResult.zero()
+        }
+        let insufficient = (try? amount > amountAvailable) ?? true
+        if insufficient {
+            return ComputeFeeResult.insufficient()
+        }
+//    private func fee(ppCheck: CheckDepositResult?) -> Amount? {
+        do {
+//            if let ppCheck {
+//                // Outgoing: fee = effective - raw
+//                feeAmount = try ppCheck.fees.coin + ppCheck.fees.wire + ppCheck.fees.refresh
+//                return feeAmount
+//            }
+        } catch {
+
+        }
+        return nil
     }
 
     private func buttonTitle(_ amount: Amount) -> String {
         let amountWithCurrency = amount.formatted(currencyInfo, isNegative: false, useISO: true)
-        return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
+        return String(localized: "Deposit \(amountWithCurrency)", comment: "Button: amount with currency")
     }
 
     private func subjectTitle(_ amount: Amount) -> String {
         let amountStr = amount.formatted(currencyInfo, isNegative: false)
         return String(localized: "NavTitle_Deposit_AmountStr",
                       defaultValue: "Deposit", comment: "NavTitle: Deposit")
-        //                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
+        //            defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
     }
 
     var body: some View {
@@ -86,26 +194,18 @@ struct DepositAmountV: View {
             LoadingView(scopeInfo: nil, message: "Depositing...")
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-        } else {
-            let currency = amountToTransfer.currencyStr
-            let currencySymbol = currencyInfo.altUnitSymbol ?? currencyInfo.specs.name
-            let navTitle = String(localized: "NavTitle_Deposit_Currency",
-                                  defaultValue: "Deposit \(currencySymbol)",
-                                  comment: "NavTitle: Deposit 'currencySymbol'")
-            let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? "an unknown amount"
-            let _ = print("available: \(available)")
-            let _ = symLog.log("currency: \(currencyInfo.specs.name), available: \(available)")
-            let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-            let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
-            let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
+        } else { Group {
+            if let balance {
+                let scopeInfo = balance.scopeInfo
+                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
+
+//                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
+                let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
+//                let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
 
             let disabled = insufficient || amountToTransfer.isZero
-            ScrollView { VStack(alignment: .trailing) {
-//                Text("via \(exchange.exchangeBaseUrl.trimURL)")
-//                    .multilineTextAlignment(.center)
-//                    .talerFont(.body)
 
-                Text("Available:\t\(available)")
+                Text("Available:\t\(availableStr)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
                 CurrencyInputView(currencyInfo: currencyInfo,
@@ -141,55 +241,47 @@ struct DepositAmountV: View {
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .disabled(disabled || depositStarted)
                 .accessibilityHint(disabled ? String(localized: "enabled when amount is non-zero, but not higher than your available amount") : EMPTYSTRING)
-            }.padding(.horizontal) } // ScrollVStack
-            .frame(maxWidth: .infinity, alignment: .leading)
-//            .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-            .navigationTitle(navTitle)
-            .onAppear {
-                DebugViewC.shared.setViewID(VIEW_DEPOSIT, stack: stack.push())
-                symLog.log("❗️ \(navTitle) onAppear")
-            }
-            .onDisappear {
-                symLog.log("❗️ \(navTitle) onDisappear")
-            }
-            .task(id: amountToTransfer.value) {
-                if let amountAvailable {
-                    do {
-                        insufficient = try amountToTransfer > amountAvailable
-                    } catch {
-                        print("Yikes❗️ insufficient failed❗️")
-                        insufficient = true
-                    }
-
-                    if insufficient {
-                        announce("\(amountVoiceOver), \(insufficientLabel2)")
-                        feeStr = EMPTYSTRING
-                    }
-                }
-                if !insufficient {
-                    if amountToTransfer.isZero {
-                        feeStr = EMPTYSTRING
-                        checkDepositResult = nil
-                    } else if let paytoUri {
-                        if let ppCheck = try? await model.checkDepositM(paytoUri, amount: amountToTransfer) {
-                            if let feeAmount = fee(ppCheck: ppCheck) {
-                                feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-                                let feeLabel = feeLabel(feeStr)
-                                announce("\(amountVoiceOver), \(feeLabel)")
-                            } else {
-                                feeStr = EMPTYSTRING
-                                announce(amountVoiceOver)
-                            }
-                            checkDepositResult = ppCheck
-                        } else {
-                            checkDepositResult = nil
-                        }
-                    }
-                }
+            } else {    // no balance - Yikes
+                Text("No balance. There seems to be a problem with the database...")
             }
         }
-    }
+//            .task(id: amountToTransfer.value) {
+//                if let amountAvailable {
+//                    do {
+//                        insufficient = try amountToTransfer > amountAvailable
+//                    } catch {
+//                        print("Yikes❗️ insufficient failed❗️")
+//                        insufficient = true
+//                    }
+//
+//                    if insufficient {
+//                        announce("\(amountVoiceOver), \(insufficientLabel2)")
+//                        feeStr = EMPTYSTRING
+//                    }
+//                }
+//                if !insufficient {
+//                    if amountToTransfer.isZero {
+//                        feeStr = EMPTYSTRING
+//                        checkDepositResult = nil
+//                    } else if let paytoUri {
+//                        if let ppCheck = try? await model.checkDepositM(paytoUri, amount: amountToTransfer) {
+//                            if let feeAmount = fee(ppCheck: ppCheck) {
+//                                feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+//                                let feeLabel = feeLabel(feeStr)
+//                                announce("\(amountVoiceOver), \(feeLabel)")
+//                            } else {
+//                                feeStr = EMPTYSTRING
+//                                announce(amountVoiceOver)
+//                            }
+//                            checkDepositResult = ppCheck
+//                        } else {
+//                            checkDepositResult = nil
+//                        }
+//                    }
+//                }
+//            }
+        } // else
+    } // body
 }
 // MARK: -
 #if DEBUG

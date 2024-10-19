@@ -47,8 +47,6 @@ struct DepositIbanV: View {
     }
 
     private var subjectTitle: String {
-//        let currencyName = currencyInfo.scope.currency
-//        let currencySymbol = currencyInfo.altUnitSymbol ?? currencyName
         return String(localized: "NavTitle_Deposit_AmountStr",
 //                   defaultValue: "Deposit \(currencySymbol)",
                    defaultValue: "Deposit IBAN",
@@ -59,19 +57,12 @@ struct DepositIbanV: View {
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
-        let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
+        let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the #
 #endif
-        let destination = LazyView {
-            DepositAmountV(stack: stack.push(),
-                    currencyInfo: $currencyInfo,
-                        paytoUri: paytoUri,
-//                 exchangeBaseUrl: baseURL,
-                 amountAvailable: amountAvailable,
-//                     depositIBAN: $depositIBAN,
-//                   accountHolder: $accountHolder,
-                amountToTransfer: $amountToTransfer,
-                  amountLastUsed: amountLastUsed)
-        }
+        let destination = DepositAmountV(stack: stack.push(),
+                               selectedBalance: $selectedBalance,
+                                amountLastUsed: $amountLastUsed,
+                                      paytoUri: paytoUri)
         ScrollView { VStack (alignment: .leading, spacing: 6) {
             if let feeIsNotZero {       // don't show fee if nil
                 let label = feeLabel ?? myFeeLabel
