@@ -63,6 +63,7 @@ struct ManualWithdraw: View {
                 ManualWithdrawDone(stack: stack.push(),
                             currencyInfo: $currencyInfo,
                                 exchange: exchange,
+                                 balance: nil,
                         amountToTransfer: amountToTransfer)
 //                           restrictAge: restrictAge)
             }

@@ -14,7 +14,8 @@ struct ManualWithdrawDone: View {
     let stack: CallStack
     @Binding var currencyInfo: CurrencyInfo
 
-    let exchange: Exchange
+    let exchange: Exchange?
+    let balance: Balance?
     let amountToTransfer: Amount
 //    let restrictAge: Int?
 
@@ -34,6 +35,7 @@ struct ManualWithdrawDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let baseURL = balance?.scopeInfo.url ?? exchange?.exchangeBaseUrl ?? EMPTYSTRING
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
@@ -56,17 +58,17 @@ struct ManualWithdrawDone: View {
                             .padding(.horizontal)
                 }
             } else {
-                LoadingView(scopeInfo: nil, message: exchange.exchangeBaseUrl.trimURL)
+                LoadingView(scopeInfo: nil, message: baseURL.trimURL)
             }
         }.onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
             if transactionId == nil {
-                if let result = try? await model.sendAcceptManualWithdrawalM(exchange.exchangeBaseUrl,
-                                                                             amount: amountToTransfer, restrictAge: 0) {
-                    transactionId = result.transactionId
-                }
+                if let result = try? await model.sendAcceptManualWithdrawalM(baseURL,
+                                                                     amount: amountToTransfer,
+                                                                restrictAge: 0)
+                { transactionId = result.transactionId }
             }
         }
     }
@@ -93,6 +95,7 @@ fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
         ManualWithdrawDone(stack: CallStack("Preview"),
                     currencyInfo: $currencyInfoD,
                         exchange: exchange,
+                         balance: nil,
                 amountToTransfer: amountToTransfer)
     }
 }
