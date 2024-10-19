@@ -108,7 +108,7 @@ struct DepositAmountV: View {
                 Text("Available:\t\(available)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
-                CurrencyInputView(currencyInfo: $currencyInfo,
+                CurrencyInputView(currencyInfo: currencyInfo,
                                         amount: $amountToTransfer,
                                 amountLastUsed: amountLastUsed,
                                      available: nil,  // amountAvailable,

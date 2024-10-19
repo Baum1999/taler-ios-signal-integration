@@ -12,7 +12,7 @@ fileprivate let replaceable = 500
 fileprivate let shortcutValues = [5000,2500,1000]        // TODO: adapt for ¥
 
 struct ShortcutButton: View {
-    @Binding var currencyInfo: CurrencyInfo
+    let currencyInfo: CurrencyInfo
     let currency: String
     let currencyField: CurrencyField
     let shortcut: Int
@@ -20,7 +20,7 @@ struct ShortcutButton: View {
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {
-        ShortcutButton(currencyInfo: $currencyInfo,
+        ShortcutButton(currencyInfo: currencyInfo,
                            currency: currency,
                       currencyField: currencyField,
                            shortcut: newShortcut,
@@ -61,7 +61,7 @@ struct ShortcutButton: View {
 }
 // MARK: -
 struct CurrencyInputView: View {
-    @Binding var currencyInfo: CurrencyInfo
+    let currencyInfo: CurrencyInfo
     @Binding var amount: Amount         // the `value´
     let amountLastUsed: Amount
     let available: Amount?
@@ -97,7 +97,7 @@ struct CurrencyInputView: View {
                 if !shortcutValues.contains(lastUsedI) {
                     shortcut = lastUsedI
         }   }   }
-        return ShortcutButton(currencyInfo: $currencyInfo,
+        return ShortcutButton(currencyInfo: currencyInfo,
                                   currency: amount.currencyStr,
                              currencyField: currencyField,
                                   shortcut: shortcut,
@@ -135,7 +135,7 @@ struct CurrencyInputView: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currency = amount.currencyStr
-        let currencyField = CurrencyField($currencyInfo, amount: $amount)
+        let currencyField = CurrencyField(currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
             if let heading = heading() {
                 Text(heading)
@@ -226,7 +226,7 @@ fileprivate struct Previews: PreviewProvider {
         @State var amountLastUsed = Amount(currency: LONGCURRENCY, cent: 170)
         @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
         var body: some View {
-            CurrencyInputView(currencyInfo: $currencyInfoL,
+            CurrencyInputView(currencyInfo: currencyInfoL,
                                     amount: $amountToPreview,
                             amountLastUsed: amountLastUsed,
                                  available: Amount(currency: LONGCURRENCY, cent: 2000),

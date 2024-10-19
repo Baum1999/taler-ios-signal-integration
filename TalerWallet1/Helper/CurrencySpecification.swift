@@ -60,7 +60,7 @@ extension Amount {
 
     func formatted(_ scope: ScopeInfo, isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
         let controller = Controller.shared
-        if let currencyInfo = controller.info2(for: self.currencyStr) {
+        if let currencyInfo = controller.info(for: scope) {
             return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO, a11y: a11y)
         }
         return self.readableDescription

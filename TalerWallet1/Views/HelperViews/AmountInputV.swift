@@ -93,7 +93,7 @@ struct AmountInputV: View {
 //                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
 //                    .padding(4)
 //            }
-            CurrencyInputView(currencyInfo: $currencyInfo,
+            CurrencyInputView(currencyInfo: currencyInfo,
                                     amount: $amountToTransfer,
                             amountLastUsed: amountLastUsed,
                                  available: amountAvailable,

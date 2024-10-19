@@ -73,7 +73,7 @@ struct ManualWithdraw: View {
                     .multilineTextAlignment(.center)
                     .talerFont(.body)
                 if tosAccepted {
-                    CurrencyInputView(currencyInfo: $currencyInfo,
+                    CurrencyInputView(currencyInfo: currencyInfo,
                                             amount: $amountToTransfer,
                                     amountLastUsed: amountLastUsed,
                                          available: nil,
