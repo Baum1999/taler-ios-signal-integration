@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-
+// Called when tapping [􁾩Deposit]
 struct DepositIbanV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
