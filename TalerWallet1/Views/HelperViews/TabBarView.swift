@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TabBarView: View {
     @Binding var selection: Tab
+    @Binding var userAction: Int
     @Binding var hidden: Int
     let onActionTab: () -> Void
     let onActionDrag: () -> Void
@@ -16,15 +17,20 @@ struct TabBarView: View {
     @Environment(\.keyboardShowing) var keyboardShowing
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("tapped") var tapped: Int = 0
+    @AppStorage("dragged") var dragged: Int = 0
 
     @State private var offset = CGSize.zero
     @State private var didDrag = false
 
     private func tabBarItem(for tab: Tab) -> some View {
         VStack(spacing: 0) {
-            if tab == .actions {
-                let width = 72.0
-                let height = 57.6
+            let isActions = (tab == .actions)
+            let withText = isActions ? tapped < TAPPED
+                                     : tapped < TAPPED || !minimalistic
+            if isActions {
+                let width = withText ? 48 : 72.0
+                let height = withText ? 36 : 57.6
                 tab.image
                     .resizable()
                     .scaledToFill()
@@ -32,7 +38,7 @@ struct TabBarView: View {
                     .clipped() // Crop the image to the frame size
                     .padding(.bottom, 4)
                     .offset(offset)
-                    .opacity(1 - Double(abs(offset.height / 35)))
+//                    .opacity(1 - Double(abs(offset.height / 35)))
                     .gesture(
                         DragGesture()
                             .onChanged { gesture in
@@ -42,6 +48,9 @@ struct TabBarView: View {
                                     offset = .zero
                                     didDrag = true
                                     onActionDrag()    // switch to camera
+                                    if tapped >= TAPPED {
+                                        dragged += 1
+                                    }
                                 } else {
                                     offset = trans
                                 }
@@ -55,50 +64,62 @@ struct TabBarView: View {
                                 offset = .zero
                             }
                     )
-
             } else {
-                let size = minimalistic ? 36.0 : 24.0
+                let size = withText ? 24.0 : 36.0
                 tab.image
                     .resizable()
                     .renderingMode(.template)
                     .tint(.black)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: size, height: size)
-                if !minimalistic {
-                    Text(tab.title)
-                        .lineLimit(1)
-                        .talerFont(.body)
-                }
             }
-        }
+            if withText {
+                Text(tab.title)
+                    .lineLimit(1)
+                    .talerFont(.body)
+            }
+        }.id(tab)
         .foregroundColor(selection == tab ? .accentColor : .secondary)
         .padding(.vertical, 8)
         .accessibilityElement(children: .combine)
         .accessibility(label: Text(tab.title))
         .accessibility(addTraits: [.isButton])
         .accessibility(removeTraits: [.isImage])
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
     }
 
+    private func userAction(_ newValue: Int) {
+        if tapped >= TAPPED && dragged < DRAGGED {
+            withAnimation(Animation.easeOut(duration: DRAGDURATION).delay(DRAGDELAY)) {
+                offset.height = -50
+            }
+            withAnimation(Animation.easeOut(duration: DRAGSPEED).delay(DRAGDELAY + DRAGDURATION + DRAGSPEED)) {
+                offset.height = 0
+            }
+        }
+    }
     var body: some View {
         Group {
             if keyboardShowing || hidden > 0 {
                 EmptyView()
             } else {
+                let actionTab = tabBarItem(for: Tab.actions)
+                let balanceTab = tabBarItem(for: Tab.balances)
+                let settingsTab = tabBarItem(for: Tab.settings)
                 HStack(alignment: .bottom) {
-                    ForEach(Tab.allCases, id: \.self) { tab in
-                        tabBarItem(for: tab)
-                            .frame(maxWidth: .infinity)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                if tab == .actions {
-                                    onActionTab()
-                                } else {
-                                    selection = tab
-                                }
-                            }
+                    balanceTab.onTapGesture { selection = .balances; userAction += 1 }
+                    actionTab.onTapGesture {
+                        onActionTab()
+                        tapped += 1
+//                        dragged = 0
                     }
+                    settingsTab.onTapGesture { selection = .settings; userAction += 1 }
                 }
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.bottom))
+                .onChange(of: userAction) { newValue in
+                    userAction(newValue)
+                }
             }
         }
     }

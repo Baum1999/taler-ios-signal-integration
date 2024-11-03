@@ -46,6 +46,7 @@ struct MainView: View {
 //    @State private var showCameraAlert: Bool = false
     @State private var qrButtonTapped = false
     @State private var innerHeight: CGFloat = .zero
+    @State private var userAction = 0
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -65,12 +66,13 @@ struct MainView: View {
 #endif
         Group {
             if controller.backendState == .ready {
-                Content(logger: logger, stack: stack.push("Content"),
-               selectedBalance: $selectedBalance,
-                talerFontIndex: $talerFontIndex,
-               showActionSheet: $showActionSheet,
-                   showScanner: $showScanner)
-                    .onAppear() {
+                MainContent(logger: logger, stack: stack.push("Content"),
+                   selectedBalance: $selectedBalance,
+                    talerFontIndex: $talerFontIndex,
+                   showActionSheet: $showActionSheet,
+                       showScanner: $showScanner,
+                        userAction: $userAction)
+                .onAppear() {
 #if DEBUG
                     if playSoundsI != 0  && playSoundsB && !soundPlayed {
                         controller.playSound(1008)     // Startup chime
@@ -211,13 +213,14 @@ extension MainView {
         }
     }
 
-    struct Content: View {
+    struct MainContent: View {
         let logger: Logger
         let stack: CallStack
         @Binding var selectedBalance: Balance?
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
+        @Binding var userAction: Int
 
 #if DEBUG
         @AppStorage("developerMode") var developerMode: Bool = true
@@ -304,12 +307,7 @@ extension MainView {
             let balancesTitle = Tab.balances.title
 //            let actionTitle = Tab.actions.title
             let settingsTitle = Tab.settings.title
-            let tabBarView = TabBarView(selection: tabSelection(), hidden: $navModel.tabBarHidden) {
-                if selectedTab != .balances {
-                    selectedTab = .balances
-                }
-                // TODO: check NavigationStack, pop only if necessary
-//                ViewState.shared.popToRootView(nil)   either do this after any of the buttons was operated, or don't do it at all
+            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $navModel.tabBarHidden) {
                 showActionSheet = true
             } onActionDrag: {
                 showScanner = true

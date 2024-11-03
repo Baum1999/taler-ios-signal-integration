@@ -22,10 +22,13 @@ struct AboutView: View {
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("tapped") var tapped: Int = 0
+    @AppStorage("dragged") var dragged: Int = 0
 
     @State private var rotationEnabled = false
     @State private var showGitHash = false
     @State private var listID = UUID()
+    @State private var onboarding = false
 
     var body: some View {
 #if PRINT_CHANGES
@@ -63,11 +66,27 @@ struct AboutView: View {
                             }
                         }
                     } else {
-                        SettingsItem(name: String(localized: "WalletCore Version"), id1: "wallet-coreV") {
+                        SettingsItem(name: String(localized: "Wallet-Core Version"), id1: "wallet-coreV") {
                             Text(verbatim: "\(walletCore.versionInfo?.implementationSemver ?? "unknown")")
                         }
                     }
                 }.onTapGesture(count: 1) { showGitHash.toggle() }
+                SettingsToggle(name: String(localized: "Onboarding"),
+                               value: $onboarding.onChange({ shouldOnboard in
+                                    if shouldOnboard {
+                                        tapped = 0
+                                        dragged = 0
+                                    } else {
+                                        tapped = TAPPED
+                                        dragged = DRAGGED
+                                    }
+                                }),
+                                id1: "onboarding",
+                        description: minimalistic ? nil : String(localized: "Explain the Actions button"))
+#if DEBUG
+                Text("Tapped: \(tapped), dragged: \(dragged)")
+#endif
+
 //                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
 //                    Text(verbatim: "\(walletCore.versionInfo?.exchange ?? "unknown")")
 //                }
@@ -82,6 +101,9 @@ struct AboutView: View {
             .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
+        .task {
+            onboarding = (tapped < TAPPED || dragged < DRAGGED)
+        }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_ABOUT, stack: stack.push())
         }
@@ -110,7 +132,7 @@ extension Bundle {
     }
     var releaseVersionNumberPretty: String {
         let release = releaseVersionNumber ?? "1.0.0"
-        return "v\(release) (\(buildVersionNumber))"
+        return release // "v\(release) (\(buildVersionNumber))"
     }
 }
 // MARK: -
