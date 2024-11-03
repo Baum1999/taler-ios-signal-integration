@@ -61,7 +61,6 @@ struct RequestPayment: View {
                 .padding(.bottom, 4)
             }
             RequestPaymentContent(stack: stack.push(),
-                           currencyInfo: $currencyInfo,
                                 balance: $balance,
                            balanceIndex: $balanceIndex,
                          amountLastUsed: $amountLastUsed,
@@ -95,7 +94,6 @@ struct RequestPayment: View {
 struct RequestPaymentContent: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
     @Binding var balance: Balance?
     @Binding var balanceIndex: Int
     @Binding var amountLastUsed: Amount
@@ -146,7 +144,7 @@ struct RequestPaymentContent: View {
         return peerPullCheck != nil ? true : false
     }
 
-    private func computeFeeRequest(_ amount: Amount) async -> ComputeFeeResult? {
+    private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
         if exchange == nil {
             if let url = scopeInfo.url {
                 exchange = try? await model.getExchangeByUrl(url: url)
@@ -161,7 +159,7 @@ struct RequestPaymentContent: View {
             let raw = ppCheck.amountRaw
             let effective = ppCheck.amountEffective
             if let fee = fee(raw: raw, effective: effective) {
-                feeStr = fee.formatted(currencyInfo, isNegative: true)
+                feeStr = fee.formatted(scopeInfo, isNegative: true)
                 symLog.log("Fee = \(feeStr)")
 
                 peerPullCheck = ppCheck
@@ -188,25 +186,22 @@ struct RequestPaymentContent: View {
             }
         }
         return nil
-    }
+    } // computeFee
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let coinData = CoinData(details: peerPullCheck)
-        Group {
-            if let balance {
-                let scopeInfo = balance.scopeInfo
+        if let balance {
+            Group { if scopeInfo != nil {
+                let coinData = CoinData(details: peerPullCheck)
 //                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
 //                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-                let feeLabel = coinData.feeLabel(currencyInfo,
-                                        feeZero: String(localized: "No payment fee"),
-                                     isNegative: false)
+                let feeLabel = coinData.feeLabel(scopeInfo, feeZero: String(localized: "No payment fee"),
+                                                 isNegative: false)
                 let inputDestination = P2PSubjectV(stack: stack.push(),
                                                    scope: scopeInfo,
-                                            currencyInfo: $currencyInfo,
                                                 feeLabel: feeLabel,
                                             feeIsNotZero: feeIsNotZero(),
                                                 outgoing: false,
@@ -215,7 +210,6 @@ struct RequestPaymentContent: View {
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
                                                       scope: scopeInfo,
-                                               currencyInfo: $currencyInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),
                                                    outgoing: false,
@@ -225,7 +219,7 @@ struct RequestPaymentContent: View {
                 let amountLabel = minimalistic ? String(localized: "Amount:")
                                                : String(localized: "Amount to request:")
                 AmountInputV(stack: stack.push(),
-                      currencyInfo: $currencyInfo,
+                             scope: scopeInfo,
                    amountAvailable: $amountZero,        // incoming needs no available
                        amountLabel: amountLabel,
                   amountToTransfer: $amountToTransfer,
@@ -235,25 +229,23 @@ struct RequestPaymentContent: View {
                     shortcutAction: shortcutAction,
                       buttonAction: buttonAction,
                      feeIsNegative: true,
-                        computeFee: computeFeeRequest)
+                        computeFee: computeFee)
                 .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
                     ) // shortcutDestination
                 .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
                         { EmptyView() }.frame(width: 0).opacity(0).hidden()
                     ) // inputDestination
-            } else {    // no balance - Yikes
-                Text("No balance. There seems to be a problem with the database...")
             }
         } // Group
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
             // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
             symLog.log("❗️ task \(balanceIndex)")
-            if let balance {
                 scopeInfo = balance.scopeInfo
                 amountToTransfer.setCurrency(scopeInfo.currency)
-                currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
             }
+        } else {    // no balance - Yikes
+            Text("No balance. There seems to be a problem with the database...")
         }
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {

@@ -44,7 +44,7 @@ struct P2pReceiveURIView: View {
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
+                                        scope: peerPushCreditResponse.scopeInfo,
                                      topTitle: String(localized: "Gross Amount to receive:"),
                                     topAbbrev: String(localized: "Receive gross:", comment: "mini"),
                                     topAmount: raw,

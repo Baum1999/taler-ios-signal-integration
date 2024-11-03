@@ -94,30 +94,21 @@ extension BalancesSectionView: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
-        let _ = symLog.log("BalancesSectionView❗️ \(currencyInfo.scope.currency) used as currencyInfo")
 
         let balanceDest = LazyView {
             TransactionsListView(stack: stack.push("\(Self.className())()"),
+                                                   scope: scopeInfo,
                                balance: balance,
                        selectedBalance: $selectedBalance,
-                          currencyInfo: $currencyInfo,
                               navTitle: currency,   // String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
-                             scopeInfo: scopeInfo,
                           transactions: $completedTransactions,
                        reloadAllAction: loadCompleted,
                        reloadOneAction: reloadOneAction)
         }
 
         Section {
-            if scopeInfo.type == .exchange {
-                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment provider", comment: "exchange url")
-                Text(baseURL)
-                    .talerFont(.subheadline)
-                    .foregroundColor(.secondary)
-//                    .listRowSeparator(.hidden)
-            }
             BalanceCellV(stack: stack.push("BalanceCell"),
-                  currencyInfo: $currencyInfo,
+                         scope: balance.scopeInfo,
                         amount: balance.available,
 //                sizeCategory: sizeCategory,
 //                   rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
@@ -128,7 +119,6 @@ extension BalancesSectionView: View {
             if pendingTransactions.count > 0 {
                 BalancesPendingRowV(//symLog: symLog,
                                      stack: stack.push(),
-                              currencyInfo: $currencyInfo,
                                    balance: balance,
                            selectedBalance: $selectedBalance,
                        pendingTransactions: $pendingTransactions,
@@ -138,8 +128,7 @@ extension BalancesSectionView: View {
             }
         } header: {
             BarGraphHeader(stack: stack.push(),
-                       scopeInfo: scopeInfo,
-                    currencyInfo: $currencyInfo,
+                           scope: scopeInfo,
             shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .listRowSeparator(.hidden)
@@ -158,8 +147,7 @@ extension BalancesSectionView: View {
                 let _ = symLog.log("recent transactions")
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: $currencyInfo,
-                                     scopeInfo: scopeInfo,
+                                         scope: scopeInfo,
                                   transactions: $recentTransactions,
                                reloadAllAction: loadRecent,
                                reloadOneAction: reloadOneAction)

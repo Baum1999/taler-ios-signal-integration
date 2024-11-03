@@ -21,7 +21,6 @@ struct P2pPayURIView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
     let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
@@ -32,10 +31,11 @@ struct P2pPayURIView: View {
                 List {
                     let raw = peerPullDebitResponse.amountRaw
                     let effective = peerPullDebitResponse.amountEffective
+                    let scope = peerPullDebitResponse.scopeInfo
                     let currency = raw.currencyStr
                     let fee = try! Amount.diff(raw, effective)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
+                                        scope: scope,
                                      topTitle: String(localized: "Amount to pay:"),
                                     topAbbrev: String(localized: "Pay:", comment: "mini"),
                                     topAmount: raw,
@@ -60,20 +60,20 @@ struct P2pPayURIView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                .task(id: controller.currencyTicker) {
-                    let currency = peerPullDebitResponse.amountRaw.currencyStr
-                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-                }
-
-                NavigationLink(destination: LazyView {
-                    P2pAcceptDone(stack: stack.push(),
-                          transactionId: peerPullDebitResponse.transactionId,
-                               incoming: false)
-                    }) {
+//                .task(id: controller.currencyTicker) {
+//                    let currency = peerPullDebitResponse.amountRaw.currencyStr
+//                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+//                }
+                .safeAreaInset(edge: .bottom) {
+                    let destination = P2pAcceptDone(stack: stack.push(),
+                                            transactionId: peerPullDebitResponse.transactionId,
+                                                 incoming: false)
+                    NavigationLink(destination: destination) {
                         Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
                     .padding(.horizontal)
+                }
             } else {
 #if DEBUG
                 let message = url.host

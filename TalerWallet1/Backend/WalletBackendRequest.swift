@@ -39,6 +39,9 @@ struct ScopeInfo: Codable, Hashable {
     public static func zero() -> ScopeInfo {
         ScopeInfo(type: .madeUp, currency: UNKNOWN)
     }
+    public static func zero(_ currency: String) -> ScopeInfo {
+        ScopeInfo(type: .madeUp, currency: currency)
+    }
     public static func < (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
         if lhs.type == .global {
             if rhs.type == .global {        // both global ==> alphabetic currency

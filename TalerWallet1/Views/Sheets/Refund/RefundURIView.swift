@@ -30,11 +30,12 @@ struct RefundURIView: View {
     var body: some View {
         if let refundTransactionId, let transaction {
             let common = transaction.common
+            let scope = common.scopes[0]                                        // TODO: tx could span multiple scopes
             let raw = common.amountRaw
             let currency = raw.currencyStr
-//            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
+
             TransactionSummaryV(stack: stack.push(),
-                         currencyInfo: $currencyInfo,
+                                scope: scope,
                         transactionId: refundTransactionId,
                          reloadAction: reloadOneAction,
                              navTitle: nil,   // navTitle,

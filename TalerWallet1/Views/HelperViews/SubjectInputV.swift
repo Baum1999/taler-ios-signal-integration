@@ -12,7 +12,6 @@ import SymLog
 struct SubjectInputV<TargetView: View>: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
     // the scanned URL
     let url: URL?
     let amountAvailable: Amount?            // TODO: getMaxDepositAmountM, getMaxPeerPushDebitAmountM
@@ -35,7 +34,6 @@ struct SubjectInputV<TargetView: View>: View {
 
     let navTitle = String(localized: "Custom Summary", comment:"pay merchant")
 
-    @State private var preparePayResult: PreparePayResult? = nil
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -44,16 +42,16 @@ struct SubjectInputV<TargetView: View>: View {
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
 //        let feeLabel = insufficient ? insufficientLabel
 //                                    : feeLabel(feeStr)
-        let available = amountAvailable?.formatted(currencyInfo, isNegative: false) ?? nil
+//        let available = amountAvailable?.formatted(scope, isNegative: false) ?? nil
 //        let disabled = insufficient || summary.count == 0
         let disabled = summary.count == 0
         ScrollView { VStack(alignment: .leading) {
-            if let available {
-                Text("Available:\t\(available)")
-                    .talerFont(.title3)
-                    .padding(.bottom, 2)
-//                    .accessibility(sortPriority: 3)
-            }
+//            if let available {
+//                Text("Available:\t\(available)")
+//                    .talerFont(.title3)
+//                    .padding(.bottom, 2)
+////                    .accessibility(sortPriority: 3)
+//            }
 
             if !minimalistic {
                 Text("Enter subject:")    // Purpose
@@ -69,7 +67,7 @@ struct SubjectInputV<TargetView: View>: View {
             } else {
                 TextField("Subject", text: $summary)
                     .focused($isFocused)
-                //                      .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
+//                  .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
             } } // Group for iOS16+ & iOS15
             .talerFont(.title2)
             .foregroundColor(WalletColors().fieldForeground)     // text color
@@ -84,16 +82,16 @@ struct SubjectInputV<TargetView: View>: View {
                     }
                 }
             }
-            HStack {
-                Text(amountToTransfer.formatted(currencyInfo, isNegative: false))
-                // TODO: hasFees?
-//                Text(feeLabel)
-            }
-                .talerFont(.body)
-//                .foregroundColor(insufficient ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
-                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-//                .accessibility(sortPriority: 1)
-                .padding(4)
+//            HStack {
+//                Text(amountToTransfer.formatted(currencyInfo, isNegative: false))
+//                // TODO: hasFees?
+////                Text(feeLabel)
+//            }
+//                .talerFont(.body)
+////                .foregroundColor(insufficient ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
+//                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+////                .accessibility(sortPriority: 1)
+//                .padding(4)
 //            if insufficient {
 //                Text(insufficientLabel)
 //                    .talerFont(.body)

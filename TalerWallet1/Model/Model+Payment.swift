@@ -141,13 +141,13 @@ struct ExchangeFeeGapEstimate: Codable {
 struct PreparePayResult: Codable {
     let status: PreparePayResultType
     let transactionId: String
+    let contractTerms: MerchantContractTerms
+    let scopes: [ScopeInfo]
     let amountRaw: Amount
     let amountEffective: Amount?                                // only if status != insufficientBalance
     let paid: Bool?                                             // only if status == alreadyConfirmed
     let talerUri: String?
     let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
-    let contractTermsHash: String?                              // only if status != insufficientBalance
-    let contractTerms: MerchantContractTerms
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
@@ -180,22 +180,24 @@ fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
 }
 // MARK: -
 struct TemplateContractDetails: Codable {
-    let summary: String?                    // Human-readable short summary of the contract. Fixed if this field exists, editable if nil
-    let currency: String?
-    let amount: Amount?                     // Total amount payable. Fixed if this field exists, editable if nil
+    let summary: String?                // Human-readable short summary of the contract. Editable if nil
+    let currency: String?               // specify currency when amount is nil - unspecified if nil
+    let amount: Amount?                 // Total amount payable. Fixed if this field exists, editable if nil
+    let scopeInfo: ScopeInfo?
     let minimumAge: Int
     let payDuration: RelativeTime
 
     enum CodingKeys: String, CodingKey {
         case summary, currency, amount
+        case scopeInfo
         case minimumAge = "minimum_age"
         case payDuration = "pay_duration"
     }
 }
 struct TemplateContractDetailsDefaults: Codable {
-    let summary: String?                    // Default 'Human-readable short summary' if editable, or empty if nil.
-    let currency: String?
-    let amount: Amount?                     // Default amount if editable, or unspecified if nil.
+    let summary: String?                // Default 'Human-readable summary' when editable: empty if nil
+    let currency: String?               // Default currency when unspecified: any if nil (e.g. donations)
+    let amount: Amount?                 // Default amount when editable: unspecified if nil
 }
 struct TalerMerchantTemplateDetails: Codable {
     let templateContract: TemplateContractDetails

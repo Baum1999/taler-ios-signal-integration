@@ -39,8 +39,8 @@ struct PayTemplateV: View {
     @State private var buttonSelected2 = false
     @State private var summaryIsEditable = false
     @State private var summary: String = EMPTYSTRING       // templateParam
+    @State private var scope: ScopeInfo? = nil
 
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 //    @State private var feeAmount: Amount? = nil
 //    @State private var feeStr: String = EMPTYSTRING
 
@@ -107,7 +107,6 @@ struct PayTemplateV: View {
 
             let inputDestination = LazyView {
                 SubjectInputV(stack: stack.push(),
-                       currencyInfo: $currencyInfo,
                                 url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountToTransfer,
@@ -120,7 +119,6 @@ struct PayTemplateV: View {
             }   // destination to subject input
             let shortcutDestination = LazyView {
                 SubjectInputV(stack: stack.push(),
-                       currencyInfo: $currencyInfo,
                                 url: url,
                     amountAvailable: nil,
                    amountToTransfer: $amountShortcut,
@@ -134,7 +132,7 @@ struct PayTemplateV: View {
           Group {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
                 let amountInput = AmountInputV(stack: stack.push(),
-                                        currencyInfo: $currencyInfo,
+                                               scope: scope,
                                      amountAvailable: $amountAvailable,
                                          amountLabel: amountLabel,
                                     amountToTransfer: $amountToTransfer,
@@ -181,10 +179,6 @@ struct PayTemplateV: View {
           } .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-            .task(id: controller.currencyTicker) {
-                let currency = amountToTransfer.currencyStr
-                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-            }
             .onAppear() {
                 symLog.log("onAppear")
                 DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)

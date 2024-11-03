@@ -16,12 +16,11 @@ fileprivate let showUpDown = 25     // show up+down buttons in the menubar if li
 struct TransactionsListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let scope: ScopeInfo
     let balance: Balance                            // this is the currency to be used
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
-    @Binding var currencyInfo: CurrencyInfo
-    let navTitle: String
+    let navTitle: String?
 
-    let scopeInfo: ScopeInfo
     @Binding var transactions: [Transaction]
 
     let reloadAllAction: (_ stack: CallStack) async -> ()
@@ -41,8 +40,7 @@ struct TransactionsListView: View {
             List {
                 TransactionsArraySliceV(symLog: symLog,
                                          stack: stack.push(),
-                                  currencyInfo: $currencyInfo,
-                                     scopeInfo: scopeInfo,
+                                         scope: scope,
                                   transactions: $transactions,
                                reloadAllAction: reloadAllAction,
                                reloadOneAction: reloadOneAction)
@@ -70,7 +68,7 @@ struct TransactionsListView: View {
                 })
             }
         } // ScrollViewReader
-        .navigationTitle(navTitle)
+        .navigationTitle(navTitle ?? scope.currency)
         .accessibilityHint(String(localized: "Transaction list"))
         .task {
             symLog.log("❗️.task List❗️")
@@ -78,7 +76,7 @@ struct TransactionsListView: View {
         }
         .overlay {
             if transactions.isEmpty {
-                TransactionsEmptyView(stack: stack.push(), currency: scopeInfo.currency)
+                TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
             }
         }
         .onAppear {
@@ -92,8 +90,7 @@ struct TransactionsListView: View {
 struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
-    let scopeInfo: ScopeInfo
+    let scope: ScopeInfo
     @Binding var transactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
     let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
@@ -113,7 +110,7 @@ struct TransactionsArraySliceV: View {
 
         ForEach(transactions, id: \.self) { transaction in
             let destination = TransactionSummaryV(stack: stack.push(),
-                                           currencyInfo: $currencyInfo,
+                                                  scope: scope,
                                           transactionId: transaction.id,
                                            reloadAction: reloadOneAction,
                                                navTitle: nil,
@@ -124,7 +121,7 @@ struct TransactionsArraySliceV: View {
                                           suspendAction: suspendAction,
                                            resumeAction: resumeAction)
             let row = NavigationLink { destination } label: {
-                TransactionRowView(currencyInfo: $currencyInfo, transaction: transaction)
+                TransactionRowView(scope: scope, transaction: transaction)
             }.id(transaction.id)
             if transaction.isDeleteable {
                 row.swipeActions(edge: .trailing) {

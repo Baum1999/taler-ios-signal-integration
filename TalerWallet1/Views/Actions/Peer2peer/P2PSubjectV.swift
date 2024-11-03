@@ -22,7 +22,6 @@ struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let scope: ScopeInfo
-    @Binding var currencyInfo: CurrencyInfo
     let feeLabel: String?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
     let outgoing: Bool
@@ -39,16 +38,16 @@ struct P2PSubjectV: View {
     @State private var transactionStarted: Bool = false
     @FocusState private var isFocused: Bool
 
-    private func buttonTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: false, useISO: true)
+    private func buttonTitle(_ amount: Amount) -> String {
+        let amountWithCurrency = amount.formatted(scope, isNegative: false, useISO: true)
         return outgoing ? String(localized: "Send \(amountWithCurrency) now",
                                    comment: "amount with currency")
                         : String(localized: "Request \(amountWithCurrency)",
                                    comment: "amount with currency")
     }
 
-    private func subjectTitle(_ amount: Amount, _ currencyInfo: CurrencyInfo) -> String {
-        let amountStr = amount.formatted(currencyInfo, isNegative: false)
+    private func subjectTitle(_ amount: Amount) -> String {
+        let amountStr = amount.formatted(scope, isNegative: false)
         return outgoing ? String(localized: "NavTitle_Send_AmountStr",
                               defaultValue: "Send \(amountStr)",
                                    comment: "NavTitle: Send 'amountStr'")
@@ -81,12 +80,24 @@ struct P2PSubjectV: View {
                 }
                 Group { if #available(iOS 16.0, *) {
                     TextField(minimalistic ? "Subject" : EMPTYSTRING, text: $summary, axis: .vertical)
+                        .submitLabel(.next)
                         .focused($isFocused)
-                        .lineLimit(2...)
-                } else {
+                        .onChange(of: summary) { newValue in
+                            guard isFocused else { return }
+                            guard newValue.contains("\n") else { return }
+                            isFocused = false
+                            summary = newValue.replacing("\n", with: "")
+                        }
+                  } else {
                     TextField("Subject", text: $summary)
+                        .submitLabel(.next)
                         .focused($isFocused)
-//                      .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
+                        .onChange(of: summary) { newValue in
+                            guard isFocused else { return }
+                            guard newValue.contains("\n") else { return }
+                            isFocused = false
+                            summary = newValue.replacingOccurrences(of: "\n", with: "")
+                        }
                 } } // Group for iOS16+ & iOS15
                     .talerFont(.title2)
                     .foregroundColor(WalletColors().fieldForeground)     // text color
@@ -112,24 +123,22 @@ struct P2PSubjectV: View {
                     .padding(.bottom)
 
                 let disabled = (expireDays == 0) || (summary.count < 1)    // TODO: check amountAvailable
-                NavigationLink(destination: LazyView {
-                    P2PReadyV(stack: stack.push(),
-                       currencyInfo: $currencyInfo,
-                              scope: scope,
-                            summary: summary,
-                         expireDays: expireDays,
-                           outgoing: outgoing,
-                   amountToTransfer: amountToTransfer,
-                 transactionStarted: $transactionStarted)
-                }) {
-                    Text(buttonTitle(amountToTransfer, currencyInfo))
-                }
+            let destination = P2PReadyV(stack: stack.push(),
+                                        scope: scope,
+                                      summary: summary,
+                                   expireDays: expireDays,
+                                     outgoing: outgoing,
+                             amountToTransfer: amountToTransfer,
+                           transactionStarted: $transactionStarted)
+            NavigationLink(destination: destination) {
+                Text(buttonTitle(amountToTransfer))
+            }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? String(localized: "enabled when subject and expiration are set") : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .navigationTitle(subjectTitle(amountToTransfer, currencyInfo))
+        .navigationTitle(subjectTitle(amountToTransfer))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SUBJECT, stack: stack.push())
@@ -142,7 +151,7 @@ struct P2PSubjectV: View {
             if outgoing && feeLabel == nil {
                 if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer, scope: scope) {
                     if let feeAmount = p2pFee(ppCheck: ppCheck) {
-                        let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+                        let feeStr = feeAmount.formatted(scope, isNegative: false)
                         myFeeLabel = String(localized: "+ \(feeStr) fee")
                     } else { myFeeLabel = EMPTYSTRING }
                 } else {

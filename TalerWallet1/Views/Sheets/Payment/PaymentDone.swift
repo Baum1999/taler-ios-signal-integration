@@ -11,7 +11,7 @@ import SymLog
 struct PaymentDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo?
     let transactionId: String
 
     @EnvironmentObject private var controller: Controller
@@ -32,7 +32,7 @@ struct PaymentDone: View {
             if paymentDone {
                 let navTitle = String(localized: "Paid", comment: "Title, short")
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: $currencyInfo,
+                                    scope: scope,
                             transactionId: transactionId,
                              reloadAction: reloadOneAction,
                                  navTitle: navTitle,

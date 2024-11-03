@@ -10,8 +10,7 @@ let MAXBARS = 15
 struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let scopeInfo: ScopeInfo?
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo
     @Binding var shouldReloadBalances: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -24,27 +23,25 @@ struct BarGraphHeader: View {
     @ScaledMetric var barHeight = 9       // relative to fontSize
 
     var body: some View {
+        let currencyInfo = controller.info(for: scope, controller.currencyTicker)
         HStack (alignment: .center, spacing: 10) {
             if !minimalistic || currencyInfo.hasSymbol {
                 Text(currencyInfo.name)
                     .talerFont(.title2)
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
-            if let scopeInfo {
-                BarGraph(transactions: $completedTransactions,
-                         maxBars: MAXBARS, barHeight: barHeight)
-            }
+            BarGraph(transactions: $completedTransactions,
+                          maxBars: MAXBARS, barHeight: barHeight)
         }
 //        .headerProminence(.increased)         // unfortunately this is not useful
         .task(id: shouldReloadBalances + 2_000_000) {
-            if let scopeInfo {
-                symLog.log(".task for BarGraphHeader(\(scopeInfo.currency)) - load \(MAXBARS) Transactions")
-                if let response = try? await model.transactionsT2(stack.push("BarGraphHeader - \(scopeInfo.url?.trimURL)"),
-                                                        scopeInfo: scopeInfo,
-                                                    filterByState: .done,
-                                                            limit: MAXBARS) {
-                    completedTransactions = response
-                }
+            symLog.log(".task for BarGraphHeader(\(scope.currency)) - load \(MAXBARS) Transactions")
+            if let response = try? await model.transactionsT2(stack.push("BarGraphHeader - \(scope.url?.trimURL)"),
+                                                    scopeInfo: scope,
+                                                filterByState: .done,
+                                                        limit: MAXBARS
+            ) {
+                completedTransactions = response
             }
         }
     }

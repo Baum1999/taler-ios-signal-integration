@@ -14,10 +14,27 @@ struct QRCodeDetailView: View {
     let talerCopyShare: String
     let incoming: Bool
     let amount: Amount
-    let specs: CurrencySpecification
+    let scope: ScopeInfo
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    @State private var currencyInfo: CurrencyInfo?
+
+    private func currencyTickerChanged() async {
+        currencyInfo = controller.info(for: scope)
+    }
+
+    private func amountStr(_ currencyInfo : CurrencyInfo?) -> String {
+        let amountFormatted: String
+        if let currencyInfo {
+            amountFormatted = amount.formatted(currencyInfo, isNegative: false,
+                                               useISO: false, a11y: nil)
+        } else {
+            amountFormatted = amount.readableDescription
+        }
+        return amountFormatted
+    }
 
     var body: some View {
         if talerURI.count > 10 {
@@ -39,7 +56,7 @@ struct QRCodeDetailView: View {
                 .accessibilityLabel("QR Code")
                 .listRowSeparator(.hidden)
                 if !minimalistic {
-                    let amountStr = amount.formatted(specs: specs, isNegative: false)
+                    let amountStr = amountStr(currencyInfo)
                     let scanLong = incoming ? String(localized: "(payer) 1",
                                                   defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
                                                        comment: "e.g. '5,3 €'")
@@ -50,6 +67,7 @@ struct QRCodeDetailView: View {
                         .multilineTextAlignment(.leading)
                         .talerFont(.title3)
                         .listRowSeparator(.hidden)
+                        .task(id: controller.currencyTicker) { await currencyTickerChanged() }
                 }
                 CopyShare(textToCopy: talerCopyShare)
                     .disabled(false)

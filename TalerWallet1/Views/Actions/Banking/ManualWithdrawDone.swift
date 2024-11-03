@@ -12,10 +12,9 @@ import SymLog
 struct ManualWithdrawDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo                                                        // TODO: use data from tx itself
 
-    let exchange: Exchange?
-    let balance: Balance?
+    let baseURL: String
     let amountToTransfer: Amount
 //    let restrictAge: Int?
 
@@ -35,11 +34,10 @@ struct ManualWithdrawDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let baseURL = balance?.scopeInfo.url ?? exchange?.exchangeBaseUrl ?? EMPTYSTRING
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: $currencyInfo,
+                                    scope: scope,                               // TODO: use data from tx itself
                             transactionId: transactionId,
                              reloadAction: reloadOneAction,
                                  navTitle: navTitle,
@@ -65,9 +63,9 @@ struct ManualWithdrawDone: View {
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }.task {
             if transactionId == nil {
-                if let result = try? await model.sendAcceptManualWithdrawalM(baseURL,
-                                                                     amount: amountToTransfer,
-                                                                restrictAge: 0)
+                if let result = try? await model.acceptManualWithdrawalM(amountToTransfer,
+                                                                baseUrl: baseURL,
+                                                            restrictAge: 0)
                 { transactionId = result.transactionId }
             }
         }
@@ -80,7 +78,7 @@ fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
     @MainActor
     struct BindingViewContainer : View {
         @State private var amountToTransfer = Amount(currency: LONGCURRENCY, cent: 510)
-        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
 
     var body: some View {
         let scopeInfo = ScopeInfo(type: .exchange, currency: LONGCURRENCY)
@@ -93,9 +91,8 @@ fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
-                    currencyInfo: $currencyInfoD,
-                        exchange: exchange,
-                         balance: nil,
+                           scope: scopeInfo,
+                         baseURL: DEMOEXCHANGE,
                 amountToTransfer: amountToTransfer)
     }
 }

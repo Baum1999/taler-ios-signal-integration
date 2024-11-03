@@ -11,9 +11,9 @@ import taler_swift
 // Title and Amount
 struct AmountRowV: View {
     let stack: CallStack?
-    @Binding var currencyInfo: CurrencyInfo
     let title: String
     let amount: Amount
+    let scope: ScopeInfo?
     let isNegative: Bool?        // show fee with minus (or plus) sign, or no sign if nil
     let color: Color
     let large: Bool      // set to false for QR or IBAN
@@ -23,7 +23,7 @@ struct AmountRowV: View {
                         .multilineTextAlignment(.leading)
                         .talerFont(.body)
         let amountV = AmountV(stack: stack?.push(),
-                       currencyInfo: $currencyInfo,
+                              scope: scope,
                              amount: amount,
                          isNegative: isNegative,
                       strikethrough: false,
@@ -63,11 +63,11 @@ struct AmountRowV: View {
     }
 }
 extension AmountRowV {
-    init(_ currencyInfo: Binding<CurrencyInfo>, title: String, amount: Amount, isNegative: Bool, color: Color) {
+    init(_ title: String, amount: Amount, scope: ScopeInfo?, isNegative: Bool, color: Color) {
         self.stack = nil
-        self._currencyInfo = currencyInfo
         self.title = title
         self.amount = amount
+        self.scope = scope
         self.isNegative = isNegative
         self.color = color
         self.large = true
@@ -87,15 +87,15 @@ fileprivate func talerFromStr(_ from: String) -> Amount {
 #if DEBUG
 @MainActor
 fileprivate struct BindingViewContainer: View {
-    @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+    @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
     var body: some View {
-        let fee = Amount(currency: "Taler", cent: 20)
-        let currencyInfo = CurrencyInfo.zero("Taler")
-        AmountRowV(stack: nil, currencyInfo: $currencyInfoD, title: "Fee", amount: fee, isNegative: true, color: Color("Outgoing"), large: false)
-        let cents = Amount(currency: "Taler", cent: 480)
-        AmountRowV($currencyInfoD, title: "Cents", amount: cents, isNegative: false, color: Color("Incoming"))
+        let scope = ScopeInfo.zero(DEMOCURRENCY)
+        let fee = Amount(currency: DEMOCURRENCY, cent: 20)
+        AmountRowV("Fee", amount: fee, scope: scope, isNegative: true, color: Color("Outgoing"))
+        let cents = Amount(currency: DEMOCURRENCY, cent: 480)
+        AmountRowV("Cents", amount: cents, scope: scope, isNegative: false, color: Color("Incoming"))
         let amount = talerFromStr("Taler:4.80")
-        AmountRowV($currencyInfoD, title: "Chosen amount to withdraw", amount: amount, isNegative: false, color: Color("Incoming"))
+        AmountRowV("Chosen amount to withdraw", amount: amount, scope: scope, isNegative: false, color: Color("Incoming"))
     }
 }
 

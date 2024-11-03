@@ -43,7 +43,7 @@ struct WithdrawURIView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
 //    @State private var feeAmount: Amount? = nil
-    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
+    @State private var withdrawalDetails: WithdrawalDetailsForAmount? = nil
 
     let navTitle = String(localized: "Withdrawal")
 
@@ -67,8 +67,9 @@ struct WithdrawURIView: View {
 
     private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
         if let exchange {
-            if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
-                                                                      amount: amount) {
+            if let details = try? await model.getWithdrawalDetailsForAmountM(amount,
+                                                                    baseUrl: exchange.exchangeBaseUrl,
+                                                                      scope: nil) {     // TODO: scope
                 let fee = try? details.amountRaw - details.amountEffective
                 let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? "nix"
                 symLog.log("Fee = \(feeStr)")
@@ -77,7 +78,7 @@ struct WithdrawURIView: View {
                 } else {
                     false
                 }
-                withdrawalAmountDetails = details
+                withdrawalDetails = details
                 return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
                                         feeStr: feeLabel(feeStr), numCoins: details.numCoins)
             }
@@ -87,12 +88,37 @@ struct WithdrawURIView: View {
         return nil
     }
 
+    private func viewDidLoad() async {
+        symLog.log(".task")
+        do {
+            let uriInfoResponse = try await model.getWithdrawalDetailsForUriM(url.absoluteString)
+            let amount = uriInfoResponse.amount
+            let currency = amount?.currencyStr ?? uriInfoResponse.currency
+            amountToTransfer = amount ?? Amount.zero(currency: currency)
+            amountIsEditable = uriInfoResponse.editableAmount
+            amountAvailable = uriInfoResponse.maxAmount     // may be nil
+            wireFee = uriInfoResponse.wireFee               // may be nil
+            let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
+                       ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
+            defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
+            possibleExchanges = uriInfoResponse.possibleExchanges
+
+            await loadExchange(baseUrl)
+            symLog.log("\(baseUrl.trimURL) loaded")
+
+            await controller.checkCurrencyInfo(for: baseUrl, model: model)
+            symLog.log("Info(for: \(baseUrl.trimURL) loaded")
+        } catch {
+            // TODO: error, dismiss
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        if possibleExchanges.count > 0 {
+        if let exchange {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
                 VStack {
                     let title = String(localized: "using:", comment: "using: exchange.taler.net")
@@ -105,45 +131,36 @@ struct WithdrawURIView: View {
                         }
                         .talerFont(.title3)
                         .pickerStyle(.menu)
-                        .onAppear() {
-                            withAnimation { selectedExchange = defaultBaseUrl }
-                        }
+                        .onAppear() {  selectedExchange = defaultBaseUrl }
                         .onChange(of: selectedExchange) { selected in
-                            Task {
-                                await loadExchange(selected)
-                            }
+                            Task { await loadExchange(selected) }
                         }
-                    } else {
+                    } else {        // TODO: don't show exchange for global currency
                         HStack {
                             Text(title)
                             Text(defaultBaseUrl.trimURL)
                         }
                         .talerFont(.body)
-//                        .task {
-//                            await loadExchange(defaultBaseUrl)
-//                        }
                     } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(),
-                                                        currencyInfo: $currencyInfo,
                                                                  url: url,
+                                                               scope: exchange.scopeInfo,
                                                     amountToTransfer: $amountToTransfer,
                                                              wireFee: $wireFee,
                                                             exchange: $exchange)
                     if amountIsEditable {
                         ScrollView {
-                            let shortcutDestination = LazyView {
-                                WithdrawAcceptView(stack: stack.push(),
-                                            currencyInfo: $currencyInfo,
-                                                     url: url,
-                                        amountToTransfer: $amountShortcut,
-                                                 wireFee: $wireFee,
-                                                exchange: $exchange)
-                            }
+                            let shortcutDestination = WithdrawAcceptView(stack: stack.push(),
+                                                                    url: url,
+                                                                  scope: exchange.scopeInfo,
+                                                       amountToTransfer: $amountShortcut,
+                                                                wireFee: $wireFee,
+                                                               exchange: $exchange)
                             // TODO: input amount, then
                             let amountLabel = minimalistic ? String(localized: "Amount:")
                                                            : String(localized: "Amount to withdraw:")
                             AmountInputV(stack: stack.push(),
-                                  currencyInfo: $currencyInfo,
+                                         scope: exchange.scopeInfo,
                                amountAvailable: $amountZero,
                                    amountLabel: amountLabel,
                               amountToTransfer: $amountToTransfer,
@@ -155,11 +172,11 @@ struct WithdrawURIView: View {
                                  feeIsNegative: true,
                                     computeFee: computeFeeWithdraw)
                             .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            ) // shortcutDestination
+                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                                ) // shortcutDestination
                             .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            ) // acceptDestination
+                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
+                                ) // acceptDestination
                         } // ScrollView
                     } else {
                         acceptDestination
@@ -167,16 +184,13 @@ struct WithdrawURIView: View {
                 }
                 .navigationTitle(navTitle)
                 .task(id: controller.currencyTicker) {
-                    let currency = amountToTransfer.currencyStr
-                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+                    currencyInfo = controller.info(for: exchange.scopeInfo, controller.currencyTicker)
                 }
                 .onAppear() {
                     symLog.log("onAppear")
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)
                 }
-//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
-            } else {    // TODO: error
-//                symLog.log("no exchangeBaseUrl or no exchange")
+//              agePicker.setAges(ages: details?.ageRestrictionOptions)
             }
 
 
@@ -187,27 +201,7 @@ struct WithdrawURIView: View {
             let message: String? = nil
 #endif
             LoadingView(scopeInfo: nil, message: message)
-                .task { // this runs only once
-                    symLog.log(".task")
-                    if let uriInfoResponse = try? await model.getWithdrawalDetailsForUriM(url.absoluteString) {
-                        let amount = uriInfoResponse.amount
-                        let currency = amount?.currencyStr ?? uriInfoResponse.currency
-                        amountToTransfer = amount ?? Amount.zero(currency: currency)
-                        amountIsEditable = uriInfoResponse.editableAmount
-                        amountAvailable = uriInfoResponse.maxAmount     // may be nil
-                        wireFee = uriInfoResponse.wireFee               // may be nil
-                        let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
-                                   ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
-                        defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
-                        possibleExchanges = uriInfoResponse.possibleExchanges
-                        await loadExchange(baseUrl)
-                        symLog.log("\(baseUrl.trimURL) loaded")
-                        await controller.checkCurrencyInfo(for: baseUrl, model: model)
-                        symLog.log("Info(for: \(baseUrl.trimURL) loaded")
-                    }
-
-                    // TODO: amount = nil ==> show amount input
-                } // getWithdrawalDetailsForUriM
+                .task { await viewDidLoad() }
         }
     }
 }

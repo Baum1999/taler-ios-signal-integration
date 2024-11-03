@@ -9,7 +9,6 @@ import taler_swift
 struct BalancesPendingRowV: View {
 //    let symLog: SymLogV?            // inherited from BalancesSectionView
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
     let balance: Balance
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     @Binding var pendingTransactions: [Transaction]
@@ -31,18 +30,18 @@ struct BalancesPendingRowV: View {
 
         VStack(spacing: 6) {
             if hasIncoming {
-                PendingRowView(currencyInfo: $currencyInfo,
-                                     amount: pendingIncoming,
-                                   incoming: true,
-                              shouldConfirm: shouldConfirm,
-                                   needsKYC: needsKYCin)
+                PendingRowView(scope: balance.scopeInfo,
+                              amount: pendingIncoming,
+                            incoming: true,
+                       shouldConfirm: shouldConfirm,
+                            needsKYC: needsKYCin)
             }
             if hasOutgoing {
-                PendingRowView(currencyInfo: $currencyInfo,
-                                     amount: pendingOutgoing,
-                                   incoming: false,
-                              shouldConfirm: false,
-                                   needsKYC: needsKYCout)
+                PendingRowView(scope: balance.scopeInfo,
+                              amount: pendingOutgoing,
+                            incoming: false,
+                       shouldConfirm: false,
+                            needsKYC: needsKYCout)
             }
             if !hasIncoming && !hasOutgoing {
                 // should never happen - but DOES when wallet-core doesn't report P2P as pendingIncoming/pendingOutgoing
@@ -60,21 +59,18 @@ struct BalancesPendingRowV: View {
 
     var body: some View {
         if let reloadOneAction {
-            let destination = LazyView {
-                TransactionsListView(stack: stack.push(),
-                                   balance: balance,
-                           selectedBalance: $selectedBalance,
-                              currencyInfo: $currencyInfo,
-                                  navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
-                                 scopeInfo: balance.scopeInfo,
-                              transactions: $pendingTransactions,
-                           reloadAllAction: reloadPending,
-                           reloadOneAction: reloadOneAction)
-            }
-            NavigationLink(destination: destination, label: { pendingRowLabel() })
+            let destination = TransactionsListView(stack: stack.push(),
+                                                   scope: balance.scopeInfo,
+                                                 balance: balance,
+                                         selectedBalance: $selectedBalance,
+                                                navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
+                                            transactions: $pendingTransactions,
+                                         reloadAllAction: reloadPending,
+                                         reloadOneAction: reloadOneAction)
+            NavigationLink(destination: destination) { pendingRowLabel() }
             //let _ = print("button: Pending Transactions: \(currency)")
         } else { // just for Preview
-            NavigationLink(destination: EmptyView(), label: { pendingRowLabel() })
+            NavigationLink(destination: EmptyView()) { pendingRowLabel() }
         }
     } // body
 } // BalancesPendingRowV
@@ -85,7 +81,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     @MainActor
     struct BindingViewContainer: View {
         @State private var previewTransactions: [Transaction] = []
-        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         @State private var selectedBalance: Balance? = nil
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
@@ -98,7 +94,6 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
                                       flags: flags)
             BalancesPendingRowV(//symLog: nil,
                                  stack: CallStack("Preview"),
-                          currencyInfo: $currencyInfoD,
                                balance: balance,
                        selectedBalance: $selectedBalance,
                    pendingTransactions: $previewTransactions,

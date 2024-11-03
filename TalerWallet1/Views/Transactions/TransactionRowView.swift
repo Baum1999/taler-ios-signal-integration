@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 
 struct TransactionRowView: View {
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo
     let transaction : Transaction
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -56,7 +56,7 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV($currencyInfo, isZero ? common.amountRaw : common.amountEffective,
+        let amountV = AmountV(scope, isZero ? common.amountRaw : common.amountEffective,
                               isNegative: isZero ? nil : !incoming, strikethrough: !doneOrPending)
             .foregroundColor(foreColor)
 
@@ -182,14 +182,14 @@ struct TransactionRow_Previews: PreviewProvider {
                                          time: Timestamp(from: 1_666_666_000_000))
     @MainActor
     struct StateContainer: View {
-        @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
-        @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+        @State private var previewD = CurrencyInfo.zero(DEMOCURRENCY)
+        @State private var previewT = CurrencyInfo.zero(TESTCURRENCY)
 
         var body: some View {
+            let scope = ScopeInfo.zero(DEMOCURRENCY)
             List {
-                TransactionRowView(currencyInfo: $currencyInfoD, transaction: withdrawal)
-                TransactionRowView(currencyInfo: $currencyInfoT, transaction: payment)
-
+                TransactionRowView(scope: scope, transaction: withdrawal)
+                TransactionRowView(scope: scope, transaction: payment)
             }
         }
     }
@@ -202,15 +202,20 @@ struct TransactionRow_Previews: PreviewProvider {
 // MARK: -
 extension Transaction {             // for PreViews
     init(incoming: Bool, pending: Bool, id: String, time: Timestamp) {
-        let effective = incoming ? 480 : 520
+        let txState = TransactionState(major: pending ? TransactionMajorState.pending
+                                                      : TransactionMajorState.done)
+        let raw = Amount(currency: LONGCURRENCY, cent: 500)
+        let eff = Amount(currency: LONGCURRENCY, cent: incoming ? 480 : 520)
         let common = TransactionCommon(type: incoming ? .withdrawal : .payment,
                                     txState: TransactionState(major: pending ? TransactionMajorState.pending
                                                                              : TransactionMajorState.done),
-                            amountEffective: Amount(currency: LONGCURRENCY, cent: UInt64(effective)),
-                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 5),
+                            amountEffective: eff,
+                                  amountRaw: raw,
                               transactionId: id,
                                   timestamp: time,
-                                  txActions: [.abort])
+                                     scopes: [],
+                                  txActions: [.abort],
+                                     kycUrl: nil)
         if incoming {
             // if pending then manual else bank-integrated
             let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company&amount=KUDOS%3A9.99&message=Taler+Withdrawal+J41FQPJGAP1BED1SFSXHC989EN8HRDYAHK688MQ228H6SKBMV0AG"

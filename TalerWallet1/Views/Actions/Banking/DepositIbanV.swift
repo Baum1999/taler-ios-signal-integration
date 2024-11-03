@@ -14,13 +14,11 @@ struct DepositIbanV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var selectedBalance: Balance?
-//    @Binding var currencyInfo: CurrencyInfo
-    let feeLabel: String?
-    let feeIsNotZero: Bool?            // nil = no fees at all, false = no fee for this tx
+    @Binding var amountLastUsed: Amount
+
 //    let amountAvailable: Amount?
 //    @Binding var depositIBAN: String
 //    @Binding var accountHolder: String
-    @Binding var amountLastUsed: Amount
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -48,10 +46,8 @@ struct DepositIbanV: View {
 
     private var subjectTitle: String {
         return String(localized: "NavTitle_Deposit_AmountStr",
-//                   defaultValue: "Deposit \(currencySymbol)",
                    defaultValue: "Deposit IBAN",
                         comment: "NavTitle: Deposit")
-//                   defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
     }
 
     var body: some View {
@@ -64,22 +60,12 @@ struct DepositIbanV: View {
                                 amountLastUsed: $amountLastUsed,
                                       paytoUri: paytoUri)
         ScrollView { VStack (alignment: .leading, spacing: 6) {
-            if let feeIsNotZero {       // don't show fee if nil
-                let label = feeLabel ?? myFeeLabel
-                if label.count > 0 {
-                    Text(label)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .foregroundColor(feeIsNotZero ? .red 
-                                                      : WalletColors().secondary(colorScheme, colorSchemeContrast))
-                        .talerFont(.body)
-                }
-            }
             if !minimalistic {
                 Text("Account holder:")
                     .talerFont(.title3)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityRemoveTraits(.isStaticText)
-                    .padding(.top)
+//                    .padding(.top)
             }
             TextField(minimalistic ? "Account holder" : EMPTYSTRING, text: $accountHolder)
                 .focused($isFocused)
@@ -87,7 +73,7 @@ struct DepositIbanV: View {
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .textFieldStyle(.roundedBorder)
-                .padding(minimalistic ? .bottom : .vertical)
+//                .padding(minimalistic ? .bottom : .vertical)
                 .onAppear {
                     if !UIAccessibility.isVoiceOverRunning {
                         symLog.log("dispatching kbd...")
@@ -103,14 +89,14 @@ struct DepositIbanV: View {
                     .talerFont(.title3)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityRemoveTraits(.isStaticText)
-                    .padding(.top)
+//                    .padding(.top)
             }
             TextField(minimalistic ? "IBAN" : EMPTYSTRING, text: $depositIBAN)
                 .talerFont(.title2)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .textFieldStyle(.roundedBorder)
-                .padding(minimalistic ? .bottom : .vertical)
+//                .padding(minimalistic ? .bottom : .vertical)
 
             let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
             NavigationLink(destination: destination) {

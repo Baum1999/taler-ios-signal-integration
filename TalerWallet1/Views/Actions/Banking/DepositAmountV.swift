@@ -22,8 +22,6 @@ struct DepositAmountV: View {
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
-    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
-
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
@@ -53,9 +51,7 @@ struct DepositAmountV: View {
                         amountLastUsed: $amountLastUsed,
                       amountToTransfer: $amountToTransfer,
                        amountAvailable: amountAvailable,
-                          currencyInfo: currencyInfo,
                               paytoUri: paytoUri)
-            .environment(\.currencyInfo, currencyInfo)
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -90,7 +86,6 @@ struct DepositAmountV: View {
                 if let balance {
                     let scopeInfo = balance.scopeInfo
                     amountToTransfer.setCurrency(scopeInfo.currency)
-                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
                     do {
                         amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
                     } catch {
@@ -121,7 +116,6 @@ struct DepositAmountContent: View {
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
     let amountAvailable: Amount
-    let currencyInfo: CurrencyInfo
     let paytoUri: String?
 
     @EnvironmentObject private var controller: Controller
@@ -174,12 +168,15 @@ struct DepositAmountContent: View {
     }
 
     private func buttonTitle(_ amount: Amount) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: false, useISO: true)
-        return String(localized: "Deposit \(amountWithCurrency)", comment: "Button: amount with currency")
+        if let balance {
+            let amountWithCurrency = amount.formatted(balance.scopeInfo, isNegative: false, useISO: true)
+            return String(localized: "Deposit \(amountWithCurrency)", comment: "Button: amount with currency")
+        }
+        return subjectTitle(amount)             // should never happen
     }
 
     private func subjectTitle(_ amount: Amount) -> String {
-        let amountStr = amount.formatted(currencyInfo, isNegative: false)
+//        let amountStr = amount.formatted(scopeInfo, isNegative: false)
         return String(localized: "NavTitle_Deposit_AmountStr",
                       defaultValue: "Deposit", comment: "NavTitle: Deposit")
         //            defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
@@ -197,9 +194,10 @@ struct DepositAmountContent: View {
         } else { Group {
             if let balance {
                 let scopeInfo = balance.scopeInfo
-                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
+                let availableStr = amountAvailable.formatted(scopeInfo, isNegative: false)
 
-//                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
+                let currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+//                let amountVoiceOver = amountToTransfer.formatted(scopeInfo, isNegative: false)
                 let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
 //                let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
 
@@ -208,13 +206,13 @@ struct DepositAmountContent: View {
                 Text("Available:\t\(availableStr)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
-                CurrencyInputView(currencyInfo: currencyInfo,
-                                        amount: $amountToTransfer,
-                                amountLastUsed: amountLastUsed,
-                                     available: nil,  // amountAvailable,
-                                         title: minimalistic ? String(localized: "Amount:")
-                                                             : String(localized: "Amount to deposit:"),
-                                shortcutAction: nil)
+                CurrencyInputView(scope: scopeInfo,
+                                 amount: $amountToTransfer,
+                         amountLastUsed: amountLastUsed,
+                              available: nil,  // amountAvailable,
+                                  title: minimalistic ? String(localized: "Amount:")
+                                                      : String(localized: "Amount to deposit:"),
+                         shortcutAction: nil)
 
                 Text(insufficient ? insufficientLabel
                                   : feeLabel(feeStr))
@@ -266,7 +264,7 @@ struct DepositAmountContent: View {
 //                    } else if let paytoUri {
 //                        if let ppCheck = try? await model.checkDepositM(paytoUri, amount: amountToTransfer) {
 //                            if let feeAmount = fee(ppCheck: ppCheck) {
-//                                feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
+//                                feeStr = feeAmount.formatted(scopeInfo, isNegative: false)
 //                                let feeLabel = feeLabel(feeStr)
 //                                announce("\(amountVoiceOver), \(feeLabel)")
 //                            } else {

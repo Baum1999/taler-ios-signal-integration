@@ -10,8 +10,8 @@ import taler_swift
 import SymLog
 
 struct BalanceCellV: View {
-    let stack: CallStack?
-    @Binding var currencyInfo: CurrencyInfo
+    let stack: CallStack
+    let scope: ScopeInfo
     let amount: Amount
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
@@ -24,8 +24,8 @@ struct BalanceCellV: View {
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
-        let amountV = AmountV(stack: stack?.push("AmountV"),
-                       currencyInfo: $currencyInfo,
+        let amountV = AmountV(stack: stack.push("AmountV"),
+                              scope: scope,
                              amount: amount,
                          isNegative: nil,           // don't show the + sign
                       strikethrough: false,

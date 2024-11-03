@@ -61,6 +61,7 @@ struct WithdrawUriInfoResponse: Decodable {
     var maxAmount: Amount?                  // limit how much the user may withdraw
     var wireFee: Amount?
     var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
+    var editableExchange: Bool              // TODO: what for?
     var possibleExchanges: [Exchange]       // TODO: query these for fees?
 }
 /// A request to get an exchange's withdrawal details.
@@ -93,7 +94,8 @@ fileprivate struct PrepareWithdrawExchange: WalletBackendFormattedRequest {
 }
 // MARK: -
 /// The result from getWithdrawalDetailsForAmount
-struct WithdrawalAmountDetails: Decodable {
+struct WithdrawalDetailsForAmount: Decodable {
+    var exchangeBaseUrl: String
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
     var numCoins: Int?                  // Number of coins this amountEffective will create
@@ -103,16 +105,19 @@ struct WithdrawalAmountDetails: Decodable {
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
-    typealias Response = WithdrawalAmountDetails
+    typealias Response = WithdrawalDetailsForAmount
     func operation() -> String { "getWithdrawalDetailsForAmount" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount,
-                          clientCancellationId: "cancel") }
-
-    var exchangeBaseUrl: String
+    func args() -> Args { Args(amount: amount,
+                      exchangeBaseUrl: baseUrl,
+                        restrictScope: scope,
+                 clientCancellationId: "cancel") }
     var amount: Amount
+    var baseUrl: String?
+    var scope: ScopeInfo?
     struct Args: Encodable {
-        var exchangeBaseUrl: String
         var amount: Amount
+        var exchangeBaseUrl: String?            // needed for b-i-withdrawals
+        var restrictScope: ScopeInfo?           // only if exchangeBaseUrl is nil
         var clientCancellationId: String?
     }
 }
@@ -196,15 +201,15 @@ struct AcceptManualWithdrawalResult: Decodable {
 fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptManualWithdrawalResult
     func operation() -> String { "acceptManualWithdrawal" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge) }
+    func args() -> Args { Args(amount: amount, exchangeBaseUrl: baseUrl, restrictAge: restrictAge) }
 
-    var exchangeBaseUrl: String
     var amount: Amount
+    var baseUrl: String
     var restrictAge: Int?
 
     struct Args: Encodable {
-        var exchangeBaseUrl: String
         var amount: Amount
+        var exchangeBaseUrl: String
         var restrictAge: Int?
     }
 }
@@ -247,11 +252,10 @@ extension WalletModel {
         return response
     }
     @MainActor                     // M for MainActor
-    func getWithdrawalDetailsForAmountM(_ exchangeBaseUrl: String, amount: Amount,
+    func getWithdrawalDetailsForAmountM(_ amount: Amount, baseUrl: String?, scope: ScopeInfo?,
                                               viewHandles: Bool = false)
-      async throws -> WithdrawalAmountDetails {
-        let request = GetWithdrawalDetailsForAmount(exchangeBaseUrl: exchangeBaseUrl,
-                                                             amount: amount)
+      async throws -> WithdrawalDetailsForAmount {
+          let request = GetWithdrawalDetailsForAmount(amount: amount, baseUrl: baseUrl, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
@@ -279,10 +283,10 @@ extension WalletModel {
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor                  // M for MainActor
-    func sendAcceptManualWithdrawalM(_ exchangeBaseUrl: String, amount: Amount, restrictAge: Int?, viewHandles: Bool = false)
+    @MainActor              // M for MainActor
+    func acceptManualWithdrawalM(_ amount: Amount, baseUrl: String, restrictAge: Int?, viewHandles: Bool = false)
       async throws -> AcceptManualWithdrawalResult? {
-        let request = AcceptManualWithdrawal(exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge)
+        let request = AcceptManualWithdrawal(amount: amount, baseUrl: baseUrl, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

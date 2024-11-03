@@ -19,7 +19,9 @@ extension Transaction {             // for Dummys
                                   amountRaw: amount,
                               transactionId: EMPTYSTRING,
                                   timestamp: now,
-                                  txActions: [])
+                                     scopes: [],
+                                  txActions: [],
+                                     kycUrl: nil)
         self = .dummy(DummyTransaction(common: common))
     }
 }
@@ -27,7 +29,7 @@ extension Transaction {             // for Dummys
 struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo?
     let transactionId: String
     let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
     let navTitle: String?
@@ -38,6 +40,7 @@ struct TransactionSummaryV: View {
     let suspendAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
     let resumeAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
 
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -179,7 +182,7 @@ struct TransactionSummaryV: View {
                     }
 
                 TypeDetail(stack: stack.push(),
-                    currencyInfo: $currencyInfo,
+                           scope: scope,
                      transaction: $transaction,
                          hasDone: hasDone)
 
@@ -289,7 +292,7 @@ struct TransactionSummaryV: View {
 
     struct TypeDetail: View {
         let stack: CallStack
-        @Binding var currencyInfo: CurrencyInfo
+        let scope: ScopeInfo?
         @Binding var transaction: Transaction
         let hasDone: Bool
         @Environment(\.colorScheme) private var colorScheme
@@ -346,7 +349,7 @@ struct TransactionSummaryV: View {
                                                    details: details)
                         } // ManualDetails or Confirm now (with bank)
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Chosen:", comment: "mini"),
                                        topTitle: String(localized: "Chosen amount to withdraw:"),
@@ -360,7 +363,7 @@ struct TransactionSummaryV: View {
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Deposit:", comment: "mini"),
                                        topTitle: String(localized: "Amount to deposit:"),
@@ -375,7 +378,7 @@ struct TransactionSummaryV: View {
                         let details = paymentTransaction.details
                         TransactionPayDetailV(paymentTx: paymentTransaction)
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Price:", comment: "mini"),
                                        topTitle: String(localized: "Price (net):"),
@@ -389,7 +392,7 @@ struct TransactionSummaryV: View {
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Refunded:", comment: "mini"),
                                        topTitle: String(localized: "Refunded amount:"),
@@ -409,17 +412,17 @@ struct TransactionSummaryV: View {
                                 .talerFont(.title)
                             let input = details.refreshInputAmount
                             AmountRowV(stack: stack.push(),
-                                currencyInfo: $currencyInfo,
                                        title: minimalistic ? "Refreshed:" : "Refreshed amount:",
                                       amount: input,
+                                       scope: scope,
                                   isNegative: nil,
                                        color: labelColor,
                                        large: true)
                             if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
                                 AmountRowV(stack: stack.push(),
-                                    currencyInfo: $currencyInfo,
                                            title: minimalistic ? "Fee:" : "Refreshed fee:",
                                           amount: fee,
+                                           scope: scope,
                                       isNegative: fee.isZero ? nil : true,
                                            color: labelColor,
                                            large: true)
@@ -463,7 +466,7 @@ struct TransactionSummaryV: View {
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {
-                                QRCodeDetails(transaction: transaction, specs: currencyInfo.specs)
+                                QRCodeDetails(transaction: transaction)
                                 if hasDone {
                                     Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                         .multilineTextAlignment(.leading)
@@ -480,7 +483,7 @@ struct TransactionSummaryV: View {
                         let localizedType = transaction.isDone ? transaction.localizedTypePast
                                                                : transaction.localizedType
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: localizedType + colon,
                                        topTitle: localizedType + colon,
@@ -495,7 +498,7 @@ struct TransactionSummaryV: View {
                     case .recoup(let recoupTransaction): Group {
                         let details = recoupTransaction.details                 // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Recoup:", comment: "mini"),
                                        topTitle: String(localized: "Recoup:"),
@@ -509,7 +512,7 @@ struct TransactionSummaryV: View {
                     case .denomLoss(let denomLossTransaction): Group {
                         let details = denomLossTransaction.details              // TODO: more details
                         ThreeAmountsSheet(stack: stack.push(),
-                                   currencyInfo: $currencyInfo,
+                                          scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),
@@ -527,7 +530,6 @@ struct TransactionSummaryV: View {
 
     struct QRCodeDetails: View {
         var transaction : Transaction
-        var specs: CurrencySpecification
         var body: some View {
             let details = transaction.detailsToShow()
             let keys = details.keys
@@ -538,7 +540,7 @@ struct TransactionSummaryV: View {
                                    talerCopyShare: talerURI,
                                          incoming: transaction.isP2pIncoming,
                                            amount: transaction.common.amountRaw,
-                                            specs: specs)
+                                            scope: transaction.common.scopes[0])
                     }
                 }
             } else if keys.contains(EXCHANGEBASEURL) {

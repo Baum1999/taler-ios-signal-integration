@@ -12,11 +12,11 @@ import SymLog
 struct WithdrawAcceptView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
     let navTitle = String(localized: "Withdrawal")
 
     // the URL from the bank website
     let url: URL
+    let scope: ScopeInfo
     @Binding var amountToTransfer: Amount
     @Binding var wireFee: Amount?
     @Binding var exchange: Exchange?
@@ -25,7 +25,8 @@ struct WithdrawAcceptView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var withdrawalDetails: WithdrawalDetailsForAmount? = nil
 
     func reloadExchange() async -> Void {        // TODO: throws?
         if let exchange {
@@ -36,7 +37,7 @@ struct WithdrawAcceptView: View {
     }
 
     var body: some View {
-        if let exchange, let withdrawalAmountDetails {
+        if let exchange, let withdrawalDetails {
             VStack {
                 let tosAccepted = exchange.tosStatus == .accepted
                 if !tosAccepted {
@@ -47,16 +48,15 @@ struct WithdrawAcceptView: View {
                            acceptAction: reloadExchange)
                 }
                 List {
-                    let raw = withdrawalAmountDetails.amountRaw
-                    let effective = withdrawalAmountDetails.amountEffective
+                    let raw = withdrawalDetails.amountRaw
+                    let effective = withdrawalDetails.amountEffective
                     let currency = raw.currencyStr
-                    let currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                     let fee = try! Amount.diff(raw, effective)
                     let outColor = WalletColors().transactionColor(false)
                     let inColor = WalletColors().transactionColor(true)
 
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
+                                        scope: scope,
                                      topTitle: String(localized: "Chosen amount to withdraw:"),
                                     topAbbrev: String(localized: "Withdraw:", comment: "Chosen amount to withdraw:"),
                                     topAmount: raw,
@@ -81,13 +81,12 @@ struct WithdrawAcceptView: View {
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
                 if tosAccepted {
-                    NavigationLink(destination: LazyView {
-                        WithdrawAcceptDone(stack: stack.push(),
-                                    currencyInfo: $currencyInfo,
-                                 exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                             url: url,
-                                amountToTransfer: amountToTransfer)
-                    }) {
+                    let destination = WithdrawAcceptDone(stack: stack.push(),
+                                                         scope: scope,
+                                               exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                           url: url,
+                                              amountToTransfer: amountToTransfer)
+                    NavigationLink(destination: destination) {
                         Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))
@@ -108,14 +107,15 @@ struct WithdrawAcceptView: View {
                 .task(id: exchange?.id) {
                     symLog.log(".task \(exchange?.id ?? "nil")")
                     if let exchange {
-                        if let details = try? await model.getWithdrawalDetailsForAmountM(exchange.exchangeBaseUrl,
-                                                                                  amount: amountToTransfer) {
-                            withdrawalAmountDetails = details
+                        if let details = try? await model.getWithdrawalDetailsForAmountM(amountToTransfer,
+                                                                                baseUrl: exchange.exchangeBaseUrl,
+                                                                                  scope: nil) { // TODO: scope
+                            withdrawalDetails = details
                         }
 //                    agePicker.setAges(ages: details?.ageRestrictionOptions)
                     } else {    // TODO: error
                         symLog.log("no exchangeBaseUrl or no exchange")
-                        withdrawalAmountDetails = nil
+                        withdrawalDetails = nil
                     }
                 }
         }

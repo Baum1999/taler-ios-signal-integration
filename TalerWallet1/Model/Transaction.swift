@@ -291,6 +291,7 @@ struct TransactionCommon: Decodable, Sendable {
     var amountRaw: Amount
     var transactionId: String
     var timestamp: Timestamp
+    var scopes: [ScopeInfo]
     var txActions: [TxAction]
     var kycUrl: String?
 

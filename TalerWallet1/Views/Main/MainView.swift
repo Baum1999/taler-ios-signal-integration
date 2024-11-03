@@ -331,10 +331,6 @@ extension MainView {
 
             let depositDest = DepositIbanV(stack: stack.push(Self.name),
                                  selectedBalance: $selectedBalance,
-                                        feeLabel: nil,
-                                    feeIsNotZero: nil,
-                //                   depositIBAN: $depositIBAN,
-                //                 accountHolder: $accountHolder,
                                   amountLastUsed: $amountLastUsed)
 
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),

@@ -13,7 +13,6 @@ import SymLog
 struct P2PReadyV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
     let scope: ScopeInfo
     let summary: String
     let expireDays: UInt
@@ -44,16 +43,16 @@ struct P2PReadyV: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                             currencyInfo: $currencyInfo,
-                              transactionId: transactionId,
-                               reloadAction: reloadOneAction,
-                                   navTitle: navTitle,
-                                    hasDone: true,
-                                abortAction: nil,
-                               deleteAction: nil,
-                                 failAction: nil,
-                              suspendAction: nil,
-                               resumeAction: nil)
+                                    scope: scope,
+                            transactionId: transactionId,
+                             reloadAction: reloadOneAction,
+                                 navTitle: navTitle,
+                                  hasDone: true,
+                              abortAction: nil,
+                             deleteAction: nil,
+                               failAction: nil,
+                            suspendAction: nil,
+                             resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .safeAreaInset(edge: .bottom) {

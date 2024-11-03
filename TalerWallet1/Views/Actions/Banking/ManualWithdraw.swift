@@ -23,6 +23,7 @@ struct ManualWithdraw: View {
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     func navTitle(_ currency: String, _ condition: Bool = false) -> String {
         condition ? String(localized: "NavTitle_Withdraw_Currency)",
@@ -38,14 +39,13 @@ struct ManualWithdraw: View {
         let _ = Self._printChanges()
 #endif
         let currencySymbol = currencyInfo.symbol
-        let navA11y = navTitle(currencyInfo.name)
+        let navA11y = navTitle(currencyInfo.name)                               // always include currency for a11y
         let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex,
-                      onlyNonZero: false)
+                ScopePicker(value: $balanceIndex, onlyNonZero: false)
                 { index in
                     balanceIndex = index
                     balance = controller.balances[index]
@@ -53,11 +53,12 @@ struct ManualWithdraw: View {
                 .padding(.horizontal)
                 .padding(.bottom, 4)
             }
-            ManualWithdrawContent(stack: stack.push(),
-                           currencyInfo: $currencyInfo,
-                                balance: $balance,
-                           balanceIndex: $balanceIndex,
-                         amountLastUsed: $amountLastUsed)
+            if let balance {
+                ManualWithdrawContent(stack: stack.push(),
+                                      scope: balance.scopeInfo,
+                             amountLastUsed: $amountLastUsed,
+                           amountToTransfer: $amountToTransfer)
+            }
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,6 +84,15 @@ struct ManualWithdraw: View {
                     balance = (count > 0) ? controller.balances[0] : nil
                 }
             }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+                // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
+                symLog.log("❗️ task \(balanceIndex)")
+                if let balance {
+                    let scopeInfo = balance.scopeInfo
+                    amountToTransfer.setCurrency(scopeInfo.currency)
+//                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+                }
+            }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
@@ -100,21 +110,21 @@ struct ManualWithdraw: View {
 struct ManualWithdrawContent: View {
     private let symLog = SymLogV()
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
-    @Binding var balance: Balance?
-    @Binding var balanceIndex: Int
+    let scope: ScopeInfo
     @Binding var amountLastUsed: Amount
+    @Binding var amountToTransfer: Amount
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State private var withdrawalAmountDetails: WithdrawalAmountDetails? = nil
-    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+    @State private var detailsForAmount: WithdrawalDetailsForAmount? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
+
     @State private var exchanges: [Exchange] = []
     @State private var exchange: Exchange? = nil
+
 
     private func exchangeVia(_ baseURL: String?) -> String? {
         if let baseURL {
@@ -123,100 +133,96 @@ struct ManualWithdrawContent: View {
         return nil
     }
 
+    private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
+        if amount.isZero {
+            return ComputeFeeResult.zero()
+        }
+        do {
+            let details = try await model.getWithdrawalDetailsForAmountM(amount, baseUrl: nil, scope: scope,
+                                                            viewHandles: true)
+            detailsForAmount = details
+//          agePicker.setAges(ages: detailsForAmount?.ageRestrictionOptions)
+        } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
+            symLog.log(walletBackendResponseError?.hint)
+                // TODO: ignore WALLET_CORE_REQUEST_CANCELLED but handle all others
+                // Passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
+                // when calling getWithdrawalDetailsForAmount again before the last call returned.
+                // Since amountToTransfer changed and we don't need the old fee anymore, we just
+                // ignore it and do nothing.
+        } catch {
+            symLog.log(error.localizedDescription)
+            detailsForAmount = nil
+            }
+        return nil
+    } // computeFee
+
+    private func withdrawButtonTitle(_ currency: String) -> String {
+        switch currency {
+            case CHF_4217:
+                String(localized: "WITHDRAW_CONFIRM_BUTTONTITLE_CHF", defaultValue: "Confirm Withdrawal")
+            case EUR_4217:
+                String(localized: "WITHDRAW_CONFIRM_BUTTONTITLE_EUR", defaultValue: "Confirm Withdrawal")
+            default:
+                String(localized: "WITHDRAW_CONFIRM_BUTTONTITLE", defaultValue: "Confirm Withdrawal")
+        }
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
 
-        let coinData = CoinData(details: withdrawalAmountDetails)
-       Group {
-            if let balance {
-                let scopeInfo = balance.scopeInfo
-                let currency = scopeInfo.currency
-//            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-                let baseURL = exchange?.exchangeBaseUrl ?? scopeInfo.url        // nil for global currency
-
+        if let detailsForAmount {
+            Group {
+                let coinData = CoinData(details: detailsForAmount)
+                let currency = detailsForAmount.scopeInfo.currency
+                let baseURL = detailsForAmount.exchangeBaseUrl
 //              let agePicker = AgePicker(ageMenuList: $ageMenuList, selectedAge: $selectedAge)
-
 //              let restrictAge: Int? = (selectedAge == 0) ? nil
 //                                                         : selectedAge
 //  let _ = print(selectedAge, restrictAge)
                 let destination = ManualWithdrawDone(stack: stack.push(),
-                                              currencyInfo: $currencyInfo,
-                                                  exchange: nil,    // exchange,
-                                                   balance: balance,
+                                                     scope: detailsForAmount.scopeInfo,
+                                                   baseURL: detailsForAmount.exchangeBaseUrl,
                                           amountToTransfer: amountToTransfer)
 //                                             restrictAge: restrictAge)
                 let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
                 let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
 
-              VStack(alignment: .trailing) {
-                Text(exchangeVia(baseURL) ?? currency)
-                    .multilineTextAlignment(.center)
-                    .talerFont(.body)
                 if tosAccepted {
-                    CurrencyInputView(currencyInfo: currencyInfo,
-                                            amount: $amountToTransfer,
-                                    amountLastUsed: amountLastUsed,
-                                         available: nil,
-                                             title: minimalistic ? String(localized: "Amount:")
-                                                                 : String(localized: "Amount to withdraw:"),
-                                    shortcutAction: nil)
+                    CurrencyInputView(scope: scope,
+                                     amount: $amountToTransfer,
+                             amountLastUsed: amountLastUsed,
+                                  available: nil,
+                                      title: minimalistic ? String(localized: "Amount:")
+                                                          : String(localized: "Amount to withdraw:"),
+                             shortcutAction: nil)
                         .padding(.top)
-                    QuiteSomeCoins(currencyInfo: $currencyInfo,
-//                                amountEffective: withdrawalAmountDetails?.amountEffective,
-                                       currency: currency,
-                                       coinData: coinData,
-                                  shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
-                                  feeIsNegative: true)
+                        .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
+                            await computeFee(amountToTransfer)
+                        }
+                    QuiteSomeCoins(scope: scope,
+                                coinData: coinData,
+                           shouldShowFee: true,           // TODO: set to false if we never charge withdrawal fees
+                           feeIsNegative: true)
 //                  agePicker
-                    NavigationLink(destination: destination) {
-                        Text("Confirm Withdrawal")      // VIEW_WITHDRAW_ACCEPT
+                    NavigationLink(destination: destination) {                  // VIEW_WITHDRAW_ACCEPT
+                        Text(withdrawButtonTitle(currency))
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                     .disabled(disabled)
                     .padding(.top)
-                } else if let baseURL {
+                } else {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: baseURL,
-                                 viewID: VIEW_WITHDRAW_TOS,                     // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
+                                 viewID: VIEW_WITHDRAW_TOS,   // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
                                     p2p: false,
                            acceptAction: nil)
                     .padding(.top)
                 }
-              }.padding(.horizontal) // VStack
-            } else {    // got no balance yet
-                Text("No balance. There seems to be a problem with the database...")
-            }
-        } // Group
-//        .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes
-//            if let exchangeBaseUrl = scopeInfo?.url {
-//                symLog.log("getExchangeByUrl(\(exchangeBaseUrl))")
-//                if exchange == nil || exchange?.tosStatus != .accepted {
-//                    exchange = try? await model.getExchangeByUrl(url: exchangeBaseUrl)
-//                }
-//                if !amountToTransfer.isZero {
-//                    do {
-//                        let details = try await model.getWithdrawalDetailsForAmountM(exchangeBaseUrl,
-//                                                                              amount: amountToTransfer,
-//                                                                         viewHandles: true)
-//                        withdrawalAmountDetails = details
-////                      agePicker.setAges(ages: withdrawalAmountDetails?.ageRestrictionOptions)
-//                    } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
-//                        symLog.log(walletBackendResponseError?.hint)
-//                        // TODO: ignore WALLET_CORE_REQUEST_CANCELLED but handle all others
-//                        // Passing non-nil to clientCancellationId will throw WALLET_CORE_REQUEST_CANCELLED
-//                        // when calling getWithdrawalDetailsForAmount again before the last call returned.
-//                        // Since amountToTransfer changed and we don't need the old fee anymore, we just
-//                        // ignore it and do nothing.
-//                    } catch {
-//                        symLog.log(error.localizedDescription)
-//                        withdrawalAmountDetails = nil
-//                    }
-//                }
-//            }
-//        }
+            } // Group
+            .padding(.horizontal)
+        }
     }
 }
 // MARK: -

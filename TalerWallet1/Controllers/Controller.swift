@@ -62,7 +62,7 @@ class Controller: ObservableObject {
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
     let semaphore = AsyncSemaphore(value: 1)
-    var currencyInfos: [CurrencyInfo]
+    private var currencyInfos: [ScopeInfo : CurrencyInfo]
     var exchanges: [Exchange]
     var messageForSheet: String? = nil
 
@@ -111,7 +111,7 @@ class Controller: ObservableObject {
 //        }
         backendState = .instantiated
         currencyTicker = 0
-        currencyInfos = []
+        currencyInfos = [:]
         exchanges = []
         balances = []
 //        checkInternetConnection()
@@ -144,13 +144,7 @@ class Controller: ObservableObject {
     func info(for scope: ScopeInfo) -> CurrencyInfo? {
 //        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
 //        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
-        for info in currencyInfos {
-            if info.scope == scope {
-                return info
-            }
-        }
-//        logger.log("  ❗️ no info for \(currency)")
-        return nil
+        return currencyInfos[scope]
     }
     func info(for scope: ScopeInfo, _ ticker: Int) -> CurrencyInfo {
         if ticker != currencyTicker {
@@ -162,8 +156,8 @@ class Controller: ObservableObject {
     func info2(for currency: String) -> CurrencyInfo? {
 //        return CurrencyInfo.euro()              // Fake EUR instead of the real Currency
 //        return CurrencyInfo.francs()            // Fake CHF instead of the real Currency
-        for info in currencyInfos {
-            if info.scope.currency == currency {
+        for (scope, info) in currencyInfos {
+            if scope.currency == currency {
                 return info
             }
         }
@@ -178,8 +172,8 @@ class Controller: ObservableObject {
     }
 
     func hasInfo(for currency: String) -> Bool {
-        for info in currencyInfos {
-            if info.scope.currency == currency {
+        for (scope, info) in currencyInfos {
+            if scope.currency == currency {
                 return true
             }
         }
@@ -204,7 +198,7 @@ class Controller: ObservableObject {
 
     func updateInfo(_ scope: ScopeInfo, model: WalletModel) async {
         if let info = try? await model.getCurrencyInfoM(scope: scope) {
-            await setInfo(info)
+            await setInfo(info, for: scope)
 //            logger.log("  ❗️info set for \(scope.currency)")
         }
     }
@@ -212,26 +206,22 @@ class Controller: ObservableObject {
     func checkCurrencyInfo(for baseUrl: String, model: WalletModel) async {
         if let exchange = await exchange(for: baseUrl, model: model) {
             let scope = exchange.scopeInfo
-            for info in currencyInfos {
-                if info.scope == scope {
-                    return  // got it, nothing to do
-                }
+            if currencyInfos[scope] == nil {
+                await updateInfo(scope, model: model)
             }
-            await updateInfo(scope, model: model)
+        } else {
+            // Yikes❗️  TODO: error?
         }
     }
 
     /// called whenever a new currency pops up - will first load the Exchange and then currencyInfos
     func checkInfo(for scope: ScopeInfo, model: WalletModel) {
-        for info in currencyInfos {
-            if info.scope == scope {
-                return  // got it, nothing to do
-            }
-        }
-        Task {
-            let exchange = await exchange(for: scope.url, model: model)
-            if let scope2 = exchange?.scopeInfo {
-                await updateInfo(scope2, model: model)
+        if currencyInfos[scope] == nil {
+            Task {
+                let exchange = await exchange(for: scope.url, model: model)
+                if let scope2 = exchange?.scopeInfo {
+                    await updateInfo(scope2, model: model)
+                }
             }
         }
     }
@@ -239,33 +229,21 @@ class Controller: ObservableObject {
     @MainActor
     func getInfo(from exchangeBaseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
         let exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
-        let scopeInfo = exchange.scopeInfo
-        if let info = info(for: scopeInfo) {
+        let scope = exchange.scopeInfo
+        if let info = info(for: scope) {
             return info
         }
-        let info = try await model.getCurrencyInfoM(scope: scopeInfo, delay: 0)
-        await setInfo(info)
+        let info = try await model.getCurrencyInfoM(scope: scope, delay: 0)
+        await setInfo(info, for: scope)
         return info
     }
 
     @MainActor
-    func setInfo(_ newInfo: CurrencyInfo) async {
+    func setInfo(_ newInfo: CurrencyInfo, for scope: ScopeInfo) async {
         await semaphore.wait()
         defer { semaphore.signal() }
 
-        var replaced = false
-        var newInfos = currencyInfos.map { currencyInfo in
-            if currencyInfo.scope.currency == newInfo.scope.currency {
-                replaced = true
-                return newInfo
-            } else {
-                return currencyInfo
-            }
-        }
-        if !replaced {
-            newInfos.append(newInfo)
-        }
-        currencyInfos = newInfos
+        currencyInfos[scope] = newInfo
         currencyTicker += 1         // triggers published view update
     }
 // MARK: -

@@ -256,6 +256,7 @@ struct ManualDetails_Previews: PreviewProvider {
                                   amountRaw: Amount(currency: LONGCURRENCY, cent: 220),
                               transactionId: "someTxID",
                                   timestamp: Timestamp(from: 1_666_666_000_000),
+                                     scopes: [],
                                   txActions: [])
         let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company"
         let details = WithdrawalDetails(type: .manual, 

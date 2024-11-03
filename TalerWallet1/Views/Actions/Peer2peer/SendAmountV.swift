@@ -217,7 +217,6 @@ struct SendAmountContent: View {
 
                 let inputDestination = P2PSubjectV(stack: stack.push(),
                                                    scope: scopeInfo,
-                                            currencyInfo: $currencyInfo,
                                                 feeLabel: feeLabel(feeStr),
                                             feeIsNotZero: feeIsNotZero(),
                                                 outgoing: true,
@@ -226,7 +225,6 @@ struct SendAmountContent: View {
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
                                                       scope: scopeInfo,
-                                               currencyInfo: $currencyInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),
                                                    outgoing: true,
@@ -234,7 +232,7 @@ struct SendAmountContent: View {
                                                     summary: $summary,
                                                  expireDays: $expireDays)
                 AmountInputV(stack: stack.push(),
-                      currencyInfo: $currencyInfo,
+                             scope: scopeInfo,
                    amountAvailable: $amountAvailable,
                        amountLabel: nil,        // will use "Available: xxx", trailing
                   amountToTransfer: $amountToTransfer,
@@ -328,17 +326,16 @@ fileprivate struct Preview_Content: View {
     var body: some View {
         let amount = Amount(currency: DEMOCURRENCY, cent: 1000)
         let pending = Amount(currency: DEMOCURRENCY, cent: 0)
-        let currencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+        let scope = ScopeInfo.zero(DEMOCURRENCY)
         let exchange2 = Exchange(exchangeBaseUrl: ARS_EXP_EXCHANGE,
                                        masterPub: "masterPub",
-                                       scopeInfo: currencyInfo.scope,
+                                       scopeInfo: scope,
                                        paytoUris: [],
                                        tosStatus: .proposed,
                              exchangeEntryStatus: .ephemeral,
                             exchangeUpdateStatus: .ready,
                            ageRestrictionOptions: [])
-        let scopeInfo = ScopeInfo(type: .exchange, url: DEMOEXCHANGE, currency: DEMOCURRENCY)
-        let balance = Balance(scopeInfo: scopeInfo,
+        let balance = Balance(scopeInfo: scope,
                               available: amount,
                         pendingIncoming: pending,
                         pendingOutgoing: pending,

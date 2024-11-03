@@ -32,7 +32,7 @@ struct ComputeFeeResult {
 struct AmountInputV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo?
     @Binding var amountAvailable: Amount
     let amountLabel: String?
     @Binding var amountToTransfer: Amount
@@ -87,21 +87,19 @@ struct AmountInputV: View {
         let currency = amountToTransfer.currencyStr
 //        let insufficientLabel = String(localized: "You don't have enough \(currency).")
         VStack(alignment: .trailing) {
-            CurrencyInputView(currencyInfo: currencyInfo,
-                                    amount: $amountToTransfer,
-                            amountLastUsed: amountLastUsed,
-                                 available: amountAvailable,
-                                     title: amountLabel,
-                            shortcutAction: shortcutAction)
+            CurrencyInputView(scope: scope,
+                             amount: $amountToTransfer,
+                     amountLastUsed: amountLastUsed,
+                          available: amountAvailable,
+                              title: amountLabel,
+                     shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
 
             let coinData = CoinData(coins: numCoins, fee: feeAmount)
-            QuiteSomeCoins(currencyInfo: $currencyInfo,
-//                        amountEffective: amountEffective,
-                               currency: currency,
-                               coinData: coinData,
-                          shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
-                          feeIsNegative: feeIsNegative)
+            QuiteSomeCoins(scope: scope,
+                        coinData: coinData,
+                   shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
+                   feeIsNegative: feeIsNegative)
             let flags = checkAvailable(coinData)
             Button(coinData.invalid ? "Amount too small" : "Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))

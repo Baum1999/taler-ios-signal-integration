@@ -12,7 +12,7 @@ fileprivate let replaceable = 500
 fileprivate let shortcutValues = [5000,2500,1000]        // TODO: adapt for ¥
 
 struct ShortcutButton: View {
-    let currencyInfo: CurrencyInfo
+    let scope: ScopeInfo?
     let currency: String
     let currencyField: CurrencyField
     let shortcut: Int
@@ -20,12 +20,12 @@ struct ShortcutButton: View {
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {
-        ShortcutButton(currencyInfo: currencyInfo,
-                           currency: currency,
-                      currencyField: currencyField,
-                           shortcut: newShortcut,
-                          available: available,
-                             action: action)
+        ShortcutButton(scope: scope,
+                    currency: currency,
+               currencyField: currencyField,
+                    shortcut: newShortcut,
+                   available: available,
+                      action: action)
     }
 
     func isDisabled(shortie: Amount) -> Bool {
@@ -46,7 +46,7 @@ struct ShortcutButton: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let shortie = Amount(currency: currency, cent: UInt64(shortcut))        // TODO: adapt for ¥
-        let title = shortie.formatted(currencyInfo, isNegative: false)
+        let title = shortie.formatted(scope, isNegative: false)
         let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
         Button(action: { action(shortcut, currencyField)} ) {
             Text(title)
@@ -61,14 +61,14 @@ struct ShortcutButton: View {
 }
 // MARK: -
 struct CurrencyInputView: View {
-    let currencyInfo: CurrencyInfo
+    let scope: ScopeInfo?
     @Binding var amount: Amount         // the `value´
     let amountLastUsed: Amount
     let available: Amount?
     let title: String?
     let shortcutAction: ((_ amount: Amount) -> Void)?
 
-//    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var controller: Controller
     
     @State private var hasBeenShown = false
     @State private var showKeyboard = 0
@@ -97,12 +97,12 @@ struct CurrencyInputView: View {
                 if !shortcutValues.contains(lastUsedI) {
                     shortcut = lastUsedI
         }   }   }
-        return ShortcutButton(currencyInfo: currencyInfo,
-                                  currency: amount.currencyStr,
-                             currencyField: currencyField,
-                                  shortcut: shortcut,
-                                 available: available,
-                                    action: action)
+        return ShortcutButton(scope: scope,
+                           currency: amount.currencyStr,
+                      currencyField: currencyField,
+                           shortcut: shortcut,
+                          available: available,
+                             action: action)
     }
 
     @MainActor
@@ -119,7 +119,7 @@ struct CurrencyInputView: View {
             return title
         }
         if let available {
-            let availableStr = available.formatted(currencyInfo, isNegative: false)
+            let availableStr = available.formatted(scope, isNegative: false)
             return String(localized: "Available: \(availableStr)")
         }
         return nil
@@ -129,12 +129,20 @@ struct CurrencyInputView: View {
         return String(localized: "Available: \(availableStr)")
     }
 
+    func currencyInfo() -> CurrencyInfo {
+        if let scope {
+            return controller.info(for: scope, controller.currencyTicker)
+        } else {
+            return controller.info2(for: amount.currencyStr, controller.currencyTicker)
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let currency = amount.currencyStr
+        let currencyInfo = currencyInfo()
         let currencyField = CurrencyField(currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
             if let heading = heading() {
@@ -156,7 +164,7 @@ struct CurrencyInputView: View {
                 .textFieldStyle(.roundedBorder)
                 .onTapGesture {
                     if useShortcut != 0 {
-                        amount = Amount.zero(currency: currency)
+                        amount = Amount.zero(currency: amount.currencyStr)
                         useShortcut = 0
                     }
                     showKeyboard += 1
@@ -219,23 +227,23 @@ struct CurrencyInputView: View {
 }
 // MARK: -
 #if DEBUG
-fileprivate struct Previews: PreviewProvider {
-    @MainActor
-    struct StateContainer: View {
-        @State var amountToPreview = Amount(currency: LONGCURRENCY, cent: 0)
-        @State var amountLastUsed = Amount(currency: LONGCURRENCY, cent: 170)
-        @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
-        var body: some View {
-            CurrencyInputView(currencyInfo: currencyInfoL,
-                                    amount: $amountToPreview,
-                            amountLastUsed: amountLastUsed,
-                                 available: Amount(currency: LONGCURRENCY, cent: 2000),
-                                     title: "Amount to withdraw:",
-                            shortcutAction: nil)
-        }
-    }
-    static var previews: some View {
-        StateContainer()
-    }
-}
+//fileprivate struct Previews: PreviewProvider {
+//    @MainActor
+//    struct StateContainer: View {
+//        @State var amountToPreview = Amount(currency: LONGCURRENCY, cent: 0)
+//        @State var amountLastUsed = Amount(currency: LONGCURRENCY, cent: 170)
+//        @State private var previewL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
+//        var body: some View {
+//            CurrencyInputView(amount: $amountToPreview,
+//                              scope: <#ScopeInfo#>,
+//                      amountLastUsed: amountLastUsed,
+//                           available: Amount(currency: LONGCURRENCY, cent: 2000),
+//                               title: "Amount to withdraw:",
+//                      shortcutAction: nil)
+//        }
+//    }
+//    static var previews: some View {
+//        StateContainer()
+//    }
+//}
 #endif

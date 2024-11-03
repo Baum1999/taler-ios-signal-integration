@@ -131,8 +131,7 @@ struct ExchangeSectionView: View {
             })
         } header: {
             BarGraphHeader(stack: stack.push(),
-                       scopeInfo: scopeInfo,
-                    currencyInfo: $currencyInfo,
+                           scope: scopeInfo,
             shouldReloadBalances: $shouldReloadBalances)
         }
         .task { await viewDidLoad() }

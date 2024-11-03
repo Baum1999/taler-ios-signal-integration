@@ -69,7 +69,7 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
 // both from the shop's website - or even from a printed QR code.
 // We show the payment details in a sheet, and a "Confirm payment" / "Pay now" button.
 // This is also the final view after the user entered data of a <pay-template>.
-struct PaymentView: View {
+struct PaymentView: View, Sendable {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
@@ -90,6 +90,14 @@ struct PaymentView: View {
 
 
     func checkCurrencyInfo(for result: PreparePayResult) async {
+        let scopes = result.scopes
+        if scopes.count > 0 {
+            for scope in scopes {
+                await controller.checkInfo(for: scope, model: model)
+            }
+            return
+        }
+        // else fallback to contractTerms.exchanges
         let exchanges = result.contractTerms.exchanges
         for exchange in exchanges {
             let baseUrl = exchange.url
@@ -107,10 +115,12 @@ struct PaymentView: View {
       Group {
         if let preparePayResult {
             let status = preparePayResult.status
+            let firstScope = preparePayResult.scopes.first
             let raw = preparePayResult.amountRaw
             let currency = raw.currencyStr
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
+            let exchanges = terms.exchanges
             let baseURL = terms.exchanges.first?.url
             let paid = status == .alreadyConfirmed
             let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
@@ -138,12 +148,13 @@ struct PaymentView: View {
                 if let effective {
                     let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
+                                        scope: firstScope,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw,
                                        noFees: nil,        // TODO: check baseURL for fees
                                           fee: fee,
+                                feeIsNegative: nil,
                                   bottomTitle: bottomTitle,
                                  bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                                  bottomAmount: effective,
@@ -159,12 +170,13 @@ struct PaymentView: View {
                     Text("You don't have enough \(currency).")
                         .talerFont(.headline)
                     ThreeAmountsSection(stack: stack.push(),
-                                 currencyInfo: $currencyInfo,
+                                        scope: firstScope,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
                                     topAmount: raw,
                                        noFees: nil,        // TODO: check baseURL for fees
                                           fee: nil,
+                                feeIsNegative: nil,
                                   bottomTitle: String(localized: "Amount available:"),
                                  bottomAbbrev: String(localized: "Available:", comment: "mini"),
                                  bottomAmount: balanceDetails.balanceAvailable,
@@ -186,17 +198,18 @@ struct PaymentView: View {
                 if !paid {
                     if let effective {
                         VStack {
-                            NavigationLink(destination: LazyView {
-                                PaymentDone(stack: stack.push(),
-                                            currencyInfo: $currencyInfo,
-                                            transactionId: preparePayResult.transactionId)
-                            }) {
+                            let destination = PaymentDone(stack: stack.push(),
+                                                          scope: firstScope,    // TODO: let user choose which currency
+                                                  transactionId: preparePayResult.transactionId)
+                            NavigationLink(destination: destination) {
                                 let formatted = raw.formatted(currencyInfo, isNegative: false)
                                 Text("Pay \(formatted) now")
                             }
                                 .buttonStyle(TalerButtonStyle(type: .prominent))
                                 .padding(.horizontal)
-                            Text("Payment is made in \(currencyInfo.scope.currency)")
+                            let currency = currencyInfo.currency
+//                            let currency = amountToTransfer.currencyStr
+                            Text("Payment is made in \(currency)")
                                 .talerFont(.callout)
                         }
                     } else {
@@ -211,28 +224,33 @@ struct PaymentView: View {
             .navigationTitle(navTitle)
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
-                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.scope.currency)")
+                if let resultScope = preparePayResult.scopes.first {            // TODO: let user choose which currency
+                    currencyInfo = controller.info(for: resultScope, controller.currencyTicker)
+                } else {
+                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+                }
+                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
-            .task { // this runs only once
-                symLog.log(".task")
-                if template {
-                    if let payResponse = try? await model.preparePayForTemplateM(url.absoluteString,
-                                                                     amount: amountIsEditable ? amountToTransfer : nil,
-                                                                    summary: summaryIsEditable ? summary : nil) {
-                        await checkCurrencyInfo(for: payResponse)
-                        preparePayResult = payResponse
-                    }
-                } else {
-                    if let result = try? await model.preparePayForUriM(url.absoluteString) {
-                        amountToTransfer = result.amountRaw
-                        await checkCurrencyInfo(for: result)
-                        preparePayResult = result
+                .task { // this runs only once
+                    symLog.log(".task")
+                    if template {
+                        if let payResponse = try? await model.preparePayForTemplateM(url.absoluteString,
+                                                                                     amount: amountIsEditable ? amountToTransfer : nil,
+                                                                                     summary: summaryIsEditable ? summary : nil) {
+                            await checkCurrencyInfo(for: payResponse)
+                            preparePayResult = payResponse
+                        }
+                    } else {
+                        if let result = try? await model.preparePayForUriM(url.absoluteString) {
+                            amountToTransfer = result.amountRaw
+                            await checkCurrencyInfo(for: result)
+                            preparePayResult = result
+                        }
                     }
                 }
-            }
+//                .task { await viewDidLoad() }
         }
       }.onAppear() {
           symLog.log("onAppear")

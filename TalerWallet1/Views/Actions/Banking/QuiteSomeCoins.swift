@@ -18,11 +18,11 @@ struct CoinData {
     var tooMany:   Bool { numCoins > 999 }
 
     let fee: Amount?
-    func feeLabel(_ currencyInfo: CurrencyInfo, feeZero: String?, isNegative: Bool = false) -> String {
+    func feeLabel(_ scope: ScopeInfo?, feeZero: String?, isNegative: Bool = false) -> String {
        return if let fee {
            fee.isZero ? feeZero ?? EMPTYSTRING    // String(localized: "No withdrawal fee")
-         : isNegative ? String(localized: "- \(fee.formatted(currencyInfo, isNegative: false)) fee")
-                      : String(localized: "+ \(fee.formatted(currencyInfo, isNegative: false)) fee")
+         : isNegative ? String(localized: "- \(fee.formatted(scope, isNegative: false)) fee")
+                      : String(localized: "+ \(fee.formatted(scope, isNegative: false)) fee")
        } else {
            EMPTYSTRING
        }
@@ -34,7 +34,7 @@ extension CoinData {
         self.init(numCoins: numCoins ?? -1, fee: fee)           // either the number of coins, or unknown
     }
 
-    init(details: WithdrawalAmountDetails?) {
+    init(details: WithdrawalDetailsForAmount?) {
         do {
             if let details {
                 // Incoming: fee = raw - effective
@@ -63,21 +63,18 @@ extension CoinData {
 // MARK: -
 struct QuiteSomeCoins: View {
     private let symLog = SymLogV(0)
-    @Binding var currencyInfo: CurrencyInfo
-//    let amountEffective: Amount?
-    let currency: String
+    let scope: ScopeInfo?
     let coinData: CoinData
     let shouldShowFee: Bool
     let feeIsNegative: Bool
 
     var body: some View {
-        let isError = coinData.tooMany // || coinData.invalid 
+        let isError = coinData.tooMany // || coinData.invalid
         let showFee = shouldShowFee && !isError
         if showFee {
             if let fee = coinData.fee {
-                Text(coinData.feeLabel(currencyInfo,
-                               feeZero: String(localized: "No withdrawal fee"),
-                            isNegative: feeIsNegative))
+                Text(coinData.feeLabel(scope, feeZero: String(localized: "No withdrawal fee"),
+                                       isNegative: feeIsNegative))
                 .foregroundColor(.primary)
                 .talerFont(.body)
             }

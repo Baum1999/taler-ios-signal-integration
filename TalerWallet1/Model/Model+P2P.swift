@@ -182,9 +182,10 @@ struct PreparePeerPushCreditResponse: Codable {
     let contractTerms: PeerContractTerms
     let amountRaw: Amount
     let amountEffective: Amount
-    let exchangeBaseUrl: String
-    // the dialog transaction is already created in the local DB - must either accept or delete
+    // TODO: the dialog transaction is already created in the local DB - must either accept or delete
     let transactionId: String
+    let exchangeBaseUrl: String         // need (exchange.tosStatus == .accepted) for incoming coins
+    let scopeInfo: ScopeInfo
 }
 fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPushCreditResponse
@@ -232,8 +233,10 @@ struct PreparePeerPullDebitResponse: Codable {
     let contractTerms: PeerContractTerms
     let amountRaw: Amount
     let amountEffective: Amount
-    // the dialog transaction is already created in the local DB - must either accept or delete
+    // TODO: the dialog transaction is already created in the local DB - must either accept or delete
     let transactionId: String
+//    let exchangeBaseUrl: String       use scope instead
+    let scopeInfo: ScopeInfo
 }
 fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPullDebitResponse

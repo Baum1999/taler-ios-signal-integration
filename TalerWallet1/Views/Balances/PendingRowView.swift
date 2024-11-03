@@ -10,7 +10,7 @@ import taler_swift
 
 /// This view shows a pending transaction row in a currency section
 struct PendingRowView: View {
-    @Binding var currencyInfo: CurrencyInfo
+    let scope: ScopeInfo
     let amount: Amount
     let incoming: Bool
     let shouldConfirm: Bool
@@ -37,7 +37,7 @@ struct PendingRowView: View {
         let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle
 
-        let amountText = AmountV($currencyInfo, amount, isNegative: !incoming)
+        let amountText = AmountV(scope, amount, isNegative: !incoming)
             .foregroundColor(pendingColor)
 
         // this is the default view for iOS 15
@@ -70,34 +70,32 @@ struct PendingRowView: View {
 }
 // MARK: -
 #if DEBUG
-@MainActor
-fileprivate struct Preview_Content: View {
-    @State private var currencyInfoD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
-    @State private var currencyInfoT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
-    var body: some View {
-        let test = Amount(currency: TESTCURRENCY, cent: 123)
-        let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
-        List {
-            PendingRowView(currencyInfo: $currencyInfoD,
-                                 amount: test, incoming: true, shouldConfirm: true, needsKYC: false)
-            PendingRowView(currencyInfo: $currencyInfoT,
-                                 amount: demo, incoming: false, shouldConfirm: false, needsKYC: true)
-        }
-    }
-}
-fileprivate struct Previews: PreviewProvider {
-    @MainActor
-    struct StateContainer: View {
-//        @StateObject private var controller = Controller.shared
-        var body: some View {
-            let hello = "Hello"
-            Text(hello)
-//            Preview_Content()
-//                .environmentObject(controller)
-        }
-    }
-    static var previews: some View {
-        StateContainer()
-    }
-}
+//@MainActor
+//fileprivate struct Preview_Content: View {
+//    @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
+//    @State private var previewT: CurrencyInfo = CurrencyInfo.zero(TESTCURRENCY)
+//    var body: some View {
+//        let test = Amount(currency: TESTCURRENCY, cent: 123)
+//        let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
+//        List {
+//            PendingRowView(amount: test, incoming: true, shouldConfirm: true, needsKYC: false)
+//            PendingRowView(amount: demo, incoming: false, shouldConfirm: false, needsKYC: true)
+//        }
+//    }
+//}
+//fileprivate struct Previews: PreviewProvider {
+//    @MainActor
+//    struct StateContainer: View {
+////        @StateObject private var controller = Controller.shared
+//        var body: some View {
+//            let hello = "Hello"
+//            Text(hello)
+////            Preview_Content()
+////                .environmentObject(controller)
+//        }
+//    }
+//    static var previews: some View {
+//        StateContainer()
+//    }
+//}
 #endif
