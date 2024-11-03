@@ -65,8 +65,10 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
 //}
 
 // MARK: -
-// Will be called either by the user scanning a QR code or tapping the provided link,
-// both from the shop's website. We show the payment details in a sheet.
+// Will be called either by the user scanning a <pay> QR code or tapping the provided link,
+// both from the shop's website - or even from a printed QR code.
+// We show the payment details in a sheet, and a "Confirm payment" / "Pay now" button.
+// This is also the final view after the user entered data of a <pay-template>.
 struct PaymentView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

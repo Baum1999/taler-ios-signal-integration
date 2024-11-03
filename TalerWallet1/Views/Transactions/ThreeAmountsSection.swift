@@ -207,7 +207,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
 
     static var previews: some View {
         StateContainer()
-        //            .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
+//          .environment(\.sizeCategory, .extraExtraLarge)    Canvas Device Settings
     }
 }
 #endif

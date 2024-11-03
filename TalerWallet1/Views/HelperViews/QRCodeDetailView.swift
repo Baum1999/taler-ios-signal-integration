@@ -9,7 +9,6 @@ import SwiftUI
 import taler_swift
 import AVFoundation
 
-
 struct QRCodeDetailView: View {
     let talerURI: String
     let talerCopyShare: String
@@ -54,7 +53,7 @@ struct QRCodeDetailView: View {
                 }
                 CopyShare(textToCopy: talerCopyShare)
                     .disabled(false)
-                //                    .padding(.bottom)
+//                  .padding(.bottom)
                     .listRowSeparator(.hidden)
                 
             }

@@ -72,24 +72,28 @@ struct WithdrawTOSView: View {
 }
 // MARK: -
 extension WithdrawTOSView {
+
+    static func cleanupText(_ term0: String) -> String {
+        let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
+        let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
+        let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks
+        let term4 = term3.replacingOccurrences(of: "\n  ", with: " ")       // newline + 2 blanks
+        let term5 = term4.replacingOccurrences(of: "\n ", with: " ")        // newline + 1 blank
+        let term6 = term5.replacingOccurrences(of: "\n", with: " ")         // remove all other linebreaks
+        let term7 = term6.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
+        let term8 = term7.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
+        let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
+        return term9
+    }
+
     struct plaintextToSV: View {
         let plaintext: String
 
         var body: some View {
             let components = plaintext.components(separatedBy: "\n\n")
-
             ForEach (components, id: \.self) { term0 in
-                let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
-                let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
-                let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks
-                let term4 = term3.replacingOccurrences(of: "\n  ", with: " ")       // newline + 2 blanks
-                let term5 = term4.replacingOccurrences(of: "\n ", with: " ")        // newline + 1 blank
-                let term6 = term5.replacingOccurrences(of: "\n", with: " ")         // remove all other linebreaks
-                let term7 = term6.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
-                let term8 = term7.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
-                let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
                 Section {
-                    Text(term9)
+                    Text(cleanupText(term0))
                         .talerFont(.footnote)
                         .foregroundColor(Color(UIColor.label))
                 }
@@ -136,17 +140,8 @@ extension WithdrawTOSView {
                 } else {
                     let components = tos.content.components(separatedBy: "\n\n")
                     ForEach (components, id: \.self) { term0 in
-                        let term1 = term0.replacingOccurrences(of: "\n     ", with: " ")    // newline + 5 blanks
-                        let term2 = term1.replacingOccurrences(of: "\n    ", with: " ")     // newline + 4 blanks
-                        let term3 = term2.replacingOccurrences(of: "\n   ", with: " ")      // newline + 3 blanks
-                        let term4 = term3.replacingOccurrences(of: "\n  ", with: " ")       // newline + 2 blanks
-                        let term5 = term4.replacingOccurrences(of: "\n ", with: " ")        // newline + 1 blank
-                        let term6 = term5.replacingOccurrences(of: "\n", with: " ")         // remove all other linebreaks
-                        let term7 = term6.replacingOccurrences(of: " ====", with: "\n====") // add them back for underscoring
-                        let term8 = term7.replacingOccurrences(of: " ----", with: "\n----") // special for "Highlights:"
-                        let term9 = term8.replacingOccurrences(of: " ****", with: "\n****") // special for "Terms of Service:"
-                            Section {
-                            Text(term9)
+                        Section {
+                            Text(cleanupText(term0))
                                 .talerFont(.footnote)
                                 .foregroundColor(Color(UIColor.label))
                         }

@@ -184,25 +184,25 @@ struct TransactionSummaryV: View {
                          hasDone: hasDone)
 
                 // TODO: Retry Countdown, Retry Now button
-//                if transaction.isRetryable { if let retryAction {
+//                if transaction.isRetryable, let retryAction {
 //                    TransactionButton(transactionId: common.transactionId, command: .retry,
 //                                      warning: nil, action: abortAction)
-//                } } // Retry button
-                if transaction.isAbortable { if let abortAction {
+//                } // Retry button
+                if transaction.isAbortable, let abortAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .abort,
                                             warning: String(localized: "Are you sure you want to abort this transaction?"),
                                          didExecute: $ignoreThis,
                                              action: abortAction)
-                } } // Abort button
-                if transaction.isFailable { if let failAction {
+                } // Abort button
+                if transaction.isFailable, let failAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .fail,
                                             warning: String(localized: "Are you sure you want to abandon this transaction?"),
                                          didExecute: $ignoreThis,
                                              action: failAction)
-                } } // Fail button
-                if transaction.isDeleteable { if let deleteAction {
+                } // Fail button
+                if transaction.isDeleteable, let deleteAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .delete,
                                             warning: String(localized: "Are you sure you want to delete this transaction?"),
@@ -214,10 +214,10 @@ struct TransactionSummaryV: View {
                             dismiss(stack)
                         }
                     }
-                } } // Delete button
+                } // Delete button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
-        } // Group
+        } // ScrollViewReader
         .onNotification(.TransactionExpired) { notification in
             // TODO: Alert user that this tx just expired
             if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {

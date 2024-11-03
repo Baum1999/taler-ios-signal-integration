@@ -68,7 +68,7 @@ struct ScopePicker: View {
                     .frame(maxWidth: .infinity)
 //                    .border(.red)                 // debugging
                     .pickerStyle(.menu)
-                    .labelsHidden()
+                    .labelsHidden()                 // be sure to use valid labels for a11y
                 }
             }
             .talerFont(.picker)
@@ -149,8 +149,6 @@ struct  ScopeDropDown: View {
                             chevron.foregroundColor(.clear)
                                 .accessibilityHidden(true)
                         }
-
-
                     }) // .accessibilityElement(children: .combine)
                     .disabled(rowDisabled)
                     .padding(.horizontal, radius / 2)
