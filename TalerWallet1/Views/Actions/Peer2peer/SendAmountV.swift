@@ -32,6 +32,25 @@ struct SendAmountV: View {
                              comment: "NavTitle: Send")
     }
 
+    private func viewDidLoad() async {
+        if let selectedBalance {
+            if selectedBalance.available.isZero {
+                // find another balance
+                balance = Balance.firstNonZero(controller.balances)
+            } else {
+                balance = selectedBalance
+            }
+        } else {
+            balance = Balance.firstNonZero(controller.balances)
+        }
+        if let balance {
+            balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
+        } else {
+            balanceIndex = 0
+            balance = (controller.balances.count > 0) ? controller.balances[0] : nil
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -69,24 +88,7 @@ struct SendAmountV: View {
             .onDisappear {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
-            .task {
-                if let selectedBalance {
-                    if selectedBalance.available.isZero {
-                        // find another balance
-                        balance = Balance.firstNonZero(controller.balances)
-                    } else {
-                        balance = selectedBalance
-                    }
-                } else {
-                    balance = Balance.firstNonZero(controller.balances)
-                }
-                if let balance {
-                    balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
-                } else {
-                    balanceIndex = 0
-                    balance = (count > 0) ? controller.balances[0] : nil
-                }
-            }
+            .task { await viewDidLoad() }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {

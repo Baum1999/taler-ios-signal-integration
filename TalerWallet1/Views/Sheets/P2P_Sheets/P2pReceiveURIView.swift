@@ -28,6 +28,18 @@ struct P2pReceiveURIView: View {
 
     let navTitle = String(localized: "P2P Receive")
 
+    private func viewDidLoad() async {
+        symLog.log(".task")
+        if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {
+            let baseUrl = ppResponse.exchangeBaseUrl
+            exchange = try? await model.getExchangeByUrl(url: baseUrl)
+            await controller.checkCurrencyInfo(for: baseUrl, model: model)
+            peerPushCreditResponse = ppResponse
+        } else {
+            peerPushCreditResponse = nil
+        }
+    }
+
     var body: some View {
         VStack {
             if let peerPushCreditResponse {
@@ -98,15 +110,7 @@ struct P2pReceiveURIView: View {
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
         }
         .task { // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
-            symLog.log(".task")
-            if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {
-                let baseUrl = ppResponse.exchangeBaseUrl
-                exchange = try? await model.getExchangeByUrl(url: baseUrl)
-                await controller.checkCurrencyInfo(for: baseUrl, model: model)
-                peerPushCreditResponse = ppResponse
-            } else {
-                peerPushCreditResponse = nil
-            }
+            await viewDidLoad()
         }
     }
 }

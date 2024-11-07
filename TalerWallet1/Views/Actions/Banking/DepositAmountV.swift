@@ -25,6 +25,26 @@ struct DepositAmountV: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
+    private func viewDidLoad() async {
+        let balances = controller.balances
+        if let selectedBalance {
+            if selectedBalance.available.isZero {
+                // find another balance
+                balance = Balance.firstNonZero(balances)
+            } else {
+                balance = selectedBalance
+            }
+        } else {
+            balance = Balance.firstNonZero(balances)
+        }
+        if let balance {
+            balanceIndex = balances.firstIndex(of: balance) ?? 0
+        } else {
+            balanceIndex = 0
+            balance = (balances.count > 0) ? balances[0] : nil
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -63,24 +83,7 @@ struct DepositAmountV: View {
             .onDisappear {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
-            .task {
-                if let selectedBalance {
-                    if selectedBalance.available.isZero {
-                        // find another balance
-                        balance = Balance.firstNonZero(controller.balances)
-                    } else {
-                        balance = selectedBalance
-                    }
-                } else {
-                    balance = Balance.firstNonZero(controller.balances)
-                }
-                if let balance {
-                    balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
-                } else {
-                    balanceIndex = 0
-                    balance = (count > 0) ? controller.balances[0] : nil
-                }
-            }
+            .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
                 symLog.log("❗️ task \(balanceIndex)")
                 if let balance {

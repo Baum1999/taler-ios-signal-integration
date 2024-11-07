@@ -17,6 +17,18 @@ struct P2pAcceptDone: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
+    private func viewDidLoad() async {
+        if incoming {
+            if let _ = try? await model.acceptPeerPushCreditM(transactionId) {
+                dismissTop(stack.push())
+            }
+        } else {
+            if let _ = try? await model.confirmPeerPullDebitM(transactionId) {
+                dismissTop(stack.push())
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -28,21 +40,11 @@ struct P2pAcceptDone: View {
             .navigationBarBackButtonHidden(true)
 //            .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)
+            .task { await viewDidLoad() }
             .onAppear() {
                 symLog.log("onAppear")
                 DebugViewC.shared.setSheetID(incoming ? SHEET_RCV_P2P_ACCEPT
                                                       : SHEET_PAY_P2P_ACCEPT)
-            }
-            .task {
-                if incoming {
-                    if let _ = try? await model.acceptPeerPushCreditM(transactionId) {
-                        dismissTop(stack.push())
-                    }
-                } else {
-                    if let _ = try? await model.confirmPeerPullDebitM(transactionId) {
-                        dismissTop(stack.push())
-                    }
-                }
             }
     }
 }

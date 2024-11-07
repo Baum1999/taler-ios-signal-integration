@@ -31,6 +31,21 @@ struct WithdrawAcceptDone: View {
         return response
     }
 
+    private func viewDidLoad() async {
+        if let exchangeBaseUrl {
+            // TODO: restrictAge
+            if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl,
+                                                         withdrawURL: url.absoluteString,
+                                                              amount: amountToTransfer,
+                                                         restrictAge: nil
+            ) {
+                let confirmTransferUrl = result.confirmTransferUrl
+                symLog.log(confirmTransferUrl)
+                transactionId = result.transactionId
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -67,19 +82,11 @@ struct WithdrawAcceptDone: View {
                 LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL
                                                   ?? "Bank Authorization")
             }
-        }.onAppear() {
+        }
+        .task { await viewDidLoad() }
+        .onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
-        }.task {
-            if let exchangeBaseUrl {
-                // TODO: restrictAge
-                if let result = try? await model.sendAcceptIntWithdrawalM(exchangeBaseUrl, withdrawURL: url.absoluteString,
-                                                                          amount: amountToTransfer, restrictAge: nil) {
-                    let confirmTransferUrl = result.confirmTransferUrl
-                    symLog.log(confirmTransferUrl)
-                    transactionId = result.transactionId
-                }
-            }
         }
     }
 }

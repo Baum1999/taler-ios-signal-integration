@@ -23,6 +23,16 @@ struct PaymentDone: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    @MainActor
+    private func viewDidLoad() async {
+        if let confirmPayResult = try? await model.confirmPayM(transactionId) {
+//          symLog.log(confirmPayResult as Any)
+            if confirmPayResult.type == "done" {
+                paymentDone = true
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -52,14 +62,7 @@ struct PaymentDone: View {
                 }
             } else {
                 LoadingView(scopeInfo: nil, message: "Paying...")
-                    .task {
-                        if let confirmPayResult = try? await model.confirmPayM(transactionId) {
-//                          symLog.log(confirmPayResult as Any)
-                            if confirmPayResult.type == "done" {
-                                paymentDone = true
-                            }
-                        }
-                    }
+                    .task { await viewDidLoad() }
             }
         }.onAppear() {
             symLog.log("onAppear")

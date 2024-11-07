@@ -137,6 +137,12 @@ struct ManualDetailsV: View {
         }
     }
 
+    private func viewDidLoad(_ payto: String) async {
+        if let specs = try? await model.getQrCodesForPaytoM(payto) {
+            qrCodeSpecs = specs ?? []
+        }
+    }
+
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             let validDetails = validDetails(accountDetails)
@@ -227,11 +233,7 @@ struct ManualDetailsV: View {
                             }
                         }.id(listID)
                             .talerFont(.body)
-                            .task {
-                                if let specs = try? await model.getQrCodesForPaytoM(payto) {
-                                    qrCodeSpecs = specs ?? []
-                                }
-                            }
+                            .task { await viewDidLoad(payto) }
                     } else {
                         // TODO: Error No payto URL
                     }

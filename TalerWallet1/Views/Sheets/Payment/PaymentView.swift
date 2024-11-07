@@ -111,6 +111,25 @@ struct PaymentView: View, Sendable {
         symLog.log("Couldn't load Info(for: \(result.amountRaw.currencyStr))")
     }
 
+    @MainActor
+    private func viewDidLoad() async {
+//        symLog.log(".task")
+        if template {
+            if let templateResponse = try? await model.preparePayForTemplateM(url.absoluteString,
+                                                                     amount: amountIsEditable ? amountToTransfer : nil,
+                                                                    summary: summaryIsEditable ? summary : nil) {
+                await checkCurrencyInfo(for: templateResponse)
+                preparePayResult = templateResponse
+            }
+        } else {
+            if let payResponse = try? await model.preparePayForUriM(url.absoluteString) {
+                amountToTransfer = payResponse.amountRaw
+                await checkCurrencyInfo(for: payResponse)
+                preparePayResult = payResponse
+            }
+        }
+    }
+
     var body: some View {
       Group {
         if let preparePayResult {
@@ -233,24 +252,7 @@ struct PaymentView: View, Sendable {
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
-                .task { // this runs only once
-                    symLog.log(".task")
-                    if template {
-                        if let payResponse = try? await model.preparePayForTemplateM(url.absoluteString,
-                                                                                     amount: amountIsEditable ? amountToTransfer : nil,
-                                                                                     summary: summaryIsEditable ? summary : nil) {
-                            await checkCurrencyInfo(for: payResponse)
-                            preparePayResult = payResponse
-                        }
-                    } else {
-                        if let result = try? await model.preparePayForUriM(url.absoluteString) {
-                            amountToTransfer = result.amountRaw
-                            await checkCurrencyInfo(for: result)
-                            preparePayResult = result
-                        }
-                    }
-                }
-//                .task { await viewDidLoad() }
+                .task { await viewDidLoad() }
         }
       }.onAppear() {
           symLog.log("onAppear")

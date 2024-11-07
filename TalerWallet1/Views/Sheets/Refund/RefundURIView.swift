@@ -27,6 +27,14 @@ struct RefundURIView: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    private func viewDidLoad() async {
+        symLog.log(".task")
+        if let result = try? await model.startRefundForUriM(url: url.absoluteString) {
+            refundTransactionId = result
+            transaction = try? await model.getTransactionByIdM(result)
+        }
+    }
+
     var body: some View {
         if let refundTransactionId, let transaction {
             let common = transaction.common
@@ -55,13 +63,7 @@ struct RefundURIView: View {
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
-                .task {
-                    symLog.log(".task")
-                    if let result = try? await model.startRefundForUriM(url: url.absoluteString) {
-                        refundTransactionId = result
-                        transaction = try? await model.getTransactionByIdM(result)
-                    }
-                }
+                .task { await viewDidLoad() }
         }
     }
 }

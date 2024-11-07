@@ -29,6 +29,15 @@ struct ManualWithdrawDone: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    private func viewDidLoad() async {
+        if transactionId == nil {
+            if let result = try? await model.acceptManualWithdrawalM(amountToTransfer,
+                                                           baseUrl: baseURL,
+                                                       restrictAge: 0)
+            { transactionId = result.transactionId }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -57,17 +66,12 @@ struct ManualWithdrawDone: View {
                 }
             } else {
                 LoadingView(scopeInfo: nil, message: baseURL.trimURL)
+                    .task { await viewDidLoad() }
             }
-        }.onAppear() {
+        }
+        .onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
-        }.task {
-            if transactionId == nil {
-                if let result = try? await model.acceptManualWithdrawalM(amountToTransfer,
-                                                                baseUrl: baseURL,
-                                                            restrictAge: 0)
-                { transactionId = result.transactionId }
-            }
         }
     }
 }

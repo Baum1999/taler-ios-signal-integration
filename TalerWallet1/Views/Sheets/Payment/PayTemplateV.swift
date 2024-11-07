@@ -80,6 +80,49 @@ struct PayTemplateV: View {
         return nil
     }
 
+    @MainActor
+    private func viewDidLoad() async {
+        if let response = try? await model.checkPayForTemplateM(url.absoluteString) {
+            let details = response.templateDetails
+            let defaults = details.editableDefaults     // might be nil, or its fields might be nil
+                                                        // TODO: let the user choose a currency from supportedCurrencies[]
+            let supportedCurrencies = response.supportedCurrencies
+
+            /// checkPayForTemplate does not provide fees (yet)
+            let contract = details.templateContract     // specifies fixed amount/summary
+            amountIsEditable = contract.amount == nil
+            summaryIsEditable = contract.summary == nil
+
+            let prepCurrency = contract.currency ?? defaults?.currency ??
+                             (supportedCurrencies.count > 0 ? supportedCurrencies[0]
+                                                            : UNKNOWN)
+            let zeroAmount = Amount(currency: prepCurrency, cent: 0)
+            let prepAmount = contract.amount ?? defaults?.amount        // might be nil
+            let prepSummary = contract.summary ?? defaults?.summary     // might be nil
+//          symLog.log("LoadingView.task preparePayForTemplate")
+            /// preparePayForTemplate will make a network call to the merchant and create a TX
+            ///  -> we only want to do this after the user entered amount and subject - but before confirmation of course
+//          if let result = await preparePayForTemplate(model: model,
+//                                                        url: url,
+//                                                     amount: amountIsEditable ? prepAmount ?? zeroAmount
+//                                                                              : nil,
+//                                                    summary: summaryIsEditable ? prepSummary ?? " "
+//                                                                               : nil,
+//                                                   announce: announce)
+//          {   symLog.log("preparePayForTemplate finished")
+                amountToTransfer = prepAmount ?? zeroAmount
+                summary = prepSummary ?? EMPTYSTRING
+                templateContract = contract
+//              insufficient = result.insufficient
+//              feeAmount = result.feeAmount
+//              feeStr = result.feeStr
+//              preparePayResult = result.ppCheck
+//          } else {
+//              symLog.log("preparePayForTemplateM failed")
+//          }
+        }
+
+    }
     var body: some View {
         if let templateContract {       // preparePayResult
 //            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? UNKNOWN
@@ -180,43 +223,7 @@ struct PayTemplateV: View {
             }
         } else {
             LoadingView(scopeInfo: nil, message: url.host)
-                .task {
-                    if let details = try? await model.checkPayForTemplateM(url.absoluteString) {
-                        /// checkPayForTemplateM does not provide fees (yet)
-                        let contract = details.templateDetails.templateContract     // specifies fixed amount/summary
-                        amountIsEditable = contract.amount == nil
-                        summaryIsEditable = contract.summary == nil
-                        let defaults = details.templateDetails.editableDefaults     // might be nil, or its fields might be nil
-                        // TODO: let the user choose a currency from supportedCurrencies[]
-                        let prepCurrency = contract.currency ?? defaults?.currency ??
-                                    (details.supportedCurrencies.count > 0 ? details.supportedCurrencies[0]
-                                                                           : UNKNOWN)
-                        let zeroAmount = Amount(currency: prepCurrency, cent: 0)
-                        let prepAmount = contract.amount ?? defaults?.amount        // might be nil
-                        let prepSummary = contract.summary ?? defaults?.summary     // might be nil
-//                        symLog.log("LoadingView.task preparePayForTemplate")
-                        /// preparePayForTemplate will make a network call to the merchant and create a TX
-                        ///  -> we only want to do this after the user entered amount and subject - but before confirmation of course
-//                        if let result = await preparePayForTemplate(model: model,
-//                                                                      url: url,
-//                                                                   amount: amountIsEditable ? prepAmount ?? zeroAmount
-//                                                                                            : nil,
-//                                                                  summary: summaryIsEditable ? prepSummary ?? " "
-//                                                                                             : nil,
-//                                                                 announce: announce)
-//                        {   symLog.log("preparePayForTemplate finished")
-                            amountToTransfer = prepAmount ?? zeroAmount
-                            summary = prepSummary ?? EMPTYSTRING
-                            templateContract = contract
-//                            insufficient = result.insufficient
-//                            feeAmount = result.feeAmount
-//                            feeStr = result.feeStr
-//                            preparePayResult = result.ppCheck
-//                        } else {
-//                            symLog.log("preparePayForTemplateM failed")
-//                        }
-                    }
-                }
+                .task { await viewDidLoad() }
         }
     }
 }
