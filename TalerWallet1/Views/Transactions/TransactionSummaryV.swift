@@ -339,7 +339,7 @@ struct TransactionSummaryV: View {
                         let details = withdrawalTransaction.details
                         if common.isAborted && details.withdrawalDetails.type == .manual {
                             if let dayStr = abortedHint(details.withdrawalDetails.reserveClosingDelay) {
-                                Text("The withdrawal was aborted.\nIf you have already sent money to the exchange, it will wire it back in \(dayStr) days.")
+                                Text("The withdrawal was aborted.\nIf you have already sent money to the payment service, it will wire it back in \(dayStr) days.")
                                     .talerFont(.callout)
                             }
                         }

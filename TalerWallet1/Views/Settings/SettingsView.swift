@@ -107,7 +107,7 @@ struct SettingsView: View {
                     exchangesDest
                 } label: {
                     SettingsItem(name: exchangesTitle, id1: "exchanges",
-                          description: hideDescriptions ? nil : String(localized: "Manage payment service providers...")) {}
+                          description: hideDescriptions ? nil : String(localized: "Manage payment services...")) {}
                 }
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                                description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {

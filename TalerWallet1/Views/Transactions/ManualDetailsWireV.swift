@@ -23,7 +23,7 @@ struct TransferRestrictionsV: View {
             let amountNBS = amountStr.nbs
             let obtainNBS = obtainStr.nbs
             Text(minimalistic ? "Transfer \(amountNBS) to the payment service."
-                 : "You need to transfer \(amountNBS) from your regular bank account to the payment service provider to receive \(obtainNBS) as electronic cash in this wallet.")
+                 : "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as electronic cash in this wallet.")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
             if let restrictions {
@@ -72,16 +72,16 @@ struct ManualDetailsWireV: View {
             }   .padding(.leading)
             let payeeCode = HStack {
                 VStack(alignment: .leading) {
-                    Text("Payee:")
+                    Text("Recipient:")
                         .talerFont(.subheadline)
                     Text(receiverStr)
                         .monospacedDigit()
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Payee", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Recipient", comment: "VoiceOver"))
                 CopyButton(textToCopy: receiverStr, vertical: true)
-                    .accessibilityLabel(Text("Copy the payee", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the recipient", comment: "VoiceOver"))
                     .disabled(false)
             }   .padding(.top, -8)
             let ibanCode = HStack {
@@ -93,7 +93,7 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("IBAN of the payee", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("IBAN of the recipient", comment: "VoiceOver"))
                 CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
                     .accessibilityLabel(Text("Copy the IBAN", comment: "VoiceOver"))
                     .disabled(false)
@@ -107,7 +107,7 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("account of the payee", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("account of the recipient", comment: "VoiceOver"))
                 CopyButton(textToCopy: xTaler, vertical: true)
                     .accessibilityLabel(Text("Copy the account", comment: "VoiceOver"))
                     .disabled(false)
@@ -121,13 +121,13 @@ struct ManualDetailsWireV: View {
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
-            let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste payee and IBAN:"
-                              : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste payee and IBAN into the payee/IBAN fields in your banking app or website (and save it as favorite for the next time):")
+            let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste recipient and IBAN:"
+                              : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste recipient and IBAN into the recipient/IBAN fields in your banking app or website (and save it as favorite for the next time):")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            let step2x = Text(minimalistic ? "**Step 2:** Copy+Paste payee and account:"
-                              : "**Step 2:** Copy and paste payee and account into the corresponding fields in your banking app or website:")
+            let step2x = Text(minimalistic ? "**Step 2:** Copy+Paste recipient and account:"
+                              : "**Step 2:** Copy and paste recipient and account into the corresponding fields in your banking app or website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)

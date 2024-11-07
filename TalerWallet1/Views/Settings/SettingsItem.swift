@@ -203,7 +203,7 @@ struct SettingsItemPreview : View {
 
     var body: some View {
         VStack {
-            SettingsToggle(name: "Developer Mode", value: $developerMode, id1: "dev1",
+            SettingsToggle(name: "Developer Preview", value: $developerMode, id1: "dev1",
                     description: "More information intended for debugging")
             SettingsTriState(name: "Observe walletCore", value: $observe,
                      description: "on LocalConsole")

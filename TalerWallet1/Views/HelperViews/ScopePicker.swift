@@ -73,7 +73,7 @@ struct ScopePicker: View {
             }
             .talerFont(.picker)
             .accessibilityLabel(a11yLabel)
-            .accessibilityHint(String(localized: "Choose the payment provider.", comment: "a11y"))
+            .accessibilityHint(String(localized: "Choose the payment service.", comment: "a11y"))
             .task() {
                 withAnimation { selected = value }
             }

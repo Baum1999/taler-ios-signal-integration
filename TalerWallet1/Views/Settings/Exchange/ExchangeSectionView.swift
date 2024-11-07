@@ -108,9 +108,9 @@ struct ExchangeSectionView: View {
                 .listRowSeparator(.hidden)
             }
 
-            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete payment provider", comment: "Action button")
-            let warningText1 = String(localized: "Are you sure you want to delete this payment provider?")
-            let warningText2 = String(localized: "This payment provider is in use. Delete anyway?")
+            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete payment service", comment: "Action button")
+            let warningText1 = String(localized: "Are you sure you want to delete this payment service?")
+            let warningText2 = String(localized: "This payment service is in use. Delete anyway?")
             WarningButton(warningText: warningText1,
                           buttonTitle: buttonTitle,
                            buttonIcon: "trash",
@@ -127,7 +127,7 @@ struct ExchangeSectionView: View {
                     showAlert = false
                 }
             }, message: {
-                Text("You will loose all \(currency) of this payment provider")
+                Text("You will loose all \(currency) of this payment service")
             })
         } header: {
             BarGraphHeader(stack: stack.push(),
