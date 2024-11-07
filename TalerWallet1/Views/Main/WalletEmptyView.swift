@@ -29,7 +29,7 @@ struct WalletEmptyView: View {
             Section {
                 let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
                 let settings = Image(systemName: SETTINGS)                      // 􀍟 "gear"
-                Text("Use «\(qrButton) Scan QR codes» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
+                Text("Use «\(qrButton) Scan QR code» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
                 Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")

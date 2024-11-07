@@ -113,7 +113,7 @@ struct QRButton : View  {
     }
 
     var body: some View {
-        let scanText = String(localized: "Scan QR codes", comment: "Button title, a11y")
+        let scanText = String(localized: "Scan QR code", comment: "Button title, a11y")
         let qr = "qrcode.viewfinder"
         Button(action: checkCameraAvailable) {
             if isNavBarItem {
