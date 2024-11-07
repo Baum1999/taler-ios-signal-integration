@@ -49,9 +49,6 @@ struct TalerWallet1App: App {
                 .task {
                     try! await controller.initWalletCore(model, setTesting: false)     // will (and should) crash on failure
                 }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
-                    logger.log("❗️App Did Become Active")
-                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
                     logger.log("❗️App Will Resign")
                     isActive = false
@@ -60,10 +57,9 @@ struct TalerWallet1App: App {
                     logger.log("❗️App Will Enter Foreground")
                     isActive = true
                 }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification, object: nil)) { _ in
-                    logger.log("❗️App Will Terminate")
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
+                    logger.log("❗️App Did Become Active")
                 }
-
         }
         .onChange(of: phase) { newPhase in
             switch newPhase {
