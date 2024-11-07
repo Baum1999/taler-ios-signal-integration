@@ -74,11 +74,10 @@ struct P2pReceiveURIView: View {
                     currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
                 if tosAccepted {
-                    NavigationLink(destination: LazyView {
-                        P2pAcceptDone(stack: stack.push(),
-                              transactionId: peerPushCreditResponse.transactionId,
-                                   incoming: true)
-                    }) {
+                        let destination = P2pAcceptDone(stack: stack.push(),
+                                                transactionId: peerPushCreditResponse.transactionId,
+                                                     incoming: true)
+                        NavigationLink(destination: destination) {
                         Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
                     }
                     .buttonStyle(TalerButtonStyle(type: .prominent))

@@ -15,7 +15,7 @@ struct BalanceCellV: View {
     let amount: Amount
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
-    let balanceDest: LazyView<TransactionsListView>?
+    let balanceDest: TransactionsListView
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast

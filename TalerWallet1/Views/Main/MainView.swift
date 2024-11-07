@@ -12,14 +12,6 @@ import SymLog
 import AVFoundation
 import taler_swift
 
-// Use this to delay instantiation when using `NavigationLink`, etc...
-struct LazyView<Content: View>: View {
-    var content: () -> Content
-    var body: some View {
-        self.content()
-    }
-}
-
 struct MainView: View {
     private let symLog = SymLogV(0)
     let logger: Logger

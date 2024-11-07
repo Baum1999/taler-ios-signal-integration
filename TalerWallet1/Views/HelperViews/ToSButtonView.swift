@@ -25,12 +25,11 @@ struct ToSButtonView: View {
             .talerFont(.body)
             .multilineTextAlignment(.leading)
             .padding()
-        NavigationLink(destination: LazyView {
-            WithdrawTOSView(stack: stack.push(),
-                  exchangeBaseUrl: exchangeBaseUrl,
-                           viewID: viewID,
-                     acceptAction: acceptAction)                                // pop back to here
-        }) {
+        let destination = WithdrawTOSView(stack: stack.push(),
+                                exchangeBaseUrl: exchangeBaseUrl,
+                                         viewID: viewID,
+                                   acceptAction: acceptAction)                  // pop back to here
+        NavigationLink(destination: destination) {
             Text("Terms of Service")  // VIEW_WITHDRAW_TOS
         }.buttonStyle(TalerButtonStyle(type: .prominent))
             .padding(.horizontal)

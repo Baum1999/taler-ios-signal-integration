@@ -95,8 +95,7 @@ extension BalancesSectionView: View {
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
 
-        let balanceDest = LazyView {
-            TransactionsListView(stack: stack.push("\(Self.className())()"),
+        let balanceDest = TransactionsListView(stack: stack.push("\(Self.className())()"),
                                                    scope: scopeInfo,
                                balance: balance,
                        selectedBalance: $selectedBalance,
@@ -104,7 +103,6 @@ extension BalancesSectionView: View {
                           transactions: $completedTransactions,
                        reloadAllAction: loadCompleted,
                        reloadOneAction: reloadOneAction)
-        }
 
         Section {
             BalanceCellV(stack: stack.push("BalanceCell"),

@@ -92,17 +92,15 @@ struct SettingsView: View {
                 let localizedAppName = Bundle.main.bundleName ?? appName
                 let aboutStr = String(localized: "About \(localizedAppName)")
                 NavigationLink {        // whole row like in a tableView
-                    LazyView { AboutView(stack: stack.push(), navTitle: aboutStr) }
+                    AboutView(stack: stack.push(), navTitle: aboutStr)
                 } label: {
                     SettingsItem(name: aboutStr, id1: "about",
                           description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
                 }
 
                 let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
-                let exchangesDest = LazyView {
-                    ExchangeListView(stack: stack.push(exchangesTitle),
-                                  navTitle: exchangesTitle)
-                }
+                let exchangesDest = ExchangeListView(stack: stack.push(exchangesTitle),
+                                                  navTitle: exchangesTitle)
                 NavigationLink {        // whole row like in a tableView
                     exchangesDest
                 } label: {
