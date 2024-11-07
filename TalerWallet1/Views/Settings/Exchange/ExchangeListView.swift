@@ -116,7 +116,7 @@ struct ExchangeListCommonV: View {
         }
 //#endif
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_BANKING, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_PAYMENT_SERVICES, stack: stack.push())
         }
 //        .onNotification(.ExchangeAdded) { notification in
 //            // doesn't need to be received on main thread because we just reload in the background anyway

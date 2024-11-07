@@ -271,7 +271,7 @@ extension WalletCore {
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
                             if let newMinor {
-                                logger.warning("\(newMajor.rawValue, privacy: .public):\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.log("\(newMajor.rawValue, privacy: .public):\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
                             } else {
                                 logger.warning("\(newMajor.rawValue, privacy: .public): \(decoded.transactionId, privacy: .private(mask: .hash))")
                             }

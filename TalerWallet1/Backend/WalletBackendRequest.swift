@@ -123,7 +123,7 @@ struct Product: Codable, Identifiable {
     var quantity: Int?
     var unit: String?
     var price: Amount?
-    var image: String? // URL to a product image
+    var image: String? // product image 128x128 encoded
     var taxes: [Tax]?
     var delivery_date: Timestamp?
 
@@ -209,32 +209,6 @@ struct WalletBackendPreparePayRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
 }
 
-/// A request to confirm a payment.
-struct WalletBackendConfirmPayRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "confirmPay" }
-    func args() -> Args { Args(proposalId: proposalId) }
-    var proposalId: String
-
-    struct Args: Encodable {
-        var proposalId: String
-    }
-
-    struct Response: Decodable {}
-}
-// MARK: -
-/// A request to abort a failed payment.
-struct WalletBackendAbortFailedPaymentRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "abortFailedPayWithRefund" }
-    func args() -> Args { Args(proposalId: proposalId) }
-
-    var proposalId: String
-    struct Args: Encodable {
-        var proposalId: String
-    }
-    
-    struct Response: Decodable {}
-    
-}
 // MARK: -
 struct IntegrationTestArgs: Codable {
     var exchangeBaseUrl: String

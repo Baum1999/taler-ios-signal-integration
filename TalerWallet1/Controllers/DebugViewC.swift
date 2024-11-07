@@ -29,7 +29,7 @@ public let VIEW_EMPTY_WALLET = 10                                   // 10 Wallet
 public let VIEW_BALANCES = VIEW_EMPTY_WALLET + 1                    // 11 BalancesListView
 public let VIEW_SETTINGS = VIEW_BALANCES + 1                        // 12 SettingsView
 public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 13 AboutView
-public let VIEW_BANKING = VIEW_ABOUT + 1                            // 14 ExchangeListView
+public let VIEW_PAYMENT_SERVICES = VIEW_ABOUT + 1                   // 14 ExchangeListView
 
 // MARK: Transactions
 public let VIEW_EMPTY_HISTORY = VIEW_EMPTY_WALLET + 10              // 20 TransactionsEmptyView
