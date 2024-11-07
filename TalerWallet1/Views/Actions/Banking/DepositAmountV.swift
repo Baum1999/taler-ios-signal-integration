@@ -124,7 +124,7 @@ struct DepositAmountContent: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State var checkDepositResult: CheckDepositResult? = nil
+    @State var checkDepositResult: CheckDepositResponse? = nil
     @State private var insufficient = false
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
@@ -154,7 +154,7 @@ struct DepositAmountContent: View {
         if insufficient {
             return ComputeFeeResult.insufficient()
         }
-//    private func fee(ppCheck: CheckDepositResult?) -> Amount? {
+//    private func fee(ppCheck: CheckDepositResponse?) -> Amount? {
         do {
 //            if let ppCheck {
 //                // Outgoing: fee = effective - raw

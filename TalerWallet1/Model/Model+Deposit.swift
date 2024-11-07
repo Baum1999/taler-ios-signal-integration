@@ -98,14 +98,14 @@ struct DepositFees: Codable {
     let wire: Amount
     let refresh: Amount
 }
-struct CheckDepositResult: Codable {
+struct CheckDepositResponse: Codable {
     let totalDepositCost: Amount
     let effectiveDepositAmount: Amount
     let fees: DepositFees
 }
 /// A request to get an exchange's deposit contract terms.
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
-    typealias Response = CheckDepositResult
+    typealias Response = CheckDepositResponse
     func operation() -> String { "prepareDeposit" }         // checkDeposit
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount,
                           clientCancellationId: "cancel") }
@@ -141,7 +141,7 @@ extension WalletModel {
     /// check fees for deposit. No Networking
     @MainActor    // M for MainActor
     func checkDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
-      async throws -> CheckDepositResult {
+      async throws -> CheckDepositResponse {
           let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
           return response
