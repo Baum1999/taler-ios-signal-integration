@@ -28,7 +28,6 @@
                 "major": "done"
             },
 
-            "proposalId": "43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
             "status": "paid",
             "totalRefundRaw": "KUDOS:0",
             "totalRefundEffective": "KUDOS:0"
@@ -75,7 +74,6 @@
                 "major": "done"
             },
 
-            "proposalId": "3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
             "status": "paid",
             "totalRefundRaw": "KUDOS:0",
             "totalRefundEffective": "KUDOS:0",
@@ -115,7 +113,6 @@
                 "major": "done"
             },
 
-            "proposalId": "8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0"
             "status": "paid",
             "totalRefundRaw": "KUDOS:0",
             "totalRefundEffective": "KUDOS:0",
@@ -175,7 +172,6 @@
             "t_s":1683531978
         },
         "transactionId":"txn:payment:43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
-        "proposalId":"43JV9JTB270X1EBH5T59HV9JF2CQW8ZY7M23PS8444BGY4F2Z110",
         "info":{
             "merchant":{
                 "name":"GNU Taler",
@@ -229,7 +225,6 @@
         "refunds":[],
         "timestamp":{ "t_s":1683531996 },
         "transactionId":"txn:payment:3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
-        "proposalId":"3F9DWB6DNAT8WDPRHQ160AZ1G8WNJH23069Q39HDK8Z3EAR804M0",
         "info":{
             "merchant":{
                 "name":"GNU Taler",
@@ -279,7 +274,6 @@
             "t_s":1683531998
         },
         "transactionId":"txn:payment:8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0",
-        "proposalId":"8AG5GVQ7E2FGREEH8V5ADNW1D6NPVD4YCF26763A9JYEQ76AVBX0",
         "info":{
             "merchant":{
                 "name":"GNU Taler",

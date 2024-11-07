@@ -430,7 +430,6 @@ struct RefundInfo: Decodable {
 }
 struct PaymentTransactionDetails: Decodable {
     var info: OrderShortInfo
-    var proposalId: String
     var totalRefundRaw: Amount
     var totalRefundEffective: Amount
     var refundPending: Amount?

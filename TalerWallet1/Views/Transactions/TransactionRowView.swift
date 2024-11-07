@@ -234,7 +234,6 @@ extension Transaction {             // for PreViews
                                       summary: "some product summary",
                                      products: [])
             let pDetails = PaymentTransactionDetails(info: info,
-                                               proposalId: "some proposal ID",
                                            totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
                                      totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),
                                                   refunds: [],
