@@ -14,14 +14,13 @@ extension Transaction {             // for Dummys
         let amount = Amount.zero(currency: dummyCurrency)
         let now = Timestamp.now()
         let common = TransactionCommon(type: .dummy,
-                                    txState: TransactionState(major: .pending),
-                            amountEffective: amount,
-                                  amountRaw: amount,
                               transactionId: EMPTYSTRING,
                                   timestamp: now,
                                      scopes: [],
+                                    txState: TransactionState(major: .pending),
                                   txActions: [],
-                                     kycUrl: nil)
+                                  amountRaw: amount,
+                            amountEffective: amount)
         self = .dummy(DummyTransaction(common: common))
     }
 }
@@ -44,6 +43,7 @@ struct TransactionSummaryV: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -118,6 +118,7 @@ struct TransactionSummaryV: View {
         let pending = transaction.isPending
         let locale = TalerDater.shared.locale
         let (dateString, date) = TalerDater.dateString(from: common.timestamp)
+//        let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
         let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.isDone ? transaction.localizedTypePast
                                            : transaction.localizedType
@@ -456,6 +457,7 @@ struct TransactionSummaryV: View {
                         if !transaction.isDone {
                             let expiration = details.info.expiration
                             let (dateString, date) = TalerDater.dateString(from: expiration)
+//                            let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
                             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
                             let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                             Text("Expires: \(dateString)")

@@ -182,14 +182,13 @@ struct ThreeAmounts_Previews: PreviewProvider {
         var body: some View {
             let scope = ScopeInfo.zero(LONGCURRENCY)
             let common = TransactionCommon(type: .withdrawal,
-                                        txState: TransactionState(major: .done),
-                                amountEffective: Amount(currency: LONGCURRENCY, cent: 10),
-                                      amountRaw: Amount(currency: LONGCURRENCY, cent: 20),
                                   transactionId: "someTxID",
                                       timestamp: Timestamp(from: 1_666_666_000_000),
                                          scopes: [scope],
+                                        txState: TransactionState(major: .done),
                                       txActions: [],
-                                         kycUrl: nil)
+                                      amountRaw: Amount(currency: LONGCURRENCY, cent: 20),
+                                amountEffective: Amount(currency: LONGCURRENCY, cent: 10))
 //            let test = Amount(currency: TESTCURRENCY, cent: 123)
 //            let demo = Amount(currency: DEMOCURRENCY, cent: 123456)
             List {

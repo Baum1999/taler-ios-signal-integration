@@ -137,6 +137,9 @@ enum TransactionMajorState: String, Codable {
 struct TransactionState: Codable, Hashable {
     var major: TransactionMajorState
     var minor: TransactionMinorState?
+
+    var isReady: Bool { minor == .ready }
+    var isKYC: Bool { minor == .kyc || minor == .balanceKyc || minor == .mergeKycRequired }
 }
 
 struct TransactionTransition: Codable {             // Notification
@@ -284,20 +287,29 @@ enum TransactionType: String, Codable {
     }
 }
 
+struct KycAuthTransferInfo: Decodable, Sendable {
+     /// The KYC auth transfer will *not* work if it originates from a different account.
+    var debitPaytoUri: String       /// Payto URI of the account that must make the transfer
+    var accountPub: String          /// Account public key that must be included in the subject
+    var creditPaytoUris: [String]   /// Possible target payto URIs
+}
+
 struct TransactionCommon: Decodable, Sendable {
     var type: TransactionType
-    var txState: TransactionState
-    var amountEffective: Amount
-    var amountRaw: Amount
     var transactionId: String
     var timestamp: Timestamp
     var scopes: [ScopeInfo]
+    var txState: TransactionState
     var txActions: [TxAction]
+    var amountRaw: Amount
+    var amountEffective: Amount
+    var error: TalerErrorDetail?
     var kycUrl: String?
+    var kycAuthTransferInfo: KycAuthTransferInfo?
 
     var isPending       : Bool { txState.major == .pending }
-    var isPendingReady  : Bool { isPending && txState.minor == .ready }
-    var isPendingKYC    : Bool { isPending && (txState.minor == .kyc || txState.minor == .balanceKyc || txState.minor == .mergeKycRequired) }
+    var isPendingReady  : Bool { isPending && txState.isReady }
+    var isPendingKYC    : Bool { isPending && txState.isKYC }
     var isDone          : Bool { txState.major == .done }
     var isAborting      : Bool { txState.major == .aborting }
     var isAborted       : Bool { txState.major == .aborted }

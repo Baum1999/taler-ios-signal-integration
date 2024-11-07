@@ -173,14 +173,14 @@ struct ManualDetailsWireV: View {
 //struct ManualDetailsWire_Previews: PreviewProvider {
 //    static var previews: some View {
 //        let common = TransactionCommon(type: .withdrawal,
-//                                    txState: TransactionState(major: .done),
-//                            amountEffective: Amount(currency: LONGCURRENCY, cent: 110),
-//                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 220),
 //                              transactionId: "someTxID",
 //                                  timestamp: Timestamp(from: 1_666_666_000_000),
+//                                    txState: TransactionState(major: .done),
 //                                  txActions: [])
+//                            amountEffective: Amount(currency: LONGCURRENCY, cent: 110),
+//                                  amountRaw: Amount(currency: LONGCURRENCY, cent: 220),
 //        let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company"
-//        let details = WithdrawalDetails(type: .manual, 
+//        let details = WithdrawalDetails(type: .manual,
 //                                  reservePub: "ReSeRvEpUbLiC_KeY_FoR_WiThDrAwAl",
 //                              reserveIsReady: false,
 //                                   confirmed: false)

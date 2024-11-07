@@ -10,6 +10,12 @@ import os.log
 fileprivate let DATABASE = "talerwalletdb-v30"
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+struct TalerErrorDetail: Codable, Hashable {
+    var code: Int
+    var when: Timestamp?
+    var hint: String?
+}
+
 struct HTTPError: Codable, Hashable {
     var code: Int
     var requestUrl: String?

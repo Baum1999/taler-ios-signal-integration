@@ -15,23 +15,39 @@ struct TransactionRowView: View {
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         available < (contentWidth + valueWidth + 40)
     }
 
-    func topString() -> String {
+    func topString(forA11y: Bool = false) -> String? {
         switch transaction {
             case .payment(let paymentTransaction):
                 return paymentTransaction.details.info.merchant.name
             default:
-                return transaction.isDone ? transaction.localizedTypePast
-                                          : transaction.localizedType
+                let result = transaction.isDone ? transaction.localizedTypePast
+                                                : transaction.localizedType
+                return forA11y ? result
+                : minimalistic ? nil
+                               : result
+        }
+    }
+
+    func amount() -> Amount {
+        switch transaction {
+            case .refresh(let refreshTransaction):
+                let details = refreshTransaction.details
+                return details.refreshInputAmount
+            default:
+                let common = transaction.common
+                let eff = common.amountEffective
+                if !eff.isZero { return eff }
+                return common.amountRaw
         }
     }
 
     var body: some View {
-        let common = transaction.common
         let pending = transaction.isPending
         let needsKYC = transaction.isPendingKYC
         let shouldConfirm = transaction.shouldConfirm
@@ -40,13 +56,13 @@ struct TransactionRowView: View {
         let increasedContrast = colorSchemeContrast == .increased
         let details = transaction.detailsToShow()
         let keys = details.keys
-
+        let common = transaction.common
+        let isZero = common.amountEffective.isZero
         let incoming = common.incoming()
         let textColor = doneOrPending ? .primary
                : colorScheme == .dark ? .secondary
                   : increasedContrast ? Color(.darkGray)
                                       : .secondary  // Color(.tertiaryLabel)
-        let isZero = common.amountEffective.isZero
         let refreshZero = common.type.isRefresh && isZero
         let foreColor = refreshZero ? textColor
                           : pending ? WalletColors().pendingColor(incoming)
@@ -56,18 +72,20 @@ struct TransactionRowView: View {
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm, needsKYC: needsKYC)
-        let amountV = AmountV(scope, isZero ? common.amountRaw : common.amountEffective,
-                              isNegative: isZero ? nil : !incoming, strikethrough: !doneOrPending)
+        let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
+                              strikethrough: !doneOrPending)
             .foregroundColor(foreColor)
 
+        let topA11y = topString(forA11y: true)
         let topString = topString()
-        let centerTop = Text(topString)
+        let centerTop = Text(topString ?? EMPTYSTRING)
             .foregroundColor(textColor)
             .strikethrough(!doneOrPending, color: .red)
             .talerFont(.headline)
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
-            .accessibilityLabel(doneOrPending ? topString : topString +  String(localized: ", canceled", comment: "VoiceOver"))
+            .accessibilityLabel(doneOrPending ? topA11y!
+                                              : topA11y! +  String(localized: ", canceled", comment: "VoiceOver"))
         let centerBottom = TimelineView(.everyMinute) { context in
             let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
             Text(dateString)
@@ -85,7 +103,7 @@ struct TransactionRowView: View {
 
         let layout1 = HStack(spacing: 4) {
                 VStack(alignment: .leading, spacing: 2) {
-                    centerTop
+                    if topString != nil { centerTop }
                     centerBottom
                 }
 #if DEBUG
@@ -96,7 +114,7 @@ struct TransactionRowView: View {
         }
 
         let layout2 = VStack(alignment: .leading, spacing: 2) {
-            centerTop
+            if topString != nil { centerTop }
             HStack(spacing: 6) {
                 centerBottom
 #if DEBUG
@@ -111,16 +129,24 @@ struct TransactionRowView: View {
         }
 
         let layout3 = VStack(spacing: 0) {
-            HStack(spacing: 8) {
+            if topString != nil {
+                HStack(spacing: 8) {
                     centerTop
                     Spacer(minLength: 2)
-                amountV
+                    amountV
+                }
+                centerBottom
+            } else {
+                HStack(spacing: 8) {
+                    centerBottom
+                    Spacer(minLength: 2)
+                    amountV
+                }
             }
-            centerBottom
         }
 
         let layout4 = VStack(alignment: .leading, spacing: 2) {
-            centerTop
+            if topString != nil { centerTop }
             HStack(spacing: -4) {
                 Spacer(minLength: 2)
 #if DEBUG
@@ -207,15 +233,13 @@ extension Transaction {             // for PreViews
         let raw = Amount(currency: LONGCURRENCY, cent: 500)
         let eff = Amount(currency: LONGCURRENCY, cent: incoming ? 480 : 520)
         let common = TransactionCommon(type: incoming ? .withdrawal : .payment,
-                                    txState: TransactionState(major: pending ? TransactionMajorState.pending
-                                                                             : TransactionMajorState.done),
-                            amountEffective: eff,
-                                  amountRaw: raw,
                               transactionId: id,
                                   timestamp: time,
                                      scopes: [],
+                                    txState: txState,
                                   txActions: [.abort],
-                                     kycUrl: nil)
+                                  amountRaw: raw,
+                            amountEffective: eff)
         if incoming {
             // if pending then manual else bank-integrated
             let payto = "payto://iban/SANDBOXX/DE159593?receiver-name=Exchange+Company&amount=KUDOS%3A9.99&message=Taler+Withdrawal+J41FQPJGAP1BED1SFSXHC989EN8HRDYAHK688MQ228H6SKBMV0AG"
