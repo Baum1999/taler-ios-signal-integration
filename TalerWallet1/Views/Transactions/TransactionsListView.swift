@@ -55,6 +55,7 @@ struct TransactionsListView: View {
                 await reloadAllAction(stack.push())
             }
 #endif
+#if false // SCROLLBUTTONS
             .if(count > showUpDown) { view in
                 view.navigationBarItems(trailing: HStack {
                     ArrowUpButton {
@@ -67,6 +68,7 @@ struct TransactionsListView: View {
                     }
                 })
             }
+#endif
         } // ScrollViewReader
         .navigationTitle(navTitle ?? scope.currency)
         .accessibilityHint(String(localized: "Transaction list"))
