@@ -117,8 +117,7 @@ struct TransactionSummaryV: View {
         let common = transaction.common
         let pending = transaction.isPending
         let locale = TalerDater.shared.locale
-        let (dateString, date) = TalerDater.dateString(from: common.timestamp)
-//        let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
+        let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
         let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
         let navTitle2 = transaction.isDone ? transaction.localizedTypePast
                                            : transaction.localizedType
@@ -456,8 +455,7 @@ struct TransactionSummaryV: View {
                         let details = p2pTransaction.details
                         if !transaction.isDone {
                             let expiration = details.info.expiration
-                            let (dateString, date) = TalerDater.dateString(from: expiration)
-//                            let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
+                            let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
                             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
                             let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                             Text("Expires: \(dateString)")

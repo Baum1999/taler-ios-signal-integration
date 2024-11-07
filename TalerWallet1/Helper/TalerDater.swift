@@ -8,16 +8,22 @@ import taler_swift
 public class TalerDater: DateFormatter {
     public static let shared = TalerDater()
 
-    static func relativeDate(from: TimeInterval) -> String? {
+    static func relativeDate(_ from: TimeInterval, _ minimalistic: Bool) -> String? {
         if from > 0 {       // transactions should always be in the past
             let minute = from / 60.0                // from is in seconds
-            if minute < 1 { return String(localized: "Right now") }
-            if minute < 2 { return String(localized: "1 minute ago") }
-            if minute < 55 { return String(localized: "\(Int(minute)) minutes ago") }
-            if minute < 60 { return String(localized: "About an hour ago") }
-            if minute < 80 { return String(localized: "1 hour ago") }
-            if minute < 105 { return String(localized: "About 1½ hours ago") }
-            if minute < 125 { return String(localized: "About 2 hours ago") }
+            if minute < 1 { return minimalistic ? String(localized: "Now")
+                                                : String(localized: "Right now") }
+            if minute < 2 { return minimalistic ? String(localized: "1 min ago")
+                                                : String(localized: "1 minute ago") }
+            if minute < 55 { return minimalistic ? String(localized: "\(Int(minute)) min ago")
+                                                 : String(localized: "\(Int(minute)) minutes ago") }
+            if minute < 60 { return minimalistic ? String(localized: "~ 1 hour ago")
+                                                 : String(localized: "About an hour ago") }
+            if minute < 75 { return String(localized: "1 hour ago") }
+            if minute < 105 { return minimalistic ? String(localized: "~ 1½ hours ago")
+                                                  : String(localized: "About 1½ hours ago") }
+            if minute < 135 { return minimalistic ? String(localized: "~ 2 hours ago")
+                                                  : String(localized: "About 2 hours ago") }
             let hour = minute / 60.0
             let calendar = Calendar.current
             let now = Date.now
@@ -37,13 +43,13 @@ public class TalerDater: DateFormatter {
     }
 
     /// produces a random date string between `now` and m+h+d (edit values after 60x)
-    public static func randomDateStr() -> String {
+    public static func randomDateStr(_ minimalistic: Bool) -> String {
         let m =       60*15
         let h =    60*60*9
         let d = 24*60*60*22
         let t = m+h+d
         let randomTime = Int.random(in:1...t)
-        if let randomDateStr = relativeDate(from: Double(randomTime)) {
+        if let randomDateStr = relativeDate(Double(randomTime), minimalistic) {
             return randomDateStr
         } else {    // t is too large for a relative date
                     // return absolute date with random locale
@@ -61,7 +67,7 @@ public class TalerDater: DateFormatter {
 //    }
 
     /// converts a timestamp into a formatted date string
-    public static func dateString(from: Timestamp, relative: Bool = false) -> (String, Date?) {
+    public static func dateString(_ from: Timestamp, _ minimalistic: Bool, relative: Bool = false) -> (String, Date?) {
         do {
             let milliseconds = try from.milliseconds()
             let date = Date(milliseconds: milliseconds)
@@ -69,7 +75,7 @@ public class TalerDater: DateFormatter {
             if relative {
                 let now = Date.now
                 let timeInterval = now.timeIntervalSince(date)
-                if let relativeDate = relativeDate(from: timeInterval) {
+                if let relativeDate = relativeDate(timeInterval, minimalistic) {
                     return (relativeDate, date)
                 }
             }
@@ -90,7 +96,7 @@ public class TalerDater: DateFormatter {
     }
 
     public static func dateString() -> String {
-        return shared.string(from: Date())
+        shared.string(from: Date())
     }
 
     private override init() {
@@ -109,16 +115,15 @@ public class TalerDater: DateFormatter {
 
 extension Date {
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
-        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+        lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
 }
 extension TimeInterval {
-
     var seconds: Int {
-        return Int(self.rounded())
+        Int(self.rounded())
     }
 
     var milliseconds: Int {
-        return Int(self * 1000)
+        Int(self * 1000)
     }
 }

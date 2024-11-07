@@ -87,7 +87,7 @@ struct TransactionRowView: View {
             .accessibilityLabel(doneOrPending ? topA11y!
                                               : topA11y! +  String(localized: ", canceled", comment: "VoiceOver"))
         let centerBottom = TimelineView(.everyMinute) { context in
-            let (dateString, date) = TalerDater.dateString(from: common.timestamp, relative: true)
+            let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic, relative: true)
             Text(dateString)
                 .foregroundColor(textColor)
                 .talerFont(.callout)

@@ -19,6 +19,7 @@ struct P2pReceiveURIView: View {
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -59,7 +60,7 @@ struct P2pReceiveURIView: View {
                                       summary: peerPushCreditResponse.contractTerms.summary,
                                      merchant: nil)
                     let expiration = peerPushCreditResponse.contractTerms.purse_expiration
-                    let (dateString, date) = TalerDater.dateString(from: expiration)
+                    let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
                     let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
                     let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
                     Text("Expires: \(dateString)")
