@@ -18,19 +18,13 @@ struct SendAmountV: View {
     @Binding var summary: String
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-
-    func navTitle(_ currency: String, _ condition: Bool = false) -> String {
-        condition ? String(localized: "NavTitle_Send_Currency",
-                        defaultValue: "Send \(currency)",
-                             comment: "NavTitle: Send 'currency'")
-                  : String(localized: "NavTitle_Send",
-                        defaultValue: "Send",
-                             comment: "NavTitle: Send")
-    }
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
     private func viewDidLoad() async {
         if let selectedBalance {
@@ -54,16 +48,16 @@ struct SendAmountV: View {
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currencySymbol = currencyInfo.symbol
-        let navA11y = navTitle(currencyInfo.name)
-        let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
+        let navA11y = SendAmountView.navTitle(currencyInfo.name)                // always include currency for a11y
+        let navTitle = SendAmountView.navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex,
-                      onlyNonZero: true)
+                ScopePicker(value: $balanceIndex, onlyNonZero: true)            // can only send what exists
                 { index in
                     balanceIndex = index
                     balance = controller.balances[index]
@@ -71,24 +65,43 @@ struct SendAmountV: View {
                 .padding(.horizontal)
                 .padding(.bottom, 4)
             }
-            SendAmountContent(stack: stack.push(),
-                       currencyInfo: $currencyInfo,
-                            balance: $balance,
-                       balanceIndex: $balanceIndex,
-                     amountLastUsed: $amountLastUsed,
-                            summary: $summary)
+            if let balance {
+                SendAmountView(stack: stack.push(),
+                             balance: balance,
+                      amountLastUsed: $amountLastUsed,
+                    amountToTransfer: $amountToTransfer,
+                     amountAvailable: $amountAvailable,
+                             summary: $summary)
+            } else {    // no balance - Yikes
+                Text("No balance. There seems to be a problem with the database...")
+            }
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-            .onAppear {
-                DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-                symLog.log("❗️ \(navTitle) onAppear")
-            }
-            .onDisappear {
-                symLog.log("❗️ \(navTitle) onDisappear")
-            }
+//            .onAppear {
+//                DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
+//                symLog.log("❗️ \(navTitle) onAppear")
+//            }
+//            .onDisappear {
+//                symLog.log("❗️ \(navTitle) onDisappear")
+//            }
             .task { await viewDidLoad() }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
+                // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
+                symLog.log("❗️ task \(balanceIndex)")
+                if let balance {
+                    let scope = balance.scopeInfo
+                    amountToTransfer.setCurrency(scope.currency)
+                    currencyInfo = controller.info(for: scope, controller.currencyTicker)
+                    do {
+                        amountAvailable = try await model.getMaxPeerPushDebitAmountM(scope)
+                    } catch {
+                        // TODO: Error
+                        amountAvailable = balance.available
+                    }
+                }
+            }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
@@ -101,221 +114,6 @@ struct SendAmountV: View {
             scrollView
         }
     }
-}
-// MARK: -
-struct SendAmountContent: View {
-    private let symLog = SymLogV()
-    let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo
-    @Binding var balance: Balance?
-    @Binding var balanceIndex: Int
-    @Binding var amountLastUsed: Amount
-    @Binding var summary: String
-
-    @EnvironmentObject private var controller: Controller
-    @EnvironmentObject private var model: WalletModel
-    @AppStorage("minimalistic") var minimalistic: Bool = false
-
-    @State var peerPushCheck: CheckPeerPushDebitResponse? = nil
-    @State private var expireDays = SEVENDAYS
-    @State private var insufficient = false
-//    @State private var feeAmount: Amount? = nil
-    @State private var feeStr: String = EMPTYSTRING
-    @State private var buttonSelected = false
-    @State private var shortcutSelected = false
-    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
-    @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
-    @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
-    @State private var exchange: Exchange? = nil                                // wg. noFees
-
-    @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
-
-    private func shortcutAction(_ shortcut: Amount) {
-        amountShortcut = shortcut
-        shortcutSelected = true
-    }
-    private func buttonAction() { buttonSelected = true }
-
-    private func feeLabel(_ feeString: String) -> String {
-        feeString.count > 0 ? String(localized: "+ \(feeString) fee")
-                            : EMPTYSTRING
-    }
-
-    private func fee(raw: Amount, effective: Amount) -> Amount? {
-        do {     // Outgoing: fee = effective - raw
-            let fee = try effective - raw
-            return fee
-        } catch {}
-        return nil
-    }
-
-    private func feeIsNotZero() -> Bool? {
-        if let hasNoFees = exchange?.noFees {
-            if hasNoFees {
-                return nil      // this exchange never has fees
-            }
-        }
-        return peerPushCheck == nil ? false
-                                    : true // TODO: !(feeAmount?.isZero ?? false)
-    }
-
-    private func computeFeeSend(_ amount: Amount) async -> ComputeFeeResult? {
-        if amount.isZero {
-            return ComputeFeeResult.zero()
-        }
-        let insufficient = (try? amount > amountAvailable) ?? true
-        if insufficient {
-            return ComputeFeeResult.insufficient()
-        }
-        do {
-            let ppCheck = try await model.checkPeerPushDebitM(amount, scope: scopeInfo, viewHandles: true)
-            let raw = ppCheck.amountRaw
-            let effective = ppCheck.amountEffective
-            if let fee = fee(raw: raw, effective: effective) {
-                feeStr = fee.formatted(currencyInfo, isNegative: false)
-                symLog.log("Fee = \(feeStr)")
-                let insufficient = (try? effective > amountAvailable) ?? true
-
-                peerPushCheck = ppCheck
-                let feeLabel = feeLabel(feeStr)
-//                announce("\(amountVoiceOver), \(feeLabel)")
-                return ComputeFeeResult(insufficient: insufficient,
-                                           feeAmount: fee,
-                                              feeStr: feeLabel,
-                                            numCoins: nil)
-            } else {
-                peerPushCheck = nil
-            }
-        } catch {
-            // handle cancel, errors
-            symLog.log("❗️ \(error), \(error.localizedDescription)")
-            switch error {
-                case let walletError as WalletBackendError:
-                    switch walletError {
-                        case .walletCoreError(let wError): 
-                            if wError?.code == 7027 {
-                                return ComputeFeeResult.insufficient()
-                            }
-                        default: break
-                    }
-                default: break
-            }
-        }
-        return nil
-    }
-
-    var body: some View {
-#if PRINT_CHANGES
-        let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-#endif
-        Group {
-            if let balance {
-                let scopeInfo = balance.scopeInfo
-                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
-//              let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
-//              let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-//              let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
-
-                let inputDestination = P2PSubjectV(stack: stack.push(),
-                                                   scope: scopeInfo,
-                                                feeLabel: feeLabel(feeStr),
-                                            feeIsNotZero: feeIsNotZero(),
-                                                outgoing: true,
-                                        amountToTransfer: $amountToTransfer,    // from the textedit
-                                                 summary: $summary,
-                                              expireDays: $expireDays)
-                let shortcutDestination = P2PSubjectV(stack: stack.push(),
-                                                      scope: scopeInfo,
-                                                   feeLabel: nil,
-                                               feeIsNotZero: feeIsNotZero(),
-                                                   outgoing: true,
-                                           amountToTransfer: $amountShortcut,   // from the tapped shortcut button
-                                                    summary: $summary,
-                                                 expireDays: $expireDays)
-                AmountInputV(stack: stack.push(),
-                             scope: scopeInfo,
-                   amountAvailable: $amountAvailable,
-                       amountLabel: nil,        // will use "Available: xxx", trailing
-                  amountToTransfer: $amountToTransfer,
-                    amountLastUsed: amountLastUsed,
-                           wireFee: nil,
-                           summary: $summary,
-                    shortcutAction: shortcutAction,
-                      buttonAction: buttonAction,
-                     feeIsNegative: false,
-                        computeFee: computeFeeSend)
-                .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                    ) // shortcutDestination
-                .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                    ) // inputDestination
-            } else {    // no balance - Yikes
-                Text("No balance. There seems to be a problem with the database...")
-            }
-        } // Group
-        .task { // getMaxPeerPushDebit on first appearance
-            if scopeInfo.type != .madeUp {
-                do {
-                    symLog.log("❗️ task \(scopeInfo.currency)")
-                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo, viewHandles: true)
-                    return
-                } catch {}
-            }
-            amountAvailable = Amount.zero(currency: amountToTransfer.currencyStr)
-        }
-        .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-            // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
-            symLog.log("❗️ task \(balanceIndex)")
-            if let balance {
-                scopeInfo = balance.scopeInfo
-                amountToTransfer.setCurrency(scopeInfo.currency)
-                currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
-                do {
-                    amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
-                } catch {
-                    // TODO: Error
-                    amountAvailable = balance.available
-                }
-            }
-        }
-//        .task(id: amountToTransfer.value) {
-//            if exchange == nil {
-//                if let url = scopeInfo.url {
-//                    exchange = try? await model.getExchangeByUrl(url: url)
-//                }
-//            }
-//            do {
-//                insufficient = try amountToTransfer > amountAvailable
-//            } catch {
-//                print("Yikes❗️ insufficient failed❗️")
-//                insufficient = true
-//            }
-//
-//            if insufficient {
-//                announce("\(amountVoiceOver), \(insufficientLabel2)")
-//            } else if amountToTransfer.isZero {
-//                feeStr = EMPTYSTRING
-//            } else {
-//                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
-//                // TODO: set from exchange
-////                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-//                    if let feeAmount = fee(ppCheck: ppCheck) {
-//                        feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-//                        let feeLabel = feeLabel(feeStr)
-//                        announce("\(amountVoiceOver), \(feeLabel)")
-//                    } else {
-//                        feeStr = EMPTYSTRING
-//                        announce(amountVoiceOver)
-//                    }
-//                    peerPushCheck = ppCheck
-//                } else {
-//                    peerPushCheck = nil
-//                }
-//            }
-//        }
-    } // body
 }
 // MARK: -
 #if DEBUG
