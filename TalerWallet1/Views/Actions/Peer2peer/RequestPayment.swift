@@ -22,6 +22,7 @@ struct RequestPayment: View {
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func viewDidLoad() async {
         if let selectedBalance {
@@ -41,19 +42,30 @@ struct RequestPayment: View {
                              comment: "NavTitle: Request")
     }
 
+    @MainActor
+    private func newBalance() async {
+        // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
+        symLog.log("❗️ task \(balanceIndex)")
+        if let balance {
+            let scopeInfo = balance.scopeInfo
+            amountToTransfer.setCurrency(scopeInfo.currency)
+            currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
 #endif
         let currencySymbol = currencyInfo.symbol
-        let navA11y = navTitle(currencyInfo.name)
+        let navA11y = navTitle(currencyInfo.name)                               // always include currency for a11y
         let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex,
-                      onlyNonZero: false) { index in
+                ScopePicker(value: $balanceIndex, onlyNonZero: false)
+                { index in
                         balanceIndex = index
                         balance = controller.balances[index]
                 }
@@ -64,6 +76,7 @@ struct RequestPayment: View {
                                 balance: $balance,
                            balanceIndex: $balanceIndex,
                          amountLastUsed: $amountLastUsed,
+                       amountToTransfer: $amountToTransfer,
                                 summary: $summary)
         } // ScrollView
             .navigationTitle(navTitle)
@@ -77,6 +90,7 @@ struct RequestPayment: View {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
             .task { await viewDidLoad() }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
@@ -92,11 +106,12 @@ struct RequestPayment: View {
 }
 // MARK: -
 struct RequestPaymentContent: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var balance: Balance?
     @Binding var balanceIndex: Int
     @Binding var amountLastUsed: Amount
+    @Binding var amountToTransfer: Amount
     @Binding var summary: String
 
     @EnvironmentObject private var controller: Controller
@@ -109,7 +124,6 @@ struct RequestPaymentContent: View {
     @State private var feeStr: String = EMPTYSTRING
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
-    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
     @State private var exchange: Exchange? = nil                                // wg. noFees
@@ -156,7 +170,7 @@ struct RequestPaymentContent: View {
         }
         do {
             let baseURL = exchange?.exchangeBaseUrl
-            let ppCheck = try await model.checkPeerPullCreditM(amount, scope: scopeInfo, viewHandles: true)
+            let ppCheck = try await model.checkPeerPullCredit(amount, scope: scopeInfo, viewHandles: true)
             let raw = ppCheck.amountRaw
             let effective = ppCheck.amountEffective
             if let fee = fee(raw: raw, effective: effective) {
@@ -236,32 +250,14 @@ struct RequestPaymentContent: View {
                      feeIsNegative: true,
                         computeFee: computeFee)
                 .background(actions)
-            }
-        } // Group
-        .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-            // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
-            symLog.log("❗️ task \(balanceIndex)")
+            } } // if, Group
+            .task {
                 scopeInfo = balance.scopeInfo
-                amountToTransfer.setCurrency(scopeInfo.currency)
             }
         } else {    // no balance - Yikes
             Text("No balance. There seems to be a problem with the database...")
         }
-//        .task(id: amountToTransfer.value) {
-//            if exchange == nil {
-//                if let url = scopeInfo.url {
-//                    exchange = try? await model.getExchangeByUrl(url: url)
-//                }
-//            }
-//            if amountToTransfer.isZero {
-// //               fee = EMPTYSTRING
-//            } else {
-//                let baseURL = exchange?.exchangeBaseUrl
-// //               peerPullCheck = try? await model.checkPeerPullCreditM(amountToTransfer, exchangeBaseUrl: nil)
-//                peerPullCheck = try? await model.checkPeerPullCreditM(baseURL, amount: amountToTransfer)
-//            }
-//        }
-    }
+    } // body
 }
 // MARK: -
 #if DEBUG

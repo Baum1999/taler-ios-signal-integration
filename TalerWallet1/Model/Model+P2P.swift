@@ -26,8 +26,8 @@ fileprivate struct AmountResponse: Codable {
 fileprivate struct GetMaxPeerPushDebitAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
     func operation() -> String { "getMaxPeerPushDebitAmount" }
-    func args() -> Args { Args(currency: scope.currency, restrictScope: scope) }
-
+    func args() -> Args { Args(currency: scope.currency,
+                          restrictScope: scope) }
     var scope: ScopeInfo
     struct Args: Encodable {
         var currency: String
@@ -35,14 +35,14 @@ fileprivate struct GetMaxPeerPushDebitAmount: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor                 // M for MainActor
-    func getMaxPeerPushDebitAmountM(_ scope: ScopeInfo, viewHandles: Bool = false)
+    nonisolated func getMaxPeerPushDebitAmount(_ scope: ScopeInfo,
+                                           viewHandles: Bool = false)
       async throws -> Amount {
         let request = GetMaxPeerPushDebitAmount(scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.rawAmount
     }
-} // getMaxPeerPushAmountM
+} // getMaxPeerPushAmount
 // MARK: - check PeerPushDebit
 struct CheckPeerPushDebitResponse: Codable {
     let exchangeBaseUrl: String?                // API "2:0:1"
@@ -53,8 +53,9 @@ struct CheckPeerPushDebitResponse: Codable {
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
     func operation() -> String { "checkPeerPushDebit" }
-    func args() -> Args { Args(amount: amount, restrictScope: scope, clientCancellationId: "cancel") }
-
+    func args() -> Args { Args(amount: amount,
+                        restrictScope: scope,
+                 clientCancellationId: "cancel") }
     var amount: Amount
     var scope: ScopeInfo
     struct Args: Encodable {
@@ -64,16 +65,15 @@ fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor          // M for MainActor
-    func checkPeerPushDebitM(_ amount: Amount,
-                                scope: ScopeInfo,
-                          viewHandles: Bool = false)
+    nonisolated func checkPeerPushDebit(_ amount: Amount,
+                                           scope: ScopeInfo,
+                                     viewHandles: Bool = false)
       async throws -> CheckPeerPushDebitResponse {
         let request = CheckPeerPushDebit(amount: amount, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // checkPeerPushDebitM
+} // checkPeerPushDebit
 // MARK: - Initiate PeerPushDebit
 /// Initiate an outgoing peer push payment, send coins
 struct InitiatePeerPushDebitResponse: Codable {
@@ -90,7 +90,6 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     func args() -> Args { Args(//exchangeBaseUrl: baseURL,
                                  restrictScope: scope,
                           partialContractTerms: terms) }
-
     var scope: ScopeInfo
 //    var baseURL: String?
     var terms: PeerContractTerms
@@ -101,16 +100,15 @@ fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor             // M for MainActor
-    func initiatePeerPushDebitM(/*_ baseURL: String?,*/ scope: ScopeInfo, terms: PeerContractTerms, viewHandles: Bool = false)
-    async throws -> InitiatePeerPushDebitResponse {
-        let request = InitiatePeerPushDebit(//exchangeBaseUrl: baseURL,
-                                                      scope: scope,
-                                                      terms: terms)
+    nonisolated func initiatePeerPushDebit(scope: ScopeInfo,
+                                           terms: PeerContractTerms,
+                                     viewHandles: Bool = false)
+      async throws -> InitiatePeerPushDebitResponse {
+        let request = InitiatePeerPushDebit(scope: scope, terms: terms)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // initiatePeerPushDebitM
+} // initiatePeerPushDebit
 // MARK: - PeerPullCredit
 /// Check fees before sending a request(invoice) to another wallet
 struct CheckPeerPullCreditResponse: Codable {
@@ -137,16 +135,15 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor           // M for MainActor
-    func checkPeerPullCreditM(_ amount: Amount,
-                                 scope: ScopeInfo,
-                           viewHandles: Bool = false)
+    nonisolated func checkPeerPullCredit(_ amount: Amount,
+                                            scope: ScopeInfo,
+                                      viewHandles: Bool = false)
       async throws -> CheckPeerPullCreditResponse {
         let request = CheckPeerPullCredit(amount: amount, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // checkPeerPullCreditM
+} // checkPeerPullCredit
 // - - - - - -
 /// Initiate an outgoing peer pull payment, send a request(invoice)
 struct InitiatePeerPullCreditResponse: Codable {
@@ -157,7 +154,7 @@ fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPullCreditResponse
     func operation() -> String { "initiatePeerPullCredit" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
-                                 partialContractTerms: partialContractTerms) }
+                          partialContractTerms: partialContractTerms) }
 
     var exchangeBaseUrl: String?
     var partialContractTerms: PeerContractTerms
@@ -167,15 +164,16 @@ fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func initiatePeerPullCreditM(_ baseURL: String?, terms: PeerContractTerms, viewHandles: Bool = false)  // M for MainActor
+    nonisolated func initiatePeerPullCredit(_ baseURL: String?,
+                                                terms: PeerContractTerms,
+                                          viewHandles: Bool = false)
       async throws -> InitiatePeerPullCreditResponse {
         let request = InitiatePeerPullCredit(exchangeBaseUrl: baseURL,
                                         partialContractTerms: terms)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // initiatePeerPullCreditM
+} // initiatePeerPullCredit
 // MARK: - PeerPushCredit
 /// Prepare an incoming peer push payment, receive coins
 struct PreparePeerPushCreditResponse: Codable {
@@ -198,14 +196,14 @@ fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func preparePeerPushCreditM(_ talerUri: String, viewHandles: Bool = false)       // M for MainActor
+    nonisolated func preparePeerPushCredit(_ talerUri: String,
+                                          viewHandles: Bool = false)
       async throws -> PreparePeerPushCreditResponse {
         let request = PreparePeerPushCredit(talerUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // preparePeerPushCreditM
+} // preparePeerPushCredit
 // - - - - - -
 /// Accept an incoming peer push payment
 fileprivate struct AcceptPeerPushCredit: WalletBackendFormattedRequest {
@@ -219,14 +217,14 @@ fileprivate struct AcceptPeerPushCredit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func acceptPeerPushCreditM(_ transactionId: String, viewHandles: Bool = false)       // M for MainActor
+    nonisolated func acceptPeerPushCredit(_ transactionId: String,
+                                              viewHandles: Bool = false)
       async throws -> Decodable {
         let request = AcceptPeerPushCredit(transactionId: transactionId)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // acceptPeerPushCreditM
+} // acceptPeerPushCredit
 // MARK: - PeerPullDebit
 /// Prepare an incoming peer push request(invoice), pay coins
 struct PreparePeerPullDebitResponse: Codable {
@@ -249,14 +247,14 @@ fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func preparePeerPullDebitM(_ talerUri: String, viewHandles: Bool = false)       // M for MainActor
+    nonisolated func preparePeerPullDebit(_ talerUri: String,
+                                         viewHandles: Bool = false)
       async throws -> PreparePeerPullDebitResponse {
         let request = PreparePeerPullDebit(talerUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // preparePeerPullDebitM
+} // preparePeerPullDebit
 // - - - - - -
 /// Confirm incoming peer push request(invoice) and pay
 fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
@@ -270,11 +268,11 @@ fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor
-    func confirmPeerPullDebitM(_ transactionId: String, viewHandles: Bool = false)       // M for MainActor
+    nonisolated func confirmPeerPullDebit(_ transactionId: String,
+                                              viewHandles: Bool = false)
       async throws -> Decodable {
         let request = ConfirmPeerPullDebit(transactionId: transactionId)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-} // confirmPeerPullDebitM
+} // confirmPeerPullDebit

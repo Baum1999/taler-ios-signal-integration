@@ -26,6 +26,7 @@ struct SendAmountV: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
+    @MainActor
     private func viewDidLoad() async {
         if let selectedBalance {
             if selectedBalance.available.isZero {
@@ -42,6 +43,23 @@ struct SendAmountV: View {
         } else {
             balanceIndex = 0
             balance = (controller.balances.count > 0) ? controller.balances[0] : nil
+        }
+    }
+
+    @MainActor
+    private func newBalance() async {
+        // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
+        symLog.log("❗️ task \(balanceIndex)")
+        if let balance {
+            let scope = balance.scopeInfo
+            amountToTransfer.setCurrency(scope.currency)
+            currencyInfo = controller.info(for: scope, controller.currencyTicker)
+            do {
+                amountAvailable = try await model.getMaxPeerPushDebitAmount(scope)
+            } catch {
+                // TODO: Error
+                amountAvailable = balance.available
+            }
         }
     }
 
@@ -87,21 +105,7 @@ struct SendAmountV: View {
 //                symLog.log("❗️ \(navTitle) onDisappear")
 //            }
             .task { await viewDidLoad() }
-            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-                // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
-                symLog.log("❗️ task \(balanceIndex)")
-                if let balance {
-                    let scope = balance.scopeInfo
-                    amountToTransfer.setCurrency(scope.currency)
-                    currencyInfo = controller.info(for: scope, controller.currencyTicker)
-                    do {
-                        amountAvailable = try await model.getMaxPeerPushDebitAmountM(scope)
-                    } catch {
-                        // TODO: Error
-                        amountAvailable = balance.available
-                    }
-                }
-            }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {

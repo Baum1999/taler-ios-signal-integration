@@ -35,6 +35,37 @@ struct P2PReadyV: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    @MainActor
+    private func initiateP2P() async {
+        symLog.log(".task")
+        guard transactionStarted == false else {
+// TODO:    logger.warning("Trying to start P2P a second time")
+            symLog.log("Yikes❗️ Trying to start P2P a second time")
+            return
+        }
+        transactionStarted = true
+        let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)   // 24h
+                                                              : expireDays > 5  ? 60        //  1h
+                                                                                : 3)        //  3m
+                                      : Timestamp.inSomeDays(expireDays)
+        let terms = PeerContractTerms(amount: amountToTransfer,
+                                     summary: summary,
+                            purse_expiration: timestamp)
+        if outgoing {
+            // TODO: let user choose baseURL
+            if let response = try? await model.initiatePeerPushDebit(scope: scope, terms: terms) {
+                // will switch from WithdrawProgressView to TransactionSummaryV
+                transactionId = response.transactionId
+            }
+        } else {
+            // TODO: let user choose baseURL
+            if let response = try? await model.initiatePeerPullCredit(nil, terms: terms) {
+                // will switch from WithdrawProgressView to TransactionSummaryV
+                transactionId = response.transactionId
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -70,6 +101,7 @@ struct P2PReadyV: View {
             }
         }
         .navigationTitle(navTitle)
+        .task { await initiateP2P() }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_READY, stack: stack.push())
 //            print("❗️ P2PReadyV onAppear")
@@ -77,34 +109,6 @@ struct P2PReadyV: View {
         .onDisappear {
 //            print("❗️ P2PReadyV onDisappear")
         }
-        .task(id: amountToTransfer.value) {
-            symLog.log(".task")
-            guard transactionStarted == false else {
-// TODO:               logger.warning("Try to start P2P a second time")
-                symLog.log("Yikes❗️ Try to start P2P a second time")
-                return
-            }
-            transactionStarted = true
-            let timestamp = developerMode ? Timestamp.inSomeMinutes(expireDays > 20 ? (24*60)
-                                                                  : expireDays > 5 ? 60 : 3)
-                                          : Timestamp.inSomeDays(expireDays)
-            let terms = PeerContractTerms(amount: amountToTransfer,
-                                         summary: summary,
-                                purse_expiration: timestamp)
-            if outgoing {
-                // TODO: let user choose baseURL
-                if let response = try? await model.initiatePeerPushDebitM(scope: scope, terms: terms) {
-                    // will switch from WithdrawProgressView to TransactionSummaryV
-                    transactionId = response.transactionId
-                }
-            } else {
-                // TODO: let user choose baseURL
-                if let response = try? await model.initiatePeerPullCreditM(nil, terms: terms) {
-                    // will switch from WithdrawProgressView to TransactionSummaryV
-                    transactionId = response.transactionId
-                }
-            }
-        } // task
     }
 }
 // MARK: -

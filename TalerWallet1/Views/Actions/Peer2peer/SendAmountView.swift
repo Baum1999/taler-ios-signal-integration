@@ -73,6 +73,7 @@ struct SendAmountView: View {
                                     : true // TODO: !(feeAmount?.isZero ?? false)
     }
 
+    @MainActor
     private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
         if amount.isZero {
             return ComputeFeeResult.zero()
@@ -83,7 +84,7 @@ struct SendAmountView: View {
         }
         if let scopeInfo {
             do {
-                let ppCheck = try await model.checkPeerPushDebitM(amount, scope: scopeInfo, viewHandles: true)
+                let ppCheck = try await model.checkPeerPushDebit(amount, scope: scopeInfo, viewHandles: true)
                 let raw = ppCheck.amountRaw
                 let effective = ppCheck.amountEffective
                 if let fee = fee(raw: raw, effective: effective) {
@@ -118,6 +119,19 @@ struct SendAmountView: View {
             }
         }
         return nil
+    }
+
+    @MainActor
+    private func newBalance() async {
+        let scope = balance.scopeInfo
+        symLog.log("❗️ task \(scope.currency)")
+
+        if let available = try? await model.getMaxPeerPushDebitAmount(scope, viewHandles: true) {
+            amountAvailable = available
+        } else {
+            amountAvailable = Amount.zero(currency: scope.currency)
+        }
+        scopeInfo = scope
     }
 
     var body: some View {
@@ -169,23 +183,13 @@ struct SendAmountView: View {
                 Text(" ")
             }
         } // Group
+        .task(id: balance) { await newBalance() }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
             symLog.log("❗️ onAppear")
         }
         .onDisappear {
             symLog.log("❗️ onDisappear")
-        }
-        .task(id: balance) { // getMaxPeerPushDebit on first appearance
-            let scope = balance.scopeInfo
-            symLog.log("❗️ task \(scope.currency)")
-
-            if let available = try? await model.getMaxPeerPushDebitAmountM(scope, viewHandles: true) {
-                amountAvailable = available
-            } else {
-                amountAvailable = Amount.zero(currency: scope.currency)
-            }
-            scopeInfo = scope
         }
 //        .task(id: amountToTransfer.value) {
 //            if exchange == nil {

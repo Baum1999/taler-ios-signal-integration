@@ -1,6 +1,9 @@
 /*
- * This file is part of GNU Taler, ©2022-23 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
  * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
  */
 import SwiftUI
 import taler_swift
@@ -31,7 +34,7 @@ struct P2pReceiveURIView: View {
     @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
-        if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {
+        if let ppResponse = try? await model.preparePeerPushCredit(url.absoluteString) {
             let baseUrl = ppResponse.exchangeBaseUrl
             exchange = try? await model.getExchangeByUrl(url: baseUrl)
             await controller.checkCurrencyInfo(for: baseUrl, model: model)
@@ -42,6 +45,10 @@ struct P2pReceiveURIView: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         VStack {
             if let peerPushCreditResponse {
                 let tosAccepted = exchange?.tosStatus == .accepted
@@ -106,12 +113,11 @@ struct P2pReceiveURIView: View {
                 LoadingView(scopeInfo: nil, message: message)
             }
         }
+        // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
+        .task { await viewDidLoad() }
         .onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
-        }
-        .task { // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted
-            await viewDidLoad()
         }
     }
 }

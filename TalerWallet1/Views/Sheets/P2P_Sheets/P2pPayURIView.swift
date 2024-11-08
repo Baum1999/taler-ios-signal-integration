@@ -26,6 +26,14 @@ struct P2pPayURIView: View {
 
     let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
 
+    @MainActor
+    private func viewDidLoad() async {
+        do {
+            symLog.log(".task")
+            peerPullDebitResponse = try? await model.preparePeerPullDebit(url.absoluteString)
+        }
+    }
+
     var body: some View {
         VStack {
             if let peerPullDebitResponse {
@@ -82,10 +90,7 @@ struct P2pPayURIView: View {
                 let message: String? = nil
 #endif
                 LoadingView(scopeInfo: nil, message: message)
-                    .task { do {
-                        symLog.log(".task")
-                        peerPullDebitResponse = try? await model.preparePeerPullDebitM(url.absoluteString)
-                    } }
+                    .task { await viewDidLoad() }
             }
         }
         .onAppear() {

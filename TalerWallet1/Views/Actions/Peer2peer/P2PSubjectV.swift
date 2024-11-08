@@ -56,6 +56,21 @@ struct P2PSubjectV: View {
                                    comment: "NavTitle: Request 'amountStr'")
     }
 
+    @MainActor
+    private func checkPeerPushDebit() async {
+        if outgoing && feeLabel == nil {
+            if let ppCheck = try? await model.checkPeerPushDebit(amountToTransfer, scope: scope) {
+                if let feeAmount = p2pFee(ppCheck: ppCheck) {
+                    let feeStr = feeAmount.formatted(scope, isNegative: false)
+                    myFeeLabel = String(localized: "+ \(feeStr) fee")
+                } else { myFeeLabel = EMPTYSTRING }
+            } else {
+                print("❗️ checkPeerPushDebitM failed")
+
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -140,25 +155,13 @@ struct P2PSubjectV: View {
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
         .navigationTitle(subjectTitle(amountToTransfer))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .task(id: amountToTransfer.value) { await checkPeerPushDebit() }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SUBJECT, stack: stack.push())
 //            print("❗️ P2PSubjectV onAppear")
         }
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
-        }
-        .task(id: amountToTransfer.value) {
-            if outgoing && feeLabel == nil {
-                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer, scope: scope) {
-                    if let feeAmount = p2pFee(ppCheck: ppCheck) {
-                        let feeStr = feeAmount.formatted(scope, isNegative: false)
-                        myFeeLabel = String(localized: "+ \(feeStr) fee")
-                    } else { myFeeLabel = EMPTYSTRING }
-                } else {
-                    print("❗️ checkPeerPushDebitM failed")
-
-                }
-            }
         }
     }
 }

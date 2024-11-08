@@ -17,13 +17,14 @@ struct P2pAcceptDone: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
+    @MainActor
     private func viewDidLoad() async {
         if incoming {
-            if let _ = try? await model.acceptPeerPushCreditM(transactionId) {
+            if let _ = try? await model.acceptPeerPushCredit(transactionId) {
                 dismissTop(stack.push())
             }
         } else {
-            if let _ = try? await model.confirmPeerPullDebitM(transactionId) {
+            if let _ = try? await model.confirmPeerPullDebit(transactionId) {
                 dismissTop(stack.push())
             }
         }
