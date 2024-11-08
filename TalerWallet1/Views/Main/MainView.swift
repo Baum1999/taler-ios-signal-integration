@@ -278,6 +278,11 @@ extension MainView {
                 }
             }
         }
+        private var isBalances: Bool { self.selectedTab == .balances}
+        private func triggerAction(_ action: Int) {
+            navModel.actionSelected = isBalances ? action       // 1..4
+                                                 : action + 4   // 5..8
+        }
 
         private static func className() -> String {"\(self)"}
         private static var name: String { Self.className() }
@@ -330,6 +335,18 @@ extension MainView {
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!
                                                   isSheet: false)
 
+            let balanceActions = Group {
+                NavLink(1, $navModel.actionSelected) { sendDest }
+                NavLink(2, $navModel.actionSelected) { requestDest }
+                NavLink(3, $navModel.actionSelected) { depositDest }
+                NavLink(4, $navModel.actionSelected) { manualWithdrawDest }
+            }
+            let settingsActions = Group {
+                NavLink(5, $navModel.actionSelected) { sendDest }
+                NavLink(6, $navModel.actionSelected) { requestDest }
+                NavLink(7, $navModel.actionSelected) { depositDest }
+                NavLink(8, $navModel.actionSelected) { manualWithdrawDest }
+            }
             ZStack(alignment: .bottom) {
                 TabView(selection: tabSelection()) {
                     NavigationView {
@@ -338,20 +355,7 @@ extension MainView {
 //                         shouldReloadPending: $shouldReloadPending,
                           shouldReloadBalances: $shouldReloadBalances)
                         .navigationTitle(balancesTitle)
-                        .background( Group {
-                            NavigationLink(destination: sendDest, tag: 1, selection: $navModel.actionSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: requestDest, tag: 2, selection: $navModel.actionSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: depositDest, tag: 3, selection: $navModel.actionSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                            NavigationLink(destination: manualWithdrawDest, tag: 4, selection: $navModel.actionSelected)
-                            { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        })
-                        .onNotification(.SendAction)    { navModel.actionSelected = 1 }
-                        .onNotification(.RequestAction) { navModel.actionSelected = 2 }
-                        .onNotification(.DepositAction) { navModel.actionSelected = 3 }
-                        .onNotification(.WithdrawAction){ navModel.actionSelected = 4 }
+                        .background(balanceActions)
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.balances)
@@ -361,6 +365,7 @@ extension MainView {
                     NavigationView {
                         SettingsView(stack: stack.push(),
                                   navTitle: settingsTitle)
+                        .background(settingsActions)
                     }.id(viewState2.rootViewId)               // any change to rootViewId triggers popToRootView behaviour
                     .navigationViewStyle(.stack)
                     .tag(Tab.settings)
@@ -371,7 +376,10 @@ extension MainView {
                     .ignoresSafeArea(.keyboard, edges: .bottom)
             } // ZStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+            .onNotification(.SendAction)    { triggerAction(1) }
+            .onNotification(.RequestAction) { triggerAction(2) }
+            .onNotification(.DepositAction) { triggerAction(3) }
+            .onNotification(.WithdrawAction){ triggerAction(4) }
             .onNotification(.KYCrequired) { notification in
               // show an alert with the KYC link (button) which opens in Safari
                 if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {

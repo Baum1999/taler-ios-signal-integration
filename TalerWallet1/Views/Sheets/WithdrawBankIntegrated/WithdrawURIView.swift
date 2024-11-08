@@ -150,12 +150,16 @@ struct WithdrawURIView: View {
                                                             exchange: $exchange)
                     if amountIsEditable {
                         ScrollView {
-                            let shortcutDestination = WithdrawAcceptView(stack: stack.push(),
+                            let shortcutDest = WithdrawAcceptView(stack: stack.push(),
                                                                     url: url,
                                                                   scope: exchange.scopeInfo,
                                                        amountToTransfer: $amountShortcut,
                                                                 wireFee: $wireFee,
                                                                exchange: $exchange)
+                            let actions = Group {
+                                NavLink($shortcutSelected) { shortcutDest }
+                                NavLink($buttonSelected) { acceptDestination }
+                            }
                             // TODO: input amount, then
                             let amountLabel = minimalistic ? String(localized: "Amount:")
                                                            : String(localized: "Amount to withdraw:")
@@ -171,12 +175,7 @@ struct WithdrawURIView: View {
                                   buttonAction: buttonAction,
                                  feeIsNegative: true,
                                     computeFee: computeFeeWithdraw)
-                            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                                ) // shortcutDestination
-                            .background(NavigationLink(destination: acceptDestination, isActive: $buttonSelected)
-                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                                ) // acceptDestination
+                            .background(actions)
                         } // ScrollView
                     } else {
                         acceptDestination

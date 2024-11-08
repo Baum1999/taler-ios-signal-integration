@@ -184,25 +184,19 @@ struct PayTemplateV: View {
                 ScrollView {
                     if summaryIsEditable {  // after amount input,
                         amountInput
-                            .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden())
-                            .background( NavigationLink(destination: inputDestination, isActive: $buttonSelected1)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden())
+                            .background( NavLink($shortcutSelected) { shortcutDestination } )
+                            .background( NavLink($buttonSelected1) { inputDestination} )
 
                     } else {
                         amountInput
-                            .background(NavigationLink(destination: finalDestinationS, isActive: $shortcutSelected)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden())
-                            .background(NavigationLink(destination: finalDestinationI, isActive: $buttonSelected1)
-                                        { EmptyView() }.frame(width: 0).opacity(0).hidden())
+                            .background( NavLink($shortcutSelected) { finalDestinationS } )
+                            .background( NavLink($buttonSelected1) { finalDestinationI } )
                     }
                 } // amountInput
             } else if summaryIsEditable {   // template contract summary is not fixed => let the user input a summary
                 ScrollView {
                     inputDestination
-                        .background(NavigationLink(destination: finalDestinationI, isActive: $buttonSelected2)
-                                    { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                        )
+                        .background( NavLink($buttonSelected2) { finalDestinationI } )
                 } // inputDestination
             } else {    // both template contract amount and summary are fixed => directly show the payment
                 // Attention: contains a List, thus mustn't be included in a ScrollView

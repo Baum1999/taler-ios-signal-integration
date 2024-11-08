@@ -216,6 +216,10 @@ struct RequestPaymentContent: View {
                                            amountToTransfer: $amountShortcut,
                                                     summary: $summary,
                                                  expireDays: $expireDays)
+                let actions = Group {
+                    NavLink($buttonSelected) { inputDestination }
+                    NavLink($shortcutSelected) { shortcutDestination }
+                }
                 let amountLabel = minimalistic ? String(localized: "Amount:")
                                                : String(localized: "Amount to request:")
                 AmountInputV(stack: stack.push(),
@@ -230,12 +234,7 @@ struct RequestPaymentContent: View {
                       buttonAction: buttonAction,
                      feeIsNegative: true,
                         computeFee: computeFee)
-                .background(NavigationLink(destination: shortcutDestination, isActive: $shortcutSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                    ) // shortcutDestination
-                .background(NavigationLink(destination: inputDestination, isActive: $buttonSelected)
-                        { EmptyView() }.frame(width: 0).opacity(0).hidden()
-                    ) // inputDestination
+                .background(actions)
             }
         } // Group
         .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
