@@ -137,13 +137,18 @@ struct ExchangeFeeGapEstimate: Codable {
     let maxEffectiveSpendAmount: Amount
 }
 
+struct PerScopeDetails: Codable {
+    let scopeInfo: ScopeInfo
+}
 /// The result from PreparePayForUri
 struct PreparePayResult: Codable {
     let status: PreparePayResultType
     let transactionId: String
     let contractTerms: MerchantContractTerms
     let scopes: [ScopeInfo]
+//  let detailsPerScope: [ScopeInfo : PreparePayDetails]
     let amountRaw: Amount
+
     let amountEffective: Amount?                                // only if status != insufficientBalance
     let paid: Bool?                                             // only if status == alreadyConfirmed
     let talerUri: String?
@@ -234,7 +239,7 @@ struct ConfirmPayResult: Decodable {
     var transactionId: String
 }
 /// A request to get an exchange's payment details.
-fileprivate struct confirmPayForUri: WalletBackendFormattedRequest {
+fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
     func operation() -> String { "confirmPay" }
     func args() -> Args { Args(transactionId: transactionId) }
@@ -247,32 +252,31 @@ fileprivate struct confirmPayForUri: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// load payment details. Networking involved
-    @MainActor
-    func preparePayForUriM(_ talerPayUri: String, viewHandles: Bool = false)       // M for MainActor
-      async throws -> PreparePayResult {
-          let request = PreparePayForUri(talerPayUri: talerPayUri)
-          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-          return response
-    }
-    @MainActor
-    func checkPayForTemplateM(_ talerPayTemplateUri: String, viewHandles: Bool = false)       // M for MainActor
+    nonisolated func checkPayForTemplate(_ talerPayTemplateUri: String, viewHandles: Bool = false)
       async throws -> WalletTemplateDetails {
         let request = CheckPayForTemplate(talerPayTemplateUri: talerPayTemplateUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor
-    func preparePayForTemplateM(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)       // M for MainActor
+
+    nonisolated func preparePayForTemplate(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)
       async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor
-    func confirmPayM(_ transactionId: String, viewHandles: Bool = false)              // M for MainActor
+
+    nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
+      async throws -> PreparePayResult {
+        let request = PreparePayForUri(talerPayUri: talerPayUri)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
+    }
+
+    nonisolated func confirmPay(_ transactionId: String, viewHandles: Bool = false)
       async throws -> ConfirmPayResult {
-        let request = confirmPayForUri(transactionId: transactionId)
+        let request = ConfirmPayForUri(transactionId: transactionId)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

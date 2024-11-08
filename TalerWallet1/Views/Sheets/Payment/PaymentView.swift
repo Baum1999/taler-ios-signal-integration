@@ -115,14 +115,14 @@ struct PaymentView: View, Sendable {
     private func viewDidLoad() async {
 //        symLog.log(".task")
         if template {
-            if let templateResponse = try? await model.preparePayForTemplateM(url.absoluteString,
-                                                                     amount: amountIsEditable ? amountToTransfer : nil,
-                                                                    summary: summaryIsEditable ? summary : nil) {
+            if let templateResponse = try? await model.preparePayForTemplate(url.absoluteString,
+                                                   amount: amountIsEditable ? amountToTransfer : nil,
+                                                 summary: summaryIsEditable ? summary : nil) {
                 await checkCurrencyInfo(for: templateResponse)
                 preparePayResult = templateResponse
             }
         } else {
-            if let payResponse = try? await model.preparePayForUriM(url.absoluteString) {
+            if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
                 amountToTransfer = payResponse.amountRaw
                 await checkCurrencyInfo(for: payResponse)
                 preparePayResult = payResponse

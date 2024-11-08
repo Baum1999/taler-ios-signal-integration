@@ -25,7 +25,7 @@ struct PaymentDone: View {
 
     @MainActor
     private func viewDidLoad() async {
-        if let confirmPayResult = try? await model.confirmPayM(transactionId) {
+        if let confirmPayResult = try? await model.confirmPay(transactionId) {
 //          symLog.log(confirmPayResult as Any)
             if confirmPayResult.type == "done" {
                 paymentDone = true

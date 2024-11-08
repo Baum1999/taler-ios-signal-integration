@@ -54,10 +54,12 @@ struct PayTemplateV: View {
     private func buttonAction2() {
         buttonSelected2 = true
     }
+
+    @MainActor
     func acceptAction(preparePayResult: PreparePayResult) {
         Task { // runs on MainActor
-            if let confirmPayResult = try? await model.confirmPayM(preparePayResult.transactionId) {
-                //                symLog.log(confirmPayResult as Any)
+            if let confirmPayResult = try? await model.confirmPay(preparePayResult.transactionId) {
+//                symLog.log(confirmPayResult as Any)
                 if confirmPayResult.type != "done" {
                     controller.playSound(0)
                     // TODO: show error
@@ -82,7 +84,7 @@ struct PayTemplateV: View {
 
     @MainActor
     private func viewDidLoad() async {
-        if let response = try? await model.checkPayForTemplateM(url.absoluteString) {
+        if let response = try? await model.checkPayForTemplate(url.absoluteString) {
             let details = response.templateDetails
             let defaults = details.editableDefaults     // might be nil, or its fields might be nil
                                                         // TODO: let the user choose a currency from supportedCurrencies[]
