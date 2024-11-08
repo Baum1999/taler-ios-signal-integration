@@ -147,6 +147,8 @@
 		4E40E0BE29F25ABB00B85369 /* SendAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */; };
 		4E448AB72C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
 		4E448AB82C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
+		4E4A3F0B2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A3F0A2CD4B6CD00CA6A90 /* View+NavLink.swift */; };
+		4E4A3F0C2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A3F0A2CD4B6CD00CA6A90 /* View+NavLink.swift */; };
 		4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
 		4E4F60A92C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
 		4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */; };
@@ -385,6 +387,7 @@
 		4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Binding+onChange.swift"; sourceTree = "<group>"; };
 		4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmountV.swift; sourceTree = "<group>"; };
 		4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesPendingRowV.swift; sourceTree = "<group>"; };
+		4E4A3F0A2CD4B6CD00CA6A90 /* View+NavLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+NavLink.swift"; sourceTree = "<group>"; };
 		4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Condition.swift"; sourceTree = "<group>"; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
 		4E53A33629F50B7B00830EC2 /* CurrencyField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
@@ -866,6 +869,7 @@
 				4EFA395F2AA7946B00742548 /* ToSButtonView.swift */,
 				4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */,
 				4E983C2B2ADC416800FA9CC5 /* View+fitsSideBySide.swift */,
+				4E4A3F0A2CD4B6CD00CA6A90 /* View+NavLink.swift */,
 				4EEBEFAF2C8982180020D340 /* View+innerSize.swift */,
 				4E847B7E2C9030E0003A164E /* TabBarView.swift */,
 				4E847B812C9065FD003A164E /* ScopePicker.swift */,
@@ -1226,6 +1230,7 @@
 				4E3327BA2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
 				4ED80E8E2B8F6212008BD576 /* QuickDataTask.swift in Sources */,
 				4E3EAE2C2A990778009F1BE8 /* ManualWithdraw.swift in Sources */,
+				4E4A3F0B2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */,
 				4E448AB72C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */,
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
 				4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
@@ -1360,6 +1365,7 @@
 				4E3327BB2AD1635100BF5AD6 /* AsyncSemaphore.swift in Sources */,
 				4ED80E8F2B8F6212008BD576 /* QuickDataTask.swift in Sources */,
 				4E50B3502A1BEE8000F9F01C /* ManualWithdraw.swift in Sources */,
+				4E4A3F0C2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */,
 				4E448AB82C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */,
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
 				4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
