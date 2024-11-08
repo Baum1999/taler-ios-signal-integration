@@ -88,7 +88,7 @@ struct PaymentView: View, Sendable {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var preparePayResult: PreparePayResult? = nil
 
-
+    @MainActor
     func checkCurrencyInfo(for result: PreparePayResult) async {
         let scopes = result.scopes
         if scopes.count > 0 {

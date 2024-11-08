@@ -181,7 +181,7 @@ class Controller: ObservableObject {
         return false
     }
 
-//    @MainActor
+    @MainActor
     func exchange(for baseUrl: String?, model: WalletModel) async -> Exchange? {
         if let baseUrl {
             if let exchange1 = exchange(for: baseUrl) {
@@ -196,8 +196,9 @@ class Controller: ObservableObject {
         return nil
     }
 
+    @MainActor
     func updateInfo(_ scope: ScopeInfo, model: WalletModel) async {
-        if let info = try? await model.getCurrencyInfoM(scope: scope) {
+        if let info = try? await model.getCurrencyInfo(scope: scope) {
             await setInfo(info, for: scope)
 //            logger.log("  ❗️info set for \(scope.currency)")
         }
@@ -233,7 +234,7 @@ class Controller: ObservableObject {
         if let info = info(for: scope) {
             return info
         }
-        let info = try await model.getCurrencyInfoM(scope: scope, delay: 0)
+        let info = try await model.getCurrencyInfo(scope: scope, delay: 0)
         await setInfo(info, for: scope)
         return info
     }

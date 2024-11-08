@@ -144,6 +144,7 @@ struct RequestPaymentContent: View {
         return peerPullCheck != nil ? true : false
     }
 
+    @MainActor
     private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
         if exchange == nil {
             if let url = scopeInfo.url {

@@ -46,15 +46,20 @@ struct ExchangeSectionView: View {
 //        return nil
 //    }
 
+    @MainActor
     private func viewDidLoad() async {
-        if let exc = try? await model.listExchangesM(scope: balance.scopeInfo) {
+        if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
             withAnimation { exchanges = exc }
         }
     }
+
+    @MainActor
     private func currencyTickerChanged(_ scopeInfo: ScopeInfo) async {
         symLog.log("task \(didDelete ? 1 : 0)")
         currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
     }
+
+    @MainActor
     private func deleteExchange() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor

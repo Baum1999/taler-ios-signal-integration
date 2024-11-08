@@ -20,6 +20,7 @@ struct ExchangeListView: View {
     @State var showAlert: Bool = false
     @State var newExchange: String = TESTEXCHANGE
 
+    @MainActor
     func addExchange(_ exchange: String) -> Void {
         Task { // runs on MainActor
             symLog.log("adding: \(exchange)")

@@ -28,6 +28,7 @@ struct P2pReceiveURIView: View {
 
     let navTitle = String(localized: "P2P Receive")
 
+    @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
         if let ppResponse = try? await model.preparePeerPushCreditM(url.absoluteString) {

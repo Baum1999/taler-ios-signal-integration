@@ -47,6 +47,7 @@ struct WithdrawURIView: View {
 
     let navTitle = String(localized: "Withdrawal")
 
+    @MainActor
     func loadExchange(_ baseUrl: String) async {        // TODO: throws?
         if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
             symLog.log("Loaded \(baseUrl.trimURL)")

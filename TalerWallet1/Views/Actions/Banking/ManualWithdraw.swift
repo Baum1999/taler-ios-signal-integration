@@ -160,6 +160,7 @@ struct ManualWithdrawContent: View {
         return nil
     } // computeFee
 
+    @MainActor
     private func viewDidLoad2() async {
         // neues scope wenn balance geändert wird?
         let details = try? await model.getWithdrawalDetailsForAmountM(amountToTransfer, baseUrl: nil, scope: scope,

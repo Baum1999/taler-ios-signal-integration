@@ -25,6 +25,7 @@ struct WithdrawExchangeV: View {
 
     let navTitle = String(localized: "Checking Link")
 
+    @MainActor
     private func viewDidLoad() async {
         if exchange == nil {
             symLog.log(".task")

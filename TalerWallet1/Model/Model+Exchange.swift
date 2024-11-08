@@ -173,7 +173,7 @@ fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
-    @MainActor func listExchangesM(scope: ScopeInfo?, filterByStatus: ExchangeEntryStatus? = nil, viewHandles: Bool = false)
+    nonisolated func listExchanges(scope: ScopeInfo?, filterByStatus: ExchangeEntryStatus? = nil, viewHandles: Bool = false)
       async -> [Exchange] {   // M for MainActor
         do {
             let request = ListExchanges(scope: scope, filterByStatus: filterByStatus)    // .used, .preset
@@ -185,7 +185,7 @@ extension WalletModel {
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func getExchangeByUrl(url: String, viewHandles: Bool = false)
+    nonisolated func getExchangeByUrl(url: String, viewHandles: Bool = false)
       async throws -> Exchange {
         let request = GetExchangeByUrl(exchangeBaseUrl: url)
 //            logger.info("query for exchange: \(url, privacy: .public)")
@@ -194,16 +194,16 @@ extension WalletModel {
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func addExchange(url: String, viewHandles: Bool = false)
-    async throws {
+    nonisolated func addExchange(url: String, viewHandles: Bool = false)
+      async throws {
         let request = AddExchange(exchangeBaseUrl: url)
         logger.info("adding exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    func deleteExchange(url: String, purge: Bool = false, viewHandles: Bool = false)
-    async throws {
+    nonisolated func deleteExchange(url: String, purge: Bool = false, viewHandles: Bool = false)
+      async throws {
         let request = DeleteExchange(exchangeBaseUrl: url, purge: purge)
         logger.info("deleting exchange: \(url, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
@@ -212,7 +212,7 @@ extension WalletModel {
     /// ask wallet-core to update an existing exchange by querying it for denominations, fees, and scoped currency info
 //    func updateExchange(scopeInfo: ScopeInfo)
 //    func updateExchange(scopeInfo: ScopeInfo, viewHandles: Bool = false)
-    func updateExchange(exchangeBaseUrl: String, viewHandles: Bool = false)
+    nonisolated func updateExchange4711(exchangeBaseUrl: String, viewHandles: Bool = false)
       async throws  {
 //        let request = UpdateExchange(scopeInfo: scopeInfo)
         let request = UpdateExchange(exchangeBaseUrl: exchangeBaseUrl)
@@ -221,8 +221,7 @@ extension WalletModel {
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
-    @MainActor
-    func getCurrencyInfoM(scope: ScopeInfo, delay: UInt = 0, viewHandles: Bool = false)
+    nonisolated func getCurrencyInfo(scope: ScopeInfo, delay: UInt = 0, viewHandles: Bool = false)
       async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY + delay, viewHandles: viewHandles)

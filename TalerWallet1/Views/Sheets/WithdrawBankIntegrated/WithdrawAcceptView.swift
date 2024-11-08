@@ -28,6 +28,7 @@ struct WithdrawAcceptView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var withdrawalDetails: WithdrawalDetailsForAmount? = nil
 
+    @MainActor
     func reloadExchange() async -> Void {        // TODO: throws?
         if let exchange {
             if let someExchange = try? await model.getExchangeByUrl(url: exchange.exchangeBaseUrl) {
