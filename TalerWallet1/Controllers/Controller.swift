@@ -117,10 +117,10 @@ class Controller: ObservableObject {
 //        checkInternetConnection()
     }
 // MARK: -
-    /// runs on MainActor if called in some Task {}
+    @MainActor
     @discardableResult
     func loadBalances(_ stack: CallStack,_ model: WalletModel) async -> Int? {
-        if let reloaded = try? await model.balancesM(stack.push()) {
+        if let reloaded = try? await model.getBalances(stack.push()) {
             for balance in reloaded {
                 let scope = balance.scopeInfo
                 checkInfo(for: scope, model: model)
