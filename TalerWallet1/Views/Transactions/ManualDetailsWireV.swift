@@ -52,6 +52,7 @@ struct ManualDetailsWireV: View {
     let receiverStr: String
     let iban: String?
     let xTaler: String
+    let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
     let amountStr: String
     let obtainStr: String
     let account: WithdrawalExchangeAccountDetails
@@ -98,6 +99,20 @@ struct ManualDetailsWireV: View {
                     .accessibilityLabel(Text("Copy the IBAN", comment: "VoiceOver"))
                     .disabled(false)
             }   .padding(.top, -8)
+            let amountCode = HStack {
+                VStack(alignment: .leading) {
+                    Text("Amount:")
+                        .talerFont(.subheadline)
+                    Text(amountStr)
+                        .monospacedDigit()
+                        .padding(.leading)
+                }   .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(Text("Amount to transfer", comment: "VoiceOver"))
+                CopyButton(textToCopy: amountValue, vertical: true)             // only digits + separator, no currency name or symbol
+                    .accessibilityLabel(Text("Copy the amount", comment: "VoiceOver"))
+                    .disabled(false)
+            }//   .padding(.top, -8)
             let xTalerCode = HStack {
                 VStack(alignment: .leading) {
                     Text("Account:")
@@ -136,7 +151,6 @@ struct ManualDetailsWireV: View {
                              : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
-                .padding(.top)
 
             Group {
                 TransferRestrictionsV(amountStr: amountStr,
@@ -157,7 +171,9 @@ struct ManualDetailsWireV: View {
                     payeeCode.listRowSeparator(.hidden)
                     xTalerCode.listRowSeparator(.hidden)
                 }
-                step3.listRowSeparator(.visible)
+                amountCode.listRowSeparator(.hidden)
+                    .padding(.top)
+                step3 // .padding(.top, 6)
             }
         }
         .navigationTitle(navTitle)

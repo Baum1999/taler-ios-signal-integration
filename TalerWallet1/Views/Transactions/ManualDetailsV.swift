@@ -151,6 +151,7 @@ struct ManualDetailsV: View {
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
                     let amountStr = common.amountRaw.formatted(specs: specs, isNegative: false)
+                    let amountValue = common.amountRaw.valueStr
                     let obtainStr = common.amountEffective.formatted(specs: specs, isNegative: false)
 //            let _ = print(amountStr, " | ", obtainStr)
                     if !minimalistic {
@@ -196,6 +197,7 @@ struct ManualDetailsV: View {
                                                        receiverStr: receiverStr,
                                                               iban: iban,
                                                             xTaler: xTaler,
+                                                       amountValue: amountValue,
                                                          amountStr: amountStr,
                                                          obtainStr: obtainStr,
                                                            account: account)
