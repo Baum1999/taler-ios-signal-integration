@@ -23,13 +23,15 @@ struct RefundURIView: View {
     @State var transaction: Transaction?
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
+    @MainActor
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
-        if let result = try? await model.startRefundForUriM(url: url.absoluteString) {
+        if let result = try? await model.startRefundForUri(url: url.absoluteString) {
             refundTransactionId = result
             transaction = try? await model.getTransactionByIdM(result)
         }
