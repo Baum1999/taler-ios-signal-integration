@@ -110,7 +110,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         textField.becomeFirstResponder()
     }
 
-    @MainActor public func resignFirstResponder() -> Void {
+    @MainActor public func resignFirstResponder() {
         textField.resignFirstResponder()
         Self.endEditing()
     }
@@ -123,6 +123,27 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
     }
 
+    func toolBar() -> UIToolbar {
+        let image = UIImage(systemName: "return")
+        let button = UIBarButtonItem(image: image, style: .done, target: textField,
+                                    action: #selector(UITextField.resignFirstResponder))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace,
+                                                     target: self, action: nil)
+        let toolBar: UIToolbar = UIToolbar()
+        toolBar.items = [flexSpace, button]
+
+        // Unable to simultaneously satisfy constraints
+        // Will attempt to recover by breaking constraint
+        // <NSLayoutConstraint: UIImageView: .centerY == _UIModernBarButton: .centerY   (active)>
+
+        // this all doesn't help
+//        toolBar.frame.size.height = 100
+//        toolBar.autoresizingMask = .flexibleWidth
+//        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        toolBar.sizeToFit()
+        return toolBar
+    }
+
     func makeUIView(context: Context) -> NoCaretTextField {
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
@@ -130,7 +151,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         textField.delegate = context.coordinator
 
         // Set keyboard type
-        textField.keyboardType = .asciiCapableNumberPad //  numberPad
+        textField.keyboardType = .asciiCapableNumberPad //  numberPad decimalPad phonePad numbersAndPunctuation
 
         // Make visual components invisible...
         textField.tintColor = .clear
@@ -153,6 +174,9 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
             action: #selector(Coordinator.editingChanged(textField:)),
             for: .editingChanged
         )
+
+        // Add a toolbar with a done button above the keyboard
+        textField.inputAccessoryView = toolBar()
 
         // Set initial textfield text
         context.coordinator.updateText(amount, textField: textField)
