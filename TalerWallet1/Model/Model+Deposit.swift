@@ -28,9 +28,8 @@ fileprivate struct ValidateIban: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     /// validate IBAN. No Networking
-    @MainActor    // M for MainActor
-    func validateIbanM(_ iban: String, viewHandles: Bool = false)
-    async throws -> Bool {
+    nonisolated func validateIban(_ iban: String, viewHandles: Bool = false)
+      async throws -> Bool {
         let request = ValidateIban(iban: iban)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.valid
@@ -56,8 +55,7 @@ fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     /// Get wire types that can be used for a deposit operation
-    @MainActor                   // M for MainActor
-    func depositWireTypesForCurrencyM(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
+    nonisolated func depositWireTypesForCurrency(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
       async throws -> [String] {
         let request = DepositWireTypesForCurrency(currency: currency, scopeInfo: scopeInfo)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
@@ -73,9 +71,8 @@ fileprivate struct AmountResponse: Codable {
 fileprivate struct GetMaxDepositAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
     func operation() -> String { "getMaxDepositAmount" }
-    func args() -> Args { Args(currency: currency, restrictScope: scope) }
+    func args() -> Args { Args(currency: scope.currency, restrictScope: scope) }
 
-    var currency: String
     var scope: ScopeInfo
     struct Args: Encodable {
         var currency: String
@@ -84,14 +81,13 @@ fileprivate struct GetMaxDepositAmount: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor           // M for MainActor
-    func getMaxDepositAmountM(_ currency: String, scope: ScopeInfo, viewHandles: Bool = false)
+    nonisolated func getMaxDepositAmount(_ scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> Amount {
-        let request = GetMaxDepositAmount(currency: currency, scope: scope)
+        let request = GetMaxDepositAmount(scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.rawAmount
     }
-} // getMaxDepositAmountM
+} // getMaxDepositAmount
 // MARK: - Deposit
 struct DepositFees: Codable {
     let coin: Amount
@@ -139,8 +135,7 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// check fees for deposit. No Networking
-    @MainActor    // M for MainActor
-    func checkDepositM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
+    nonisolated func checkDeposit(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> CheckDepositResponse {
           let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
@@ -148,8 +143,7 @@ extension WalletModel {
     }
 
     /// deposit coins. Networking involved
-    @MainActor          // M for MainActor
-    func createDepositGroupM(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
+    nonisolated func createDepositGroup(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
           let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
           let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)

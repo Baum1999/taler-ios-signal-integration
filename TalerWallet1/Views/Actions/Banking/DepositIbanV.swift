@@ -50,6 +50,16 @@ struct DepositIbanV: View {
                         comment: "NavTitle: Deposit")
     }
 
+    @MainActor
+    private func validateIban() async {
+        if (try? await model.validateIban(depositIBAN)) == true {
+            let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
+            paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        } else {
+            paytoUri = nil
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -116,14 +126,7 @@ struct DepositIbanV: View {
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
         }
-        .task(id: depositIBAN) {
-            if (try? await model.validateIbanM(depositIBAN)) == true {
-                let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
-                paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            } else {
-                paytoUri = nil
-            }
-        }
+        .task(id: depositIBAN) { await validateIban() }
     }
 }
 // MARK: -

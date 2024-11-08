@@ -25,6 +25,7 @@ struct DepositAmountV: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
+    @MainActor
     private func viewDidLoad() async {
         let balances = controller.balances
         if let selectedBalance {
@@ -42,6 +43,21 @@ struct DepositAmountV: View {
         } else {
             balanceIndex = 0
             balance = (balances.count > 0) ? balances[0] : nil
+        }
+    }
+
+    @MainActor
+    private func newBalance() async {
+        symLog.log("❗️ task \(balanceIndex)")
+        if let balance {
+            let scopeInfo = balance.scopeInfo
+            amountToTransfer.setCurrency(scopeInfo.currency)
+            do {
+                amountAvailable = try await model.getMaxDepositAmount(scopeInfo)
+            } catch {
+                // TODO: Error
+                amountAvailable = balance.available
+            }
         }
     }
 
@@ -84,19 +100,7 @@ struct DepositAmountV: View {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
             .task { await viewDidLoad() }
-            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-                symLog.log("❗️ task \(balanceIndex)")
-                if let balance {
-                    let scopeInfo = balance.scopeInfo
-                    amountToTransfer.setCurrency(scopeInfo.currency)
-                    do {
-                        amountAvailable = try await model.getMaxPeerPushDebitAmountM(scopeInfo)
-                    } catch {
-                        // TODO: Error
-                        amountAvailable = balance.available
-                    }
-                }
-            }
+            .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
@@ -185,6 +189,23 @@ struct DepositAmountContent: View {
         //            defaultValue: "Deposit \(amountStr)", comment: "NavTitle: Deposit 'amountStr'")
     }
 
+    @MainActor
+    private func startDeposit() {
+        if let paytoUri {
+            depositStarted = true    // don't run twice
+            Task {
+                symLog.log("Deposit")
+                if let result = try? await model.createDepositGroup(paytoUri, amount: amountToTransfer) {
+                    symLog.log(result.transactionId)
+                    ViewState2.shared.popToRootView(stack.push())
+                    NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
+                } else {
+                    depositStarted = false
+                }
+            }
+        }
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -224,21 +245,7 @@ struct DepositAmountContent: View {
                                                   : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
                                                                                 : .red)
                     .padding(4)
-                Button(buttonTitle(amountToTransfer)) {
-                    if let paytoUri {
-                        depositStarted = true    // don't run twice
-                        Task { // runs on MainActor
-                            symLog.log("Deposit")
-                            if let result = try? await model.createDepositGroupM(paytoUri, amount: amountToTransfer) {
-                                symLog.log(result.transactionId)
-                                ViewState2.shared.popToRootView(stack.push())
-                                NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
-                            } else {
-                                depositStarted = false
-                            }
-                        }
-                    }
-                }
+                Button(buttonTitle(amountToTransfer)) { startDeposit() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .disabled(disabled || depositStarted)
                 .accessibilityHint(disabled ? String(localized: "enabled when amount is non-zero, but not higher than your available amount") : EMPTYSTRING)
