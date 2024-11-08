@@ -6,8 +6,10 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import SymLog
 
 struct TabBarView: View {
+    private let symLog = SymLogV(0)
     @Binding var selection: Tab
     @Binding var userAction: Int
     @Binding var hidden: Int
@@ -40,11 +42,12 @@ struct TabBarView: View {
                     .offset(offset)
 //                    .opacity(1 - Double(abs(offset.height / 35)))
                     .gesture(
-                        DragGesture()
+                        DragGesture(minimumDistance: 10)
                             .onChanged { gesture in
                                 var trans = gesture.translation
                                 trans.width = .zero
-                                if abs(offset.height) > 30 {
+                                if abs(trans.height) > 30 {
+                                    symLog.log(".onChanged: didDrag \(trans.height)")
                                     offset = .zero
                                     didDrag = true
                                     onActionDrag()    // switch to camera
@@ -52,13 +55,17 @@ struct TabBarView: View {
                                         dragged += 1
                                     }
                                 } else {
+                                    symLog.log(".onChanged: \(trans.height)")
                                     offset = trans
                                 }
                             }
-                            .onEnded { _ in
+                            .onEnded { gesture in
+                                var trans = gesture.translation
                                 if didDrag {
+                                    symLog.log(".onEnded: didDrag \(trans.height)")
                                     didDrag = false
                                 } else {
+                                    symLog.log(".onActionTab: \(trans.height)")
                                     onActionTab()
                                 }
                                 offset = .zero
