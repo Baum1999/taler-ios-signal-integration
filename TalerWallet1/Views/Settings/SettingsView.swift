@@ -167,7 +167,7 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw DEMO KUDOS")
                                     let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
-                                    try? await model.loadTestKudosM(0, amount: amount)
+                                    try? await model.loadTestKudos(0, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -181,7 +181,7 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
                                     let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
-                                    try? await model.loadTestKudosM(1, amount: amount)
+                                    try? await model.loadTestKudos(1, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -195,16 +195,17 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw HEAD KUDOS")
                                     let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
-                                    try? await model.loadTestKudosM(2, amount: amount)
+                                    try? await model.loadTestKudos(2, amount: amount)
                                 }
                             }
                             .buttonStyle(.bordered)
                             .disabled(withDrawDisabled)
                         }.id("head1withdraw")
                         SettingsToggle(name: String("Set 2 seconds delay"),
-                                       value: $developDelay.onChange({ delay in
-                            walletCore.developDelay = delay}), id1: "delay",
-                                       description: hideDescriptions ? nil : String("After each wallet-core action"))
+                                      value: $developDelay.onChange({ delay in
+                                                walletCore.developDelay = delay}),
+                                        id1: "delay",
+                                description: hideDescriptions ? nil : String("After each wallet-core action"))
                             .id("delay")
 #if DEBUG
                         SettingsItem(name: String("Run Dev Experiment"), id1: "applyDevExperiment",
@@ -228,7 +229,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on demo")
-                                    try? await model.runIntegrationTestM(newVersion: false, test: false)
+                                    try? await model.runIntegrationTest(newVersion: false, test: false)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -241,7 +242,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test on test")
-                                    try? await model.runIntegrationTestM(newVersion: false, test: true)
+                                    try? await model.runIntegrationTest(newVersion: false, test: true)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -254,7 +255,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on demo")
-                                    try? await model.runIntegrationTestM(newVersion: true, test: false)
+                                    try? await model.runIntegrationTest(newVersion: true, test: false)
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -267,7 +268,7 @@ struct SettingsView: View {
                                 checkDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("running integration test V2 on test")
-                                    try? await model.runIntegrationTestM(newVersion: true, test: true)
+                                    try? await model.runIntegrationTest(newVersion: true, test: true)
                                 }
                             }
                             .buttonStyle(.bordered)

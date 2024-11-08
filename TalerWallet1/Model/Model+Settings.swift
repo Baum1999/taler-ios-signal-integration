@@ -34,8 +34,8 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func loadTestKudosM(_ test: Int, amount: Amount, viewHandles: Bool = false)
-    async throws {          // M for MainActor
+    nonisolated func loadTestKudos(_ test: Int, amount: Amount, viewHandles: Bool = false)
+      async throws {
         let request = WithdrawTestBalanceRequest(amount: amount,
                                             bankBaseUrl: test == 2 ? HEADBANK
                                                        : test == 1 ? TESTBANK : DEMOBANK,
@@ -43,7 +43,7 @@ extension WalletModel {
                                                        : test == 1 ? TESTEXCHANGE : DEMOEXCHANGE)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
-} // loadTestKudosM()
+} // loadTestKudos
 // MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
@@ -77,8 +77,8 @@ fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    @MainActor func runIntegrationTestM(newVersion: Bool, test: Bool, viewHandles: Bool = false)
-    async throws {               // M for MainActor
+    nonisolated  func runIntegrationTest(newVersion: Bool, test: Bool, viewHandles: Bool = false)
+      async throws {
         let amountW = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 300)
         let amountS = Amount(currency: test ? TESTCURRENCY : DEMOCURRENCY, cent: 100)
         let request = RunIntegrationTest(newVersion: newVersion,
@@ -90,7 +90,7 @@ extension WalletModel {
                                       amountToSpend: amountS)
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
-} // runIntegrationTestM()
+} // runIntegrationTest
   // MARK: -
 /// A request to add a test balance to the wallet.
 fileprivate struct InfiniteTransactionLoop: WalletBackendFormattedRequest {
@@ -110,9 +110,9 @@ fileprivate struct InfiniteTransactionLoop: WalletBackendFormattedRequest {
     }
 }
 extension WalletModel {
-    func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool, viewHandles: Bool = false)
+    nonisolated func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool, viewHandles: Bool = false)
       async throws {
         let request = InfiniteTransactionLoop(delayMs: delayMs, shouldFetch: shouldFetch)
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
-} // runIntegrationTestM()
+} // testingInfiniteTransaction
