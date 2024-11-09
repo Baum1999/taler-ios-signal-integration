@@ -44,8 +44,9 @@ struct BalancesSectionView {
 
     private static func className() -> String {"\(self)"}
 
+    @MainActor
     func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
+        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
     }
 
     @State private var sectionID = UUID()

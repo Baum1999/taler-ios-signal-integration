@@ -109,16 +109,11 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 }
 
 extension WalletModel {
-    func getTransactionByIdT(_ transactionId: String, viewHandles: Bool = false)
-      async throws -> Transaction {              // T for any Thread
-        // might be called from a background thread itself
+    /// get the specified transaction from Wallet-Core. No networking involved
+    nonisolated func getTransactionById(_ transactionId: String, viewHandles: Bool = false)
+      async throws -> Transaction {
         let request = GetTransactionById(transactionId: transactionId)
         return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-    }
-    /// get the specified transaction from Wallet-Core. No networking involved
-    @MainActor func getTransactionByIdM(_ transactionId: String, viewHandles: Bool = false)
-      async throws -> Transaction {                // M for MainActor
-        return try await getTransactionByIdT(transactionId, viewHandles: viewHandles)      // call GetTransactionById on main thread
     }
 }
 // MARK: -

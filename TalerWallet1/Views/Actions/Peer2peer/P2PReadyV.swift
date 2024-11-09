@@ -31,8 +31,9 @@ struct P2PReadyV: View {
     let navTitle = String(localized: "P2P Ready")
     @State private var transactionId: String? = nil
 
+    @MainActor
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
+        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
     }
 
     @MainActor

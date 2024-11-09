@@ -25,8 +25,9 @@ struct ManualWithdrawDone: View {
 
     let navTitle = String(localized: "Wire Transfer")
 
+    @MainActor
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
+        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
     }
 
     @MainActor

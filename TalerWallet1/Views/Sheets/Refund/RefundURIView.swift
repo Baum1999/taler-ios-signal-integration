@@ -25,7 +25,7 @@ struct RefundURIView: View {
 
     @MainActor
     func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
+        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
     }
 
     @MainActor
@@ -33,7 +33,7 @@ struct RefundURIView: View {
         symLog.log(".task")
         if let result = try? await model.startRefundForUri(url: url.absoluteString) {
             refundTransactionId = result
-            transaction = try? await model.getTransactionByIdM(result)
+            transaction = try? await model.getTransactionById(result)
         }
     }
 
