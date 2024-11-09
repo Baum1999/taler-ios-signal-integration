@@ -67,6 +67,7 @@ struct TransactionButton: View {
     @State private var executed: Bool = false
     @State private var buttonTitle: String = EMPTYSTRING
 
+    @MainActor
     private func doAction() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor

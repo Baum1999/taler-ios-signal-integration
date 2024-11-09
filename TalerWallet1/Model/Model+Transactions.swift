@@ -57,14 +57,14 @@ struct TransactionOffset: Codable {
 /// A request to get the transactions in the wallet's history.
 fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
     func operation() -> String { "getTransactionsV2" }
-    func args() -> Args { Args(scopeInfo: scopeInfo,
+    func args() -> Args { Args(scopeInfo: scope,
                            filterByState: filterByState,
                         includeRefreshes: includeRefreshes,
                                    limit: -limit,               // descending
                      offsetTransactionId: offset?.txID,
                          offsetTimestamp: offset?.txTime) }
 
-    var scopeInfo: ScopeInfo?
+    var scope: ScopeInfo?
     var filterByState: TransactionStateFilter?
     var limit: Int
     var offset: TransactionOffset?
@@ -139,69 +139,51 @@ struct ResumeTransaction: WalletBackendFormattedRequest {
 }
 // MARK: -
 extension WalletModel {
-    /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT(_ stack: CallStack, scopeInfo: ScopeInfo, // searchString: String? = nil,    <= never worked anyway
-                          sort: String = "descending", filterByState: TransactionStateFilter? = nil,
-              includeRefreshes: Bool = false, viewHandles: Bool = false)
+    /// ask wallet-core for its list of transactions filtered by state
+    nonisolated func getTransactionsV2(_ stack: CallStack,
+                                         scope: ScopeInfo,
+                                 filterByState: TransactionStateFilter,
+                                         limit: Int = 1_000_000,
+                                        offset: TransactionOffset? = nil,
+                              includeRefreshes: Bool = false,
+                                   viewHandles: Bool = false)
       async throws -> [Transaction] {
-        let request = GetTransactions(scopeInfo: scopeInfo, currency: scopeInfo.currency, // search: searchString, <= never worked
-                                           sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-        return response.transactions
-    }
-    /// fetch transactions from Wallet-Core. No networking involved
-    @MainActor func transactionsM(_ stack: CallStack, scopeInfo: ScopeInfo, // searchString: String? = nil,
-                                      sort: String = "descending", filterByState: TransactionStateFilter? = nil,
-                               viewHandles: Bool = false)
-      async throws -> [Transaction] {    // M for MainActor
-        return try await transactionsT(stack.push(), scopeInfo: scopeInfo, // searchString: searchString,
-                                       sort: sort, filterByState: filterByState, viewHandles: viewHandles)
-    }
-    /// ask wallet-core for its list of transactions filtered by searchString
-    func transactionsT2(_ stack: CallStack,
-                      scopeInfo: ScopeInfo,
-                  filterByState: TransactionStateFilter,
-                          limit: Int = 1_000_000,
-                         offset: TransactionOffset? = nil,
-               includeRefreshes: Bool = false,
-                    viewHandles: Bool = false)
-      async throws -> [Transaction] {
-        let request = GetTransactionsV2(scopeInfo: scopeInfo,
-                                    filterByState: filterByState,
-                                            limit: limit,
-                                           offset: offset,
-                                 includeRefreshes: includeRefreshes)
+        let request = GetTransactionsV2(scope: scope,
+                                filterByState: filterByState,
+                                        limit: limit,
+                                       offset: offset,
+                             includeRefreshes: includeRefreshes)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.transactions
     }
     // MARK: -
     /// abort the specified transaction from Wallet-Core. No networking involved
-    func abortTransaction(transactionId: String, viewHandles: Bool = false) async throws {
+    nonisolated func abortTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = AbortTransaction(transactionId: transactionId)
         logger.notice("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
     /// delete the specified transaction from Wallet-Core. No networking involved
-    func deleteTransaction(transactionId: String, viewHandles: Bool = false) async throws {
+    nonisolated func deleteTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = DeleteTransaction(transactionId: transactionId)
         logger.notice("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func failTransaction(transactionId: String, viewHandles: Bool = false) async throws {
+    nonisolated func failTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = FailTransaction(transactionId: transactionId)
         logger.notice("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func suspendTransaction(transactionId: String, viewHandles: Bool = false) async throws {
+    nonisolated func suspendTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = SuspendTransaction(transactionId: transactionId)
         logger.notice("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 
-    func resumeTransaction(transactionId: String, viewHandles: Bool = false) async throws {
+    nonisolated func resumeTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = ResumeTransaction(transactionId: transactionId)
         logger.notice("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)

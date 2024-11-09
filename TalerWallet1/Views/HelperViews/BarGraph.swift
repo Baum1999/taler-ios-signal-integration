@@ -22,6 +22,18 @@ struct BarGraphHeader: View {
     @State private var completedTransactions: [Transaction] = []
     @ScaledMetric var barHeight = 9       // relative to fontSize
 
+    @MainActor
+    private func loadCompleted() async {
+        symLog.log(".task for BarGraphHeader(\(scope.currency)) - load \(MAXBARS) Transactions")
+        if let response = try? await model.getTransactionsV2(stack.push("BarGraphHeader - \(scope.url?.trimURL)"),
+                                                      scope: scope,
+                                              filterByState: .done,
+                                                      limit: MAXBARS
+        ) {
+            completedTransactions = response
+        }
+    }
+
     var body: some View {
         let currencyInfo = controller.info(for: scope, controller.currencyTicker)
         HStack (alignment: .center, spacing: 10) {
@@ -34,16 +46,7 @@ struct BarGraphHeader: View {
                           maxBars: MAXBARS, barHeight: barHeight)
         }
 //        .headerProminence(.increased)         // unfortunately this is not useful
-        .task(id: shouldReloadBalances + 2_000_000) {
-            symLog.log(".task for BarGraphHeader(\(scope.currency)) - load \(MAXBARS) Transactions")
-            if let response = try? await model.transactionsT2(stack.push("BarGraphHeader - \(scope.url?.trimURL)"),
-                                                    scopeInfo: scope,
-                                                filterByState: .done,
-                                                        limit: MAXBARS
-            ) {
-                completedTransactions = response
-            }
-        }
+        .task(id: shouldReloadBalances + 2_000_000) { await loadCompleted() }
     }
 }
 // MARK: -
