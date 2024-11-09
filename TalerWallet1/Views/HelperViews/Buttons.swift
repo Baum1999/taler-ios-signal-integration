@@ -213,15 +213,14 @@ struct TalerButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
         //        configuration.role = type == .prominent ? .primary : .normal          Only on macOS
-        MyBigButton(//type: type,
-            foreColor: foreColor(type: type, pressed: configuration.isPressed, disabled: disabled),
-            backColor: backColor(type: type, pressed: configuration.isPressed, disabled: disabled),
-            dimmed: dimmed,
-            configuration: configuration,
-            disabled: disabled,
-            narrow: narrow,
-            aligned: aligned,
-            badge: badge)
+        MyBigButton(foreColor: foreColor(type: type, pressed: configuration.isPressed, disabled: disabled),
+                    backColor: backColor(type: type, pressed: configuration.isPressed, disabled: disabled),
+                       dimmed: dimmed,
+                configuration: configuration,
+                     disabled: disabled,
+                       narrow: narrow,
+                      aligned: aligned,
+                        badge: badge)
     }
 
     func foreColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
@@ -284,9 +283,7 @@ struct TalerButtonStyle: ButtonStyle {
                                 .scaleEffect(configuration.isPressed ? 0.95 : 1)
                                 .animation(.spring(response: 0.1), value: configuration.isPressed)
                                 .disabled(disabled)
-            if !hasBadge {
-                buttonLabel
-            } else {
+            if hasBadge {
                 let badgeV = Image(systemName: badge)
                                 .talerFont(.caption)
                 HStack(alignment: .top, spacing: 0) {
@@ -294,6 +291,8 @@ struct TalerButtonStyle: ButtonStyle {
                     buttonLabel
                     badgeV.foregroundColor(.red)
                 }
+            } else {
+                buttonLabel
             }
         }
     }

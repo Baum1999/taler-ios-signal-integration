@@ -103,16 +103,12 @@ struct AboutView: View {
         .navigationTitle(navTitle)
         .task {
             onboarding = (tapped < TAPPED || dragged < DRAGGED)
+//            try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(5))
+//            rotationEnabled.toggle()
         }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_ABOUT, stack: stack.push())
         }
-        .onDisappear() {
-        }
-//        .task {
-//            try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(5))
-//            rotationEnabled.toggle()
-//        }
     }
 }
 extension Bundle {

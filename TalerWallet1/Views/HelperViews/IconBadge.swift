@@ -15,10 +15,10 @@ struct PendingIconBadge: View {
     let needsKYC: Bool
 
     var body: some View {
-        let image = incoming && done ? Image(DONE_INCOMING)         // "plus.circle.fill"
-                          : incoming ? Image(PENDING_INCOMING)      // "plus"
-        // since the money already left the wallet, show DONE and not PENDING_OUTGOING
-                                     : Image(DONE_OUTGOING)         // "minus.circle"
+        let image = incoming && done ? Image(systemName: DONE_INCOMING)         // "plus.circle.fill"
+                          : incoming ? Image(systemName: PENDING_INCOMING)      // "plus"
+        // since outgoing money already left the wallet, show DONE_ and not PENDING_OUTGOING
+                                     : Image(systemName: DONE_OUTGOING)         // "minus.circle"
         IconBadge(image: image,
                    done: false,
               foreColor: foreColor,
@@ -59,7 +59,7 @@ struct ButtonIconBadge: View {
           shouldConfirm: false,
                needsKYC: false,
                wideIcon: TransactionType.peerPushDebit.icon())
-                      // button never is payment or refund
+                      // button is send/receive/withdraw/deposit, never payment or refund
     }
 }
 // MARK: -
@@ -69,7 +69,8 @@ struct IconBadge: View {
     let foreColor:Color
     let shouldConfirm: Bool
     let needsKYC: Bool
-    let wideIcon: Image?
+    let wideIcon: Image?        // cheating: ZStack with widest icon to ensure all have the same width
+                                // TODO: EqualIconWidth...
 
     @ScaledMetric var spacing = 8       // relative to fontSize
 

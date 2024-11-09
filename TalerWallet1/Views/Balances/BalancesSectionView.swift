@@ -41,7 +41,6 @@ struct BalancesSectionView {
     @State private var completedTransactions: [Transaction] = []
     @State private var recentTransactions: [Transaction] = []
     @State private var pendingTransactions: [Transaction] = []
-    @State private var currencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     private static func className() -> String {"\(self)"}
 
@@ -96,23 +95,20 @@ extension BalancesSectionView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let scopeInfo = balance.scopeInfo
-        let currency = scopeInfo.currency
 
-        let balanceDest = TransactionsListView(stack: stack.push("\(Self.className())()"),
+      Group {
+            let balanceDest = TransactionsListView(stack: stack.push("\(Self.className())()"),
                                                    scope: scopeInfo,
-                               balance: balance,
-                       selectedBalance: $selectedBalance,
-                              navTitle: currency,   // String(localized: "Transactions", comment: "ViewTitle of TransactionList"),
-                          transactions: $completedTransactions,
-                       reloadAllAction: loadCompleted,
-                       reloadOneAction: reloadOneAction)
-
-        Section {
+                                                 balance: balance,
+                                         selectedBalance: $selectedBalance,
+                                                navTitle: nil,                  // will use scopeInfo.currency
+                                            transactions: $completedTransactions,
+                                         reloadAllAction: loadCompleted,
+                                         reloadOneAction: reloadOneAction)
+          Section {
             BalanceCellV(stack: stack.push("BalanceCell"),
                          scope: balance.scopeInfo,
                         amount: balance.available,
-//                sizeCategory: sizeCategory,
-//                   rowAction: { buttonSelected = 3 },     // trigger TransactionList NavigationLink
                    balanceDest: balanceDest)
 //            .listRowSeparator(.hidden)
 //            .border(.red)
@@ -133,9 +129,6 @@ extension BalancesSectionView: View {
             shouldReloadBalances: $shouldReloadBalances)
         }.id(sectionID)
         .listRowSeparator(.hidden)
-        .task(id: controller.currencyTicker) {
-            currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-        }
         .task(id: shouldReloadBalances + 1_000_000) {
             symLog.log(".task for BalancesSectionView - load recent+completed+pending")
             await loadRecent(stack.push(".task - load recent"))
@@ -164,6 +157,7 @@ extension BalancesSectionView: View {
                 }
             }
         } // recent transactions
+      }
     } // body
 } // BalancesSectionView
 // MARK: -

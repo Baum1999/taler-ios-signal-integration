@@ -97,7 +97,7 @@ struct MainView: View {
                                      urlToOpen: url))
             Sheet(stack: stack.push(), sheetView: sheet)
         }
-        .sheet(isPresented: $model.showError) {
+        .sheet(isPresented: $model.showError) {         // TODO: switch to alert/overlay
             model.setError(nil)
         } content: {
             if let error2 = model.error2 {
