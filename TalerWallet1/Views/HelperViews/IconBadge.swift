@@ -88,7 +88,9 @@ struct IconBadge: View {
                                          : CONFIRM_BANK
                 Image(systemName: badgeName)
                     .talerFont(.caption)
-                    .foregroundColor((needsKYC || shouldConfirm) ? .red : .clear)
+                    .foregroundColor(needsKYC ? .red
+                              : shouldConfirm ? .yellow
+                                              : .clear)
             }
         }.accessibilityHidden(true)
     }
