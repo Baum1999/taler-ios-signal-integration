@@ -94,15 +94,17 @@ struct P2pReceiveURIView: View {
                     let currency = peerPushCreditResponse.amountRaw.currencyStr
                     currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
-                if tosAccepted {
+                .safeAreaInset(edge: .bottom) {
+                    if tosAccepted {
                         let destination = P2pAcceptDone(stack: stack.push(),
                                                 transactionId: peerPushCreditResponse.transactionId,
                                                      incoming: true)
                         NavigationLink(destination: destination) {
-                        Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
+                            Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
+                        }
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
                 }
             } else {
 #if DEBUG
