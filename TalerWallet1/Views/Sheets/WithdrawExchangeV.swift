@@ -29,7 +29,7 @@ struct WithdrawExchangeV: View {
     private func viewDidLoad() async {
         if exchange == nil {
             symLog.log(".task")
-            if let withdrawExchange = try? await model.loadWithdrawalExchangeForUriM(url.absoluteString) {
+            if let withdrawExchange = try? await model.loadWithdrawalExchangeForUri(url.absoluteString) {
                 let baseUrl = withdrawExchange.exchangeBaseUrl
                 symLog.log("getExchangeByUrl(\(baseUrl))")
                 if let exc = try? await model.getExchangeByUrl(url: baseUrl) {

@@ -37,6 +37,22 @@ struct WithdrawAcceptView: View {
         }
     }
 
+    @MainActor
+    private func viewDidLoad() async {
+        symLog.log(".task \(exchange?.id ?? "nil")")
+        if let exchange {
+            if let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer,
+                                                                   baseUrl: exchange.exchangeBaseUrl,
+                                                                     scope: nil) { // TODO: scope
+                withdrawalDetails = details
+            }
+//          agePicker.setAges(ages: details?.ageRestrictionOptions)
+        } else {    // TODO: error
+            symLog.log("no exchangeBaseUrl or no exchange")
+            withdrawalDetails = nil
+        }
+    }
+
     var body: some View {
         if let exchange, let withdrawalDetails {
             VStack {
@@ -81,17 +97,19 @@ struct WithdrawAcceptView: View {
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
-                if tosAccepted {
-                    let destination = WithdrawAcceptDone(stack: stack.push(),
-                                                         scope: scope,
-                                               exchangeBaseUrl: exchange.exchangeBaseUrl,
-                                                           url: url,
-                                              amountToTransfer: amountToTransfer)
-                    NavigationLink(destination: destination) {
-                        Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                .safeAreaInset(edge: .bottom) {
+                    if tosAccepted {
+                        let destination = WithdrawAcceptDone(stack: stack.push(),
+                                                             scope: scope,
+                                                   exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                               url: url,
+                                                  amountToTransfer: amountToTransfer)
+                        NavigationLink(destination: destination) {
+                            Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
+                        }
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
                 }
             }
             .onAppear() {
@@ -105,20 +123,7 @@ struct WithdrawAcceptView: View {
             let message: String? = nil
 #endif
             LoadingView(scopeInfo: nil, message: message)
-                .task(id: exchange?.id) {
-                    symLog.log(".task \(exchange?.id ?? "nil")")
-                    if let exchange {
-                        if let details = try? await model.getWithdrawalDetailsForAmountM(amountToTransfer,
-                                                                                baseUrl: exchange.exchangeBaseUrl,
-                                                                                  scope: nil) { // TODO: scope
-                            withdrawalDetails = details
-                        }
-//                    agePicker.setAges(ages: details?.ageRestrictionOptions)
-                    } else {    // TODO: error
-                        symLog.log("no exchangeBaseUrl or no exchange")
-                        withdrawalDetails = nil
-                    }
-                }
+                .task(id: exchange?.id) { await viewDidLoad() }
         }
     }
 }

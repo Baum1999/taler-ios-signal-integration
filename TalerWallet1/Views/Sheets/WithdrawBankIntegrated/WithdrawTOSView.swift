@@ -21,16 +21,32 @@ struct WithdrawTOSView: View {
 
     let navTitle = String(localized: "Terms of Service")
 
+    @MainActor
     func loadToS(_ language: String) async {
         if let exchangeBaseUrl {
             let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]      // MARKDOWN, HTML, PLAINTEXT
-            if let someTOS = try? await model.loadExchangeTermsOfServiceM(exchangeBaseUrl,
-                                                       acceptedFormat: acceptedFormat,
-                                                       acceptLanguage: language) {
+            if let someTOS = try? await model.loadExchangeTermsOfService(exchangeBaseUrl,
+                                                         acceptedFormat: acceptedFormat,
+                                                         acceptLanguage: language) {
                 exchangeTOS = someTOS
             }
         } else {
             // TODO: Yikes! No baseURL
+        }
+    }
+
+    @MainActor
+    func viewDidLoad() async {
+        if let exchangeTOS, let exchangeBaseUrl {
+            _ = try? await model.setExchangeTOSAccepted(exchangeBaseUrl,
+                                                        etag: exchangeTOS.currentEtag)
+            if acceptAction != nil {
+                await acceptAction!()
+            } else { // just go back - caller will reload
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        } else {
+            // TODO: error
         }
     }
 
@@ -40,18 +56,7 @@ struct WithdrawTOSView: View {
         if let exchangeTOS {
             Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
                   language: languageCode, languageAction: loadToS) {
-                Task { // runs on MainActor
-                    if let exchangeBaseUrl {
-                        _ = try? await model.setExchangeTOSAcceptedM(exchangeBaseUrl, etag: exchangeTOS.currentEtag)
-                        if acceptAction != nil {
-                            await acceptAction!()
-                        } else { // just go back - caller will reload
-                            self.presentationMode.wrappedValue.dismiss()
-                        }
-                    } else {
-                        // TODO: error
-                    }
-                }
+                Task { await viewDidLoad() }
             }
             .navigationTitle(navTitle)
             .onAppear() {

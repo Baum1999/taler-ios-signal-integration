@@ -137,10 +137,13 @@ struct ManualDetailsV: View {
         }
     }
 
+    @MainActor
     private func viewDidLoad(_ payto: String) async {
-        if let specs = try? await model.getQrCodesForPaytoM(payto) {
-            qrCodeSpecs = specs ?? []
+        if let specs = try? await model.getQrCodesForPayto(payto) {
+            qrCodeSpecs = specs
+            return
         }
+        qrCodeSpecs = []
     }
 
     var body: some View {

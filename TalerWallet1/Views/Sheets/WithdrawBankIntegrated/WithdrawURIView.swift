@@ -66,11 +66,12 @@ struct WithdrawURIView: View {
         : EMPTYSTRING
     }
 
+    @MainActor
     private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
         if let exchange {
-            if let details = try? await model.getWithdrawalDetailsForAmountM(amount,
-                                                                    baseUrl: exchange.exchangeBaseUrl,
-                                                                      scope: nil) {     // TODO: scope
+            if let details = try? await model.getWithdrawalDetailsForAmount(amount,
+                                                                   baseUrl: exchange.exchangeBaseUrl,
+                                                                     scope: nil) {     // TODO: scope
                 let fee = try? details.amountRaw - details.amountEffective
                 let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? "nix"
                 symLog.log("Fee = \(feeStr)")
@@ -89,10 +90,11 @@ struct WithdrawURIView: View {
         return nil
     }
 
+    @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
         do {
-            let uriInfoResponse = try await model.getWithdrawalDetailsForUriM(url.absoluteString)
+            let uriInfoResponse = try await model.getWithdrawalDetailsForUri(url.absoluteString)
             let amount = uriInfoResponse.amount
             let currency = amount?.currencyStr ?? uriInfoResponse.currency
             amountToTransfer = amount ?? Amount.zero(currency: currency)

@@ -29,9 +29,10 @@ struct ManualWithdrawDone: View {
         return try await model.getTransactionByIdT(transactionId, viewHandles: viewHandles)
     }
 
+    @MainActor
     private func viewDidLoad() async {
         if transactionId == nil {
-            if let result = try? await model.acceptManualWithdrawalM(amountToTransfer,
+            if let result = try? await model.acceptManualWithdrawal(amountToTransfer,
                                                            baseUrl: baseURL,
                                                        restrictAge: 0)
             { transactionId = result.transactionId }

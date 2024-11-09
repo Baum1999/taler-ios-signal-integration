@@ -236,31 +236,37 @@ fileprivate struct GetQrCodesForPayto: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
-    @MainActor                    // M for MainActor
-    func loadWithdrawalExchangeForUriM(_ talerUri: String, viewHandles: Bool = false)
+    nonisolated func loadWithdrawalExchangeForUri(_ talerUri: String,
+                                                 viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
+
     /// load withdrawal details. Networking involved
-    @MainActor                  // M for MainActor
-    func getWithdrawalDetailsForUriM(_ talerWithdrawUri: String, viewHandles: Bool = false)
+    nonisolated func getWithdrawalDetailsForUri(_ talerUri: String,
+                                               viewHandles: Bool = false)
       async throws -> WithdrawUriInfoResponse {
-        let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerWithdrawUri)
+        let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor                     // M for MainActor
-    func getWithdrawalDetailsForAmountM(_ amount: Amount, baseUrl: String?, scope: ScopeInfo?,
-                                              viewHandles: Bool = false)
+
+    nonisolated func getWithdrawalDetailsForAmount(_ amount: Amount,
+                                                    baseUrl: String?,
+                                                      scope: ScopeInfo?,
+                                                viewHandles: Bool = false)
       async throws -> WithdrawalDetailsForAmount {
-          let request = GetWithdrawalDetailsForAmount(amount: amount, baseUrl: baseUrl, scope: scope)
+        let request = GetWithdrawalDetailsForAmount(amount: amount, baseUrl: baseUrl, scope: scope)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor                  // M for MainActor
-    func loadExchangeTermsOfServiceM(_ exchangeBaseUrl: String, acceptedFormat: [String], acceptLanguage: String, viewHandles: Bool = false)
+
+    nonisolated func loadExchangeTermsOfService(_ exchangeBaseUrl: String,
+                                                   acceptedFormat: [String],
+                                                   acceptLanguage: String,
+                                                      viewHandles: Bool = false)
       async throws -> ExchangeTermsOfService {
         let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl,
                                                  acceptedFormat: acceptedFormat,
@@ -268,31 +274,41 @@ extension WalletModel {
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor              // M for MainActor
-    func setExchangeTOSAcceptedM(_ exchangeBaseUrl: String, etag: String, viewHandles: Bool = false)
+
+    nonisolated func setExchangeTOSAccepted(_ exchangeBaseUrl: String,
+                                                         etag: String,
+                                                  viewHandles: Bool = false)
       async throws -> Decodable {
         let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor               // M for MainActor
-    func sendAcceptIntWithdrawalM(_ exchangeBaseUrl: String, withdrawURL: String, amount: Amount?, restrictAge: Int?, viewHandles: Bool = false)
+
+    nonisolated func acceptBankIntWithdrawal(_ exchangeBaseUrl: String,
+                                                   withdrawURL: String,
+                                                        amount: Amount?,
+                                                   restrictAge: Int?,
+                                                   viewHandles: Bool = false)
       async throws -> AcceptWithdrawalResponse? {
           let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl,
                                                                  amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor              // M for MainActor
-    func acceptManualWithdrawalM(_ amount: Amount, baseUrl: String, restrictAge: Int?, viewHandles: Bool = false)
+
+    nonisolated func acceptManualWithdrawal(_ amount: Amount,
+                                             baseUrl: String,
+                                         restrictAge: Int?,
+                                         viewHandles: Bool = false)
       async throws -> AcceptManualWithdrawalResult? {
         let request = AcceptManualWithdrawal(amount: amount, baseUrl: baseUrl, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
-    @MainActor                  // M for MainActor
-    func getQrCodesForPaytoM(_ paytoUri: String, viewHandles: Bool = false)
-    async throws -> [QrCodeSpec]? {
+
+    nonisolated func getQrCodesForPayto(_ paytoUri: String,
+                                       viewHandles: Bool = false)
+      async throws -> [QrCodeSpec]? {
         let request = GetQrCodesForPayto(paytoUri: paytoUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.codes

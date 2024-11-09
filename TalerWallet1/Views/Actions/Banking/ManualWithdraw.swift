@@ -137,12 +137,13 @@ struct ManualWithdrawContent: View {
         return nil
     }
 
+    @MainActor
     private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
         if amount.isZero {
             return ComputeFeeResult.zero()
         }
         do {
-            let details = try await model.getWithdrawalDetailsForAmountM(amount, baseUrl: nil, scope: scope,
+            let details = try await model.getWithdrawalDetailsForAmount(amount, baseUrl: nil, scope: scope,
                                                             viewHandles: true)
             detailsForAmount = details
 //          agePicker.setAges(ages: detailsForAmount?.ageRestrictionOptions)
@@ -163,7 +164,7 @@ struct ManualWithdrawContent: View {
     @MainActor
     private func viewDidLoad2() async {
         // neues scope wenn balance geändert wird?
-        let details = try? await model.getWithdrawalDetailsForAmountM(amountToTransfer, baseUrl: nil, scope: scope,
+        let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer, baseUrl: nil, scope: scope,
                                                          viewHandles: true)
         if let details {
             detailsForAmount = details
