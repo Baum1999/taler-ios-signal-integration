@@ -19,7 +19,7 @@ struct ActionsSheet: View {
     @Binding var qrButtonTapped: Bool
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
+    @AppStorage("demoHints") var demoHints: Bool = true
     @EnvironmentObject private var controller: Controller
 
     private var hasKudos: Bool {
@@ -50,7 +50,7 @@ struct ActionsSheet: View {
                 .padding(.top, 5)
                 .padding(.bottom, 10)
 
-            if hasKudos && !hideSpendingHint {
+            if hasKudos && demoHints {
                 Text(minimalistic ? "Spend your \(DEMOCURRENCY) in the Demo shop"
                                   : "You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
                     .talerFont(.body)
@@ -59,7 +59,7 @@ struct ActionsSheet: View {
 
                 let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let shopAction = {
-                    hideSpendingHint = true
+//                    demoHints += 1
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
                     dismissTop(stack.push())
                 }
@@ -127,7 +127,7 @@ struct DualHeightSheet: View {
 
             .onChange(of: qrButtonTapped2) { tapped2 in
                 if tapped2 {
-                    logger.log("❗️the user tapped")
+//                    logger.trace("❗️the user tapped")
                     qrButtonTapped = true           // tell our caller
                     withAnimation(Animation.easeIn(duration: 0.6)) {
                         // animate this sheet to full height
@@ -137,13 +137,13 @@ struct DualHeightSheet: View {
             }
             .onChange(of: qrButtonTapped) { tapped in
                 if !tapped {
-                    logger.log("❗️dismissed, cleanup")
+                    logger.trace("❗️dismissed, cleanup")
                     sheetHeight = innerHeight
                     qrButtonTapped2 = false
                 }
             }
             .onChange(of: innerHeight) { newHeight in
-                logger.log("onChange❗️set sheetHeight: \(sheetHeight) -> \(newHeight)❗️")
+                logger.trace("onChange❗️set sheetHeight: \(sheetHeight) -> \(newHeight)❗️")
 //            withAnimation {
                 sheetHeight = newHeight
                 selectedDetent = .height(sheetHeight)       // will update detents in .onChange(:)
@@ -152,16 +152,16 @@ struct DualHeightSheet: View {
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
                 if newValue == .large {
-                    logger.log("onChange❗️selectedDetent = .large)")
+                    logger.trace("onChange❗️selectedDetent = .large)")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
                 } else {
-                    logger.log("onChange❗️selectedDetent = .height(\(sheetHeight))")
+                    logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
                     detents = [.large, .height(sheetHeight)]
                 }
             }
             .task {
-                logger.log("task❗️selectedDetent = .height(\(sheetHeight))")
+                logger.trace("task❗️selectedDetent = .height(\(sheetHeight))")
                 selectedDetent = .height(sheetHeight)       // will update detents in .onChange(:)
             }
 //            .animation(.spring(), value: selectedDetent)

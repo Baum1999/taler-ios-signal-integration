@@ -12,7 +12,6 @@ import SymLog
 struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var currencyInfo: CurrencyInfo              // this is the currency to be used
     let exchange: Exchange
 
     @Environment(\.sizeCategory) var sizeCategory
@@ -54,7 +53,7 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
         @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 1234)
         @State private var depositIBAN = "DE1234567890"
         @State private var accountHolder = "Marc Stibane"
-        @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
+//        @State private var previewL: CurrencyInfo = CurrencyInfo.zero(LONGCURRENCY)
 
 //    let amount = Amount(currency: LONGCURRENCY, cent: 123456)
         var body: some View {
@@ -76,7 +75,6 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
                                 exchangeUpdateStatus: .ready,
                                ageRestrictionOptions: [])
             ExchangeRowView(stack: CallStack("Preview"),
-                     currencyInfo: $currencyInfoL,
                          exchange: exchange1)
         }
     }

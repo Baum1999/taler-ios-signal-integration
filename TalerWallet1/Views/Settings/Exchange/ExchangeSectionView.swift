@@ -19,7 +19,7 @@ struct ExchangeSectionView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("hideSpendingHint") var hideSpendingHint: Bool = false
+    @AppStorage("demoHints") var demoHints: Bool = true
 
     @State private var exchanges: [Exchange] = []
     @State private var shouldReloadBalances: Int = 0
@@ -72,7 +72,7 @@ struct ExchangeSectionView: View {
                 didDelete = true             // change button text
                 NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
                 NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
-                hideSpendingHint = false
+                demoHints = true
             } else {
                 purge = true
                 showAlert = true
@@ -89,28 +89,31 @@ struct ExchangeSectionView: View {
 #endif
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
-//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
         Section {
             ForEach(exchanges) { exchange in
                 ExchangeRowView(stack: stack.push(),
-                         currencyInfo: $currencyInfo,
                              exchange: exchange)
                 .listRowSeparator(.hidden)
             }
             if DEMOCURRENCY == currency {
+                SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints, id1: "demoHints",
+                               description: minimalistic ? nil : String(localized: "Show hints for demo money"))
+                .listRowSeparator(.hidden)
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
-                VStack {
-                    if !minimalistic {
-                        Text(bankingHint)
+                if demoHints {
+                    VStack {
+                        if !minimalistic {
+                            Text(bankingHint)
+                        }
+                        Link(linkTitle, destination: URL(string: DEMOBANK)!)
+                            .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                     }
-                    Link(linkTitle, destination: URL(string: DEMOBANK)!)
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(bankingHint + " " + linkTitle)
+                    .padding(.top)
+                    .listRowSeparator(.hidden)
                 }
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(bankingHint + " " + linkTitle)
-                .padding(.top)
-                .listRowSeparator(.hidden)
             }
 
             let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete payment service", comment: "Action button")
