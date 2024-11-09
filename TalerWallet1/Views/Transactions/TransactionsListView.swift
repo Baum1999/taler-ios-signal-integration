@@ -70,6 +70,8 @@ struct TransactionsListView: View {
             }
 #endif
         } // ScrollViewReader
+//        .navigationTitle("EURO")           // Fake EUR instead of the real Currency
+//        .navigationTitle("CHF")            // Fake CHF instead of the real Currency
         .navigationTitle(navTitle ?? scope.currency)
         .accessibilityHint(String(localized: "Transaction list"))
         .task {
