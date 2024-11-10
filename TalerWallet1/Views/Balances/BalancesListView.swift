@@ -53,12 +53,10 @@ struct BalancesListView: View {
                 .listStyle(myListStyle.style).anyView
             }
         }
-#if REFRESHABLE
         .refreshable {  // already async
             controller.hapticNotification(.success)
             symLog.log("refreshing balances")
             await controller.loadBalances(stack.push("refreshing balances"), model)
         }
-#endif
     }
 }

@@ -82,6 +82,17 @@ extension CallStack {
         return push(item: item)
     }
 #endif
+    public func print() -> String {
+        var result: String = EMPTYSTRING
+        for (item) in stack {
+#if DEBUG
+            result += item.file + " " + item.function + "; "
+#else
+            result += item.message + "; "
+#endif
+        }
+        return result
+    }
 }
 
 //extension CallStack: Equatable {

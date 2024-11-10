@@ -19,16 +19,14 @@ struct URLSheet: View {
     @EnvironmentObject private var controller: Controller
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var summary = EMPTYSTRING
-    @State private var urlCommand: UrlCommand = .unknown
-
-    let navTitle = String(localized: "Checking Link")
+    @State private var urlCommand: UrlCommand?
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
+        if let urlCommand {
             switch urlCommand {
                 case .termsExchange,      // TODO: just check the ToS
                      .withdraw:
@@ -49,18 +47,19 @@ struct URLSheet: View {
                     PayTemplateV(stack: stack.push(), url: urlToOpen)
                 case .refund:
                     RefundURIView(stack: stack.push(), url: urlToOpen)
-                default:        // Error view
+                default:        // TODO: Error view
                     VStack {
-                        Text("unknown command")
-                            .talerFont(.title)
+                        let _ = symLog.log("❗️Unknown command❗️ \(urlToOpen.absoluteString)")
                         Text(controller.messageForSheet ?? urlToOpen.absoluteString)
                     }
-                    .navigationTitle(navTitle)
+                    .navigationTitle("Unknown command")
             }
-        }
-        .task {
-            let command = controller.openURL(urlToOpen, stack: stack.push())
-            urlCommand = command
+        } else {
+            LoadingView(scopeInfo: nil, message: "Scanning...")
+                .task {
+                    let command = controller.openURL(urlToOpen, stack: stack.push())
+                    urlCommand = command
+                }
         }
     }
 }

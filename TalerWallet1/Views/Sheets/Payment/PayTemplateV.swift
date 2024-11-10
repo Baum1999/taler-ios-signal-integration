@@ -71,11 +71,11 @@ struct PayTemplateV: View {
 
     private func computeFeePayTemplate(_ amount: Amount) async -> ComputeFeeResult? {
 //        if let result = await preparePayForTemplate(model: model,
-//                                                    url: url,
-//                                                    amount: amountToTransfer,
-//                                                    summary: summaryIsEditable ? summary ?? " "
-//                                                    : nil,
-//                                                    announce: announce)
+//                                                      url: url,
+//                                                   amount: amountToTransfer,
+//                                                  summary: summaryIsEditable ? summary ?? " "
+//                                                                             : nil,
+//                                                 announce: announce)
 //        {
 //            preparePayResult = result.ppCheck
 //        }
@@ -128,47 +128,49 @@ struct PayTemplateV: View {
     var body: some View {
         if let templateContract {       // preparePayResult
 //            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? UNKNOWN
-//            let currencyInfo = controller.info(for: currency, controller.currencyTicker)
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : String(localized: "Amount to pay:")
             // final destination with amountToTransfer, after user input of amount
             let finalDestinationI = PaymentView(stack: stack.push(),
                                                   url: url,
                                              template: true,
-                 amountToTransfer: $amountToTransfer,
-                          summary: $summary,
-                 amountIsEditable: amountIsEditable,
-                summaryIsEditable: summaryIsEditable)
+                                     amountToTransfer: $amountToTransfer,
+                                              summary: $summary,
+                                     amountIsEditable: amountIsEditable,
+                                    summaryIsEditable: summaryIsEditable)
+
+            // final destination with amountShortcut, when user tapped a shortcut
             let finalDestinationS = PaymentView(stack: stack.push(),
                                                   url: url,
-                         template: true,
-                 amountToTransfer: $amountShortcut,
-                          summary: $summary,
-                 amountIsEditable: amountIsEditable,
-                summaryIsEditable: summaryIsEditable)
+                                             template: true,
+                                     amountToTransfer: $amountShortcut,
+                                              summary: $summary,
+                                     amountIsEditable: amountIsEditable,
+                                    summaryIsEditable: summaryIsEditable)
 
             // destination to subject input
             let inputDestination = SubjectInputV(stack: stack.push(),
                                                    url: url,
-                    amountAvailable: nil,
-                   amountToTransfer: $amountToTransfer,
-                        amountLabel: amountLabel,
-                            summary: $summary,
-//                       insufficient: $insufficient,
-//                          feeAmount: $feeAmount,
-                       feeIsNotZero: true, // TODO: feeIsNotZero()
-                         targetView: finalDestinationI)
+                                       amountAvailable: nil,
+                                      amountToTransfer: $amountToTransfer,
+                                           amountLabel: amountLabel,
+                                               summary: $summary,
+//                                        insufficient: $insufficient,
+//                                           feeAmount: $feeAmount,
+                                          feeIsNotZero: true, // TODO: feeIsNotZero()
+                                            targetView: finalDestinationI)
+
             // destination to subject input, when user tapped an amount shortcut
             let shortcutDestination = SubjectInputV(stack: stack.push(),
                                                       url: url,
-                    amountAvailable: nil,
-                   amountToTransfer: $amountShortcut,
-                        amountLabel: amountLabel,
-                            summary: $summary,
-//                       insufficient: $insufficient,
-//                          feeAmount: $feeAmount,
-                       feeIsNotZero: true, // TODO: feeIsNotZero()
-                         targetView: finalDestinationS)
+                                          amountAvailable: nil,
+                                         amountToTransfer: $amountShortcut,
+                                              amountLabel: amountLabel,
+                                                  summary: $summary,
+//                                           insufficient: $insufficient,
+//                                              feeAmount: $feeAmount,
+                                             feeIsNotZero: true, // TODO: feeIsNotZero()
+                                               targetView: finalDestinationS)
           Group {
             if amountIsEditable {           // template contract amount is not fixed => let the user input an amount first
                 let amountInput = AmountInputV(stack: stack.push(),

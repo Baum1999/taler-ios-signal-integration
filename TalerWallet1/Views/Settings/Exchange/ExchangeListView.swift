@@ -73,6 +73,7 @@ struct ExchangeListCommonV: View {
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     var body: some View {
@@ -92,12 +93,15 @@ struct ExchangeListCommonV: View {
             }
             Section {
                 let plus = Image(systemName: "plus")
-                Text("Use the \(plus) button to add a service.")
-                    .talerFont(.body)
-                    .listRowSeparator(.hidden)
-                Text("You can also scan a withdrawal QR code from your bank in the Action menu to automatically add a payment service.")
-                    .talerFont(.body)
+                if !minimalistic {
+                    Text("Tap the \(plus) button to add a service.")
+                        .listRowSeparator(.hidden)
+                    Text("You can also scan a withdrawal QR code from your bank in the Action menu to automatically add a payment service.")
+                } else {
+                    Text("Tap \(plus) or scan a withdrawal QR code from your bank to add a payment service.")
+                }
             }
+                .talerFont(.body)
         }
 
         Group {
@@ -108,30 +112,14 @@ struct ExchangeListCommonV: View {
             }
         }
         .listStyle(myListStyle.style).anyView
-//#if REFRESHABLE
         .refreshable {
             controller.hapticNotification(.success)
             symLog?.log("refreshing")
 //            await reloadExchanges()
             NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
         }
-//#endif
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_PAYMENT_SERVICES, stack: stack.push())
         }
-//        .onNotification(.ExchangeAdded) { notification in
-//            // doesn't need to be received on main thread because we just reload in the background anyway
-//            symLog?.log(".onNotification(.ExchangeAdded) ==> reloading exchanges")
-//            Task { await reloadExchanges() } // runs on MainActor
-//        }
-//        .onNotification(.ExchangeDeleted) { notification in
-//            // doesn't need to be received on main thread because we just reload in the background anyway
-//            symLog?.log(".onNotification(.ExchangeDeleted) ==> reloading exchanges")
-//            Task { await reloadExchanges() } // runs on MainActor
-//        }
-//        .task {
-//            symLog?.log(".task")
-//            await reloadExchanges()
-//        }
     } // body
 }

@@ -309,24 +309,16 @@ extension Controller {
             // TODO: uncrypted
         }
         switch command.lowercased() {
-            case "withdraw":
-                return .withdraw
-            case "withdraw-exchange":
-                return .withdrawExchange
-            case "terms-exchange":
-                return .termsExchange
-            case "pay":
-                return .pay
-            case "pay-pull":
-                return .payPull
-            case "pay-push":
-                return .payPush
-            case "pay-template":
-                return .payTemplate
-            case "refund":
-                return .refund
+            case "withdraw":            return .withdraw
+            case "withdraw-exchange":   return .withdrawExchange
+            case "terms-exchange":      return .termsExchange
+            case "pay":                 return .pay
+            case "pay-pull":            return .payPull
+            case "pay-push":            return .payPush
+            case "pay-template":        return .payTemplate
+            case "refund":              return .refund
             default:
-                self.logger.error("unknown command taler://\(command)")
+                self.logger.error("❗️unknown command taler://\(command)")
         }
         return .unknown
     }

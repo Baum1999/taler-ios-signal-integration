@@ -48,13 +48,11 @@ struct TransactionsListView: View {
             }
             .id(viewId)
             .listStyle(myListStyle.style).anyView
-#if REFRESHABLE
             .refreshable {
                 controller.hapticNotification(.success)
                 symLog.log("refreshing")
                 await reloadAllAction(stack.push())
             }
-#endif
 #if false // SCROLLBUTTONS
             .if(count > showUpDown) { view in
                 view.navigationBarItems(trailing: HStack {
