@@ -88,7 +88,7 @@ class WalletCore: QuickjsMessageHandler {
     init() throws {
         isObserving = 0
         isLogging = false
-        logger.info("init Quickjs")
+//        logger.trace("init Quickjs")
         requestsMade = 0
         queue = DispatchQueue(label: "net.taler.myQueue", attributes: .concurrent)
         semaphore = DispatchSemaphore(value: 1)
