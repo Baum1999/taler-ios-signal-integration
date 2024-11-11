@@ -101,7 +101,7 @@ struct AmountInputV: View {
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                    feeIsNegative: feeIsNegative)
             let flags = checkAvailable(coinData)
-            Button(coinData.invalid ? "Amount too small" : "Next") { buttonAction() }
+            Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
         }.padding(.horizontal)
