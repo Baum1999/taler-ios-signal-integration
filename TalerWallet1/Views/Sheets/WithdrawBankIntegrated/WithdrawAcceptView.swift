@@ -25,7 +25,6 @@ struct WithdrawAcceptView: View {
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var withdrawalDetails: WithdrawalDetailsForAmount? = nil
 
     @MainActor
@@ -91,8 +90,11 @@ struct WithdrawAcceptView: View {
                                       summary: nil,
                                      merchant: nil)
                     if let wireFee {
-                        let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
-                        Text("Your bank's wire fee: \(feeStr)")
+                        if !wireFee.isZero {
+                            let currencyInfo = controller.info(for: scope, controller.currencyTicker)
+                            let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
+                            Text("Your bank's wire fee: \(feeStr)")
+                        }
                     }
                 }
                 .listStyle(myListStyle.style).anyView
