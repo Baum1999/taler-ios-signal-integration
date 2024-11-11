@@ -94,7 +94,7 @@ struct ManualWithdraw: View {
                 if let balance {
                     let scopeInfo = balance.scopeInfo
                     amountToTransfer.setCurrency(scopeInfo.currency)
-//                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
                 }
             }
 

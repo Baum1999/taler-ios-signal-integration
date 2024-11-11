@@ -32,16 +32,15 @@ struct DepositIbanV: View {
     @State private var transactionStarted: Bool = false
     @State private var paytoUri: String? = nil
     @FocusState private var isFocused: Bool
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func buttonTitle(_ amount: Amount) -> String {
-        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
+//        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
         return String(localized: "Next", comment: "advance Deposit to Amount")
-        return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
+//        return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
     }
 
     private var subjectTitle: String {
