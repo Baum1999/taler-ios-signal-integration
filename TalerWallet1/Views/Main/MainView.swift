@@ -112,27 +112,29 @@ struct MainView: View {
                 withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
                     showScanner = true      // switch to qrSheet => camera on
         }   }   }
-        .sheet(isPresented: $showActionSheet,
-               onDismiss: { showScanner = false; qrButtonTapped = false }
+        .sheet(isPresented: $showScanner,
+               onDismiss: { showActionSheet = false; qrButtonTapped = false; userAction += 1 }
         ) {
             let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                           selectedBalance: $selectedBalance))
+            let _ = logger.trace("❗️showScanner: .large❗️")
             if #available(iOS 16.4, *) {
-                if showScanner {
-                    let _ = logger.log("❗️showScanner: .large❗️")
-                    Sheet(stack: stack.push(), sheetView: qrSheet)
-                        .presentationDetents([.large])
-                        .transition(.opacity)
-                } else {
-                    let _ = logger.log("❗️actionsSheet: small❗️")
-                    DualHeightSheet(stack: stack.push(),
-                           qrButtonTapped: $qrButtonTapped)
-                }
+                Sheet(stack: stack.push(), sheetView: qrSheet)
+                    .presentationDetents([.large])
+                    .transition(.opacity)
             } else {
-                if showScanner {
-                    Sheet(stack: stack.push(), sheetView: qrSheet)
-                        .transition(.opacity)
-                } else {
+                Sheet(stack: stack.push(), sheetView: qrSheet)
+                    .transition(.opacity)
+            }
+        }
+        .sheet(isPresented: $showActionSheet,
+               onDismiss: { showScanner = false; qrButtonTapped = false; userAction += 1 }
+        ) {
+            if #available(iOS 16.4, *) {
+                let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
+                DualHeightSheet(stack: stack.push(),
+                       qrButtonTapped: $qrButtonTapped)
+            } else {
                     Group {
                         Spacer()
                         ScrollView {
@@ -145,7 +147,6 @@ struct MainView: View {
                         .edgesIgnoringSafeArea(.all)
                     }
                     .background(WalletColors().gray2)
-                }
             }
         }
     } // body
@@ -305,16 +306,12 @@ extension MainView {
 //            let actionTitle = Tab.actions.title
             let settingsTitle = Tab.settings.title
             let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $navModel.tabBarHidden) {
+                logger.log("onActionTab")
                 showActionSheet = true
             } onActionDrag: {
+                logger.log("onActionDrag: showScanner = true")
                 showScanner = true
-                showActionSheet = true
             }
-
-            let scope = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange,
-                                noFees: false,
-                                   url: DEMOEXCHANGE,
-                              currency: DEMOCURRENCY)
 
             let sendDest = SendAmountV(stack: stack.push(Self.name),
                              selectedBalance: $selectedBalance,                 // if nil shows currency picker
