@@ -100,7 +100,9 @@ struct TransactionSummaryV: View {
                        // flush the screen first, then reload
                     withAnimation { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
                     symLog.log("newState: \(newMajor), reloading transaction")
-                    await loadTransaction()
+                    if newMajor != .none {              // don't reload after delete
+                        await loadTransaction()
+                    }
                 }
             }
         } else { // Yikes - should never happen
