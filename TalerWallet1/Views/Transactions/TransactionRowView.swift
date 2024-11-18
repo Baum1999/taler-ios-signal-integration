@@ -80,7 +80,7 @@ struct TransactionRowView: View {
         let topString = topString()
         let centerTop = Text(topString ?? EMPTYSTRING)
             .foregroundColor(textColor)
-            .strikethrough(!doneOrPending, color: .red)
+            .strikethrough(!doneOrPending, color: WalletColors().negative)
             .talerFont(.headline)
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)

@@ -91,7 +91,7 @@ struct BarGraph: View {
                                 .frame(width: width, height: topHeight)
                         }
                         Rectangle()
-                            .foregroundColor(incoming ? .green : .red)
+                            .foregroundColor(incoming ? WalletColors().positive : WalletColors().negative)
                             .frame(width: width, height: valueColored)
                         if botHeight > 0 {
                             Rectangle()

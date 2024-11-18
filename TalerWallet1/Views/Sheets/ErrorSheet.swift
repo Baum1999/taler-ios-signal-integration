@@ -81,7 +81,7 @@ struct ErrorSheet: View {
                     .resizable()
                     .frame(width: 50, height: 50)
                     .aspectRatio(contentMode: .fit)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(WalletColors().attention)
                     .padding()
 
                 Text(title)

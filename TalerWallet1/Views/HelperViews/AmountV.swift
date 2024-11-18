@@ -53,7 +53,7 @@ struct AmountV: View {
 
     var body: some View {
         Text(amountStr(currencyInfo))
-            .strikethrough(strikethrough, color: .red)
+            .strikethrough(strikethrough, color: WalletColors().attention)
             .multilineTextAlignment(.center)
             .talerFont(large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)

@@ -82,7 +82,7 @@ struct P2PSubjectV: View {
                 if label.count > 0 {
                     Text(label)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .foregroundColor(feeIsNotZero ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
+                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                         .talerFont(.body)
                 }
             }

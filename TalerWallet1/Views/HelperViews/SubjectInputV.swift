@@ -95,7 +95,7 @@ struct SubjectInputV<TargetView: View>: View {
 //            if insufficient {
 //                Text(insufficientLabel)
 //                    .talerFont(.body)
-//                    .foregroundColor(.red)
+//                    .foregroundColor(WalletColors().attention)
 //                    .padding(4)
 //            }
 

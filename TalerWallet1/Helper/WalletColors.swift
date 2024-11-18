@@ -21,6 +21,13 @@ public struct WalletColors {
     let gray8 = grouped ? Color(.secondarySystemGroupedBackground)
                         : Color(.secondarySystemBackground)       // disabled Back
 
+    let attention = Color.red
+    let confirm = Color.yellow
+
+    // TODO: In Japan, negative is blue, and positive is red
+    let positive = Color.green
+    let negative = Color.red
+
     func buttonForeColor(pressed: Bool, disabled: Bool,
                        prominent: Bool = false, balance: Bool = false) -> Color {
              balance ? Color.primary

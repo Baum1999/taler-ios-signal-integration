@@ -284,8 +284,8 @@ struct TalerButtonStyle: ButtonStyle {
                                 .animation(.spring(response: 0.1), value: configuration.isPressed)
                                 .disabled(disabled)
             if hasBadge {
-                let badgeColor: Color = (badge == CONFIRM_BANK) ? .yellow
-                                                                : .red
+                let badgeColor: Color = (badge == CONFIRM_BANK) ? WalletColors().confirm
+                                                                : WalletColors().attention
                 let badgeV = Image(systemName: badge)
                                 .talerFont(.caption)
                 HStack(alignment: .top, spacing: 0) {

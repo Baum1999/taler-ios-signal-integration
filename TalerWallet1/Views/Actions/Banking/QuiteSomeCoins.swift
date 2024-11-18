@@ -83,7 +83,7 @@ struct QuiteSomeCoins: View {
             Text(coinData.tooMany ? "Amount too big for a single withdrawal!"
              : coinData.quiteSome ? "Note: It will take quite some time to prepare this amount! Be more patient..."
                                   : "Note: It will take some time to prepare this amount. Be patient...")
-                .foregroundColor(isError || coinData.quiteSome ? .red : .primary)
+                .foregroundColor(isError || coinData.quiteSome ? WalletColors().attention : .primary)
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.vertical, 6)

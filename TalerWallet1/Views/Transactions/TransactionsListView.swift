@@ -136,7 +136,7 @@ struct TransactionsArraySliceV: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
-                        .tint(.red)
+                        .tint(WalletColors().negative)
                     }
             } else {
                 row
