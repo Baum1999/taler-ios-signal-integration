@@ -121,7 +121,7 @@ struct CheckPeerPullCreditResponse: Codable {
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
     func operation() -> String { "checkPeerPullCredit" }
-    func args() -> Args { Args(amount: amount, scopeInfo: scope,
+    func args() -> Args { Args(amount: amount, restrictScope: scope,
                                exchangeBaseUrl: scope?.url,
                                clientCancellationId: "cancel") }
 
@@ -129,7 +129,7 @@ fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     var scope: ScopeInfo?
     struct Args: Encodable {
         var amount: Amount
-        var scopeInfo: ScopeInfo?
+        var restrictScope: ScopeInfo?
         var exchangeBaseUrl: String?
         var clientCancellationId: String?
     }
