@@ -28,6 +28,7 @@ struct ExchangeSectionView: View {
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
     @State private var purge: Bool = false
+    @State private var global: Bool = false
 
 //    func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
 //        if let exchange {
@@ -49,6 +50,10 @@ struct ExchangeSectionView: View {
     @MainActor
     private func viewDidLoad() async {
         if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
+            if exc.count > 0 {
+                let exchange = exc[0]
+                global = exchange.scopeInfo.type == .global
+            }
             withAnimation { exchanges = exc }
         }
     }
@@ -82,6 +87,24 @@ struct ExchangeSectionView: View {
         }
     }
 
+    @MainActor
+    private func setGlobal() {
+        if exchanges.count > 0 {
+            let exchange = exchanges[0]
+            let scope = exchange.scopeInfo
+            Task {
+                if scope.type != .global {
+                    try? await model.addGlobalCurrencyExchange(currency: exchange.scopeInfo.currency,
+                                                                baseUrl: exchange.exchangeBaseUrl,
+                                                              masterPub: exchange.masterPub ?? EMPTYSTRING)
+                } else {
+                    try? await model.rmvGlobalCurrencyExchange(currency: exchange.scopeInfo.currency,
+                                                                baseUrl: exchange.exchangeBaseUrl,
+                                                              masterPub: exchange.masterPub ?? EMPTYSTRING)
+                }
+            }
+        }
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -95,9 +118,16 @@ struct ExchangeSectionView: View {
                              exchange: exchange)
                 .listRowSeparator(.hidden)
             }
+            if DEMOCURRENCY == currency || TESTCURRENCY == currency {
+                SettingsToggle(name: String(localized: "Global"), value: $global.onChange({ isGlobal in
+                    setGlobal()
+                }),             id1: "global",
+                        description: minimalistic ? nil : String(localized: "Treat this as a global exchange"))
+                .listRowSeparator(.hidden)
+            }
             if DEMOCURRENCY == currency {
                 SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints, id1: "demoHints",
-                               description: minimalistic ? nil : String(localized: "Show hints for demo money"))
+                        description: minimalistic ? nil : String(localized: "Show hints for demo money"))
                 .listRowSeparator(.hidden)
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
