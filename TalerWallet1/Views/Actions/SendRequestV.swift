@@ -11,6 +11,7 @@ import SwiftUI
 struct SendRequestV: View {
     let stack: CallStack
     let sendDisabled: Bool   // can't send/deposit if wallet has no coins at all
+    let recvDisabled: Bool   // can't receive/withdraw if wallet has no payments services
 
     var body: some View {
         let sendTitle = String(localized: "SendButton_Short", defaultValue: "Send",
@@ -26,6 +27,7 @@ struct SendRequestV: View {
                    recvA11y: requTitle,
                sendDisabled: sendDisabled,
                  sendAction: .SendAction,
+               recvDisabled: recvDisabled,
                  recvAction: .RequestAction)
     }
 }

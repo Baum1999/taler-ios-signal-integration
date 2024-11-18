@@ -11,6 +11,7 @@ import SwiftUI
 struct DepositWithdrawV: View {
     let stack: CallStack
     let sendDisabled: Bool   // can't send/deposit if wallet has no coins at all
+    let recvDisabled: Bool   // can't receive/withdraw if wallet has no payments services
 
     var body: some View {
         let depositTitle = String(localized: "DepositButton_Short", defaultValue: "Deposit",
@@ -26,6 +27,7 @@ struct DepositWithdrawV: View {
                    recvA11y: withdrawTitle,
                sendDisabled: sendDisabled,
                  sendAction: .DepositAction,
+               recvDisabled: recvDisabled,
                  recvAction: .WithdrawAction)
     }
 }

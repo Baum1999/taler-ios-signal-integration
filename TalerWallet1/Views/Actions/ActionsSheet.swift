@@ -77,8 +77,9 @@ struct ActionsSheet: View {
             }
 
             let sendDisabled = !canSend
-            SendRequestV(stack: stack.push(), sendDisabled: sendDisabled)
-            DepositWithdrawV(stack: stack.push(), sendDisabled: sendDisabled)
+            let recvDisabled = controller.balances.count == 0
+            SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
+            DepositWithdrawV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
             QRButton(isNavBarItem: false) {
                 qrButtonTapped = true
             }

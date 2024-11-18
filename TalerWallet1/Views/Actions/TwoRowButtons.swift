@@ -105,8 +105,9 @@ struct TwoRowButtons: View {
     let recvTitle: String
     var recvType: TransactionType
     let recvA11y: String
-    let sendDisabled: Bool
+    let sendDisabled: Bool   // can't send/deposit if wallet has no coins at all
     let sendAction: NSNotification.Name
+    let recvDisabled: Bool   // can't receive/withdraw if wallet has no payments services
     let recvAction: NSNotification.Name
 
     func sendButton(_ title: String) -> TypeButton {
@@ -123,7 +124,7 @@ struct TwoRowButtons: View {
                    title: title,
                     a11y: recvA11y,
                     type: recvType,
-                disabled: false,
+                disabled: recvDisabled,
                   action: recvAction)
     }
 
@@ -163,6 +164,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                        recvA11y: "Request " + LONGCURRENCY,
                    sendDisabled: true,
                      sendAction: .SendAction,
+                   recvDisabled: false,
                      recvAction: .RequestAction)
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
@@ -174,6 +176,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                        recvA11y: "Request " + DEMOCURRENCY,
                    sendDisabled: true,
                      sendAction: .SendAction,
+                   recvDisabled: false,
                      recvAction: .RequestAction)
                 .listRowSeparator(.hidden)
         }
