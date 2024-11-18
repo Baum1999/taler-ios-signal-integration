@@ -55,20 +55,24 @@ struct QRCodeDetailView: View {
                 }
                 .accessibilityLabel("QR Code")
                 .listRowSeparator(.hidden)
-                if !minimalistic {
-                    let amountStr = amountStr(currencyInfo)
-                    let scanLong = incoming ? String(localized: "(payer) 1",
-                                                  defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
-                                                       comment: "e.g. '5,3 €'")
-                                            : String(localized: "(payee) 1",
-                                                  defaultValue: "Let the payee scan this QR code to receive \(amountStr).",
-                                                       comment: "e.g. '$ 7.41'")
-                    Text(scanLong)
-                        .multilineTextAlignment(.leading)
-                        .talerFont(.title3)
-                        .listRowSeparator(.hidden)
-                        .task(id: controller.currencyTicker) { await currencyTickerChanged() }
-                }
+                let amountStr = amountStr(currencyInfo)
+                let scanLong = incoming ? (minimalistic ? String(localized: "(payer) 1 mini",
+                                                              defaultValue: "Requesting \(amountStr)",
+                                                                   comment: "e.g. '5,3 €'")
+                                                        : String(localized: "(payer) 1",
+                                                              defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
+                                                                   comment: "e.g. '5,3 €'"))
+                                        : (minimalistic ? String(localized: "(payee) 1 mini",
+                                                              defaultValue: "Sending \(amountStr)",
+                                                                   comment: "e.g. '$ 7.41'")
+                                                        : String(localized: "(payee) 1",
+                                                              defaultValue: "Let the payee scan this QR code to receive \(amountStr).",
+                                                                   comment: "e.g. '$ 7.41'"))
+                Text(scanLong)
+                    .multilineTextAlignment(.leading)
+                    .talerFont(.title3)
+                    .listRowSeparator(.hidden)
+                    .task(id: controller.currencyTicker) { await currencyTickerChanged() }
                 CopyShare(textToCopy: talerCopyShare)
                     .disabled(false)
 //                  .padding(.bottom)

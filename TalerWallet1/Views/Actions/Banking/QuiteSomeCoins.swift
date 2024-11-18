@@ -71,12 +71,14 @@ struct QuiteSomeCoins: View {
     var body: some View {
         let isError = coinData.tooMany // || coinData.invalid
         let showFee = shouldShowFee && !isError
-        if showFee {
+        if showFee {    // TODO: does exchange never have fee?
             if let fee = coinData.fee {
-                Text(coinData.feeLabel(scope, feeZero: String(localized: "No withdrawal fee"),
-                                       isNegative: feeIsNegative))
-                .foregroundColor(.primary)
-                .talerFont(.body)
+                let feeLabel = coinData.feeLabel(scope,
+                                        feeZero: String(localized: "No fee"),
+                                     isNegative: feeIsNegative)
+                Text(feeLabel)
+                    .foregroundColor(.primary)
+                    .talerFont(.body)
             }
         }
         if isError || coinData.quiteSome || coinData.manyCoins {

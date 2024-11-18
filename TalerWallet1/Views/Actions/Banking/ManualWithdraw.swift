@@ -202,7 +202,7 @@ struct ManualWithdrawContent: View {
 //  let _ = print(selectedAge, restrictAge)
                 let destination = ManualWithdrawDone(stack: stack.push(),
                                                      scope: detailsForAmount.scopeInfo,
-                                                   baseURL: detailsForAmount.exchangeBaseUrl,
+                                                   baseURL: baseURL,
                                           amountToTransfer: amountToTransfer)
 //                                             restrictAge: restrictAge)
                 let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany

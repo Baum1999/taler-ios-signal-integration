@@ -41,7 +41,7 @@ struct PendingRowView: View {
             .foregroundColor(pendingColor)
 
         // this is the default view for iOS 15
-        let vStack = VStack {
+        let vLayout = VStack {
             Text(pendingTitle.tabbed(oneLine: true))
             HStack {
                 iconBadge
@@ -56,7 +56,7 @@ struct PendingRowView: View {
                     Text(pendingTitle.tabbed(oneLine: false))
                     amountText.frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                vStack
+                vLayout
                 VStack {
                     Text(pendingTitle.tabbed(oneLine: true))
                     iconBadge
@@ -64,7 +64,7 @@ struct PendingRowView: View {
                 }
             }
         } else {
-            vStack
+            vLayout
         }
     }
 }
