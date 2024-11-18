@@ -169,7 +169,7 @@ struct SendAmountView: View {
                 AmountInputV(stack: stack.push(),
                              scope: scopeInfo,
                    amountAvailable: $amountAvailable,
-                       amountLabel: nil,        // will use "Available: xxx", trailing
+                       amountLabel: nil,        // will use "Available for transfer: xxx", trailing
                   amountToTransfer: $amountToTransfer,
                     amountLastUsed: amountLastUsed,
                            wireFee: nil,

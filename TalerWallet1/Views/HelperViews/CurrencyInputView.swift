@@ -120,7 +120,7 @@ struct CurrencyInputView: View {
         }
         if let available {
             let availableStr = available.formatted(scope, isNegative: false)
-            return String(localized: "Available: \(availableStr)")
+            return String(localized: "Available for transfer: \(availableStr)")
         }
         return nil
     }
@@ -148,7 +148,7 @@ struct CurrencyInputView: View {
             if let heading = heading() {
                 Text(heading)
                     .padding(.horizontal, 4)
-                    .frame(maxWidth: .infinity, alignment: title != nil ? .leading : .trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)  // title != nil ? .leading :
                     .talerFont(.title2)
                     .accessibilityAddTraits(.isHeader)
                     .if(title == nil && available != nil) { view in

@@ -164,12 +164,10 @@ struct WithdrawURIView: View {
                                 NavLink($buttonSelected) { acceptDestination }
                             }
                             // TODO: input amount, then
-                            let amountLabel = minimalistic ? String(localized: "Amount:")
-                                                           : String(localized: "Amount to withdraw:")
                             AmountInputV(stack: stack.push(),
                                          scope: exchange.scopeInfo,
                                amountAvailable: $amountZero,
-                                   amountLabel: amountLabel,
+                                   amountLabel: nil,        // will use "Available for transfer: xxx", trailing
                               amountToTransfer: $amountToTransfer,
                                 amountLastUsed: amountLastUsed,
                                        wireFee: wireFee,
