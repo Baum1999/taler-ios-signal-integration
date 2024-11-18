@@ -344,9 +344,9 @@ struct TransactionCommon: Decodable, Sendable {
             case .scanPushCredit: return String(localized: "Receive Money",
                                                   comment: "TransactionType, scan to receive coins sent from another wallet")
             case .peerPullCredit: return String(localized: "Request Money",     // Invoice?
-                                                  comment: "TransactionType, send invoice to another wallet")
+                                                  comment: "TransactionType, send private 'invoice' to another wallet")
             case .scanPullDebit:  return String(localized: "Pay Request",       // Pay Invoice is the same as Payment
-                                                  comment: "TransactionType, scan invoice to pay to another wallet")
+                                                  comment: "TransactionType, scan private 'invoice' to pay to another wallet")
             case .recoup:         return String(localized: "Recoup",
                                                   comment: "TransactionType")
             case .denomLoss:      return String(localized: "Money lost",
@@ -355,14 +355,14 @@ struct TransactionCommon: Decodable, Sendable {
     }
     func localizedTypePast(_ type: TransactionType) -> String {
         switch type {
-            case .peerPushDebit:  return String(localized: "Sent Money",
+            case .peerPushDebit:  return String(localized: "Money Sent",
                                                 comment: "TransactionType, sent coins to another wallet")
-            case .scanPushCredit: return String(localized: "Received Money",
+            case .scanPushCredit: return String(localized: "Money Received",
                                                 comment: "TransactionType, received coins sent from another wallet")
-            case .peerPullCredit: return String(localized: "Requested Money",     // Invoice?
-                                                comment: "TransactionType, sent invoice to another wallet")
-            case .scanPullDebit:  return String(localized: "Paid Request",       // Pay Invoice is the same as Payment
-                                                comment: "TransactionType, paid invoice from another wallet")
+            case .peerPullCredit: return String(localized: "Money Requested",     // Invoice?
+                                                comment: "TransactionType, sent private 'invoice' to another wallet")
+            case .scanPullDebit:  return String(localized: "Request Paid",       // Pay Invoice is the same as Payment
+                                                comment: "TransactionType, paid private 'invoice' from another wallet")
             default:              return localizedType(type)
         }
     }

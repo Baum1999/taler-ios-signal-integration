@@ -60,13 +60,13 @@ struct QRCodeDetailView: View {
                                                               defaultValue: "Requesting \(amountStr)",
                                                                    comment: "e.g. '5,3 €'")
                                                         : String(localized: "(payer) 1",
-                                                              defaultValue: "Let the payer scan this QR code to pay \(amountStr).",
+                                                              defaultValue: "To receive \(amountStr), have the payer scan this QR code.",
                                                                    comment: "e.g. '5,3 €'"))
                                         : (minimalistic ? String(localized: "(payee) 1 mini",
                                                               defaultValue: "Sending \(amountStr)",
                                                                    comment: "e.g. '$ 7.41'")
                                                         : String(localized: "(payee) 1",
-                                                              defaultValue: "Let the payee scan this QR code to receive \(amountStr).",
+                                                              defaultValue: "Sending \(amountStr) - let the payee scan this QR code to receive the payment.",
                                                                    comment: "e.g. '$ 7.41'"))
                 Text(scanLong)
                     .multilineTextAlignment(.leading)

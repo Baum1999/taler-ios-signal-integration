@@ -28,7 +28,7 @@ struct P2PReadyV: View {
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    let navTitle = String(localized: "P2P Ready")
+    let navTitle = String(localized: "Ready")
     @State private var transactionId: String? = nil
 
     @MainActor
