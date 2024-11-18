@@ -170,6 +170,37 @@ fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
         let currencySpecification: CurrencySpecification
     }
 }
+/// A request to make a currency "global"
+fileprivate struct AddGlobalCurrency: WalletBackendFormattedRequest {
+    func operation() -> String { "addGlobalCurrencyExchange" }
+    func args() -> Args { Args(currency: currency,
+                        exchangeBaseUrl: baseUrl,
+                      exchangeMasterPub: masterPub) }
+    var currency: String
+    var baseUrl: String
+    var masterPub: String
+    struct Args: Encodable {
+        var currency: String
+        var exchangeBaseUrl: String
+        var exchangeMasterPub: String
+    }
+    struct Response: Decodable {}   // no result - getting no error back means success
+}
+fileprivate struct RmvGlobalCurrency: WalletBackendFormattedRequest {
+    func operation() -> String { "removeGlobalCurrencyExchange" }
+    func args() -> Args { Args(currency: currency,
+                        exchangeBaseUrl: baseUrl,
+                      exchangeMasterPub: masterPub) }
+    var currency: String
+    var baseUrl: String
+    var masterPub: String
+    struct Args: Encodable {
+        var currency: String
+        var exchangeBaseUrl: String
+        var exchangeMasterPub: String
+    }
+    struct Response: Decodable {}   // no result - getting no error back means success
+}
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
@@ -228,5 +259,17 @@ extension WalletModel {
         return CurrencyInfo(specs: response.currencySpecification,
                         formatter: CurrencyFormatter.formatter(currency: scope.currency,
                                                                   specs: response.currencySpecification))
+    }
+
+    nonisolated func addGlobalCurrencyExchange(currency: String, baseUrl: String, masterPub: String, viewHandles: Bool = false)
+      async throws {
+        let request = AddGlobalCurrency(currency: currency, baseUrl: baseUrl, masterPub: masterPub)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+
+    nonisolated func rmvGlobalCurrencyExchange(currency: String, baseUrl: String, masterPub: String, viewHandles: Bool = false)
+      async throws {
+        let request = RmvGlobalCurrency(currency: currency, baseUrl: baseUrl, masterPub: masterPub)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
