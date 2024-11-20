@@ -81,7 +81,7 @@ struct IconBadge: View {
                     wideIcon.foregroundColor(.clear)
                 }
                 image.foregroundColor(foreColor)
-            }.talerFont(.title)
+            }.talerFont(.title2)
             if wideIcon == nil {
                 // ZStack centers the main icon, so the badge will always be at the same position
                 let badgeName = needsKYC ? NEEDS_KYC
