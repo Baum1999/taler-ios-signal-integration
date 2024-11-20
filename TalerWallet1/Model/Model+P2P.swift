@@ -87,14 +87,11 @@ struct InitiatePeerPushDebitResponse: Codable {
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPushDebitResponse
     func operation() -> String { "initiatePeerPushDebit" }
-    func args() -> Args { Args(//exchangeBaseUrl: baseURL,
-                                 restrictScope: scope,
-                          partialContractTerms: terms) }
+    func args() -> Args { Args(restrictScope: scope,
+                        partialContractTerms: terms) }
     var scope: ScopeInfo
-//    var baseURL: String?
     var terms: PeerContractTerms
     struct Args: Encodable {
-//        var exchangeBaseUrl: String?
         var restrictScope: ScopeInfo
         var partialContractTerms: PeerContractTerms
     }
@@ -121,10 +118,10 @@ struct CheckPeerPullCreditResponse: Codable {
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
     func operation() -> String { "checkPeerPullCredit" }
-    func args() -> Args { Args(amount: amount, restrictScope: scope,
-                               exchangeBaseUrl: scope?.url,
-                               clientCancellationId: "cancel") }
-
+    func args() -> Args { Args(amount: amount,
+                        restrictScope: scope,
+                      exchangeBaseUrl: scope?.url,
+                 clientCancellationId: "cancel") }
     var amount: Amount
     var scope: ScopeInfo?
     struct Args: Encodable {
@@ -155,7 +152,6 @@ fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
     func operation() -> String { "initiatePeerPullCredit" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
                           partialContractTerms: partialContractTerms) }
-
     var exchangeBaseUrl: String?
     var partialContractTerms: PeerContractTerms
     struct Args: Encodable {

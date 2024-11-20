@@ -215,11 +215,11 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 }
 
 extension WalletModel {
-    /// initalize Wallet-Core. Will do networking
+    /// initalize Wallet-Core. Might do networking
     func initWalletCoreT(setTesting: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
                     // T for any Thread
         let dbPath = try dbPath()
-        logger.debug("dbPath: \(dbPath)")
+//        logger.debug("dbPath: \(dbPath)")
         let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
         let response = try await sendRequest(request, 0, viewHandles: viewHandles)    // no Delay
         return response.versionInfo

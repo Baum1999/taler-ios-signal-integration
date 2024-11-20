@@ -68,9 +68,9 @@ struct WithdrawUriInfoResponse: Decodable {
 fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
     typealias Response = WithdrawUriInfoResponse
     func operation() -> String { "getWithdrawalDetailsForUri" }
-    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri) }
+    func args() -> Args { Args(talerWithdrawUri: talerUri) }
 
-    var talerWithdrawUri: String
+    var talerUri: String
     struct Args: Encodable {
         var talerWithdrawUri: String
     }
@@ -141,9 +141,10 @@ struct ExchangeTermsOfService: Decodable {
 fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     typealias Response = ExchangeTermsOfService
     func operation() -> String { "getExchangeTos" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, acceptedFormat: acceptedFormat, acceptLanguage: acceptLanguage) }
-
-    var exchangeBaseUrl: String
+    func args() -> Args { Args(exchangeBaseUrl: baseUrl,
+                                acceptedFormat: acceptedFormat,
+                                acceptLanguage: acceptLanguage) }
+    var baseUrl: String
     var acceptedFormat: [String]?
     var acceptLanguage: String?
     struct Args: Encodable {
@@ -156,9 +157,9 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
 fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { "setExchangeTosAccepted" }
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, etag: etag) }
+    func args() -> Args { Args(exchangeBaseUrl: baseUrl, etag: etag) }
 
-    var exchangeBaseUrl: String
+    var baseUrl: String
     var etag: String
 
     struct Args: Encodable {
@@ -176,10 +177,10 @@ struct AcceptWithdrawalResponse: Decodable {
 fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptWithdrawalResponse
     func operation() -> String { "acceptBankIntegratedWithdrawal" }
-    func args() -> Args { Args(talerWithdrawUri: talerWithdrawUri, exchangeBaseUrl: exchangeBaseUrl, amount: amount, restrictAge: restrictAge) }
+    func args() -> Args { Args(talerWithdrawUri: talerUri, exchangeBaseUrl: baseUrl, amount: amount, restrictAge: restrictAge) }
 
-    var talerWithdrawUri: String
-    var exchangeBaseUrl: String
+    var talerUri: String
+    var baseUrl: String
     var amount: Amount?
     var restrictAge: Int?
 
@@ -248,7 +249,7 @@ extension WalletModel {
     nonisolated func getWithdrawalDetailsForUri(_ talerUri: String,
                                                viewHandles: Bool = false)
       async throws -> WithdrawUriInfoResponse {
-        let request = GetWithdrawalDetailsForURI(talerWithdrawUri: talerUri)
+        let request = GetWithdrawalDetailsForURI(talerUri: talerUri)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
@@ -263,35 +264,35 @@ extension WalletModel {
         return response
     }
 
-    nonisolated func loadExchangeTermsOfService(_ exchangeBaseUrl: String,
-                                                   acceptedFormat: [String],
-                                                   acceptLanguage: String,
-                                                      viewHandles: Bool = false)
+    nonisolated func loadExchangeTermsOfService(_ baseUrl: String,
+                                           acceptedFormat: [String],
+                                           acceptLanguage: String,
+                                              viewHandles: Bool = false)
       async throws -> ExchangeTermsOfService {
-        let request = GetExchangeTermsOfService(exchangeBaseUrl: exchangeBaseUrl,
-                                                 acceptedFormat: acceptedFormat,
-                                                 acceptLanguage: acceptLanguage)
+        let request = GetExchangeTermsOfService(baseUrl: baseUrl,
+                                         acceptedFormat: acceptedFormat,
+                                         acceptLanguage: acceptLanguage)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 
-    nonisolated func setExchangeTOSAccepted(_ exchangeBaseUrl: String,
-                                                         etag: String,
-                                                  viewHandles: Bool = false)
+    nonisolated func setExchangeTOSAccepted(_ baseUrl: String,
+                                                 etag: String,
+                                          viewHandles: Bool = false)
       async throws -> Decodable {
-        let request = SetExchangeTOSAccepted(exchangeBaseUrl: exchangeBaseUrl, etag: etag)
+        let request = SetExchangeTOSAccepted(baseUrl: baseUrl, etag: etag)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
 
-    nonisolated func acceptBankIntWithdrawal(_ exchangeBaseUrl: String,
-                                                   withdrawURL: String,
-                                                        amount: Amount?,
-                                                   restrictAge: Int?,
-                                                   viewHandles: Bool = false)
+    nonisolated func acceptBankIntWithdrawal(_ baseUrl: String,
+                                           withdrawURL: String,
+                                                amount: Amount?,
+                                           restrictAge: Int?,
+                                           viewHandles: Bool = false)
       async throws -> AcceptWithdrawalResponse? {
-          let request = AcceptBankIntegratedWithdrawal(talerWithdrawUri: withdrawURL, exchangeBaseUrl: exchangeBaseUrl,
-                                                                 amount: amount, restrictAge: restrictAge)
+          let request = AcceptBankIntegratedWithdrawal(talerUri: withdrawURL, baseUrl: baseUrl,
+                                                         amount: amount, restrictAge: restrictAge)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }

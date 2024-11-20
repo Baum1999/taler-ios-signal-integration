@@ -149,9 +149,6 @@ struct TransactionRowView: View {
             if topString != nil { centerTop }
             HStack(spacing: -4) {
                 Spacer(minLength: 2)
-#if DEBUG
-                    .border(green)
-#endif
                 amountV
 #if DEBUG
                     .border(green)

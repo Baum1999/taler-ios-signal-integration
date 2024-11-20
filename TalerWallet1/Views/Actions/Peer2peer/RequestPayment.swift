@@ -24,6 +24,7 @@ struct RequestPayment: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
+    @MainActor
     private func viewDidLoad() async {
         if let selectedBalance {
             balance = selectedBalance
@@ -33,6 +34,7 @@ struct RequestPayment: View {
             balance = (controller.balances.count > 0) ? controller.balances[0] : nil
         }
     }
+
     private func navTitle(_ currency: String, _ condition: Bool = false) -> String {
         condition ? String(localized: "NavTitle_Request_Currency)",
                         defaultValue: "Request \(currency)",

@@ -28,6 +28,7 @@ struct SendAmountV: View {
 
     @MainActor
     private func viewDidLoad() async {
+        let balances = controller.balances
         if let selectedBalance {
             if selectedBalance.available.isZero {
                 // find another balance
@@ -39,10 +40,10 @@ struct SendAmountV: View {
             balance = Balance.firstNonZero(controller.balances)
         }
         if let balance {
-            balanceIndex = controller.balances.firstIndex(of: balance) ?? 0
+            balanceIndex = balances.firstIndex(of: balance) ?? 0
         } else {
             balanceIndex = 0
-            balance = (controller.balances.count > 0) ? controller.balances[0] : nil
+            balance = (balances.count > 0) ? balances[0] : nil
         }
     }
 
@@ -75,7 +76,8 @@ struct SendAmountV: View {
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex, onlyNonZero: true)            // can only send what exists
+                ScopePicker(value: $balanceIndex,
+                      onlyNonZero: true)                                        // can only send what exists
                 { index in
                     balanceIndex = index
                     balance = controller.balances[index]
@@ -90,20 +92,13 @@ struct SendAmountV: View {
                     amountToTransfer: $amountToTransfer,
                      amountAvailable: $amountAvailable,
                              summary: $summary)
-            } else {    // no balance - Yikes
+            } else {    // TODO: Error no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-//            .onAppear {
-//                DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
-//                symLog.log("❗️ \(navTitle) onAppear")
-//            }
-//            .onDisappear {
-//                symLog.log("❗️ \(navTitle) onDisappear")
-//            }
             .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 

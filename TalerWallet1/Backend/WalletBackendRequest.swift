@@ -32,9 +32,9 @@ struct ScopeInfo: Codable, Hashable {
         case madeUp     // => type unknown, currency name taken from amount
     }
     var type: ScopeInfoType
+    var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
     var noFees: Bool?           // only for "global". Regional have this field per Exchange
     var url: String?            // only for "exchange" and "auditor"
-    var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
 
     public static func zero() -> ScopeInfo {
         ScopeInfo(type: .madeUp, currency: UNKNOWN)

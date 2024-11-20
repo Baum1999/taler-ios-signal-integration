@@ -86,7 +86,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
 
-            let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, url: DEMOEXCHANGE, currency: DEMOCURRENCY)
+            let scopeInfo = ScopeInfo(type: ScopeInfo.ScopeInfoType.exchange, currency: DEMOCURRENCY, url: DEMOEXCHANGE)
             let balance = Balance(scopeInfo: scopeInfo,
                                   available: Amount(currency: DEMOCURRENCY, cent:1000),
                             pendingIncoming: Amount(currency: DEMOCURRENCY, cent: 555),

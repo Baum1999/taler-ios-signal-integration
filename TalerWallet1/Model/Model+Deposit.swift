@@ -102,16 +102,25 @@ struct CheckDepositResponse: Codable {
 /// A request to get an exchange's deposit contract terms.
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
     typealias Response = CheckDepositResponse
-    func operation() -> String { "prepareDeposit" }         // checkDeposit
-    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount,
+    func operation() -> String { "checkDeposit" }
+    func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
+                                        amount: amount,
                           clientCancellationId: "cancel") }
-
     var depositPaytoUri: String
     var amount: Amount
     struct Args: Encodable {
         var depositPaytoUri: String
         var amount: Amount
         var clientCancellationId: String?
+    }
+}
+extension WalletModel {
+    /// check fees for deposit. No Networking
+    nonisolated func checkDeposit4711(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
+      async throws -> CheckDepositResponse {
+        let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
     }
 }
 // MARK: -
@@ -123,8 +132,8 @@ struct DepositGroupResult: Decodable {
 fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
     typealias Response = DepositGroupResult
     func operation() -> String { "createDepositGroup" }
-    func args() -> Args { Args(depositPaytoUri: depositPaytoUri, amount: amount) }
-
+    func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
+                                        amount: amount) }
     var depositPaytoUri: String
     var amount: Amount
     struct Args: Encodable {
@@ -132,21 +141,12 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
         var amount: Amount
     }
 }
-// MARK: -
 extension WalletModel {
-    /// check fees for deposit. No Networking
-    nonisolated func checkDeposit(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
-      async throws -> CheckDepositResponse {
-          let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
-          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-          return response
-    }
-
     /// deposit coins. Networking involved
     nonisolated func createDepositGroup(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
-          let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
-          let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-          return response
+        let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
     }
 }

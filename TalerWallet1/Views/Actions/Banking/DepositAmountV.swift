@@ -48,12 +48,13 @@ struct DepositAmountV: View {
 
     @MainActor
     private func newBalance() async {
+        // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
         symLog.log("❗️ task \(balanceIndex)")
         if let balance {
-            let scopeInfo = balance.scopeInfo
-            amountToTransfer.setCurrency(scopeInfo.currency)
+            let scope = balance.scopeInfo
+            amountToTransfer.setCurrency(scope.currency)
             do {
-                amountAvailable = try await model.getMaxDepositAmount(scopeInfo)
+                amountAvailable = try await model.getMaxDepositAmount(scope)
             } catch {
                 // TODO: Error
                 amountAvailable = balance.available
@@ -73,7 +74,7 @@ struct DepositAmountV: View {
         let scrollView = ScrollView {
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
-                      onlyNonZero: true)
+                      onlyNonZero: true)                                        // can only send what exists
                 { index in
                     balanceIndex = index
                     balance = controller.balances[index]

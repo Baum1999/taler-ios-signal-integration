@@ -228,8 +228,8 @@ class Controller: ObservableObject {
     }
 
     @MainActor
-    func getInfo(from exchangeBaseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
-        let exchange = try await model.getExchangeByUrl(url: exchangeBaseUrl)
+    func getInfo(from baseUrl: String, model: WalletModel) async throws -> CurrencyInfo? {
+        let exchange = try await model.getExchangeByUrl(url: baseUrl)
         let scope = exchange.scopeInfo
         if let info = info(for: scope) {
             return info
