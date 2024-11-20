@@ -21,9 +21,21 @@ struct BalanceCellV: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
+    private func baseURL(_ url: String?) -> String {
+        if let url {
+            return url.trimURL
+        } else {
+            return String(localized: "Unknown payment service", comment: "exchange url")
+        }
+    }
+
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         let amountV = AmountV(stack: stack.push("AmountV"),
                               scope: scope,
                              amount: amount,
