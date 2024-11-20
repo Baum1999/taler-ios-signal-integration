@@ -33,8 +33,6 @@ struct SendAmountView: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees
 
-    @State private var scopeInfo: ScopeInfo? = nil
-
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
         shortcutSelected = true
@@ -82,13 +80,12 @@ struct SendAmountView: View {
         if insufficient {
             return ComputeFeeResult.insufficient()
         }
-        if let scopeInfo {
             do {
-                let ppCheck = try await model.checkPeerPushDebit(amount, scope: scopeInfo, viewHandles: true)
+                let ppCheck = try await model.checkPeerPushDebit(amount, scope: balance.scopeInfo, viewHandles: true)
                 let raw = ppCheck.amountRaw
                 let effective = ppCheck.amountEffective
                 if let fee = fee(raw: raw, effective: effective) {
-                    feeStr = fee.formatted(scopeInfo, isNegative: false)
+                    feeStr = fee.formatted(balance.scopeInfo, isNegative: false)
                     symLog.log("Fee = \(feeStr)")
                     let insufficient = (try? effective > amountAvailable) ?? true
 
@@ -117,7 +114,6 @@ struct SendAmountView: View {
                     default: break
                 }
             }
-        }
         return nil
     }
 
@@ -131,7 +127,6 @@ struct SendAmountView: View {
         } else {
             amountAvailable = Amount.zero(currency: scope.currency)
         }
-        scopeInfo = scope
     }
 
     var body: some View {
@@ -140,14 +135,13 @@ struct SendAmountView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-            if scopeInfo != nil {
-                let availableStr = amountAvailable.formatted(scopeInfo, isNegative: false)
+                let availableStr = amountAvailable.formatted(balance.scopeInfo, isNegative: false)
 //              let availableA11y = amountAvailable.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
 //              let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
 //              let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
                 let inputDestination = P2PSubjectV(stack: stack.push(),
-                                                   scope: scopeInfo!,
+                                                   scope: balance.scopeInfo,
                                                 feeLabel: feeLabel(feeStr),
                                             feeIsNotZero: feeIsNotZero(),
                                                 outgoing: true,
@@ -155,7 +149,7 @@ struct SendAmountView: View {
                                                  summary: $summary,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
-                                                      scope: scopeInfo!,
+                                                      scope: balance.scopeInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),
                                                    outgoing: true,
@@ -167,7 +161,7 @@ struct SendAmountView: View {
                     NavLink($shortcutSelected) { shortcutDestination }
                 }
                 AmountInputV(stack: stack.push(),
-                             scope: scopeInfo,
+                             scope: balance.scopeInfo,
                    amountAvailable: $amountAvailable,
                        amountLabel: nil,        // will use "Available for transfer: xxx", trailing
                   amountToTransfer: $amountToTransfer,
@@ -179,9 +173,6 @@ struct SendAmountView: View {
                      feeIsNegative: false,
                         computeFee: computeFee)
                 .background(actions)
-            } else {    // must have $some view, otherwise .task will NOT run
-                Text(" ")
-            }
         } // Group
         .task(id: balance) { await newBalance() }
         .onAppear {
