@@ -44,7 +44,7 @@ struct ScopePicker: View {
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
             let a11yLabel = url + ", " + availableA11y
 
-            HStack(alignment: .top) {
+            HStack(alignment: .firstTextBaseline) {
                 let disabled = (count == 1)
                 Text("via", comment: "ScopePicker")
                     .accessibilityHidden(true)
@@ -104,23 +104,29 @@ struct  ScopeDropDown: View {
     }
 
     @ViewBuilder
-    func dropDownRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> some View {
-        let hLayout = HStack(alignment: .top) {
-            Text(urlOrCurrency(balance))
-            Spacer()
-            Text(formattedAmount(balance, currencyInfo).nbs)
-        }
-        let vLayout = VStack(alignment: .leading) {
-            Text(urlOrCurrency(balance))
-            HStack {
+    func dropDownRow(_ balance: Balance, _ currencyInfo: CurrencyInfo, _ first: Bool = false) -> some View {
+        let text = Text(urlOrCurrency(balance))
+        let amount = Text(formattedAmount(balance, currencyInfo).nbs)
+        if first {
+            text
+        } else {
+            let hLayout = HStack(alignment: .firstTextBaseline) {
+                text
                 Spacer()
-                Text(formattedAmount(balance, currencyInfo).nbs)
-                Spacer()
+                amount
+            }.padding(.vertical, 4)
+            let vLayout = VStack(alignment: .leading) {
+                text
+                HStack {
+                    Spacer()
+                    amount
+                    Spacer()
+                }
             }
-        }
-        ViewThatFits(in: .horizontal) {
-            hLayout
-            vLayout
+            ViewThatFits(in: .horizontal) {
+                hLayout
+                vLayout
+            }
         }
     }
 
@@ -159,9 +165,10 @@ struct  ScopeDropDown: View {
                 // selected item
                 let balance = controller.balances[selection]
                 let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
+                let noAmount = !showDropdown
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
-                        dropDownRow(balance, currencyInfo)
+                        dropDownRow(balance, currencyInfo, noAmount)
                             .accessibilityAddTraits(.isSelected)
                         Spacer()
                         if !disabled {
@@ -170,6 +177,7 @@ struct  ScopeDropDown: View {
                         }
                     }
                 }
+                    .padding(.vertical, 4)
                     .padding(.horizontal, radius / 2)
                     .frame(maxWidth: .infinity, alignment: .leading)
 //                .border(.red)
