@@ -103,7 +103,7 @@ struct TransactionRowView: View {
         let orange = debug ? Color.orange : Color.clear
 #endif
 
-        let layout1 = HStack(spacing: 4) {
+        let layout1 = HStack(spacing: 4) {                                      // amount right centered, top & bottom left
                 VStack(alignment: .leading, spacing: 2) {
                     if topString != nil { centerTop }
                     centerBottom
@@ -115,7 +115,7 @@ struct TransactionRowView: View {
             amountV //.frame(maxWidth: .infinity, alignment: .trailing)
         }
 
-        let layout2 = VStack(alignment: .leading, spacing: 2) {
+        let layout2 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, bottom & amount below
             if topString != nil { centerTop }
             HStack(spacing: 6) {
                 centerBottom
@@ -130,15 +130,15 @@ struct TransactionRowView: View {
             }
         }
 
-        let layout3 = VStack(spacing: 0) {
-            if topString != nil {
+        let layout3 = VStack(alignment: .leading, spacing: 0) {
+            if topString != nil {                                               // top & amount, bottom below
                 HStack(spacing: 8) {
                     centerTop
                     Spacer(minLength: 2)
                     amountV
                 }
                 centerBottom
-            } else {
+            } else {                                                            // no top, bottom & amount
                 HStack(spacing: 8) {
                     centerBottom
                     Spacer(minLength: 2)
@@ -147,7 +147,7 @@ struct TransactionRowView: View {
             }
         }
 
-        let layout4 = VStack(alignment: .leading, spacing: 2) {
+        let layout4 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount right, bottom full-width
             if topString != nil { centerTop }
             HStack(spacing: -4) {
                 Spacer(minLength: 2)
