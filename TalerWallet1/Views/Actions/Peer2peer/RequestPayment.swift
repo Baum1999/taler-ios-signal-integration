@@ -74,23 +74,19 @@ struct RequestPayment: View {
                 .padding(.horizontal)
                 .padding(.bottom, 4)
             }
-            RequestPaymentContent(stack: stack.push(),
-                                balance: $balance,
-                           balanceIndex: $balanceIndex,
-                         amountLastUsed: $amountLastUsed,
-                       amountToTransfer: $amountToTransfer,
-                                summary: $summary)
+            if let balance {
+                RequestPaymentContent(stack: stack.push(),
+                                    balance: balance,
+                             amountLastUsed: $amountLastUsed,
+                           amountToTransfer: $amountToTransfer,
+                                    summary: $summary)
+            } else {    // TODO: Error no balance - Yikes
+                Text("No balance. There seems to be a problem with the database...")
+            }
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-            .onAppear {
-                DebugViewC.shared.setViewID(VIEW_P2P_REQUEST, stack: stack.push())
-                symLog.log("❗️ \(navTitle) onAppear")
-            }
-            .onDisappear {
-                symLog.log("❗️ \(navTitle) onDisappear")
-            }
             .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 
@@ -110,8 +106,7 @@ struct RequestPayment: View {
 struct RequestPaymentContent: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var balance: Balance?
-    @Binding var balanceIndex: Int
+    let balance: Balance
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
@@ -128,9 +123,7 @@ struct RequestPaymentContent: View {
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
-    @State private var exchange: Exchange? = nil                                // wg. noFees
-
-    @State private var scopeInfo: ScopeInfo = ScopeInfo.zero()
+    @State private var exchange: Exchange? = nil                                // wg. noFees and tosAccepted
 
     private func shortcutAction(_ shortcut: Amount) {
         amountShortcut = shortcut
@@ -162,63 +155,82 @@ struct RequestPaymentContent: View {
 
     @MainActor
     private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
-        if exchange == nil {
-            if let url = scopeInfo.url {
-                exchange = try? await model.getExchangeByUrl(url: url)
-            }
-        }
         if amount.isZero {
             return ComputeFeeResult.zero()
         }
-        do {
-            let baseURL = exchange?.exchangeBaseUrl
-            let ppCheck = try await model.checkPeerPullCredit(amount, scope: scopeInfo, viewHandles: true)
-            let raw = ppCheck.amountRaw
-            let effective = ppCheck.amountEffective
-            if let fee = fee(raw: raw, effective: effective) {
-                feeStr = fee.formatted(scopeInfo, isNegative: true)
-                symLog.log("Fee = \(feeStr)")
-
-                peerPullCheck = ppCheck
-                return ComputeFeeResult(insufficient: false,
-                                           feeAmount: fee,
-                                              feeStr: feeLabel(feeStr),
+            if exchange == nil {
+                if let url = balance.scopeInfo.url {
+                    exchange = try? await model.getExchangeByUrl(url: url)
+                }
+            }
+            do {
+                let baseURL = exchange?.exchangeBaseUrl
+                let ppCheck = try await model.checkPeerPullCredit(amount, scope: balance.scopeInfo, viewHandles: true)
+                let raw = ppCheck.amountRaw
+                let effective = ppCheck.amountEffective
+                if let fee = fee(raw: raw, effective: effective) {
+                    feeStr = fee.formatted(balance.scopeInfo, isNegative: true)
+                    symLog.log("Fee = \(feeStr)")
+                    
+                    peerPullCheck = ppCheck
+                    let feeLabel = feeLabel(feeStr)
+//                    announce("\(amountVoiceOver), \(feeLabel)")
+                    return ComputeFeeResult(insufficient: false,
+                                            feeAmount: fee,
+                                            feeStr: feeLabel,
                                             numCoins: ppCheck.numCoins)
-            } else {
-                peerPullCheck = nil
+                } else {
+                    peerPullCheck = nil
+                }
+            } catch {
+                // handle cancel, errors
+                symLog.log("❗️ \(error), \(error.localizedDescription)")
+                switch error {
+                    case let walletError as WalletBackendError:
+                        switch walletError {
+                            case .walletCoreError(let wError):
+                                if wError?.code == 7027 {
+                                    return ComputeFeeResult.insufficient()
+                                }
+                            default: break
+                        }
+                    default: break
+                }
             }
-        } catch {
-            // handle cancel, errors
-            symLog.log("❗️ \(error), \(error.localizedDescription)")
-            switch error {
-                case let walletError as WalletBackendError:
-                    switch walletError {
-                        case .walletCoreError(let wError):
-                            if wError?.code == 7027 {
-                                return ComputeFeeResult.insufficient()
-                            }
-                        default: break
-                    }
-                default: break
-            }
-        }
         return nil
     } // computeFee
+
+    @MainActor
+    private func newBalance() async {
+        let scope = balance.scopeInfo
+        symLog.log("❗️ task \(scope.currency)")
+        let ppCheck = try? await model.checkPeerPullCredit(amountToTransfer, scope: scope, viewHandles: false)
+        if let ppCheck {
+            peerPullCheck = ppCheck
+            var baseURL = ppCheck.scopeInfo?.url ?? ppCheck.exchangeBaseUrl
+            if let baseURL {
+                if exchange == nil || exchange?.tosStatus != .accepted {
+                    symLog.log("getExchangeByUrl(\(ppCheck.exchangeBaseUrl))")
+                    exchange = try? await model.getExchangeByUrl(url: baseURL)
+                }
+            }
+        }
+    }
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        if let balance {
-            Group { if scopeInfo != nil {
-                let coinData = CoinData(details: peerPullCheck)
+        Group {
+            let coinData = CoinData(details: peerPullCheck)
 //                let availableStr = amountAvailable.formatted(currencyInfo, isNegative: false)
 //                let amountVoiceOver = amountToTransfer.formatted(currencyInfo, isNegative: false)
-                let feeLabel = coinData.feeLabel(scopeInfo, feeZero: String(localized: "No payment fee"),
-                                                 isNegative: false)
+                let feeLabel = coinData.feeLabel(balance.scopeInfo,
+                                        feeZero: String(localized: "No fee"),
+                                     isNegative: false)
                 let inputDestination = P2PSubjectV(stack: stack.push(),
-                                                   scope: scopeInfo,
+                                                   scope: balance.scopeInfo,
                                                 feeLabel: feeLabel,
                                             feeIsNotZero: feeIsNotZero(),
                                                 outgoing: false,
@@ -226,7 +238,7 @@ struct RequestPaymentContent: View {
                                                  summary: $summary,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
-                                                      scope: scopeInfo,
+                                                      scope: balance.scopeInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),
                                                    outgoing: false,
@@ -237,27 +249,45 @@ struct RequestPaymentContent: View {
                     NavLink($buttonSelected) { inputDestination }
                     NavLink($shortcutSelected) { shortcutDestination }
                 }
-                let amountLabel = minimalistic ? String(localized: "Amount:")
-                                               : String(localized: "Amount to request:")
-                AmountInputV(stack: stack.push(),
-                             scope: scopeInfo,
-                   amountAvailable: $amountZero,        // incoming needs no available
-                       amountLabel: amountLabel,
-                  amountToTransfer: $amountToTransfer,
-                    amountLastUsed: amountLastUsed,
-                           wireFee: nil,
-                           summary: $summary,
-                    shortcutAction: shortcutAction,
-                      buttonAction: buttonAction,
-                     feeIsNegative: true,
-                        computeFee: computeFee)
-                .background(actions)
-            } } // if, Group
-            .task {
-                scopeInfo = balance.scopeInfo
-            }
-        } else {    // no balance - Yikes
-            Text("No balance. There seems to be a problem with the database...")
+                let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
+                if tosAccepted {
+                    let amountLabel = minimalistic ? String(localized: "Amount:")
+                                                   : String(localized: "Amount to request:")
+//                    Text(amountLabel)
+                    AmountInputV(stack: stack.push(),
+                                 scope: balance.scopeInfo,
+                       amountAvailable: $amountZero,        // incoming needs no available
+                           amountLabel: amountLabel,
+                      amountToTransfer: $amountToTransfer,
+                        amountLastUsed: amountLastUsed,
+                               wireFee: nil,
+                               summary: $summary,
+                        shortcutAction: shortcutAction,
+                          buttonAction: buttonAction,
+                         feeIsNegative: true,
+                            computeFee: computeFee)
+                    .background(actions)
+                } else {
+                    if let peerPullCheck {
+                        var baseURL = peerPullCheck.scopeInfo?.url ?? peerPullCheck.exchangeBaseUrl
+                        ToSButtonView(stack: stack.push(),
+                            exchangeBaseUrl: baseURL,
+                                     viewID: VIEW_P2P_TOS,   // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
+                                        p2p: false,
+                                      acceptAction: nil)
+                        .padding(.top)
+                    } else {
+                        Text("No baseURL")      // need $some view otherwise task will not run
+                    }
+                }
+        }
+        .task(id: balance) { await newBalance() }
+        .onAppear {
+            DebugViewC.shared.setViewID(VIEW_P2P_REQUEST, stack: stack.push())
+            symLog.log("❗️ onAppear")
+        }
+        .onDisappear {
+            symLog.log("❗️ onDisappear")
         }
     } // body
 }
