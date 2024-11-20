@@ -25,6 +25,8 @@ struct TransactionRowView: View {
         switch transaction {
             case .payment(let paymentTransaction):
                 return paymentTransaction.details.info.merchant.name
+            case .peer2peer(let p2pTransaction):
+                return p2pTransaction.details.info.summary
             default:
                 let result = transaction.isDone ? transaction.localizedTypePast
                                                 : transaction.localizedType
