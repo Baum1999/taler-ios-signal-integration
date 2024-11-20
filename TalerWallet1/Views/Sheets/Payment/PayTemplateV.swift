@@ -60,12 +60,13 @@ struct PayTemplateV: View {
         Task { // runs on MainActor
             if let confirmPayResult = try? await model.confirmPay(preparePayResult.transactionId) {
 //                symLog.log(confirmPayResult as Any)
-                if confirmPayResult.type != "done" {
+                if confirmPayResult.type == "done" {
+                    dismissTop(stack.push())
+                } else if confirmPayResult.type == "error" {
                     controller.playSound(0)
                     // TODO: show error
                 }
             }
-            dismissTop(stack.push())
         }
     }
 
