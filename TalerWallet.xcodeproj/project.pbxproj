@@ -289,6 +289,8 @@
 		4EE77E7F2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */; };
 		4EE77E812C06E513007C9064 /* WithdrawAcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE77E802C06E513007C9064 /* WithdrawAcceptView.swift */; };
 		4EE77E822C06E513007C9064 /* WithdrawAcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE77E802C06E513007C9064 /* WithdrawAcceptView.swift */; };
+		4EE9864F2CE26E0F00F75634 /* DepositAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */; };
+		4EE986502CE26E0F00F75634 /* DepositAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */; };
 		4EEBEFB02C8982180020D340 /* View+innerSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEBEFAF2C8982180020D340 /* View+innerSize.swift */; };
 		4EEBEFB12C8982180020D340 /* View+innerSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEBEFAF2C8982180020D340 /* View+innerSize.swift */; };
 		4EEC118D2B83DE4800146CFF /* AmountInputV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC118C2B83DE4700146CFF /* AmountInputV.swift */; };
@@ -499,6 +501,7 @@
 		4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "GNU_Taler InfoPlist.xcstrings"; sourceTree = "<group>"; };
 		4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Taler_Wallet InfoPlist.xcstrings"; sourceTree = "<group>"; };
 		4EE77E802C06E513007C9064 /* WithdrawAcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptView.swift; sourceTree = "<group>"; };
+		4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAmountView.swift; sourceTree = "<group>"; };
 		4EEBEFAF2C8982180020D340 /* View+innerSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+innerSize.swift"; sourceTree = "<group>"; };
 		4EEC118C2B83DE4700146CFF /* AmountInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountInputV.swift; sourceTree = "<group>"; };
 		4EEC11922B83FB7A00146CFF /* SubjectInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubjectInputV.swift; sourceTree = "<group>"; };
@@ -924,6 +927,7 @@
 			children = (
 				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
 				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
+				4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */,
 				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
 				4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */,
 				4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */,
@@ -1257,6 +1261,7 @@
 				4E3EAE3E2A990778009F1BE8 /* ManualDetailsV.swift in Sources */,
 				4E3EAE3F2A990778009F1BE8 /* View+dismissTop.swift in Sources */,
 				4E3EAE402A990778009F1BE8 /* TransactionsListView.swift in Sources */,
+				4EE9864F2CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
 				4E0A71142C396D86002485BB /* Error+debugDescription.swift in Sources */,
 				4E3EAE412A990778009F1BE8 /* WalletBackendRequest.swift in Sources */,
 				4E3EAE422A990778009F1BE8 /* KeyboardResponder.swift in Sources */,
@@ -1392,6 +1397,7 @@
 				4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */,
 				4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */,
 				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
+				4EE986502CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
 				4E0A71152C396D86002485BB /* Error+debugDescription.swift in Sources */,
 				4EB0951F2989CBCB0043A8A1 /* WalletBackendRequest.swift in Sources */,
 				4EAD117629F672FA008EDD0B /* KeyboardResponder.swift in Sources */,
