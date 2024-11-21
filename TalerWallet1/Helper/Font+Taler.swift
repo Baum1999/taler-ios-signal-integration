@@ -181,6 +181,7 @@ extension TalerFont {   // old running
     static var subheadline: TalerFont { TalerFont(fontName, size: 15, relativeTo: .subheadline) } // 15 -> 17
     static var footnote:    TalerFont { TalerFont(fontName, size: 13, relativeTo: .footnote) }    // 13 -> 15
     static var caption:     TalerFont { TalerFont(fontName, size: 12, relativeTo: .caption) }     // 12 -> 13
+    static var badge:       TalerFont { TalerFont(fontName, size: 10, relativeTo: .caption) }     // 12 -> 13
 }
 
 struct StyleSizeBoldViewModifier: ViewModifier {

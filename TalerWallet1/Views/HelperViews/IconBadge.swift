@@ -72,7 +72,7 @@ struct IconBadge: View {
     let wideIcon: Image?        // cheating: ZStack with widest icon to ensure all have the same width
                                 // TODO: EqualIconWidth...
 
-    @ScaledMetric var spacing = 8       // relative to fontSize
+    @ScaledMetric var spacing = 6       // relative to fontSize
 
     var body: some View {
         HStack(alignment: .top, spacing: -spacing) {
@@ -82,16 +82,15 @@ struct IconBadge: View {
                 }
                 image.foregroundColor(foreColor)
             }.talerFont(.title2)
-            if wideIcon == nil {
-                // ZStack centers the main icon, so the badge will always be at the same position
-                let badgeName = needsKYC ? NEEDS_KYC
-                                         : CONFIRM_BANK
-                Image(systemName: badgeName)
-                    .talerFont(.caption)
-                    .foregroundColor(needsKYC ? WalletColors().attention
-                              : shouldConfirm ? WalletColors().confirm
-                                              : .clear)
-            }
+            // ZStack centers the main icon, so the badge will always be at the same position
+            let badgeName = needsKYC ? NEEDS_KYC
+                                     : CONFIRM_BANK
+            Image(systemName: badgeName)
+                .talerFont(.badge)
+                .foregroundColor(needsKYC ? WalletColors().attention
+                          : shouldConfirm ? WalletColors().confirm
+                                          : .clear)
+                .padding(.top, -2)
         }.accessibilityHidden(true)
     }
 }
