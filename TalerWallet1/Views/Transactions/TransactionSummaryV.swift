@@ -117,13 +117,13 @@ struct TransactionSummaryV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let common = transaction.common
-        let pending = transaction.isPending
-        let locale = TalerDater.shared.locale
-        let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
-        let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-        let navTitle2 = transaction.isDone ? transaction.localizedTypePast
-                                           : transaction.localizedType
-        ScrollViewReader { scrollView in
+        if common.type != .dummy {
+            let pending = transaction.isPending
+            let locale = TalerDater.shared.locale
+            let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
+            let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+            let navTitle2 = transaction.isDone ? transaction.localizedTypePast
+                                               : transaction.localizedType
             List {
                 if developerMode {
                     if transaction.isSuspendable { if let suspendAction {
@@ -222,36 +222,39 @@ struct TransactionSummaryV: View {
                 } // Delete button
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
-        } // ScrollViewReader
-        .onNotification(.TransactionExpired) { notification in
-            // TODO: Alert user that this tx just expired
-            if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {
-    // TODO:                  logger.info("newTxState.major == expired  => dismiss sheet")
+            .onNotification(.TransactionExpired) { notification in
+                // TODO: Alert user that this tx just expired
+                if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {
+        // TODO:                  logger.info("newTxState.major == expired  => dismiss sheet")
+                }
             }
-        }
-        .onNotification(.TransactionDone) { notification in
-            checkDismiss(notification, "newTxState.major == done  => dismiss sheet")
-        }
-        .onNotification(.DismissSheet) { notification in
-            checkDismiss(notification, "exchangeWaitReserve or withdrawCoins  => dismiss sheet")
-        }
-        .onNotification(.PendingReady) { notification in
-            checkReload(notification, "pending ready ==> reload for talerURI")
-        }
-        .onNotification(.TransactionStateTransition) { notification in
-            checkReload(notification, "some transition ==> reload")
-        }
-        .navigationTitle(navTitle ?? navTitle2)
-        .task {
-            symLog.log("task - load transaction")
-            await loadTransaction()
-        }
-        .onAppear {
-            symLog.log("onAppear")
-            DebugViewC.shared.setViewID(VIEW_TRANSACTIONSUMMARY, stack: stack.push())
-        }
-        .onDisappear {
-            symLog.log("onDisappear")
+            .onNotification(.TransactionDone) { notification in
+                checkDismiss(notification, "newTxState.major == done  => dismiss sheet")
+            }
+            .onNotification(.DismissSheet) { notification in
+                checkDismiss(notification, "exchangeWaitReserve or withdrawCoins  => dismiss sheet")
+            }
+            .onNotification(.PendingReady) { notification in
+                checkReload(notification, "pending ready ==> reload for talerURI")
+            }
+            .onNotification(.TransactionStateTransition) { notification in
+                checkReload(notification, "some transition ==> reload")
+            }
+            .navigationTitle(navTitle ?? navTitle2)
+            .onAppear {
+                symLog.log("onAppear")
+                DebugViewC.shared.setViewID(VIEW_TRANSACTIONSUMMARY, stack: stack.push())
+            }
+            .onDisappear {
+                symLog.log("onDisappear")
+            }
+        } else {
+            Color.clear
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .task {
+                    symLog.log("task - load transaction")
+                    await loadTransaction()
+                }
         }
     }
 
