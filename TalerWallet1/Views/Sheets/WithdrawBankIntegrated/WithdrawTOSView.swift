@@ -118,7 +118,7 @@ extension WithdrawTOSView {
 
         var body: some View {
             let title = String(localized: "Language:", comment: "title of ToS language selection")
-            List {
+            let list = List {
               if tos.tosAvailableLanguages.count > 1 {
                 Picker(title, selection: $selectedLanguage) {
                         ForEach(tos.tosAvailableLanguages, id: \.self) { code in
@@ -152,18 +152,20 @@ extension WithdrawTOSView {
                         }
                     } // for
                 } // plain text
-            }.safeAreaInset(edge: .bottom) {
-                    let currentEtag = tos.currentEtag
-                    let showButton = tos.acceptedEtag == nil ? true
-                                   : tos.acceptedEtag! == tos.currentEtag ? false
-                                                                          : true
-                    if showButton {
-                        Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
+            }.listStyle(myListStyle.style).anyView
+
+            let currentEtag = tos.currentEtag
+            let showButton = tos.acceptedEtag == nil ? true
+                           : tos.acceptedEtag! == tos.currentEtag ? false
+                                                                  : true
+            let button = Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
                             .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
-                    }
+            list.safeAreaInset(edge: .bottom) {
+                if showButton {
+                    button.padding(.bottom, 40)
+                }
             }
-            .listStyle(myListStyle.style).anyView
         }
     }
 }
