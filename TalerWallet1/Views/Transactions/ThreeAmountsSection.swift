@@ -70,6 +70,29 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                          products: nil)
     }
 }
+
+struct ProductImage: Codable, Hashable {
+    var imageBase64: String
+    var description: String
+    var price: Amount?
+
+    init(_ image: String, _ desc: String, _ price: Amount?) {
+        self.imageBase64 = image
+        self.description = desc
+        self.price = price
+    }
+
+    var image: Image? {
+        if let url = NSURL(string: imageBase64) {
+            let data = NSData(contentsOf: url as URL)
+            if let uiImage = UIImage(data: data as! Data) {
+                return Image(uiImage: uiImage)
+            }
+        }
+        return nil
+    }
+}
+
 // MARK: -
 struct ThreeAmountsSection: View {
     let stack: CallStack
@@ -96,17 +119,54 @@ struct ThreeAmountsSection: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
+    @State private var productImages: [ProductImage] = []
+
+    @MainActor
+    private func viewDidLoad() async {
+        var temp: [ProductImage] = []
+        if let products {
+            for product in products {
+                if let imageBase64 = product.image {
+                    let productImage = ProductImage(imageBase64, product.description, product.price)
+                    temp.append(productImage)
+                }
+            }
+        }
+        productImages = temp
+    }
+
     var body: some View {
         let labelColor = WalletColors().labelColor
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
         let hasNoFees = noFees ?? false
+        ForEach(productImages, id: \.self) { productImage in
+            if let image = productImage.image {
+                Section {
+                    HStack {
+                        image.resizable()
+                            .scaledToFill()
+                            .frame(width: 64, height: 64)
+                        Text(productImage.description)
+//                        if let product_id = product.product_id {
+//                            Text(product_id)
+//                        }
+                        if let price = productImage.price {
+                            Spacer()
+                            AmountV(scope, price, isNegative: nil)
+                        }
+                    }.talerFont(.body)
+                }
+            }
+        }
         Section {
             if let summary {
-                Text(summary)
-                    .talerFont(.title3)
-                    .lineLimit(4)
-                    .padding(.bottom)
+                if productImages.count == 0 {
+                    Text(summary)
+                        .talerFont(.title3)
+                        .lineLimit(4)
+                        .padding(.bottom)
+                }
             }
             if let merchant {
                 Text(merchant)
@@ -171,6 +231,7 @@ struct ThreeAmountsSection: View {
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
         }
+        .task { await viewDidLoad() }
     }
 }
 // MARK: -
