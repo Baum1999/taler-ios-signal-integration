@@ -53,7 +53,6 @@ struct WithdrawAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
                                     scope: scope,
@@ -80,16 +79,16 @@ struct WithdrawAcceptDone: View {
                             .padding(.horizontal)
                     }
                 }
+                .onAppear() {
+                    symLog.log("onAppear")
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
+                }
             } else {
-                LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL
-                                                  ?? "Bank Authorization")
+                let fallback = String(localized: "Bank Authorization")
+                LoadingView(scopeInfo: nil,
+                              message: exchangeBaseUrl?.trimURL ?? fallback)
+                .task { await viewDidLoad() }
             }
-        }
-        .task { await viewDidLoad() }
-        .onAppear() {
-            symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
-        }
     }
 }
 // MARK: -
