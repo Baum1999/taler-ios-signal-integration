@@ -66,7 +66,8 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                           baseURL: baseURL,
                        txStateLcl: txStateLcl,
                           summary: summary,
-                         merchant: merchant)
+                         merchant: merchant,
+                         products: nil)
     }
 }
 // MARK: -
@@ -89,6 +90,7 @@ struct ThreeAmountsSection: View {
     let txStateLcl: String?                 // localizedState
     let summary: String?
     let merchant: String?
+    let products: [Product]?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast

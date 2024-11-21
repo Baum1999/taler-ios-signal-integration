@@ -183,7 +183,8 @@ struct PaymentView: View, Sendable {
                                       baseURL: baseURL,
                                    txStateLcl: nil,
                                       summary: terms.summary,
-                                     merchant: terms.merchant.name)
+                                     merchant: terms.merchant.name,
+                                     products: terms.products)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
                     Text("You don't have enough \(currency).")
@@ -205,7 +206,8 @@ struct PaymentView: View, Sendable {
                                       baseURL: baseURL,
                                    txStateLcl: nil,
                                       summary: terms.summary,
-                                     merchant: terms.merchant.name)
+                                     merchant: terms.merchant.name,
+                                     products: terms.products)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")
