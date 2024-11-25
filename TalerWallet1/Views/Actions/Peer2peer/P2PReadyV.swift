@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when initiating a P2P transaction: Send coins or Send Request(Invoice)
+// Called when initiating a P2P transaction: Send or Request(Invoice)
 struct P2PReadyV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

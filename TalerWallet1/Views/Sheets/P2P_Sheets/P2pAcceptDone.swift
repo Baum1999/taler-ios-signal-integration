@@ -6,7 +6,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when accepting a scanned P2P transaction: Receive coins or Pay Request(Invoice)
+// Called when accepting a scanned P2P transaction: Receive, or pay Request(Invoice)
 struct P2pAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -35,8 +35,8 @@ struct P2pAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let navTitle = incoming ? String(localized: "Received P2P", comment: "Title, short")
-                                : String(localized: "Paid P2P", comment: "Title, short")
+        let navTitle = incoming ? String(localized: "Received", comment: "Nav Title, short")
+                                : String(localized: "Paid", comment: "Nav Title, short")
         LoadingView(scopeInfo: nil, message: "Accepting...")
             .navigationBarBackButtonHidden(true)
 //            .interactiveDismissDisabled()           // can only use "Done" button to dismiss

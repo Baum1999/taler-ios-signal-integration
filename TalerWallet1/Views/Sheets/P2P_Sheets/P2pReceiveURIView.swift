@@ -10,7 +10,7 @@ import taler_swift
 import SymLog
 
 // Will be called either by the user scanning a QR code or tapping the provided link,
-// from another user's SendCoins. We show the P2P details - but first the ToS must be accepted.
+// from another user's Send. We show the P2P details - but first the ToS must be accepted.
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -29,7 +29,7 @@ struct P2pReceiveURIView: View {
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
     @State private var exchange: Exchange? = nil
 
-    let navTitle = String(localized: "P2P Receive")
+    let navTitle = String(localized: "Receive", comment: "Nav Title")
 
     @MainActor
     private func viewDidLoad() async {
@@ -101,7 +101,7 @@ struct P2pReceiveURIView: View {
                                                 transactionId: peerPushCreditResponse.transactionId,
                                                      incoming: true)
                         NavigationLink(destination: destination) {
-                            Text("Accept P2P Receive")      // SHEET_RCV_P2P_ACCEPT
+                            Text("Accept and receive")      // SHEET_RCV_P2P_ACCEPT
                         }
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)

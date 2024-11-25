@@ -7,7 +7,7 @@ import taler_swift
 import SymLog
 
 // Called either when scanning a QR code or tapping the provided link
-// from another user's Send Request(Invoice). We show the P2P details.
+// from another user's Request(Invoice). We show the P2P details.
 struct P2pPayURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -24,7 +24,7 @@ struct P2pPayURIView: View {
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
 
-    let navTitle = String(localized: "Pay P2P", comment: "Nav Title")
+    let navTitle = String(localized: "Pay Request", comment: "Nav Title")
 
     @MainActor
     private func viewDidLoad() async {

@@ -498,7 +498,7 @@ enum RefreshReason: String, Decodable {
                                                   comment: "RefreshReason")
             case .abortDeposit:         return String(localized: "Abort Deposit",
                                                   comment: "RefreshReason")
-            case .abortPeerPushDebit:   return String(localized: "Abort P2P Send",
+            case .abortPeerPushDebit:   return String(localized: "Abort Sending",
                                                     comment: "RefreshReason")
             case .recoup:           return String(localized: "Recoup",
                                                   comment: "RefreshReason")
