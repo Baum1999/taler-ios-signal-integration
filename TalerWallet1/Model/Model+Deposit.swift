@@ -36,10 +36,24 @@ extension WalletModel {
     }
 }
 // MARK: - Deposit
+enum PaytoType: String, Codable {
+    case unknown
+    case iban
+    case bitcoin
+    case xTalerBank = "x-taler-bank"
+}
+
+struct WireTypeDetails: Codable {
+    let paymentTargetType: PaytoType
+    let talerBankHostnames: [String]
+}
+
 struct DepositWireTypesForCurrencyResponse: Codable {
     /// can be used to pre-filter payment target types to offer the user as an input option
-    let wireTypes: [String]
+//    let wireTypes: [PaytoType]
+    let wireTypeDetails: [WireTypeDetails]
 }
+
 /// A request to get wire types that can be used for a deposit operation.
 fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
     typealias Response = DepositWireTypesForCurrencyResponse
@@ -56,10 +70,10 @@ fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
 extension WalletModel {
     /// Get wire types that can be used for a deposit operation
     nonisolated func depositWireTypesForCurrency(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
-      async throws -> [String] {
+      async throws -> [WireTypeDetails] {
         let request = DepositWireTypesForCurrency(currency: currency, scopeInfo: scopeInfo)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
-        return response.wireTypes
+        return response.wireTypeDetails
     }
 }
 // MARK: - max Deposit amount
