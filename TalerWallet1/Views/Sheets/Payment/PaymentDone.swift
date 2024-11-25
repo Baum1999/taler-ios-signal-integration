@@ -63,7 +63,7 @@ struct PaymentDone: View {
             }
         }.onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_PAY_ACCEPT)
+            DebugViewC.shared.setSheetID(SHEET_PAY_CONFIRM)
         }
     }
 }

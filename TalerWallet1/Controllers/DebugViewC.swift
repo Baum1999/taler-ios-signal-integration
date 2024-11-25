@@ -38,7 +38,7 @@ public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 22 Transa
 public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 23 TransactionDetail
 
 
-// MARK: - Manual Withdrawal (from Banking / ExchangeList)
+// MARK: - (Manual) Withdrawal (from Actions)
 // receive coins from bank ==> shows payee, IBAN + Purpose/Subject for manual wire transfer
 public let VIEW_WITHDRAWAL = VIEW_EMPTY_HISTORY + 10                // 30 WithdrawAmount
 public let VIEW_WITHDRAW_TOS = VIEW_WITHDRAWAL + 1                  // 31 WithdrawTOSView
@@ -46,25 +46,25 @@ public let VIEW_WITHDRAW_ACCEPT = VIEW_WITHDRAW_TOS + 1             // 32 Manual
 public let VIEW_WITHDRAW_INSTRUCTIONS = VIEW_WITHDRAW_ACCEPT + 1    // 33 ManualDetailsWireV
 public let VIEW_WITHDRAW_QRCODES = VIEW_WITHDRAW_INSTRUCTIONS + 1   // 34 QRcodesForPayto
 
-// MARK: Manual Deposit (from Banking / ExchangeList)
+// MARK: (Manual) Deposit (from Actions)
 // send coins back to customer ==> instruct exchange to make the wire transfer to the customer's bank account
 public let VIEW_DEPOSIT = VIEW_WITHDRAWAL + 10                      // 40 Deposit Coins
 //public let VIEW_DEPOSIT_TOS                                       // - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_DEPOSIT_ACCEPT = VIEW_DEPOSIT + 2                   // 42
 
-// MARK: P2P Send Coins (from Balances)
+// MARK: Send (from Actions)
 // push debit to another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
 public let VIEW_P2P_SEND = VIEW_DEPOSIT + 10                        // 50 Send Coins
 //public let VIEW_SEND_TOS                                          // - user already accepted the ToS at withdrawal, invoice or receive
 public let VIEW_P2P_SUBJECT = VIEW_P2P_SEND + 2                     // 52 Send / Request Subject
 public let VIEW_P2P_READY = VIEW_P2P_SUBJECT + 1                    // 53 Send / Request Ready
 
-// MARK: P2P Private Receive (from Balances)
+// MARK: Request (from Actions)
 // pull credit from another wallet ==> shows QR code to be scanned / link to be sent by mail or messenger
 public let VIEW_P2P_REQUEST = VIEW_P2P_SEND + 10                    // 60 Request Amount
 public let VIEW_P2P_TOS = VIEW_P2P_REQUEST + 1                      // 61 Request ToS
 
-// MARK: P2P Business Invoice (from Balances)
+// MARK: Business Invoice (from Actions)
 // TBD
 //public let VIEW_INVOICE_P2P = VIEW_REQUEST_P2P + 10                 // 70 Invoice Amount
 //public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 71 Invoice ToS
@@ -76,7 +76,7 @@ public let VIEW_P2P_TOS = VIEW_P2P_REQUEST + 1                      // 61 Reques
 public let SHEET_WITHDRAWAL = VIEW_WITHDRAWAL + 100                 // 130 WithdrawURIView
 public let SHEET_WITHDRAW_TOS = SHEET_WITHDRAWAL + 1                // 131 WithdrawTOSView
 public let SHEET_WITHDRAW_ACCEPT = SHEET_WITHDRAW_TOS + 1           // 132 WithdrawAcceptView
-public let SHEET_WITHDRAW_CONFIRM = SHEET_WITHDRAW_ACCEPT + 1       // 133 waiting for bank confirmation
+public let SHEET_WITHDRAW_AUTHORIZE = SHEET_WITHDRAW_ACCEPT + 1     // 133 waiting for bank confirmation
 
 public let SHEET_WITHDRAW_EXCHANGE = SHEET_WITHDRAWAL + 5           // 135 WithdrawExchangeV
 
@@ -87,18 +87,18 @@ public let SHEET_PAYMENT = SHEET_WITHDRAWAL + 10                    // 140 Pay M
 public let SHEET_PAY_TEMPLATE = SHEET_PAYMENT + 1                   // 141 Pay Merchant Template
 public let SHEET_PAY_TEMPL_AMOUNT = SHEET_PAY_TEMPLATE + 1          // 142 Pay Template Amount
 public let SHEET_PAY_TEMPL_SUBJECT = SHEET_PAY_TEMPL_AMOUNT + 1     // 143 Pay Template Subject
-public let SHEET_PAY_ACCEPT = SHEET_PAY_TEMPL_SUBJECT + 1           // 144 Pay Accept
+public let SHEET_PAY_CONFIRM = SHEET_PAY_TEMPL_SUBJECT + 1          // 144 Pay Confirm
 
-// MARK: P2P Pay Invoice
-// p2p pull debit - openURL (Link or scan QR)
-public let SHEET_PAY_P2P = SHEET_PAYMENT + 10                       // 150 Pay P2P Invoice
-public let SHEET_PAY_P2P_ACCEPT = SHEET_PAY_P2P + 2                 // 152 Pay P2P AcceptView
+// MARK: Pay Request
+// peer pull debit - openURL (Link or scan QR)
+public let SHEET_PAY_P2P = SHEET_PAYMENT + 10                       // 150 Pay P2P Request
+public let SHEET_PAY_P2P_CONFIRM = SHEET_PAY_P2P + 2                // 152 Pay P2P Confirm
 
-// MARK: P2P Receive Coins
-// p2p push credit - openURL (Link or scan QR)
-public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 160 Receive P2P Coins
-public let SHEET_RCV_P2P_TOS = SHEET_RCV_P2P + 1                    // 161 Receive P2P TOSView
-public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 162 Receive P2P AcceptView
+// MARK: Receive
+// peer push credit - openURL (Link or scan QR)
+public let SHEET_RCV_P2P = SHEET_PAY_P2P + 10                       // 160 Receive Money
+public let SHEET_RCV_P2P_TOS = SHEET_RCV_P2P + 1                    // 161 Receive TOSView
+public let SHEET_RCV_P2P_ACCEPT = SHEET_RCV_P2P_TOS + 1             // 162 Receive AcceptView
 
 // MARK: Refund - Get Coins back from merchant
 // openURL (Link, NFC or scan QR) ==> receive coins from merchant

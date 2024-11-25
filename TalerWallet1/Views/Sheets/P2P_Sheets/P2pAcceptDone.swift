@@ -45,7 +45,7 @@ struct P2pAcceptDone: View {
             .onAppear() {
                 symLog.log("onAppear")
                 DebugViewC.shared.setSheetID(incoming ? SHEET_RCV_P2P_ACCEPT
-                                                      : SHEET_PAY_P2P_ACCEPT)
+                                                      : SHEET_PAY_P2P_CONFIRM)
             }
     }
 }

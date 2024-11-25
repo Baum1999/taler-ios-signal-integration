@@ -76,7 +76,7 @@ struct WithdrawAcceptDone: View {
                 }
                 .onAppear() {
                     symLog.log("onAppear")
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_CONFIRM)
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE)
                 }
             } else {
                 let fallback = String(localized: "Bank Authorization")
