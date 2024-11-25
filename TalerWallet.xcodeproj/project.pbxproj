@@ -11,6 +11,10 @@
 		4E0A71152C396D86002485BB /* Error+debugDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A71132C396D86002485BB /* Error+debugDescription.swift */; };
 		4E0A71182C3AB099002485BB /* IconBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A71172C3AB099002485BB /* IconBadge.swift */; };
 		4E0A71192C3AB099002485BB /* IconBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A71172C3AB099002485BB /* IconBadge.swift */; };
+		4E0E8EFA2CEFDB0700C5F914 /* BankListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0E8EF92CEFDB0700C5F914 /* BankListView.swift */; };
+		4E0E8EFB2CEFDB0700C5F914 /* BankListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0E8EF92CEFDB0700C5F914 /* BankListView.swift */; };
+		4E0E8EFD2CF0A18800C5F914 /* BankSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0E8EFC2CF0A18800C5F914 /* BankSectionView.swift */; };
+		4E0E8EFE2CF0A18800C5F914 /* BankSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0E8EFC2CF0A18800C5F914 /* BankSectionView.swift */; };
 		4E11803D2CD2A6D700023E37 /* SendAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E11803C2CD2A6D700023E37 /* SendAmountView.swift */; };
 		4E11803E2CD2A6D700023E37 /* SendAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E11803C2CD2A6D700023E37 /* SendAmountView.swift */; };
 		4E16E12329F3BB99008B9C86 /* CurrencySpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */; };
@@ -362,6 +366,8 @@
 /* Begin PBXFileReference section */
 		4E0A71132C396D86002485BB /* Error+debugDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+debugDescription.swift"; sourceTree = "<group>"; };
 		4E0A71172C3AB099002485BB /* IconBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconBadge.swift; sourceTree = "<group>"; };
+		4E0E8EF92CEFDB0700C5F914 /* BankListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankListView.swift; sourceTree = "<group>"; };
+		4E0E8EFC2CF0A18800C5F914 /* BankSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankSectionView.swift; sourceTree = "<group>"; };
 		4E11803C2CD2A6D700023E37 /* SendAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmountView.swift; sourceTree = "<group>"; };
 		4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencySpecification.swift; sourceTree = "<group>"; };
 		4E1A59E02C99C5D700842BBF /* View+Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Keyboard.swift"; sourceTree = "<group>"; };
@@ -571,6 +577,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4E0E8EF82CEFDADF00C5F914 /* Bank */ = {
+			isa = PBXGroup;
+			children = (
+				4E0E8EF92CEFDB0700C5F914 /* BankListView.swift */,
+				4E0E8EFC2CF0A18800C5F914 /* BankSectionView.swift */,
+			);
+			path = Bank;
+			sourceTree = "<group>";
+		};
 		4E2254942A822B8100E41D29 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -769,6 +784,7 @@
 		4EB095242989CBFE0043A8A1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				4E0E8EF82CEFDADF00C5F914 /* Bank */,
 				4EB095252989CBFE0043A8A1 /* SettingsView.swift */,
 				4EC400882AE3E7E800DF72C7 /* AboutView.swift */,
 				4EB095262989CBFE0043A8A1 /* SettingsItem.swift */,
@@ -1259,6 +1275,7 @@
 				4E3EAE3C2A990778009F1BE8 /* WithdrawTOSView.swift in Sources */,
 				4E3EAE3D2A990778009F1BE8 /* Sheet.swift in Sources */,
 				4E3EAE3E2A990778009F1BE8 /* ManualDetailsV.swift in Sources */,
+				4E0E8EFA2CEFDB0700C5F914 /* BankListView.swift in Sources */,
 				4E3EAE3F2A990778009F1BE8 /* View+dismissTop.swift in Sources */,
 				4E3EAE402A990778009F1BE8 /* TransactionsListView.swift in Sources */,
 				4EE9864F2CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
@@ -1328,6 +1345,7 @@
 				4E3EAE6F2A990778009F1BE8 /* TalerStrings.swift in Sources */,
 				4E3EAE702A990778009F1BE8 /* CurrencyInputView.swift in Sources */,
 				4E3EAE712A990778009F1BE8 /* URL+id+iban.swift in Sources */,
+				4E0E8EFD2CF0A18800C5F914 /* BankSectionView.swift in Sources */,
 				4ED80E8B2B8F60E7008BD576 /* Atomic.swift in Sources */,
 				4EEC3A712B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */,
 				4EDBDCD92AB787CB00925C02 /* CallStack.swift in Sources */,
@@ -1395,6 +1413,7 @@
 				4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */,
 				4EEC157829F9032900D46A03 /* Sheet.swift in Sources */,
 				4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */,
+				4E0E8EFB2CEFDB0700C5F914 /* BankListView.swift in Sources */,
 				4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */,
 				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
 				4EE986502CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
@@ -1464,6 +1483,7 @@
 				4EB0950A2989CB7C0043A8A1 /* TalerStrings.swift in Sources */,
 				4EA551252A2C923600FEC9A8 /* CurrencyInputView.swift in Sources */,
 				4E363CBC2A237E0900D7E98C /* URL+id+iban.swift in Sources */,
+				4E0E8EFE2CF0A18800C5F914 /* BankSectionView.swift in Sources */,
 				4ED80E8C2B8F60E7008BD576 /* Atomic.swift in Sources */,
 				4EEC3A722B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */,
 				4EDBDCDA2AB787CB00925C02 /* CallStack.swift in Sources */,

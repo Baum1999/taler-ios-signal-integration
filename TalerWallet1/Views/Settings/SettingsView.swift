@@ -107,6 +107,15 @@ struct SettingsView: View {
                     SettingsItem(name: exchangesTitle, id1: "exchanges",
                           description: hideDescriptions ? nil : String(localized: "Manage payment services...")) {}
                 }
+                let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
+                let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
+                                                 navTitle: bankAccountsTitle)
+                NavigationLink {        // whole row like in a tableView
+                    bankAccountsDest
+                } label: {
+                    SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
+                                 description: hideDescriptions ? nil : String(localized: "Your accounts for deposit...")) {}
+                }
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                                description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
                     hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }

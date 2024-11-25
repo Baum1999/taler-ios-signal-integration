@@ -1,0 +1,101 @@
+/*
+ * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
+ * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
+ */
+import SwiftUI
+import taler_swift
+import SymLog
+
+/// This view shows the list of exchanges
+struct BankListView: View {
+    private let symLog = SymLogV(0)
+    let stack: CallStack
+    let navTitle: String
+
+    @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+
+    @State var showAlert: Bool = false
+    @State var newExchange: String = TESTEXCHANGE
+    @State private var bankAccounts: [KnownBankAccountsInfo] = []
+
+    @MainActor
+    func addExchange(_ exchange: String) -> Void {
+        Task { // runs on MainActor
+            symLog.log("adding: \(exchange)")
+            if let _ = try? await model.addExchange(url: exchange) {
+                symLog.log("added: \(exchange)")
+                announce("added: \(exchange)")
+                NotificationCenter.default.post(name: .ExchangeAdded, object: nil, userInfo: nil)
+            }
+        }
+    }
+
+    @MainActor
+    private func viewDidLoad() async {
+        if let accounts = try? await model.listKnownBankAccounts() {
+            withAnimation { bankAccounts = accounts }
+        }
+    }
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let a11yLabelStr = String(localized: "Add bank account", comment: "VoiceOver for the + button")
+        let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
+            showAlert = true
+        }
+        let addTitleStr = String(localized: "Add bank account", comment: "title of the addExchange alert")
+        let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
+
+        let sortedList = List(bankAccounts, id: \.self) { account in
+            BankSectionView(stack: stack.push(),
+                          account: account)
+        }
+
+        let emptyList = List {
+            Section {
+                Text("There are no bank accounts yet.")
+                    .talerFont(.title3)
+            }
+            Section {
+                let plus = Image(systemName: "plus")
+                if !minimalistic {
+                    Text("Tap the \(plus) button to add an account.")
+                        .listRowSeparator(.hidden)
+                    Text("You can also scan a withdrawal QR code from your bank in the Action menu to automatically add a bank account.")
+                } else {
+                    Text("Tap \(plus) or scan a withdrawal QR code from your bank to add a bank account.")
+                }
+            }
+                .talerFont(.body)
+        }
+
+        Group {
+            if bankAccounts.isEmpty {
+                emptyList
+            } else {
+                sortedList
+            }
+        }
+        .listStyle(myListStyle.style).anyView
+        .refreshable {
+            controller.hapticNotification(.success)
+            symLog.log("refreshing")
+            await viewDidLoad()
+        }
+        .task { await viewDidLoad() }
+        .navigationTitle(navTitle)
+        .navigationBarItems(trailing: plusButton)
+        .onAppear() {
+            DebugViewC.shared.setViewID(VIEW_PAYMENT_SERVICES, stack: stack.push())
+        }
+    } // body
+}
