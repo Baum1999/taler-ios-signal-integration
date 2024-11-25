@@ -100,6 +100,9 @@ struct WithdrawURIView: View {
             amountToTransfer = amount ?? Amount.zero(currency: currency)
             amountIsEditable = uriInfoResponse.editableAmount
             amountAvailable = uriInfoResponse.maxAmount     // may be nil
+            if let available = amountAvailable {
+                amountZero = available
+            }
             wireFee = uriInfoResponse.wireFee               // may be nil
             let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
                        ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
@@ -138,12 +141,6 @@ struct WithdrawURIView: View {
                         .onChange(of: selectedExchange) { selected in
                             Task { await loadExchange(selected) }
                         }
-                    } else {        // TODO: don't show exchange for global currency
-                        HStack {
-                            Text(title)
-                            Text(defaultBaseUrl.trimURL)
-                        }
-                        .talerFont(.body)
                     } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(),
                                                                  url: url,
@@ -163,11 +160,13 @@ struct WithdrawURIView: View {
                                 NavLink($shortcutSelected) { shortcutDest }
                                 NavLink($buttonSelected) { acceptDestination }
                             }
+                            let amountLabel = minimalistic ? String(localized: "Amount:")        // maxAmount
+                                                           : String(localized: "Amount to withdraw:")
                             // TODO: input amount, then
                             AmountInputV(stack: stack.push(),
                                          scope: exchange.scopeInfo,
                                amountAvailable: $amountZero,
-                                   amountLabel: nil,        // will use "Available for transfer: xxx", trailing
+                                   amountLabel: amountZero.isZero ? amountLabel : nil,
                               amountToTransfer: $amountToTransfer,
                                 amountLastUsed: amountLastUsed,
                                        wireFee: wireFee,
