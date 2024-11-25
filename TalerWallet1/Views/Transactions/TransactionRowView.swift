@@ -73,7 +73,8 @@ struct TransactionRowView: View {
 
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
                                              done: done, incoming: incoming,
-                                    shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+                                    shouldConfirm: shouldConfirm && pending,
+                                         needsKYC: needsKYC && pending)
         let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
                               strikethrough: !doneOrPending)
             .foregroundColor(foreColor)
@@ -189,8 +190,10 @@ struct TransactionRowView: View {
             } else { layout4 } // view for iOS 15
         }
             .accessibilityElement(children: .combine)
-            .accessibilityValue(needsKYC ? String(localized: ". Needs K Y C") :
-                           shouldConfirm ? String(localized: ". Needs bank authorization") : EMPTYSTRING)
+            .accessibilityValue(!doneOrPending ? EMPTYSTRING
+                                    : needsKYC ? String(localized: ". Needs K Y C")
+                               : shouldConfirm ? String(localized: ". Needs bank authorization")
+                                               : EMPTYSTRING)
             .accessibilityHint(String(localized: "Will go to detail view."))
     }
 }
