@@ -66,7 +66,7 @@ extension Controller {
             let fileURL = URL(fileURLWithPath: "/System/Library/Audio/UISounds/"
                               + sound + ".caf")
             AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
-            logger.log("\(sound, privacy: .public) \(soundID)")
+            logger.trace("\(sound, privacy: .public) \(soundID)")
         }
         if number == 0 || number > 9 || playSoundsI < 0 {
             AudioServicesPlaySystemSound(soundID);

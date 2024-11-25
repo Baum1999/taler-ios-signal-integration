@@ -264,9 +264,9 @@ extension WalletCore {
                                     postNotification(.KYCrequired, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 }
-                                logger.log("Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.trace("Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
                             } else {
-                                logger.log("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.trace("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
@@ -414,7 +414,7 @@ print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")     
                     symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
                     try handleError(decoded)
                 case "response":
-                    symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
+                    symLog.log(message)
                     try handleResponse(decoded)
                 case "notification":
 //                    symLog.log(message)
@@ -456,12 +456,18 @@ print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")     
                 self.completions[requestId] = (sendTime, completionHandler)
                 self.requestsMade += 1
                 self.semaphore.signal()         // free requestsMade
-              self.logger.log("sendRequest \(requestId, privacy: .public): \(request.operation, privacy: .public)")
+                    let args = try JSONEncoder().encode(request.args)
+                    if let jsonArgs = String(data: args, encoding: .utf8) {
+                        self.logger.log("🔴 \(request.operation, privacy: .public) (\(requestId, privacy: .public)) \(jsonArgs, privacy: .auto)")
+                    } else {    // should NEVER happen since the whole request was already successfully encoded and stringified
+                        self.logger.log("🔴 \(request.operation, privacy: .public) (\(requestId, privacy: .public)) 🔴 Error: jsonArgs")
+                    }
                 self.quickjs.sendMessage(message: jsonString)
-              self.symLog.log(jsonString)
+//              self.symLog.log(jsonString)
             } catch {       // call completion
-                self.semaphore.signal()
-              self.symLog.log(error)
+                self.semaphore.signal()         // free requestsMade
+                self.logger.error("\(error.localizedDescription)")
+//              self.symLog.log(error)
                 completionHandler(requestId, sendTime, nil, WalletCore.serializeRequestError());
             }
         }
