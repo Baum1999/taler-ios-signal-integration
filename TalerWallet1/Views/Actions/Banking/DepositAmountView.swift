@@ -97,8 +97,9 @@ struct DepositAmountView: View {
                 symLog.log("Deposit")
                 if let result = try? await model.createDepositGroup(paytoUri, amount: amountToTransfer) {
                     symLog.log(result.transactionId)
-                    ViewState2.shared.popToRootView(stack.push())
+//                    ViewState2.shared.popToRootView(stack.push())
                     NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
+                    dismissTop(stack.push())
                 } else {
                     depositStarted = false
                 }
@@ -115,6 +116,11 @@ struct DepositAmountView: View {
             LoadingView(scopeInfo: nil, message: "Depositing...")
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
+                .safeAreaInset(edge: .bottom) {
+                    Button("Abort") { dismissTop(stack.push()) }
+                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .padding(.horizontal)
+                }
         } else { Group {
             if let balance {
                 let scopeInfo = balance.scopeInfo
@@ -148,6 +154,7 @@ struct DepositAmountView: View {
                     .padding(4)
                 Button(buttonTitle(amountToTransfer)) { startDeposit() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
+                .padding(.horizontal)
                 .disabled(disabled || depositStarted)
                 .accessibilityHint(disabled ? String(localized: "enabled when amount is non-zero, but not higher than your available amount") : EMPTYSTRING)
             } else {    // no balance - Yikes
