@@ -24,7 +24,6 @@ struct TransactionsListView: View {
     @Binding var transactions: [Transaction]
 
     let reloadAllAction: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
@@ -42,8 +41,7 @@ struct TransactionsListView: View {
                                          stack: stack.push(),
                                          scope: scope,
                                   transactions: $transactions,
-                               reloadAllAction: reloadAllAction,
-                               reloadOneAction: reloadOneAction)
+                               reloadAllAction: reloadAllAction)
                     .padding(.leading, ICONLEADING)
             }
             .id(viewId)
@@ -95,9 +93,9 @@ struct TransactionsArraySliceV: View {
     let scope: ScopeInfo
     @Binding var transactions: [Transaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
 
     @EnvironmentObject private var model: WalletModel
+    @State private var noTransaction: Transaction? = nil
 
     var body: some View {
 #if PRINT_CHANGES
@@ -114,7 +112,7 @@ struct TransactionsArraySliceV: View {
             let destination = TransactionSummaryV(stack: stack.push(),
                                                   scope: scope,
                                           transactionId: transaction.id,
-                                           reloadAction: reloadOneAction,
+                                         outTransaction: $noTransaction,
                                                navTitle: nil,
                                                 hasDone: false,
                                             abortAction: abortAction,

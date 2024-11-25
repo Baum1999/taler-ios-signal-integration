@@ -21,16 +21,9 @@ struct WithdrawAcceptDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
-    @State private var transaction: Transaction? = nil
+    @State private var transaction: Transaction? = Transaction(dummyCurrency: DEMOCURRENCY)
 
     let navTitle = String(localized: "Authorize at Bank", comment: "Nav title")
-
-    @MainActor
-    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        let response = try await model.getTransactionById(transactionId, viewHandles: viewHandles)
-        transaction = response
-        return response
-    }
 
     @MainActor
     private func viewDidLoad() async {
@@ -57,7 +50,7 @@ struct WithdrawAcceptDone: View {
                 TransactionSummaryV(stack: stack.push(),
                                     scope: scope,
                             transactionId: transactionId,
-                             reloadAction: reloadOneAction,
+                           outTransaction: $transaction,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,
@@ -69,7 +62,8 @@ struct WithdrawAcceptDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
-                    if let transaction {
+                  if let transaction {  // will always succed
+                    if transaction.common.type != .dummy {
                         Button(transaction.shouldConfirm ? "Authorize later" : "Done") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
                             .padding(.horizontal)
@@ -78,6 +72,7 @@ struct WithdrawAcceptDone: View {
                             .buttonStyle(TalerButtonStyle(type: .bordered))
                             .padding(.horizontal)
                     }
+                  }
                 }
                 .onAppear() {
                     symLog.log("onAppear")

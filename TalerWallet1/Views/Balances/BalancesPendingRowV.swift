@@ -16,7 +16,6 @@ struct BalancesPendingRowV: View {
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     @Binding var pendingTransactions: [Transaction]
     let reloadPending: (_ stack: CallStack) async -> ()
-    let reloadOneAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)?
 
     @ViewBuilder func pendingRowLabel() -> some View {
         let pendingIncoming = balance.pendingIncoming
@@ -61,20 +60,15 @@ struct BalancesPendingRowV: View {
     }
 
     var body: some View {
-        if let reloadOneAction {
             let destination = TransactionsListView(stack: stack.push(),
                                                    scope: balance.scopeInfo,
                                                  balance: balance,
                                          selectedBalance: $selectedBalance,
                                                 navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                             transactions: $pendingTransactions,
-                                         reloadAllAction: reloadPending,
-                                         reloadOneAction: reloadOneAction)
+                                         reloadAllAction: reloadPending)
             NavigationLink(destination: destination) { pendingRowLabel() }
             //let _ = print("button: Pending Transactions: \(currency)")
-        } else { // just for Preview
-            NavigationLink(destination: EmptyView()) { pendingRowLabel() }
-        }
     } // body
 } // BalancesPendingRowV
 
@@ -100,8 +94,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
                                balance: balance,
                        selectedBalance: $selectedBalance,
                    pendingTransactions: $previewTransactions,
-                         reloadPending: {stack in },
-                       reloadOneAction: nil)
+                         reloadPending: {stack in })
         }
     }
 

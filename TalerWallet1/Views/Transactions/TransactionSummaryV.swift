@@ -30,7 +30,7 @@ struct TransactionSummaryV: View {
     let stack: CallStack
     let scope: ScopeInfo?
     let transactionId: String
-    let reloadAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction)
+    @Binding var outTransaction: Transaction?
     let navTitle: String?
     let hasDone: Bool
     let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
@@ -40,6 +40,7 @@ struct TransactionSummaryV: View {
     let resumeAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -58,9 +59,12 @@ struct TransactionSummaryV: View {
     @Namespace var topID
 
     func loadTransaction() async {
-        if let reloadedTransaction = try? await reloadAction(transactionId, false) {
+        if let reloadedTransaction = try? await model.getTransactionById(transactionId, viewHandles: false) {
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
             withAnimation { transaction = reloadedTransaction; viewId = UUID() }      // redraw
+            if outTransaction != nil {
+                outTransaction = reloadedTransaction
+            }
         } else {
             withAnimation{ transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
         }

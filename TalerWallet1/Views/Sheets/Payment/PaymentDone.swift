@@ -17,12 +17,8 @@ struct PaymentDone: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
-    @State var paymentDone: Bool = false
-
-    @MainActor
-    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
-    }
+    @State private var paymentDone: Bool = false
+    @State private var noTransaction: Transaction? = nil
 
     @MainActor
     private func viewDidLoad() async {
@@ -45,7 +41,7 @@ struct PaymentDone: View {
                 TransactionSummaryV(stack: stack.push(),
                                     scope: scope,
                             transactionId: transactionId,
-                             reloadAction: reloadOneAction,
+                           outTransaction: $noTransaction,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,

@@ -22,13 +22,9 @@ struct ManualWithdrawDone: View {
 
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State private var transactionId: String?
+    @State private var noTransaction: Transaction? = nil
 
     let navTitle = String(localized: "Wire Transfer")
-
-    @MainActor
-    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
-    }
 
     @MainActor
     private func viewDidLoad() async {
@@ -50,7 +46,7 @@ struct ManualWithdrawDone: View {
                 TransactionSummaryV(stack: stack.push(),
                                     scope: scope,                               // TODO: use data from tx itself
                             transactionId: transactionId,
-                             reloadAction: reloadOneAction,
+                           outTransaction: $noTransaction,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,

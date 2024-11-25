@@ -44,11 +44,6 @@ struct BalancesSectionView {
 
     private static func className() -> String {"\(self)"}
 
-    @MainActor
-    func reloadOneAction(_ transactionId: String, _ viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
-    }
-
     @State private var sectionID = UUID()
     @State private var shownSectionID = UUID()  // guaranteed to be different the first time
 
@@ -104,8 +99,7 @@ extension BalancesSectionView: View {
                                          selectedBalance: $selectedBalance,
                                                 navTitle: nil,                  // will use scopeInfo.currency
                                             transactions: $completedTransactions,
-                                         reloadAllAction: loadCompleted,
-                                         reloadOneAction: reloadOneAction)
+                                         reloadAllAction: loadCompleted)
           Section {
             BalanceCellV(stack: stack.push("BalanceCell"),
                          scope: balance.scopeInfo,
@@ -120,8 +114,7 @@ extension BalancesSectionView: View {
                                    balance: balance,
                            selectedBalance: $selectedBalance,
                        pendingTransactions: $pendingTransactions,
-                             reloadPending: loadPending,
-                           reloadOneAction: reloadOneAction)
+                             reloadPending: loadPending)
                     .padding(.leading, ICONLEADING)
             }
         } header: {
@@ -144,8 +137,7 @@ extension BalancesSectionView: View {
                                          stack: stack.push(),
                                          scope: scopeInfo,
                                   transactions: $recentTransactions,
-                               reloadAllAction: loadRecent,
-                               reloadOneAction: reloadOneAction)
+                               reloadAllAction: loadRecent)
                     .padding(.leading, ICONLEADING)
             } header: {
                 if !minimalistic {

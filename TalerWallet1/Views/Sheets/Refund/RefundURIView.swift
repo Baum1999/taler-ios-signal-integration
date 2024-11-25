@@ -23,17 +23,14 @@ struct RefundURIView: View {
     @State var transaction: Transaction?
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
-    @MainActor
-    func reloadOneAction(_ transactionId: String, viewHandles: Bool) async throws -> Transaction {
-        return try await model.getTransactionById(transactionId, viewHandles: viewHandles)
-    }
+    @State private var noTransaction: Transaction? = nil
 
     @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
         if let result = try? await model.startRefundForUri(url: url.absoluteString) {
             refundTransactionId = result
-            transaction = try? await model.getTransactionById(result)
+//            transaction = try? await model.getTransactionById(result)
         }
     }
 
@@ -47,7 +44,7 @@ struct RefundURIView: View {
             TransactionSummaryV(stack: stack.push(),
                                 scope: scope,
                         transactionId: refundTransactionId,
-                         reloadAction: reloadOneAction,
+                       outTransaction: $noTransaction,
                              navTitle: nil,   // navTitle,
                               hasDone: true,
                           abortAction: model.abortTransaction,
