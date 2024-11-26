@@ -152,20 +152,12 @@ struct MainView: View {
     } // body
 }
 // MARK: - TabBar
-enum Tab: String, Hashable, CaseIterable {
-    case balances
+enum Tab: Int, Hashable, CaseIterable {
+    case balances = 0
     case actions
-//    case overview
     case settings
 
-    var index: Int {
-        switch self {
-            case .balances: return 0
-            case .actions:  return 1
-//            case .overview: return 1
-            case .settings: return 2
-        }
-    }
+//    var index: Int { self.rawValue }
 
     var title: String {
         switch self {
@@ -188,6 +180,23 @@ enum Tab: String, Hashable, CaseIterable {
         }
     }
 
+    var a11y: String {
+        switch self {
+            case .balances: return BALANCES                  // 􀣉  "chart.bar.xaxis"
+            case .actions:  return "bolt"
+            case .settings: return SETTINGS                  // 􀍟 "gear"
+        }
+    }
+
+    var label: Label<Text, Image> {
+        Label(self)
+    }
+}
+
+extension Label where Title == Text, Icon == Image {
+    init(_ tab: Tab) {
+        self.init(EMPTYSTRING, systemImage: tab.a11y)
+    }
 }
 
 // MARK: - Content
@@ -264,8 +273,6 @@ extension MainView {
                     switch tappedTab {
                         case .balances:
                             ViewState.shared.popToRootView(nil)
-//                        case .exchanges:
-//                            ViewState2.shared.popToRootView(nil)
                         default:
                             break
                     }
@@ -287,6 +294,7 @@ extension MainView {
 
         private static func className() -> String {"\(self)"}
         private static var name: String { Self.className() }
+
         var body: some View {
 #if PRINT_CHANGES
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
@@ -344,6 +352,12 @@ extension MainView {
                 NavLink(7, $navModel.actionSelected) { depositDest }
                 NavLink(8, $navModel.actionSelected) { manualWithdrawDest }
             }
+            let a11yBalanceTab = Label(Tab.balances).labelStyle(.titleOnly)
+                                    .accessibilityLabel(Tab.balances.title)     // "Balances"
+            let a11yActionsTab = Label(Tab.actions).labelStyle(.titleOnly)
+                                    .accessibilityLabel(Tab.actions.title)      // "Actions"
+            let a11ySettingsTab = Label(Tab.settings).labelStyle(.titleOnly)
+                                    .accessibilityLabel(Tab.settings.title)     // "Settings"
             ZStack(alignment: .bottom) {
                 TabView(selection: tabSelection()) {
                     NavigationView {
@@ -354,23 +368,26 @@ extension MainView {
                         .navigationTitle(balancesTitle)
                         .background(balanceActions)
                     }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                    .navigationViewStyle(.stack)
-                    .tag(Tab.balances)
+                        .navigationViewStyle(.stack)
+                        .tag(Tab.balances)
+                        .tabItem { a11yBalanceTab }
 
-                    EmptyView().tag(Tab.actions)
+                    Color.clear
+                        .tag(Tab.actions)
+                        .tabItem { a11yActionsTab }
 
                     NavigationView {
                         SettingsView(stack: stack.push(),
                                   navTitle: settingsTitle)
                         .background(settingsActions)
                     }.id(viewState2.rootViewId)               // any change to rootViewId triggers popToRootView behaviour
-                    .navigationViewStyle(.stack)
-                    .tag(Tab.settings)
+                        .navigationViewStyle(.stack)
+                        .tag(Tab.settings)
+                        .tabItem { a11ySettingsTab }
                 } // TabView
-//                    .ignoresSafeArea(.keyboard, edges: .bottom)
-//                    .padding(.bottom, 10)
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)
+                    .accessibilityHidden(true)              // for a11y we use the original tabBar, not our custom one
             } // ZStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onNotification(.SendAction)    { triggerAction(1) }
