@@ -28,6 +28,7 @@ struct ExchangeListView: View {
                 symLog.log("added: \(exchange)")
                 announce("added: \(exchange)")
                 NotificationCenter.default.post(name: .ExchangeAdded, object: nil, userInfo: nil)
+                NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)       // TODO: ExchangeAdded should suffice
             }
         }
     }
