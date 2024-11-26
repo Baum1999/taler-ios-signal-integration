@@ -38,8 +38,7 @@ struct WithdrawTOSView: View {
     @MainActor
     func viewDidLoad() async {
         if let exchangeTOS, let exchangeBaseUrl {
-            _ = try? await model.setExchangeTOSAccepted(exchangeBaseUrl,
-                                                        etag: exchangeTOS.currentEtag)
+            _ = try? await model.setExchangeTOSAccepted(exchangeBaseUrl)
             if acceptAction != nil {
                 await acceptAction!()
             } else { // just go back - caller will reload

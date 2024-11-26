@@ -157,14 +157,12 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
 fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
     func operation() -> String { "setExchangeTosAccepted" }
-    func args() -> Args { Args(exchangeBaseUrl: baseUrl, etag: etag) }
+    func args() -> Args { Args(exchangeBaseUrl: baseUrl) }
 
     var baseUrl: String
-    var etag: String
 
     struct Args: Encodable {
         var exchangeBaseUrl: String
-        var etag: String
     }
 }
 // MARK: -
@@ -277,10 +275,9 @@ extension WalletModel {
     }
 
     nonisolated func setExchangeTOSAccepted(_ baseUrl: String,
-                                                 etag: String,
                                           viewHandles: Bool = false)
       async throws -> Decodable {
-        let request = SetExchangeTOSAccepted(baseUrl: baseUrl, etag: etag)
+        let request = SetExchangeTOSAccepted(baseUrl: baseUrl)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
