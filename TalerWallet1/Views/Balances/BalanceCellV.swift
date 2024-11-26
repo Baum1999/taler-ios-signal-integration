@@ -36,6 +36,13 @@ struct BalanceCellV: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+#if DEBUG
+        let debug = 1==0
+        let red = debug ? Color.red : Color.clear
+        let green = debug ? Color.green : Color.clear
+        let blue = debug ? Color.blue : Color.clear
+        let orange = debug ? Color.orange : Color.clear
+#endif
         let amountV = AmountV(stack: stack.push("AmountV"),
                               scope: scope,
                              amount: amount,

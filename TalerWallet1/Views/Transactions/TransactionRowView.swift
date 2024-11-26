@@ -129,14 +129,23 @@ struct TransactionRowView: View {
                     .border(red)
 #endif
             }
+#if DEBUG
+            .border(blue)
+#endif
         }
 
         let layout3 = VStack(alignment: .leading, spacing: 0) {
             if topString != nil {                                               // top & amount, bottom below
                 HStack(spacing: 8) {
                     centerTop
+#if DEBUG
+                        .border(blue)
+#endif
                     Spacer(minLength: 2)
                     amountV
+#if DEBUG
+                        .border(green)
+#endif
                 }
                 centerBottom
             } else {                                                            // no top, bottom & amount
