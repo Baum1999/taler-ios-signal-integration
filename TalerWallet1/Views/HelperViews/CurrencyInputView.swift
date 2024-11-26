@@ -148,6 +148,7 @@ struct CurrencyInputView: View {
             if let heading = heading() {
                 Text(heading)
                     .padding(.horizontal, 4)
+                    .padding(.top)
                     .frame(maxWidth: .infinity, alignment: .trailing)  // title != nil ? .leading :
                     .talerFont(.title2)
                     .accessibilityAddTraits(.isHeader)
