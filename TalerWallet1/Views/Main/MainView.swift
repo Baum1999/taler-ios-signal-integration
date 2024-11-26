@@ -310,36 +310,23 @@ extension MainView {
 #else
             let delay: UInt = 0     // no delay for release builds
 #endif
-            let balancesTitle = Tab.balances.title
-//            let actionTitle = Tab.actions.title
-            let settingsTitle = Tab.settings.title
-            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $navModel.tabBarHidden) {
-                logger.log("onActionTab")
-                showActionSheet = true
-            } onActionDrag: {
-                logger.log("onActionDrag: showScanner = true")
-                showScanner = true
-            }
-
+        /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
                              selectedBalance: $selectedBalance,                 // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary)
-
             let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: $selectedBalance,
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary)
-
             let depositDest = DepositIbanV(stack: stack.push(Self.name),
                                  selectedBalance: $selectedBalance,
                                   amountLastUsed: $amountLastUsed)
-
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
                                           selectedBalance: $selectedBalance,
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!
                                                   isSheet: false)
-
+        /// each NavigationView needs its own NavLinks
             let balanceActions = Group {
                 NavLink(1, $navModel.actionSelected) { sendDest }
                 NavLink(2, $navModel.actionSelected) { requestDest }
@@ -352,42 +339,55 @@ extension MainView {
                 NavLink(7, $navModel.actionSelected) { depositDest }
                 NavLink(8, $navModel.actionSelected) { manualWithdrawDest }
             }
+        /// tab titles, and invisible tabItems which are only used for a11y
+            let balancesTitle = Tab.balances.title     // "Balances"
+            let actionTitle = Tab.actions.title        // "Actions"
+            let settingsTitle = Tab.settings.title     // "Settings"
             let a11yBalanceTab = Label(Tab.balances).labelStyle(.titleOnly)
-                                    .accessibilityLabel(Tab.balances.title)     // "Balances"
+                                    .accessibilityLabel(balancesTitle)
             let a11yActionsTab = Label(Tab.actions).labelStyle(.titleOnly)
-                                    .accessibilityLabel(Tab.actions.title)      // "Actions"
+                                    .accessibilityLabel(actionTitle)
             let a11ySettingsTab = Label(Tab.settings).labelStyle(.titleOnly)
-                                    .accessibilityLabel(Tab.settings.title)     // "Settings"
+                                    .accessibilityLabel(settingsTitle)
+        /// NavigationViews for Balances & Settings
+            let balancesStack = NavigationView {
+                BalancesListView(stack: stack.push(balancesTitle),
+                       selectedBalance: $selectedBalance,
+//                   shouldReloadPending: $shouldReloadPending,
+                  shouldReloadBalances: $shouldReloadBalances)
+                .navigationTitle(balancesTitle)
+                .background(balanceActions)
+            }.navigationViewStyle(.stack)
+            let settingsStack = NavigationView {
+                SettingsView(stack: stack.push(),
+                             navTitle: settingsTitle)
+                .background(settingsActions)
+            }.navigationViewStyle(.stack)
+        /// our custom tabBar with the Actions button in the middle
+            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $navModel.tabBarHidden) {
+                logger.log("onActionTab")
+                showActionSheet = true
+            } onActionDrag: {
+                logger.log("onActionDrag: showScanner = true")
+                showScanner = true
+            }
+        /// custom tabBar is rendered on top of the TabView, and overlaps its tabBar
             ZStack(alignment: .bottom) {
+            /// the tabItems (EMPTYSTRING .titleOnly) could indeed be omitted and the app would work the same - but are needed for accessibilityLabel
                 TabView(selection: tabSelection()) {
-                    NavigationView {
-                        BalancesListView(stack: stack.push(balancesTitle),
-                               selectedBalance: $selectedBalance,
-//                         shouldReloadPending: $shouldReloadPending,
-                          shouldReloadBalances: $shouldReloadBalances)
-                        .navigationTitle(balancesTitle)
-                        .background(balanceActions)
-                    }.id(viewState.rootViewId)                // any change to rootViewId triggers popToRootView behaviour
-                        .navigationViewStyle(.stack)
+                    balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
                         .tag(Tab.balances)
                         .tabItem { a11yBalanceTab }
-
-                    Color.clear
+                    Color.clear                                 // can't use EmptyView because then VoiceOver wouldn't have the Actions tab
                         .tag(Tab.actions)
                         .tabItem { a11yActionsTab }
-
-                    NavigationView {
-                        SettingsView(stack: stack.push(),
-                                  navTitle: settingsTitle)
-                        .background(settingsActions)
-                    }.id(viewState2.rootViewId)               // any change to rootViewId triggers popToRootView behaviour
-                        .navigationViewStyle(.stack)
+                    settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
                         .tag(Tab.settings)
                         .tabItem { a11ySettingsTab }
                 } // TabView
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)
-                    .accessibilityHidden(true)              // for a11y we use the original tabBar, not our custom one
+                    .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onNotification(.SendAction)    { triggerAction(1) }
