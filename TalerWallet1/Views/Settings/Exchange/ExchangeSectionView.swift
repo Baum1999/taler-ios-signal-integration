@@ -20,6 +20,12 @@ struct ExchangeSectionView: View {
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
+    @AppStorage("fakeNoFees") var fakeNoFees: Bool = true
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State private var exchanges: [Exchange] = []
     @State private var shouldReloadBalances: Int = 0
@@ -101,12 +107,14 @@ struct ExchangeSectionView: View {
                              exchange: exchange)
                 .listRowSeparator(.hidden)
             }
-            if DEMOCURRENCY == currency || TESTCURRENCY == currency {
+            if developerMode && (DEMOCURRENCY == currency || TESTCURRENCY == currency) {
                 SettingsToggle(name: String(localized: "Global"), value: $global.onChange({ isGlobal in
                     setGlobal()
                 }),             id1: "global",
                         description: minimalistic ? nil : String(localized: "Treat this as a global exchange"))
                 .listRowSeparator(.hidden)
+                SettingsToggle(name: String(localized: "Fake no fees"), value: $fakeNoFees, id1: "fakeNoFees",
+                               description: minimalistic ? nil : String(localized: "Remove fee and gros from details"))
             }
             if DEMOCURRENCY == currency {
                 SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints, id1: "demoHints",
