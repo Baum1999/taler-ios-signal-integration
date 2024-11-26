@@ -201,7 +201,7 @@ struct ManualWithdrawContent: View {
 //                                                         : selectedAge
 //  let _ = print(selectedAge, restrictAge)
                 let destination = ManualWithdrawDone(stack: stack.push(),
-                                                     scope: detailsForAmount.scopeInfo,
+//                                                     scope: detailsForAmount.scopeInfo,
                                                    baseURL: baseURL,
                                           amountToTransfer: amountToTransfer)
 //                                             restrictAge: restrictAge)

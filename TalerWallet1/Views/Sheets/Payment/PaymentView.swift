@@ -220,7 +220,7 @@ struct PaymentView: View, Sendable {
                     if let effective {
                         VStack {
                             let destination = PaymentDone(stack: stack.push(),
-                                                          scope: firstScope,    // TODO: let user choose which currency
+//                                                          scope: firstScope,    // TODO: let user choose which currency
                                                   transactionId: preparePayResult.transactionId)
                             NavigationLink(destination: destination) {
                                 let formatted = raw.formatted(currencyInfo, isNegative: false)

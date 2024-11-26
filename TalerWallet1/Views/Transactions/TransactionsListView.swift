@@ -110,7 +110,7 @@ struct TransactionsArraySliceV: View {
 
         ForEach(transactions, id: \.self) { transaction in
             let destination = TransactionSummaryV(stack: stack.push(),
-                                                  scope: scope,
+//                                                  scope: scope,
                                           transactionId: transaction.id,
                                          outTransaction: $noTransaction,
                                                navTitle: nil,

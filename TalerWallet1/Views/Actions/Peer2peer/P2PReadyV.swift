@@ -71,7 +71,7 @@ struct P2PReadyV: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                                    scope: scope,
+//                                    scope: scope,
                             transactionId: transactionId,
                            outTransaction: $noTransaction,
                                  navTitle: navTitle,

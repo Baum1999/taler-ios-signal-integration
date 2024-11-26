@@ -12,7 +12,7 @@ import SymLog
 struct WithdrawAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let scope: ScopeInfo
+//    let scope: ScopeInfo
     let exchangeBaseUrl: String?
     let url: URL
     let amountToTransfer: Amount?
@@ -48,7 +48,7 @@ struct WithdrawAcceptDone: View {
 #endif
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                                    scope: scope,
+//                                    scope: scope,
                             transactionId: transactionId,
                            outTransaction: $transaction,
                                  navTitle: navTitle,

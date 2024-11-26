@@ -12,7 +12,7 @@ import SymLog
 struct ManualWithdrawDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let scope: ScopeInfo                                                        // TODO: use data from tx itself
+//    let scope: ScopeInfo                                                        // TODO: use data from tx itself
 
     let baseURL: String
     let amountToTransfer: Amount
@@ -44,7 +44,7 @@ struct ManualWithdrawDone: View {
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
-                                    scope: scope,                               // TODO: use data from tx itself
+//                                    scope: scope,                               // TODO: use data from tx itself
                             transactionId: transactionId,
                            outTransaction: $noTransaction,
                                  navTitle: navTitle,
@@ -93,7 +93,7 @@ fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
-                           scope: scopeInfo,
+//                           scope: scopeInfo,
                          baseURL: DEMOEXCHANGE,
                 amountToTransfer: amountToTransfer)
     }

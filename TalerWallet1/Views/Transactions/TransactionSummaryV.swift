@@ -28,7 +28,7 @@ extension Transaction {             // for Dummys
 struct TransactionSummaryV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let scope: ScopeInfo?
+//    let scope: ScopeInfo?
     let transactionId: String
     @Binding var outTransaction: Transaction?
     let navTitle: String?
@@ -122,6 +122,7 @@ struct TransactionSummaryV: View {
 #endif
         let common = transaction.common
         if common.type != .dummy {
+            let scope = common.scopes.first                                     // might be nil if scopes == []
             let pending = transaction.isPending
             let locale = TalerDater.shared.locale
             let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)

@@ -103,7 +103,7 @@ struct WithdrawAcceptView: View {
                 .safeAreaInset(edge: .bottom) {
                     if tosAccepted {
                         let destination = WithdrawAcceptDone(stack: stack.push(),
-                                                             scope: scope,
+//                                                             scope: scope,
                                                    exchangeBaseUrl: exchange.exchangeBaseUrl,
                                                                url: url,
                                                   amountToTransfer: amountToTransfer)
