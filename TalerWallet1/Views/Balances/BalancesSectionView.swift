@@ -97,7 +97,7 @@ extension BalancesSectionView: View {
                                                    scope: scopeInfo,
                                                  balance: balance,
                                          selectedBalance: $selectedBalance,
-                                                navTitle: nil,                  // will use scopeInfo.currency
+                                                navTitle: balance.available.readableDescription,    // TODO: format with currency sign
                                             transactions: $completedTransactions,
                                          reloadAllAction: loadCompleted)
           Section {
