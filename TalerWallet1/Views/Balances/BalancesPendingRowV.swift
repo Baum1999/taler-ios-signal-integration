@@ -79,7 +79,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     struct BindingViewContainer: View {
         @State private var previewTransactions: [Transaction] = []
         @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
-        @State private var selectedBalance: Balance? = nil
+        @State private var selectedPreviewBalance: Balance? = nil
         var body: some View {
             let flags: [BalanceFlag] = [.incomingConfirmation]
 
@@ -92,7 +92,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
             BalancesPendingRowV(//symLog: nil,
                                  stack: CallStack("Preview"),
                                balance: balance,
-                       selectedBalance: $selectedBalance,
+                       selectedBalance: $selectedPreviewBalance,
                    pendingTransactions: $previewTransactions,
                          reloadPending: {stack in })
         }

@@ -30,23 +30,6 @@ struct ExchangeSectionView: View {
     @State private var purge: Bool = false
     @State private var global: Bool = false
 
-//    func amountAvailable(_ exchange: Exchange?, currency: String?) -> Amount? {
-//        if let exchange {
-//            for balance in balances {
-//                if let baseUrl = balance.scopeInfo.url {
-//                    if baseUrl == exchange.exchangeBaseUrl {
-//                        return balance.available
-//                    }
-//                } else if let currency {
-//                    if currency == balance.scopeInfo.currency {
-//                        return balance.available
-//                    }
-//                }
-//            }
-//        }
-//        return nil
-//    }
-
     @MainActor
     private func viewDidLoad() async {
         if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
