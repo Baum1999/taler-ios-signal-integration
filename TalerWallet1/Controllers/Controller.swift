@@ -121,11 +121,16 @@ class Controller: ObservableObject {
     @discardableResult
     func loadBalances(_ stack: CallStack,_ model: WalletModel) async -> Int? {
         if let reloaded = try? await model.getBalances(stack.push()) {
-            for balance in reloaded {
-                let scope = balance.scopeInfo
-                checkInfo(for: scope, model: model)
+            if reloaded != balances {
+                for balance in reloaded {
+                    let scope = balance.scopeInfo
+                    checkInfo(for: scope, model: model)
+                }
+                self.logger.log("••Got new balances, will redraw")
+                balances = reloaded         // redraw
+            } else {
+                self.logger.log("••Same balances, no redraw")
             }
-            balances = reloaded         // redraw
             return reloaded.count
         }
         return nil
