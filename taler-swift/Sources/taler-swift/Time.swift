@@ -74,12 +74,12 @@ extension RelativeTime {
 public enum Timestamp: Codable, Hashable, Sendable {
     case milliseconds(UInt64)
     case never
-    
+
     enum CodingKeys: String, CodingKey {
         case t_s = "t_s"
         case t_ms = "t_ms"
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
@@ -108,11 +108,42 @@ public enum Timestamp: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws {
         var value = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .milliseconds(let t_ms):
-            try value.encode(t_ms / 1000, forKey: .t_s)
-        case .never:
-            try value.encode("never", forKey: .t_s)
+            case .milliseconds(let t_ms):
+                try value.encode(t_ms / 1000, forKey: .t_s)
+            case .never:
+                try value.encode("never", forKey: .t_s)
         }
+    }
+}
+
+extension Timestamp: Comparable {
+    public static func < (lhs: Timestamp, rhs: Timestamp) -> Bool {
+        switch lhs {
+            case .milliseconds(let lhs_ms):
+                switch rhs {
+                    case .milliseconds(let rhs_ms):
+                        return lhs_ms < rhs_ms
+                    case .never: break
+                }
+            case .never: break
+        }
+        return false
+    }
+    public static func == (lhs: Timestamp, rhs: Timestamp) -> Bool {
+        switch lhs {
+            case .never:
+                switch rhs {
+                    case .never: return true
+                    case .milliseconds(_): break
+                }
+            case .milliseconds(let lhs_ms):
+                switch rhs {
+                    case .milliseconds(let rhs_ms):
+                        return lhs_ms == rhs_ms
+                    case .never: break
+                }
+        }
+        return false
     }
 }
 
@@ -172,7 +203,7 @@ public enum Duration: Equatable {
 }
 
 /// Addition of a timestamp and a duration.
-func +(lhs: Timestamp, rhs: Duration) -> Timestamp {
+public func +(lhs: Timestamp, rhs: Duration) -> Timestamp {
     switch lhs {
     case .milliseconds(let lhs_ms):
         switch rhs {
@@ -192,7 +223,7 @@ func +(lhs: Timestamp, rhs: Duration) -> Timestamp {
 }
 
 /// Subtraction of a duration from a timestamp.
-func -(lhs: Timestamp, rhs: Duration) -> Timestamp {
+public func -(lhs: Timestamp, rhs: Duration) -> Timestamp {
     switch lhs {
     case .milliseconds(let lhs_ms):
         switch rhs {
@@ -212,7 +243,7 @@ func -(lhs: Timestamp, rhs: Duration) -> Timestamp {
 }
 
 /// Calculates the difference between two timestamps.
-func -(lhs: Timestamp, rhs: Timestamp) throws -> Duration {
+public func -(lhs: Timestamp, rhs: Timestamp) throws -> Duration {
     switch lhs {
     case .milliseconds(let lhs_ms):
         switch rhs {
