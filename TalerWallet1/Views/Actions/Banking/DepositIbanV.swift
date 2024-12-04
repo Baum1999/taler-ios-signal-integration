@@ -18,7 +18,6 @@ struct DepositIbanV: View {
 
 //    let amountAvailable: Amount?
 //    @Binding var depositIBAN: String
-//    @Binding var accountHolder: String
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -26,22 +25,17 @@ struct DepositIbanV: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("depositIBAN") var depositIBAN: String = EMPTYSTRING
-    @AppStorage("accountHolder") var accountHolder: String = EMPTYSTRING
+    @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var myFeeLabel: String = EMPTYSTRING
     @State private var transactionStarted: Bool = false
-    @State private var paytoUri: String? = nil
     @FocusState private var isFocused: Bool
     @State private var currencyName: String = UNKNOWN
     @State private var currencySymbol: String = UNKNOWN
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+    @State private var bankAccounts: [KnownBankAccountsInfo] = []
 
-    private func buttonTitle(_ amount: Amount) -> String {
-//        let amountWithCurrency = amount.formatted(currencyInfo, isNegative: true, useISO: true)
-        return String(localized: "Next", comment: "advance Deposit to Amount")
-//        return String(localized: "Deposit \(amountWithCurrency)", comment: "amount with currency")
-    }
 
     private var subjectTitle: String {
         return String(localized: "NavTitle_Deposit_AmountStr",
@@ -50,12 +44,9 @@ struct DepositIbanV: View {
     }
 
     @MainActor
-    private func validateIban() async {
-        if (try? await model.validateIban(depositIBAN)) == true {
-            let payto = "payto://iban/\(depositIBAN)?receiver-name=\(accountHolder)"
-            paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        } else {
-            paytoUri = nil
+    private func viewDidLoad() async {
+        if let accounts = try? await model.listKnownBankAccounts() {
+            withAnimation { bankAccounts = accounts }
         }
     }
 
@@ -64,60 +55,66 @@ struct DepositIbanV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the #
 #endif
-        let destination = DepositAmountV(stack: stack.push(),
-                               selectedBalance: $selectedBalance,
-                                amountLastUsed: $amountLastUsed,
-                                      paytoUri: paytoUri)
-        ScrollView { VStack (alignment: .leading, spacing: 6) {
-            if !minimalistic {
-                Text("Account holder:")
-                    .talerFont(.title3)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityRemoveTraits(.isStaticText)
-//                    .padding(.top)
+        let depositHint = Text("You can only deposit to a bank account that you control, otherwise you will not be able to fulfill the regulatory requirements.")
+
+        List {
+            Section {
+                depositHint
             }
-            TextField(minimalistic ? "Account holder" : EMPTYSTRING, text: $accountHolder)
-                .focused($isFocused)
-                .talerFont(.title2)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-//                .padding(minimalistic ? .bottom : .vertical)
-                .onAppear {
-                    if !UIAccessibility.isVoiceOverRunning {
-                        symLog.log("dispatching kbd...")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                            isFocused = true        // make first responder - raise keybord
-                            symLog.log("...kbd isFocused")
+            Section {
+                if bankAccounts.isEmpty {
+                    let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
+                    let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
+                                                        navTitle: bankAccountsTitle)
+                    NavigationLink {        // whole row like in a tableView
+                        bankAccountsDest
+                    } label: {
+                        SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
+                              description: minimalistic ? nil : String(localized: "Your accounts for deposit...")) {}
+                    }
+                } else {
+                    ForEach(bankAccounts, id: \.self) { account in
+//                      let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
+                        let payURL = URL(string: account.paytoUri)
+                        let iban = payURL?.iban
+                        let xTaler = payURL?.xTaler
+                        let alias = account.alias
+                        let kyc = account.kycCompleted ? String(localized: "verified")
+                                                       : String(localized: "not yet verified")
+
+                        let destination = DepositAmountV(stack: stack.push(),
+                                               selectedBalance: $selectedBalance,
+                                                amountLastUsed: $amountLastUsed,
+                                                      paytoUri: account.paytoUri)
+                        NavigationLink(destination: destination) {
+                            VStack {
+                                if let iban {
+                                    Text("IBAN: \(iban)")
+                                } else if let xTaler {
+                                    Text("xTaler: \(xTaler)")
+                                } else {
+                                    Text("unknown payment method")
+                                }
+                                Text("Status: \(kyc)")
+                                    .padding(.leading)
+                                if let alias {
+                                    Text(alias)
+                                }
+                            }
                         }
                     }
                 }
-
-            if !minimalistic {
-                Text("IBAN:")
-                    .talerFont(.title3)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityRemoveTraits(.isStaticText)
-//                    .padding(.top)
             }
-            TextField(minimalistic ? "IBAN" : EMPTYSTRING, text: $depositIBAN)
-                .talerFont(.title2)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-//                .padding(minimalistic ? .bottom : .vertical)
-
-            let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
-            NavigationLink(destination: destination) {
-                Text(buttonTitle(amountToTransfer))
-            }
-            .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
-                .disabled(disabled)
-                .accessibilityHint(disabled ? String(localized: "enabled when account holder and IBAN are set") : EMPTYSTRING)
-        }.padding(.horizontal) } // ScrollVStack
-//        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
+        }
+        .listStyle(myListStyle.style).anyView
+        .refreshable {
+            controller.hapticNotification(.success)
+            symLog.log("refreshing")
+            await viewDidLoad()
+        }
+        .task { await viewDidLoad() }
         .navigationTitle(subjectTitle)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+//        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT_ACCEPT, stack: stack.push())
 //            print("❗️ P2PSubjectV onAppear")
@@ -125,7 +122,7 @@ struct DepositIbanV: View {
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
         }
-        .task(id: depositIBAN) { await validateIban() }
+//        .task(id: depositIBAN) { await validateIban() }
     }
 }
 // MARK: -
