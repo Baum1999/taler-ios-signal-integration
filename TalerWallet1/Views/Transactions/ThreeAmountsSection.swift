@@ -225,11 +225,10 @@ struct ThreeAmountsSection: View {
                 .accessibilityElement(children: .combine)
             }
         } header: {
-            if !minimalistic {
-                Text("Summary")
-                    .talerFont(.title3)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-            }
+            let header = scope?.url?.trimURL ?? scope?.currency ?? "Summary"
+            Text(header)
+                .talerFont(.title3)
+                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
         }
         .task { await viewDidLoad() }
     }
