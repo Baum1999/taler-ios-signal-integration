@@ -87,13 +87,14 @@ struct PaymentView: View, Sendable {
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var preparePayResult: PreparePayResult? = nil
+    @State private var elapsed: Int = 0
 
     @MainActor
     func checkCurrencyInfo(for result: PreparePayResult) async {
         let scopes = result.scopes
         if scopes.count > 0 {
             for scope in scopes {
-                await controller.checkInfo(for: scope, model: model)
+                controller.checkInfo(for: scope, model: model)
             }
             return
         }
@@ -130,6 +131,17 @@ struct PaymentView: View, Sendable {
         }
     }
 
+    func timeToPay(_ terms: MerchantContractTerms) -> Int {
+        if terms.payDeadline > terms.timestamp {
+            if let duration = try? terms.payDeadline - terms.timestamp {
+                switch duration {
+                    case .milliseconds(let uInt64):
+                        return Int(uInt64 / 1000)
+                    case .forever: break
+        }   }   }
+        return 0
+    }
+
     var body: some View {
       Group {
         if let preparePayResult {
@@ -144,6 +156,8 @@ struct PaymentView: View, Sendable {
             let paid = status == .alreadyConfirmed
             let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
                                 : String(localized: "Confirm Payment", comment:"pay merchant navTitle")
+            let timeToPay = timeToPay(terms)
+
             List {
                 if paid {
                     Text("You already paid for this article.")
@@ -219,6 +233,28 @@ struct PaymentView: View, Sendable {
                 if !paid {
                     if let effective {
                         VStack {
+                            if timeToPay > 0 {
+                                let startDate = Date()
+                                HStack {
+                                    Text("Time to pay:")
+                                    TimelineView(.animation) { context in
+                                        let elapsed = Int(context.date.timeIntervalSince(startDate))
+                                        let seconds = timeToPay - elapsed
+
+                                        if #available(iOS 17.0, *) {
+                                            Text("\(seconds)")
+                                                .contentTransition(.numericText(countsDown: true))
+                                                .animation(.default, value: elapsed)
+                                        } else if #available(iOS 16.0, *) {
+                                            Text("\(seconds)")
+                                                .animation(.default, value: elapsed)
+                                        } else {
+                                            Text("\(seconds)")
+                                        }
+                                    }.monospacedDigit()
+                                    Text("seconds")
+                                }
+                            }
                             let destination = PaymentDone(stack: stack.push(),
 //                                                          scope: firstScope,    // TODO: let user choose which currency
                                                   transactionId: preparePayResult.transactionId)
