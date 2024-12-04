@@ -81,9 +81,16 @@ struct TabBarView: View {
                     .frame(width: size, height: size)
             }
             if withText {
-                Text(tab.title)
-                    .lineLimit(1)
-                    .talerFont(.body)
+                if selection == tab {
+                    Text(tab.title)
+                        .bold()
+                        .lineLimit(1)
+                        .talerFont(.picker)
+                } else {
+                    Text(tab.title)
+                        .lineLimit(1)
+                        .talerFont(.body)
+                }
             }
         }.id(tab)
         .foregroundColor(selection == tab ? .accentColor : .secondary)
