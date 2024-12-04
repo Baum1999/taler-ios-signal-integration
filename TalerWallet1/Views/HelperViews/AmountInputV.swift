@@ -35,6 +35,7 @@ struct AmountInputV: View {
     let scope: ScopeInfo?
     @Binding var amountAvailable: Amount
     let amountLabel: String?
+    let a11yLabel: String
     @Binding var amountToTransfer: Amount
     let amountLastUsed: Amount
     let wireFee: Amount?
@@ -92,6 +93,7 @@ struct AmountInputV: View {
                      amountLastUsed: amountLastUsed,
                           available: amountAvailable,
                               title: amountLabel,
+                          a11yTitle: a11yLabel,
                      shortcutAction: shortcutAction)
 //                .accessibility(sortPriority: 2)
 

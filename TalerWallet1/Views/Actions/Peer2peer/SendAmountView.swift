@@ -160,10 +160,12 @@ struct SendAmountView: View {
                     NavLink($buttonSelected) { inputDestination }
                     NavLink($shortcutSelected) { shortcutDestination }
                 }
+                let a11yLabel = String(localized: "Amount to send:", comment: "accessibility, no abbreviations")
                 AmountInputV(stack: stack.push(),
                              scope: balance.scopeInfo,
                    amountAvailable: $amountAvailable,
                        amountLabel: nil,        // will use "Available for transfer: xxx", trailing
+                         a11yLabel: a11yLabel,
                   amountToTransfer: $amountToTransfer,
                     amountLastUsed: amountLastUsed,
                            wireFee: nil,

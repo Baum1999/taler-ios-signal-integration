@@ -160,13 +160,15 @@ struct WithdrawURIView: View {
                                 NavLink($shortcutSelected) { shortcutDest }
                                 NavLink($buttonSelected) { acceptDestination }
                             }
+                            let a11yLabel = String(localized: "Amount to withdraw:", comment: "accessibility, no abbreviations")
                             let amountLabel = minimalistic ? String(localized: "Amount:")        // maxAmount
-                                                           : String(localized: "Amount to withdraw:")
+                                                           : a11yLabel
                             // TODO: input amount, then
                             AmountInputV(stack: stack.push(),
                                          scope: exchange.scopeInfo,
                                amountAvailable: $amountZero,
                                    amountLabel: amountZero.isZero ? amountLabel : nil,
+                                     a11yLabel: a11yLabel,
                               amountToTransfer: $amountToTransfer,
                                 amountLastUsed: amountLastUsed,
                                        wireFee: wireFee,

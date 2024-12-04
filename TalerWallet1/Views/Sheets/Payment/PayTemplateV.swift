@@ -129,8 +129,9 @@ struct PayTemplateV: View {
     var body: some View {
         if let templateContract {       // preparePayResult
 //            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? UNKNOWN
+            let a11yLabel = String(localized: "Amount to pay:", comment: "accessibility, no abbreviations")
             let amountLabel = minimalistic ? String(localized: "Amount:")
-                                           : String(localized: "Amount to pay:")
+                                           : a11yLabel
             // final destination with amountToTransfer, after user input of amount
             let finalDestinationI = PaymentView(stack: stack.push(),
                                                   url: url,
@@ -178,6 +179,7 @@ struct PayTemplateV: View {
                                                scope: scope,
                                      amountAvailable: $amountAvailable,
                                          amountLabel: amountLabel,
+                                           a11yLabel: a11yLabel,
                                     amountToTransfer: $amountToTransfer,
                                       amountLastUsed: amountLastUsed,
                                              wireFee: nil,

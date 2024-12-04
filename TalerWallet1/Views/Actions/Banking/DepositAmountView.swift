@@ -136,12 +136,15 @@ struct DepositAmountView: View {
                 Text("Available:\t\(availableStr)")
                     .talerFont(.title3)
                     .padding(.bottom, 2)
+                let a11yLabel = String(localized: "Amount to deposit:", comment: "accessibility, no abbreviations")
+                let amountLabel = minimalistic ? String(localized: "Amount:")
+                                               : a11yLabel
                 CurrencyInputView(scope: scopeInfo,
                                  amount: $amountToTransfer,
                          amountLastUsed: amountLastUsed,
                               available: nil,  // amountAvailable,
-                                  title: minimalistic ? String(localized: "Amount:")
-                                                      : String(localized: "Amount to deposit:"),
+                                  title: amountLabel,
+                              a11yTitle: a11yLabel,
                          shortcutAction: nil)
                     .padding(.horizontal)
 

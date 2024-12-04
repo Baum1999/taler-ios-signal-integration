@@ -42,7 +42,7 @@ struct ScopePicker: View {
             let available = balance.available
             let availableA11y = available.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
-            let a11yLabel = url + ", " + availableA11y
+//            let a11yLabel = url + ", " + availableA11y
 
             HStack(alignment: .firstTextBaseline) {
                 let disabled = (count == 1)
@@ -68,11 +68,12 @@ struct ScopePicker: View {
                     .frame(maxWidth: .infinity)
 //                    .border(.red)                 // debugging
                     .pickerStyle(.menu)
+//                  .accessibilityLabel(a11yLabel)
                     .labelsHidden()                 // be sure to use valid labels for a11y
                 }
             }
             .talerFont(.picker)
-            .accessibilityLabel(a11yLabel)
+//            .accessibilityLabel(a11yLabel)
             .accessibilityHint(String(localized: "Choose the payment service.", comment: "a11y"))
             .task() {
                 withAnimation { selected = value }
@@ -105,10 +106,13 @@ struct  ScopeDropDown: View {
 
     @ViewBuilder
     func dropDownRow(_ balance: Balance, _ currencyInfo: CurrencyInfo, _ first: Bool = false) -> some View {
-        let text = Text(urlOrCurrency(balance))
+        let urlOrCurrency = urlOrCurrency(balance)
+        let text = Text(urlOrCurrency)
         let amount = Text(formattedAmount(balance, currencyInfo).nbs)
+        let a11yAmount = balance.available.readableDescription
         if first {
             text
+                .accessibilityLabel("via \(urlOrCurrency)")
         } else {
             let hLayout = HStack(alignment: .firstTextBaseline) {
                 text
@@ -127,6 +131,8 @@ struct  ScopeDropDown: View {
                 hLayout
                 vLayout
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(urlOrCurrency), \(a11yAmount)")
         }
     }
 

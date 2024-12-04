@@ -251,13 +251,14 @@ struct RequestPaymentContent: View {
                 }
                 let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
                 if tosAccepted {
+                    let a11yLabel = String(localized: "Amount to request:", comment: "accessibility, no abbreviations")
                     let amountLabel = minimalistic ? String(localized: "Amount:")
-                                                   : String(localized: "Amount to request:")
-//                    Text(amountLabel)
+                                                   : a11yLabel
                     AmountInputV(stack: stack.push(),
                                  scope: balance.scopeInfo,
                        amountAvailable: $amountZero,        // incoming needs no available
                            amountLabel: amountLabel,
+                             a11yLabel: a11yLabel,
                       amountToTransfer: $amountToTransfer,
                         amountLastUsed: amountLastUsed,
                                wireFee: nil,

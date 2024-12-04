@@ -209,12 +209,15 @@ struct ManualWithdrawContent: View {
                 let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
 
                 if tosAccepted {
+                    let a11yLabel = String(localized: "Amount to withdraw:", comment: "accessibility, no abbreviations")
+                    let amountLabel = minimalistic ? String(localized: "Amount:")
+                                                   : a11yLabel
                     CurrencyInputView(scope: scope,
                                      amount: $amountToTransfer,
                              amountLastUsed: amountLastUsed,
                                   available: nil,
-                                      title: minimalistic ? String(localized: "Amount:")
-                                                          : String(localized: "Amount to withdraw:"),
+                                      title: amountLabel,
+                                  a11yTitle: a11yLabel,
                              shortcutAction: nil)
                         .padding(.top)
                         .task(id: amountToTransfer.value) { // re-run this whenever amountToTransfer changes

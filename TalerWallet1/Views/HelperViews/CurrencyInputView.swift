@@ -66,6 +66,7 @@ struct CurrencyInputView: View {
     let amountLastUsed: Amount
     let available: Amount?
     let title: String?
+    let a11yTitle: String
     let shortcutAction: ((_ amount: Amount) -> Void)?
 
     @EnvironmentObject private var controller: Controller
@@ -114,19 +115,22 @@ struct CurrencyInputView: View {
         return buttons
     }
 
+    func availableString(_ availableStr: String) -> String {
+        String(localized: "Available for transfer: \(availableStr)")
+    }
+
+    var a11yLabel: String {        // format currency for a11y
+        availableString(available?.readableDescription ?? String(localized: "unknown"))
+    }
+
     func heading() -> String? {
         if let title {
             return title
         }
         if let available {
-            let availableStr = available.formatted(scope, isNegative: false)
-            return String(localized: "Available for transfer: \(availableStr)")
+            return availableString(available.formatted(scope, isNegative: false))
         }
         return nil
-    }
-    var a11yLabel: String {        // format currency for a11y
-        let availableStr = available?.readableDescription ?? String(localized: "unknown")
-        return String(localized: "Available: \(availableStr)")
     }
 
     func currencyInfo() -> CurrencyInfo {
@@ -158,6 +162,7 @@ struct CurrencyInputView: View {
                     .padding(.bottom, -6)
             }
             currencyField
+                .accessibilityLabel(a11yTitle)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
 //                .background(WalletColors().fieldBackground)       // problem: white corners
