@@ -26,6 +26,8 @@ struct TransactionsListView: View {
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
     @EnvironmentObject private var controller: Controller
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var viewId = UUID()
 
@@ -37,12 +39,19 @@ struct TransactionsListView: View {
         let count = transactions.count
         ScrollViewReader { scrollView in
             List {
-                TransactionsArraySliceV(symLog: symLog,
-                                         stack: stack.push(),
-                                         scope: scope,
-                                  transactions: $transactions,
-                               reloadAllAction: reloadAllAction)
-                    .padding(.leading, ICONLEADING)
+                Section {
+                    TransactionsArraySliceV(symLog: symLog,
+                                             stack: stack.push(),
+                                             scope: scope,
+                                      transactions: $transactions,
+                                   reloadAllAction: reloadAllAction)
+                        .padding(.leading, ICONLEADING)
+                } header: {
+                    let header = scope.url?.trimURL ?? scope.currency
+                    Text(header)
+                        .talerFont(.title3)
+                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                }
             }
             .id(viewId)
             .listStyle(myListStyle.style).anyView
