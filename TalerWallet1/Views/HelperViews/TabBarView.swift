@@ -102,6 +102,9 @@ struct TabBarView: View {
                 offset.height = -50
             }
             withAnimation(Animation.easeOut(duration: DRAGSPEED).delay(DRAGDELAY + DRAGDURATION + DRAGSPEED)) {
+                offset.height = 10
+            }
+            withAnimation(Animation.easeOut(duration: DRAGSPEED/2).delay(DRAGDELAY + DRAGDURATION + 2.5*DRAGSPEED)) {
                 offset.height = 0
             }
         }
