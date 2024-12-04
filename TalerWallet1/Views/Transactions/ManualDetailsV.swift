@@ -164,15 +164,14 @@ struct ManualDetailsV: View {
                             .listRowSeparator(.hidden)
                     }
                     if validDetails.count > 1 {
-                        let picker = AccountPicker(title: String(localized: "Bank"),
-                                                   value: $accountID,
-                                          accountDetails: validDetails,
-                                                  action: redraw)
-                            .listRowSeparator(.hidden)
                         if validDetails.count > 3 { // too many for SegmentControl
-                            picker.pickerStyle(.menu)
+                            AccountPicker(title: String(localized: "Bank"),
+                                          value: $accountID,
+                                 accountDetails: validDetails,
+                                         action: redraw)
+                            .listRowSeparator(.hidden)
+                            .pickerStyle(.menu)
                         } else {
-//                            picker.pickerStyle(.segmented)
                             SegmentControl(value: $accountID, accountDetails: validDetails, action: redraw)
                                 .listRowSeparator(.hidden)
                         }
