@@ -21,6 +21,7 @@ struct BankSectionView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
     @AppStorage("fakeNoFees") var fakeNoFees: Bool = true
+    @AppStorage("ownerName") var ownerName: String = EMPTYSTRING
 
     @State private var shouldReloadBalances: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -29,12 +30,42 @@ struct BankSectionView: View {
     @State private var showAlert: Bool = false
     @State private var purge: Bool = false
     @State private var global: Bool = false
+    @State private var accountHolder: String = EMPTYSTRING
+    @State private var iban: String = EMPTYSTRING
+    @State private var xTaler: String = EMPTYSTRING
+    @State private var alias: String = EMPTYSTRING
+    @State private var paytoType: PaytoType = .iban
+    @State private var selected = 0
+    @FocusState private var focus:FocusedField?
+
+    enum FocusedField: Hashable {
+        case accountHolder, iban, xTaler, alias
+    }
+
+//    @MainActor
+//    private func validateIban() async {
+//        if (try? await model.validateIban(iban)) == true {
+//            let payto = "payto://iban/\(iban)?receiver-name=\(accountHolder)"
+//            paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//        } else {
+//            paytoUri = nil
+//        }
+//    }
 
     @MainActor
     private func viewDidLoad() async {
-//        if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
-//            withAnimation { exchanges = exc }
-//        }
+        let payURL = URL(string: account.paytoUri)
+        iban = payURL?.iban ?? EMPTYSTRING
+        xTaler = payURL?.xTaler ?? EMPTYSTRING
+        alias = account.alias ?? EMPTYSTRING
+        if let queryParameters = payURL?.queryParameters {
+            let name = if let rcv = queryParameters["receiver-name"] {
+                rcv.replacingOccurrences(of: "+", with: SPACE)
+            } else {
+                ownerName
+            }
+            accountHolder = name
+        }
     }
 
     @MainActor
@@ -61,50 +92,81 @@ struct BankSectionView: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let kyc = account.kycCompleted ? String(localized: "verified")
+                                       : String(localized: "not yet verified")
+        let methods = [PaytoType.iban, PaytoType.xTalerBank]
         Section {
-            if let alias = account.alias {
-                Text(alias)
+            if !minimalistic {
+                Text("Account holder:")
+                    .talerFont(.title3)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityRemoveTraits(.isStaticText)
             }
-            let payURL = URL(string: account.paytoUri)
-            if let queryParameters = payURL?.queryParameters {
-                let name = if let rcv = queryParameters["receiver-name"] {
-                    rcv.replacingOccurrences(of: "+", with: " ")
-                } else {
-                    EMPTYSTRING
+            TextField(minimalistic ? "Account holder" : EMPTYSTRING, text: $accountHolder)
+                .focused($focus, equals: .accountHolder)
+                .talerFont(.title2)
+                .foregroundColor(WalletColors().fieldForeground)     // text color
+                .background(WalletColors().fieldBackground)
+                .textFieldStyle(.roundedBorder)
+            Picker(EMPTYSTRING, selection: $selected) {
+                ForEach(0..<methods.count, id: \.self) { index in
+                    let method = methods[index]
+                    Text(method.rawValue.uppercased())
+                        .tag(index)
                 }
-                Text("Holder: \(name)")
-
-
-//                let amountStr = queryParameters["amount"] ?? EMPTYSTRING
-//                let messageStr = queryParameters["message"] ?? EMPTYSTRING
-//                let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
-
+            }.pickerStyle(.segmented)
+            .onChange(of: selected) { newValue in
+                paytoType = methods[newValue]
             }
 
-            let method = if let iban = payURL?.iban {
-                Text("IBAN: \(iban)")
-            } else if let xTaler = payURL?.xTaler {
-                Text("TALER: \(xTaler)")
+            if paytoType == .iban {
+                TextField(EMPTYSTRING, text: $iban)
+                    .focused($focus, equals: .iban)
+                    .talerFont(.title2)
+                    .foregroundColor(WalletColors().fieldForeground)     // text color
+                    .background(WalletColors().fieldBackground)
+                    .textFieldStyle(.roundedBorder)
+            } else if paytoType == .xTalerBank {
+                TextField(EMPTYSTRING, text: $xTaler)
+                    .focused($focus, equals: .xTaler)
+                    .talerFont(.title2)
+                    .foregroundColor(WalletColors().fieldForeground)     // text color
+                    .background(WalletColors().fieldBackground)
+                    .textFieldStyle(.roundedBorder)
             } else {
                 Text("unknown payment method")
             }
-            method
 
-            let kyc = account.kycCompleted ? String(localized: "verified")
-                                           : String(localized: "not yet verified")
-            Text(kyc)
-                .padding(.leading)
+            HStack {
+                Spacer()
+                Text("Status: \(kyc)")
+            }.padding(.top, -4)
 
             if account.currencies.count == 1 {
                 let currency = account.currencies[0]
-                Text("Currency: \(currency)")
+                Text(minimalistic ? currency
+                                  : "Currency: \(currency)")
             } else {
-                Text("Currencies:")
+                if !minimalistic {
+                    Text("Currencies:")
+                }
                 ForEach (account.currencies, id: \.self) { currency in
                     Text(currency)
                         .padding(.leading)
                 }
             }
+            if !minimalistic {
+                Text("Note:")
+                    .talerFont(.title3)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityRemoveTraits(.isStaticText)
+            }
+            TextField(minimalistic ? "Note" : EMPTYSTRING, text: $alias)
+                .focused($focus, equals: .alias)
+                .talerFont(.title2)
+                .foregroundColor(WalletColors().fieldForeground)     // text color
+                .background(WalletColors().fieldBackground)
+                .textFieldStyle(.roundedBorder)
             Button {
                 deleteAccount()
             } label: {
@@ -113,6 +175,10 @@ struct BankSectionView: View {
                 .buttonStyle(TalerButtonStyle(type: .bordered, disabled: disabled))
                 .disabled(disabled)
         } header: {
+        }
+        .listRowSeparator(.hidden)
+        .onChange(of: focus) {
+            print($0)
         }
         .task { await viewDidLoad() }
 //        .task(id: controller.currencyTicker) { await currencyTickerChanged(scopeInfo) }

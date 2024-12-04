@@ -55,17 +55,15 @@ struct BankListView: View {
         let addTitleStr = String(localized: "Add bank account", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
 
-        let sortedList = List(bankAccounts, id: \.self) { account in
-            BankSectionView(stack: stack.push(),
-                          account: account)
-        }
+        let depositHint = Text("You can only deposit to a bank account that you control, otherwise you will not be able to fulfill the regulatory requirements.")
 
-        let emptyList = List {
+        let emptyList = Group {
             Section {
                 Text("There are no bank accounts yet.")
                     .talerFont(.title3)
             }
             Section {
+                depositHint
                 let plus = Image(systemName: "plus")
                 if !minimalistic {
                     Text("Tap the \(plus) button to add an account.")
@@ -78,11 +76,16 @@ struct BankListView: View {
                 .talerFont(.body)
         }
 
-        Group {
+        List {
             if bankAccounts.isEmpty {
                 emptyList
             } else {
-                sortedList
+                depositHint
+                ForEach(bankAccounts, id: \.self) { account in
+                    BankSectionView(stack: stack.push(),
+                                    account: account)
+//                    Text(account.paytoUri)
+                }
             }
         }
         .listStyle(myListStyle.style).anyView
