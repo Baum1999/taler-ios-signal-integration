@@ -19,6 +19,7 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     func operation() -> String { "withdrawTestBalance" }
     func args() -> Args { Args(amount: amount,
                    corebankApiBaseUrl: bankBaseUrl,
+                    useForeignAccount: true,
                       exchangeBaseUrl: exchangeBaseUrl)
                         }
 
@@ -30,6 +31,7 @@ fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
         var amount: Amount
 //        var bankBaseUrl: String                         // <= this should be the correct parameter name
         var corebankApiBaseUrl: String                // <= but this is used by wallet-core
+        var useForeignAccount: Bool
         var exchangeBaseUrl: String
     }
 }
