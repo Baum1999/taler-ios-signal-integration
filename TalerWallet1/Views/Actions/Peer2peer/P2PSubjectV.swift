@@ -99,9 +99,9 @@ struct P2PSubjectV: View {
                         .focused($isFocused)
                         .onChange(of: summary) { newValue in
                             guard isFocused else { return }
-                            guard newValue.contains("\n") else { return }
+                            guard newValue.contains(LINEFEED) else { return }
                             isFocused = false
-                            summary = newValue.replacing("\n", with: "")
+                            summary = newValue.replacing(LINEFEED, with: EMPTYSTRING)
                         }
                   } else {
                     TextField("Subject", text: $summary)
@@ -111,7 +111,7 @@ struct P2PSubjectV: View {
                             guard isFocused else { return }
                             guard newValue.contains("\n") else { return }
                             isFocused = false
-                            summary = newValue.replacingOccurrences(of: "\n", with: "")
+                            summary = newValue.replacingOccurrences(of: LINEFEED, with: EMPTYSTRING)
                         }
                 } } // Group for iOS16+ & iOS15
                     .talerFont(.title2)

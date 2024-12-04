@@ -40,7 +40,7 @@ struct SegmentControl: View {
                     let amount = detail.transferAmount
                     let amountStr = amount?.formatted(specs: specs, isNegative: false, useISO: false) ?? EMPTYSTRING
                     let bankName = detail.bankLabel
-                    let a11yLabel = bankName != nil ? (bankName! + " " + amountStr) : amountStr
+                    let a11yLabel = bankName != nil ? (bankName! + SPACE + amountStr) : amountStr
 //            let _ = print(amountStr)
                     VStack(spacing: 6) {
                         Text(amountStr)
@@ -191,7 +191,7 @@ struct ManualDetailsV: View {
 //                                   payURL?.host() ??
                                      String(localized: "unknown payment method")
                         let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING)
-                                            .replacingOccurrences(of: "+", with: " ")
+                                            .replacingOccurrences(of: "+", with: SPACE)
 //                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
 //                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
 //                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING

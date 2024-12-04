@@ -48,10 +48,10 @@ extension Data {
 extension String {
 
     public var bytes: String {
-        var result: String = ""
+        var result: String = EMPTYSTRING
         for k in self.utf8 {
             result += String(k)
-            result += " "
+            result += SPACE
         }
         return result
     }
@@ -78,19 +78,19 @@ extension String {
 
     var spaced: String {
         String(self.map {
-            $0 == NONBREAKING ? " " : $0
+            $0 == NONBREAKING ? SPACECHAR : $0
         })
     }
     var nbs: String {
         String(self.map {
-            $0 == " " ? NONBREAKING : $0
+            $0 == SPACECHAR ? NONBREAKING : $0
         })
     }
 
     func tabbed(oneLine: Bool) -> String {
         let fragments = self.components(separatedBy: "\t")
         if fragments.count > 1 {
-            let separator = oneLine ? " " : "\n"
+            let separator = oneLine ? SPACE : "\n"
             return fragments.joined(separator: separator)
         }
         return self

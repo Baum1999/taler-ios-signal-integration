@@ -28,7 +28,10 @@ public let SEVENDAYS: UInt = 7      // 3..9
 public let THIRTYDAYS: UInt = 30    // 10..30
 
 public let EMPTYSTRING = ""                         // avoid automatic translation of empty "" textLiterals in Text()
+public let SPACE = " "
+public let SPACECHAR: Character = " "
 public let NONBREAKING: Character = "\u{00A0}"
+public let LINEFEED = "\n"
 public let UNKNOWN = String(localized: "UNKNOWN", comment: "merchant didn't specify the currency, use ALL CAPS")
 
 public let BALANCES = "chart.bar.xaxis"             // 􀣉                       2.0 (iOS 14)

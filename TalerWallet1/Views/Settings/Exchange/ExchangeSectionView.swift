@@ -131,7 +131,7 @@ struct ExchangeSectionView: View {
                             .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                     }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(bankingHint + " " + linkTitle)
+                    .accessibilityLabel(bankingHint + SPACE + linkTitle)
                     .padding(.top)
                     .listRowSeparator(.hidden)
                 }

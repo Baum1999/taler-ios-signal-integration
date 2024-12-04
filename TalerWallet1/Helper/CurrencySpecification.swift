@@ -171,8 +171,8 @@ public struct CurrencyInfo: Sendable {
                 return symbolString.replacingOccurrences(of: formatter.currencyCode, with: aSymbol)
             }
             if let aName = altUnitName0 {
-                let spacedName = formatter.leadingCurrencySymbol ? aName + " "
-                                                                 : " " + aName
+                let spacedName = formatter.leadingCurrencySymbol ? aName + SPACE
+                                                                 : SPACE + aName
                 let spacedString1 = aString.replacingOccurrences(of: formatter.currencySymbol, with: spacedName)
                 let spacedString2 = spacedString1.replacingOccurrences(of: formatter.currencyCode, with: spacedName)
                 let spacedString3 = spacedString2.replacingOccurrences(of: "  ", with: " ")  // ensure we have only 1 space
@@ -181,8 +181,8 @@ public struct CurrencyInfo: Sendable {
         }
         let currency = formatter.currency
         if currency.count > 0 {
-            let spacedName = formatter.leadingCurrencySymbol ? currency + " "
-                                                             : " " + currency
+            let spacedName = formatter.leadingCurrencySymbol ? currency + SPACE
+                                                             : SPACE + currency
             let spacedString1 = aString.replacingOccurrences(of: formatter.currencySymbol, with: spacedName)
             let spacedString2 = spacedString1.replacingOccurrences(of: formatter.currencyCode, with: spacedName)
             let spacedString3 = spacedString2.replacingOccurrences(of: "  ", with: " ")  // ensure we have only 1 space
@@ -294,7 +294,7 @@ public class CurrencyFormatter: NumberFormatter {
     static func formatter(currency: String, specs: CurrencySpecification) -> CurrencyFormatter {
         let formatter = CurrencyFormatter()
         if let altUnitNameZero = specs.altUnitNames?[0] {
-            if altUnitNameZero.hasPrefix(" ") {
+            if altUnitNameZero.hasPrefix(SPACE) {
                 formatter.altUnitName0 = String(altUnitNameZero.dropFirst())
             } else {
                 formatter.altUnitSymbol = altUnitNameZero

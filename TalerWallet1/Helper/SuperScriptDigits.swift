@@ -5,7 +5,7 @@
 import Foundation
 
 func SuperScriptDigits(_ number: String) -> String {
-    var result = ""
+    var result = EMPTYSTRING
     for char in number {
         switch char {
             case "0": result = result + String("\u{2070}")

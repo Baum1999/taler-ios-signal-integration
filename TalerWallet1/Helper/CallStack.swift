@@ -55,7 +55,7 @@ fileprivate func filePath2Name(_ file: String) -> String {
 
 extension CallStack {
 #if DEBUG
-    init(_ message: String = "",
+    init(_ message: String = EMPTYSTRING,
           funcName: String = #function,
           filePath: String = #file,
               line: UInt = #line) {
@@ -63,13 +63,13 @@ extension CallStack {
         self.stack = [item]
     }
 #else
-    init(_ message: String = "") {
+    init(_ message: String = EMPTYSTRING) {
         let item = CallStackItem(message: message)
         self.stack = [item]
     }
 #endif
 #if DEBUG
-    public func push(_ message: String = "",
+    public func push(_ message: String = EMPTYSTRING,
                       funcName: String = #function,
                       filePath: String = #file,
                           line: UInt = #line) -> CallStack {
@@ -77,7 +77,7 @@ extension CallStack {
         return push(item: item)
     }
 #else
-    public func push(_ message: String = "") -> CallStack {
+    public func push(_ message: String = EMPTYSTRING) -> CallStack {
         let item = CallStackItem(message: message)
         return push(item: item)
     }
@@ -86,7 +86,7 @@ extension CallStack {
         var result: String = EMPTYSTRING
         for (item) in stack {
 #if DEBUG
-            result += item.file + " " + item.function + "; "
+            result += item.file + SPACE + item.function + "; "
 #else
             result += item.message + "; "
 #endif

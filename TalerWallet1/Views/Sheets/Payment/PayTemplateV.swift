@@ -74,7 +74,7 @@ struct PayTemplateV: View {
 //        if let result = await preparePayForTemplate(model: model,
 //                                                      url: url,
 //                                                   amount: amountToTransfer,
-//                                                  summary: summaryIsEditable ? summary ?? " "
+//                                                  summary: summaryIsEditable ? summary ?? SPACE
 //                                                                             : nil,
 //                                                 announce: announce)
 //        {
@@ -109,7 +109,7 @@ struct PayTemplateV: View {
 //                                                        url: url,
 //                                                     amount: amountIsEditable ? prepAmount ?? zeroAmount
 //                                                                              : nil,
-//                                                    summary: summaryIsEditable ? prepSummary ?? " "
+//                                                    summary: summaryIsEditable ? prepSummary ?? SPACE
 //                                                                               : nil,
 //                                                   announce: announce)
 //          {   symLog.log("preparePayForTemplate finished")
