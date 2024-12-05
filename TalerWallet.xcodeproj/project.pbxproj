@@ -278,6 +278,8 @@
 		4EC90C782A1B528B0071DC58 /* ExchangeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */; };
 		4ECB62802A0BA6DF004ABBB7 /* Model+P2P.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */; };
 		4ECB62822A0BB01D004ABBB7 /* SelectDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */; };
+		4ECF927D2D005E3E006DB14E /* BankEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF927C2D005E3E006DB14E /* BankEditView.swift */; };
+		4ECF927E2D005E3E006DB14E /* BankEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECF927C2D005E3E006DB14E /* BankEditView.swift */; };
 		4ED2F94B2A278F5100453B40 /* ThreeAmountsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */; };
 		4ED80E882B8F5FB8008BD576 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E872B8F5FB8008BD576 /* CStringArray.swift */; };
 		4ED80E892B8F5FB8008BD576 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED80E872B8F5FB8008BD576 /* CStringArray.swift */; };
@@ -500,6 +502,7 @@
 		4EC90C772A1B528B0071DC58 /* ExchangeSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeSectionView.swift; sourceTree = "<group>"; };
 		4ECB627F2A0BA6DF004ABBB7 /* Model+P2P.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+P2P.swift"; sourceTree = "<group>"; };
 		4ECB62812A0BB01D004ABBB7 /* SelectDays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDays.swift; sourceTree = "<group>"; };
+		4ECF927C2D005E3E006DB14E /* BankEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankEditView.swift; sourceTree = "<group>"; };
 		4ED2F94A2A278F5100453B40 /* ThreeAmountsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreeAmountsSection.swift; sourceTree = "<group>"; };
 		4ED80E872B8F5FB8008BD576 /* CStringArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CStringArray.swift; sourceTree = "<group>"; };
 		4ED80E8A2B8F60E7008BD576 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
@@ -583,6 +586,7 @@
 			children = (
 				4E0E8EF92CEFDB0700C5F914 /* BankListView.swift */,
 				4E0E8EFC2CF0A18800C5F914 /* BankSectionView.swift */,
+				4ECF927C2D005E3E006DB14E /* BankEditView.swift */,
 			);
 			path = Bank;
 			sourceTree = "<group>";
@@ -1279,6 +1283,7 @@
 				4E3EAE3E2A990778009F1BE8 /* ManualDetailsV.swift in Sources */,
 				4E0E8EFA2CEFDB0700C5F914 /* BankListView.swift in Sources */,
 				4E3EAE3F2A990778009F1BE8 /* View+dismissTop.swift in Sources */,
+				4ECF927D2D005E3E006DB14E /* BankEditView.swift in Sources */,
 				4E3EAE402A990778009F1BE8 /* TransactionsListView.swift in Sources */,
 				4EE9864F2CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
 				4E0A71142C396D86002485BB /* Error+debugDescription.swift in Sources */,
@@ -1417,6 +1422,7 @@
 				4E6EDD852A3615BE0031D520 /* ManualDetailsV.swift in Sources */,
 				4E0E8EFB2CEFDB0700C5F914 /* BankListView.swift in Sources */,
 				4EB0950B2989CB7C0043A8A1 /* View+dismissTop.swift in Sources */,
+				4ECF927E2D005E3E006DB14E /* BankEditView.swift in Sources */,
 				4EB095562989CBFE0043A8A1 /* TransactionsListView.swift in Sources */,
 				4EE986502CE26E0F00F75634 /* DepositAmountView.swift in Sources */,
 				4E0A71152C396D86002485BB /* Error+debugDescription.swift in Sources */,
