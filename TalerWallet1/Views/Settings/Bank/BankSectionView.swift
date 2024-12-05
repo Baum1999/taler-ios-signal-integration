@@ -95,85 +95,38 @@ struct BankSectionView: View {
         let kyc = account.kycCompleted ? String(localized: "verified")
                                        : String(localized: "not yet verified")
         let methods = [PaytoType.iban, PaytoType.xTalerBank]
+        let methodType = methods[selected].rawValue.uppercased()
+        let methodStr = (paytoType == .iban) ? iban
+                : (paytoType == .xTalerBank) ? xTaler
+                                             : "unknown payment method"
         Section {
-            if !minimalistic {
-                Text("Account holder:")
-                    .talerFont(.title3)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityRemoveTraits(.isStaticText)
-            }
-            TextField(minimalistic ? "Account holder" : EMPTYSTRING, text: $accountHolder)
-                .focused($focus, equals: .accountHolder)
-                .talerFont(.title2)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-            Picker(EMPTYSTRING, selection: $selected) {
-                ForEach(0..<methods.count, id: \.self) { index in
-                    let method = methods[index]
-                    Text(method.rawValue.uppercased())
-                        .tag(index)
-                }
-            }.pickerStyle(.segmented)
-            .onChange(of: selected) { newValue in
-                paytoType = methods[newValue]
-            }
-
-            if paytoType == .iban {
-                TextField(EMPTYSTRING, text: $iban)
-                    .focused($focus, equals: .iban)
-                    .talerFont(.title2)
-                    .foregroundColor(WalletColors().fieldForeground)     // text color
-                    .background(WalletColors().fieldBackground)
-                    .textFieldStyle(.roundedBorder)
-            } else if paytoType == .xTalerBank {
-                TextField(EMPTYSTRING, text: $xTaler)
-                    .focused($focus, equals: .xTaler)
-                    .talerFont(.title2)
-                    .foregroundColor(WalletColors().fieldForeground)     // text color
-                    .background(WalletColors().fieldBackground)
-                    .textFieldStyle(.roundedBorder)
-            } else {
-                Text("unknown payment method")
-            }
-
-            HStack {
-                Spacer()
-                Text("Status: \(kyc)")
-            }.padding(.top, -4)
-
-            if account.currencies.count == 1 {
-                let currency = account.currencies[0]
-                Text(minimalistic ? currency
-                                  : "Currency: \(currency)")
-            } else {
-                if !minimalistic {
-                    Text("Currencies:")
-                }
-                ForEach (account.currencies, id: \.self) { currency in
-                    Text(currency)
-                        .padding(.leading)
-                }
-            }
-            if !minimalistic {
-                Text("Note:")
-                    .talerFont(.title3)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityRemoveTraits(.isStaticText)
-            }
-            TextField(minimalistic ? "Note" : EMPTYSTRING, text: $alias)
-                .focused($focus, equals: .alias)
-                .talerFont(.title2)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-            Button {
-                deleteAccount()
+            NavigationLink {
+                BankEditView(stack: stack.push(),
+                           account: account)
             } label: {
-                Label("Delete Account", systemImage: "trash")
+                VStack(alignment: .leading) {
+                    if account.currencies.count == 1 {
+                        BankSectionRow(title: String(localized: "Currency:"),
+                                       value: account.currencies[0])
+                    } else {
+                        if !minimalistic { Text("Currencies:") }
+                        ForEach (account.currencies, id: \.self) { currency in
+                            Text(currency)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                    }
+                    BankSectionRow(title: String(localized: "Note:"),
+                                   value: alias)
+                    BankSectionRow(title: String(localized: "Account holder:"),
+                                   value: accountHolder)
+                    BankSectionRow(title: String(localized: "\(methodType):", comment: "methodType:"),
+                                   value: methodStr)
+                    BankSectionRow(title: String(localized: "Status:"),
+                                   value: kyc)
+                }   .talerFont(.body)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint("Double tap to edit the account")
             }
-                .buttonStyle(TalerButtonStyle(type: .bordered, disabled: disabled))
-                .disabled(disabled)
         } header: {
         }
         .listRowSeparator(.hidden)
@@ -186,5 +139,40 @@ struct BankSectionView: View {
             disabled = false
             purge = false
         }
+    }
+}
+
+struct BankSectionRow: View {
+    let title: String
+    let value: String
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        let hLayout = HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+        }
+        let vLayout = VStack(alignment: .leading) {
+            Text(title)
+            HStack {
+                Spacer()
+                Text(value)
+            }
+        }
+
+        if minimalistic {
+            Text(value)
+        } else if #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                hLayout
+                vLayout
+            }.accessibilityElement(children: .combine)
+        } else {
+            vLayout
+                .accessibilityElement(children: .combine)
+        }
+
     }
 }

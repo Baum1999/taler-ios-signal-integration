@@ -20,8 +20,12 @@ struct BankListView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State var showAlert: Bool = false
+    @State var showAddDialog: Bool = false
     @State var newExchange: String = TESTEXCHANGE
+    @State var newBankAccount = KnownBankAccountsInfo(paytoUri: EMPTYSTRING,
+                                                  kycCompleted: false,
+                                                    currencies: [],
+                                                         alias: nil)
     @State private var bankAccounts: [KnownBankAccountsInfo] = []
 
     @MainActor
@@ -50,7 +54,7 @@ struct BankListView: View {
 #endif
         let a11yLabelStr = String(localized: "Add bank account", comment: "VoiceOver for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
-            showAlert = true
+            showAddDialog = true
         }
         let addTitleStr = String(localized: "Add bank account", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
@@ -76,9 +80,16 @@ struct BankListView: View {
                 .talerFont(.body)
         }
 
+        let addBankDest = BankEditView(stack: stack.push(),
+                                     account: newBankAccount)
+        let actions = Group {
+            NavLink($showAddDialog) { addBankDest }
+        }
+
         List {
             if bankAccounts.isEmpty {
                 emptyList
+                    .opacity(0)
             } else {
                 depositHint
                 ForEach(bankAccounts, id: \.self) { account in
@@ -88,6 +99,7 @@ struct BankListView: View {
                 }
             }
         }
+        .background(actions)
         .listStyle(myListStyle.style).anyView
         .refreshable {
             controller.hapticNotification(.success)
