@@ -28,7 +28,7 @@ struct ExchangeSectionView: View {
 #endif
 
     @State private var exchanges: [Exchange] = []
-    @State private var shouldReloadBalances: Int = 0
+    @State private var reloadTransactions: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
@@ -161,7 +161,7 @@ struct ExchangeSectionView: View {
         } header: {
             BarGraphHeader(stack: stack.push(),
                            scope: scopeInfo,
-            shouldReloadBalances: $shouldReloadBalances)
+              reloadTransactions: $reloadTransactions)
         }
         .task { await viewDidLoad() }
         .task(id: controller.currencyTicker) { await currencyTickerChanged(scopeInfo) }

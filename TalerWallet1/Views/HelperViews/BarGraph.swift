@@ -11,7 +11,7 @@ struct BarGraphHeader: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let scope: ScopeInfo
-    @Binding var shouldReloadBalances: Int
+    @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -46,7 +46,7 @@ struct BarGraphHeader: View {
                           maxBars: MAXBARS, barHeight: barHeight)
         }
 //        .headerProminence(.increased)         // unfortunately this is not useful
-        .task(id: shouldReloadBalances + 2_000_000) { await loadCompleted() }
+        .task(id: reloadTransactions + 2_000_000) { await loadCompleted() }
     }
 }
 // MARK: -

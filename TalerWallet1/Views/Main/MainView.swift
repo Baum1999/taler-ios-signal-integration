@@ -238,6 +238,7 @@ extension MainView {
         @StateObject var navModel = NavigationModel()
 
         @State private var shouldReloadBalances = 0
+        @State private var shouldReloadTransactions = 0
         @State private var shouldReloadPending = 0
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
@@ -354,7 +355,7 @@ extension MainView {
                 BalancesListView(stack: stack.push(balancesTitle),
                        selectedBalance: $selectedBalance,
 //                   shouldReloadPending: $shouldReloadPending,
-                  shouldReloadBalances: $shouldReloadBalances)
+                    reloadTransactions: $shouldReloadTransactions)
                 .navigationTitle(balancesTitle)
                 .background(balanceActions)
             }.navigationViewStyle(.stack)
@@ -419,13 +420,13 @@ extension MainView {
             }
             .onNotification(.TransactionExpired) { notification in
                 logger.info(".onNotification(.TransactionExpired) ==> reload balances")
-                shouldReloadBalances += 1
+                shouldReloadTransactions += 1
                 shouldReloadPending += 1
             }
             .onNotification(.TransactionDone) {
-                shouldReloadBalances += 1
+                shouldReloadTransactions += 1
                 shouldReloadPending += 1
-                selectedTab = .balances
+//                selectedTab = .balances       // automatically switch to Balances
             }
             .onNotification(.TransactionError) { notification in
                 shouldReloadPending += 1

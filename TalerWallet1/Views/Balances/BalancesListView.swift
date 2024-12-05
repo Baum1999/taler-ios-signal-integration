@@ -16,7 +16,7 @@ struct BalancesListView: View {
     let stack: CallStack
     @Binding var selectedBalance: Balance?
 //    @Binding var shouldReloadPending: Int
-    @Binding var shouldReloadBalances: Int
+    @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -44,7 +44,7 @@ struct BalancesListView: View {
                                  sectionCount: count,
                              amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                       summary: $summary,
-                         shouldReloadBalances: $shouldReloadBalances)
+                           reloadTransactions: $reloadTransactions)
                 }
                 .onAppear() {
                     DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))

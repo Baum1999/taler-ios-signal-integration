@@ -23,7 +23,7 @@ struct BalancesSectionView {
     let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
-    @Binding var shouldReloadBalances: Int
+    @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
@@ -120,10 +120,10 @@ extension BalancesSectionView: View {
         } header: {
             BarGraphHeader(stack: stack.push(),
                            scope: scopeInfo,
-            shouldReloadBalances: $shouldReloadBalances)
+              reloadTransactions: $reloadTransactions)
         }.id(sectionID)
         .listRowSeparator(.hidden)
-        .task(id: shouldReloadBalances + 1_000_000) {
+        .task(id: reloadTransactions + 1_000_000) {
             symLog.log(".task for BalancesSectionView - load recent+completed+pending")
             await loadRecent(stack.push(".task - load recent"))
             await loadCompleted(stack.push(".task - load completed"))
