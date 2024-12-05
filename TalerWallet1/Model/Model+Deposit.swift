@@ -48,16 +48,16 @@ struct WireTypeDetails: Codable {
     let talerBankHostnames: [String]
 }
 
-struct DepositWireTypesForCurrencyResponse: Codable {
+struct DepositWireTypesResponse: Codable {
     /// can be used to pre-filter payment target types to offer the user as an input option
 //    let wireTypes: [PaytoType]
     let wireTypeDetails: [WireTypeDetails]
 }
 
 /// A request to get wire types that can be used for a deposit operation.
-fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
-    typealias Response = DepositWireTypesForCurrencyResponse
-    func operation() -> String { "getDepositWireTypesForCurrency" }
+fileprivate struct DepositWireTypes: WalletBackendFormattedRequest {
+    typealias Response = DepositWireTypesResponse
+    func operation() -> String { "getDepositWireTypes" }
     func args() -> Args { Args(currency: currency, scopeInfo: scopeInfo) }
 
     var currency: String
@@ -69,9 +69,9 @@ fileprivate struct DepositWireTypesForCurrency: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     /// Get wire types that can be used for a deposit operation
-    nonisolated func depositWireTypesForCurrency(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
+    nonisolated func depositWireTypes(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
       async throws -> [WireTypeDetails] {
-        let request = DepositWireTypesForCurrency(currency: currency, scopeInfo: scopeInfo)
+        let request = DepositWireTypes(currency: currency, scopeInfo: scopeInfo)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.wireTypeDetails
     }
