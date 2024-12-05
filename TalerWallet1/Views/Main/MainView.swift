@@ -274,6 +274,8 @@ extension MainView {
                     switch tappedTab {
                         case .balances:
                             ViewState.shared.popToRootView(nil)
+                        case .settings:
+                            ViewState2.shared.popToRootView(nil)
                         default:
                             break
                     }
