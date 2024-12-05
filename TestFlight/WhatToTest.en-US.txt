@@ -1,13 +1,7 @@
-Version 0.13.8 (wallet-core 0.13.13)
-
-- multiple bugfixes
-please play around
-
-
-Version 0.13.7 (wallet-core 0.13.10)
+Version 0.14.0 (wallet-core 0.13.14)
 
 • New UI with Action button
-please play around
+- lots of bugfixes
 
 
 Version 0.13.3 (wallet-core 0.13.5)
