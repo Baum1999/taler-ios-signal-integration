@@ -132,7 +132,7 @@ struct ManualWithdrawContent: View {
 
     private func exchangeVia(_ baseURL: String?) -> String? {
         if let baseURL {
-            return String(localized: "via \(baseURL.trimURL)")
+            return String(localized: "via \(baseURL.trimURL)", comment: "currency/exchange chooser")
         }
         return nil
     }

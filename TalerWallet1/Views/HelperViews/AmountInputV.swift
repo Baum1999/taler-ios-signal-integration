@@ -103,9 +103,11 @@ struct AmountInputV: View {
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                    feeIsNegative: feeIsNegative)
             let flags = checkAvailable(coinData)
+            let hint = String(localized: "enabled when amount is non-zero", comment: "VoiceOver")
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
+                .accessibilityHint(flags.disabled ? hint : EMPTYSTRING)
         }.padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))

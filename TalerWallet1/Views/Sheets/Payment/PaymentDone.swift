@@ -58,7 +58,8 @@ struct PaymentDone: View {
                         .padding(.horizontal)
                 }
             } else {
-                LoadingView(scopeInfo: nil, message: "Paying...")
+                let message = String(localized: "Paying...", comment: "loading")
+                LoadingView(scopeInfo: nil, message: message)
                     .task { await viewDidLoad() }
             }
         }.onAppear() {

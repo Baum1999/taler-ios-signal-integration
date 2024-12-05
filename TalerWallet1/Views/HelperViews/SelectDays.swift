@@ -77,8 +77,8 @@ struct SelectDays: View {
                     .disabled(!isEnabled || maxExpiration < THIRTYDAYS)
             } // 3 buttons
             if !minimalistic {
-                Text(outgoing ? "The payment service will send your money back if it won't get collected in time, or when you abort the operation."
-                              : "This request will be cancelled if it doesn't get paid in time, or when you abort the operation.")
+                Text(outgoing ? "The payment service will send your money back if it won't get collected on time, or when you abort the operation."
+                              : "This request will be cancelled if it doesn't get paid on time, or when you abort the operation.")
                 .talerFont(.body)
             }
         }

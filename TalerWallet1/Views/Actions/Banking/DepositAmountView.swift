@@ -113,11 +113,13 @@ struct DepositAmountView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         if depositStarted {
-            LoadingView(scopeInfo: nil, message: "Depositing...")
+            let message = String(localized: "Depositing...", comment: "loading")
+            LoadingView(scopeInfo: nil, message: message)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .safeAreaInset(edge: .bottom) {
-                    Button("Abort") { dismissTop(stack.push()) }
+                    let buttonTitle = String(localized: "Abort", comment: "deposit")
+                    Button(buttonTitle) { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }
@@ -155,11 +157,12 @@ struct DepositAmountView: View {
                                                   : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
                                                                                 : WalletColors().negative)
                     .padding(4)
+                let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount", comment: "VoiceOver")
                 Button(buttonTitle(amountToTransfer)) { startDeposit() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .padding(.horizontal)
                 .disabled(disabled || depositStarted)
-                .accessibilityHint(disabled ? String(localized: "enabled when amount is non-zero, but not higher than your available amount") : EMPTYSTRING)
+                .accessibilityHint(disabled ? hint : EMPTYSTRING)
             } else {    // no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }

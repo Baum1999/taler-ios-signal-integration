@@ -79,7 +79,7 @@ struct WithdrawAcceptDone: View {
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE)
                 }
             } else {
-                let fallback = String(localized: "Bank Authorization")
+                let fallback = String(localized: "Bank Authorization", comment: "loading")
                 LoadingView(scopeInfo: nil,
                               message: exchangeBaseUrl?.trimURL ?? fallback)
                 .task { await viewDidLoad() }

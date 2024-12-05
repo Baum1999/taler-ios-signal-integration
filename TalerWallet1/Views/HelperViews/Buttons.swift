@@ -115,26 +115,24 @@ struct QRButton : View  {
     var body: some View {
         let scanText = String(localized: "Scan QR code", comment: "Button title, a11y")
         let qr = "qrcode.viewfinder"
+        let qrImage = Text("\(Image(systemName: qr))", comment: "QR Image")
         Button(action: checkCameraAvailable) {
             if isNavBarItem {
                 if !minimalistic {
                     Text("Scan QR", comment: "Button title")
                         .talerFont(.title3)
                 }
-                Text("\(Image(systemName: qr))")
-                    .talerFont(.title2)
+                qrImage.talerFont(.title2)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
-                Text("\(Image(systemName: qr))")
-                    .talerFont(.largeTitle)
+                qrImage.talerFont(.largeTitle)
                     .padding(.horizontal, width)
 //                    .padding(.vertical)
             } else {
-                HStack {
-                    Text("\(Image(systemName: qr))   ")
-                        .talerFont(.title)
-                    Text("\(scanText)  ")
-                }//.padding()
+                HStack(spacing: 16) {
+                    qrImage.talerFont(.title)
+                    Text(scanText)
+                }.padding(.horizontal)
             }
         }
         .accessibilityLabel(scanText)

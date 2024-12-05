@@ -555,7 +555,7 @@ struct TransactionSummaryV: View {
                 }
             } else if keys.contains(EXCHANGEBASEURL) {
                 if let baseURL = details[EXCHANGEBASEURL] {
-                    Text("from \(baseURL.trimURL)") 
+                    Text("from \(baseURL.trimURL)", comment: "baseURL") 
                         .talerFont(.title2)
                         .padding(.bottom)
                 }

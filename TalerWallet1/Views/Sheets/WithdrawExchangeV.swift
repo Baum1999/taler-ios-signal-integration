@@ -67,7 +67,8 @@ struct WithdrawExchangeV: View {
                 currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
             }
         } else {
-            LoadingView(scopeInfo: nil, message: "No exchangeBaseUrl!")
+            let message = String(localized: "No payment service...", comment: "loading")
+            LoadingView(scopeInfo: nil, message: message)
                 .task { await viewDidLoad() }
         }
     }

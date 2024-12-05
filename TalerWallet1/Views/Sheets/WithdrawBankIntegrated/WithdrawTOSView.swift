@@ -66,8 +66,9 @@ struct WithdrawTOSView: View {
                 }
             }
         } else {
-            LoadingView(scopeInfo: nil, message: exchangeBaseUrl?.trimURL
-                                              ?? "No exchangeBaseUrl!")
+            let fallback = String(localized: "No payment service", comment: "loading")
+            LoadingView(scopeInfo: nil,
+                        message: exchangeBaseUrl?.trimURL ?? fallback)
                 .task {
                     await loadToS(languageCode)
                 }

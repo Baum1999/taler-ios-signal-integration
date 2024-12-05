@@ -40,6 +40,7 @@ struct AboutView: View {
             List {
                 RotatingTaler(size: 100, progress: false, rotationEnabled: $rotationEnabled)
                     // has its own accessibilityLabel
+                    .accessibilityHidden(true)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .onTapGesture(count: 1) { rotationEnabled.toggle() }
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
@@ -84,7 +85,7 @@ struct AboutView: View {
                                 id1: "onboarding",
                         description: minimalistic ? nil : String(localized: "Explain the Actions button"))
 #if DEBUG
-                Text("Tapped: \(tapped), dragged: \(dragged)")
+                Text(verbatim: "Tapped: \(tapped), dragged: \(dragged)")
 #endif
 
 //                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {

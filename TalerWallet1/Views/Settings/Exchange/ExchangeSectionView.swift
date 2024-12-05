@@ -108,13 +108,13 @@ struct ExchangeSectionView: View {
                 .listRowSeparator(.hidden)
             }
             if developerMode && (DEMOCURRENCY == currency || TESTCURRENCY == currency) {
-                SettingsToggle(name: String(localized: "Global"), value: $global.onChange({ isGlobal in
+                SettingsToggle(name: String("Global"), value: $global.onChange({ isGlobal in
                     setGlobal()
                 }),             id1: "global",
-                        description: minimalistic ? nil : String(localized: "Treat this as a global exchange"))
+                        description: minimalistic ? nil : String("Treat this as a global exchange"))
                 .listRowSeparator(.hidden)
-                SettingsToggle(name: String(localized: "Fake no fees"), value: $fakeNoFees, id1: "fakeNoFees",
-                               description: minimalistic ? nil : String(localized: "Remove fee and gros from details"))
+                SettingsToggle(name: String("Fake no fees"), value: $fakeNoFees, id1: "fakeNoFees",
+                               description: minimalistic ? nil : String("Remove fee and gros from details"))
             }
             if DEMOCURRENCY == currency {
                 SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints, id1: "demoHints",

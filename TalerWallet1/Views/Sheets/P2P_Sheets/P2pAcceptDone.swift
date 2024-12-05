@@ -37,7 +37,8 @@ struct P2pAcceptDone: View {
 #endif
         let navTitle = incoming ? String(localized: "Received", comment: "Nav Title, short")
                                 : String(localized: "Paid", comment: "Nav Title, short")
-        LoadingView(scopeInfo: nil, message: "Accepting...")
+        let message = String(localized: "Accepting...", comment: "loading")
+        LoadingView(scopeInfo: nil, message: message)
             .navigationBarBackButtonHidden(true)
 //            .interactiveDismissDisabled()           // can only use "Done" button to dismiss
             .navigationTitle(navTitle)

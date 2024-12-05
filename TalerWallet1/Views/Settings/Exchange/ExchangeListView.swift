@@ -40,19 +40,22 @@ struct ExchangeListView: View {
         }
         let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
+        let enterURL = String(localized: "Enter the URL")
         if #available(iOS 16.0, *) {
             ExchangeListCommonV(symLog: symLog, stack: stack.push())
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
                     TextField("Address of the payment service", text: $newExchange)
+                        .accessibilityLabel(enterURL)
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
                     Button(addButtonStr) {
                         addExchange(newExchange)
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
-                    Text("Please enter the URL")
+                    Text(enterURL)
+                        .accessibilityHidden(true)
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
             ExchangeListCommonV(symLog: symLog, stack: stack.push())

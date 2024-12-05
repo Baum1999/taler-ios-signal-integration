@@ -55,7 +55,8 @@ struct URLSheet: View {
                     .navigationTitle("Unknown command")
             }
         } else {
-            LoadingView(scopeInfo: nil, message: "Scanning...")
+            let message = String(localized: "Scanning...", comment: "loading")
+            LoadingView(scopeInfo: nil, message: message)
                 .task {
                     let command = controller.openURL(urlToOpen, stack: stack.push())
                     urlCommand = command

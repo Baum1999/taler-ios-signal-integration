@@ -240,16 +240,16 @@ struct PaymentView: View, Sendable {
                                     TimelineView(.animation) { context in
                                         let elapsed = Int(context.date.timeIntervalSince(startDate))
                                         let seconds = timeToPay - elapsed
-
+                                        let text = Text(verbatim: "\(seconds)")
                                         if #available(iOS 17.0, *) {
-                                            Text("\(seconds)")
+                                            text
                                                 .contentTransition(.numericText(countsDown: true))
                                                 .animation(.default, value: elapsed)
                                         } else if #available(iOS 16.0, *) {
-                                            Text("\(seconds)")
+                                            text
                                                 .animation(.default, value: elapsed)
                                         } else {
-                                            Text("\(seconds)")
+                                            text
                                         }
                                     }.monospacedDigit()
                                     Text("seconds")
