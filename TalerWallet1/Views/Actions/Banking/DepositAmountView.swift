@@ -84,7 +84,7 @@ struct DepositAmountView: View {
     private func buttonTitle(_ amount: Amount) -> String {
         if let balance {
             let amountWithCurrency = amount.formatted(balance.scopeInfo, isNegative: false, useISO: true)
-            return DepositAmountView.navTitle(amountWithCurrency, true)
+            return DepositAmountView.navTitle(amountWithCurrency.0, true)
         }
         return DepositAmountView.navTitle()             // should never happen
     }

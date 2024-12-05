@@ -63,7 +63,9 @@ struct CurrencyField: View {
         ZStack {
             // Text view to display the formatted currency
             // Set as priority so CurrencyInputField size doesn't affect parent
-            let text = Text(amount.formatted(currencyInfo, isNegative: false))
+            let formatted = amount.formatted(currencyInfo, isNegative: false)
+            let text = Text(formatted.0)
+                        .accessibilityLabel(formatted.1)
                         .layoutPriority(1)
             // make the textfield use the whole width for tapping inside to become active
                         .frame(maxWidth: .infinity, alignment: .trailing)

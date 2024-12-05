@@ -16,7 +16,7 @@ struct AmountV: View {
     let useISO: Bool
     let strikethrough: Bool
     let large: Bool             // set to false for QR or IBAN
-    let a11y: String?
+    let a11yDecSep: String?
     
     @EnvironmentObject private var controller: Controller
 
@@ -35,30 +35,36 @@ struct AmountV: View {
         }
     }
 
-    private func amountStr(_ currencyInfo : CurrencyInfo?) -> String {
+    private func amountStr(_ currencyInfo : CurrencyInfo?) -> (String, String) {
         let dontShow = (isNegative == nil)
         let showSign: Bool = isNegative ?? false
-        let amountFormatted: String
+        let readable = amount.readableDescription
+        let amountFormatted: (String, String)
         if let currencyInfo {
             amountFormatted = amount.formatted(currencyInfo, isNegative: false,
-                                               useISO: useISO, a11y: a11y)
+                                               useISO: useISO, a11yDecSep: a11yDecSep)
         } else {
-            amountFormatted = amount.readableDescription
+            amountFormatted = (readable, readable)
         }
-        let amountStr = dontShow ?      amountFormatted
-                      : showSign ? "- \(amountFormatted)"
-                                 : "+ \(amountFormatted)"
-        return amountStr
+        let amountStr = dontShow ?      amountFormatted.0
+                      : showSign ? "- \(amountFormatted.0)"
+                                 : "+ \(amountFormatted.0)"
+        let amountA11y = dontShow ?      amountFormatted.1
+                       : showSign ? "- \(amountFormatted.1)"
+                                  : "+ \(amountFormatted.1)"
+
+        return (amountStr, amountA11y)
     }
 
     var body: some View {
-        Text(amountStr(currencyInfo))
+        let amountTuple = amountStr(currencyInfo)
+        Text(amountTuple.0)
             .strikethrough(strikethrough, color: WalletColors().attention)
             .multilineTextAlignment(.center)
             .talerFont(large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
             .monospacedDigit()
-            .accessibilityLabel(amount.readableDescription)     // TODO: locale.leadingCurrencySymbol
+            .accessibilityLabel(amountTuple.1)     // TODO: locale.leadingCurrencySymbol
             .task(id: controller.currencyTicker) { await currencyTickerChanged() }
 //            .onLongPressGesture(minimumDuration: 0.3) {
 //                showValue = true
@@ -78,7 +84,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = false
-        self.a11y = nil
+        self.a11yDecSep = nil
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?) {
         self.stack = nil
@@ -88,7 +94,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = false
-        self.a11y = nil
+        self.a11yDecSep = nil
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?, strikethrough: Bool) {
         self.stack = nil
@@ -98,7 +104,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = strikethrough
         self.large = false
-        self.a11y = nil
+        self.a11yDecSep = nil
     }
     init(stack: CallStack?, scope: ScopeInfo?, amount: Amount, isNegative: Bool?,
          strikethrough: Bool, large: Bool = false) {
@@ -109,7 +115,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = strikethrough
         self.large = false
-        self.a11y = nil
+        self.a11yDecSep = nil
     }
 }
 // MARK: -

@@ -10,20 +10,30 @@ import OrderedCollections
 import taler_swift
 
 struct TransferRestrictionsV: View {
-    let amountStr: String
-    let obtainStr: String
+    let amountStr: (String, String)
+    let obtainStr: (String, String)
     let restrictions: [AccountRestriction]?
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var selectedLanguage = Locale.preferredLanguageCode
 
+    private func transferMini(_ amountS: String) -> String {
+        let amountNBS = amountS.nbs
+        return String(localized: "Transfer \(amountNBS) to the payment service.")
+    }
+    private func transferMaxi(_ amountS: String, _ obtainS: String) -> String {
+        let amountNBS = amountS.nbs
+        let obtainNBS = obtainS.nbs
+        return String(localized: "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as electronic cash in this wallet.")
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
-            let amountNBS = amountStr.nbs
-            let obtainNBS = obtainStr.nbs
-            Text(minimalistic ? "Transfer \(amountNBS) to the payment service."
-                 : "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as electronic cash in this wallet.")
+            Text(minimalistic ? transferMini(amountStr.0)
+                              : transferMaxi(amountStr.0, obtainStr.0))
+            .accessibilityLabel(minimalistic ? transferMini(amountStr.1)
+                                             : transferMaxi(amountStr.1, obtainStr.1))
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
             if let restrictions {
@@ -53,12 +63,18 @@ struct ManualDetailsWireV: View {
     let iban: String?
     let xTaler: String
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
-    let amountStr: String
-    let obtainStr: String
+    let amountStr: (String, String)
+    let obtainStr: (String, String)
     let account: WithdrawalExchangeAccountDetails
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer instructions")
+
+    private func step3(_ amountS: String) -> String {
+        let amountNBS = amountS.nbs
+        return minimalistic ? String(localized: "Transfer \(amountNBS).")
+                            : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+    }
 
     var body: some View {
         List {
@@ -103,7 +119,8 @@ struct ManualDetailsWireV: View {
                 VStack(alignment: .leading) {
                     Text("Amount:")
                         .talerFont(.subheadline)
-                    Text(amountStr)
+                    Text(amountStr.0)
+                        .accessibilityLabel(amountStr.1)
                         .monospacedDigit()
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
@@ -146,9 +163,11 @@ struct ManualDetailsWireV: View {
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            let amountNBS = amountStr.nbs
-            let step3 = Text(minimalistic ? "**Step 3:** Transfer \(amountNBS)."
-                             : "**Step 3:** Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+            let step3A11y = step3(amountStr.1)
+            let step3Str = step3(amountStr.0)
+            let step3Head = String(localized: "**Step 3:**")
+            let step3 = Text(step3Head + step3Str)
+                .accessibilityLabel(step3Head + step3A11y)
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
 

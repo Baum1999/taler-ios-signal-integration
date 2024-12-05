@@ -27,7 +27,7 @@ struct SendAmountView: View {
     @State private var expireDays = SEVENDAYS
     @State private var insufficient = false
 //    @State private var feeAmount: Amount? = nil
-    @State private var feeStr: String = EMPTYSTRING
+    @State private var feeString = (EMPTYSTRING, EMPTYSTRING)
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
@@ -48,9 +48,9 @@ struct SendAmountView: View {
                              comment: "NavTitle: Send")
     }
 
-    private func feeLabel(_ feeString: String) -> String {
-        feeString.count > 0 ? String(localized: "+ \(feeString) fee")
-                            : EMPTYSTRING
+    private func feeLabel(_ feeStr: String) -> String {
+        feeStr.count > 0 ? String(localized: "+ \(feeStr) fee")
+                         : EMPTYSTRING
     }
 
     private func fee(raw: Amount, effective: Amount) -> Amount? {
@@ -85,12 +85,12 @@ struct SendAmountView: View {
                 let raw = ppCheck.amountRaw
                 let effective = ppCheck.amountEffective
                 if let fee = fee(raw: raw, effective: effective) {
-                    feeStr = fee.formatted(balance.scopeInfo, isNegative: false)
-                    symLog.log("Fee = \(feeStr)")
+                    feeString = fee.formatted(balance.scopeInfo, isNegative: false)
+                    symLog.log("Fee = \(feeString.0)")
                     let insufficient = (try? effective > amountAvailable) ?? true
 
                     peerPushCheck = ppCheck
-                    let feeLabel = feeLabel(feeStr)
+                    let feeLabel = (feeLabel(feeString.0), feeLabel(feeString.1))
 //                    announce("\(amountVoiceOver), \(feeLabel)")
                     return ComputeFeeResult(insufficient: insufficient,
                                                feeAmount: fee,
@@ -142,7 +142,7 @@ struct SendAmountView: View {
 
                 let inputDestination = P2PSubjectV(stack: stack.push(),
                                                    scope: balance.scopeInfo,
-                                                feeLabel: feeLabel(feeStr),
+                                                feeLabel: (feeLabel(feeString.0), feeLabel(feeString.1)),
                                             feeIsNotZero: feeIsNotZero(),
                                                 outgoing: true,
                                         amountToTransfer: $amountToTransfer,    // from the textedit

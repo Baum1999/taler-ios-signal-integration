@@ -38,12 +38,14 @@ struct SegmentControl: View {
                     let detail = accountDetails[index]
                     let specs = detail.currencySpecification
                     let amount = detail.transferAmount
-                    let amountStr = amount?.formatted(specs: specs, isNegative: false, useISO: false) ?? EMPTYSTRING
+                    let formatted = amount?.formatted(specs: specs, isNegative: false, useISO: false)
+                                    ?? (EMPTYSTRING, EMPTYSTRING)
                     let bankName = detail.bankLabel
-                    let a11yLabel = bankName != nil ? (bankName! + SPACE + amountStr) : amountStr
+                    let a11yLabel = bankName != nil ? (bankName! + SPACE + formatted.1)
+                                                    : formatted.1
 //            let _ = print(amountStr)
                     VStack(spacing: 6) {
-                        Text(amountStr)
+                        Text(formatted.0)
                             .talerFont(.title3)
                         if let bankName {
                             Text(bankName)
@@ -94,10 +96,12 @@ struct AccountPicker: View {
                                                     isNegative: false, useISO: false)
 //            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
-                            Text(bankName + ":   " + amountStr)
+                            Text(bankName + ":   " + amountStr.0)
+                                .accessibilityLabel(bankName + ":   " + amountStr.1)
                                 .tag(index)
                         } else {
-                            Text(amountStr)
+                            Text(amountStr.0)
+                                .accessibilityLabel(amountStr.1)
                                 .tag(index)
                         }
                     }
@@ -177,7 +181,8 @@ struct ManualDetailsV: View {
                         }
                     } else if let amount = account.transferAmount {
                         if let bankName = account.bankLabel {
-                            Text(bankName + ":   " + amountStr)
+                            Text(bankName + ":   " + amountStr.0)
+                                .accessibilityLabel(bankName + ":   " + amountStr.1)
 //                        } else {
 //                            Text(amountStr)
                         }

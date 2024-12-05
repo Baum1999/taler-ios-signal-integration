@@ -36,7 +36,7 @@ struct RequestPayment: View {
     }
 
     private func navTitle(_ currency: String, _ condition: Bool = false) -> String {
-        condition ? String(localized: "NavTitle_Request_Currency)",
+        condition ? String(localized: "NavTitle_Request_Currency",
                         defaultValue: "Request \(currency)",
                              comment: "NavTitle: Request 'currency'")
                   : String(localized: "NavTitle_Request",
@@ -118,7 +118,7 @@ struct RequestPaymentContent: View {
     @State private var peerPullCheck: CheckPeerPullCreditResponse? = nil
     @State private var expireDays: UInt = 0
 //    @State private var feeAmount: Amount? = nil
-    @State private var feeStr: String = EMPTYSTRING
+    @State private var feeString = (EMPTYSTRING, EMPTYSTRING)
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
@@ -131,9 +131,9 @@ struct RequestPaymentContent: View {
     }
     private func buttonAction() { buttonSelected = true }
 
-    private func feeLabel(_ feeString: String) -> String {
-        feeString.count > 0 ? String(localized: "- \(feeString) fee")
-                            : EMPTYSTRING
+    private func feeLabel(_ feeStr: String) -> String {
+        feeStr.count > 0 ? String(localized: "- \(feeStr) fee")
+                         : EMPTYSTRING
     }
 
     private func fee(raw: Amount, effective: Amount) -> Amount? {
@@ -169,16 +169,16 @@ struct RequestPaymentContent: View {
                 let raw = ppCheck.amountRaw
                 let effective = ppCheck.amountEffective
                 if let fee = fee(raw: raw, effective: effective) {
-                    feeStr = fee.formatted(balance.scopeInfo, isNegative: true)
-                    symLog.log("Fee = \(feeStr)")
-                    
+                    feeString = fee.formatted(balance.scopeInfo, isNegative: false)
+                    symLog.log("Fee = \(feeString.0)")
+
                     peerPullCheck = ppCheck
-                    let feeLabel = feeLabel(feeStr)
+                    let feeLabel = (feeLabel(feeString.0), feeLabel(feeString.1))
 //                    announce("\(amountVoiceOver), \(feeLabel)")
                     return ComputeFeeResult(insufficient: false,
-                                            feeAmount: fee,
-                                            feeStr: feeLabel,
-                                            numCoins: ppCheck.numCoins)
+                                               feeAmount: fee,
+                                                  feeStr: feeLabel,             // TODO: feeLabelA11y
+                                                numCoins: ppCheck.numCoins)
                 } else {
                     peerPullCheck = nil
                 }

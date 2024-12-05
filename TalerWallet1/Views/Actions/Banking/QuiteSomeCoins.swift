@@ -18,13 +18,18 @@ struct CoinData {
     var tooMany:   Bool { numCoins > 999 }
 
     let fee: Amount?
-    func feeLabel(_ scope: ScopeInfo?, feeZero: String?, isNegative: Bool = false) -> String {
-       return if let fee {
-           fee.isZero ? feeZero ?? EMPTYSTRING    // String(localized: "No withdrawal fee")
-         : isNegative ? String(localized: "- \(fee.formatted(scope, isNegative: false)) fee")
-                      : String(localized: "+ \(fee.formatted(scope, isNegative: false)) fee")
+    func feeLabel(_ scope: ScopeInfo?, feeZero: String?, isNegative: Bool = false) -> (String, String) {
+        if let fee {
+            let formatted = fee.formatted(scope, isNegative: false)
+            let feeLabel = fee.isZero ? feeZero ?? EMPTYSTRING    // String(localized: "No withdrawal fee")
+                         : isNegative ? String(localized: "- \(formatted.0) fee")
+                                      : String(localized: "+ \(formatted.0) fee")
+            let feeA11Y = fee.isZero ? feeZero ?? EMPTYSTRING    // String(localized: "No withdrawal fee")
+                        : isNegative ? String(localized: "- \(formatted.1) fee")
+                                     : String(localized: "+ \(formatted.1) fee")
+            return (feeLabel, feeA11Y)
        } else {
-           EMPTYSTRING
+           return (EMPTYSTRING, EMPTYSTRING)
        }
     }
 }
@@ -76,7 +81,8 @@ struct QuiteSomeCoins: View {
                 let feeLabel = coinData.feeLabel(scope,
                                         feeZero: String(localized: "No fee"),
                                      isNegative: feeIsNegative)
-                Text(feeLabel)
+                Text(feeLabel.0)
+                    .accessibilityLabel(feeLabel.1)
                     .foregroundColor(.primary)
                     .talerFont(.body)
             }

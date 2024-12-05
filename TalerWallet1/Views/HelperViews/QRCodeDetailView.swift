@@ -25,15 +25,33 @@ struct QRCodeDetailView: View {
         currencyInfo = controller.info(for: scope)
     }
 
-    private func amountStr(_ currencyInfo : CurrencyInfo?) -> String {
-        let amountFormatted: String
+    private func amountStr(_ currencyInfo : CurrencyInfo?) -> (String, String) {
+        let amountFormatted: (String, String)
+        let readable = amount.readableDescription
         if let currencyInfo {
             amountFormatted = amount.formatted(currencyInfo, isNegative: false,
-                                               useISO: false, a11y: nil)
+                                               useISO: false, a11yDecSep: nil)
         } else {
-            amountFormatted = amount.readableDescription
+            amountFormatted = (readable, readable)
         }
         return amountFormatted
+    }
+
+    private func requesting(_ amountS: String) -> String {
+        minimalistic ? String(localized: "(payer) 1 mini",
+                           defaultValue: "Requesting \(amountS)",
+                                comment: "e.g. '5,3 €'")
+                     : String(localized: "(payer) 1",
+                           defaultValue: "To receive \(amountS), have the payer scan this QR code to complete the payment.",
+                                comment: "e.g. '5,3 €'")
+    }
+    private func sending(_ amountS: String) -> String {
+        minimalistic ? String(localized: "(payee) 1 mini",
+                           defaultValue: "Sending \(amountS)",
+                                comment: "e.g. '$ 7.41'")
+                     : String(localized: "(payee) 1",
+                           defaultValue: "To send \(amountS), let the payee scan this QR code to accept/receive the payment.",
+                                comment: "e.g. '$ 7.41'")
     }
 
     var body: some View {
@@ -56,19 +74,10 @@ struct QRCodeDetailView: View {
                 .accessibilityLabel("QR Code")
                 .listRowSeparator(.hidden)
                 let amountStr = amountStr(currencyInfo)
-                let scanLong = incoming ? (minimalistic ? String(localized: "(payer) 1 mini",
-                                                              defaultValue: "Requesting \(amountStr)",
-                                                                   comment: "e.g. '5,3 €'")
-                                                        : String(localized: "(payer) 1",
-                                                              defaultValue: "To receive \(amountStr), have the payer scan this QR code.",
-                                                                   comment: "e.g. '5,3 €'"))
-                                        : (minimalistic ? String(localized: "(payee) 1 mini",
-                                                              defaultValue: "Sending \(amountStr)",
-                                                                   comment: "e.g. '$ 7.41'")
-                                                        : String(localized: "(payee) 1",
-                                                              defaultValue: "Sending \(amountStr) - let the payee scan this QR code to receive the payment.",
-                                                                   comment: "e.g. '$ 7.41'"))
-                Text(scanLong)
+                let scanLong = incoming ? (requesting(amountStr.0), requesting(amountStr.1))
+                                        : (sending(amountStr.0), sending(amountStr.1))
+                Text(scanLong.0)
+                    .accessibilityLabel(scanLong.1)
                     .multilineTextAlignment(.leading)
                     .talerFont(.title3)
                     .listRowSeparator(.hidden)

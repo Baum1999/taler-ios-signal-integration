@@ -8,7 +8,7 @@
 import SwiftUI
 import taler_swift
 
-fileprivate func formattedAmount(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> String {
+fileprivate func formattedAmount(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> (String, String) {
     let amount = balance.available
     return amount.formatted(currencyInfo, isNegative: false, useISO: false)
 }
@@ -17,8 +17,11 @@ fileprivate func urlOrCurrency(_ balance: Balance) -> String {
     balance.scopeInfo.url?.trimURL ?? balance.scopeInfo.currency
 }
 
-fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> String {
-    String("\(urlOrCurrency(balance)):\t\(formattedAmount(balance, currencyInfo).nbs)")
+fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> (String, String) {
+    let formatted = formattedAmount(balance, currencyInfo)
+    let urlOrCurrency = urlOrCurrency(balance)
+    return (String("\(urlOrCurrency):\t\(formatted.0.nbs)"),
+            String("\(urlOrCurrency): \(formatted.1)"))
 }
 
 struct ScopePicker: View {
@@ -40,12 +43,14 @@ struct ScopePicker: View {
             let balance = controller.balances[selected]
             let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
             let available = balance.available
-            let availableA11y = available.formatted(currencyInfo, isNegative: false, useISO: true, a11y: ".")
+            let availableA11y = available.formatted(currencyInfo, isNegative: false,
+                                                    useISO: true, a11yDecSep: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
 //            let a11yLabel = url + ", " + availableA11y
+            let choose = String(localized: "Choose the payment service.", comment: "VoiceOver")
+            let disabled = (count == 1)
 
             HStack(alignment: .firstTextBaseline) {
-                let disabled = (count == 1)
                 Text("via", comment: "ScopePicker")
                     .accessibilityHidden(true)
                     .foregroundColor(disabled ? .secondary : .primary)
@@ -59,7 +64,9 @@ struct ScopePicker: View {
                         ForEach(0..<controller.balances.count, id: \.self) { index in
                             let balance = controller.balances[index]
                             let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
-                            Text(pickerRow(balance, currencyInfo))
+                            let pickerRow = pickerRow(balance, currencyInfo)
+                            Text(pickerRow.0)
+                                .accessibilityLabel(pickerRow.1)
                                 .tag(index)
 //                              .selectionDisabled(balance.available.isZero)    needs iOS 17
                         }
@@ -74,7 +81,7 @@ struct ScopePicker: View {
             }
             .talerFont(.picker)
 //            .accessibilityLabel(a11yLabel)
-            .accessibilityHint(String(localized: "Choose the payment service.", comment: "a11y"))
+            .accessibilityHint(disabled ? EMPTYSTRING : choose)
             .task() {
                 withAnimation { selected = value }
             }
@@ -108,12 +115,14 @@ struct  ScopeDropDown: View {
     func dropDownRow(_ balance: Balance, _ currencyInfo: CurrencyInfo, _ first: Bool = false) -> some View {
         let urlOrCurrency = urlOrCurrency(balance)
         let text = Text(urlOrCurrency)
-        let amount = Text(formattedAmount(balance, currencyInfo).nbs)
-        let a11yAmount = balance.available.readableDescription
+        let formatted = formattedAmount(balance, currencyInfo)
+        let amount = Text(formatted.0.nbs)
         if first {
+            let a11yLabel = String(localized: "via \(urlOrCurrency)", comment: "VoiceOver")
             text
-                .accessibilityLabel("via \(urlOrCurrency)")
+                .accessibilityLabel(a11yLabel)
         } else {
+            let a11yLabel = "\(urlOrCurrency), \(formatted.1)"
             let hLayout = HStack(alignment: .firstTextBaseline) {
                 text
                 Spacer()
@@ -132,7 +141,7 @@ struct  ScopeDropDown: View {
                 vLayout
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(urlOrCurrency), \(a11yAmount)")
+            .accessibilityLabel(a11yLabel)
         }
     }
 
@@ -161,7 +170,7 @@ struct  ScopeDropDown: View {
                             chevron.foregroundColor(.clear)
                                 .accessibilityHidden(true)
                         }
-                    }) // .accessibilityElement(children: .combine)
+                    })
                     .disabled(rowDisabled)
                     .padding(.horizontal, radius / 2)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -172,21 +181,25 @@ struct  ScopeDropDown: View {
                 let balance = controller.balances[selection]
                 let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
                 let noAmount = !showDropdown
-                Button(action: buttonAction) {
-                    HStack(alignment: .firstTextBaseline) {
+                Group {
+                    if disabled {
                         dropDownRow(balance, currencyInfo, noAmount)
-                            .accessibilityAddTraits(.isSelected)
-                        Spacer()
-                        if !disabled {
-                            chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
-                                .accessibilityHidden(true)
+                    } else {
+                        Button(action: buttonAction) {
+                            HStack(alignment: .firstTextBaseline) {
+                                dropDownRow(balance, currencyInfo, noAmount)
+                                    .accessibilityAddTraits(.isSelected)
+                                Spacer()
+                                chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
+                                    .accessibilityHidden(true)
+                            }
                         }
                     }
                 }
                     .padding(.vertical, 4)
                     .padding(.horizontal, radius / 2)
                     .frame(maxWidth: .infinity, alignment: .leading)
-//                .border(.red)
+//                  .border(.red)
                 if (showDropdown) {
                     if #available(iOS 17.0, *) {
 //                      let toomany = controller.balances.count > maxItemDisplayed

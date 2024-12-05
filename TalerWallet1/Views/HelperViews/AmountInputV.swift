@@ -12,19 +12,19 @@ import SymLog
 struct ComputeFeeResult {
     let insufficient: Bool
     let feeAmount: Amount?
-    let feeStr: String
+    let feeStr: (String, String)
     let numCoins: Int?
 
     static func zero() -> ComputeFeeResult {
         ComputeFeeResult(insufficient: false,
                             feeAmount: nil,
-                               feeStr: EMPTYSTRING,
+                               feeStr: (EMPTYSTRING, EMPTYSTRING),
                              numCoins: 0)
     }
     static func insufficient() -> ComputeFeeResult {
         ComputeFeeResult(insufficient: true,
                             feeAmount: nil,
-                               feeStr: EMPTYSTRING,
+                               feeStr: (EMPTYSTRING, EMPTYSTRING),
                              numCoins: -1)
     }
 }
@@ -52,7 +52,7 @@ struct AmountInputV: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     @State private var feeAmount: Amount? = nil
-    @State private var feeStr: String = EMPTYSTRING
+    @State private var feeStr = (EMPTYSTRING, EMPTYSTRING)
     @State private var numCoins: Int?
 
     struct Flags {

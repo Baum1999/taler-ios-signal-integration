@@ -38,30 +38,41 @@ extension Locale {
 
 extension Amount {
     func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool,
-                           useISO: Bool = false, a11y: String? = nil
-    ) -> String {
+                           useISO: Bool = false, a11yDecSep: String? = nil
+    ) -> (String, String) {
         if let currencyInfo {
-            return currencyInfo.string(for: valueAsFloatTuple, isNegative: isNegative, currency: currencyStr,
-                                       useISO: useISO, a11y: a11y)
+            let a11y = currencyInfo.string(for: valueAsFloatTuple,
+                                    isNegative: isNegative,
+                                      currency: currencyStr,
+                                        useISO: true,
+                                    a11yDecSep: a11yDecSep)
+            let strg = currencyInfo.string(for: valueAsFloatTuple,
+                                    isNegative: isNegative,
+                                      currency: currencyStr,
+                                        useISO: useISO,
+                                    a11yDecSep: nil)
+            return (strg, a11y)
         } else {
-            return valueStr
+            return (valueStr, valueStr)
         }
     }
 
     // this is the function to use
-    func formatted(_ scope: ScopeInfo?, isNegative: Bool, useISO: Bool = false, a11y: String? = nil) -> String {
+    func formatted(_ scope: ScopeInfo?, isNegative: Bool,
+                    useISO: Bool = false, a11yDecSep: String? = nil
+    ) -> (String, String) {
         let controller = Controller.shared
         if let scope {
             if let currencyInfo = controller.info(for: scope) {
-                return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO, a11y: a11y)
+                return self.formatted(currencyInfo, isNegative: isNegative, useISO: useISO, a11yDecSep: a11yDecSep)
             }
         }
-        return self.readableDescription
+        return (self.readableDescription, self.readableDescription)
     }
 
-    func formatted(specs: CurrencySpecification?, isNegative: Bool, scope: ScopeInfo? = nil,
-                  useISO: Bool = false
-    ) -> String {
+    func formatted(specs: CurrencySpecification?, isNegative: Bool,
+                   scope: ScopeInfo? = nil, useISO: Bool = false
+    ) -> (String, String) {
         if let specs {
             let formatter = CurrencyFormatter.formatter(currency: currencyStr, specs: specs)
             let currencyInfo = CurrencyInfo(specs: specs, formatter: formatter)
@@ -69,7 +80,7 @@ extension Amount {
         } else if let scope {
             return formatted(scope, isNegative: isNegative, useISO: useISO)
         }
-        return self.readableDescription
+        return (self.readableDescription, self.readableDescription)
     }
 
     func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
@@ -193,7 +204,7 @@ public struct CurrencyInfo: Sendable {
 
     // TODO: use valueAsDecimalTuple instead of valueAsFloatTuple
     func string(for valueTuple: (Double, Double), isNegative: Bool, currency: String,
-                        useISO: Bool = false, a11y: String? = nil) -> String {
+                        useISO: Bool = false, a11yDecSep: String? = nil) -> String {
         formatter.setUseISO(useISO)
         let (integer, fraction) = valueTuple
         if let integerStr = formatter.string(for: isNegative ? -integer : integer) {
@@ -227,8 +238,8 @@ public struct CurrencyInfo: Sendable {
                             }
                         }
 //            print(resultStr)
-                        if let a11y {
-                            resultStr = resultStr.replacingOccurrences(of: decimalSeparator, with: a11y)
+                        if let a11yDecSep {
+                            resultStr = resultStr.replacingOccurrences(of: decimalSeparator, with: a11yDecSep)
                         }
                         return currencyString(resultStr, useISO: useISO)
                     }

@@ -48,15 +48,16 @@ struct ShortcutButton: View {
         let shortie = Amount(currency: currency, cent: UInt64(shortcut))        // TODO: adapt for ¥
         let title = shortie.formatted(scope, isNegative: false)
         let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
+        let a11yLabel = "\(shortcutLabel) \(title.1)"
         Button(action: { action(shortcut, currencyField)} ) {
-            Text(title)
+            Text(title.0)
                 .lineLimit(1)
                 .talerFont(.callout)
         }
 //            .frame(maxWidth: .infinity)
             .disabled(isDisabled(shortie: shortie))
             .buttonStyle(.bordered)
-            .accessibilityLabel("\(shortcutLabel) \(title)")
+            .accessibilityLabel(a11yLabel)
     }
 }
 // MARK: -
@@ -128,7 +129,8 @@ struct CurrencyInputView: View {
             return title
         }
         if let available {
-            return availableString(available.formatted(scope, isNegative: false))
+            let formatted = available.formatted(scope, isNegative: false)
+            return availableString(formatted.0)
         }
         return nil
     }

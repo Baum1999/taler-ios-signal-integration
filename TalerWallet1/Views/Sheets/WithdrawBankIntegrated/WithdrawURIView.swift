@@ -73,8 +73,8 @@ struct WithdrawURIView: View {
                                                                    baseUrl: exchange.exchangeBaseUrl,
                                                                      scope: nil) {     // TODO: scope
                 let fee = try? details.amountRaw - details.amountEffective
-                let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? "nix"
-                symLog.log("Fee = \(feeStr)")
+                let feeStr = fee?.formatted(currencyInfo, isNegative: true) ?? ("0", "0")
+                symLog.log("Fee = \(feeStr.0)")
                 let insufficient = if let amountAvailable {
                     (try? details.amountRaw < amountAvailable) ?? true
                 } else {
@@ -82,7 +82,8 @@ struct WithdrawURIView: View {
                 }
                 withdrawalDetails = details
                 return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
-                                        feeStr: feeLabel(feeStr), numCoins: details.numCoins)
+                                              feeStr: (feeLabel(feeStr.0), feeLabel(feeStr.1)),
+                                            numCoins: details.numCoins)
             }
         } else {
             symLog.log("No exchange!")
