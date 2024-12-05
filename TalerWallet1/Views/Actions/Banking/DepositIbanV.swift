@@ -39,7 +39,7 @@ struct DepositIbanV: View {
 
     private var subjectTitle: String {
         return String(localized: "NavTitle_Deposit_AmountStr",
-                   defaultValue: "Deposit IBAN",
+                   defaultValue: "Select account",
                         comment: "NavTitle: Deposit")
     }
 
