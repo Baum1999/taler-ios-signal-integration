@@ -213,13 +213,18 @@ extension WalletCore {
                     guard type != .refresh else { return }
                     let newMajor = decoded.newTxState.major
                     let newMinor = decoded.newTxState.minor
+                    let oldMinor = decoded.oldTxState.minor
                     switch newMajor {
                         case .done:
                             logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if type.isWithdrawal {
-                                Controller.shared.playSound(2)  // payment_received only for withdrawals
+                                Controller.shared.playSound(2)  // play payment_received only for withdrawals
                             } else if !type.isIncoming {
-                                Controller.shared.playSound(1)  // payment_sent for all outgoing tx
+                                if !(oldMinor == .autoRefund || oldMinor == .acceptRefund) {
+                                    Controller.shared.playSound(1)  // play payment_sent for all outgoing tx
+                                }
+                            } else {    // incoming but not withdrawal
+                                logger.info("incoming payment done - NO sound - \(type.rawValue)")
                             }
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
