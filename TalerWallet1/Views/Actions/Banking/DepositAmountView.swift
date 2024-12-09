@@ -135,9 +135,12 @@ struct DepositAmountView: View {
 
                 let disabled = insufficient || amountToTransfer.isZero
 
-                Text("Available:\t\(availableStr)")
+                Text("Available: \(availableStr.0)")
+                    .accessibilityLabel("Available: \(availableStr.1)")
                     .talerFont(.title3)
-                    .padding(.bottom, 2)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.horizontal)
+//                    .padding(.bottom, 2)
                 let a11yLabel = String(localized: "Amount to deposit:", comment: "accessibility, no abbreviations")
                 let amountLabel = minimalistic ? String(localized: "Amount:")
                                                : a11yLabel
@@ -157,7 +160,8 @@ struct DepositAmountView: View {
                                                   : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
                                                                                 : WalletColors().negative)
                     .padding(4)
-                let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount", comment: "VoiceOver")
+                let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount",
+                                    comment: "VoiceOver")
                 Button(buttonTitle(amountToTransfer)) { startDeposit() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .padding(.horizontal)

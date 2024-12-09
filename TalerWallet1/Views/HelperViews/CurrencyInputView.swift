@@ -155,12 +155,9 @@ struct CurrencyInputView: View {
                 Text(heading)
                     .padding(.horizontal, 4)
                     .padding(.top)
-                    .frame(maxWidth: .infinity, alignment: .trailing)  // title != nil ? .leading :
+                    .frame(maxWidth: .infinity, alignment: title != nil ? .leading : .trailing)
                     .talerFont(.title2)
-                    .accessibilityAddTraits(.isHeader)
-                    .if(title == nil && available != nil) { view in
-                        view.accessibilityLabel(a11yLabel)
-                    }
+                    .accessibilityHidden(true)
                     .padding(.bottom, -6)
             }
             currencyField
