@@ -78,7 +78,7 @@ struct BalanceCellV: View {
         NavigationLink { balanceDest } label: {
             balanceCell
                 .accessibilityElement(children: .combine)
-                .accessibilityHint(String(localized: "Will go to main transactions list."))
+                .accessibilityHint(String(localized: "Will go to main transactions list.", comment: "VoiceOver"))
 //            .accessibilityLabel(balanceTitleStr + SPACE + amountStr)    // TODO: CurrencyFormatter!
         }
     }

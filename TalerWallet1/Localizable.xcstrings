@@ -1758,11 +1758,12 @@
       }
     },
     "Available:\t%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verfügbar: %@"
+            "value" : "Verfügbar: %@ (there was a \"\\ t\")"
           }
         },
         "es" : {
@@ -1775,6 +1776,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Доступно: %@"
+          }
+        }
+      }
+    },
+    "Available: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar: %@"
           }
         }
       }
@@ -1980,13 +1991,13 @@
         }
       }
     },
-    "Choose the payment service." : {
+    "Choose the payment service:" : {
       "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wählen Sie den Zahlungsdienst."
+            "value" : "Wählen Sie den Zahlungsdienst:"
           }
         }
       }
@@ -2715,6 +2726,7 @@
       }
     },
     "Double tap to edit the account" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4499,12 +4511,12 @@
     },
     "NavTitle_Deposit_AmountStr" : {
       "comment" : "NavTitle: Deposit",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Konto wählen"
+            "value" : "Konto auswählen"
           }
         },
         "en" : {
@@ -4528,7 +4540,7 @@
       }
     },
     "NavTitle_Deposit_Currency" : {
-      "comment" : "NavTitle: Deposit 'currency'\nNavTitle: Deposit 'currencySymbol'",
+      "comment" : "NavTitle: Deposit 'currencySymbol'",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
@@ -4553,6 +4565,24 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Депозит %@"
+          }
+        }
+      }
+    },
+    "NavTitle_Deposit_Select" : {
+      "comment" : "NavTitle: Deposit",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto auswählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select account"
           }
         }
       }
@@ -4976,6 +5006,7 @@
       }
     },
     "not yet verified" : {
+      "comment" : "KYC state",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8064,6 +8095,7 @@
       }
     },
     "Transaction list" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8690,6 +8722,7 @@
       }
     },
     "verified" : {
+      "comment" : "KYC state",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8857,6 +8890,7 @@
       }
     },
     "Will go to bank website to authorize this withdrawal." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8879,6 +8913,7 @@
       }
     },
     "Will go to detail view." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8901,6 +8936,7 @@
       }
     },
     "Will go to KYC website to permit this withdrawal." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8923,6 +8959,7 @@
       }
     },
     "Will go to main transactions list." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8945,6 +8982,7 @@
       }
     },
     "Will go to Pending transactions." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8967,6 +9005,7 @@
       }
     },
     "Will go to the demo shop website." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8989,6 +9028,7 @@
       }
     },
     "Will go to the merchant website." : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {

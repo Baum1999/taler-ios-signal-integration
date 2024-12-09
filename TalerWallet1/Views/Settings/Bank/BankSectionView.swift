@@ -128,7 +128,7 @@ struct BankSectionView: View {
                                    value: kyc)
                 }   .talerFont(.body)
                     .accessibilityElement(children: .combine)
-                    .accessibilityHint("Double tap to edit the account")
+                    .accessibilityHint(String(localized: "Double tap to edit the account", comment: "VoiceOver"))
             }
         } header: {
         }

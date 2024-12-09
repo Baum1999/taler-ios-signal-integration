@@ -276,7 +276,7 @@ struct TransactionSummaryV: View {
                         LinkButton(destination: destination,
                                      hintTitle: String(localized: "You need to pass a KYC procedure."),
                                    buttonTitle: String(localized: "Open KYC website"),
-                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal."),
+                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "VoiceOver"),
                                          badge: NEEDS_KYC)
             }   }   }
             let withdrawalDetails = details.withdrawalDetails
@@ -293,7 +293,7 @@ struct TransactionSummaryV: View {
                                     LinkButton(destination: destination,
                                                  hintTitle: String(localized: "The bank is waiting for your authorization."),
                                                buttonTitle: String(localized: "Authorize now"),
-                                                  a11yHint: String(localized: "Will go to bank website to authorize this withdrawal."),
+                                                  a11yHint: String(localized: "Will go to bank website to authorize this withdrawal.", comment: "VoiceOver"),
                                                      badge: CONFIRM_BANK)
                     }   }   }   }
             } // switch

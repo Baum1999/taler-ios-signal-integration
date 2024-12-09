@@ -39,7 +39,7 @@ struct DepositSelectV: View {
 
 
     private var subjectTitle: String {
-        return String(localized: "NavTitle_Deposit_AmountStr",
+        return String(localized: "NavTitle_Deposit_Select",
                    defaultValue: "Select account",
                         comment: "NavTitle: Deposit")
     }
@@ -80,8 +80,8 @@ struct DepositSelectV: View {
                         let iban = payURL?.iban
                         let xTaler = payURL?.xTaler
                         let alias = account.label
-                        let kyc = account.kycCompleted ? String(localized: "verified")
-                                                       : String(localized: "not yet verified")
+                        let kyc = account.kycCompleted ? String(localized: "verified", comment: "KYC state")
+                                                       : String(localized: "not yet verified", comment: "KYC state")
 
                         let destination = DepositAmountV(stack: stack.push(),
                                                selectedBalance: $selectedBalance,

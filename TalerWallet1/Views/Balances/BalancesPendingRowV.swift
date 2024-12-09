@@ -56,7 +56,7 @@ struct BalancesPendingRowV: View {
                                              needsKYC ? needsKYCStr :
                                         shouldConfirm ? needsConfStr
                                                       : EMPTYSTRING)
-        .accessibilityHint(String(localized: "Will go to Pending transactions."))
+        .accessibilityHint(String(localized: "Will go to Pending transactions.", comment: "VoiceOver"))
     }
 
     var body: some View {

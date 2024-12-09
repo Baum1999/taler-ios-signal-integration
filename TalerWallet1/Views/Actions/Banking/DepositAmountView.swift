@@ -38,7 +38,7 @@ struct DepositAmountView: View {
     ) -> String {
         condition ? String(localized: "NavTitle_Deposit_Currency",
                         defaultValue: "Deposit \(currency)",
-                             comment: "NavTitle: Deposit 'currency'")
+                             comment: "NavTitle: Deposit 'currencySymbol'")
                   : String(localized: "NavTitle_Deposit",
                         defaultValue: "Deposit",
                              comment: "NavTitle: Deposit")

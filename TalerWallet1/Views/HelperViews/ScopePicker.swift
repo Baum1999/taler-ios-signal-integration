@@ -47,7 +47,7 @@ struct ScopePicker: View {
                                                     useISO: true, a11yDecSep: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
 //            let a11yLabel = url + ", " + availableA11y
-            let choose = String(localized: "Choose the payment service.", comment: "VoiceOver")
+            let choose = String(localized: "Choose the payment service:", comment: "VoiceOver")
             let disabled = (count == 1)
 
             HStack(alignment: .firstTextBaseline) {

@@ -167,7 +167,7 @@ struct PaymentView: View, Sendable {
                             let buttonTitle = terms.fulfillmentMessage ?? String(localized: "Open merchant website")
                             Link(buttonTitle, destination: destination)
                                 .buttonStyle(TalerButtonStyle(type: .bordered))
-                                .accessibilityHint(String(localized: "Will go to the merchant website."))
+                                .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "VoiceOver"))
                         }
                     }
                 }

@@ -102,7 +102,7 @@ extension BalancesSectionView: View {
                                          reloadAllAction: loadCompleted)
           Section {
             if scopeInfo.type == .exchange {
-                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment provider", comment: "exchange url")
+                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment service", comment: "exchange url")
                 Text(baseURL)
                     .talerFont(.subheadline)
                     .foregroundColor(.secondary)

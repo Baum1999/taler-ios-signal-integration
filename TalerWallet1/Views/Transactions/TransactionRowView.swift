@@ -203,7 +203,7 @@ struct TransactionRowView: View {
                                     : needsKYC ? String(localized: ". Needs K Y C")
                                : shouldConfirm ? String(localized: ". Needs bank authorization")
                                                : EMPTYSTRING)
-            .accessibilityHint(String(localized: "Will go to detail view."))
+            .accessibilityHint(String(localized: "Will go to detail view.", comment: "VoiceOver"))
     }
 }
 // MARK: -

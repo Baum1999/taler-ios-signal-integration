@@ -78,7 +78,7 @@ struct TransactionsListView: View {
 //        .navigationTitle("EURO")           // Fake EUR instead of the real Currency
 //        .navigationTitle("CHF")            // Fake CHF instead of the real Currency
         .navigationTitle(navTitle ?? scope.currency)
-        .accessibilityHint(String(localized: "Transaction list"))
+        .accessibilityHint(String(localized: "Transaction list", comment: "VoiceOver"))
         .task {
             symLog.log("❗️.task List❗️")
             await reloadAllAction(stack.push())
