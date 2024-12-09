@@ -14,7 +14,7 @@ import SymLog
 struct BankEditView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let account: KnownBankAccountsInfo
+    let account: BankAccountsInfo
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -33,13 +33,13 @@ struct BankEditView: View {
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
-    @State private var alias: String = EMPTYSTRING
+    @State private var label: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
     @State private var selected = 0
     @FocusState private var focus:FocusedField?
 
     enum FocusedField: Hashable {
-        case accountHolder, iban, xTaler, alias
+        case accountHolder, iban, xTaler, label
     }
 
 //    @MainActor
@@ -57,7 +57,7 @@ struct BankEditView: View {
         let payURL = URL(string: account.paytoUri)
         iban = payURL?.iban ?? EMPTYSTRING
         xTaler = payURL?.xTaler ?? EMPTYSTRING
-        alias = account.alias ?? EMPTYSTRING
+        label = account.label ?? EMPTYSTRING
         if let queryParameters = payURL?.queryParameters {
             let name = if let rcv = queryParameters["receiver-name"] {
                 rcv.replacingOccurrences(of: "+", with: SPACE)
@@ -169,9 +169,9 @@ struct BankEditView: View {
                     .talerFont(.title3)
                     .accessibilityHidden(true)
             }
-            TextField(minimalistic ? note : EMPTYSTRING, text: $alias)
+            TextField(minimalistic ? note : EMPTYSTRING, text: $label)
                 .accessibilityLabel(noteColon)
-                .focused($focus, equals: .alias)
+                .focused($focus, equals: .label)
                 .talerFont(.title2)
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)

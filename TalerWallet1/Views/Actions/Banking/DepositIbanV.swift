@@ -34,7 +34,7 @@ struct DepositIbanV: View {
     @State private var currencySymbol: String = UNKNOWN
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
-    @State private var bankAccounts: [KnownBankAccountsInfo] = []
+    @State private var bankAccounts: [BankAccountsInfo] = []
 
 
     private var subjectTitle: String {
@@ -45,7 +45,7 @@ struct DepositIbanV: View {
 
     @MainActor
     private func viewDidLoad() async {
-        if let accounts = try? await model.listKnownBankAccounts() {
+        if let accounts = try? await model.listBankAccounts() {
             withAnimation { bankAccounts = accounts }
         }
     }
@@ -78,7 +78,7 @@ struct DepositIbanV: View {
                         let payURL = URL(string: account.paytoUri)
                         let iban = payURL?.iban
                         let xTaler = payURL?.xTaler
-                        let alias = account.alias
+                        let alias = account.label
                         let kyc = account.kycCompleted ? String(localized: "verified")
                                                        : String(localized: "not yet verified")
 

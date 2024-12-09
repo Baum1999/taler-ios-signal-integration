@@ -165,19 +165,20 @@ extension WalletModel {
     }
 }
 // MARK: -
-struct KnownBankAccountsInfo: Decodable, Hashable {
+struct BankAccountsInfo: Decodable, Hashable {
+    var bankAccountId: String
     var paytoUri: String
     var kycCompleted: Bool
-    var currencies: [String]
-    var alias: String?
+    var currencies: [String]?
+    var label: String?
 }
-struct KnownBankAccounts: Decodable, Hashable {
-    var accounts: [KnownBankAccountsInfo]
+struct BankAccounts: Decodable, Hashable {
+    var accounts: [BankAccountsInfo]
 }
-/// A request to list know bank accounts.
-fileprivate struct ListKnownBankAccounts: WalletBackendFormattedRequest {
-    typealias Response = KnownBankAccounts
-    func operation() -> String { "listKnownBankAccounts" }
+/// A request to list known bank accounts.
+fileprivate struct ListBankAccounts: WalletBackendFormattedRequest {
+    typealias Response = BankAccounts
+    func operation() -> String { "listBankAccounts" }
     func args() -> Args { Args(currency: currency) }
     var currency: String?
     struct Args: Encodable {
@@ -186,53 +187,85 @@ fileprivate struct ListKnownBankAccounts: WalletBackendFormattedRequest {
 }
 extension WalletModel {
     /// ask for known accounts. No networking
-    nonisolated func listKnownBankAccounts(_ currency: String? = nil, viewHandles: Bool = false)
-      async throws -> [KnownBankAccountsInfo] {
-        let request = ListKnownBankAccounts(currency: currency)
+    nonisolated func listBankAccounts(_ currency: String? = nil, viewHandles: Bool = false)
+      async throws -> [BankAccountsInfo] {
+        let request = ListBankAccounts(currency: currency)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.accounts
     }
 }
 
+/// A request to get one bank account.
+fileprivate struct GetBankAccountById: WalletBackendFormattedRequest {
+    typealias Response = BankAccountsInfo
+    func operation() -> String { "getBankAccountById" }
+    func args() -> Args { Args(bankAccountId: bankAccountId) }
+    var bankAccountId: String
+    struct Args: Encodable {
+        var bankAccountId: String
+    }
+}
+extension WalletModel {
+    /// ask for a specific account. No networking
+    nonisolated func getBankAccountById(_ bankAccountId: String, viewHandles: Bool = false)
+      async throws -> BankAccountsInfo {
+        let request = GetBankAccountById(bankAccountId: bankAccountId)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response
+    }
+}
+
+struct AddBankAccountResponse: Decodable, Hashable {
+    var bankAccountId: String                       // Identifier of the added bank account
+}
 /// A request to add a known bank account.
-fileprivate struct AddKnownBankAccount: WalletBackendFormattedRequest {
-    struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "addKnownBankAccount" }
-    func args() -> Args { Args(paytoUri: uri, alias: alias, replacePaytoUri: replaceUri) }
+fileprivate struct AddBankAccount: WalletBackendFormattedRequest {
+    typealias Response = AddBankAccountResponse
+    func operation() -> String { "addBankAccount" }
+    func args() -> Args { Args(paytoUri: uri,
+                                  label: label,
+                             currencies: currencies,
+                        replacePaytoUri: replaceUri) }
     var uri: String
-    var alias: String
+    var label: String
+    var currencies: [String]?
     var replaceUri: String?
     struct Args: Encodable {
         var paytoUri: String                        // bank account that should be added
-        var alias: String                           // Human-readable alias / label
+        var label: String                           // Human-readable label
         var currencies: [String]?                   // currencies supported by the bank (if known)
         var replacePaytoUri: String?                // account that this new account should replace
     }
 }
 extension WalletModel {
     /// add (or update) a known account. No networking
-    nonisolated func addKnownBankAccount(_ uri: String, alias: String, replaceUri: String? = nil, viewHandles: Bool = false)
-      async throws {
-        let request = AddKnownBankAccount(uri: uri, alias: alias, replaceUri: replaceUri)
-        _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+    nonisolated func addBankAccount(_ uri: String,
+                                    label: String,
+                               currencies: [String]? = nil,
+                               replaceUri: String? = nil,
+                              viewHandles: Bool = false)
+      async throws -> String {
+        let request = AddBankAccount(uri: uri, label: label, currencies: currencies, replaceUri: replaceUri)
+        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return response.bankAccountId
     }
 }
 
 /// A request to forget a known bank account.
-fileprivate struct ForgetKnownBankAccount: WalletBackendFormattedRequest {
+fileprivate struct ForgetBankAccount: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "forgetKnownBankAccount" }
-    func args() -> Args { Args(paytoUri: uri) }
-    var uri: String
+    func operation() -> String { "forgetBankAccount" }
+    func args() -> Args { Args(bankAccountId: accountId) }
+    var accountId: String
     struct Args: Encodable {
-        var paytoUri: String                        // bank account that should be forgotten
+        var bankAccountId: String                        // bank account that should be forgotten
     }
 }
 extension WalletModel {
     /// add a known account. No networking
-    nonisolated func forgetKnownBankAccount(_ uri: String, viewHandles: Bool = false)
-    async throws {
-        let request = ForgetKnownBankAccount(uri: uri)
+    nonisolated func forgetBankAccount(_ accountId: String, viewHandles: Bool = false)
+      async throws {
+        let request = ForgetBankAccount(accountId: accountId)
         _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 }

@@ -14,7 +14,7 @@ import SymLog
 struct BankSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let account: KnownBankAccountsInfo
+    let account: BankAccountsInfo
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -33,13 +33,13 @@ struct BankSectionView: View {
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
-    @State private var alias: String = EMPTYSTRING
+    @State private var label: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
     @State private var selected = 0
     @FocusState private var focus:FocusedField?
 
     enum FocusedField: Hashable {
-        case accountHolder, iban, xTaler, alias
+        case accountHolder, iban, xTaler, label
     }
 
 //    @MainActor
@@ -57,7 +57,7 @@ struct BankSectionView: View {
         let payURL = URL(string: account.paytoUri)
         iban = payURL?.iban ?? EMPTYSTRING
         xTaler = payURL?.xTaler ?? EMPTYSTRING
-        alias = account.alias ?? EMPTYSTRING
+        label = account.label ?? EMPTYSTRING
         if let queryParameters = payURL?.queryParameters {
             let name = if let rcv = queryParameters["receiver-name"] {
                 rcv.replacingOccurrences(of: "+", with: SPACE)
@@ -105,18 +105,23 @@ struct BankSectionView: View {
                            account: account)
             } label: {
                 VStack(alignment: .leading) {
-                    if account.currencies.count == 1 {
-                        BankSectionRow(title: String(localized: "Currency:"),
-                                       value: account.currencies[0])
-                    } else {
-                        if !minimalistic { Text("Currencies:") }
-                        ForEach (account.currencies, id: \.self) { currency in
-                            Text(currency)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                    if let currencies = account.currencies {
+                        if currencies.count == 1 {
+                            BankSectionRow(title: String(localized: "Currency:"),
+                                           value: currencies[0])
+                        } else {
+                            if !minimalistic { Text("Currencies:") }
+                            ForEach (currencies, id: \.self) { currency in
+                                Text(currency)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
                         }
+                    } else {
+                        BankSectionRow(title: String(localized: "Currency:"),
+                                       value: "UNKNOWN")
                     }
                     BankSectionRow(title: String(localized: "Note:"),
-                                   value: alias)
+                                   value: label)
                     BankSectionRow(title: String(localized: "Account holder:"),
                                    value: accountHolder)
                     BankSectionRow(title: String(localized: "\(methodType):", comment: "methodType:"),

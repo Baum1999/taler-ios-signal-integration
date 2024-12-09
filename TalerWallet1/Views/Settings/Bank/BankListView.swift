@@ -22,11 +22,7 @@ struct BankListView: View {
 
     @State var showAddDialog: Bool = false
     @State var newExchange: String = TESTEXCHANGE
-    @State var newBankAccount = KnownBankAccountsInfo(paytoUri: EMPTYSTRING,
-                                                  kycCompleted: false,
-                                                    currencies: [],
-                                                         alias: nil)
-    @State private var bankAccounts: [KnownBankAccountsInfo] = []
+    @State private var bankAccounts: [BankAccountsInfo] = []
 
     @MainActor
     func addExchange(_ exchange: String) -> Void {
@@ -42,7 +38,7 @@ struct BankListView: View {
 
     @MainActor
     private func viewDidLoad() async {
-        if let accounts = try? await model.listKnownBankAccounts() {
+        if let accounts = try? await model.listBankAccounts() {
             withAnimation { bankAccounts = accounts }
         }
     }
@@ -81,7 +77,7 @@ struct BankListView: View {
         }
 
         let addBankDest = BankEditView(stack: stack.push(),
-                                     account: newBankAccount)
+                                     account: nil)
         let actions = Group {
             NavLink($showAddDialog) { addBankDest }
         }
@@ -94,7 +90,7 @@ struct BankListView: View {
                 depositHint
                 ForEach(bankAccounts, id: \.self) { account in
                     BankSectionView(stack: stack.push(),
-                                    account: account)
+                                  account: account)
 //                    Text(account.paytoUri)
                 }
             }
