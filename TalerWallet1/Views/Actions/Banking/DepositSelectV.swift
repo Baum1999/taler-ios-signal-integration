@@ -10,7 +10,8 @@ import taler_swift
 import SymLog
 
 // Called when tapping [􁾩Deposit]
-struct DepositIbanV: View {
+// user chooses a bank account
+struct DepositSelectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var selectedBalance: Balance?

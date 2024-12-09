@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called from DepositIbanV
+// Called from DepositSelectV
 struct DepositAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -83,12 +83,12 @@ struct DepositAmountV: View {
                 .padding(.bottom, 4)
             }
             DepositAmountView(stack: stack.push(),
-                               balance: $balance,
-                          balanceIndex: $balanceIndex,
-                        amountLastUsed: $amountLastUsed,
-                      amountToTransfer: $amountToTransfer,
-                       amountAvailable: amountAvailable,
-                              paytoUri: paytoUri)
+                            balance: $balance,
+                       balanceIndex: $balanceIndex,
+                     amountLastUsed: $amountLastUsed,
+                   amountToTransfer: $amountToTransfer,
+                    amountAvailable: amountAvailable,
+                           paytoUri: paytoUri)
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)

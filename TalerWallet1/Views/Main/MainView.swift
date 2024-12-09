@@ -322,9 +322,9 @@ extension MainView {
                                    selectedBalance: $selectedBalance,
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary)
-            let depositDest = DepositIbanV(stack: stack.push(Self.name),
-                                 selectedBalance: $selectedBalance,
-                                  amountLastUsed: $amountLastUsed)
+            let depositDest = DepositSelectV(stack: stack.push(Self.name),
+                                   selectedBalance: $selectedBalance,
+                                    amountLastUsed: $amountLastUsed)
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
                                           selectedBalance: $selectedBalance,
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!

@@ -267,8 +267,8 @@
 		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
 		4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */; };
 		4EBA82AD2A3F580500E5F39A /* QuiteSomeCoins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */; };
-		4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */; };
-		4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */; };
+		4EBC0F012B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositSelectV.swift */; };
+		4EBC0F022B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC0F002B7B3CD600C0CB19 /* DepositSelectV.swift */; };
 		4EC400892AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
 		4EC4008A2AE3E7E800DF72C7 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC400882AE3E7E800DF72C7 /* AboutView.swift */; };
 		4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4008B2AE5664100DF72C7 /* CharacterSet+contains.swift */; };
@@ -495,7 +495,7 @@
 		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
 		4EBA82AA2A3EB2CA00E5F39A /* TransactionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 		4EBA82AC2A3F580500E5F39A /* QuiteSomeCoins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuiteSomeCoins.swift; sourceTree = "<group>"; };
-		4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositIbanV.swift; sourceTree = "<group>"; };
+		4EBC0F002B7B3CD600C0CB19 /* DepositSelectV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositSelectV.swift; sourceTree = "<group>"; };
 		4EC400882AE3E7E800DF72C7 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		4EC4008B2AE5664100DF72C7 /* CharacterSet+contains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CharacterSet+contains.swift"; sourceTree = "<group>"; };
 		4EC4008E2AE8019700DF72C7 /* ExchangeRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRowView.swift; sourceTree = "<group>"; };
@@ -946,7 +946,7 @@
 		4EFDC38E2CBE8D4E00BE8DBC /* Banking */ = {
 			isa = PBXGroup;
 			children = (
-				4EBC0F002B7B3CD600C0CB19 /* DepositIbanV.swift */,
+				4EBC0F002B7B3CD600C0CB19 /* DepositSelectV.swift */,
 				4E96583B2B79656E00404A68 /* DepositAmountV.swift */,
 				4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */,
 				4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */,
@@ -1259,7 +1259,7 @@
 				4E4A3F0B2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */,
 				4E448AB72C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */,
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
-				4EBC0F012B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
+				4EBC0F012B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */,
 				4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */,
 				4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB02C8982180020D340 /* View+innerSize.swift in Sources */,
@@ -1398,7 +1398,7 @@
 				4E4A3F0C2CD4B6CD00CA6A90 /* View+NavLink.swift in Sources */,
 				4E448AB82C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */,
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
-				4EBC0F022B7B3CD600C0CB19 /* DepositIbanV.swift in Sources */,
+				4EBC0F022B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */,
 				4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */,
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB12C8982180020D340 /* View+innerSize.swift in Sources */,
