@@ -101,6 +101,13 @@ extension BalancesSectionView: View {
                                             transactions: $completedTransactions,
                                          reloadAllAction: loadCompleted)
           Section {
+            if scopeInfo.type == .exchange {
+                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment provider", comment: "exchange url")
+                Text(baseURL)
+                    .talerFont(.subheadline)
+                    .foregroundColor(.secondary)
+            //      .listRowSeparator(.hidden)
+            }
             BalanceCellV(stack: stack.push("BalanceCell"),
                          scope: balance.scopeInfo,
                         amount: balance.available,
