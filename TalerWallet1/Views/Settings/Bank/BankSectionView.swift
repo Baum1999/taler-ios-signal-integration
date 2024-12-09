@@ -27,9 +27,8 @@ struct BankSectionView: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
-    @State private var showAlert: Bool = false
-    @State private var purge: Bool = false
-    @State private var global: Bool = false
+//    @State private var purge: Bool = false
+
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
@@ -81,7 +80,6 @@ struct BankSectionView: View {
 //                demoHints = true
 //            } else {
 //                purge = true
-//                showAlert = true
 //                disabled = false
 //            }
         }
@@ -102,7 +100,7 @@ struct BankSectionView: View {
         Section {
             NavigationLink {
                 BankEditView(stack: stack.push(),
-                           account: account)
+                         accountID: account.bankAccountId)
             } label: {
                 VStack(alignment: .leading) {
                     if let currencies = account.currencies {
@@ -139,10 +137,9 @@ struct BankSectionView: View {
             print($0)
         }
         .task { await viewDidLoad() }
-//        .task(id: controller.currencyTicker) { await currencyTickerChanged(scopeInfo) }
         .onDisappear() {
             disabled = false
-            purge = false
+//            purge = false
         }
     }
 }

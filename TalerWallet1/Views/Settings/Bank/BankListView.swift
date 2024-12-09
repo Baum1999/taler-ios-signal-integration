@@ -77,7 +77,7 @@ struct BankListView: View {
         }
 
         let addBankDest = BankEditView(stack: stack.push(),
-                                     account: nil)
+                                   accountID: nil)
         let actions = Group {
             NavLink($showAddDialog) { addBankDest }
         }

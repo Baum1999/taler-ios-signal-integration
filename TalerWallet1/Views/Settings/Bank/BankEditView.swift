@@ -14,7 +14,7 @@ import SymLog
 struct BankEditView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let account: BankAccountsInfo
+    let accountID: String?
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -29,12 +29,13 @@ struct BankEditView: View {
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
     @State private var purge: Bool = false
-    @State private var global: Bool = false
+//    @State private var global: Bool = false
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
     @State private var label: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
+    @State private var currencies: [String] = []
     @State private var selected = 0
     @FocusState private var focus:FocusedField?
 
@@ -54,17 +55,20 @@ struct BankEditView: View {
 
     @MainActor
     private func viewDidLoad() async {
-        let payURL = URL(string: account.paytoUri)
-        iban = payURL?.iban ?? EMPTYSTRING
-        xTaler = payURL?.xTaler ?? EMPTYSTRING
-        label = account.label ?? EMPTYSTRING
-        if let queryParameters = payURL?.queryParameters {
-            let name = if let rcv = queryParameters["receiver-name"] {
-                rcv.replacingOccurrences(of: "+", with: SPACE)
-            } else {
-                ownerName
+        if let accountID {
+            if let account = try? await model.getBankAccountById(accountID) {
+                let payURL = URL(string: account.paytoUri)
+                iban = payURL?.iban ?? EMPTYSTRING
+                xTaler = payURL?.xTaler ?? EMPTYSTRING
+                label = account.label ?? EMPTYSTRING
+                if let queryParameters = payURL?.queryParameters {
+                    let name = queryParameters["receiver-name"] ?? ownerName
+                    accountHolder = name.replacingOccurrences(of: "+", with: SPACE)
+                }
+                currencies = account.currencies ?? []
             }
-            accountHolder = name
+        } else {
+
         }
     }
 
@@ -148,15 +152,15 @@ struct BankEditView: View {
             }.padding(.bottom)
 
 
-            if account.currencies.count == 1 {
-                let currency = account.currencies[0]
+            if currencies.count == 1 {
+                let currency = currencies[0]
                 Text(minimalistic ? currency
                                   : "Currency: \(currency)")
-            } else {
+            } else if currencies.count > 1 {
                 if !minimalistic {
                     Text("Currencies:")
                 }
-                ForEach (account.currencies, id: \.self) { currency in
+                ForEach (currencies, id: \.self) { currency in
                     Text(currency)
                         .padding(.leading)
                 }
