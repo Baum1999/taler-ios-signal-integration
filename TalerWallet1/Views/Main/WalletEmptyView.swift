@@ -50,11 +50,6 @@ struct WalletEmptyView: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawDisabled, aligned: .center))
                 .disabled(withDrawDisabled)
-
-//                Link(title, destination: URL(string: DEMOBANK)!)
-//                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, aligned: .center))
-//                    .padding(.vertical)
-//                    .accessibilityHint(String(localized: "Will go to the demo bank website."))
             }
         }
         .listStyle(myListStyle.style).anyView

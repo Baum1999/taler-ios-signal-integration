@@ -129,7 +129,6 @@ struct TabBarView: View {
                     actionTab.onTapGesture {
                         onActionTab()
                         tapped += 1
-//                        dragged = 0
                     }
                     settingsTab.onTapGesture { selection = .settings; userAction += 1 }
                 }

@@ -302,7 +302,7 @@ extension WalletCore {
         throw WalletBackendError.walletCoreError(nil)       // TODO: error?
     }
 
-    @MainActor private func handleNotification(_ anyCodable: AnyCodable?) throws {
+    @MainActor private func handleNotification(_ anyCodable: AnyCodable?, _ message: String) throws {
         guard let anyPayload = anyCodable else {
             throw WalletBackendError.deserializationError
         }
@@ -312,24 +312,27 @@ extension WalletCore {
 
             switch payload.type {
                 case Notification.Name.Idle.rawValue:
-//                    symLog.log(anyPayload)
+                    symLog.log(message)
                     break
                 case Notification.Name.ExchangeStateTransition.rawValue:
-//                    symLog.log(anyPayload)
+                    symLog.log(message)
                     break
                 case Notification.Name.TransactionStateTransition.rawValue:
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     try handleStateTransition(jsonData)
                 case Notification.Name.PendingOperationProcessed.rawValue:
                     try handlePendingProcessed(payload)
                 case Notification.Name.BalanceChange.rawValue:
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     postNotification(.BalanceChange)
+                case Notification.Name.BankAccountChange.rawValue:
+                    symLog.log(message)
+                    postNotification(.BankAccountChange)
                 case Notification.Name.ExchangeAdded.rawValue:
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     postNotification(.ExchangeAdded)
                 case Notification.Name.ExchangeDeleted.rawValue:
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     postNotification(.ExchangeDeleted)
                 case Notification.Name.ReserveNotYetFound.rawValue:
                     if let reservePub = payload.reservePub {
@@ -338,15 +341,15 @@ extension WalletCore {
                     } // else { throw WalletBackendError.deserializationError }   shouldn't happen, but if it does just ignore it
 
                 case Notification.Name.ProposalAccepted.rawValue:               // "proposal-accepted":
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     postNotification(.ProposalAccepted, userInfo: nil)
                 case Notification.Name.ProposalDownloaded.rawValue:             // "proposal-downloaded":
-                    symLog.log(anyPayload)
+                    symLog.log(message)
                     postNotification(.ProposalDownloaded, userInfo: nil)
                 case Notification.Name.TaskObservabilityEvent.rawValue,
                      Notification.Name.RequestObservabilityEvent.rawValue:
                     if isObserving != 0 {
-                        symLog.log(anyPayload)
+                        symLog.log(message)
                         let timestamp = TalerDater.dateString()
                         if let event = payload.event, let json = event.toJSON() {
                             let type = event["type"]?.value as? String
@@ -362,11 +365,11 @@ extension WalletCore {
 //                     "refresh-revealed", "refresh-unwarranted":
 //                    break
                 default:
-print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")        // this is a new notification I haven't seen before
+print("\n❗️ WalletCore.swift:368 NEW Notification: ", message, "\n")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {
-            symLog.log("Error \(error) parsing notification: \(anyPayload)")    // TODO: .error
+            symLog.log("Error \(error) parsing notification: \(message)")    // TODO: .error
             postNotification(.Error, userInfo: [NOTIFICATIONERROR: error])
         // TODO: if DevMode then should log into file for user
         }
@@ -423,7 +426,7 @@ print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")     
                     try handleResponse(decoded)
                 case "notification":
 //                    symLog.log(message)
-                    try handleNotification(decoded.payload)
+                    try handleNotification(decoded.payload, message)
                 case "tunnelHttp":          // TODO: Handle tunnelHttp
                     symLog.log("Can't handle tunnelHttp: \(message)")    // TODO: .error
                     throw WalletBackendError.deserializationError
@@ -463,9 +466,9 @@ print("\n❗️ WalletCore.swift:343 NEW Notification: ", anyPayload, "\n")     
                 self.semaphore.signal()         // free requestsMade
                     let args = try JSONEncoder().encode(request.args)
                     if let jsonArgs = String(data: args, encoding: .utf8) {
-                        self.logger.log("🔴 \(request.operation, privacy: .public) (\(requestId, privacy: .public)) \(jsonArgs, privacy: .auto)")
+                        self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
                     } else {    // should NEVER happen since the whole request was already successfully encoded and stringified
-                        self.logger.log("🔴 \(request.operation, privacy: .public) (\(requestId, privacy: .public)) 🔴 Error: jsonArgs")
+                        self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public) 🔴 Error: jsonArgs")
                     }
                 self.quickjs.sendMessage(message: jsonString)
 //              self.symLog.log(jsonString)
