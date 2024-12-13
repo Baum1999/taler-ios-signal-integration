@@ -1162,6 +1162,24 @@
         }
       }
     },
+    "Account.Delete" : {
+      "comment" : "Action button",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bankkonto vergessen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Forget bank account"
+          }
+        }
+      }
+    },
     "Actions" : {
       "localizations" : {
         "de" : {
@@ -1669,6 +1687,16 @@
         }
       }
     },
+    "Are you sure you want to forget this bank account?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass sie dieses Bankkonto vergessen wollen?"
+          }
+        }
+      }
+    },
     "Authorize at Bank" : {
       "comment" : "Nav title",
       "localizations" : {
@@ -1925,6 +1953,17 @@
         }
       }
     },
+    "Camera Active" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera aktiv"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "de" : {
@@ -2070,6 +2109,7 @@
       }
     },
     "Closing Camera" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2420,6 +2460,7 @@
       }
     },
     "Currencies:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2430,6 +2471,7 @@
       }
     },
     "Currency:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2440,6 +2482,7 @@
       }
     },
     "Currency: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2506,6 +2549,7 @@
       }
     },
     "Delete Account" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2732,6 +2776,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Doppeltippen um das Konto zu bearbeiten"
+          }
+        }
+      }
+    },
+    "Double tap to select" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppel-tapp zum Auswählen"
           }
         }
       }
@@ -3257,6 +3312,17 @@
         }
       }
     },
+    "Error while scanning QR code" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler beim QR-Code Scannen"
+          }
+        }
+      }
+    },
     "Exchange fee (long):" : {
       "comment" : "long version",
       "extractionState" : "extracted_with_value",
@@ -3547,6 +3613,7 @@
       }
     },
     "IBAN: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3574,6 +3641,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Якщо цей гаманець належить дитині або підлітку, то створена електронна готівка повинна мати вікове обмеження."
+          }
+        }
+      }
+    },
+    "If you change the account holder name or the IBAN, you may have to perform the KYC procedure again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn Sie den Kontoinhaber oder die IBAN ändern, müssen sie evtl. die Verifikation wiederholen."
           }
         }
       }
@@ -3712,6 +3789,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "KYC (Знай свого клієнта)"
+          }
+        }
+      }
+    },
+    "Label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezeichnung"
           }
         }
       }
@@ -4540,19 +4627,19 @@
       }
     },
     "NavTitle_Deposit_Currency" : {
-      "comment" : "NavTitle: Deposit 'currencySymbol'",
+      "comment" : "currencySymbol",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einzahlen"
+            "value" : "%@ Einzahlen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Deposit"
+            "value" : "Deposit %@"
           }
         },
         "es" : {
@@ -5017,6 +5104,7 @@
       }
     },
     "Note" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5027,6 +5115,7 @@
       }
     },
     "Note:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5305,6 +5394,7 @@
       }
     },
     "Opening Camera" : {
+      "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6017,6 +6107,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR-код та посилання також можуть бути відскановані або скопійовані / поширені з Транзакцій пізніше."
+          }
+        }
+      }
+    },
+    "QR code recognized" : {
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR-Code erkannt"
           }
         }
       }
@@ -7313,6 +7414,7 @@
       }
     },
     "Status: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8090,6 +8192,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Налаштування"
+          }
+        }
+      }
+    },
+    "to %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "an %@"
           }
         }
       }
@@ -9267,6 +9379,7 @@
       }
     },
     "xTaler: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
