@@ -134,6 +134,7 @@ public let NOTIFICATIONERROR = "error"
 extension Notification.Name {
     static let Idle = Notification.Name("idle")
     static let BalanceChange = Notification.Name("balance-change")
+    static let BankAccountChange = Notification.Name(AccountChange.TransitionType.change.rawValue)
     static let ExchangeAdded = Notification.Name("exchange-added")
     static let ExchangeDeleted = Notification.Name("exchange-deleted")
     static let ExchangeStateTransition = Notification.Name(ExchangeTransition.TransitionType.transition.rawValue)

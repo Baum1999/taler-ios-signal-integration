@@ -38,10 +38,9 @@ struct DepositAmountView: View {
     ) -> String {
         condition ? String(localized: "NavTitle_Deposit_Currency",
                         defaultValue: "Deposit \(currency)",
-                             comment: "NavTitle: Deposit 'currencySymbol'")
+                             comment: "currencySymbol")
                   : String(localized: "NavTitle_Deposit",
-                        defaultValue: "Deposit",
-                             comment: "NavTitle: Deposit")
+                        defaultValue: "Deposit")
     }
 
     private func feeLabel(_ feeString: String) -> String {
@@ -90,12 +89,14 @@ struct DepositAmountView: View {
     }
 
     @MainActor
-    private func startDeposit() {
+    private func startDeposit(_ scope: ScopeInfo) {
         if let paytoUri {
             depositStarted = true    // don't run twice
             Task {
                 symLog.log("Deposit")
-                if let result = try? await model.createDepositGroup(paytoUri, amount: amountToTransfer) {
+                if let result = try? await model.createDepositGroup(paytoUri,
+                                                             scope: scope,
+                                                            amount: amountToTransfer) {
                     symLog.log(result.transactionId)
 //                    ViewState2.shared.popToRootView(stack.push())
                     NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
@@ -162,7 +163,7 @@ struct DepositAmountView: View {
                     .padding(4)
                 let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount",
                                     comment: "VoiceOver")
-                Button(buttonTitle(amountToTransfer)) { startDeposit() }
+                Button(buttonTitle(amountToTransfer)) { startDeposit(balance.scopeInfo) }   // TODO: use exchange scope
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .padding(.horizontal)
                 .disabled(disabled || depositStarted)

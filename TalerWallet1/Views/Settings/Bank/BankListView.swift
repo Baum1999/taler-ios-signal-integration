@@ -20,8 +20,9 @@ struct BankListView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State var showAddDialog: Bool = false
-    @State var newExchange: String = TESTEXCHANGE
+    @State private var selectedBalance: Balance? = nil
+    @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // needed for Deposit, ignore
+    @State private var showAddDialog: Bool = false
     @State private var bankAccounts: [BankAccountsInfo] = []
 
     @MainActor
@@ -76,8 +77,7 @@ struct BankListView: View {
                 .talerFont(.body)
         }
 
-        let addBankDest = BankEditView(stack: stack.push(),
-                                   accountID: nil)
+        let addBankDest = BankEditView(stack: stack.push(), accountID: nil)
         let actions = Group {
             NavLink($showAddDialog) { addBankDest }
         }
@@ -85,13 +85,15 @@ struct BankListView: View {
         List {
             if bankAccounts.isEmpty {
                 emptyList
-                    .opacity(0)
+//                    .opacity(0)           // TODO: wait 0.5 seconds, then fade in
             } else {
                 depositHint
                 ForEach(bankAccounts, id: \.self) { account in
                     BankSectionView(stack: stack.push(),
-                                  account: account)
-//                    Text(account.paytoUri)
+                                  account: account,
+                          selectedBalance: $selectedBalance,                    // needed for Deposit, ignore
+                           amountLastUsed: $amountLastUsed,                     // needed for Deposit, ignore
+                                 goToEdit: true)
                 }
             }
         }
@@ -101,6 +103,10 @@ struct BankListView: View {
             controller.hapticNotification(.success)
             symLog.log("refreshing")
             await viewDidLoad()
+        }
+        .onNotification(.BankAccountChange) { notification in
+//            logger.info(".onNotification(.BankAccountChange) ==> reload accounts")
+            Task { await viewDidLoad() }
         }
         .task { await viewDidLoad() }
         .navigationTitle(navTitle)

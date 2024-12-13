@@ -15,31 +15,23 @@ struct BankSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let account: BankAccountsInfo
+    @Binding var selectedBalance: Balance?
+    @Binding var amountLastUsed: Amount
+    let goToEdit: Bool
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("demoHints") var demoHints: Bool = true
-    @AppStorage("fakeNoFees") var fakeNoFees: Bool = true
     @AppStorage("ownerName") var ownerName: String = EMPTYSTRING
 
-    @State private var shouldReloadBalances: Int = 0
-    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var didDelete: Bool = false
-    @State private var disabled: Bool = false
 //    @State private var purge: Bool = false
 
+    @State private var label: String = EMPTYSTRING
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
-    @State private var label: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
     @State private var selected = 0
-    @FocusState private var focus:FocusedField?
-
-    enum FocusedField: Hashable {
-        case accountHolder, iban, xTaler, label
-    }
 
 //    @MainActor
 //    private func validateIban() async {
@@ -67,24 +59,6 @@ struct BankSectionView: View {
         }
     }
 
-    @MainActor
-    private func deleteAccount() {
-        disabled = true     // don't try this more than once
-        Task { // runs on MainActor
-//            if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
-//                purge = false
-//                symLog.log("deleted \(baseUrl.trimURL)")
-//                didDelete = true             // change button text
-//                NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
-//                NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
-//                demoHints = true
-//            } else {
-//                purge = true
-//                disabled = false
-//            }
-        }
-    }
-
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -97,29 +71,25 @@ struct BankSectionView: View {
         let methodStr = (paytoType == .iban) ? iban
                 : (paytoType == .xTalerBank) ? xTaler
                                              : "unknown payment method"
+        let editHint = String(localized: "Double tap to edit the account", comment: "VoiceOver")
+        let selectHint = String(localized: "Double tap to select", comment: "VoiceOver")
         Section {
             NavigationLink {
-                BankEditView(stack: stack.push(),
-                         accountID: account.bankAccountId)
+                if goToEdit {
+                    BankEditView(stack: stack.push(),
+                             accountID: account.bankAccountId)
+                } else {
+                    let navTitle = String(localized: "NavTitle_Deposit",    // _Currency",
+                                       defaultValue: "Deposit")             // \(currencySymbol)"
+                    DepositAmountV(stack: stack.push(),
+                         selectedBalance: $selectedBalance,
+                          amountLastUsed: $amountLastUsed,
+                                paytoUri: account.paytoUri,
+                                   label: account.label)
+                    .navigationTitle(navTitle)
+                }
             } label: {
                 VStack(alignment: .leading) {
-                    if let currencies = account.currencies {
-                        if currencies.count == 1 {
-                            BankSectionRow(title: String(localized: "Currency:"),
-                                           value: currencies[0])
-                        } else {
-                            if !minimalistic { Text("Currencies:") }
-                            ForEach (currencies, id: \.self) { currency in
-                                Text(currency)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                        }
-                    } else {
-                        BankSectionRow(title: String(localized: "Currency:"),
-                                       value: "UNKNOWN")
-                    }
-                    BankSectionRow(title: String(localized: "Note:"),
-                                   value: label)
                     BankSectionRow(title: String(localized: "Account holder:"),
                                    value: accountHolder)
                     BankSectionRow(title: String(localized: "\(methodType):", comment: "methodType:"),
@@ -127,18 +97,18 @@ struct BankSectionView: View {
                     BankSectionRow(title: String(localized: "Status:"),
                                    value: kyc)
                 }   .talerFont(.body)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityHint(String(localized: "Double tap to edit the account", comment: "VoiceOver"))
+                    .listRowSeparator(.hidden)
+//                    .accessibilityElement(children: .combine)
             }
+            .accessibilityHint(goToEdit ? editHint : selectHint)
         } header: {
-        }
-        .listRowSeparator(.hidden)
-        .onChange(of: focus) {
-            print($0)
+            Text(label)
+                .talerFont(.title3)
+//                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+//                .accessibilityHint(EMPTYSTRING)
         }
         .task { await viewDidLoad() }
         .onDisappear() {
-            disabled = false
 //            purge = false
         }
     }

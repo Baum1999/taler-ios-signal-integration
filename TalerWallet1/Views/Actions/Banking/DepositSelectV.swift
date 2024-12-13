@@ -62,8 +62,8 @@ struct DepositSelectV: View {
             Section {
                 depositHint
             }
-            Section {
-                if bankAccounts.isEmpty {
+            if bankAccounts.isEmpty {
+                Section {
                     let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
                     let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
                                                         navTitle: bankAccountsTitle)
@@ -73,37 +73,15 @@ struct DepositSelectV: View {
                         SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
                               description: minimalistic ? nil : String(localized: "Your accounts for deposit...")) {}
                     }
-                } else {
-                    ForEach(bankAccounts, id: \.self) { account in
-//                      let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
-                        let payURL = URL(string: account.paytoUri)
-                        let iban = payURL?.iban
-                        let xTaler = payURL?.xTaler
-                        let alias = account.label
-                        let kyc = account.kycCompleted ? String(localized: "verified", comment: "KYC state")
-                                                       : String(localized: "not yet verified", comment: "KYC state")
-
-                        let destination = DepositAmountV(stack: stack.push(),
-                                               selectedBalance: $selectedBalance,
-                                                amountLastUsed: $amountLastUsed,
-                                                      paytoUri: account.paytoUri)
-                        NavigationLink(destination: destination) {
-                            VStack {
-                                if let iban {
-                                    Text("IBAN: \(iban)")
-                                } else if let xTaler {
-                                    Text("xTaler: \(xTaler)")
-                                } else {
-                                    Text("unknown payment method")
-                                }
-                                Text("Status: \(kyc)")
-                                    .padding(.leading)
-                                if let alias {
-                                    Text(alias)
-                                }
-                            }
-                        }
-                    }
+                }
+            } else {
+                ForEach(bankAccounts, id: \.self) { account in
+//                  let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
+                    BankSectionView(stack: stack.push(),
+                                  account: account,
+                          selectedBalance: $selectedBalance,
+                           amountLastUsed: $amountLastUsed,
+                                 goToEdit: false)
                 }
             }
         }
@@ -113,7 +91,10 @@ struct DepositSelectV: View {
             symLog.log("refreshing")
             await viewDidLoad()
         }
-        .task { await viewDidLoad() }
+        .task { 
+            setVoice(to: nil)
+            await viewDidLoad()
+        }
         .navigationTitle(subjectTitle)
 //        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {

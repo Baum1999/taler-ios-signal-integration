@@ -16,6 +16,7 @@ struct DepositAmountV: View {
     @Binding var selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     let paytoUri: String?
+    let label: String?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -68,10 +69,15 @@ struct DepositAmountV: View {
 #endif
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
-        let navTitle = String(localized: "NavTitle_Deposit_Currency",
-                           defaultValue: "Deposit",     // \(currencySymbol)",
-                                comment: "NavTitle: Deposit 'currencySymbol'")
+//        let navTitle = String(localized: "NavTitle_Deposit",    // _Currency",
+//                           defaultValue: "Deposit")             // \(currencySymbol)"
         let scrollView = ScrollView {
+            if let label {
+                Text("to \(label)")
+                    .talerFont(.picker)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+            }
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
                       onlyNonZero: true)                                        // can only send what exists
@@ -90,10 +96,13 @@ struct DepositAmountV: View {
                     amountAvailable: amountAvailable,
                            paytoUri: paytoUri)
         } // ScrollView
-            .navigationTitle(navTitle)
+//            .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-            .task { await viewDidLoad() }
+            .task {
+                setVoice(to: nil)
+                await viewDidLoad()
+            }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 
         if #available(iOS 16.0, *) {

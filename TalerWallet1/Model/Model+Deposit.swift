@@ -11,6 +11,14 @@ import AnyCodable
 //import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
+struct AccountChange: Codable {             // Notification
+    enum TransitionType: String, Codable {
+        case change = "bank-account-change"
+    }
+    var type: TransitionType
+    var bankAccountId: String
+}
+
 // MARK: - IBAN
 struct ValidateIbanResult: Codable {
     let valid: Bool
@@ -60,16 +68,17 @@ fileprivate struct DepositWireTypes: WalletBackendFormattedRequest {
     func operation() -> String { "getDepositWireTypes" }
     func args() -> Args { Args(currency: currency, scopeInfo: scopeInfo) }
 
-    var currency: String
+    var currency: String?
     var scopeInfo: ScopeInfo?
     struct Args: Encodable {
-        var currency: String
+        // one of these must be set - don't set both to nil
+        var currency: String?
         var scopeInfo: ScopeInfo?
     }
 }
 extension WalletModel {
     /// Get wire types that can be used for a deposit operation
-    nonisolated func depositWireTypes(_ currency: String, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
+    nonisolated func depositWireTypes(_ currency: String?, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
       async throws -> [WireTypeDetails] {
         let request = DepositWireTypes(currency: currency, scopeInfo: scopeInfo)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
@@ -147,19 +156,22 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
     typealias Response = DepositGroupResult
     func operation() -> String { "createDepositGroup" }
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
+                                 restrictScope: scope,
                                         amount: amount) }
     var depositPaytoUri: String
+    var scope: ScopeInfo
     var amount: Amount
     struct Args: Encodable {
         var depositPaytoUri: String
+        var restrictScope: ScopeInfo
         var amount: Amount
     }
 }
 extension WalletModel {
     /// deposit coins. Networking involved
-    nonisolated func createDepositGroup(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
+    nonisolated func createDepositGroup(_ depositPaytoUri: String, scope: ScopeInfo, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
-        let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, amount: amount)
+        let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, scope: scope, amount: amount)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response
     }
@@ -169,7 +181,6 @@ struct BankAccountsInfo: Decodable, Hashable {
     var bankAccountId: String
     var paytoUri: String
     var kycCompleted: Bool
-    var currencies: [String]?
     var label: String?
 }
 struct BankAccounts: Decodable, Hashable {
@@ -224,28 +235,24 @@ fileprivate struct AddBankAccount: WalletBackendFormattedRequest {
     func operation() -> String { "addBankAccount" }
     func args() -> Args { Args(paytoUri: uri,
                                   label: label,
-                             currencies: currencies,
-                        replacePaytoUri: replaceUri) }
+                   replaceBankAccountId: replace) }
     var uri: String
     var label: String
-    var currencies: [String]?
-    var replaceUri: String?
+    var replace: String?
     struct Args: Encodable {
         var paytoUri: String                        // bank account that should be added
         var label: String                           // Human-readable label
-        var currencies: [String]?                   // currencies supported by the bank (if known)
-        var replacePaytoUri: String?                // account that this new account should replace
+        var replaceBankAccountId: String?                // account that this new account should replace
     }
 }
 extension WalletModel {
     /// add (or update) a known account. No networking
     nonisolated func addBankAccount(_ uri: String,
                                     label: String,
-                               currencies: [String]? = nil,
-                               replaceUri: String? = nil,
+                                  replace: String? = nil,
                               viewHandles: Bool = false)
       async throws -> String {
-        let request = AddBankAccount(uri: uri, label: label, currencies: currencies, replaceUri: replaceUri)
+        let request = AddBankAccount(uri: uri, label: label, replace: replace)
         let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
         return response.bankAccountId
     }
