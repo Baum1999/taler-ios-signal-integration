@@ -46,14 +46,18 @@ struct QRSheet: View {
                 }
             } else {
                 CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr], showViewfinder: true) { response in
+                    let closingAnnouncement: String
                     switch response {
                         case .success(let result):
                             symLog.log("Found code: \(result.string)")
                             scannedCode = result.string
+                            closingAnnouncement = String(localized: "QR code recognized", comment: "VoiceOver")
                         case .failure(let error):
                             // TODO: errorAlert
                             ErrorView(errortext: error.localizedDescription)
+                            closingAnnouncement = String(localized: "Error while scanning QR code", comment: "VoiceOver")
                     }
+                        announce(closingAnnouncement)
                 }
             }
         }

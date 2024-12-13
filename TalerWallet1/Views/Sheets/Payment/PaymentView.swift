@@ -253,14 +253,15 @@ struct PaymentView: View, Sendable {
                                         }
                                     }.monospacedDigit()
                                     Text("seconds")
-                                }
+                                }.accessibilityElement(children: .combine)
                             }
                             let destination = PaymentDone(stack: stack.push(),
 //                                                          scope: firstScope,    // TODO: let user choose which currency
                                                   transactionId: preparePayResult.transactionId)
                             NavigationLink(destination: destination) {
                                 let formatted = raw.formatted(currencyInfo, isNegative: false)
-                                Text("Pay \(formatted) now")
+                                Text("Pay \(formatted.0) now")
+                                    .accessibilityLabel("Pay \(formatted.1) now")
                             }
                                 .buttonStyle(TalerButtonStyle(type: .prominent))
                                 .padding(.horizontal)

@@ -18,10 +18,9 @@ struct LoadingView: View {
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
-            RotatingTaler(size: 100, progress: true,
-                          rotationEnabled: $rotationEnabled)
-//                .accessibilityLabel("Progress indicator")
-                .onTapGesture(count: 2) {
+            RotatingTaler(size: 100, progress: true,                            // VoiceOver "In progress"
+               rotationEnabled: $rotationEnabled)
+                .onTapGesture(count: 1) {
                     rotationEnabled.toggle()
                 }
             Spacer()

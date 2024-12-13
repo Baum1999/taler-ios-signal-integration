@@ -71,40 +71,30 @@ struct QRButton : View  {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
     }
-    let closingAnnouncement = AttributedString(localized: "Closing Camera")
-    private var dismissAlertButton: some View {
-        Button("Cancel", role: .cancel) {
-            if #available(iOS 17.0, *) {
-                AccessibilityNotification.Announcement(closingAnnouncement).post()
-            }
-            showCameraAlert = false
-        }
-    }
-    var defaultPriorityAnnouncement = AttributedString(localized: "Opening Camera")
-    var lowPriorityAnnouncement: AttributedString {
-        var lowPriorityString = AttributedString ("Camera Loading")
-        if #available(iOS 17.0, *) {
-            lowPriorityString.accessibilitySpeechAnnouncementPriority = .low
-        }
-        return lowPriorityString
-    }
+    let closingAnnouncement = String(localized: "Closing Camera", comment: "VoiceOver")
+
+    var defaultPriorityAnnouncement = String(localized: "Opening Camera", comment: "VoiceOver")
+
     var highPriorityAnnouncement: AttributedString {
-        var highPriorityString = AttributedString("Camera Active")
+        var highPriorityString = AttributedString(localized: "Camera Active", comment: "VoiceOver")
         if #available(iOS 17.0, *) {
             highPriorityString.accessibilitySpeechAnnouncementPriority = .high
         }
         return highPriorityString
     }
+    @MainActor
     private func checkCameraAvailable() -> Void {
         // Open Camera when QR-Button was tapped
-        if #available(iOS 17.0, *) {
-            AccessibilityNotification.Announcement(defaultPriorityAnnouncement).post()
-        }
+        announce(defaultPriorityAnnouncement)
+
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) -> Void in
             if granted {
                 action()
                 if #available(iOS 17.0, *) {
                     AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
+                } else {
+                    let cameraActive = String(localized: "Camera Active", comment: "VoiceOver")
+                    announce(cameraActive)
                 }
             } else {
                 showCameraAlert = true
@@ -113,6 +103,10 @@ struct QRButton : View  {
     }
 
     var body: some View {
+        let dismissAlertButton = Button("Cancel", role: .cancel) {
+            announce(closingAnnouncement)
+            showCameraAlert = false
+        }
         let scanText = String(localized: "Scan QR code", comment: "Button title, a11y")
         let qr = "qrcode.viewfinder"
         let qrImage = Text("\(Image(systemName: qr))", comment: "QR Image")

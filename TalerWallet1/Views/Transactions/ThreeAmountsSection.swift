@@ -147,6 +147,7 @@ struct ThreeAmountsSection: View {
                         image.resizable()
                             .scaledToFill()
                             .frame(width: 64, height: 64)
+                            .accessibilityHidden(true)
                         Text(productImage.description)
 //                        if let product_id = product.product_id {
 //                            Text(product_id)
@@ -156,6 +157,7 @@ struct ThreeAmountsSection: View {
                             AmountV(scope, price, isNegative: nil)
                         }
                     }.talerFont(.body)
+                        .accessibilityElement(children: .combine)
                 }
             }
         }

@@ -12,6 +12,12 @@ extension View {
             UIAccessibility.post(notification: .announcement, argument: this)
         }
     }
+    @MainActor
+    public func setVoice(to this: (any View)?) {
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: this)
+        }
+    }
 }
 
 extension View {
