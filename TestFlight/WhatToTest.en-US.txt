@@ -1,7 +1,8 @@
-Version 0.14.0 (wallet-core 0.13.14)
+Version 0.14.0 (wallet-core 0.14.0)
 
 • New UI with Action button
 - lots of bugfixes
+- German localization
 
 
 Version 0.13.3 (wallet-core 0.13.5)
