@@ -365,7 +365,7 @@ extension MainView {
             }.navigationViewStyle(.stack)
             let settingsStack = NavigationView {
                 SettingsView(stack: stack.push(),
-                             navTitle: settingsTitle)
+                          navTitle: settingsTitle)
                 .background(settingsActions)
             }.navigationViewStyle(.stack)
         /// our custom tabBar with the Actions button in the middle

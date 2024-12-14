@@ -259,7 +259,7 @@ class Controller: ObservableObject {
         if backendState == .instantiated {
             backendState = .initing
             do {
-                let versionInfo = try await model.initWalletCoreT(setTesting: setTesting)
+                let versionInfo = try await model.initWalletCore(setTesting: setTesting)
                 WalletCore.shared.versionInfo = versionInfo
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows

@@ -59,12 +59,12 @@ struct SettingsView: View {
         }
     }
     private var resetButton: some View {
-        Button("Reset", role: .destructive) {
+        Button("Reset", role: .destructive) {                                   // TODO: WalletColors().errorColor
             didReset = true
             showResetAlert = false
             Task { // runs on MainActor
                 symLog.log("❗️Reset wallet-core❗️")
-                try? await model.resetWalletCoreT()
+                try? await model.resetWalletCore()
             }
         }
     }
@@ -223,7 +223,7 @@ struct SettingsView: View {
                             Button(title) {
                                 Task { // runs on MainActor
                                     symLog.log("running applyDevExperiment Refresh")
-                                    try? await model.setConfigT(setTesting: true)
+                                    try? await model.setConfig(setTesting: true)
                                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
                                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
                                 }

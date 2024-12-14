@@ -48,10 +48,10 @@ struct NavLink <Content : View> : View {
     }
 
     var body: some View {
-        if tag != 0 {
+        if tag != 0 {       // actions: $navModel.actionSelected will hide the tabBar
             NavigationLink(destination: content, tag: tag, selection: $selection)
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()
-        } else {
+        } else {            // shortcuts, AddButton
             NavigationLink(destination: content, isActive: $isActive)
             { EmptyView() }.frame(width: 0).opacity(0).hidden()
         }

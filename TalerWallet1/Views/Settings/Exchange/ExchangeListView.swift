@@ -75,7 +75,6 @@ struct ExchangeListCommonV: View {
     let symLog: SymLogV?
     let stack: CallStack
 
-    @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic

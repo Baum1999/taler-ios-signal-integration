@@ -177,8 +177,7 @@ fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
-    func setConfigT(setTesting: Bool) async throws -> VersionInfo {
-        // T for any Thread
+    nonisolated func setConfig(setTesting: Bool) async throws -> VersionInfo {
         let request = ConfigRequest(setTesting: setTesting)
         let response = try await sendRequest(request, 0)    // no Delay
         return response.versionInfo
@@ -216,8 +215,7 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Might do networking
-    func initWalletCoreT(setTesting: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
-                    // T for any Thread
+    nonisolated func initWalletCore(setTesting: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
         let dbPath = try dbPath()
 //        logger.debug("dbPath: \(dbPath)")
         let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
@@ -313,7 +311,7 @@ extension WalletModel {
         }
     }
 
-    private func cachePath () throws -> String {
+    private func cachePath() throws -> String {
         let fileManager = FileManager.default
         if let cachesURL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first {
             let cacheURL = cachesURL.appendingPathComponent("cache.json")
@@ -347,8 +345,7 @@ fileprivate struct ResetRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// reset Wallet-Core
-    func resetWalletCoreT(viewHandles: Bool = false) async throws {
-        // T for any Thread
+    nonisolated func resetWalletCore(viewHandles: Bool = false) async throws {
         let request = ResetRequest()
         _ = try await sendRequest(request, 0, viewHandles: viewHandles)
     }
@@ -368,7 +365,7 @@ fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// tell wallet-core to mock new transactions
-    func devExperimentT(talerUri: String, viewHandles: Bool = false) async throws {
+    nonisolated func devExperimentT(talerUri: String, viewHandles: Bool = false) async throws {
         // T for any Thread
         let request = DevExperimentRequest(talerUri: talerUri)
         _ = try await sendRequest(request, 0, viewHandles: viewHandles)

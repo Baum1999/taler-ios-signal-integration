@@ -210,10 +210,10 @@ struct BankEditView: View {
             let warningText1 = String(localized: "Are you sure you want to forget this bank account?")
             WarningButton(warningText: warningText1,
                           buttonTitle: buttonTitle,
-                          buttonIcon: "trash",
-                          role: .destructive,
-                          disabled: $disabled,
-                          action: deleteAccount)
+                           buttonIcon: "trash",
+                                 role: .destructive,                            // TODO: WalletColors().errorColor
+                             disabled: $disabled,
+                               action: deleteAccount)
             .padding(.top)
           }.listRowSeparator(.hidden)
         } // List
