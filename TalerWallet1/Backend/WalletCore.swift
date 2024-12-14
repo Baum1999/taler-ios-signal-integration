@@ -76,6 +76,8 @@ class WalletCore: QuickjsMessageHandler {
         let type: String
         let id: String?
         let reservePub: String?
+        let isInternal: Bool?
+        let hintTransactionId: String?
         let event: [String: AnyCodable]?
     }
 
@@ -324,7 +326,14 @@ extension WalletCore {
                     try handlePendingProcessed(payload)
                 case Notification.Name.BalanceChange.rawValue:
                     symLog.log(message)
-                    postNotification(.BalanceChange)
+                    if !(payload.isInternal ?? false) {     // don't re-post internals
+                        if let txID = payload.hintTransactionId {
+                            if txID.contains("txn:refresh:") {
+                                break
+                            }
+                        }
+                        postNotification(.BalanceChange)
+                    }
                 case Notification.Name.BankAccountChange.rawValue:
                     symLog.log(message)
                     postNotification(.BankAccountChange)
