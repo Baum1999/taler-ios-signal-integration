@@ -320,7 +320,7 @@ extension MainView {
                                                  exchange: $exchange,           // only for withdraw-exchange
                                                   isSheet: false)
         /// each NavigationView needs its own NavLinks
-            let balanceActions = Group {
+            let balanceActions = Group {                                        // actionSelected will hide the tabBar
                 NavLink(1, $navModel.actionSelected) { sendDest }
                 NavLink(2, $navModel.actionSelected) { requestDest }
                 NavLink(3, $navModel.actionSelected) { depositDest }
@@ -382,6 +382,7 @@ extension MainView {
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
+            .environmentObject(navModel)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onNotification(.SendAction)    { triggerAction(1) }
             .onNotification(.RequestAction) { triggerAction(2) }

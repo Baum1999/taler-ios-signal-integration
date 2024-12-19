@@ -7,6 +7,7 @@
  */
 import Foundation
 
+public let MAXEXCHANGES = 1000          // per currency
 public let CHF_4217 = "CHF"             // ISO-4217 Swiss Francs
 public let EUR_4217 = "EUR"             // ISO-4217 Euro
 public let HUF_4217 = "HUF"             // ISO-4217 Hungarian Forint

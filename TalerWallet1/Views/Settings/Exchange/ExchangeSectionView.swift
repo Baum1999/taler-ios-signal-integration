@@ -15,6 +15,7 @@ struct ExchangeSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance
+    let thousand: Int
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -102,9 +103,11 @@ struct ExchangeSectionView: View {
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
         Section {
-            ForEach(exchanges) { exchange in
+            ForEachWithIndex(data: exchanges) { index, exchange in
+                let _ = symLog.log("Index: \(thousand + index)")
                 ExchangeRowView(stack: stack.push(),
-                             exchange: exchange)
+                             exchange: exchange,
+                                index: thousand + index + 1)
                 .listRowSeparator(.hidden)
             }
             if developerMode && (DEMOCURRENCY == currency || TESTCURRENCY == currency) {

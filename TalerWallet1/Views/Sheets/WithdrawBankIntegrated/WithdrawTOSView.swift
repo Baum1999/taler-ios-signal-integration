@@ -163,7 +163,8 @@ extension WithdrawTOSView {
                             .padding(.horizontal)
             list.safeAreaInset(edge: .bottom) {
                 if showButton {
-                    button.padding(.bottom, 40)
+                    button
+//                        .padding(.bottom, 40)
                 }
             }
         }

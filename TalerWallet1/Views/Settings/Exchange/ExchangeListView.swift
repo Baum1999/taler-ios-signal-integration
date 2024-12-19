@@ -84,9 +84,10 @@ struct ExchangeListCommonV: View {
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let sortedList = List(controller.balances, id: \.self) { balance in
+        let sortedList = List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
             ExchangeSectionView(stack: stack.push(),
-                             balance: balance)
+                              balance: balance,
+                             thousand: index * MAXEXCHANGES)
         }
 
         let emptyList = List {

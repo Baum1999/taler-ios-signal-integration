@@ -13,10 +13,12 @@ struct ExchangeRowView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let exchange: Exchange
+    let index: Int
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var navModel: NavigationModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
@@ -36,12 +38,33 @@ struct ExchangeRowView: View {
                     .talerFont(.body)
             }
         }
+        let cellView = HStack {
+            rowView
+            Spacer()
+            Text(Image(systemName: "chevron.right"))
+                .talerFont(.table)
+                .foregroundColor(.secondary)
+        }.background {           // only needed for .onTapGesture
+            Color.gray.opacity(0.001)
+        }
         let showToS = WithdrawTOSView(stack: stack.push(),
                             exchangeBaseUrl: baseURL,
                                      viewID: VIEW_WITHDRAW_TOS,
                                acceptAction: nil)         // pop back to here
+        let actions = Group {
+            NavLink(index, $navModel.tosView) { showToS }
+        }
+
         Group {
-            NavigationLink(destination: showToS) { rowView }
+//          NavigationLink(destination: showToS) { rowView }
+            cellView
+                .background(actions)
+                .onTapGesture {
+                    navModel.tosView = index
+                }
+//                .task {
+//                    navModel.tosView = false
+//                }
         }.listRowSeparator(.hidden)
     }
 }
@@ -75,7 +98,8 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
                                 exchangeUpdateStatus: .ready,
                                ageRestrictionOptions: [])
             ExchangeRowView(stack: CallStack("Preview"),
-                         exchange: exchange1)
+                         exchange: exchange1,
+                            index: 1)
         }
     }
 
