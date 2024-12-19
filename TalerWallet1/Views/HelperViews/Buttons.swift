@@ -108,23 +108,23 @@ struct QRButton : View  {
             showCameraAlert = false
         }
         let scanText = String(localized: "Scan QR code", comment: "Button title, a11y")
-        let qr = "qrcode.viewfinder"
-        let qrImage = Text("\(Image(systemName: qr))", comment: "QR Image")
+        let qrImage = Image(systemName: QRBUTTON)
+        let qrText = Text("\(qrImage)", comment: "QR Image")
         Button(action: checkCameraAvailable) {
             if isNavBarItem {
                 if !minimalistic {
                     Text("Scan QR", comment: "Button title")
                         .talerFont(.title3)
                 }
-                qrImage.talerFont(.title2)
+                qrText.talerFont(.title2)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
-                qrImage.talerFont(.largeTitle)
+                qrText.talerFont(.largeTitle)
                     .padding(.horizontal, width)
 //                    .padding(.vertical)
             } else {
                 HStack(spacing: 16) {
-                    qrImage.talerFont(.title)
+                    qrText.talerFont(.title)
                     Text(scanText)
                 }.padding(.horizontal)
             }
