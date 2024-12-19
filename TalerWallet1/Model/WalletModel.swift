@@ -285,12 +285,16 @@ extension WalletModel {
         }
     }
 
-    private func dbPath () throws -> String {
+    private func dbPath(_ export:Bool = false) throws -> String {
         if #available(iOS 16.0, *) {
             let documents = URL.documentsDirectory                              // accessible by FileSharing
+            let docsPath = documents.path(percentEncoded: false)
+            if export {
+                return docsPath
+            }
             let appSupport = URL.applicationSupportDirectory
 #if DEBUG || GNU_TALER
-            return documents.path(percentEncoded: false)
+            return docsPath
 #else     // TALER_WALLET
             migrate(from: documents, to: appSupport)
             return appSupport.path(percentEncoded: false)
@@ -300,6 +304,9 @@ extension WalletModel {
             let appDirNr: FileManager.SearchPathDirectory = .applicationSupportDirectory
             if let documentsDir = FileManager.default.urls(for: docDirNr, in: .userDomainMask).first,
                let appSupportDir = FileManager.default.urls(for: appDirNr, in: .userDomainMask).first {
+                if export {
+                    return path(documentsDir)
+                }
 #if DEBUG || GNU_TALER
                 return path(documentsDir)
 #else
@@ -350,6 +357,36 @@ extension WalletModel {
     nonisolated func resetWalletCore(viewHandles: Bool = false) async throws {
         let request = ResetRequest()
         _ = try await sendRequest(request, 0, viewHandles: viewHandles)
+    }
+}
+// MARK: -
+fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
+    func operation() -> String { "exportDbToFile" }
+    func args() -> Args { Args(directory: directory, stem: stem) }
+
+    var directory: String
+    var stem: String
+    struct Args: Encodable {
+        var directory: String
+        var stem: String
+    }                           // no arguments needed
+    struct Response: Decodable, Sendable {              // path of the copied DB
+        var path: String
+    }
+}
+
+extension WalletModel {
+    /// export DB
+    nonisolated func exportDbToFile(viewHandles: Bool = false)
+      async throws -> String? {
+        if let dbPath = try? dbPath(true) {
+            let stem = String("Taler " + TalerDater.dateString())
+            let request = ExportDbToFile(directory: dbPath, stem: stem)
+            let response = try await sendRequest(request, 0, viewHandles: viewHandles)
+            return response.path
+        } else {
+            return nil
+        }
     }
 }
 // MARK: -
