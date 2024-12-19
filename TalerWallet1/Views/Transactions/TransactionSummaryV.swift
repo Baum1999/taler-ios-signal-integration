@@ -59,7 +59,8 @@ struct TransactionSummaryV: View {
     @Namespace var topID
 
     func loadTransaction() async {
-        if let reloadedTransaction = try? await model.getTransactionById(transactionId, viewHandles: false) {
+        if let reloadedTransaction = try? await model.getTransactionById(transactionId,
+                                                               withTerms: true, viewHandles: false) {
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
             withAnimation { transaction = reloadedTransaction; viewId = UUID() }      // redraw
             if outTransaction != nil {
