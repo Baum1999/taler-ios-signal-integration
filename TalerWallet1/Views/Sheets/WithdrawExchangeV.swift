@@ -42,6 +42,7 @@ struct WithdrawExchangeV: View {
                         amountToTransfer.setCurrency(currency)
                         // is already Amount.zero()
                     }
+                    amountLastUsed.setCurrency(amountToTransfer.currencyStr)
                     exchange = exc
                 } else {
                     exchange = nil
@@ -61,6 +62,8 @@ struct WithdrawExchangeV: View {
                 ManualWithdraw(stack: stack.push(),
                      selectedBalance: $selectedBalance,
                       amountLastUsed: $amountLastUsed,
+                    amountToTransfer: $amountToTransfer,
+                            exchange: $exchange,           // only for withdraw-exchange
                              isSheet: true)
             }
             .task(id: controller.currencyTicker) {

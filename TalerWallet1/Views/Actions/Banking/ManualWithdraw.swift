@@ -16,6 +16,8 @@ struct ManualWithdraw: View {
     let stack: CallStack
     @Binding var selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
+    @Binding var amountToTransfer: Amount
+    @Binding var exchange: Exchange?           // only for withdraw-exchange
     let isSheet: Bool
 
     @EnvironmentObject private var controller: Controller
@@ -23,10 +25,13 @@ struct ManualWithdraw: View {
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
+//    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func viewDidLoad() async {
-        if let selectedBalance {
+        if let exchange {
+            currencyInfo = controller.info(for: exchange.scopeInfo, controller.currencyTicker)
+            return
+        } else if let selectedBalance {
             balance = selectedBalance
             balanceIndex = controller.balances.firstIndex(of: selectedBalance) ?? 0
         } else {
@@ -56,20 +61,29 @@ struct ManualWithdraw: View {
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
-            if count > 0 {
-                ScopePicker(value: $balanceIndex, onlyNonZero: false)
-                { index in
-                    balanceIndex = index
-                    balance = controller.balances[index]
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 4)
-            }
-            if let balance {
+            if let exchange {
                 ManualWithdrawContent(stack: stack.push(),
-                                      scope: balance.scopeInfo,
+                                      scope: exchange.scopeInfo,
                              amountLastUsed: $amountLastUsed,
-                           amountToTransfer: $amountToTransfer)
+                           amountToTransfer: $amountToTransfer,
+                                   exchange: $exchange)
+            } else {
+                if count > 0 {
+                    ScopePicker(value: $balanceIndex, onlyNonZero: false)
+                    { index in
+                        balanceIndex = index
+                        balance = controller.balances[index]
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 4)
+                }
+                if let balance {
+                    ManualWithdrawContent(stack: stack.push(),
+                                          scope: balance.scopeInfo,
+                                 amountLastUsed: $amountLastUsed,
+                               amountToTransfer: $amountToTransfer,
+                                       exchange: $exchange)
+                }
             }
         } // ScrollView
             .navigationTitle(navTitle)
@@ -91,7 +105,11 @@ struct ManualWithdraw: View {
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
                 // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
                 symLog.log("❗️ task \(balanceIndex)")
-                if let balance {
+                if let exchange {
+                    let scopeInfo = exchange.scopeInfo
+                    amountToTransfer.setCurrency(scopeInfo.currency)
+                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+                } else if let balance {
                     let scopeInfo = balance.scopeInfo
                     amountToTransfer.setCurrency(scopeInfo.currency)
                     currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
@@ -117,6 +135,7 @@ struct ManualWithdrawContent: View {
     let scope: ScopeInfo
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
+    @Binding var exchange: Exchange?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -125,10 +144,6 @@ struct ManualWithdrawContent: View {
     @State private var detailsForAmount: WithdrawalDetailsForAmount? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
-
-    @State private var exchanges: [Exchange] = []
-    @State private var exchange: Exchange? = nil
-
 
     private func exchangeVia(_ baseURL: String?) -> String? {
         if let baseURL {
@@ -162,16 +177,19 @@ struct ManualWithdrawContent: View {
     } // computeFee
 
     @MainActor
+    private func reloadExchange(_ baseURL: String) async {
+        if exchange == nil || exchange?.tosStatus != .accepted {
+            symLog.log("getExchangeByUrl(\(baseURL))")
+            exchange = try? await model.getExchangeByUrl(url: baseURL)
+        }
+    }
+    @MainActor
     private func viewDidLoad2() async {
         // neues scope wenn balance geändert wird?
         let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer, baseUrl: nil, scope: scope,
                                                          viewHandles: true)
         if let details {
             detailsForAmount = details
-            if exchange == nil || exchange?.tosStatus != .accepted {
-                symLog.log("getExchangeByUrl(\(details.exchangeBaseUrl))")
-                exchange = try? await model.getExchangeByUrl(url: details.exchangeBaseUrl)
-            }
         }
     }
 
@@ -243,7 +261,8 @@ struct ManualWithdrawContent: View {
                     .padding(.top)
                 }
             } // Group
-            .padding(.horizontal)
+                .padding(.horizontal)
+                .task { await reloadExchange(detailsForAmount.exchangeBaseUrl) }
         } else {
             LoadingView(scopeInfo: scope, message: nil)
                 .task { await viewDidLoad2() }

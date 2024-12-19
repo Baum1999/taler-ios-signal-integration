@@ -247,7 +247,7 @@ extension MainView {
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)  // Update currency when used
         @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = EMPTYSTRING
-        @State private var myExchange: Exchange? = nil
+        @State private var exchange: Exchange? = nil
 
         private var openKycButton: some View {
             Button("KYC") {
@@ -328,6 +328,8 @@ extension MainView {
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
                                           selectedBalance: $selectedBalance,
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!
+                                         amountToTransfer: $amountToTransfer,
+                                                 exchange: $exchange,           // only for withdraw-exchange
                                                   isSheet: false)
         /// each NavigationView needs its own NavLinks
             let balanceActions = Group {
