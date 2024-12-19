@@ -121,6 +121,9 @@ struct CheckDepositResponse: Codable {
     let totalDepositCost: Amount
     let effectiveDepositAmount: Amount
     let fees: DepositFees
+    let kycSoftLimit: Amount?
+    let kycHardLimit: Amount?
+    let kycExchanges: [String]?                 // Base URL of exchanges that would likely require soft KYC
 }
 /// A request to get an exchange's deposit contract terms.
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
