@@ -117,10 +117,11 @@ struct MainView: View {
         ) {
             let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                           selectedBalance: $selectedBalance))
-            let _ = logger.trace("❗️showScanner: .large❗️")
+            let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
             if #available(iOS 16.4, *) {
+                let scanDetent: PresentationDetent = .fraction(SCANDETENT)
                 Sheet(stack: stack.push(), sheetView: qrSheet)
-                    .presentationDetents([.large])
+                    .presentationDetents([scanDetent])
                     .transition(.opacity)
             } else {
                 Sheet(stack: stack.push(), sheetView: qrSheet)

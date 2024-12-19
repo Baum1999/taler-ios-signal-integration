@@ -97,14 +97,13 @@ struct DualHeightSheet: View {
     @Binding var qrButtonTapped: Bool
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
-//    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-//    @State private var sheetHeight: CGFloat = .zero
-    @State private var selectedDetent: PresentationDetent = .fraction(0.1)
+    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+//    @State private var selectedDetent: PresentationDetent = scanDetent        // Cannot use instance member 'scanDetent' within property initializer
+    @State private var selectedDetent: PresentationDetent = .fraction(0.1)      // workaround - update in .task
+//    @State private var detents: Set<PresentationDetent> = [scanDetent]
     @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]
-//    @State private var selectedDetent: PresentationDetent = .large
-//    @State private var detents: Set<PresentationDetent> = [.large]
     @State private var qrButtonTapped2: Bool = false
     @State private var innerHeight: CGFloat = .zero
     @State private var sheetHeight: CGFloat = .zero
@@ -113,8 +112,8 @@ struct DualHeightSheet: View {
         Task {
             //(1 second = 1_000_000_000 nanoseconds)
             try? await Task.sleep(nanoseconds: 80_000_000)
-            guard selectedDetent == .large else { return }
-            detents = [.large]
+            guard selectedDetent == scanDetent else { return }
+            detents = [scanDetent]
         }
     }
 
@@ -138,7 +137,7 @@ struct DualHeightSheet: View {
                     qrButtonTapped = true           // tell our caller
                     withAnimation(Animation.easeIn(duration: 0.6)) {
                         // animate this sheet to full height
-                        selectedDetent = .large
+                        selectedDetent = scanDetent
                     }
                 }
             }
@@ -158,13 +157,13 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
-                if newValue == .large {
-                    logger.trace("onChange❗️selectedDetent = .large)")
+                if newValue == scanDetent {
+                    logger.trace("onChange❗️selectedDetent = \(SCANDETENT)")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
                 } else {
                     logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
-                    detents = [.large, .height(sheetHeight)]
+                    detents = [scanDetent, .height(sheetHeight)]
                 }
             }
             .task {
