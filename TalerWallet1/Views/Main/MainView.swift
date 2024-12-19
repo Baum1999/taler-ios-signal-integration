@@ -201,19 +201,6 @@ extension Label where Title == Text, Icon == Image {
 
 // MARK: - Content
 extension MainView {
-    class NavigationModel: ObservableObject {
-        @Published var tabBarHidden = 0
-
-        @Published var actionSelected: Int? = nil {
-            didSet {
-                if actionSelected != nil {
-                    tabBarHidden += 1
-                } else {
-                    tabBarHidden = 0
-                }
-            }
-        }
-    }
 
     struct MainContent: View {
         let logger: Logger
