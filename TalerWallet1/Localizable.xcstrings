@@ -525,6 +525,12 @@
             "state" : "translated",
             "value" : "%@"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
         }
       }
     },
@@ -554,6 +560,12 @@
       "comment" : "methodType:",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@:"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@:"
@@ -1939,7 +1951,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Confirmar ahora"
           }
         },
@@ -2819,6 +2831,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Demo-Hinweise"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas de demostración"
           }
         }
       }
@@ -5795,6 +5813,12 @@
             "state" : "translated",
             "value" : "Einführung"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorporación"
+          }
         }
       }
     },
@@ -7822,6 +7846,12 @@
             "state" : "translated",
             "value" : "Demo-Hinweise anzeigen"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar pistas para dinero de demostración"
+          }
         }
       }
     },
@@ -8473,10 +8503,22 @@
       "comment" : "30 Days, always plural (10..30), 4 letters max., abbreviate if longer",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Tage"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%llu Days"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu días"
           }
         }
       }
@@ -9409,6 +9451,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unbekannter Zahlungsdienst"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servicio de pago desconocido"
           }
         }
       }
