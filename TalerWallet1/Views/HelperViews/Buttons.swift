@@ -192,7 +192,6 @@ struct ReloadButton : View  {
 struct TalerButtonStyle: ButtonStyle {
     enum TalerButtonStyleType {
         case plain
-        case balance
         case bordered
         case prominent
     }
@@ -221,8 +220,7 @@ struct TalerButtonStyle: ButtonStyle {
         }
         return WalletColors().buttonForeColor(pressed: pressed,
                                              disabled: disabled,
-                                            prominent: type == .prominent,
-                                              balance: type == .balance)
+                                            prominent: type == .prominent)
     }
     func backColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
         if type == .plain && !pressed {
@@ -230,8 +228,7 @@ struct TalerButtonStyle: ButtonStyle {
         }
         return WalletColors().buttonBackColor(pressed: pressed,
                                              disabled: disabled,
-                                            prominent: type == .prominent,
-                                              balance: type == .balance)
+                                            prominent: type == .prominent)
     }
 
     struct BackgroundView: View {
@@ -297,7 +294,7 @@ fileprivate struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let testButtonTitle = String("Placeholder")
         Button(testButtonTitle) {}
-            .buttonStyle(TalerButtonStyle(type: .balance, aligned: .trailing))
+            .buttonStyle(TalerButtonStyle(type: .bordered, aligned: .trailing))
     }
 }
 #endif

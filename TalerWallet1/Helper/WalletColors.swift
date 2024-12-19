@@ -9,7 +9,7 @@ fileprivate let grouped = true
 public struct WalletColors {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    let tint = Color(.tintColor)
+//    let tint = Color(.tintColor)
     let gray1 = Color(.systemGray)          // uncompleted
     let gray2 = Color(.systemGray2)         // disabled Fore
     let gray3 = Color(.systemGray3)
@@ -21,26 +21,26 @@ public struct WalletColors {
     let gray8 = grouped ? Color(.secondarySystemGroupedBackground)
                         : Color(.secondarySystemBackground)       // disabled Back
 
-    let attention = Color.red
-    let confirm = Color.yellow
+    let attention = Color.red       // TODO: WalletColors().errorColor
+    let confirm = Color.yellow      // TODO: WalletColors().warningColor
 
     // TODO: In Japan, negative is blue, and positive is red
     let positive = Color.green
     let negative = Color.red
 
-    func buttonForeColor(pressed: Bool, disabled: Bool,
-                       prominent: Bool = false, balance: Bool = false) -> Color {
-             balance ? Color.primary
-          : disabled ? gray2
-        : !prominent ? tint
-           : pressed ? gray6 : gray5
+    func buttonForeColor(pressed: Bool,
+                        disabled: Bool,
+                       prominent: Bool = false) -> Color {
+            disabled ? gray2
+        : !prominent ? talerColor
+           : pressed ? gray6 : Color.white
     }
 
-    func buttonBackColor(pressed: Bool, disabled: Bool,
-                       prominent: Bool = false, balance: Bool = false) -> Color {
-             balance ? (pressed ? gray5 : gray6)
-          : disabled ? gray7
-         : prominent ? tint
+    func buttonBackColor(pressed: Bool,
+                        disabled: Bool,
+                       prominent: Bool = false) -> Color {
+            disabled ? gray7
+         : prominent ? talerColor
            : pressed ? gray4 : gray5
     }
 
@@ -90,6 +90,10 @@ public struct WalletColors {
         Color("Error")
     }
 
+    var talerColor: Color {
+        Color("Taler")
+    }
+
     func pendingColor(_ incoming: Bool) -> Color {
         incoming ? Color("PendingIncoming")
                  : Color("PendingOutgoing")
@@ -99,5 +103,4 @@ public struct WalletColors {
         incoming ? Color("Incoming")
                  : Color("Outgoing")
     }
-
 }

@@ -21,7 +21,7 @@ struct WarningButton: View {
     @State private var showAlert: Bool = false
 
     var body: some View {
-        Button(role: role,
+        Button(//role: role,
              action: {
                 if !disabled {
                     if shouldShowWarning && (role == .destructive || role == .cancel) {
@@ -31,15 +31,17 @@ struct WarningButton: View {
                     }
                 }
         }) {
-            HStack(spacing: 50) {
-                Text(buttonTitle)
+            HStack(spacing: 20) {
                 if let buttonIcon {
                     Image(systemName: buttonIcon)
                 }
+                Text(buttonTitle)
             }
             .frame(maxWidth: .infinity)
+            .foregroundColor(role == .destructive ? WalletColors().errorColor
+                                                  : WalletColors().talerColor)
         }
-        .talerFont(.title2)
+        .talerFont(.title1)
         .buttonStyle(.bordered)
         .controlSize(.large)
         .disabled(disabled)
@@ -88,9 +90,9 @@ struct TransactionButton: View {
         let buttonTitle = executed ? command.localizedActionExecuted
                                    : command.localizedActionTitle
         WarningButton(warningText: warning,
-                      buttonTitle: command.localizedActionTitle,
+                      buttonTitle: buttonTitle,
                        buttonIcon: command.localizedActionImage,
-                             role: role,
+                             role: role,                                        // TODO: WalletColors().errorColor
                          disabled: $disabled,
                            action: doAction)
     }

@@ -65,7 +65,8 @@ struct ActionsSheet: View {
                 }
                 Button(action: shopAction) {
                     HStack {
-                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
+                        let talerColor = WalletColors().talerColor
+                        ButtonIconBadge(type: .payment, foreColor: talerColor, done: false)
                         Spacer()
                         Text(title)
                         Spacer()
@@ -96,6 +97,9 @@ struct DualHeightSheet: View {
     @Binding var qrButtonTapped: Bool
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
+//    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 //    @State private var sheetHeight: CGFloat = .zero
     @State private var selectedDetent: PresentationDetent = .fraction(0.1)
     @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]
@@ -116,11 +120,13 @@ struct DualHeightSheet: View {
 
     var body: some View {
         ScrollView {
+            let background = colorScheme == .dark ? WalletColors().gray6
+                                                  : WalletColors().gray2
             ActionsSheet(stack: stack.push(),
                 qrButtonTapped: $qrButtonTapped2)
             .presentationDragIndicator(.hidden)
             .presentationBackground {
-                WalletColors().gray2
+                background
                 /// overflow the bottom of the screen by a sufficient amount to fill the gap that is seen when the size changes
                     .padding(.bottom, -1000)
             }

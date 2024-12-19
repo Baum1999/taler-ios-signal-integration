@@ -34,7 +34,8 @@ struct TypeButton: View {
         let blue = debug ? Color.blue : Color.clear
         let orange = debug ? Color.orange : Color.clear
 #endif
-        let badge = ButtonIconBadge(type: type, foreColor: .accentColor, done: false)
+        let talerColor = WalletColors().talerColor
+        let badge = ButtonIconBadge(type: type, foreColor: talerColor, done: false)
         let hLayout = HStack {
             badge
             Spacer()

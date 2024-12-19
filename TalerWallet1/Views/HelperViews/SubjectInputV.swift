@@ -88,7 +88,7 @@ struct SubjectInputV<TargetView: View>: View {
 ////                Text(feeLabel)
 //            }
 //                .talerFont(.body)
-////                .foregroundColor(insufficient ? .red : WalletColors().secondary(colorScheme, colorSchemeContrast))
+// //                .foregroundColor(insufficient ? WalletColors().errorColor : WalletColors().secondary(colorScheme, colorSchemeContrast))
 //                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
 ////                .accessibility(sortPriority: 1)
 //                .padding(4)

@@ -143,7 +143,7 @@ struct ExchangeSectionView: View {
             WarningButton(warningText: warningText1,
                           buttonTitle: buttonTitle,
                            buttonIcon: "trash",
-                                 role: .destructive,
+                                 role: .destructive,                            // TODO: WalletColors().errorColor
                              disabled: $disabled,
                                action: deleteExchange)
             .padding(.top)

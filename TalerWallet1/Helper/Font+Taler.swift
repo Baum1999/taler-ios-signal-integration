@@ -172,6 +172,7 @@ extension TalerFont {   // old running
 
     static var largeTitle:  TalerFont { TalerFont(fontName, size: 34, relativeTo: .largeTitle) }  // 34 -> 38
     static var title:       TalerFont { TalerFont(fontName, size: 28, relativeTo: .title) }       // 28 -> 31
+    static var title1:      TalerFont { TalerFont(fontName, size: 24, relativeTo: .title2) }      // Destructive Buttons
     static var title2:      TalerFont { TalerFont(fontName, size: 22, relativeTo: .title2) }      // 22 -> 25
     static var title3:      TalerFont { TalerFont(fontName, size: 20, relativeTo: .title3) }      // 20 -> 23
     static var picker:      TalerFont { TalerFont(fontName, size: 18, relativeTo: .body) }        // picker uses a different size!
@@ -179,6 +180,7 @@ extension TalerFont {   // old running
     static var body:        TalerFont { TalerFont(fontName, size: 17, relativeTo: .body) }        // 17 -> 19
     static var callout:     TalerFont { TalerFont(fontName, size: 16, relativeTo: .callout) }     // 16 -> 18
     static var subheadline: TalerFont { TalerFont(fontName, size: 15, relativeTo: .subheadline) } // 15 -> 17
+    static var table:       TalerFont { TalerFont(fontName, size: 14, relativeTo: .subheadline) } // tableview uses a different size!
     static var footnote:    TalerFont { TalerFont(fontName, size: 13, relativeTo: .footnote) }    // 13 -> 15
     static var caption:     TalerFont { TalerFont(fontName, size: 12, relativeTo: .caption) }     // 12 -> 13
     static var badge:       TalerFont { TalerFont(fontName, size: 10, relativeTo: .caption) }     // 12 -> 13
