@@ -69,7 +69,8 @@ struct SelectDays: View {
                     if developerMode {
                         Text(verbatim: "1 Day")
                     } else {
-                        Text("\(THIRTYDAYS) Days", comment: "30 Days, always plural (10..30), 4 letters max., abbreviate if longer")
+                        let thirtyDays = String(localized: "thirtyDays", defaultValue: "\(THIRTYDAYS) Days", comment: "30 Days, always plural (10..30), 4 letters max., abbreviate if longer")
+                        Text(thirtyDays)
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == THIRTYDAYS) ? .prominent : .bordered, dimmed: true,
                                               disabled: !isEnabled || maxExpiration < THIRTYDAYS))
