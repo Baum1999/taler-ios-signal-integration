@@ -98,20 +98,22 @@ extension WalletModel {
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = Transaction
     func operation() -> String { "getTransactionById" }
-    func args() -> Args { Args(transactionId: transactionId) }
+    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: withTerms) }
 
     var transactionId: String
+    var withTerms: Bool?
 
     struct Args: Encodable {
         var transactionId: String
+        var includeContractTerms: Bool?
     }
 }
 
 extension WalletModel {
     /// get the specified transaction from Wallet-Core. No networking involved
-    nonisolated func getTransactionById(_ transactionId: String, viewHandles: Bool = false)
+    nonisolated func getTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> Transaction {
-        let request = GetTransactionById(transactionId: transactionId)
+        let request = GetTransactionById(transactionId: transactionId, withTerms: withTerms)
         return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }
 }
