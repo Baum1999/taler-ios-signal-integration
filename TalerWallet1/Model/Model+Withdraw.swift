@@ -235,7 +235,7 @@ fileprivate struct GetQrCodesForPayto: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
-    nonisolated func loadWithdrawalExchangeForUri(_ talerUri: String,
+    nonisolated func prepareWithdrawExchange(_ talerUri: String,
                                                  viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
