@@ -314,6 +314,8 @@
 		4EEC3A722B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */; };
 		4EED38552D140C1400F6C038 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* NavigationModel.swift */; };
 		4EED38562D140C1400F6C038 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* NavigationModel.swift */; };
+		4EED38582D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
+		4EED38592D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
 		4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF840A62A0B85F400EE0D47 /* CopyShare.swift */; };
 		4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
@@ -523,6 +525,7 @@
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
 		4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawExchangeV.swift; sourceTree = "<group>"; };
 		4EED38542D140C1400F6C038 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
+		4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEachWithIndex.swift; sourceTree = "<group>"; };
 		4EF840A62A0B85F400EE0D47 /* CopyShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyShare.swift; sourceTree = "<group>"; };
 		4EFA395F2AA7946B00742548 /* ToSButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSButtonView.swift; sourceTree = "<group>"; };
 		4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -883,6 +886,7 @@
 				4EF840A62A0B85F400EE0D47 /* CopyShare.swift */,
 				4E53A33629F50B7B00830EC2 /* CurrencyField.swift */,
 				4EA551242A2C923600FEC9A8 /* CurrencyInputView.swift */,
+				4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */,
 				4E5D2C8A2C574CB0003F7A49 /* GradientBorder.swift */,
 				4E0A71172C3AB099002485BB /* IconBadge.swift */,
 				4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */,
@@ -1240,6 +1244,7 @@
 				4E3EAE212A990778009F1BE8 /* Buttons.swift in Sources */,
 				4E3EAE222A990778009F1BE8 /* TransactionButton.swift in Sources */,
 				4EEC118D2B83DE4800146CFF /* AmountInputV.swift in Sources */,
+				4EED38582D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */,
 				4E77976F2C4BEA4E005D6ECB /* BalanceCellV.swift in Sources */,
 				4E3EAE232A990778009F1BE8 /* BalancesSectionView.swift in Sources */,
 				4E3EAE242A990778009F1BE8 /* QRGeneratorView.swift in Sources */,
@@ -1380,6 +1385,7 @@
 				4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */,
 				4EBA82AB2A3EB2CA00E5F39A /* TransactionButton.swift in Sources */,
 				4EEC118E2B83DE4800146CFF /* AmountInputV.swift in Sources */,
+				4EED38592D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */,
 				4E7797702C4BEA4E005D6ECB /* BalanceCellV.swift in Sources */,
 				4EB095602989CBFE0043A8A1 /* BalancesSectionView.swift in Sources */,
 				4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */,
