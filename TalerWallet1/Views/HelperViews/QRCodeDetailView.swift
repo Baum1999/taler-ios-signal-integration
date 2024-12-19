@@ -42,7 +42,7 @@ struct QRCodeDetailView: View {
                            defaultValue: "Requesting \(amountS)",
                                 comment: "e.g. '5,3 €'")
                      : String(localized: "(payer) 1",
-                           defaultValue: "To receive \(amountS), have the payer scan this QR code to complete the payment.",
+                           defaultValue: "Scan this QR code to pay \(amountS)",
                                 comment: "e.g. '5,3 €'")
     }
     private func sending(_ amountS: String) -> String {
@@ -50,7 +50,7 @@ struct QRCodeDetailView: View {
                            defaultValue: "Sending \(amountS)",
                                 comment: "e.g. '$ 7.41'")
                      : String(localized: "(payee) 1",
-                           defaultValue: "To send \(amountS), let the payee scan this QR code to accept/receive the payment.",
+                           defaultValue: "Scan this QR code to receive \(amountS)",
                                 comment: "e.g. '$ 7.41'")
     }
 
