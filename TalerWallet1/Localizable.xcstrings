@@ -723,7 +723,7 @@
       }
     },
     "%llu Days" : {
-      "comment" : "30 Days, always plural (10..30), 4 letters max., abbreviate if longer\n7 Days, always plural (3..9), 4 letters max., abbreviate if longer",
+      "comment" : "7 Days, always plural (3..9), 4 letters max., abbreviate if longer",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1353,7 +1353,7 @@
       }
     },
     "Add bank account" : {
-      "comment" : "VoiceOver for the + button\ntitle of the addExchange alert",
+      "comment" : "VoiceOver for the + button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1370,7 +1370,7 @@
       }
     },
     "Add payment service" : {
-      "comment" : "VoiceOver for the + button\ntitle of the addExchange alert",
+      "comment" : "VoiceOver for the + button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2846,7 +2846,7 @@
       }
     },
     "Deposit" : {
-      "comment" : "RefreshReason\nTransactionType",
+      "comment" : "TransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6889,7 +6889,7 @@
       }
     },
     "Recoup" : {
-      "comment" : "RefreshReason\nTransactionType",
+      "comment" : "TransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6958,7 +6958,7 @@
       }
     },
     "Refund" : {
-      "comment" : "RefreshReason\nTransactionType",
+      "comment" : "TransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8465,6 +8465,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "У вашому гаманці немає електронних грошей."
+          }
+        }
+      }
+    },
+    "thirtyDays" : {
+      "comment" : "30 Days, always plural (10..30), 4 letters max., abbreviate if longer",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%llu Days"
           }
         }
       }
