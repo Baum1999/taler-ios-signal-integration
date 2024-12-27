@@ -15,6 +15,12 @@
             "value" : "- %@ comisión"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- %@ prowizja"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36,6 +42,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ", cancelado"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", anulowany"
           }
         },
         "uk" : {
@@ -61,6 +73,12 @@
             "value" : ". Necesita autorización bancaria"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Wymaga autoryzacji bankowej"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -82,6 +100,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ". Necesita confirmación bancaria"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Wymaga potwierdzenia bankowego"
           }
         },
         "uk" : {
@@ -107,6 +131,12 @@
             "value" : ". Necesita K Y C"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Wymaga K Y C"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -121,8 +151,8 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Senden von %@ - lassen Sie den Empfänger den QR Code scannen um Ihre Zahlung erhalten."
+            "state" : "translated",
+            "value" : "Scannen Sie diesen QR-Code, um %@ zu erhalten."
           }
         },
         "en" : {
@@ -135,6 +165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escanea este código QR para recibir %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanuj ten kod QR, aby otrzymać %@"
           }
         }
       }
@@ -160,6 +196,12 @@
             "state" : "translated",
             "value" : "Enviando %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wysyłanie %@"
+          }
         }
       }
     },
@@ -169,8 +211,8 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Um %@ zu erhalten, lassen Sie den Zahler diesen QR-Code scannen."
+            "state" : "translated",
+            "value" : "Scannen Sie diesen QR-Code, um  %@ zu bezahlen."
           }
         },
         "en" : {
@@ -183,6 +225,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escanea este código QR para pagar %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanuj ten kod QR, aby zapłacić %@"
           }
         }
       }
@@ -208,6 +256,12 @@
             "state" : "translated",
             "value" : "Solicitando %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądaj %@"
+          }
         }
       }
     },
@@ -223,6 +277,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Alternativa:** Si tu banco ya soporta PayTo, puedes usar este PayTo-Link:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternatywa:** Jeśli twój bank już obsługuje PayTo, możesz użyć ten PayTo-Link:"
           }
         },
         "uk" : {
@@ -247,6 +307,12 @@
             "value" : "**Alternativa:** Usar este enlace PayTo:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternatywa:** Użyj tego PayTo-Link:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -269,6 +335,12 @@
             "value" : "**Paso 1:** Copia este código y pégalo en el campo asunto de tu aplicación bancaria:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 1:** Skopiuj ten kod i wklej go w polu tematu/celu w aplikacji bankowej lub na stronie internetowej banku:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -289,6 +361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 1:** Copia y pega este asunto:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 1:** Kopiuj+Wklej ten temat:"
           }
         },
         "uk" : {
@@ -334,6 +412,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y la cuenta en los campos correspondientes en tu aplicación bancaria o sitio web bancario:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 2:** Skopiuj i wklej odbiorcę i konto do odpowiednich pól w aplikacji bankowej lub na stronie internetowej:"
           }
         }
       }
@@ -397,6 +481,12 @@
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y cuenta:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 2:** Kopiuj+Wklej odbiorcę i konto:"
+          }
         }
       }
     },
@@ -412,6 +502,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario e IBAN:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 2:** Kopiuj+Wklej odbiorcę i IBAN:"
           }
         }
       }
@@ -452,6 +548,12 @@
             "state" : "translated",
             "value" : "**Paso 2:** Si todavía no la tienes en tu lista de favoritos, entonces copia y pega el beneficiario e IBAN en los campos correspondientes en tu aplicación bancaria (y guárdalos en favoritos para la próxima vez):"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 2:** Jeśli nie masz go jeszcze na liście ulubionych w swojej bankowości, skopiuj i wklej odbiorcę i IBAN w polach odbiorcy/IBAN w aplikacji bankowej lub na stronie internetowej (i zapisz go jako ulubiony do następnego razu):"
+          }
         }
       }
     },
@@ -467,6 +569,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 3:** "
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 3:** "
           }
         }
       }
@@ -531,6 +639,12 @@
             "state" : "translated",
             "value" : "%@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
         }
       }
     },
@@ -546,6 +660,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ comisión"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ prowizja"
           }
         },
         "uk" : {
@@ -570,6 +690,12 @@
             "state" : "translated",
             "value" : "%@:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@:"
+          }
         }
       }
     },
@@ -585,6 +711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld caracteres de 100"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld znaków z 100"
           }
         },
         "uk" : {
@@ -609,6 +741,12 @@
             "value" : "hace %lld días"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld dni temu"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -629,6 +767,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace %lld horas"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld godzin temu"
           }
         },
         "uk" : {
@@ -652,6 +796,12 @@
             "state" : "translated",
             "value" : "hace %lld min"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min temu"
+          }
         }
       }
     },
@@ -667,6 +817,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace %lld minutos"
+          }
+        },
+        "pl" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld minuty temu"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld minut temu"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld minutę temu"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld minut temu"
+                }
+              }
+            }
           }
         },
         "uk" : {
@@ -691,6 +871,12 @@
             "value" : "%lld años"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld lat"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -712,6 +898,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu día"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Dzień"
           }
         },
         "uk" : {
@@ -747,6 +939,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu días"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Dni"
           }
         },
         "uk" : {
@@ -795,6 +993,12 @@
             "value" : "+ %@ de comisión"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ prowizja"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -816,6 +1020,12 @@
             "state" : "translated",
             "value" : "hace ~1 hora"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~ 1 godzinę temu"
+          }
         }
       }
     },
@@ -831,6 +1041,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace ~1½ hora"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~ 1½ godziny temu"
           }
         }
       }
@@ -848,6 +1064,12 @@
             "state" : "translated",
             "value" : "hace ~2 horas"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~ 2 godziny temu"
+          }
         }
       }
     },
@@ -863,6 +1085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace 1 hora"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 godzinę temu"
           }
         },
         "uk" : {
@@ -886,6 +1114,12 @@
             "state" : "translated",
             "value" : "hace 1 min"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 min temu"
+          }
         }
       }
     },
@@ -901,6 +1135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace 1 minuto"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 minutę temu"
           }
         },
         "uk" : {
@@ -925,6 +1165,12 @@
             "state" : "translated",
             "value" : "Cancelar"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwij"
+          }
         }
       }
     },
@@ -941,6 +1187,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detener deposito"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwij wpłatę"
           }
         },
         "uk" : {
@@ -990,6 +1242,12 @@
             "value" : "Detener pago"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwanie płatności"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1012,6 +1270,12 @@
             "state" : "translated",
             "value" : "Detener envío"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwij wysyłanie"
+          }
         }
       }
     },
@@ -1027,6 +1291,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Acerca de %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info o %@"
           }
         },
         "uk" : {
@@ -1051,6 +1321,12 @@
             "value" : "Hace 1½ horas"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Około 1½ godziny temu"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1073,6 +1349,12 @@
             "value" : "HAce 2 horas"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Około 2 godziny temu"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1093,6 +1375,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hace una hora"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Około godzinę temu"
           }
         },
         "uk" : {
@@ -1139,6 +1427,12 @@
             "state" : "translated",
             "value" : "Aceptar y recibir"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akceptuj i odbieraj"
+          }
         }
       }
     },
@@ -1180,6 +1474,12 @@
             "value" : "Aceptar términos de servicio"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaakceptuj warunki korzystania z usługi"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1202,6 +1502,12 @@
             "state" : "translated",
             "value" : "Aceptando…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akceptowanie..."
+          }
         }
       }
     },
@@ -1218,6 +1524,12 @@
             "state" : "translated",
             "value" : "Beneficiario"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Właściciel konta"
+          }
         }
       }
     },
@@ -1233,6 +1545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beneficiario:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Właściciel konta:"
           }
         },
         "uk" : {
@@ -1281,6 +1599,12 @@
             "state" : "translated",
             "value" : "cuenta del beneficiario"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "konto odbiorcy"
+          }
         }
       }
     },
@@ -1296,6 +1620,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuenta:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto:"
           }
         },
         "uk" : {
@@ -1327,6 +1657,12 @@
             "state" : "translated",
             "value" : "Olvidar cuenta bancaria"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapomnij o koncie bankowym"
+          }
         }
       }
     },
@@ -1356,6 +1692,12 @@
             "value" : "Añadir"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1378,6 +1720,12 @@
             "state" : "translated",
             "value" : "Añadir cuenta bancaria"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj konto bankowe"
+          }
         }
       }
     },
@@ -1394,6 +1742,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Añadir proveedor de servicio"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj usługę płatności"
           }
         }
       }
@@ -1458,6 +1812,12 @@
             "state" : "translated",
             "value" : "Dirección del servicio de pagos"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adres serwisu płatności"
+          }
         }
       }
     },
@@ -1475,6 +1835,12 @@
             "state" : "translated",
             "value" : "Ya fue pagado"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Już zapłacone"
+          }
         }
       }
     },
@@ -1490,6 +1856,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto disponible:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępna kwota:"
           }
         },
         "uk" : {
@@ -1512,6 +1884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wykorzystania:"
           }
         },
         "uk" : {
@@ -1537,6 +1915,12 @@
             "value" : "Monto a depositar:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wpłaty:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1557,6 +1941,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a obtener:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do otrzymania:"
           }
         },
         "uk" : {
@@ -1582,6 +1972,12 @@
             "value" : "Monto a pagar:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do zapłaty:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1603,6 +1999,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a solicitar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do zażądania:"
           }
         },
         "uk" : {
@@ -1628,6 +2030,12 @@
             "value" : "Monto a envíar:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wysłania:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1648,6 +2056,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wykorzystania:"
           }
         },
         "uk" : {
@@ -1672,6 +2086,12 @@
             "state" : "translated",
             "value" : "Monto a transferir"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do przelewu"
+          }
         }
       }
     },
@@ -1688,6 +2108,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a retirar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wypłacenia:"
           }
         },
         "uk" : {
@@ -1710,6 +2136,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto demasiado grande para un solo retiro"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota za duża na pojedynczą wypłatę!"
           }
         },
         "uk" : {
@@ -1757,6 +2189,12 @@
             "value" : "Monto:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1777,6 +2215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versión de la aplicación"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wersja aplikacji"
           }
         },
         "uk" : {
@@ -1801,6 +2245,12 @@
             "value" : "¿Seguro que deseas abandonar esta transacción?"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz zrezygnować z tej transakcji?"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1821,6 +2271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¿Seguro que deseas cancelar esta transacción?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz przerwać tę transakcję?"
           }
         },
         "uk" : {
@@ -1855,6 +2311,12 @@
             "state" : "translated",
             "value" : "¿Seguro que deseas eliminar este proveedor de servicio?"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz usunąć tę usługę płatności?"
+          }
         }
       }
     },
@@ -1870,6 +2332,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¿Seguro que deseas eliminar esta transacción?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz usunąć tą transakcję?"
           }
         },
         "uk" : {
@@ -1893,6 +2361,12 @@
             "state" : "translated",
             "value" : "¿Seguro que deseas olvidar esta cuenta bancaria?"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz zapomnieć o tym koncie bankowym?"
+          }
         }
       }
     },
@@ -1909,6 +2383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorizar en el banco"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzuj w banku"
           }
         },
         "uk" : {
@@ -1933,6 +2413,12 @@
             "value" : "Autorizar después"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzuj później"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1953,6 +2439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar ahora"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzuj teraz"
           }
         },
         "uk" : {
@@ -1976,6 +2468,12 @@
             "state" : "translated",
             "value" : "Disponible para transferir: %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne do transferu: %@"
+          }
         }
       }
     },
@@ -1992,6 +2490,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Disponible:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne:"
           }
         },
         "uk" : {
@@ -2038,6 +2542,12 @@
             "state" : "translated",
             "value" : "Disponible: %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne: %@"
+          }
         }
       }
     },
@@ -2054,6 +2564,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Respaldo restaurado"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywrócono kopię zapasową"
           }
         },
         "uk" : {
@@ -2077,6 +2593,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saldo:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilans:"
           }
         },
         "uk" : {
@@ -2112,6 +2634,12 @@
             "value" : "Banco"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2133,6 +2661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorización bancaria"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja bankowa"
           }
         }
       }
@@ -2197,6 +2731,12 @@
             "state" : "translated",
             "value" : "Cámara activada"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera aktywna"
+          }
         }
       }
     },
@@ -2212,6 +2752,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj"
           }
         },
         "uk" : {
@@ -2236,6 +2782,12 @@
             "value" : "Verificando enlace"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdzanie linku"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2256,6 +2808,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Selecciona un periodo de expiración"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz okres wygaśnięcia"
           }
         },
         "uk" : {
@@ -2280,6 +2838,12 @@
             "state" : "translated",
             "value" : "Selecciona el servicio de pagos:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz usługę płatności:"
+          }
         }
       }
     },
@@ -2295,6 +2859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto de retiro seleccionado:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrana kwota do wypłaty:"
           }
         },
         "uk" : {
@@ -2320,6 +2890,12 @@
             "value" : "Seleccionado:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrane:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2340,6 +2916,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zamknij"
           }
         },
         "uk" : {
@@ -2365,6 +2947,12 @@
             "value" : "Cerrando cámara"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zameknięcie kamery"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2386,6 +2974,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar pago"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdź płatność"
           }
         },
         "uk" : {
@@ -2410,6 +3004,12 @@
             "value" : "Confirmar retiro"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdzenie wycofania"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2431,6 +3031,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmación:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdzenie:"
           }
         },
         "uk" : {
@@ -2479,6 +3085,12 @@
             "value" : "Copiar la cuenta"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj konto"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2501,6 +3113,12 @@
             "state" : "translated",
             "value" : "Copiar el monto"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj kwotę"
+          }
         }
       }
     },
@@ -2517,6 +3135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el cryptocode"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj kryptokod"
           }
         },
         "uk" : {
@@ -2542,6 +3166,12 @@
             "value" : "Copiar el error"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj błąd"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2562,6 +3192,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el error JSON"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj błędny JSON "
           }
         },
         "uk" : {
@@ -2585,6 +3221,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el IBAN"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj numer IBAN"
           }
         },
         "uk" : {
@@ -2633,6 +3275,12 @@
             "state" : "translated",
             "value" : "Copiar el beneficiario"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj odbiorcę"
+          }
         }
       }
     },
@@ -2656,6 +3304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiuj"
           }
         },
         "uk" : {
@@ -2688,6 +3342,12 @@
             "value" : "Copiar"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiuj"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2709,6 +3369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cryptocode"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kryptokod"
           }
         },
         "uk" : {
@@ -2767,6 +3433,12 @@
             "value" : "Monto personalizado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota indywidualna"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2790,6 +3462,12 @@
             "value" : "Descripción personalizada"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowanie indywidualne"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2810,6 +3488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eliminar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń"
           }
         }
       }
@@ -2838,6 +3522,12 @@
             "state" : "translated",
             "value" : "Pistas de demostración"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wskazówki demo"
+          }
         }
       }
     },
@@ -2853,6 +3543,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Demo: recibir dinero digital para experimentar cómo pagar con el dinero del futuro."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo: pobierz cyfrową gotówkę, aby przekonać się, jak płacić pieniędzmi przyszłości."
           }
         },
         "uk" : {
@@ -2876,6 +3572,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depósito"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depozyt"
           }
         },
         "uk" : {
@@ -2949,6 +3651,12 @@
             "value" : "Depositar:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depozyt:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2979,6 +3687,12 @@
             "value" : "Depositar"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depozyt"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3001,6 +3715,12 @@
             "state" : "translated",
             "value" : "Depositando…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deponowanie..."
+          }
         }
       }
     },
@@ -3016,6 +3736,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de deserialización"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd deserializacji"
           }
         },
         "uk" : {
@@ -3040,6 +3766,12 @@
             "value" : "Finalizar"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakończyć"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3062,6 +3794,12 @@
             "state" : "translated",
             "value" : "Doble toque para editar la cuenta"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij dwukrotnie, aby edytować konto"
+          }
         }
       }
     },
@@ -3079,6 +3817,12 @@
             "state" : "translated",
             "value" : "Doble toque para seleccionar"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij dwukrotnie, aby wybrać"
+          }
         }
       }
     },
@@ -3095,6 +3839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Efectivo:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skuteczne:"
           }
         },
         "uk" : {
@@ -3496,6 +4246,12 @@
             "state" : "translated",
             "value" : "habilitado cuando el monto no es cero"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "włączone, gdy kwota jest niezerowa"
+          }
         }
       }
     },
@@ -3512,6 +4268,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "habilitado cuando el monto no es cero ni más alto que el monto disponible"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "włączona, gdy kwota jest niezerowa, ale nie wyższa niż dostępna kwota"
           }
         },
         "uk" : {
@@ -3537,6 +4299,12 @@
             "value" : "habilitado cuando el asunto y la expiración estan completos"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "włączone, gdy ustawiono temat i wygaśnięcie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3558,6 +4326,12 @@
             "state" : "translated",
             "value" : "Ingresa el asunto:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz temat:"
+          }
         }
       }
     },
@@ -3573,6 +4347,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingresa el asunto:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz temat:"
           }
         },
         "uk" : {
@@ -3596,6 +4376,12 @@
             "state" : "translated",
             "value" : "Ingrese la URL"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz adres URL"
+          }
         }
       }
     },
@@ -3611,6 +4397,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd"
           }
         },
         "uk" : {
@@ -3635,6 +4427,12 @@
             "state" : "translated",
             "value" : "Error al escanear el código QR"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd podczas skanowania kodu QR"
+          }
         }
       }
     },
@@ -3658,6 +4456,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comisión:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowizja:"
           }
         },
         "uk" : {
@@ -3690,6 +4494,12 @@
             "value" : "Comisión:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowizja:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3719,6 +4529,12 @@
             "state" : "translated",
             "value" : "Eliminar servicio de pagos"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń usługę płatności"
+          }
         }
       }
     },
@@ -3734,6 +4550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expira en:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wygasa w:"
           }
         },
         "uk" : {
@@ -3759,6 +4581,12 @@
             "value" : "Expira: %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wygasa: %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3780,6 +4608,12 @@
             "state" : "translated",
             "value" : "Explicar el botón de acciones"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przycisk do wyjaśnienia akcji"
+          }
         }
       }
     },
@@ -3796,6 +4630,12 @@
             "state" : "translated",
             "value" : "Finaliza la transferencia bancaria de %@ en tu aplicación bancaria o sitio web bancario, y entonces el retiro procederá automáticamente. Dependiendo de tu banco, la transferencia puede durar desde minutos hasta dos días hábiles, favor de tener paciencia."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokończ przelew w wysokości %@ w aplikacji bankowej lub na stronie internetowej, a wypłata nastąpi automatycznie. W zależności od banku przelew może potrwać od kilku minut do dwóch dni roboczych, prosimy o cierpliwość."
+          }
         }
       }
     },
@@ -3811,6 +4651,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para los botones Borrar, Fallar & Detener"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dla przycisków Usuń, Porzuć i Przerwij"
           }
         },
         "uk" : {
@@ -3836,6 +4682,12 @@
             "value" : "desde %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "z %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3858,6 +4710,12 @@
             "value" : "Monto bruto a recibir:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota brutto do otrzymania:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3878,6 +4736,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Respuesta háptica"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptyka"
           }
         },
         "uk" : {
@@ -3926,6 +4790,12 @@
             "state" : "translated",
             "value" : "IBAN del beneficiario"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN odbiorcy"
+          }
         }
       }
     },
@@ -3938,6 +4808,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN:"
+          }
+        },
+        "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "IBAN:"
@@ -3976,6 +4852,12 @@
             "value" : "Si esta billetera pertenece a un niño/a o adolescente, el dinero electrónico generado deberá tener restricción de edad:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeśli portfel należy do dziecka lub nastolatka, wygenerowana elektroniczna gotówka powinna być ograniczona wiekowo:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3997,6 +4879,12 @@
             "state" : "translated",
             "value" : "Si cambias el nombre del beneficiario o el IBAN, es posible que tengas que realizar la verificación KYC nuevamente."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W przypadku zmiany nazwy posiadacza konta lub numeru IBAN konieczne może być ponowne przeprowadzenie procedury KYC."
+          }
         }
       }
     },
@@ -4012,6 +4900,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Si tu software bancario corre en otro dispositivo, puedes escanear uno de los siguientes códigos QR:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeśli Twoje oprogramowanie bankowe działa na innym urządzeniu, możesz zeskanować jeden z tych kodów QR:"
           }
         },
         "uk" : {
@@ -4037,6 +4931,12 @@
             "value" : "En progreso"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W trakcie realizacji"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4057,6 +4957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de inicialización"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd inicjalizacji"
           }
         },
         "uk" : {
@@ -4081,6 +4987,12 @@
             "value" : "Instrucciones"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instrukcje"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4101,6 +5013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Código de error interno"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd wewnętrzny rdzenia"
           }
         },
         "uk" : {
@@ -4142,6 +5060,12 @@
             "value" : "KYC"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KYC"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4163,6 +5087,12 @@
             "state" : "translated",
             "value" : "Nota"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etykieta"
+          }
         }
       }
     },
@@ -4179,6 +5109,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lenguaje:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Język:"
           }
         },
         "uk" : {
@@ -4210,6 +5146,12 @@
             "value" : "Sitio web del banco demostrativo"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo Strony Internetowej Banku "
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4237,6 +5179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gastar dinero de prueba"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wydaj pieniądze demo"
           }
         },
         "uk" : {
@@ -4268,6 +5216,12 @@
             "value" : "Obtener dinero de prueba"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zdobądź pieniądze demo"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4290,6 +5244,12 @@
             "value" : "Estilo de la lista:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styl listy:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4310,6 +5270,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cargando…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ładowanie..."
           }
         },
         "uk" : {
@@ -4335,6 +5301,12 @@
             "value" : "Perdido:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaginiony:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4355,6 +5327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu principal"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu główne"
           }
         },
         "uk" : {
@@ -4387,6 +5365,12 @@
             "value" : "Cancelado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwane"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4415,6 +5399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelando"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerywanie"
           }
         },
         "uk" : {
@@ -4447,6 +5437,12 @@
             "value" : "Borrado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunięte"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4475,6 +5471,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diálogo"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dialog"
           }
         },
         "uk" : {
@@ -4507,6 +5509,12 @@
             "value" : "Terminado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykonane"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4535,6 +5543,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expirado"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wygasł"
           }
         },
         "uk" : {
@@ -4567,6 +5581,12 @@
             "value" : "Abandonado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odrzucone"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -4597,6 +5617,12 @@
             "value" : "Finalizando"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizowanie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4625,6 +5651,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pendiente"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W oczekiwaniu"
           }
         },
         "uk" : {
@@ -4671,6 +5703,12 @@
             "state" : "translated",
             "value" : "Gestionar servicios de pago"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zarządzaj usługami płatniczymi..."
+          }
         }
       }
     },
@@ -4687,6 +5725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comerciante"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handlarz"
           }
         },
         "uk" : {
@@ -4709,6 +5753,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimalista"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimalistyczne"
           }
         },
         "uk" : {
@@ -4741,6 +5791,12 @@
             "value" : "Requiere AML"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagany AML"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4769,6 +5825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando la transferencia bancaria"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekiwanie na przelew bankowy"
           }
         },
         "uk" : {
@@ -4801,6 +5863,12 @@
             "value" : "Requiere KYC"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagany KYC"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4822,6 +5890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero perdido"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pieniądze utracone"
           }
         },
         "uk" : {
@@ -4846,6 +5920,12 @@
             "value" : "Dinero perdido:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pieniądze utracone:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4868,6 +5948,12 @@
             "state" : "translated",
             "value" : "Dinero recibido"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymane pieniądze"
+          }
         }
       }
     },
@@ -4884,6 +5970,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero solicitado"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądane pieniądze"
           }
         }
       }
@@ -4902,6 +5994,12 @@
             "state" : "translated",
             "value" : "Dinero enviado"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pieniądze wysłane"
+          }
         }
       }
     },
@@ -4917,6 +6015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Más información acerca de GNU Taler en general..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Więcej informacji o GNU Taler..."
           }
         },
         "uk" : {
@@ -4941,6 +6045,12 @@
             "value" : "Más información acerca de esta aplicación..."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Więcej informacji o tej aplikacji..."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4961,6 +6071,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hace más de una semana"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponad tydzień temu"
           }
         },
         "uk" : {
@@ -4991,6 +6107,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depositar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depozyt"
           }
         }
       }
@@ -5047,6 +6169,12 @@
             "value" : "Depositar %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depozyt %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -5076,6 +6204,12 @@
             "state" : "translated",
             "value" : "Seleccionar cuenta"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz konto"
+          }
         }
       }
     },
@@ -5100,6 +6234,12 @@
             "state" : "translated",
             "value" : "Solicitar"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie"
+          }
         }
       }
     },
@@ -5123,6 +6263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedir %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie %@"
           }
         },
         "uk" : {
@@ -5155,6 +6301,12 @@
             "value" : "Pedir %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5184,6 +6336,12 @@
             "state" : "translated",
             "value" : "Enviar"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij"
+          }
         }
       }
     },
@@ -5207,6 +6365,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviar %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij %@"
           }
         },
         "uk" : {
@@ -5239,6 +6403,12 @@
             "value" : "Enviar %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5267,6 +6437,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retirar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłać"
           }
         }
       }
@@ -5352,6 +6528,12 @@
             "state" : "translated",
             "value" : "Retirar %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłać %@"
+          }
         }
       }
     },
@@ -5367,6 +6549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto neto a recibir:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota netto do otrzymania:"
           }
         },
         "uk" : {
@@ -5392,6 +6580,12 @@
             "value" : "Siguiente"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Następne"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5413,6 +6607,12 @@
             "state" : "translated",
             "value" : "No hay saldos. Parece ser un problema con la base de datos…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak bilansu. Wygląda na to, że wystąpił problem z bazą danych..."
+          }
         }
       }
     },
@@ -5428,6 +6628,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin baseUrl"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak podstawowegoURL"
           }
         }
       }
@@ -5445,6 +6651,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin fecha"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak daty"
           }
         },
         "uk" : {
@@ -5467,6 +6679,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin comisión"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bez prowizji "
           }
         }
       }
@@ -5508,6 +6726,12 @@
             "state" : "translated",
             "value" : "Sin servicio de pago"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak usługi płatności"
+          }
         }
       }
     },
@@ -5524,6 +6748,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin servicio de pago…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak usługi płatności…"
           }
         }
       }
@@ -5565,6 +6795,12 @@
             "state" : "translated",
             "value" : "sin verificación"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "jeszcze nie zweryfikowano"
+          }
         }
       }
     },
@@ -5604,6 +6840,12 @@
             "value" : "Note: puede tomar algo más de tiempo preparar este monto, favor de tener paciencia"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uwaga: przygotowanie tej ilości zajmie sporo czasu! Bądź bardziej cierpliwy..."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5624,6 +6866,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nota: puede tomar algo de tiempo preparar este monto, favor de tener paciencia."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uwaga: Przygotowanie tej kwoty zajmie trochę czasu. Bądź cierpliwy..."
           }
         },
         "uk" : {
@@ -5647,6 +6895,12 @@
             "state" : "translated",
             "value" : "Ahora"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teraz"
+          }
         }
       }
     },
@@ -5662,6 +6916,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Observar wallet-core"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obserwuj walletCore"
           }
         },
         "uk" : {
@@ -5687,6 +6947,12 @@
             "value" : "Obtener:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymać:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5707,6 +6973,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto obtenido:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymana kwota:"
           }
         },
         "uk" : {
@@ -5732,6 +7004,12 @@
             "value" : "Obtenido:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymano:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5749,6 +7027,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -5776,6 +7060,12 @@
             "value" : "Omitir texto cuando sea posible"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomiń tekst tam, gdzie to możliwe"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5796,6 +7086,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "en LocalConsole"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "w LocalConsole"
           }
         },
         "uk" : {
@@ -5819,6 +7115,12 @@
             "state" : "translated",
             "value" : "Incorporación"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wdrażanie"
+          }
         }
       }
     },
@@ -5834,6 +7136,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir sitio web KYC"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz stronę KYC"
           }
         },
         "uk" : {
@@ -5858,6 +7166,12 @@
             "value" : "Abrir sitio web del comerciante"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz stronę sprzedawcy"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5878,6 +7192,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir Configuración"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz ustawienia"
           }
         },
         "uk" : {
@@ -5903,6 +7223,12 @@
             "value" : "Abrir Camara"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwieranie kamery"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5923,6 +7249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ID de orden:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identyfikator zamówienia:"
           }
         },
         "uk" : {
@@ -5994,6 +7326,12 @@
             "value" : "Pagado"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłacone"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6014,6 +7352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pagado:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłacona kwota:"
           }
         },
         "uk" : {
@@ -6087,6 +7431,12 @@
             "value" : "Pagado:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłacone:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6107,6 +7457,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar %@ ahora"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłać %@ teraz"
           }
         },
         "uk" : {
@@ -6156,6 +7512,12 @@
             "value" : "Pagar Peer-Pull"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płatność Peer-Pull"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6177,6 +7539,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar Peer-Push"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płatność Peer-Push"
           }
         },
         "uk" : {
@@ -6202,6 +7570,12 @@
             "value" : "Solicitud de pago"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie zapłaty"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6223,6 +7597,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłać:"
           }
         },
         "uk" : {
@@ -6294,6 +7674,12 @@
             "state" : "translated",
             "value" : "Pagando…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płacenie..."
+          }
         }
       }
     },
@@ -6310,6 +7696,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pago"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płatność"
           }
         },
         "uk" : {
@@ -6332,6 +7724,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El pago se hace en %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płatność jest dokonywana w %@"
           }
         },
         "uk" : {
@@ -6378,6 +7776,12 @@
             "state" : "translated",
             "value" : "Servicio de pagos:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługa płatności:"
+          }
         }
       }
     },
@@ -6394,6 +7798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pendiente"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W toku"
           }
         },
         "uk" : {
@@ -6416,6 +7826,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pendiente a obtener:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekująca kwota do uzyskania:"
           }
         },
         "uk" : {
@@ -6441,6 +7857,12 @@
             "value" : "Pendiente:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W toku:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6463,6 +7885,12 @@
             "value" : "Reproducir sonidos de pago"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odtwórz dźwięki płatności"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6483,6 +7911,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Por favor permita el acceso a la cámara desde configuración."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zezwól na dostęp do kamery w ustawieniach."
           }
         },
         "uk" : {
@@ -6530,6 +7964,12 @@
             "value" : "Precio (neto):"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cena (netto):"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6551,6 +7991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Precio:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cena:"
           }
         },
         "uk" : {
@@ -6575,6 +8021,12 @@
             "value" : "Indicador de progreso"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wskaźnik postępu"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6592,6 +8044,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        },
+        "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR"
@@ -6619,6 +8077,12 @@
             "value" : "Código QR"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod QR"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6639,6 +8103,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El código QR y el link también pueden ser escaneados o copiados / compartidos desde Transacciones después."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod QR i link można również zeskanować lub skopiować / udostępnić później z Transakcji."
           }
         },
         "uk" : {
@@ -6663,6 +8133,12 @@
             "state" : "translated",
             "value" : "Se reconoció un código QR"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod QR rozpoznany"
+          }
         }
       }
     },
@@ -6678,6 +8154,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Listo"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowe"
           }
         }
       }
@@ -6696,6 +8178,12 @@
             "state" : "translated",
             "value" : "Recibir"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymać"
+          }
         }
       }
     },
@@ -6712,6 +8200,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recibir (bruto):"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymanie kwoty brutto:"
           }
         },
         "uk" : {
@@ -6737,6 +8231,12 @@
             "value" : "Recibir Dinero"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymanie pieniędzy"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6760,6 +8260,12 @@
             "value" : "Recibir (neto):"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymanie netto:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6781,6 +8287,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recibido"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otrzymane"
           }
         }
       }
@@ -6848,6 +8360,12 @@
             "value" : "Transacciones recientes"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnia transakcja"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6869,6 +8387,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transacciones recientes"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnie transakcje"
           }
         },
         "uk" : {
@@ -6893,6 +8417,12 @@
             "state" : "translated",
             "value" : "Beneficiario"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odbiorca"
+          }
         }
       }
     },
@@ -6908,6 +8438,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beneficiario:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odbiorca:"
           }
         }
       }
@@ -6925,6 +8461,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compensación"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odzysk"
           }
         },
         "uk" : {
@@ -6950,6 +8492,12 @@
             "value" : "Compensación:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odzysk:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6971,6 +8519,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actualización"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odśwież"
           }
         },
         "uk" : {
@@ -6996,6 +8550,12 @@
             "value" : "Devolución"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwrot"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7016,6 +8576,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto devuelto:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwrócona kwota:"
           }
         },
         "uk" : {
@@ -7041,6 +8607,12 @@
             "value" : "Devuelto:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwrócone:"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7061,6 +8633,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recargar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponowne ładowanie"
           }
         },
         "uk" : {
@@ -7086,6 +8664,12 @@
             "value" : "Solicitar %@"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie %@"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7109,6 +8693,12 @@
             "value" : "Monto solicitado:"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie pieniędzy"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7130,6 +8720,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Solicitud pagada"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie opłacone"
           }
         }
       }
@@ -7180,6 +8776,12 @@
             "value" : "Solicitar"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7225,6 +8827,12 @@
             "state" : "translated",
             "value" : "Solicitado con GNU Taler"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądane przy użyciu GNU TALER"
+          }
         }
       }
     },
@@ -7240,6 +8848,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restaurar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zresetuj"
           }
         },
         "uk" : {
@@ -7264,6 +8878,12 @@
             "value" : "Restaurar billetera"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zresetuj portfel"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7284,6 +8904,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restricción:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ograniczenia:"
           }
         },
         "uk" : {
@@ -7308,6 +8934,12 @@
             "value" : "Ahora mismo"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W tej chwili"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7328,6 +8960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Guardar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisz"
           }
         },
         "uk" : {
@@ -7353,6 +8991,12 @@
             "value" : "Scan QR"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanuj QR"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7374,6 +9018,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escanear código QR"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanuj kod QR"
           }
         }
       }
@@ -7416,6 +9066,12 @@
             "value" : "Escanear códigos QR requiere acceso a la cámara"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanowanie kodu QR wymaga dostępu do kamery"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7438,6 +9094,12 @@
             "state" : "translated",
             "value" : "Escaneando…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skanowanie..."
+          }
         }
       }
     },
@@ -7454,6 +9116,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Programado"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaplanowane"
           }
         },
         "uk" : {
@@ -7478,6 +9146,12 @@
             "value" : "Desplazar hacia abajo"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przewiń w dół"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7498,6 +9172,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desplazar hacia arriba"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przewiń w górę"
           }
         },
         "uk" : {
@@ -7521,6 +9201,12 @@
             "state" : "translated",
             "value" : "segundos"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sekundy"
+          }
         }
       }
     },
@@ -7536,6 +9222,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccionar edad"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz wiek"
           }
         },
         "uk" : {
@@ -7561,6 +9253,12 @@
             "value" : "Enviar %@ ahora"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij %@ teraz"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7582,6 +9280,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto del envío"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij pieniądze"
           }
         },
         "uk" : {
@@ -7644,6 +9348,12 @@
             "value" : "Enviar"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7689,6 +9399,12 @@
             "state" : "translated",
             "value" : "Enviado con GNU Taler"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij za pomocą GNU TALER"
+          }
         }
       }
     },
@@ -7704,6 +9420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de serialización"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Błąd serializacji"
           }
         },
         "uk" : {
@@ -7739,6 +9461,12 @@
             "value" : "Compartir"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udostępnij"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7760,6 +9488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compartir PayTo"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udostępnij PayTo"
           }
         },
         "uk" : {
@@ -7785,6 +9519,12 @@
             "value" : "Compartir el enlace PayTo"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udostępnij adres URL PayTo"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7803,6 +9543,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sheet.ID."
+          }
+        },
+        "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sheet.ID."
@@ -7831,6 +9577,12 @@
             "value" : "Atajo"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skróty"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7852,6 +9604,12 @@
             "state" : "translated",
             "value" : "Mostrar pistas para dinero de demostración"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż wskazówki dotyczące pieniędzy demo"
+          }
         }
       }
     },
@@ -7867,6 +9625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar logs"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż logi"
           }
         },
         "uk" : {
@@ -7889,6 +9653,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar advertencias"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż ostrzeżenia"
           }
         },
         "uk" : {
@@ -7936,6 +9706,12 @@
             "value" : "Ya que el banco demostrativo cuenta con integración Taler, puedes comenzar un retiro directamente desde el"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponieważ bank demo obsługuje integrację Taler, możesz rozpocząć wypłatę bezpośrednio na stronie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7956,6 +9732,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algunas transacciones pendientes"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niektóre oczekujące transakcje"
           }
         },
         "uk" : {
@@ -7979,6 +9761,12 @@
             "state" : "translated",
             "value" : "Gasta tu %@ en la tienda demostrativa"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wydaj swój %@ w sklepie demonstracyjnym"
+          }
         }
       }
     },
@@ -7995,6 +9783,12 @@
             "state" : "translated",
             "value" : "Monto gastado:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wydana kwota:"
+          }
         }
       }
     },
@@ -8010,6 +9804,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fuente iOS estándar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardowa czcionka iOS"
           }
         },
         "uk" : {
@@ -8032,6 +9832,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status:"
           }
         },
         "uk" : {
@@ -8067,6 +9873,12 @@
             "value" : "Asunto"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temat"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8087,6 +9899,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resumen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podsumowanie"
           }
         },
         "uk" : {
@@ -8112,6 +9930,12 @@
             "value" : "Logo de Taler"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logo Taler"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8133,6 +9957,12 @@
             "state" : "translated",
             "value" : "Toca %@ o escanea un código QR de retiro desde tu banco para añadir una cuenta bancaria."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij  %@ lub zeskanuj kod QR wypłaty z banku, aby dodać konto bankowe."
+          }
         }
       }
     },
@@ -8148,6 +9978,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toca %@ o escanea un código QR de retiro desde tu banco para añadir un servicio de pagos."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij %@ lub zeskanuj kod QR wypłaty z banku, aby dodać usługę płatności."
           }
         }
       }
@@ -8165,6 +10001,12 @@
             "state" : "translated",
             "value" : "Toca el botón %@ para añadir un servicio."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij przycisk %@, aby dodać usługę."
+          }
         }
       }
     },
@@ -8181,6 +10023,12 @@
             "state" : "translated",
             "value" : "Toca el botón %@ para añadir una cuenta."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij przycisk %@, aby dodać konto."
+          }
         }
       }
     },
@@ -8196,6 +10044,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toca el botón para ir la sitio web KYC."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij przycisk, aby przejść do strony KYC."
           }
         },
         "uk" : {
@@ -8237,6 +10091,12 @@
             "value" : "Términos de servicio"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warunki korzystania z usługi"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8257,6 +10117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El banco esta esperando tu autorización."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bank oczekuje na Twoją autoryzację."
           }
         },
         "uk" : {
@@ -8296,6 +10162,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El servicio de pagos está esperando tu transferencia bancaria."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługa płatności czeka na Twój przelew bankowy."
           }
         }
       }
@@ -8347,6 +10219,12 @@
             "state" : "translated",
             "value" : "El servicio de pagos te regresará el dinero si no recibe tu pago a tiempo, o si decides cancelar la operación."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługa płatności odeśle pieniądze, jeśli nie zostaną one pobrane na czas lub jeśli przerwiesz operację."
+          }
         }
       }
     },
@@ -8380,6 +10258,12 @@
             "state" : "translated",
             "value" : "El retiro fue cancelado. Si ya enviaste dinero al servicio de pagos, regresará a tu cuenta bancaria en %@ días."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłata została przerwana.\nJeśli pieniądze zostały już wysłane do usługi płatności, zostaną one przesłane z powrotem w ciągu %@ dni."
+          }
         }
       }
     },
@@ -8396,6 +10280,12 @@
             "state" : "translated",
             "value" : "Aún no hay cuentas bancarias."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie ma jeszcze kont bankowych."
+          }
         }
       }
     },
@@ -8411,6 +10301,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aún no hay servicios de pago."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie ma jeszcze usług płatniczych."
           }
         }
       }
@@ -8452,6 +10348,12 @@
             "value" : "No hay transacciones para %@."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak transakcji dla %@."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8472,6 +10374,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aún no hay dinero digital en tu billetera."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie ma jeszcze cyfrowej gotówki w portfelu."
           }
         }
       }
@@ -8520,6 +10428,12 @@
             "state" : "translated",
             "value" : "%llu días"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu dni"
+          }
         }
       }
     },
@@ -8535,6 +10449,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esto es obligatorio, de lo contrario tu dinero no llegará a la billetera."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jest to obowiązkowe, w przeciwnym wypadku pieniądze nie dotrą do portfela."
           }
         },
         "uk" : {
@@ -8557,6 +10477,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta operación no puede ser deshecha"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można cofnąć tej operacji"
           }
         },
         "uk" : {
@@ -8591,6 +10517,12 @@
             "state" : "translated",
             "value" : "El servicio de pagos está en uso, ¿deseas eliminarlo de todas formas?"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta usługa płatności jest w użyciu. Usunąć mimo to?"
+          }
         }
       }
     },
@@ -8624,6 +10556,12 @@
             "state" : "translated",
             "value" : "La solicitud se cancelará si no se paga a tiempo, o cuando decidas cancelar la operación."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Żądanie to zostanie anulowane, jeśli nie zostanie opłacone na czas lub jeśli operacja zostanie przerwana."
+          }
         }
       }
     },
@@ -8639,6 +10577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta transacción no esta lista..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta transakcja nie jest jeszcze gotowa..."
           }
         },
         "uk" : {
@@ -8661,6 +10605,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Plazo para pagar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czas na zapłatę:"
           }
         }
       }
@@ -8685,6 +10635,12 @@
             "state" : "translated",
             "value" : "Acciones"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akcje"
+          }
         }
       }
     },
@@ -8706,6 +10662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saldos"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilanse"
           }
         },
         "uk" : {
@@ -8736,6 +10698,12 @@
             "state" : "translated",
             "value" : "Cuentas bancarias"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konta bankowe"
+          }
         }
       }
     },
@@ -8758,6 +10726,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servicios de pago"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługi płatnicze"
           }
         },
         "uk" : {
@@ -8790,6 +10764,12 @@
             "value" : "Pendiente\tentrante"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekujące na otrzymanie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8818,6 +10798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entrante"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadchodzące"
           }
         },
         "uk" : {
@@ -8850,6 +10836,12 @@
             "value" : "Pendiente\tsaliente"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekujące na wyjście"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8878,6 +10870,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saliente"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wychodzące"
           }
         },
         "uk" : {
@@ -8932,6 +10930,12 @@
             "value" : "Configuración"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ustawienia"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8953,6 +10957,12 @@
             "state" : "translated",
             "value" : "a %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "do %@"
+          }
         }
       }
     },
@@ -8969,6 +10979,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lista de transacciones"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista transakcji"
           }
         },
         "uk" : {
@@ -9016,6 +11032,12 @@
             "state" : "translated",
             "value" : "Transferir %@ al servicio de pagos."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelej %@ do usługi płatności."
+          }
         }
       }
     },
@@ -9055,6 +11077,12 @@
             "state" : "translated",
             "value" : "Transferir %@"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelej %@."
+          }
         }
       }
     },
@@ -9078,6 +11106,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwij"
           }
         },
         "uk" : {
@@ -9110,6 +11144,12 @@
             "value" : "Borrar del historial"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń z historii"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9138,6 +11178,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abandonar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porzuć"
           }
         },
         "uk" : {
@@ -9170,6 +11216,12 @@
             "value" : "Reintentar ahora"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spróbuj teraz ponownie"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9198,6 +11250,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelación pendiente..."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwanie w toku..."
           }
         },
         "uk" : {
@@ -9230,6 +11288,12 @@
             "value" : "Borrado de la lista"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunięte z listy"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9258,6 +11322,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abandonando…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Porzucanie..."
           }
         },
         "uk" : {
@@ -9290,6 +11360,12 @@
             "value" : "Reintentando..."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próbowanie ponownie..."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9311,6 +11387,12 @@
             "state" : "translated",
             "value" : "desconocido"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nieznane"
+          }
         }
       }
     },
@@ -9327,6 +11409,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "DESCONOCIDO"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NIEZNANE"
           }
         },
         "uk" : {
@@ -9373,6 +11461,12 @@
             "state" : "translated",
             "value" : "Comando desconocido"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznane polecenie"
+          }
         }
       }
     },
@@ -9388,6 +11482,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error desconocido"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznany błąd"
           }
         },
         "uk" : {
@@ -9410,6 +11510,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "método de pago desconocido"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nieznana metoda płatności"
           }
         },
         "uk" : {
@@ -9458,6 +11564,12 @@
             "state" : "translated",
             "value" : "Servicio de pago desconocido"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznana usługa płatności"
+          }
         }
       }
     },
@@ -9498,6 +11610,12 @@
             "value" : "sin restricción"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bez ograniczeń"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9519,6 +11637,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Utiliza «%@ Escanear código QR» en el menú de acciones para comenzar un retiro si tu banco soporta pagos con Taler."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj opcji „%@ Skanuj kod QR” w menu Działania, aby rozpocząć wypłatę, jeśli Twój bank już obsługuje płatności Taler."
           }
         }
       }
@@ -9605,6 +11729,12 @@
             "state" : "translated",
             "value" : "Utilizando servicio de pagos:"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używana usługa płatności:"
+          }
         }
       }
     },
@@ -9621,6 +11751,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "utilizando:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "używane:"
           }
         },
         "uk" : {
@@ -9645,6 +11781,12 @@
             "state" : "translated",
             "value" : "verificado"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zweryfikowane"
+          }
         }
       }
     },
@@ -9662,6 +11804,12 @@
             "state" : "translated",
             "value" : "via"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "poprzez"
+          }
         }
       }
     },
@@ -9678,6 +11826,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "vía %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "poprzez %@"
           }
         },
         "uk" : {
@@ -9700,6 +11854,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vibración"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opinie o wibracjach"
           }
         },
         "uk" : {
@@ -9748,6 +11908,12 @@
             "value" : "Visitar el sitio web taler.net"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odwiedź stronę internetową taler.net"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9768,6 +11934,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versión de wallet-core"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wersja Wallet-Core"
           }
         }
       }
@@ -9809,6 +11981,12 @@
             "value" : "Cuando una transacción termina"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po zakończeniu transakcji"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9830,6 +12008,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá al sitio web del banco para confirmar este retiro."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do strony banku, aby autoryzować tę wypłatę."
           }
         },
         "uk" : {
@@ -9855,6 +12039,12 @@
             "value" : "Irá a ver el detalle."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do widoku szczegółowego."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9876,6 +12066,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá al sitio web KYC para confirmar este retiro."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do strony KYC, aby zezwolić na tę wypłatę."
           }
         },
         "uk" : {
@@ -9901,6 +12097,12 @@
             "value" : "Irá a la lista principal de transacciones."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do głównej listy transakcji."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9922,6 +12124,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá a transacciones pendientes."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do transakcji oczekujących."
           }
         },
         "uk" : {
@@ -9947,6 +12155,12 @@
             "value" : "Irá al sitio web de la tienda demostrativa."
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do strony internetowey sklepu demo."
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9968,6 +12182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá al sitio web del comerciante."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do strony sprzedawcy."
           }
         },
         "uk" : {
@@ -9993,6 +12213,12 @@
             "value" : "Transferencia bancaria"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelew bankowy"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10013,6 +12239,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferencia bancaria"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelew Bankowy"
           }
         },
         "uk" : {
@@ -10037,6 +12269,12 @@
             "value" : "Instrucciones para transferencia bancaria"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instrukcje przelewu bankowego"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10057,6 +12295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Códigos QR para transferencia bancaria"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kody QR do przelewów bankowych"
           }
         },
         "uk" : {
@@ -10111,6 +12355,12 @@
             "state" : "translated",
             "value" : "Confirmar retiro"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdzenie wypłaty "
+          }
         }
       }
     },
@@ -10133,6 +12383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar retiro"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdzenie wypłaty"
           }
         }
       }
@@ -10157,6 +12413,12 @@
             "state" : "translated",
             "value" : "Confirmar retiro"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potwierdzenie wypłaty"
+          }
         }
       }
     },
@@ -10173,6 +12435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retirar:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłać:"
           }
         },
         "uk" : {
@@ -10196,6 +12464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retiro"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłacenie "
           }
         },
         "uk" : {
@@ -10226,6 +12500,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retirar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłać"
           }
         },
         "uk" : {
@@ -10261,6 +12541,12 @@
             "value" : "Ayer"
           }
         },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wczoraj"
+          }
+        },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10282,6 +12568,12 @@
             "state" : "translated",
             "value" : "Ya pagaste por este artículo."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapłaciłeś już za ten artykuł."
+          }
         }
       }
     },
@@ -10298,6 +12590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "También puedes añadir un servicio de pagos manualmente desde la pestaña de %@ Ajustes."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usługę płatności można również dodać ręcznie na karcie %@ Ustawienia."
           }
         }
       }
@@ -10338,6 +12636,12 @@
             "state" : "translated",
             "value" : "También puedes escanear un código QR desde tu banco en el menú Acciones para añadir una cuenta bancaria automáticamente."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz także zeskanować kod QR wypłaty z banku w menu Akcja, aby automatycznie dodać konto bankowe."
+          }
         }
       }
     },
@@ -10353,6 +12657,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "También puedes escanear un código QR desde tu banco en el menú Acciones para añadir un servicio de pagos automáticamente."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz także zeskanować kod QR wypłaty z banku w menu Akcja, aby automatycznie dodać usługę płatności."
           }
         }
       }
@@ -10393,6 +12703,12 @@
             "state" : "translated",
             "value" : "Solo puedes depositar a una cuenta de banco que controles, de lo contrario no podrás cumplir con los requisitos regulatorios."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz dokonać wpłaty tylko na konto bankowe, które kontrolujesz, w przeciwnym razie nie będziesz w stanie spełnić wymogów regulacyjnych."
+          }
         }
       }
     },
@@ -10432,6 +12748,12 @@
             "state" : "translated",
             "value" : "Puedes gastar tus %@ en la tienda demostrativa, o enviarlos a otra billetera."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz wydać swoje %@ w sklepie Demo lub wysłać je do innego portfela."
+          }
         }
       }
     },
@@ -10447,6 +12769,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No tienes suficiente %@."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie masz wystarczająco %@."
           }
         },
         "uk" : {
@@ -10541,6 +12869,12 @@
             "state" : "translated",
             "value" : "Debes aceptar los términos de servicio del servicio de pagos antes de que puedas recibir dinero digital en tu billetera."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przed otrzymaniem gotówki elektronicznej w portfelu należy zaakceptować warunki korzystania z usługi płatności."
+          }
         }
       }
     },
@@ -10556,6 +12890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Debes aceptar los términos de servicio del servicio de pagos antes de que puedas retirar dinero digital a tu billetera."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zanim będziesz mógł wypłacić gotówkę elektroniczną do swojego portfela, musisz najpierw zaakceptować Warunki korzystania z usługi płatniczej."
           }
         }
       }
@@ -10573,6 +12913,12 @@
             "state" : "translated",
             "value" : "Debes aceptar los términos de servicio del servicio de pagos."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W pierwszej kolejności należy zaakceptować warunki korzystania z usługi płatności."
+          }
         }
       }
     },
@@ -10588,6 +12934,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Necesitas llevar a cabo una verificación KYC."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz przejść procedurę KYC."
           }
         },
         "uk" : {
@@ -10646,6 +12998,12 @@
             "state" : "translated",
             "value" : "Necesitas transferir %1$@ al servicio de pagos desde tu cuenta bancaria regular para recibir %2$@ como dinero digital en esta billetera."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym portfelu."
+          }
         }
       }
     },
@@ -10673,6 +13031,12 @@
             "state" : "translated",
             "value" : "Perderás todos tus %@ de este servicio de pagos"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stracisz wszystkie %@ z tej usługi płatności"
+          }
         }
       }
     },
@@ -10689,6 +13053,12 @@
             "state" : "translated",
             "value" : "Tus cuentas de depósito"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twoje konta do wpłaty..."
+          }
         }
       }
     },
@@ -10704,6 +13074,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La comisión de transferencia de tu banco: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowizja za przelew bankowy: %@"
           }
         },
         "uk" : {
