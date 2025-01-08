@@ -314,7 +314,7 @@ extension WalletCore {
 
             switch payload.type {
                 case Notification.Name.Idle.rawValue:
-                    symLog.log(message)
+//                    symLog.log(message)
                     break
                 case Notification.Name.ExchangeStateTransition.rawValue:
                     symLog.log(message)
@@ -503,7 +503,9 @@ extension WalletCore {
                 if let error {
                     self.logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms")
                 } else {
-                    self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                    if millisecs > 50 {
+                        self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                    }
                 }
                 var err: Error? = nil
                 if let json = result, error == nil {
