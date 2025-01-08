@@ -36,7 +36,11 @@ struct WithdrawAcceptDone: View {
             ) {
                 let confirmTransferUrl = result.confirmTransferUrl
                 symLog.log(confirmTransferUrl)
-                transactionId = result.transactionId
+                if amountToTransfer == nil {
+                    dismissTop(stack.push())
+                } else {
+                    transactionId = result.transactionId
+                }
             }
         }
     }

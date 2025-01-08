@@ -9888,6 +9888,7 @@
       }
     },
     "Summary" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10101,6 +10102,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Умови надання послуг"
+          }
+        }
+      }
+    },
+    "The amount will be determined by the Cash Acceptor." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Betrag wird vom Geldannahme-Gerät festgelegt."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El monto será determinado por el Aceptante de Efectivo."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Kwota zostanie określona przez Akceptanta Gotówki."
           }
         }
       }
@@ -13063,6 +13086,7 @@
       }
     },
     "Your bank's wire fee: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

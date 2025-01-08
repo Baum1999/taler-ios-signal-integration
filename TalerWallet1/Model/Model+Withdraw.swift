@@ -56,8 +56,8 @@ struct WithdrawUriInfoResponse: Decodable {
     var status: WithdrawalOperationStatus   // pending, selected, aborted, confirmed
     var confirmTransferUrl: String?
     var currency: String                    // use this if amount=nil
-    var amount: Amount?                     // if nil then ask User
-    var editableAmount: Bool
+    var amount: Amount?                     // if nil then either ask User (editableAmount=true), or it's cash2ecash (editableAmount=false)
+    var editableAmount: Bool                // if true then ask User
     var maxAmount: Amount?                  // limit how much the user may withdraw
     var wireFee: Amount?
     var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges

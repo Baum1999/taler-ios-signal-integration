@@ -39,7 +39,7 @@ struct WithdrawAcceptView: View {
     @MainActor
     private func viewDidLoad() async {
         symLog.log(".task \(exchange?.id ?? "nil")")
-        if let exchange {
+        if !amountToTransfer.isZero, let exchange {
             if let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer,
                                                                    baseUrl: exchange.exchangeBaseUrl,
                                                                      scope: nil) { // TODO: scope
@@ -53,7 +53,7 @@ struct WithdrawAcceptView: View {
     }
 
     var body: some View {
-        if let exchange, let withdrawalDetails {
+        if let exchange {
             VStack {
                 let tosAccepted = exchange.tosStatus == .accepted
                 if !tosAccepted {
@@ -64,37 +64,43 @@ struct WithdrawAcceptView: View {
                            acceptAction: reloadExchange)
                 }
                 List {
-                    let raw = withdrawalDetails.amountRaw
-                    let effective = withdrawalDetails.amountEffective
-                    let currency = raw.currencyStr
-                    let fee = try! Amount.diff(raw, effective)
-                    let outColor = WalletColors().transactionColor(false)
-                    let inColor = WalletColors().transactionColor(true)
+                    if let withdrawalDetails {
+                        let raw = withdrawalDetails.amountRaw
+                        let effective = withdrawalDetails.amountEffective
+                        let currency = raw.currencyStr
+                        let fee = try! Amount.diff(raw, effective)
+                        let outColor = WalletColors().transactionColor(false)
+                        let inColor = WalletColors().transactionColor(true)
 
-                    ThreeAmountsSection(stack: stack.push(),
-                                        scope: scope,
-                                     topTitle: String(localized: "Chosen amount to withdraw:"),
-                                    topAbbrev: String(localized: "Withdraw:", comment: "Chosen amount to withdraw:"),
-                                    topAmount: raw,
-                                       noFees: exchange.noFees,
-                                          fee: fee,
-                                feeIsNegative: true,
-                                  bottomTitle: String(localized: "Amount to obtain:"),
-                                 bottomAbbrev: String(localized: "Obtain:", comment: "Amount to obtain:"),
-                                 bottomAmount: effective,
-                                        large: false,
-                                      pending: false,
-                                     incoming: true,
-                                      baseURL: exchange.exchangeBaseUrl,
-                                   txStateLcl: nil,        // common.txState.major.localizedState
-                                      summary: nil,
-                                     merchant: nil,
-                                     products: nil)
-                    if let wireFee {
-                        if !wireFee.isZero {
-                            let currencyInfo = controller.info(for: scope, controller.currencyTicker)
-                            let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
-                            Text("Your bank's wire fee: \(feeStr)")
+                        ThreeAmountsSection(stack: stack.push(),
+                                            scope: scope,
+                                         topTitle: String(localized: "Chosen amount to withdraw:"),
+                                        topAbbrev: String(localized: "Withdraw:", comment: "Chosen amount to withdraw:"),
+                                        topAmount: raw,
+                                           noFees: exchange.noFees,
+                                              fee: fee,
+                                    feeIsNegative: true,
+                                      bottomTitle: String(localized: "Amount to obtain:"),
+                                     bottomAbbrev: String(localized: "Obtain:", comment: "Amount to obtain:"),
+                                     bottomAmount: effective,
+                                            large: false,
+                                          pending: false,
+                                         incoming: true,
+                                          baseURL: exchange.exchangeBaseUrl,
+                                       txStateLcl: nil,        // common.txState.major.localizedState
+                                          summary: nil,
+                                         merchant: nil,
+                                         products: nil)
+                        if let wireFee {
+                            if !wireFee.isZero {
+                                let currencyInfo = controller.info(for: scope, controller.currencyTicker)
+                                let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
+                                Text("Your bank's wire fee: \(feeStr)")
+                            }
+                        }
+                    } else {
+                        Section {
+                            Text("The amount will be determined by the Cash Acceptor.")
                         }
                     }
                 }
@@ -106,7 +112,7 @@ struct WithdrawAcceptView: View {
 //                                                             scope: scope,
                                                    exchangeBaseUrl: exchange.exchangeBaseUrl,
                                                                url: url,
-                                                  amountToTransfer: amountToTransfer)
+                                                  amountToTransfer: amountToTransfer.isZero ? nil : amountToTransfer)
                         NavigationLink(destination: destination) {
                             Text("Confirm Withdrawal")      // SHEET_WITHDRAW_ACCEPT
                         }
