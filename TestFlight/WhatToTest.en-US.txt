@@ -1,3 +1,9 @@
+Version 0.14.2 (wallet-core 0.14.4)
+
+• New feature: cash-to-ecash with a Cash Acceptor device
+- Polish localization
+
+
 Version 0.14.1 (wallet-core 0.14.1)
 
 - bugfix: withdraw-template works again
