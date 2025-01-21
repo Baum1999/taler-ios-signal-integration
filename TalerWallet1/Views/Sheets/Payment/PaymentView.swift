@@ -132,13 +132,19 @@ struct PaymentView: View, Sendable {
     }
 
     func timeToPay(_ terms: MerchantContractTerms) -> Int {
-        if terms.payDeadline > terms.timestamp {
-            if let duration = try? terms.payDeadline - terms.timestamp {
-                switch duration {
-                    case .milliseconds(let uInt64):
-                        return Int(uInt64 / 1000)
-                    case .forever: break
-        }   }   }
+        if let milliseconds = try? terms.payDeadline.milliseconds() {
+            let date = Date(milliseconds: milliseconds)
+            let now = Date.now
+            let timeInterval = now.timeIntervalSince(date)
+            if timeInterval < 0 {
+                symLog.log("\(timeInterval) seconds left to pay")
+                return Int(-timeInterval)
+            } else {
+                symLog.log("\(date) - \(now) = \(timeInterval)")
+            }
+        } else {
+            symLog.log("no milliseconds")
+        }
         return 0
     }
 
@@ -233,7 +239,7 @@ struct PaymentView: View, Sendable {
                 if !paid {
                     if let effective {
                         VStack {
-                            if timeToPay > 0 {
+                            if timeToPay > 0 && timeToPay < 300 {
                                 let startDate = Date()
                                 HStack {
                                     Text("Time to pay:")
@@ -254,6 +260,8 @@ struct PaymentView: View, Sendable {
                                     }.monospacedDigit()
                                     Text("seconds")
                                 }.accessibilityElement(children: .combine)
+                            } else {
+                                let _ = symLog.log("\(timeToPay) not shown")
                             }
                             let destination = PaymentDone(stack: stack.push(),
 //                                                          scope: firstScope,    // TODO: let user choose which currency
