@@ -65,6 +65,7 @@ struct AmountV: View {
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
             .monospacedDigit()
             .accessibilityLabel(amountTuple.1)     // TODO: locale.leadingCurrencySymbol
+            .privacySensitive()
             .task(id: controller.currencyTicker) { await currencyTickerChanged() }
 //            .onLongPressGesture(minimumDuration: 0.3) {
 //                showValue = true
