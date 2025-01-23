@@ -267,7 +267,7 @@ struct PaymentView: View, Sendable {
 //                                                          scope: firstScope,    // TODO: let user choose which currency
                                                   transactionId: preparePayResult.transactionId)
                             NavigationLink(destination: destination) {
-                                let formatted = raw.formatted(currencyInfo, isNegative: false)
+                                let formatted = effective.formatted(currencyInfo, isNegative: false)
                                 Text("Pay \(formatted.0) now")
                                     .accessibilityLabel("Pay \(formatted.1) now")
                             }
