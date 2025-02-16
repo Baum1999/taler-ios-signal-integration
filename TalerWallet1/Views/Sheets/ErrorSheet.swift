@@ -60,18 +60,12 @@ struct ErrorSheet: View {
     }
 
     init(data: ErrorData, devMode: Bool, onDismiss: @escaping () -> Void) {
-        let unknownError = String(localized: "Unknown error")
-
         switch data {
-        case .message(let title, let message):
-            self.init(title: title, message: message, copyable: false, onDismiss: onDismiss)
-            return
-        case .error(let error):
-            self.init(error: error, devMode: devMode, onDismiss: onDismiss)
-            return
+            case .message(let title, let message):
+                self.init(title: title, message: message, copyable: false, onDismiss: onDismiss)
+            case .error(let error):
+                self.init(error: error, devMode: devMode, onDismiss: onDismiss)
         }
-
-        self.init(title: unknownError, copyable: false, onDismiss: onDismiss)
     }
 
     var body: some View {
