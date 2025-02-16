@@ -297,6 +297,8 @@ struct TransactionSummaryV: View {
                                                   a11yHint: String(localized: "Will go to bank website to authorize this withdrawal.", comment: "VoiceOver"),
                                                      badge: CONFIRM_BANK)
                     }   }   }   }
+                @unknown default:
+                    ErrorView(errortext: "Unknown withdrawal type");            // TODO: l10n
             } // switch
         }
     }
