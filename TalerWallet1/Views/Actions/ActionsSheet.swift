@@ -74,6 +74,7 @@ struct ActionsSheet: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
                 .accessibilityHint(String(localized: "Will go to the demo shop website.", comment: "VoiceOver"))
+                .accessibilityAddTraits(.isLink)
                 .padding(.bottom, 20)
             }
 
