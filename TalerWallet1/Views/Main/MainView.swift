@@ -58,33 +58,94 @@ struct MainView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
-            if controller.backendState == .ready {
-                MainContent(logger: logger, stack: stack.push("Content"),
-                   selectedBalance: $selectedBalance,
-                    talerFontIndex: $talerFontIndex,
-                   showActionSheet: $showActionSheet,
-                       showScanner: $showScanner,
-                        userAction: $userAction)
-                .onAppear() {
+        let mainContent = ZStack {
+            MainContent(logger: logger, stack: stack.push("Content"),
+               selectedBalance: $selectedBalance,
+                talerFontIndex: $talerFontIndex,
+               showActionSheet: $showActionSheet,
+                   showScanner: $showScanner,
+                    userAction: $userAction)
+            .onAppear() {
 #if DEBUG
-                    if playSoundsI != 0  && playSoundsB && !soundPlayed {
-                        controller.playSound(1008)     // Startup chime
-                    }
-#endif
-                    soundPlayed = true
+                if playSoundsI != 0  && playSoundsB && !soundPlayed {
+                    controller.playSound(1008)
                 }
-            } else if controller.backendState == .error {
-                ErrorView(errortext: nil)            // TODO: show Error View
-            } else {
-                LaunchAnimationView()
+#endif
+                soundPlayed = true
+            }                   // Startup chime
+            .overlay(alignment: .top) {
+                DebugViewV()
+                    .id("ViewID")
+            }     // Show the viewID on top of the app's NavigationView
+
+            if (!showScanner && urlToOpen == nil) {
+                if let error2 = model.error2 {
+                    ErrorSheet(data: error2, devMode: developerMode) {
+                        model.setError(nil)
+                    }.interactiveDismissDisabled()
+//                   .transition(.move(edge: .top))
+//                } else {
+//                    Color.clear
+                }
             }
-        }
-        .animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
-        .overlay(alignment: .top) {
-            // Show the viewID on top of the app's NavigationView
-            DebugViewV()
-                .id("ViewID")
+        }//.transition(.move(edge: .top))
+
+        let mainGroup = Group {
+            switch controller.backendState {
+                case .ready: mainContent
+                case .error: ErrorView(errortext: nil)            // TODO: show Error View
+                default:    // show launch animation until either ready or error
+                    LaunchAnimationView()
+            }
+        }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
+
+        Group {
+            mainGroup
+//            .animation(.default, value: model.error2 == nil)
+                .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
+                    let sheet = URLSheet(stack: stack.push(),
+                               selectedBalance: $selectedBalance,
+                                     urlToOpen: $urlToOpen)
+                    Sheet(stack: stack.push(), sheetView: AnyView(sheet))
+                }
+                .sheet(isPresented: $showScanner,
+                       onDismiss: { showActionSheet = false; qrButtonTapped = false; userAction += 1 }
+                ) {
+                    let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+                                                  selectedBalance: $selectedBalance))
+                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
+                    if #available(iOS 16.4, *) {
+                        let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+                        Sheet(stack: stack.push(), sheetView: qrSheet)
+                            .presentationDetents([scanDetent])
+                            .transition(.opacity)
+                    } else {
+                        Sheet(stack: stack.push(), sheetView: qrSheet)
+                            .transition(.opacity)
+                    }
+                }
+                .sheet(isPresented: $showActionSheet,
+                       onDismiss: { showScanner = false; qrButtonTapped = false; userAction += 1 }
+                ) {
+                    if #available(iOS 16.4, *) {
+                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
+                        DualHeightSheet(stack: stack.push(),
+                                        qrButtonTapped: $qrButtonTapped)
+                    } else {
+                        Group {
+                            Spacer()
+                            ScrollView {
+                                ActionsSheet(stack: stack.push(),
+                                             qrButtonTapped: $qrButtonTapped)
+                                .innerHeight($innerHeight)
+//                              .padding()
+                            }
+                            .frame(maxHeight: innerHeight)
+                            .edgesIgnoringSafeArea(.all)
+                        }
+                        .background(WalletColors().gray2)
+                    } // iOS 15
+                }
         }
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
@@ -96,65 +157,12 @@ struct MainView: View {
                 showUrlSheet = true     // raise sheet
             }
         }
-                .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
-                    let sheet = URLSheet(stack: stack.push(),
-                               selectedBalance: $selectedBalance,
-                                     urlToOpen: $urlToOpen)
-                    Sheet(stack: stack.push(), sheetView: AnyView(sheet))
-                }
-        .sheet(isPresented: $model.showError) {         // TODO: switch to alert/overlay
-            model.setError(nil)
-        } content: {
-            if let error2 = model.error2 {
-                ErrorSheet(data: error2, devMode: developerMode) {
-                    model.setError(nil)
-                }.interactiveDismissDisabled()
-            }
-        }
         .onChange(of: qrButtonTapped) { tapped in
             if tapped {
                 let delay = if #available(iOS 16.4, *) { 0.5 } else { 0.01 }
                 withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
                     showScanner = true      // switch to qrSheet => camera on
         }   }   }
-        .sheet(isPresented: $showScanner,
-               onDismiss: { showActionSheet = false; qrButtonTapped = false; userAction += 1 }
-        ) {
-            let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                          selectedBalance: $selectedBalance))
-            let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
-            if #available(iOS 16.4, *) {
-                let scanDetent: PresentationDetent = .fraction(SCANDETENT)
-                Sheet(stack: stack.push(), sheetView: qrSheet)
-                    .presentationDetents([scanDetent])
-                    .transition(.opacity)
-            } else {
-                Sheet(stack: stack.push(), sheetView: qrSheet)
-                    .transition(.opacity)
-            }
-        }
-        .sheet(isPresented: $showActionSheet,
-               onDismiss: { showScanner = false; qrButtonTapped = false; userAction += 1 }
-        ) {
-            if #available(iOS 16.4, *) {
-                let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
-                DualHeightSheet(stack: stack.push(),
-                       qrButtonTapped: $qrButtonTapped)
-            } else {
-                    Group {
-                        Spacer()
-                        ScrollView {
-                            ActionsSheet(stack: stack.push(),
-                                qrButtonTapped: $qrButtonTapped)
-                            .innerHeight($innerHeight)
-//                          .padding()
-                        }
-                        .frame(maxHeight: innerHeight)
-                        .edgesIgnoringSafeArea(.all)
-                    }
-                    .background(WalletColors().gray2)
-            }
-        }
     } // body
 }
 // MARK: - TabBar

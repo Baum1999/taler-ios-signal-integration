@@ -31,16 +31,13 @@ class WalletModel: ObservableObject {
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletModel")
     let semaphore = AsyncSemaphore(value: 1)
 
-    @Published var showError: Bool = false
     @Published var error2: ErrorData? = nil
 
     @MainActor func setError(_ theError: Error?) {
         if let theError {
             self.error2 = .error(theError)
-            self.showError = true
         } else {
             self.error2 = nil
-            self.showError = false
         }
     }
 

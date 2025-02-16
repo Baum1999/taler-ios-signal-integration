@@ -36,34 +36,32 @@ struct Sheet: View {
     var body: some View {
         let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
                                               : EMPTYSTRING      // show nothing if 0
-        NavigationView {
-            Group {
-                if let error2 = model.error2 {
-                    ErrorSheet(data: error2, devMode: developerMode) {
-                        model.setError(nil)
-                        logger.log("ErrorSheet dismissTop")
-                        dismissTop(stack.push())
-                    }
-                } else {
-                    sheetView
-//                        .navigationBarItems(leading: cancelButton)
+        ZStack {
+            NavigationView {
+                sheetView
+                    .navigationBarTitleDisplayMode(.automatic)
+                    .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            }
+            .navigationViewStyle(.stack)
+            .talerNavBar(talerFontIndex: talerFontIndex)
+            .overlay(alignment: .top) {
+                // Show the viewID on top of the sheet's NavigationView
+                Text(idString)
+                    .foregroundColor(.purple)
+                    .font(.system(size: 11))        // no talerFont
+                    .monospacedDigit()
+                    .edgesIgnoringSafeArea(.top)
+                    .id("sheetID")
+                    .accessibilityLabel(Text("Sheet.ID.", comment: "VoiceOver"))
+                    .accessibilityValue(idString)
+            }
+            if let error2 = model.error2 {
+                ErrorSheet(data: error2, devMode: developerMode) {
+                    model.setError(nil)
+                    logger.log("ErrorSheet dismissTop")
+                    dismissTop(stack.push())
                 }
             }
-                .navigationBarTitleDisplayMode(.automatic)
-                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        }
-        .navigationViewStyle(.stack)
-        .talerNavBar(talerFontIndex: talerFontIndex)
-        .overlay(alignment: .top) {
-            // Show the viewID on top of the sheet's NavigationView
-            Text(idString)
-                .foregroundColor(.purple)
-                .font(.system(size: 11))        // no talerFont
-                .monospacedDigit()
-                .edgesIgnoringSafeArea(.top)
-                .id("sheetID")
-                .accessibilityLabel(Text("Sheet.ID.", comment: "VoiceOver"))
-                .accessibilityValue(idString)
         }
         .onDisappear {
             symLog.log("❗️❗️Sheet onDisappear")
