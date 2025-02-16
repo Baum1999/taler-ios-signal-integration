@@ -10,7 +10,7 @@
 import Foundation
 import SwiftUI
 
-class NavigationModel: ObservableObject {
+class TabBarModel: ObservableObject {
     @Published var tabBarHidden = 0
 
     @Published var tosView: Int? = nil {

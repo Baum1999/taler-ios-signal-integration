@@ -312,8 +312,8 @@
 		4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC157929F9427F00D46A03 /* QRSheet.swift */; };
 		4EEC3A712B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */; };
 		4EEC3A722B2285A200D05F9D /* WithdrawExchangeV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */; };
-		4EED38552D140C1400F6C038 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* NavigationModel.swift */; };
-		4EED38562D140C1400F6C038 /* NavigationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* NavigationModel.swift */; };
+		4EED38552D140C1400F6C038 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* TabBarModel.swift */; };
+		4EED38562D140C1400F6C038 /* TabBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38542D140C1400F6C038 /* TabBarModel.swift */; };
 		4EED38582D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
 		4EED38592D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
 		4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF840A62A0B85F400EE0D47 /* CopyShare.swift */; };
@@ -524,7 +524,7 @@
 		4EEC157729F9032900D46A03 /* Sheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sheet.swift; sourceTree = "<group>"; };
 		4EEC157929F9427F00D46A03 /* QRSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRSheet.swift; sourceTree = "<group>"; };
 		4EEC3A702B2285A200D05F9D /* WithdrawExchangeV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawExchangeV.swift; sourceTree = "<group>"; };
-		4EED38542D140C1400F6C038 /* NavigationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModel.swift; sourceTree = "<group>"; };
+		4EED38542D140C1400F6C038 /* TabBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarModel.swift; sourceTree = "<group>"; };
 		4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEachWithIndex.swift; sourceTree = "<group>"; };
 		4EF840A62A0B85F400EE0D47 /* CopyShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyShare.swift; sourceTree = "<group>"; };
 		4EFA395F2AA7946B00742548 /* ToSButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSButtonView.swift; sourceTree = "<group>"; };
@@ -867,7 +867,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB095442989CBFE0043A8A1 /* MainView.swift */,
-				4EED38542D140C1400F6C038 /* NavigationModel.swift */,
+				4EED38542D140C1400F6C038 /* TabBarModel.swift */,
 				4EB095452989CBFE0043A8A1 /* ErrorView.swift */,
 				4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */,
 			);
@@ -1343,7 +1343,7 @@
 				4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */,
 				4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */,
 				4E3EAE612A990778009F1BE8 /* ListStyle.swift in Sources */,
-				4EED38552D140C1400F6C038 /* NavigationModel.swift in Sources */,
+				4EED38552D140C1400F6C038 /* TabBarModel.swift in Sources */,
 				4E3EAE622A990778009F1BE8 /* TransactionSummaryV.swift in Sources */,
 				4E3EAE632A990778009F1BE8 /* WalletCore.swift in Sources */,
 				4E3EAE642A990778009F1BE8 /* LaunchAnimationView.swift in Sources */,
@@ -1484,7 +1484,7 @@
 				4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */,
 				4E3B4BC12A41E6C200CC88B8 /* P2pReceiveURIView.swift in Sources */,
 				4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */,
-				4EED38562D140C1400F6C038 /* NavigationModel.swift in Sources */,
+				4EED38562D140C1400F6C038 /* TabBarModel.swift in Sources */,
 				4EB095582989CBFE0043A8A1 /* TransactionSummaryV.swift in Sources */,
 				4EB095202989CBCB0043A8A1 /* WalletCore.swift in Sources */,
 				4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */,

@@ -236,7 +236,7 @@ extension MainView {
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
         @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
 
-        @StateObject var navModel = NavigationModel()
+        @StateObject var tabBarModel = TabBarModel()
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
@@ -292,8 +292,8 @@ extension MainView {
         }
         private var isBalances: Bool { self.selectedTab == .balances}
         private func triggerAction(_ action: Int) {
-            navModel.actionSelected = isBalances ? action       // 1..4
-                                                 : action + 4   // 5..8
+            tabBarModel.actionSelected = isBalances ? action        // 1..4
+                                                    : action + 4    // 5..8
         }
 
         private static func className() -> String {"\(self)"}
@@ -334,16 +334,16 @@ extension MainView {
                                                   isSheet: false)
         /// each NavigationView needs its own NavLinks
             let balanceActions = Group {                                        // actionSelected will hide the tabBar
-                NavLink(1, $navModel.actionSelected) { sendDest }
-                NavLink(2, $navModel.actionSelected) { requestDest }
-                NavLink(3, $navModel.actionSelected) { depositDest }
-                NavLink(4, $navModel.actionSelected) { manualWithdrawDest }
+                NavLink(1, $tabBarModel.actionSelected) { sendDest }
+                NavLink(2, $tabBarModel.actionSelected) { requestDest }
+                NavLink(3, $tabBarModel.actionSelected) { depositDest }
+                NavLink(4, $tabBarModel.actionSelected) { manualWithdrawDest }
             }
             let settingsActions = Group {
-                NavLink(5, $navModel.actionSelected) { sendDest }
-                NavLink(6, $navModel.actionSelected) { requestDest }
-                NavLink(7, $navModel.actionSelected) { depositDest }
-                NavLink(8, $navModel.actionSelected) { manualWithdrawDest }
+                NavLink(5, $tabBarModel.actionSelected) { sendDest }
+                NavLink(6, $tabBarModel.actionSelected) { requestDest }
+                NavLink(7, $tabBarModel.actionSelected) { depositDest }
+                NavLink(8, $tabBarModel.actionSelected) { manualWithdrawDest }
             }
         /// tab titles, and invisible tabItems which are only used for a11y
             let balancesTitle = Tab.balances.title     // "Balances"
@@ -370,7 +370,7 @@ extension MainView {
                 .background(settingsActions)
             }.navigationViewStyle(.stack)
         /// our custom tabBar with the Actions button in the middle
-            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $navModel.tabBarHidden) {
+            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $tabBarModel.tabBarHidden) {
                 logger.log("onActionTab")
                 showActionSheet = true
             } onActionDrag: {
@@ -395,7 +395,7 @@ extension MainView {
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
-            .environmentObject(navModel)
+            .environmentObject(tabBarModel)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onNotification(.SendAction)    { triggerAction(1) }
             .onNotification(.RequestAction) { triggerAction(2) }

@@ -18,7 +18,7 @@ struct ExchangeRowView: View {
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @EnvironmentObject private var navModel: NavigationModel
+    @EnvironmentObject private var tabBarModel: TabBarModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
@@ -52,7 +52,7 @@ struct ExchangeRowView: View {
                                      viewID: VIEW_WITHDRAW_TOS,
                                acceptAction: nil)         // pop back to here
         let actions = Group {
-            NavLink(index, $navModel.tosView) { showToS }
+            NavLink(index, $tabBarModel.tosView) { showToS }
         }
 
         Group {
@@ -60,10 +60,10 @@ struct ExchangeRowView: View {
             cellView
                 .background(actions)
                 .onTapGesture {
-                    navModel.tosView = index
+                    tabBarModel.tosView = index
                 }
 //                .task {
-//                    navModel.tosView = false
+//                    tabBarModel.tosView = false
 //                }
         }.listRowSeparator(.hidden)
     }
