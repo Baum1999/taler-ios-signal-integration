@@ -13,53 +13,62 @@ struct URLSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var selectedBalance: Balance?
-    var urlToOpen: URL
+    @Binding var urlToOpen: URL?
 
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
     @EnvironmentObject private var controller: Controller
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var summary = EMPTYSTRING
     @State private var urlCommand: UrlCommand?
+    @State private var passedURL: URL?
+
+    private func passUrlOnce() {
+        if urlToOpen != nil {
+            passedURL = urlToOpen
+            urlCommand = controller.openURL(urlToOpen!, stack: stack.push())
+            urlToOpen = nil
+            symLog.log("❗️ erase urlToOpen:  \(urlToOpen?.absoluteString)")
+        }
+    }
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        if let urlCommand {
+        if let urlCommand, let passedURL {
             switch urlCommand {
                 case .termsExchange,      // TODO: just check the ToS
                      .withdraw:
-                    WithdrawURIView(stack: stack.push(), url: urlToOpen)
+                    WithdrawURIView(stack: stack.push(), url: passedURL)
                 case .withdrawExchange:
                     WithdrawExchangeV(stack: stack.push(),
                             selectedBalance: $selectedBalance,
-                                        url: urlToOpen)
+                                        url: passedURL)
                 case .pay:
-                    PaymentView(stack: stack.push(), url: urlToOpen,
+                    PaymentView(stack: stack.push(), url: passedURL,
                              template: false, amountToTransfer: $amountToTransfer, summary: $summary,
                      amountIsEditable: false, summaryIsEditable: false)
                 case .payPull:
-                    P2pPayURIView(stack: stack.push(), url: urlToOpen)
+                    P2pPayURIView(stack: stack.push(), url: passedURL)
                 case .payPush:
-                    P2pReceiveURIView(stack: stack.push(), url: urlToOpen)
+                    P2pReceiveURIView(stack: stack.push(), url: passedURL)
                 case .payTemplate:
-                    PayTemplateV(stack: stack.push(), url: urlToOpen)
+                    PayTemplateV(stack: stack.push(), url: passedURL)
                 case .refund:
-                    RefundURIView(stack: stack.push(), url: urlToOpen)
+                    RefundURIView(stack: stack.push(), url: passedURL)
                 default:        // TODO: Error view
                     VStack {
-                        let _ = symLog.log("❗️Unknown command❗️ \(urlToOpen.absoluteString)")
-                        Text(controller.messageForSheet ?? urlToOpen.absoluteString)
+                        let _ = symLog.log("Unknown command❗️ \(passedURL.absoluteString)")
+                        Text(controller.messageForSheet ?? passedURL.absoluteString)
                     }
                     .navigationTitle("Unknown command")
             }
         } else {
             let message = String(localized: "Scanning...", comment: "loading")
             LoadingView(scopeInfo: nil, message: message)
-                .task {
-                    let command = controller.openURL(urlToOpen, stack: stack.push())
-                    urlCommand = command
+                .task(id: urlToOpen) {
+                    passUrlOnce()
                 }
         }
     }

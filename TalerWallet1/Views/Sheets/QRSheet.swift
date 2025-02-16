@@ -13,6 +13,7 @@ struct QRSheet: View {
     @Binding var selectedBalance: Balance?
 
     @State private var scannedCode: String?
+    @State private var urlToOpen: URL?
 
     func codeToURL(_ code: String) -> URL? {
         if let scannedURL = URL(string: code) {
@@ -31,12 +32,12 @@ struct QRSheet: View {
             if scannedCode != nil {
 //                let _ = print(scannedCode as Any)       // TODO: logging
 
-                if let scannedURL = codeToURL(scannedCode!) {
+                if let scannedURL = urlToOpen {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(),
                        selectedBalance: $selectedBalance,
-                             urlToOpen: scannedURL)
+                             urlToOpen: $urlToOpen)
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
                         ErrorView(errortext: scannedURL.absoluteString)
@@ -51,6 +52,7 @@ struct QRSheet: View {
                         case .success(let result):
                             symLog.log("Found code: \(result.string)")
                             scannedCode = result.string
+                            urlToOpen = codeToURL(result.string)
                             closingAnnouncement = String(localized: "QR code recognized", comment: "VoiceOver")
                         case .failure(let error):
                             // TODO: errorAlert

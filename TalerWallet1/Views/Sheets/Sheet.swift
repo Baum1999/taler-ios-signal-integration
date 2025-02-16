@@ -40,6 +40,7 @@ struct Sheet: View {
             Group {
                 if let error2 = model.error2 {
                     ErrorSheet(data: error2, devMode: developerMode) {
+                        model.setError(nil)
                         logger.log("ErrorSheet dismissTop")
                         dismissTop(stack.push())
                     }

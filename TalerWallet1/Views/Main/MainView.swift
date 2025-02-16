@@ -32,7 +32,7 @@ struct MainView: View {
 
     @State private var selectedBalance: Balance? = nil
     @State private var urlToOpen: URL? = nil
-    @State private var sheetPresented = false
+    @State private var showUrlSheet = false
     @State private var showActionSheet = false
     @State private var showScanner = false
 //    @State private var showCameraAlert: Bool = false
@@ -42,6 +42,8 @@ struct MainView: View {
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
+        symLog.log("sheet dismiss: \(urlToOpen)")
+        urlToOpen = nil
         ViewState.shared.popToRootView(nil)
     }
 
@@ -89,14 +91,17 @@ struct MainView: View {
             // will be called on a taler:// scheme either
             // by user tapping such link in a browser (bank website)
             // or when launching the app from iOS Camera.app scanning a QR code
-            urlToOpen = url     // raise sheet
+            urlToOpen = url
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                showUrlSheet = true     // raise sheet
+            }
         }
-        .sheet(item: $urlToOpen, onDismiss: sheetDismissed) { url in
-            let sheet = AnyView(URLSheet(stack: stack.push(),
+                .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
+                    let sheet = URLSheet(stack: stack.push(),
                                selectedBalance: $selectedBalance,
-                                     urlToOpen: url))
-            Sheet(stack: stack.push(), sheetView: sheet)
-        }
+                                     urlToOpen: $urlToOpen)
+                    Sheet(stack: stack.push(), sheetView: AnyView(sheet))
+                }
         .sheet(isPresented: $model.showError) {         // TODO: switch to alert/overlay
             model.setError(nil)
         } content: {
