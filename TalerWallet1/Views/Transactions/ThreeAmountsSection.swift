@@ -84,9 +84,10 @@ struct ProductImage: Codable, Hashable {
 
     var image: Image? {
         if let url = NSURL(string: imageBase64) {
-            let data = NSData(contentsOf: url as URL)
-            if let uiImage = UIImage(data: data as! Data) {
-                return Image(uiImage: uiImage)
+            if let data = NSData(contentsOf: url as URL) {
+                if let uiImage = UIImage(data: data as Data) {
+                    return Image(uiImage: uiImage)
+                }
             }
         }
         return nil
