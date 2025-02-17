@@ -185,6 +185,8 @@
 		4E77976F2C4BEA4E005D6ECB /* BalanceCellV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */; };
 		4E7797702C4BEA4E005D6ECB /* BalanceCellV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */; };
 		4E7940DE29FC307C00A9AEA1 /* P2PSubjectV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */; };
+		4E7F85172D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7F85162D63185E00954C30 /* Environment+EdgeInsets.swift */; };
+		4E7F85182D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7F85162D63185E00954C30 /* Environment+EdgeInsets.swift */; };
 		4E847B7F2C9030E0003A164E /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E847B7E2C9030E0003A164E /* TabBarView.swift */; };
 		4E847B802C9030E0003A164E /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E847B7E2C9030E0003A164E /* TabBarView.swift */; };
 		4E847B822C9065FD003A164E /* ScopePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E847B812C9065FD003A164E /* ScopePicker.swift */; };
@@ -264,6 +266,8 @@
 		4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */; };
 		4EB230882D5E0FEC007CFBC4 /* View+DeviceRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB230872D5E0FEC007CFBC4 /* View+DeviceRotation.swift */; };
 		4EB230892D5E0FEC007CFBC4 /* View+DeviceRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB230872D5E0FEC007CFBC4 /* View+DeviceRotation.swift */; };
+		4EB2308B2D607617007CFBC4 /* View+TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB2308A2D607617007CFBC4 /* View+TabBar.swift */; };
+		4EB2308C2D607617007CFBC4 /* View+TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB2308A2D607617007CFBC4 /* View+TabBar.swift */; };
 		4EB3136129FEE79B007D68BC /* P2PReadyV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB3136029FEE79B007D68BC /* P2PReadyV.swift */; };
 		4EB431672A1E55C700C5690E /* ManualWithdrawDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */; };
 		4EBA563F2A7FD9390084948B /* SuperScriptDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */; };
@@ -428,6 +432,7 @@
 		4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceCellV.swift; sourceTree = "<group>"; };
 		4E7940DD29FC307C00A9AEA1 /* P2PSubjectV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P2PSubjectV.swift; sourceTree = "<group>"; };
 		4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
+		4E7F85162D63185E00954C30 /* Environment+EdgeInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+EdgeInsets.swift"; sourceTree = "<group>"; };
 		4E847B7E2C9030E0003A164E /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		4E847B812C9065FD003A164E /* ScopePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopePicker.swift; sourceTree = "<group>"; };
 		4E87C8722A31CB7F001C6406 /* TransactionsEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsEmptyView.swift; sourceTree = "<group>"; };
@@ -497,6 +502,7 @@
 		4EB0954A2989CBFE0043A8A1 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Model+Pending.swift"; sourceTree = "<group>"; };
 		4EB230872D5E0FEC007CFBC4 /* View+DeviceRotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+DeviceRotation.swift"; sourceTree = "<group>"; };
+		4EB2308A2D607617007CFBC4 /* View+TabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+TabBar.swift"; sourceTree = "<group>"; };
 		4EB3136029FEE79B007D68BC /* P2PReadyV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P2PReadyV.swift; sourceTree = "<group>"; };
 		4EB431662A1E55C700C5690E /* ManualWithdrawDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualWithdrawDone.swift; sourceTree = "<group>"; };
 		4EBA563E2A7FD9390084948B /* SuperScriptDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperScriptDigits.swift; sourceTree = "<group>"; };
@@ -611,6 +617,8 @@
 				4EEBEFAF2C8982180020D340 /* View+innerSize.swift */,
 				4E1A59E02C99C5D700842BBF /* View+Keyboard.swift */,
 				4E3B4BC62A429F2A00CC88B8 /* View+Notification.swift */,
+				4E7F85162D63185E00954C30 /* Environment+EdgeInsets.swift */,
+				4EB2308A2D607617007CFBC4 /* View+TabBar.swift */,
 			);
 			path = ViewModifier;
 			sourceTree = "<group>";
@@ -1263,6 +1271,7 @@
 				4E3EAE242A990778009F1BE8 /* QRGeneratorView.swift in Sources */,
 				4E3EAE252A990778009F1BE8 /* WithdrawAcceptDone.swift in Sources */,
 				4E3EAE262A990778009F1BE8 /* Transaction.swift in Sources */,
+				4EB2308B2D607617007CFBC4 /* View+TabBar.swift in Sources */,
 				4E8EADA82C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */,
 				4E605DB72AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2C2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
@@ -1353,6 +1362,7 @@
 				4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */,
 				4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */,
 				E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */,
+				4E7F85172D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */,
 				4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */,
 				4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */,
 				4E3EAE612A990778009F1BE8 /* ListStyle.swift in Sources */,
@@ -1405,6 +1415,7 @@
 				4EEC157329F8242800D46A03 /* QRGeneratorView.swift in Sources */,
 				4E5A88F72A3B9E5B00072618 /* WithdrawAcceptDone.swift in Sources */,
 				4EB095222989CBCB0043A8A1 /* Transaction.swift in Sources */,
+				4EB2308C2D607617007CFBC4 /* View+TabBar.swift in Sources */,
 				4E8EADA92C64744700C6CDC4 /* QRcodesForPayto.swift in Sources */,
 				4E605DB82AB05E48002FB9A7 /* View+flippedDirection.swift in Sources */,
 				4E983C2D2ADC416800FA9CC5 /* View+fitsSideBySide.swift in Sources */,
@@ -1495,6 +1506,7 @@
 				4EB0956E2989CBFE0043A8A1 /* Model+Pending.swift in Sources */,
 				4EB095522989CBFE0043A8A1 /* ExchangeListView.swift in Sources */,
 				E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */,
+				4E7F85182D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */,
 				4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */,
 				4E3B4BC12A41E6C200CC88B8 /* P2pReceiveURIView.swift in Sources */,
 				4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */,
