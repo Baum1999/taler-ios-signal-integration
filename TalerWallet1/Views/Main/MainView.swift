@@ -247,6 +247,7 @@ extension MainView {
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
         @State private var shouldReloadPending = 0
+        @State private var tabBarHeight: CGFloat = 0
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -305,22 +306,8 @@ extension MainView {
         private static func className() -> String {"\(self)"}
         private static var name: String { Self.className() }
 
-        var body: some View {
-#if PRINT_CHANGES
-            // "@self" marks that the view value itself has changed, and "@identity" marks that the
-            // identity of the view has changed (that is, that the persistent data associated with
-            // the view has been recycled for a new instance of the same type)
-            if #available(iOS 17.1, *) {
-                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
-                let _ = Self._logChanges()
-            } else {
-                let _ = Self._printChanges()
-            }
-            let delay: UInt = 0     // set to 5 to test delayed currency information
-#else
-            let delay: UInt = 0     // no delay for release builds
-#endif
-        /// Destinations for the 4 actions
+        private var tabContent: some View {
+            /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
                              selectedBalance: $selectedBalance,                 // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
@@ -338,7 +325,7 @@ extension MainView {
                                          amountToTransfer: $amountToTransfer,
                                                  exchange: $exchange,           // only for withdraw-exchange
                                                   isSheet: false)
-        /// each NavigationView needs its own NavLinks
+            /// each NavigationView needs its own NavLinks
             let balanceActions = Group {                                        // actionSelected will hide the tabBar
                 NavLink(1, $tabBarModel.actionSelected) { sendDest }
                 NavLink(2, $tabBarModel.actionSelected) { requestDest }
@@ -351,7 +338,7 @@ extension MainView {
                 NavLink(7, $tabBarModel.actionSelected) { depositDest }
                 NavLink(8, $tabBarModel.actionSelected) { manualWithdrawDest }
             }
-        /// tab titles, and invisible tabItems which are only used for a11y
+            /// tab titles, and invisible tabItems which are only used for a11y
             let balancesTitle = Tab.balances.title     // "Balances"
             let actionTitle = Tab.actions.title        // "Actions"
             let settingsTitle = Tab.settings.title     // "Settings"
@@ -361,7 +348,7 @@ extension MainView {
                                     .accessibilityLabel(actionTitle)
             let a11ySettingsTab = Label(Tab.settings).labelStyle(.titleOnly)
                                     .accessibilityLabel(settingsTitle)
-        /// NavigationViews for Balances & Settings
+            /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
                            orientation: $orientation,
@@ -376,7 +363,40 @@ extension MainView {
                           navTitle: settingsTitle)
                 .background(settingsActions)
             }.navigationViewStyle(.stack)
-        /// our custom tabBar with the Actions button in the middle
+            /// the tabItems (EMPTYSTRING .titleOnly) could indeed be omitted and the app would work the same - but are needed for accessibilityLabel
+            return TabView(selection: tabSelection()) {
+                balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
+                    .tag(Tab.balances)
+                    .tabItem { a11yBalanceTab }
+                    .keepTabViewHeight(in: $tabBarHeight)
+                Color.clear                                 // can't use EmptyView because then VoiceOver wouldn't have the Actions tab
+                    .tag(Tab.actions)
+                    .tabItem { a11yActionsTab }
+                    .keepTabViewHeight(in: $tabBarHeight)
+                settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
+                    .tag(Tab.settings)
+                    .tabItem { a11ySettingsTab }
+                    .keepTabViewHeight(in: $tabBarHeight)
+            } // TabView
+        }
+
+        var body: some View {
+#if PRINT_CHANGES
+            // "@self" marks that the view value itself has changed, and "@identity" marks that the
+            // identity of the view has changed (that is, that the persistent data associated with
+            // the view has been recycled for a new instance of the same type)
+            if #available(iOS 17.1, *) {
+                // logs at INFO level, “com.apple.SwiftUI” subsystem, category “Changed Body Properties”
+                let _ = Self._logChanges()
+            } else {
+                let _ = Self._printChanges()
+            }
+            let delay: UInt = 0     // set to 5 to test delayed currency information
+#else
+            let delay: UInt = 0     // no delay for release builds
+#endif
+
+            /// our custom tabBar with the Actions button in the middle
             let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $tabBarModel.tabBarHidden) {
                 logger.log("onActionTab")
                 showActionSheet = true
@@ -386,18 +406,9 @@ extension MainView {
             }
         /// custom tabBar is rendered on top of the TabView, and overlaps its tabBar
             ZStack(alignment: .bottom) {
-            /// the tabItems (EMPTYSTRING .titleOnly) could indeed be omitted and the app would work the same - but are needed for accessibilityLabel
-                TabView(selection: tabSelection()) {
-                    balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
-                        .tag(Tab.balances)
-                        .tabItem { a11yBalanceTab }
-                    Color.clear                                 // can't use EmptyView because then VoiceOver wouldn't have the Actions tab
-                        .tag(Tab.actions)
-                        .tabItem { a11yActionsTab }
-                    settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
-                        .tag(Tab.settings)
-                        .tabItem { a11ySettingsTab }
-                } // TabView
+                tabContent
+                    .hideTabBar
+                    .environment(\.tabBarHeight, tabBarHeight)
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one

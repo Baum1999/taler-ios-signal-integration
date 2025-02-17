@@ -62,7 +62,8 @@ extension View {
             let onePixel: CGFloat = 1/3
             let separatorHeight: CGFloat = tabViewHeightShouldIncludeSeparator ? onePixel : 0
             DispatchQueue.main.async {
-                storage.wrappedValue = tabBar.bounds.height + separatorHeight
+                // -4 still hides the "visible" tabBar, but leaves it available for A11Y voiceOver
+                storage.wrappedValue = tabBar.bounds.height + separatorHeight - 4
             }
         })
     }
