@@ -1,11 +1,10 @@
-//
-//  ToSButtonView.swift
-//  TalerWallet
-//
-//  Created by Marc Stibane on 2023-09-05.
-//  Copyright © 2023 Taler. All rights reserved.
-//
-
+/*
+ * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
+ */
 import SwiftUI
 
 struct ToSButtonView: View {

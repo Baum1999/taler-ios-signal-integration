@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-24 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
