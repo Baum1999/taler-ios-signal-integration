@@ -297,7 +297,7 @@ public class CurrencyFormatter: NumberFormatter {
 
     var name: String?
     var altUnitName0: String?           // specs.altUnitNames[0] should have either the name
-    var altUnitSymbol: String?           // specs.altUnitNames[0] should have the Symbol ($,€,¥)
+    var altUnitSymbol: String?          // specs.altUnitNames[0] should have the Symbol ($,€,¥)
     var currency: String
     var leadingCurrencySymbol: Bool
     /// factory
@@ -328,7 +328,7 @@ public class CurrencyFormatter: NumberFormatter {
         super.init()
 //        self.currencyCode = EUR_4217
 //        self.currencySymbol = "€"
-        self.locale = Locale.autoupdatingCurrent
+        self.locale = Locale.autoupdatingCurrent                                // TODO: Yikes, might override my currency! Needs testing!
         if #available(iOS 16.0, *) {
             let currency = self.locale.currency
             if let currencyCode = currency?.identifier {
