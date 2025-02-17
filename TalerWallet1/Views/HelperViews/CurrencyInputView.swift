@@ -30,12 +30,7 @@ struct ShortcutButton: View {
 
     func isDisabled(shortie: Amount) -> Bool {
         if let available {
-            do {
-                return try available < shortie
-            } catch {
-                print("❗️Cannot compare available.\(available.currencyStr) to shortie.\(shortie.currencyStr))")
-                return false
-            }
+            return available.value < shortie.value
         }
         return false
     }
