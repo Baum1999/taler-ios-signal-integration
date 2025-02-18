@@ -247,7 +247,7 @@ extension MainView {
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
         @State private var shouldReloadPending = 0
-        @State private var tabBarHeight: CGFloat = 0
+        @State private var tabBarHeight: CGFloat = 0                            // SwiftUI tabBar height
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -407,7 +407,7 @@ extension MainView {
         /// custom tabBar is rendered on top of the TabView, and overlaps its tabBar
             ZStack(alignment: .bottom) {
                 tabContent
-                    .hideTabBar
+                    .hideTabBar($tabBarModel.tabBarHidden)
                     .environment(\.tabBarHeight, tabBarHeight)
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)

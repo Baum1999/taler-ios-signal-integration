@@ -62,8 +62,9 @@ extension View {
             let onePixel: CGFloat = 1/3
             let separatorHeight: CGFloat = tabViewHeightShouldIncludeSeparator ? onePixel : 0
             DispatchQueue.main.async {
-                // -4 still hides the "visible" tabBar, but leaves it available for A11Y voiceOver
-                storage.wrappedValue = tabBar.bounds.height + separatorHeight - 4
+                // -4 still hides the "visible" SwiftUI tabBar, but leaves it available for A11Y voiceOver
+                // no longer necessary if we only hide the SwiftUI tabBar when our custom tabBar is hidden
+                storage.wrappedValue = tabBar.bounds.height + separatorHeight // - 4
             }
         })
     }
@@ -100,18 +101,20 @@ struct TabBarAccessor: UIViewControllerRepresentable {
 
 // MARK: - Content
 extension View {
-    var hideTabBar: some View {
-        modifier(HideTabBarModifier())
+    func hideTabBar(_ hidden: Binding<Int>) -> some View {
+        modifier(HideTabBarModifier(tabBarHidden: hidden))
     }
 }
 
 struct HideTabBarModifier: ViewModifier {
+    @Binding var tabBarHidden: Int
     @Environment(\.safeAreaEdgeInsets) private var safeAreaEdgeInsets
     @Environment(\.tabBarHeight) private var tabBarHeight
 
     func body(content: Content) -> some View {
+        let padding = tabBarHidden == 0 ? 0
+                                        : tabBarHeight
         content
-            .padding(.bottom, -safeAreaEdgeInsets.bottom - tabBarHeight)
+            .padding(.bottom, -safeAreaEdgeInsets.bottom - padding)
     }
 }
-
