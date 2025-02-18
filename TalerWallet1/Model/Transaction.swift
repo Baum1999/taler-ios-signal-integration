@@ -514,8 +514,8 @@ struct RefreshError: Decodable {
     var when: Timestamp
     var hint: String
     var stack: String?
-    var numErrors: Int?         // how many coins had errors
-    var errors: [HTTPError]?    // 1..max(5, numErrors)
+    var numErrors: Int?                 // how many coins had errors
+    var errors: [TalerErrorDetail]?     // 1..max(5, numErrors)
 }
 struct RefreshTransactionDetails: Decodable {
     var refreshReason: RefreshReason

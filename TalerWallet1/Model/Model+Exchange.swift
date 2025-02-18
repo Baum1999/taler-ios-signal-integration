@@ -13,7 +13,7 @@ import SymLog
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 struct ExchangeError: Codable, Hashable {
-    var error: HTTPError
+    var error: TalerErrorDetail
 }
 
 enum ExchangeEntryStatus: String, Codable {

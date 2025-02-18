@@ -12,20 +12,77 @@ import os.log
 
 fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
-struct TalerErrorDetail: Codable, Hashable {
-    var code: Int
-    var when: Timestamp?
-    var hint: String?
+enum InsufficientBalanceHint: String, Codable {
+    /// Merchant doesn't accept money from exchange(s) that the wallet supports
+    case merchantAcceptInsufficient = "merchant-accept-insufficient"
+    /// Merchant accepts funds from a matching exchange, but the funds can't be deposited with the wire method
+    case merchantDepositInsufficient = "merchant-deposit-insufficient"
+    /// While in principle the balance is sufficient, the age restriction on coins causes the spendable balance to be insufficient
+    case ageRestricted = "age-restricted"
+    /// Wallet has enough available funds, but the material funds are insufficient
+    /// Usually because there is a pending refresh operation
+    case walletBalanceMaterialInsufficient = "wallet-balance-material-insufficient"
+    /// The wallet simply doesn't have enough available funds
+    case walletBalanceAvailableInsufficient = "wallet-balance-available-insufficient"
+    /// Exchange is missing the global fee configuration, thus fees are unknown
+    /// and funds from this exchange can't be used for p2p payments
+    case exchangeMissingGlobalFees = "exchange-missing-global-fees"
+    /// Even though the balance looks sufficient for the instructed amount,
+    /// the fees can be covered by neither the merchant nor the remaining wallet  balance
+    case feesNotCovered = "fees-not-covered"
 }
 
-struct HTTPError: Codable, Hashable {
+struct InsufficientBalanceDetailsPerExchange: Codable, Hashable {
+    var balanceAvailable: Amount
+    var balanceMaterial: Amount
+    var balanceExchangeDepositable: Amount
+    var balanceAgeAcceptable: Amount
+    var balanceReceiverAcceptable: Amount
+    var balanceReceiverDepositable: Amount
+    var maxEffectiveSpendAmount: Amount
+    /// Exchange doesn't have global fees configured for the relevant year, p2p payments aren't possible.
+    var missingGlobalFees: Bool
+}
+
+///  Detailed reason for why the wallet's balance is insufficient.
+struct PaymentInsufficientBalanceDetails: Codable, Hashable {
+    /// Amount requested by the merchant.
+    var amountRequested: Amount
+    var causeHint: InsufficientBalanceHint?
+    /// Balance of type "available" (see balance.ts for definition).
+    var balanceAvailable: Amount
+    /// Balance of type "material" (see balance.ts for definition).
+    var balanceMaterial: Amount
+    /// Balance of type "age-acceptable" (see balance.ts for definition).
+    var balanceAgeAcceptable: Amount
+    /// Balance of type "merchant-acceptable" (see balance.ts for definition).
+    var balanceReceiverAcceptable: Amount
+    /// Balance of type ...
+    var balanceReceiverDepositable: Amount
+    var balanceExchangeDepositable: Amount
+    /// Maximum effective amount that the wallet can spend, when all fees are paid by the wallet.
+    var maxEffectiveSpendAmount: Amount
+    var perExchange: [String : InsufficientBalanceDetailsPerExchange]
+}
+// MARK: -
+struct TalerErrorDetail: Codable, Hashable {
+    /// Numeric error code defined in the GANA gnu-taler-error-codes registry.
     var code: Int
+    // all other fields are optional:
+    var when: Timestamp?
+    /// English description of the error code.
+    var hint: String?
+
+    /// Error details, type depends on `talerErrorCode`.
+    var detail: String?
+
+    /// HTTPError
     var requestUrl: String?
-    var hint: String
     var requestMethod: String?
     var httpStatusCode: Int?
-    var when: Timestamp?
     var stack: String?
+
+    var insufficientBalanceDetails: PaymentInsufficientBalanceDetails?
 }
 // MARK: -
 /// Communicate with wallet-core

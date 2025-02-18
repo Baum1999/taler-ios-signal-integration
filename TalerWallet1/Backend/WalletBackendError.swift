@@ -18,66 +18,22 @@ enum WalletBackendError: Error {
     case walletCoreError(WalletBackendResponseError?)
 }
 
-struct ErrorResponse: Codable {
-    var code: Int
-    /// English description of the error code.
-    var hint: String
-
-    /// Error details, type depends on `talerErrorCode`.
-    var detail: String? = nil
-}
-
-
-struct InsufficientBalanceDetailsPerExchange: Codable {
-    var balanceAvailable: Amount
-    var balanceMaterial: Amount
-    var balanceExchangeDepositable: Amount
-    var balanceAgeAcceptable: Amount
-    var balanceReceiverAcceptable: Amount
-    var balanceReceiverDepositable: Amount
-    var maxEffectiveSpendAmount: Amount
-    /// Exchange doesn't have global fees configured for the relevant year, p2p payments aren't possible.
-    var missingGlobalFees: Bool
-}
-
-///  Detailed reason for why the wallet's balance is insufficient.
-struct PaymentInsufficientBalanceDetails: Codable {
-    /// Amount requested by the merchant.
-    var amountRequested: Amount
-    /// Balance of type "available" (see balance.ts for definition).
-    var balanceAvailable: Amount
-    /// Balance of type "material" (see balance.ts for definition).
-    var balanceMaterial: Amount
-    /// Balance of type "age-acceptable" (see balance.ts for definition).
-    var balanceAgeAcceptable: Amount
-    /// Balance of type "merchant-acceptable" (see balance.ts for definition).
-    var balanceReceiverAcceptable: Amount
-    /// Balance of type ...
-    var balanceReceiverDepositable: Amount
-    var balanceExchangeDepositable: Amount
-    /// Maximum effective amount that the wallet can spend, when all fees are paid by the wallet.
-    var maxEffectiveSpendAmount: Amount
-    var perExchange: [String : InsufficientBalanceDetailsPerExchange]
-}
-
 /// Information supplied by the backend describing an error.
 struct WalletBackendResponseError: Codable {
-    /// Numeric error code defined defined in the GANA gnu-taler-error-codes registry.
+    /// Numeric error code defined below (-1..-4)
     var code: Int
-
+    // all other fields are optional:
     var when: Timestamp?
-
     /// English description of the error code.
-    var hint: String
-
-    var requestUrl: String? = nil
-
-    var httpStatusCode: Int? = nil
-
-    var errorResponse: ErrorResponse? = nil
-
+    var hint: String?
     /// English diagnostic message that can give details for the instance of the error.
-    var message: String? = nil
+    var message: String?
+
+//    var requestUrl: String?
+//    var httpStatusCode: Int?
+//    var requestMethod: String?
+
+    var errorResponse: TalerErrorDetail?
 
     var insufficientBalanceDetails: PaymentInsufficientBalanceDetails? = nil
 }
