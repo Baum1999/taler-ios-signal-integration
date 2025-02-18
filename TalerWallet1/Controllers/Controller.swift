@@ -213,6 +213,7 @@ class Controller: ObservableObject {
         if let exchange = await exchange(for: baseUrl, model: model) {
             let scope = exchange.scopeInfo
             if currencyInfos[scope] == nil {
+                logger.log("  ❗️got no info for \(baseUrl.trimURL) \(scope.currency) -> will update")
                 await updateInfo(scope, model: model)
             }
         } else {
@@ -226,7 +227,11 @@ class Controller: ObservableObject {
             Task {
                 let exchange = await exchange(for: scope.url, model: model)
                 if let scope2 = exchange?.scopeInfo {
+                    let exchangeName = scope2.url ?? "UNKNOWN"
+                    logger.log("  ❗️got no info for \(scope.currency) -> will update \(exchangeName.trimURL)")
                     await updateInfo(scope2, model: model)
+                } else {
+                    logger.error("  ❗️got no info for \(scope.currency), and couldn't load the exchange info❗️")
                 }
             }
         }
