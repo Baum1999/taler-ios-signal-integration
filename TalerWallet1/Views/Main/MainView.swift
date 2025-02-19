@@ -365,11 +365,12 @@ extension MainView {
             }.navigationViewStyle(.stack)
             /// the tabItems (EMPTYSTRING .titleOnly) could indeed be omitted and the app would work the same - but are needed for accessibilityLabel
             return TabView(selection: tabSelection()) {
+#if OIM
                 balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
                     .tag(Tab.balances)
                     .tabItem { a11yBalanceTab }
                     .keepTabViewHeight(in: $tabBarHeight)
-                Color.clear                                 // can't use EmptyView because then VoiceOver wouldn't have the Actions tab
+                Color.clear                                 // can't use EmptyView: VoiceOver wouldn't have the Actions tab
                     .tag(Tab.actions)
                     .tabItem { a11yActionsTab }
                     .keepTabViewHeight(in: $tabBarHeight)
@@ -377,6 +378,17 @@ extension MainView {
                     .tag(Tab.settings)
                     .tabItem { a11ySettingsTab }
                     .keepTabViewHeight(in: $tabBarHeight)
+#else
+                balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
+                    .tag(Tab.balances)
+                    .tabItem { a11yBalanceTab }
+                Color.clear                                 // can't use EmptyView: VoiceOver wouldn't have the Actions tab
+                    .tag(Tab.actions)
+                    .tabItem { a11yActionsTab }
+                settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
+                    .tag(Tab.settings)
+                    .tabItem { a11ySettingsTab }
+#endif
             } // TabView
         }
 
@@ -406,9 +418,14 @@ extension MainView {
             }
         /// custom tabBar is rendered on top of the TabView, and overlaps its tabBar
             ZStack(alignment: .bottom) {
+#if OIM
                 tabContent
                     .hideTabBar($tabBarModel.tabBarHidden)
                     .environment(\.tabBarHeight, tabBarHeight)
+#else
+                tabContent
+                    .environment(\.tabBarHeight, tabBarHeight)
+#endif
                 tabBarView
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
@@ -465,8 +482,10 @@ extension MainView {
 //                symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
                 await controller.loadBalances(stack.push("refreshing balances"), model)
             } // task
+#if OIM
             .task(id: orientation) {
             }
+#endif
         } // body
     } // Content
 }
