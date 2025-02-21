@@ -61,6 +61,7 @@ struct Sheet: View {
                     logger.log("ErrorSheet dismissTop")
                     dismissTop(stack.push())
                 }
+                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             }
         }
         .onDisappear {
