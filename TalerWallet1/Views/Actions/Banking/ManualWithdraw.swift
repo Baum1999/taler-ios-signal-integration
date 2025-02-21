@@ -172,7 +172,7 @@ struct ManualWithdrawContent: View {
         } catch {
             symLog.log(error.localizedDescription)
             detailsForAmount = nil
-            }
+        }
         return nil
     } // computeFee
 

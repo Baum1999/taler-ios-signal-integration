@@ -18,10 +18,10 @@ struct WalletEmptyView: View {
 
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-    @State private var withDrawDisabled = false
+    @State private var withDrawStarted = false
 
     var body: some View {
-        List {
+        let list = List {
             Section {
                 Text("There is no digital cash in your wallet yet.")
                     .talerFont(.title3)
@@ -41,28 +41,28 @@ struct WalletEmptyView: View {
                     .listRowSeparator(.hidden)
                 let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")
                 Button(title) {
-                    withDrawDisabled = true    // don't run twice
+                    withDrawStarted = true    // don't run twice
                     Task { // runs on MainActor
                         let amount = Amount(currency:  DEMOCURRENCY, cent: 2500)
                         symLog.log("Withdraw KUDOS")
                         try? await model.loadTestKudos(0, amount: amount)
                     }
                 }
-                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawDisabled, aligned: .center))
-                .disabled(withDrawDisabled)
+                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
+                .disabled(withDrawStarted)
             }
         }
-        .listStyle(myListStyle.style).anyView
-        .talerFont(.title2)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
-        .overlay(loadingOverlay)
+            .listStyle(myListStyle.style).anyView
+            .talerFont(.title2)
+            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        ZStack {
+            list
+            if withDrawStarted {
+                RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawStarted)
+            }
+        }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY_WALLET, stack: stack.push("onAppear"))     // 10
-        }
-    }
-    @ViewBuilder private var loadingOverlay: some View {
-        if withDrawDisabled {
-            RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawDisabled)
         }
     }
 }
