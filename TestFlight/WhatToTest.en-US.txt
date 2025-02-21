@@ -1,3 +1,9 @@
+Version 0.14.3 (wallet-core 0.14.5)
+
+- improved error handling
+- lots of bugfixes
+
+
 Version 0.14.2 (wallet-core 0.14.4)
 
 • New feature: cash-to-ecash with a Cash Acceptor device
