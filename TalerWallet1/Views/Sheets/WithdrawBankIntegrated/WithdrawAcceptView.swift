@@ -19,7 +19,7 @@ struct WithdrawAcceptView: View {
     let scope: ScopeInfo
     @Binding var amountToTransfer: Amount
     @Binding var wireFee: Amount?
-    @Binding var exchange: Exchange?
+    @Binding var exchange: Exchange?            // user can select one from possibleExchanges
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -57,7 +57,8 @@ struct WithdrawAcceptView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(scope.url ?? amountToTransfer.readableDescription)       // just to get the #
 #endif
-        if let exchange2 = exchange {
+        ZStack {  // there is only _one_ Z item ever - use ZStack to ensure .task is run only _once_ when exchange is switched
+          if let exchange2 = exchange {     // there should always be an exchange...
             VStack {
                 let tosAccepted = exchange2.tosStatus == .accepted
                 if !tosAccepted {
@@ -129,14 +130,18 @@ struct WithdrawAcceptView: View {
                 symLog.log("onAppear")
                 DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)             // 132 WithdrawAcceptView
             }
-        } else {        // no details or no exchange
+          } else {        // no exchange - should not happen
 #if DEBUG
             let message = url.host
 #else
             let message: String? = nil
 #endif
+            let _ = symLog.log("Loading")
             LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
-                .task(id: exchange?.id) { await viewDidLoad() }
+          }
+        }
+        .task(id: exchange?.id) {     // re-run this whenever the user switches the exchange
+            await viewDidLoad()
         }
     }
 }

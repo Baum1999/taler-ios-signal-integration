@@ -110,11 +110,13 @@ struct WithdrawURIView: View {
             defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
             possibleExchanges = uriInfoResponse.possibleExchanges
 
-            await loadExchange(baseUrl)
-            symLog.log("\(baseUrl.trimURL) loaded")
+//            await loadExchange(baseUrl)       <- checkCurrencyInfo now returns the exchange
+//            symLog.log("\(baseUrl.trimURL) loaded")
 
-            await controller.checkCurrencyInfo(for: baseUrl, model: model)
-            symLog.log("Info(for: \(baseUrl.trimURL) loaded")
+            if let someExchange = try? await controller.checkCurrencyInfo(for: baseUrl, model: model) {
+                symLog.log("Info(for: \(baseUrl.trimURL) loaded")
+                exchange = someExchange
+            }
         } catch {
             // TODO: error, dismiss
         }
@@ -148,7 +150,7 @@ struct WithdrawURIView: View {
                                                                scope: exchange2.scopeInfo,
                                                     amountToTransfer: $amountToTransfer,
                                                              wireFee: $wireFee,
-                                                            exchange: $exchange)
+                                                            exchange: $exchange)        // from possibleExchanges
                     if amountIsEditable {
                         ScrollView {
                             let shortcutDest = WithdrawAcceptView(stack: stack.push(),
@@ -156,7 +158,7 @@ struct WithdrawURIView: View {
                                                                   scope: exchange2.scopeInfo,
                                                        amountToTransfer: $amountShortcut,
                                                                 wireFee: $wireFee,
-                                                               exchange: $exchange)
+                                                               exchange: $exchange)    // from possibleExchanges
                             let actions = Group {
                                 NavLink($shortcutSelected) { shortcutDest }
                                 NavLink($buttonSelected) { acceptDestination }
