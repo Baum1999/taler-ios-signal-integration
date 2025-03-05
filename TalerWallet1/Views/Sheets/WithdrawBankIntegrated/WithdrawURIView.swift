@@ -125,7 +125,7 @@ struct WithdrawURIView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        if let exchange {
+        if let exchange2 = exchange {
             if let defaultBaseUrl = defaultExchangeBaseUrl ?? possibleExchanges.first?.exchangeBaseUrl {
                 VStack {
                     let title = String(localized: "using:", comment: "using: exchange.taler.net")
@@ -145,7 +145,7 @@ struct WithdrawURIView: View {
                     } // load defaultBaseUrl
                     let acceptDestination = WithdrawAcceptView(stack: stack.push(),
                                                                  url: url,
-                                                               scope: exchange.scopeInfo,
+                                                               scope: exchange2.scopeInfo,
                                                     amountToTransfer: $amountToTransfer,
                                                              wireFee: $wireFee,
                                                             exchange: $exchange)
@@ -153,7 +153,7 @@ struct WithdrawURIView: View {
                         ScrollView {
                             let shortcutDest = WithdrawAcceptView(stack: stack.push(),
                                                                     url: url,
-                                                                  scope: exchange.scopeInfo,
+                                                                  scope: exchange2.scopeInfo,
                                                        amountToTransfer: $amountShortcut,
                                                                 wireFee: $wireFee,
                                                                exchange: $exchange)
@@ -166,7 +166,7 @@ struct WithdrawURIView: View {
                                                            : a11yLabel
                             // TODO: input amount, then
                             AmountInputV(stack: stack.push(),
-                                         scope: exchange.scopeInfo,
+                                         scope: exchange2.scopeInfo,
                                amountAvailable: $amountZero,
                                    amountLabel: amountZero.isZero ? amountLabel : nil,
                                      a11yLabel: a11yLabel,
@@ -186,7 +186,7 @@ struct WithdrawURIView: View {
                 }
                 .navigationTitle(navTitle)
                 .task(id: controller.currencyTicker) {
-                    currencyInfo = controller.info(for: exchange.scopeInfo, controller.currencyTicker)
+                    currencyInfo = controller.info(for: exchange2.scopeInfo, controller.currencyTicker)
                 }
                 .onAppear() {
                     symLog.log("onAppear")

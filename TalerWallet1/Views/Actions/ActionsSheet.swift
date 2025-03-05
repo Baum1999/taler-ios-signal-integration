@@ -57,7 +57,7 @@ struct ActionsSheet: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight won't work
 
-                let title = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
+                let buttonTitle = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
                 let shopAction = {
 //                    demoHints += 1
                     UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
@@ -68,7 +68,7 @@ struct ActionsSheet: View {
                         let talerColor = WalletColors().talerColor
                         ButtonIconBadge(type: .payment, foreColor: talerColor, done: false)
                         Spacer()
-                        Text(title)
+                        Text(buttonTitle)
                         Spacer()
                     }
                 }

@@ -167,9 +167,9 @@ fileprivate struct SetExchangeTOSAccepted: WalletBackendFormattedRequest {
 }
 // MARK: -
 struct AcceptWithdrawalResponse: Decodable {
-    var reservePub: String
-    var confirmTransferUrl: String?
     var transactionId: String
+    var confirmTransferUrl: String?
+//    var reservePub: String
 }
 /// A request to accept a bank-integrated withdrawl.
 fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest {

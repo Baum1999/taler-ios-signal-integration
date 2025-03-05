@@ -53,12 +53,12 @@ struct WithdrawAcceptView: View {
     }
 
     var body: some View {
-        if let exchange {
+        if let exchange2 = exchange {
             VStack {
-                let tosAccepted = exchange.tosStatus == .accepted
+                let tosAccepted = exchange2.tosStatus == .accepted
                 if !tosAccepted {
                     ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: exchange.exchangeBaseUrl,
+                        exchangeBaseUrl: exchange2.exchangeBaseUrl,
                                  viewID: SHEET_WITHDRAW_TOS,
                                     p2p: false,
                            acceptAction: reloadExchange)
@@ -77,7 +77,7 @@ struct WithdrawAcceptView: View {
                                          topTitle: String(localized: "Chosen amount to withdraw:"),
                                         topAbbrev: String(localized: "Withdraw:", comment: "Chosen amount to withdraw:"),
                                         topAmount: raw,
-                                           noFees: exchange.noFees,
+                                           noFees: exchange2.noFees,
                                               fee: fee,
                                     feeIsNegative: true,
                                       bottomTitle: String(localized: "Amount to obtain:"),
@@ -86,7 +86,7 @@ struct WithdrawAcceptView: View {
                                             large: false,
                                           pending: false,
                                          incoming: true,
-                                          baseURL: exchange.exchangeBaseUrl,
+                                          baseURL: exchange2.exchangeBaseUrl,
                                        txStateLcl: nil,        // common.txState.major.localizedState
                                           summary: nil,
                                          merchant: nil,
@@ -110,7 +110,7 @@ struct WithdrawAcceptView: View {
                     if tosAccepted {
                         let destination = WithdrawAcceptDone(stack: stack.push(),
 //                                                             scope: scope,
-                                                   exchangeBaseUrl: exchange.exchangeBaseUrl,
+                                                   exchangeBaseUrl: exchange2.exchangeBaseUrl,
                                                                url: url,
                                                   amountToTransfer: amountToTransfer.isZero ? nil : amountToTransfer)
                         NavigationLink(destination: destination) {
