@@ -1,5 +1,12 @@
+Version 0.14.4 (wallet-core 0.14.9)
+
+- bugfixes
+- scanning a QR code works again
+
+
 Version 0.14.3 (wallet-core 0.14.5)
 
+• New feature: OIM when rotating the phone
 - improved error handling
 - lots of bugfixes
 
