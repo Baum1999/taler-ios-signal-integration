@@ -209,16 +209,18 @@ class Controller: ObservableObject {
         }
     }
 
-    func checkCurrencyInfo(for baseUrl: String, model: WalletModel) async {
+    func checkCurrencyInfo(for baseUrl: String, model: WalletModel) async -> Exchange? {
         if let exchange = await exchange(for: baseUrl, model: model) {
             let scope = exchange.scopeInfo
             if currencyInfos[scope] == nil {
                 logger.log("  ❗️got no info for \(baseUrl.trimURL) \(scope.currency) -> will update")
                 await updateInfo(scope, model: model)
             }
+            return exchange
         } else {
             // Yikes❗️  TODO: error?
         }
+        return nil
     }
 
     /// called whenever a new currency pops up - will first load the Exchange and then currencyInfos
