@@ -59,7 +59,7 @@ struct PaymentDone: View {
                 }
             } else {
                 let message = String(localized: "Paying...", comment: "loading")
-                LoadingView(scopeInfo: nil, message: message)
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                     .task { await viewDidLoad() }
             }
         }.onAppear() {

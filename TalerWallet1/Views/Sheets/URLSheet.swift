@@ -25,6 +25,7 @@ struct URLSheet: View {
     private func passUrlOnce() {
         if urlToOpen != nil {
             passedURL = urlToOpen
+            symLog.log("❗️ passed urlToOpen:  \(urlToOpen?.absoluteString)")
             urlCommand = controller.openURL(urlToOpen!, stack: stack.push())
             urlToOpen = nil
             symLog.log("❗️ erase urlToOpen:  \(urlToOpen?.absoluteString)")
@@ -34,7 +35,7 @@ struct URLSheet: View {
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+        let _ = symLog.vlog(urlToOpen?.absoluteString)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         if let urlCommand, let passedURL {
             switch urlCommand {
@@ -66,7 +67,7 @@ struct URLSheet: View {
             }
         } else {
             let message = String(localized: "Scanning...", comment: "loading")
-            LoadingView(scopeInfo: nil, message: message)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                 .task(id: urlToOpen) {
                     passUrlOnce()
                 }

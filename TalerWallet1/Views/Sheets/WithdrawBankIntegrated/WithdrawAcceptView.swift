@@ -53,6 +53,10 @@ struct WithdrawAcceptView: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog(scope.url ?? amountToTransfer.readableDescription)       // just to get the #
+#endif
         if let exchange2 = exchange {
             VStack {
                 let tosAccepted = exchange2.tosStatus == .accepted
@@ -131,7 +135,7 @@ struct WithdrawAcceptView: View {
 #else
             let message: String? = nil
 #endif
-            LoadingView(scopeInfo: nil, message: message)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                 .task(id: exchange?.id) { await viewDidLoad() }
         }
     }

@@ -115,7 +115,7 @@ struct DepositAmountView: View {
 #endif
         if depositStarted {
             let message = String(localized: "Depositing...", comment: "loading")
-            LoadingView(scopeInfo: nil, message: message)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .safeAreaInset(edge: .bottom) {

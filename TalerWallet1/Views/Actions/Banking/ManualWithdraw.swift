@@ -264,7 +264,7 @@ struct ManualWithdrawContent: View {
                 .padding(.horizontal)
                 .task { await reloadExchange(detailsForAmount.exchangeBaseUrl) }
         } else {
-            LoadingView(scopeInfo: scope, message: nil)
+            LoadingView(stack: stack.push(), scopeInfo: scope, message: nil)
                 .task { await viewDidLoad2() }
         }
     }

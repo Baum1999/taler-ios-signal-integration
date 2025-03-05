@@ -10,6 +10,7 @@ import SymLog
 
 struct LoadingView: View {
     private let symLog = SymLogV(0)
+    let stack: CallStack
     let scopeInfo: ScopeInfo?
     let message: String?
 
@@ -53,7 +54,7 @@ struct LoadingView: View {
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            LoadingView(scopeInfo: nil, message: "test message")  // , backButtonHidden: true)
+            LoadingView(stack: CallStack("Loading"), scopeInfo: nil, message: "test message")  // , backButtonHidden: true)
                 .navigationBarTitleDisplayMode(.automatic)
         }.navigationViewStyle(.stack)
     }

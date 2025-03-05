@@ -71,7 +71,7 @@ struct WithdrawExchangeV: View {
             }
         } else {
             let message = String(localized: "No payment service...", comment: "loading")
-            LoadingView(scopeInfo: nil, message: message)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                 .task { await viewDidLoad() }
         }
     }

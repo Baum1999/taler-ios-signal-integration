@@ -60,7 +60,7 @@ struct RefundURIView: View {
 //                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
 //            }
         } else {
-            LoadingView(scopeInfo: nil, message: url.host)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
                 .task { await viewDidLoad() }
         }
     }

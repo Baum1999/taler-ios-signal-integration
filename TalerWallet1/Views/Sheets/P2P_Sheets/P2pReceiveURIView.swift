@@ -113,7 +113,7 @@ struct P2pReceiveURIView: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(scopeInfo: nil, message: message)
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
             }
         }
         // must be here and not at LoadingView(), because this needs to run a 2nd time after ToS was accepted

@@ -223,7 +223,7 @@ struct PayTemplateV: View {
                 DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
             }
         } else {
-            LoadingView(scopeInfo: nil, message: url.host)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
                 .task { await viewDidLoad() }
         }
     }

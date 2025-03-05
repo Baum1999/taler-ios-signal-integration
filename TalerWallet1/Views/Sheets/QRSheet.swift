@@ -31,9 +31,13 @@ struct QRSheet: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog(scannedCode)       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         Group {
             if scannedCode != nil {
-//                let _ = print(scannedCode as Any)       // TODO: logging
+//                let _ = symLog(scannedCode!)       // TODO: logging
 
                 if let scannedURL = urlToOpen {
                     let scheme = scannedURL.scheme

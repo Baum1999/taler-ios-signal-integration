@@ -93,7 +93,7 @@ struct P2pPayURIView: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(scopeInfo: nil, message: message)
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                     .task { await viewDidLoad() }
             }
         }

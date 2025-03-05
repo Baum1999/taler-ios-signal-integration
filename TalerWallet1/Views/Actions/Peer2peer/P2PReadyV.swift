@@ -94,7 +94,7 @@ struct P2PReadyV: View {
 #else
                 let message: String? = nil
 #endif
-                LoadingView(scopeInfo: scope, message: message)
+                LoadingView(stack: stack.push(), scopeInfo: scope, message: message)
             }
         }
         .navigationTitle(navTitle)

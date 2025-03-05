@@ -63,7 +63,7 @@ struct ManualWithdrawDone: View {
                             .padding(.horizontal)
                 }
             } else {
-                LoadingView(scopeInfo: nil, message: baseURL.trimURL)
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: baseURL.trimURL)
                     .task { await viewDidLoad() }
             }
         }

@@ -298,7 +298,7 @@ struct PaymentView: View, Sendable {
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
             }
         } else {
-            LoadingView(scopeInfo: nil, message: url.host)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
                 .task { await viewDidLoad() }
         }
       }.onAppear() {

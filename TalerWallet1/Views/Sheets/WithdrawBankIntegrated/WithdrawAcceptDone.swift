@@ -84,7 +84,7 @@ struct WithdrawAcceptDone: View {
                 }
             } else {
                 let fallback = String(localized: "Bank Authorization", comment: "loading")
-                LoadingView(scopeInfo: nil,
+                LoadingView(stack: stack.push(), scopeInfo: nil,
                               message: exchangeBaseUrl?.trimURL ?? fallback)
                 .task { await viewDidLoad() }
             }
