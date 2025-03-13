@@ -43,13 +43,13 @@ struct SettingsView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
     @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
+    @AppStorage("sierraLeone") var sierraLeone: Bool = false
+    @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
 #if DEBUG
     @State private var diagnosticModeEnabled = true
-#else
-    @State private var diagnosticModeEnabled = UserDefaults.standard.bool(forKey: "diagnostic_mode_enabled")
 #endif
     @State private var showDevelopItems = false
     @State private var hideDescriptions = false
@@ -147,7 +147,18 @@ struct SettingsView: View {
                     consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
                 }
-                if diagnosticModeEnabled {
+                if controller.oimModeActive {
+                    SettingsToggle(name: String(localized: "Two rows"), value: $oimTwoRows, id1: "oimTwoRows",
+                                   description: minimalistic ? nil : String(localized: "OIM denomination layout"))
+                    SettingsToggle(name: String(localized: "Sierra Leone"), value: $sierraLeone, id1: "sierraLeone",
+                                   description: minimalistic ? nil : String(localized: "Currency to be used for OIM"))
+                }
+#if DEBUG
+                let showDiagnostic = diagnosticModeEnabled
+#else
+                let showDiagnostic = controller.diagnosticModeEnabled
+#endif
+                if showDiagnostic {
                     let showLogs = String(localized: "Show logs")
                     SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
                         walletCore.isLogging = isLogging}), id1: "localConsoleL",
@@ -338,16 +349,7 @@ struct SettingsView: View {
                           resetButton },
                message: {   Text(verbatim: "Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
 
-#if !DEBUG
-        .onReceive(
-            NotificationCenter.default
-                .publisher(for: UserDefaults.didChangeNotification)
-                .receive(on: RunLoop.main)
-        ) { _ in            // user changed Diagnostic Mode in iOS Settings.app
-            withAnimation { diagnosticModeEnabled = UserDefaults.standard.bool(forKey: "diagnostic_mode_enabled") }
-        }
-#endif
-    }
+    } // body
 }
 // MARK: -
 #if DEBUG
