@@ -39,7 +39,7 @@ struct URLSheet: View {
 #endif
         if let urlCommand, let passedURL {
             switch urlCommand {
-                case .termsExchange,      // TODO: just check the ToS
+                case .addExchange,      // TODO: just check the ToS
                      .withdraw:
                     WithdrawURIView(stack: stack.push(), url: passedURL)
                 case .withdrawExchange:
