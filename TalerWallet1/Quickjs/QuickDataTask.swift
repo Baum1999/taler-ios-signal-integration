@@ -116,7 +116,7 @@ class QuickDataTask: NSObject {
                                                     response_headers: cHeaders.pointer,
                                                 num_response_headers: numHeaders,
                                                                 body: bodyPtr,
-                                                            body_len: data.count)
+                                                            body_len: UInt32(data.count))
                         let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
                         // Initialization of 'UnsafeMutablePointer<JSHttpResponseInfo>' results in a dangling pointer
                         logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
