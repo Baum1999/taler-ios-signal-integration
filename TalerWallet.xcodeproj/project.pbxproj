@@ -302,6 +302,8 @@
 		4EE77E822C06E513007C9064 /* WithdrawAcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE77E802C06E513007C9064 /* WithdrawAcceptView.swift */; };
 		4EE9864F2CE26E0F00F75634 /* DepositAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */; };
 		4EE986502CE26E0F00F75634 /* DepositAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */; };
+		4EE9E1FA2D7D516800365E72 /* OIMcurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */; };
+		4EE9E1FB2D7D516800365E72 /* OIMcurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */; };
 		4EE9E1FD2D7E3C8000365E72 /* UserDefaults+oimMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9E1FC2D7E3C8000365E72 /* UserDefaults+oimMode.swift */; };
 		4EE9E1FE2D7E3C8000365E72 /* UserDefaults+oimMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE9E1FC2D7E3C8000365E72 /* UserDefaults+oimMode.swift */; };
 		4EEBEFB02C8982180020D340 /* View+innerSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEBEFAF2C8982180020D340 /* View+innerSize.swift */; };
@@ -524,6 +526,7 @@
 		4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Taler_Wallet InfoPlist.xcstrings"; sourceTree = "<group>"; };
 		4EE77E802C06E513007C9064 /* WithdrawAcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawAcceptView.swift; sourceTree = "<group>"; };
 		4EE9864E2CE26E0F00F75634 /* DepositAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAmountView.swift; sourceTree = "<group>"; };
+		4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OIMcurrency.swift; sourceTree = "<group>"; };
 		4EE9E1FC2D7E3C8000365E72 /* UserDefaults+oimMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+oimMode.swift"; sourceTree = "<group>"; };
 		4EEBEFAF2C8982180020D340 /* View+innerSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+innerSize.swift"; sourceTree = "<group>"; };
 		4EEC118C2B83DE4700146CFF /* AmountInputV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountInputV.swift; sourceTree = "<group>"; };
@@ -743,6 +746,7 @@
 				4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
+				4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */,
 				4E578E912A481D8600F21F1C /* Controller+playSound.swift */,
 				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
 				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
@@ -1363,6 +1367,7 @@
 				E37AA62E2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4E7F85172D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */,
 				4E3EAE5F2A990778009F1BE8 /* QRSheet.swift in Sources */,
+				4EE9E1FA2D7D516800365E72 /* OIMcurrency.swift in Sources */,
 				4E3EAE602A990778009F1BE8 /* P2pReceiveURIView.swift in Sources */,
 				4E3EAE612A990778009F1BE8 /* ListStyle.swift in Sources */,
 				4EED38552D140C1400F6C038 /* TabBarModel.swift in Sources */,
@@ -1507,6 +1512,7 @@
 				E37AA62F2AF19BE0003850CF /* RefundURIView.swift in Sources */,
 				4E7F85182D63185E00954C30 /* Environment+EdgeInsets.swift in Sources */,
 				4EEC157A29F9427F00D46A03 /* QRSheet.swift in Sources */,
+				4EE9E1FB2D7D516800365E72 /* OIMcurrency.swift in Sources */,
 				4E3B4BC12A41E6C200CC88B8 /* P2pReceiveURIView.swift in Sources */,
 				4E6EDD872A363D8D0031D520 /* ListStyle.swift in Sources */,
 				4EED38562D140C1400F6C038 /* TabBarModel.swift in Sources */,
