@@ -54,6 +54,8 @@ class Controller: ObservableObject {
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
     @Published var isConnected: Bool = true
+    @Published var oimModeActive: Bool = false
+    @Published var diagnosticModeActive: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -67,6 +69,21 @@ class Controller: ObservableObject {
     var messageForSheet: String? = nil
 
     private let monitor = NWPathMonitor()
+
+    private var oimModeObservation: NSKeyValueObservation?
+    private var diagnosticModeObservation: NSKeyValueObservation?
+
+    func startObserving() {
+        let defaults = UserDefaults.standard
+        self.oimModeObservation = defaults.observe(\.oimModeEnabled, options: [.new, .old, .prior, .initial]) { [weak self](object, change) in
+//            print(object, change)
+            print(UserDefaults.standard.oimModeEnabled)
+            self?.oimModeActive = UserDefaults.standard.oimModeEnabled
+        }
+        self.diagnosticModeObservation = defaults.observe(\.diagnosticModeEnabled, options: [.new, .old,.prior,.initial]) {  [weak self](_, _) in
+            self?.diagnosticModeActive = UserDefaults.standard.diagnosticModeEnabled
+        }
+    }
 
     func checkInternetConnection() {
         monitor.pathUpdateHandler = { path in
@@ -115,6 +132,7 @@ class Controller: ObservableObject {
         exchanges = []
         balances = []
 //        checkInternetConnection()
+        startObserving()
     }
 // MARK: -
     @MainActor
