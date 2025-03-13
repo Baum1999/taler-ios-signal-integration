@@ -151,6 +151,8 @@
 		4E40E0BE29F25ABB00B85369 /* SendAmountV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */; };
 		4E448AB72C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
 		4E448AB82C4A4109007D5C92 /* BalancesPendingRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */; };
+		4E4792502D660C5600749393 /* OIMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E47924F2D660C5600749393 /* OIMView.swift */; };
+		4E4792512D660C5600749393 /* OIMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E47924F2D660C5600749393 /* OIMView.swift */; };
 		4E4A3F0B2CD4B6CD00CA6A90 /* NavLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A3F0A2CD4B6CD00CA6A90 /* NavLink.swift */; };
 		4E4A3F0C2CD4B6CD00CA6A90 /* NavLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A3F0A2CD4B6CD00CA6A90 /* NavLink.swift */; };
 		4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */; };
@@ -410,6 +412,7 @@
 		4E3EAEA72AA70157009F1BE8 /* Binding+onChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Binding+onChange.swift"; sourceTree = "<group>"; };
 		4E40E0BD29F25ABB00B85369 /* SendAmountV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendAmountV.swift; sourceTree = "<group>"; };
 		4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalancesPendingRowV.swift; sourceTree = "<group>"; };
+		4E47924F2D660C5600749393 /* OIMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIMView.swift; sourceTree = "<group>"; };
 		4E4A3F0A2CD4B6CD00CA6A90 /* NavLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavLink.swift; sourceTree = "<group>"; };
 		4E4F60A72C3BBF9F003BB669 /* View+Condition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Condition.swift"; sourceTree = "<group>"; };
 		4E50B34F2A1BEE8000F9F01C /* ManualWithdraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualWithdraw.swift; sourceTree = "<group>"; };
@@ -870,6 +873,7 @@
 			isa = PBXGroup;
 			children = (
 				4EB095372989CBFE0043A8A1 /* BalancesListView.swift */,
+				4E47924F2D660C5600749393 /* OIMView.swift */,
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */,
 				4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */,
@@ -1295,6 +1299,7 @@
 				4E3EAE2D2A990778009F1BE8 /* Model+Exchange.swift in Sources */,
 				4EBC0F012B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */,
 				4E3EAE2E2A990778009F1BE8 /* QRCodeDetailView.swift in Sources */,
+				4E4792502D660C5600749393 /* OIMView.swift in Sources */,
 				4E3EAE2F2A990778009F1BE8 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB02C8982180020D340 /* View+innerSize.swift in Sources */,
 				4E605DAF2AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,
@@ -1440,6 +1445,7 @@
 				4E3B4BC92A42BC4800CC88B8 /* Model+Exchange.swift in Sources */,
 				4EBC0F022B7B3CD600C0CB19 /* DepositSelectV.swift in Sources */,
 				4E5A88F52A38A4FD00072618 /* QRCodeDetailView.swift in Sources */,
+				4E4792512D660C5600749393 /* OIMView.swift in Sources */,
 				4E87C8732A31CB7F001C6406 /* TransactionsEmptyView.swift in Sources */,
 				4EEBEFB12C8982180020D340 /* View+innerSize.swift in Sources */,
 				4E605DB02AADDD13002FB9A7 /* UIScreen+screenSize.swift in Sources */,

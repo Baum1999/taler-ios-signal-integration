@@ -12,13 +12,24 @@ import SwiftUI
 
 class TabBarModel: ObservableObject {
     @Published var tabBarHidden = 0
+    @Published var oimActive = 0 {
+        didSet {
+            if oimActive == 0 {
+                if actionSelected == nil && tosView == nil {
+                    tabBarHidden = 0
+                }
+            } else {
+                tabBarHidden += 1
+            }
+        }
+    }
 
     @Published var tosView: Int? = nil {
         didSet {
             if tosView != nil {
                 tabBarHidden += 1
             } else if actionSelected == nil {
-                tabBarHidden = 0
+                tabBarHidden = oimActive
             }
         }
     }
@@ -28,7 +39,7 @@ class TabBarModel: ObservableObject {
             if actionSelected != nil {
                 tabBarHidden += 1
             } else if tosView == nil {
-                tabBarHidden = 0
+                tabBarHidden = oimActive
             }
         }
     }
