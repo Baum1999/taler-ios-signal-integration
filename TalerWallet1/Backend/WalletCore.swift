@@ -379,7 +379,7 @@ extension WalletCore {
             }
         } catch let error {
             logger.error("Error \(error) parsing notification: \(message)")
-            postNotification(.Error, userInfo: [NOTIFICATIONERROR: error])
+            postNotification(.GeneralError, userInfo: [NOTIFICATIONERROR: error])
         // TODO: if DevMode then should log into file for user
         }
     }

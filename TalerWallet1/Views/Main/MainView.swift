@@ -450,7 +450,7 @@ extension MainView {
             .onNotification(.TransactionError) { notification in
                 shouldReloadPending += 1
             }
-            .onNotification(.Error) { notification in
+            .onNotification(.GeneralError) { notification in
                 if let error = notification.userInfo?[NOTIFICATIONERROR] as? Error {
                     model.setError(error)
                     controller.playSound(0)

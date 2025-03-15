@@ -159,7 +159,7 @@ extension Notification.Name {
     static let TaskObservabilityEvent = Notification.Name("task-observability-event")
     static let RequestObservabilityEvent = Notification.Name("request-observability-event")
 
-    static let Error = Notification.Name("error")
+    static let GeneralError = Notification.Name("error")
     static let TransactionError = Notification.Name("txError")
 }
 
