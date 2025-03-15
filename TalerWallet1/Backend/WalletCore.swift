@@ -288,18 +288,18 @@ extension WalletCore {
             } // 3 components
             return
         } catch DecodingError.dataCorrupted(let context) {
-            print(context)
+            logger.error("\(context.debugDescription)")
         } catch DecodingError.keyNotFound(let key, let context) {
-            print("Key '\(key)' not found:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Key '\(key.stringValue)' not found:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
         } catch DecodingError.valueNotFound(let value, let context) {
-            print("Value '\(value)' not found:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Value '\(value)' not found:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
         } catch DecodingError.typeMismatch(let type, let context) {
-            print("Type '\(type)' mismatch:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Type '\(type)' mismatch:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
         } catch let error {       // rethrows
-            symLog.log(error)       // TODO: .error
+            logger.error("\(error.localizedDescription)")
         }
         throw WalletBackendError.walletCoreError(nil)       // TODO: error?
     }
@@ -374,11 +374,11 @@ extension WalletCore {
 //                     "refresh-revealed", "refresh-unwarranted":
 //                    break
                 default:
-print("\n❗️ WalletCore.swift:368 NEW Notification: ", message, "\n")        // this is a new notification I haven't seen before
+                    logger.error("NEW Notification: \(message)")        // this is a new notification I haven't seen before
                     break
             }
         } catch let error {
-            symLog.log("Error \(error) parsing notification: \(message)")    // TODO: .error
+            logger.error("Error \(error) parsing notification: \(message)")
             postNotification(.Error, userInfo: [NOTIFICATIONERROR: error])
         // TODO: if DevMode then should log into file for user
         }
@@ -444,16 +444,18 @@ print("\n❗️ WalletCore.swift:368 NEW Notification: ", message, "\n")        
                     throw WalletBackendError.deserializationError
             }
         } catch DecodingError.dataCorrupted(let context) {
-            print(context)
+            logger.error("\(context.debugDescription)")
         } catch DecodingError.keyNotFound(let key, let context) {
-            print("Key '\(key)' not found:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Key '\(key.stringValue)' not found:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
         } catch DecodingError.valueNotFound(let value, let context) {
-            print("Value '\(value)' not found:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Value '\(value)' not found:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
         } catch DecodingError.typeMismatch(let type, let context) {
-            print("Type '\(type)' mismatch:", context.debugDescription)
-            print("codingPath:", context.codingPath)
+            logger.error("Type '\(type)' mismatch:\(context.debugDescription)")
+            logger.error("\(context.codingPath)")
+        } catch let error {
+            logger.error("\(error.localizedDescription)")
         } catch { // TODO: ?
             delegate?.walletBackendReceivedUnknownMessage(self, message: message)
         }
@@ -497,14 +499,14 @@ extension WalletCore {
         let reqData = WalletBackendRequest(operation: request.operation(),
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
-            encodeAndSend(reqData) { requestId, timeSent, result, error in
+            encodeAndSend(reqData) { [self] requestId, timeSent, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
                 if let error {
-                    self.logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms")
+                    logger.error("Request \"id\":\(requestId, privacy: .public) failed after \(millisecs, privacy: .public) ms")
                 } else {
                     if millisecs > 50 {
-                        self.logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
+                        logger.info("Request \"id\":\(requestId, privacy: .public) took \(millisecs, privacy: .public) ms")
                     }
                 }
                 var err: Error? = nil
@@ -514,30 +516,30 @@ extension WalletCore {
                         continuation.resume(returning: (decoded, requestId))
                         return
                     } catch DecodingError.dataCorrupted(let context) {
-                        print(context)
+                        logger.error("\(context.debugDescription)")
                     } catch DecodingError.keyNotFound(let key, let context) {
-                        print("Key '\(key)' not found:", context.debugDescription)
-                        print("codingPath:", context.codingPath)
+                        logger.error("Key '\(key.stringValue)' not found:\(context.debugDescription)")
+                        logger.error("\(context.codingPath)")
                     } catch DecodingError.valueNotFound(let value, let context) {
-                        print("Value '\(value)' not found:", context.debugDescription)
-                        print("codingPath:", context.codingPath)
+                        logger.error("Value '\(value)' not found:\(context.debugDescription)")
+                        logger.error("\(context.codingPath)")
                     } catch DecodingError.typeMismatch(let type, let context) {
-                        print("Type '\(type)' mismatch:", context.debugDescription)
-                        print("codingPath:", context.codingPath)
+                        logger.error("Type '\(type)' mismatch:\(context.debugDescription)")
+                        logger.error("\(context.codingPath)")
                     } catch {       // rethrows
                         if let jsonString = String(data: json, encoding: .utf8) {
-                            self.symLog.log(jsonString)       // TODO: .error
+                            symLog.log(jsonString)       // TODO: .error
                         } else {
-                            self.symLog.log(json)       // TODO: .error
+                            symLog.log(json)       // TODO: .error
                         }
                         err = error     // this will be thrown in continuation.resume(throwing:), otherwise keep nil
                     }
                 } else if let error {
                     // TODO: WALLET_CORE_REQUEST_CANCELLED
-                    self.lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
+                    lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
                     err = WalletBackendError.walletCoreError(error)
                 } else {        // both result and error are nil
-                    self.lastError = nil
+                    lastError = nil
                 }
                 continuation.resume(throwing: err ?? TransactionDecodingError.invalidStringValue)
             }

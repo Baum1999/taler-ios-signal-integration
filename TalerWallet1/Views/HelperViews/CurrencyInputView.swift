@@ -211,7 +211,7 @@ struct CurrencyInputView: View {
             if hasBeenShown {
 //                print("❗️Yikes: CurrencyInputView hasBeenShown")
             } else if !UIAccessibility.isVoiceOverRunning {
-                print("❗️CurrencyInputView❗️")
+//                print("❗️CurrencyInputView❗️")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     hasBeenShown = true
                     if !currencyField.becomeFirstResponder() {

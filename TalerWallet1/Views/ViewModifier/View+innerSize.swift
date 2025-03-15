@@ -55,7 +55,7 @@ extension View {
             }
         }
         .onPreferenceChange(InnerHeightKey.self) { newValue in
- print("❗️InnerHeight \(newValue)❗️")
+// print("❗️InnerHeight \(newValue)❗️")
             height.wrappedValue = newValue
         }
     }
@@ -68,7 +68,7 @@ extension View {
             }
         }
         .onPreferenceChange(InnerWidthKey.self) { newValue in
-  print("❗️InnerWidth \(newValue)❗️")
+//  print("❗️InnerWidth \(newValue)❗️")
             width.wrappedValue = newValue
         }
     }
@@ -81,7 +81,7 @@ extension View {
             }
         }
         .onPreferenceChange(InnerSizeKey.self) { newValue in
-  print("❗️InnerSize \(newValue)❗️")
+//  print("❗️InnerSize \(newValue)❗️")
             size.wrappedValue = newValue
         }
     }

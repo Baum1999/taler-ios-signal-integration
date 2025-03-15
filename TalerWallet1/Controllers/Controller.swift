@@ -75,9 +75,7 @@ class Controller: ObservableObject {
 
     func startObserving() {
         let defaults = UserDefaults.standard
-        self.oimModeObservation = defaults.observe(\.oimModeEnabled, options: [.new, .old, .prior, .initial]) { [weak self](object, change) in
-//            print(object, change)
-            print(UserDefaults.standard.oimModeEnabled)
+        self.oimModeObservation = defaults.observe(\.oimModeEnabled, options: [.new, .old, .prior, .initial]) { [weak self](_, _) in
             self?.oimModeActive = UserDefaults.standard.oimModeEnabled
         }
         self.diagnosticModeObservation = defaults.observe(\.diagnosticModeEnabled, options: [.new, .old,.prior,.initial]) {  [weak self](_, _) in

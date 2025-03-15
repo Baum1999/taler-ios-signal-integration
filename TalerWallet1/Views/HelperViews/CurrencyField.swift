@@ -119,7 +119,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
 
     func updateText(amount: Amount) {
         let plain = amount.plainString(currencyInfo)
-        print("Setting textfield to: \(plain)")
+//        print("Setting textfield to: \(plain)")
         textField.text = plain
         let endPosition = textField.endOfDocument
         textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)

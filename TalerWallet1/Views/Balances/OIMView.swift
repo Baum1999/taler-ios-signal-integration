@@ -93,7 +93,7 @@ struct OIMcoinStackV: View {
 
     var body: some View {
         let number = count - 1
-        let _ = print("CoinStack: \(count) * \(value) \(currency.coinBase)")
+//        let _ = print("CoinStack: \(count) * \(value) \(currency.coinBase)")
         if let size = currency.coinSize(value) {
             let offset = size / 16
             ZStack {
@@ -278,10 +278,10 @@ struct ColumnView: View {
     var body: some View {
         VStack {
             if column.topCount > 1 {
-                let _ = print("Stack: \(column.topCount) * \(column.topVal) \(currency.noteBase)")
+//                let _ = print("Stack: \(column.topCount) * \(column.topVal) \(currency.noteBase)")
                 OIMstackV(value: column.topVal, count: column.topCount, currency: currency)
             } else {
-                let _ = print("Single: \(column.topVal) and \(column.botVal) \(currency.noteBase)")
+//                let _ = print("Single: \(column.topVal) and \(column.botVal) \(currency.noteBase)")
                 OIMsingleV(value: column.topVal, currency: currency)
                 if column.botVal > 0 {
                     OIMsingleV(value: column.botVal, currency: currency)
@@ -310,7 +310,7 @@ struct OIMView: View {
             let amount = balance.available
             if !amount.isZero {
                 let value = amount.value * 100          // TODO: currency specs instead of 100
-                print("intValue: \(Int(value)) \(currency.noteBase)")
+//                print("intValue: \(Int(value)) \(currency.noteBase)")
                 return Int(value)
             }
         }
@@ -326,7 +326,7 @@ struct OIMView: View {
         func addTopVal(andBot: Int, to columns: inout Columns) {
             if topVal > 0 {
                 columns.append(Column(topCount: 1, topVal: topVal, botVal: andBot))
-                print("add \(topVal) and \(andBot) \(currency.noteBase)")
+//                print("add \(topVal) and \(andBot) \(currency.noteBase)")
                 topVal = 0
             } else if andBot > 0 {
                 topVal = andBot
@@ -346,7 +346,7 @@ struct OIMView: View {
                         cnt -= 5
                     }
                     notes.append(Column(topCount: cnt, topVal: value, botVal: 0))
-                    print("notes: \(count) * \(value) \(currency.noteBase)")
+//                    print("notes: \(count) * \(value) \(currency.noteBase)")
                 } else {
                     addTopVal(andBot: value, to: &notes)
                 }
@@ -364,7 +364,7 @@ struct OIMView: View {
                             addTopVal(andBot: 0, to: &intCoins)
                         } // else fill bottom later with smaller coin
                         intCoins.append(Column(topCount: count, topVal: value, botVal: 0))
-                        print("intCoins: \(count) * \(value) \(currency.coinBase)")
+//                        print("intCoins: \(count) * \(value) \(currency.coinBase)")
                     } else {
                         addTopVal(andBot: value, to: &intCoins)
                     }
@@ -377,7 +377,7 @@ struct OIMView: View {
                             addTopVal(andBot: 0, to: &fracCoins)
                         } // else fill bottom later with smaller coin
                         fracCoins.append(Column(topCount: count, topVal: value, botVal: 0))
-                        print("fracCoins: \(count) * \(value) \(currency.coinBase)")
+//                        print("fracCoins: \(count) * \(value) \(currency.coinBase)")
                     } else {
                         addTopVal(andBot: value, to: &fracCoins)
                     }
@@ -433,7 +433,7 @@ struct OIMView: View {
             Spacer()
             OIMcurrencyScroller(currency: currency, amount: $amount)
                 .onChange(of: amount) { newValue in
-                    print("new Amount: \(newValue)")
+//                    print("new Amount: \(newValue)")
                     let result = currency.notesCoins(newValue)
                     buildColumns(result, currency: currency)
                 }
