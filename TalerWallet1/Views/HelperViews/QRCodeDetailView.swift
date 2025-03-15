@@ -28,8 +28,9 @@ struct QRCodeDetailView: View {
     private func amountStr(_ currencyInfo : CurrencyInfo?) -> (String, String) {
         let amountFormatted: (String, String)
         let readable = amount.readableDescription
-        if let currencyInfo {
-            amountFormatted = amount.formatted(currencyInfo, isNegative: false,
+        let myCurrencyInfo = currencyInfo ?? controller.info(for: scope)
+        if let myCurrencyInfo {
+            amountFormatted = amount.formatted(myCurrencyInfo, isNegative: false,
                                                useISO: false, a11yDecSep: nil)
         } else {
             amountFormatted = (readable, readable)
