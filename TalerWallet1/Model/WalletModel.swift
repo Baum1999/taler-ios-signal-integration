@@ -100,6 +100,13 @@ class WalletModel: ObservableObject {
             self.error2 = nil
         }
     }
+    @MainActor func setMessage(_ title: String,_ theMessage: String?) {
+        if let theMessage {
+            self.error2 = .message(title: title, message: theMessage)
+        } else {
+            self.error2 = nil
+        }
+    }
 
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0, viewHandles: Bool = false)
       async throws -> T.Response {    // T for any Thread

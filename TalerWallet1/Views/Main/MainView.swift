@@ -96,7 +96,8 @@ struct MainView: View {
         let mainGroup = Group {
             switch controller.backendState {
                 case .ready: mainContent
-                case .error: ErrorView(errortext: nil)            // TODO: show Error View
+                case .error: ErrorSheet(title: String(localized: ""),
+                                        copyable: true) {}
                 default:    // show launch animation until either ready or error
                     LaunchAnimationView()
             }
@@ -109,6 +110,7 @@ struct MainView: View {
                     let sheet = URLSheet(stack: stack.push(),
                                selectedBalance: $selectedBalance,
                                      urlToOpen: $urlToOpen)
+                        .id("onOpenURL")
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
                 }
                 .sheet(isPresented: $showScanner,

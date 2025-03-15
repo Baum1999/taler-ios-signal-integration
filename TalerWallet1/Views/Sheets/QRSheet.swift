@@ -15,6 +15,7 @@ struct QRSheet: View {
     let stack: CallStack
     @Binding var selectedBalance: Balance?
 
+    @EnvironmentObject private var model: WalletModel
     @State private var scannedCode: String?
     @State private var urlToOpen: URL?
 
@@ -36,9 +37,8 @@ struct QRSheet: View {
         let _ = symLog.vlog(scannedCode)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
+            let errorAnnouncement = String(localized: "Error while scanning QR code", comment: "VoiceOver")
             if scannedCode != nil {
-//                let _ = symLog(scannedCode!)       // TODO: logging
-
                 if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
@@ -47,10 +47,18 @@ struct QRSheet: View {
                              urlToOpen: $urlToOpen)
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
-                        ErrorView(errortext: scannedURL.absoluteString)
+                        ErrorSheet(title: String(localized: "Scanned QR is no talerURI"),
+                                 message: scannedURL.absoluteString,
+                                copyable: true) {
+                            dismissTop(stack.push())
+                        }
                     }
                 } else {
-                    ErrorView(errortext: scannedCode)
+                    ErrorSheet(title: String(localized: "Scanned QR is no URL"),
+                             message: scannedCode,
+                            copyable: true) {
+                        dismissTop(stack.push())
+                    }
                 }
             } else {
                 CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr], showViewfinder: true) { response in
@@ -63,8 +71,8 @@ struct QRSheet: View {
                             closingAnnouncement = String(localized: "QR code recognized", comment: "VoiceOver")
                         case .failure(let error):
                             // TODO: errorAlert
-                            ErrorView(errortext: error.localizedDescription)
-                            closingAnnouncement = String(localized: "Error while scanning QR code", comment: "VoiceOver")
+                            model.setError(error)
+                            closingAnnouncement = errorAnnouncement
                     }
                         announce(closingAnnouncement)
                 }

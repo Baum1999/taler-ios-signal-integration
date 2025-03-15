@@ -99,7 +99,6 @@
 		4E3EAE572A990778009F1BE8 /* quickjs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0950D2989CB9A0043A8A1 /* quickjs.swift */; };
 		4E3EAE582A990778009F1BE8 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E53A33629F50B7B00830EC2 /* CurrencyField.swift */; };
 		4E3EAE592A990778009F1BE8 /* Model+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095102989CBB00043A8A1 /* Model+Settings.swift */; };
-		4E3EAE5A2A990778009F1BE8 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095452989CBFE0043A8A1 /* ErrorView.swift */; };
 		4E3EAE5B2A990778009F1BE8 /* View+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3B4BC62A429F2A00CC88B8 /* View+Notification.swift */; };
 		4E3EAE5C2A990778009F1BE8 /* Model+Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0954C2989CBFE0043A8A1 /* Model+Pending.swift */; };
 		4E3EAE5D2A990778009F1BE8 /* ExchangeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095292989CBFE0043A8A1 /* ExchangeListView.swift */; };
@@ -260,7 +259,6 @@
 		4EB095652989CBFE0043A8A1 /* WithdrawTOSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */; };
 		4EB095672989CBFE0043A8A1 /* LaunchAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */; };
 		4EB095682989CBFE0043A8A1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095442989CBFE0043A8A1 /* MainView.swift */; };
-		4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095452989CBFE0043A8A1 /* ErrorView.swift */; };
 		4EB0956A2989CBFE0043A8A1 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095472989CBFE0043A8A1 /* Buttons.swift */; };
 		4EB0956B2989CBFE0043A8A1 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */; };
 		4EB0956C2989CBFE0043A8A1 /* AmountRowV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB095492989CBFE0043A8A1 /* AmountRowV.swift */; };
@@ -500,7 +498,6 @@
 		4EB095402989CBFE0043A8A1 /* WithdrawTOSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithdrawTOSView.swift; sourceTree = "<group>"; };
 		4EB095432989CBFE0043A8A1 /* LaunchAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchAnimationView.swift; sourceTree = "<group>"; };
 		4EB095442989CBFE0043A8A1 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		4EB095452989CBFE0043A8A1 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		4EB095472989CBFE0043A8A1 /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		4EB095482989CBFE0043A8A1 /* TextFieldAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		4EB095492989CBFE0043A8A1 /* AmountRowV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountRowV.swift; sourceTree = "<group>"; };
@@ -898,7 +895,6 @@
 			children = (
 				4EB095442989CBFE0043A8A1 /* MainView.swift */,
 				4EED38542D140C1400F6C038 /* TabBarModel.swift */,
-				4EB095452989CBFE0043A8A1 /* ErrorView.swift */,
 				4EB095392989CBFE0043A8A1 /* WalletEmptyView.swift */,
 			);
 			path = Main;
@@ -1362,7 +1358,6 @@
 				4E983C292ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift in Sources */,
 				4E3EAE592A990778009F1BE8 /* Model+Settings.swift in Sources */,
 				4EC4008C2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
-				4E3EAE5A2A990778009F1BE8 /* ErrorView.swift in Sources */,
 				4E847B7F2C9030E0003A164E /* TabBarView.swift in Sources */,
 				4E4F60A82C3BBF9F003BB669 /* View+Condition.swift in Sources */,
 				4E96583C2B79656E00404A68 /* DepositAmountV.swift in Sources */,
@@ -1508,7 +1503,6 @@
 				4E983C2A2ADBDD3500FA9CC5 /* SingleAxisGeometryReader.swift in Sources */,
 				4EB095152989CBB00043A8A1 /* Model+Settings.swift in Sources */,
 				4EC4008D2AE5664100DF72C7 /* CharacterSet+contains.swift in Sources */,
-				4EB095692989CBFE0043A8A1 /* ErrorView.swift in Sources */,
 				4E847B802C9030E0003A164E /* TabBarView.swift in Sources */,
 				4E4F60A92C3BBF9F003BB669 /* View+Condition.swift in Sources */,
 				4E96583D2B79656E00404A68 /* DepositAmountV.swift in Sources */,
