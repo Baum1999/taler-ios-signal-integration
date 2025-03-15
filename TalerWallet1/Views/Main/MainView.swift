@@ -248,7 +248,6 @@ extension MainView {
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
         @State private var shouldReloadPending = 0
-        @State private var tabBarHeight: CGFloat = 0                            // SwiftUI tabBar height
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -369,15 +368,12 @@ extension MainView {
                 balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
                     .tag(Tab.balances)
                     .tabItem { a11yBalanceTab }
-                    .keepTabViewHeight(in: $tabBarHeight)
                 Color.clear                                 // can't use EmptyView: VoiceOver wouldn't have the Actions tab
                     .tag(Tab.actions)
                     .tabItem { a11yActionsTab }
-                    .keepTabViewHeight(in: $tabBarHeight)
                 settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
                     .tag(Tab.settings)
                     .tabItem { a11ySettingsTab }
-                    .keepTabViewHeight(in: $tabBarHeight)
             } // TabView
         }
 
@@ -397,7 +393,7 @@ extension MainView {
             let delay: UInt = 0     // no delay for release builds
 #endif
 
-            /// our custom tabBar with the Actions button in the middle
+            // custom tabBar with the Actions button in the middle
             let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $tabBarModel.tabBarHidden) {
                 logger.log("onActionTab")
                 showActionSheet = true
@@ -405,12 +401,10 @@ extension MainView {
                 logger.log("onActionDrag: showScanner = true")
                 showScanner = true
             }
-        /// custom tabBar is rendered on top of the TabView, and overlaps its tabBar
+
             ZStack(alignment: .bottom) {
-                tabContent
-//                  .hideTabBar($tabBarModel.tabBarHidden)      // OIM?
-                    .environment(\.tabBarHeight, tabBarHeight)
-                tabBarView
+                tabContent              // incl. the (transparent) SwiftUI tabBar
+                tabBarView              // custom tabBar is rendered on top of the TabView, and overlaps its tabBar
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
