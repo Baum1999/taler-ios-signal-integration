@@ -22,6 +22,7 @@ struct URLSheet: View {
     @State private var urlCommand: UrlCommand?
     @State private var passedURL: URL?
 
+//  don't need  @MainActor  here
     private func passUrlOnce() {
         if urlToOpen != nil {
             passedURL = urlToOpen

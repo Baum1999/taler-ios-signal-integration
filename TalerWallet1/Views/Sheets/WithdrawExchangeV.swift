@@ -9,7 +9,8 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Will be called when a withdraw-exchange QR was scanned
+// Called either when scanning a QR code or tapping the provided link, both from the bank's website.
+// We show the user the manual withdrawal details in a sheet - but first the ToS must be accepted.
 struct WithdrawExchangeV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
