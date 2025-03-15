@@ -82,7 +82,7 @@ struct MainView: View {
 
             if (!showScanner && urlToOpen == nil) {
                 if let error2 = model.error2 {
-                    ErrorSheet(data: error2, devMode: developerMode) {
+                    ErrorView(data: error2, devMode: developerMode) {
                         model.setError(nil)
                     }.interactiveDismissDisabled()
                     .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -96,8 +96,8 @@ struct MainView: View {
         let mainGroup = Group {
             switch controller.backendState {
                 case .ready: mainContent
-                case .error: ErrorSheet(title: String(localized: ""),
-                                        copyable: true) {}
+                case .error: ErrorView(title: String(localized: ""),
+                                    copyable: true) {}
                 default:    // show launch animation until either ready or error
                     LaunchAnimationView()
             }

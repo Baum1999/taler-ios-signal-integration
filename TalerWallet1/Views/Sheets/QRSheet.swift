@@ -47,16 +47,16 @@ struct QRSheet: View {
                              urlToOpen: $urlToOpen)
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
-                        ErrorSheet(title: String(localized: "Scanned QR is no talerURI"),
-                                 message: scannedURL.absoluteString,
-                                copyable: true) {
+                        ErrorView(title: String(localized: "Scanned QR is no talerURI"),
+                                message: scannedURL.absoluteString,
+                               copyable: true) {
                             dismissTop(stack.push())
                         }
                     }
                 } else {
-                    ErrorSheet(title: String(localized: "Scanned QR is no URL"),
-                             message: scannedCode,
-                            copyable: true) {
+                    ErrorView(title: String(localized: "Scanned QR is no URL"),
+                            message: scannedCode,
+                           copyable: true) {
                         dismissTop(stack.push())
                     }
                 }

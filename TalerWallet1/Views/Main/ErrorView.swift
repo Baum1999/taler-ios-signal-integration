@@ -13,7 +13,7 @@ enum ErrorData {
     case error(Error)
 }
 
-struct ErrorSheet: View {
+struct ErrorView: View {
     var title: String
     var message: String? = nil
     var copyable: Bool
@@ -119,7 +119,7 @@ struct ErrorSheet_Previews: PreviewProvider {
         message: "A KYC step is required before withdrawal can proceed"))
 
     static var previews: some View {
-        ErrorSheet(error: error, devMode: true, onDismiss: {})
-        ErrorSheet(error: error, devMode: false, onDismiss: {})
+        ErrorView(error: error, devMode: true, onDismiss: {})
+        ErrorView(error: error, devMode: false, onDismiss: {})
     }
 }

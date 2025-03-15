@@ -56,7 +56,7 @@ struct Sheet: View {
                     .accessibilityValue(idString)
             }
             if let error2 = model.error2 {
-                ErrorSheet(data: error2, devMode: developerMode) {
+                ErrorView(data: error2, devMode: developerMode) {
                     model.setError(nil)
                     logger.log("ErrorSheet dismissTop")
                     dismissTop(stack.push())

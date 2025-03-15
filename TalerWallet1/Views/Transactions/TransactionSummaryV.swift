@@ -298,9 +298,9 @@ struct TransactionSummaryV: View {
                                                      badge: CONFIRM_BANK)
                     }   }   }   }
                 @unknown default:
-                    ErrorSheet(title: "Unknown withdrawal type",        // should not happen, so no L10N
-                             message: withdrawalDetails.type.rawValue,
-                            copyable: true) {
+                    ErrorView(title: "Unknown withdrawal type",        // should not happen, so no L10N
+                            message: withdrawalDetails.type.rawValue,
+                           copyable: true) {
                         dismissTop(stack.push())
                     }
             } // switch
