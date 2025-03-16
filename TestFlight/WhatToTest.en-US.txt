@@ -1,3 +1,9 @@
+Version 0.14.5 (wallet-core 0.14.11)
+
+- bugfixes
+- improved OIM
+
+
 Version 0.14.4 (wallet-core 0.14.9)
 
 - bugfixes
