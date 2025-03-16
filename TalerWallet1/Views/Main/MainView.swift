@@ -94,12 +94,12 @@ struct MainView: View {
         }//.transition(.move(edge: .top))
 
         let mainGroup = Group {
+            // show launch animation until either ready or error
             switch controller.backendState {
                 case .ready: mainContent
-                case .error: ErrorView(title: String(localized: ""),
+                case .error: ErrorView(title: "",   // TODO: String(localized: ""),
                                     copyable: true) {}
-                default:    // show launch animation until either ready or error
-                    LaunchAnimationView()
+                default:     LaunchAnimationView()
             }
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
 

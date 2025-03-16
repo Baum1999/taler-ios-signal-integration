@@ -22,32 +22,38 @@ import SwiftUI
 /// A presented sheet (SwiftUI view) doesn't always close when calling "dismiss()" provided by @Environment(\.dismiss),
 /// so we are walking the view stack to find the top presentedViewController (UIKit) and dismiss it.
 extension View {
-    @MainActor func dismissTop(_ stack: CallStack, animated: Bool = true) {
+    @MainActor func dismissTop(_ stack: CallStack, animated: Bool = true) -> Bool {
         let windows = UIApplication.shared.connectedScenes.compactMap {
             ($0 as? UIWindowScene)?.keyWindow       // TODO: iPad might have more than 1 window
         }
         if var topController = windows.first?.rootViewController {
             var gotPresented = false
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
+            var currentController = topController
+            while let presentedViewController = currentController.presentedViewController {
+                currentController = presentedViewController
                 gotPresented = true
             }
             if gotPresented {
-                topController.dismiss(animated: animated)
+                currentController.dismiss(animated: animated)
+                return true
+            } else if let navController = Self.findNavigationController(viewController: topController) {
+                navController.popToRootViewController(animated: animated)
+                return true
             } else {
-                Self.findNavigationController(viewController: topController)?.popToRootViewController(animated: animated)
+                print("Yikes❗️ There is no navigationController!")
             }
         } else {
             print("Yikes❗️ There is no window/rootViewController!")
         }
+        return false
     }
     @MainActor static func findNavigationController(viewController: UIViewController?) -> UINavigationController? {
         guard let viewController = viewController else {
             return nil
         }
 
-        if let navigationController = viewController as? UITabBarController {
-            return findNavigationController(viewController: navigationController.selectedViewController)
+        if let tabBarController = viewController as? UITabBarController {
+            return findNavigationController(viewController: tabBarController.selectedViewController)
         }
 
         if let navigationController = viewController as? UINavigationController {
