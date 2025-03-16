@@ -14,9 +14,7 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var orientation: UIDeviceOrientation
     @Binding var selectedBalance: Balance?
-//    @Binding var shouldReloadPending: Int
     @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel

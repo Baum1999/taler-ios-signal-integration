@@ -30,7 +30,6 @@ struct MainView: View {
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
-    @State private var orientation = UIDevice.current.orientation
     @State private var selectedBalance: Balance? = nil
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
@@ -61,7 +60,6 @@ struct MainView: View {
 #endif
         let mainContent = ZStack {
             MainContent(logger: logger, stack: stack.push("Content"),
-                   orientation: $orientation,
                selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
@@ -153,7 +151,8 @@ struct MainView: View {
                 }
         }
         .onRotate { newOrientation in
-            orientation = newOrientation
+            let isSheetActive = showActionSheet || showScanner || showUrlSheet
+            controller.setOIMmode(for: newOrientation, isSheetActive)
         }
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
@@ -227,7 +226,6 @@ extension MainView {
     struct MainContent: View {
         let logger: Logger
         let stack: CallStack
-        @Binding var orientation: UIDeviceOrientation
         @Binding var selectedBalance: Balance?
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
@@ -353,7 +351,6 @@ extension MainView {
             /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
-                           orientation: $orientation,
                        selectedBalance: $selectedBalance,
 //                   shouldReloadPending: $shouldReloadPending,
                     reloadTransactions: $shouldReloadTransactions)

@@ -53,9 +53,12 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
+
     @Published var isConnected: Bool = true
+    @Published var oimModeEnabled: Bool = false
     @Published var oimModeActive: Bool = false
-    @Published var diagnosticModeActive: Bool = false
+    @Published var oimSheetActive: Bool = false
+    @Published var diagnosticModeEnabled: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -73,13 +76,21 @@ class Controller: ObservableObject {
     private var oimModeObservation: NSKeyValueObservation?
     private var diagnosticModeObservation: NSKeyValueObservation?
 
+    func setOIMmode(for newOrientation: UIDeviceOrientation, _ sheetActive: Bool) {
+        let isLandscapeRight = newOrientation == .landscapeRight
+        oimSheetActive = sheetActive && oimModeEnabled && isLandscapeRight
+        oimModeActive = sheetActive ? false
+                   : oimModeEnabled ? isLandscapeRight
+                                    : false
+    }
+
     func startObserving() {
         let defaults = UserDefaults.standard
         self.oimModeObservation = defaults.observe(\.oimModeEnabled, options: [.new, .old, .prior, .initial]) { [weak self](_, _) in
-            self?.oimModeActive = UserDefaults.standard.oimModeEnabled
+            self?.oimModeEnabled = UserDefaults.standard.oimModeEnabled
         }
         self.diagnosticModeObservation = defaults.observe(\.diagnosticModeEnabled, options: [.new, .old,.prior,.initial]) {  [weak self](_, _) in
-            self?.diagnosticModeActive = UserDefaults.standard.diagnosticModeEnabled
+            self?.diagnosticModeEnabled = UserDefaults.standard.diagnosticModeEnabled
         }
     }
 

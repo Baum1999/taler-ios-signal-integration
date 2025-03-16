@@ -147,7 +147,7 @@ struct SettingsView: View {
                     consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
                 }
-                if controller.oimModeActive {
+                if controller.oimModeEnabled {
                     SettingsToggle(name: String(localized: "Two rows"), value: $oimTwoRows, id1: "oimTwoRows",
                                    description: minimalistic ? nil : String(localized: "OIM denomination layout"))
                     SettingsToggle(name: String(localized: "Sierra Leone"), value: $sierraLeone, id1: "sierraLeone",
