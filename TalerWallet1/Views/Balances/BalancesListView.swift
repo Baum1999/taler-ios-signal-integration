@@ -20,6 +20,7 @@ struct BalancesListView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
@@ -50,6 +51,16 @@ struct BalancesListView: View {
                     selectedBalance = nil
                 }
                 .listStyle(myListStyle.style).anyView
+                .fullScreenCover(isPresented: $controller.oimModeActive) {
+                    let balance = controller.balances.first
+                    let currency = sierraLeone ? OIMleones : OIMeuros
+//                  let currency = OIMdollars
+                    let _ = symLog("❗️OIMView: \(currency.noteBase)")
+                    OIMView(scope: balance?.scopeInfo,
+                           amount: balance?.available,
+                         currency: currency,
+                          canEdit: true)
+                }
             }
         }
         .refreshable {  // already async
