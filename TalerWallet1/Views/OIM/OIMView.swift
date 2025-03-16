@@ -14,178 +14,11 @@ public let OIMBACKDARK = "tara-meinczinger-G_yCplAsnB4-unsplash"
 public let OIMBACKLIGHT = "andrey-haimin-VFUTPASjhB8-unsplash"
 
 // MARK: -
-/// renders 1 banknote from a currency with size/4
-struct OIMnoteV: View {
-    let value: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        if let name = currency.noteName(value) {
-            Image(name)
-                .resizable()
-                .scaledToFit()
-                .frame(width: currency.noteWidth / 4, height: currency.noteHeight / 4)
-                .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))
-        } else {
-            EmptyView()
-        }
-    }
-}
-
-/// renders 1 coin from a currency with size/4
-struct OIMcoinV: View {
-    let value: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        if let name = currency.coinName(value), let size = currency.coinSize(value) {
-            Image(name)
-                .resizable()
-                .scaledToFit()
-                .frame(width: size / 4, height: size / 4)
-                .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))
-        } else {
-            EmptyView()
-        }
-    }
-}
-
-/// renders 1 denomination from a currency
-struct OIMsingleV: View {
-    let value: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        if value > currency.bankCoins[0] {
-            OIMnoteV(value: value, currency: currency)
-        } else {
-            OIMcoinV(value: value, currency: currency)
-        }
-    }
-}
-
-// MARK: -
-// renders a stack of (identical) banknotes with offset 20
-struct OIMnoteStackV: View {
-    let value: Int
-    let count: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        let offset = 20
-        let maxIndex = count - 1
-        ZStack {
-            ForEach(0...maxIndex, id: \.self) { index in
-                OIMnoteV(value: value, currency: currency)
-                    .offset(x: CGFloat(offset * index), y: CGFloat(offset * index))
-            }
-        }
-        .padding(.trailing, CGFloat(offset * maxIndex))
-        .padding(.bottom, CGFloat(offset * maxIndex))
-    }
-}
-
-// renders a stack of (identical) coins with offset size/16
-struct OIMcoinStackV: View {
-    let value: Int
-    let count: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        let number = count - 1
-//        let _ = print("CoinStack: \(count) * \(value) \(currency.coinBase)")
-        if let size = currency.coinSize(value) {
-            let offset = size / 16
-            ZStack {
-                ForEach(0...number, id: \.self) { index in
-                    OIMcoinV(value: value, currency: currency)
-                        .offset(x: offset * CGFloat(index), y: offset * CGFloat(index))
-                }
-            }
-//#if DEBUG
-//            .border(Color.red)
-//#endif
-            .padding(.trailing, offset * CGFloat(number))
-            .padding(.bottom, offset * CGFloat(number))
-//#if DEBUG
-//            .border(Color.green)
-//#endif
-        }
-    }
-}
-
-// renders a stack of 1 denomination
-struct OIMstackV: View {
-    let value: Int
-    let count: Int
-    let currency: OIMcurrency
-
-    var body: some View {
-        if value > currency.bankCoins[0] {
-            OIMnoteStackV(value: value, count: count, currency: currency)
-        } else {
-            OIMcoinStackV(value: value, count: count, currency: currency)
-        }
-    }
-}
-
-// MARK: -
-// renders a spread of banknote-stacks in 1 row
-struct OIMnotesView1: View {
-    let spread: OIMdenominations
-    let currency: OIMcurrency
-    @Binding var amount: Int
-
-    var body: some View {
-        let nrOfNotes = currency.bankNotes.count - 1
-        HStack(alignment: .top, spacing: 10) {
-            ForEach(0...nrOfNotes, id: \.self) { index in
-                let count = spread[index]
-                if count > 0 {
-                    let value = currency.bankNotes[index]
-                    OIMnoteStackV(value: value, count: count, currency: currency)
-                        .onTapGesture {
-                            withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amount -= value
-                            }
-                        }
-                }
-            }
-        }
-    }
-}
-
-// renders a spread of coin-stacks in 1 row
-struct OIMcoinsView1: View {
-    let spread: OIMdenominations
-    let currency: OIMcurrency
-    @Binding var amount: Int
-
-    var body: some View {
-        let nrOfCoins = currency.bankCoins.count - 1
-        HStack(alignment: .top, spacing: 10) {
-            ForEach(0...nrOfCoins, id: \.self) { index in
-                let count = spread[index]
-                if count > 0 {
-                    let value = currency.bankCoins[index]
-                    OIMcoinStackV(value: value, count: count, currency: currency)
-                        .onTapGesture {
-                            withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amount -= value
-                            }
-                        }
-                }
-            }
-        }
-    }
-}
-
-// MARK: -
 
 // renders all banknotes and coins in 1 horizontal scrollview
 struct OIMcurrencyScroller: View {
     let currency: OIMcurrency
-    @Binding var amount: Int
+    @Binding var amountVal: Int
 
     var body: some View {
         ScrollView(.horizontal) {
@@ -194,7 +27,7 @@ struct OIMcurrencyScroller: View {
                     OIMnoteV(value: value, currency: currency)
                         .onTapGesture {
                             withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amount += value
+                                amountVal += value
                             }
                         }
                 }
@@ -202,7 +35,7 @@ struct OIMcurrencyScroller: View {
                     OIMcoinV(value: value, currency: currency)
                         .onTapGesture {
                             withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amount += value
+                                amountVal += value
                             }
                         }
                 }
@@ -292,9 +125,11 @@ struct ColumnView: View {
 }
 
 struct OIMView: View {
-    let balance: Balance?
+    let scope: ScopeInfo?
+    let amount: Amount?
     let currency: OIMcurrency
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
+    let canEdit: Bool
 
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
@@ -303,11 +138,10 @@ struct OIMView: View {
     @State private var integerCoins: Columns = []
     @State private var fractalCoins: Columns = []
 
-    @State private var amount: Int = 0
+    @State private var amountVal: Int = 0
 
     var intValue: Int {
-        if let balance {
-            let amount = balance.available
+        if let amount {
             if !amount.isZero {
                 let value = amount.value * 100          // TODO: currency specs instead of 100
 //                print("intValue: \(Int(value)) \(currency.noteBase)")
@@ -403,6 +237,12 @@ struct OIMView: View {
             .resizable()
 
         let vStack = VStack {
+            if let amount {
+                HStack {
+                    Spacer()
+                    AmountV(scope, amount, isNegative: nil)
+                }.padding()
+            }
             Spacer()
             HStack(alignment: .top, spacing: 10) {
                 if oimTwoRows {
@@ -418,25 +258,23 @@ struct OIMView: View {
                         }
                     } .padding(.leading, 20)
                 } else {
-                    let result = currency.notesCoins(amount)
-                    // Text("notes: \(result.0), coins: \(result.1)")
-                    OIMnotesView1(spread: result.0, currency: currency, amount: $amount)
-                        .padding(.trailing, 20)
-                    OIMcoinsView1(spread: result.1, currency: currency, amount: $amount)
+                    OIMlineView(currency: currency, amountVal: $amountVal, canEdit: canEdit, oneLine: false)
                 }
             }
                 .task {
-                    amount = intValue
+                    amountVal = intValue
 //                    amount = 14983
                 }
 
             Spacer()
-            OIMcurrencyScroller(currency: currency, amount: $amount)
-                .onChange(of: amount) { newValue in
-//                    print("new Amount: \(newValue)")
-                    let result = currency.notesCoins(newValue)
-                    buildColumns(result, currency: currency)
-                }
+            if canEdit {
+                OIMcurrencyScroller(currency: currency, amountVal: $amountVal)
+                    .onChange(of: amountVal) { newValue in
+                        //                    print("new Amount: \(newValue)")
+                        let result = currency.notesCoins(newValue)
+                        buildColumns(result, currency: currency)
+                    }
+            }
         }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(backImage)

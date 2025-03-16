@@ -325,6 +325,10 @@
 		4EED38582D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
 		4EED38592D1485AB00F6C038 /* ForEachWithIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */; };
 		4EF840A72A0B85F400EE0D47 /* CopyShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF840A62A0B85F400EE0D47 /* CopyShare.swift */; };
+		4EF97B982D8737250007377E /* OIMcurrencyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF97B972D8737250007377E /* OIMcurrencyViews.swift */; };
+		4EF97B992D8737250007377E /* OIMcurrencyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF97B972D8737250007377E /* OIMcurrencyViews.swift */; };
+		4EF97B9B2D8739630007377E /* OIMlineViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF97B9A2D8739630007377E /* OIMlineViews.swift */; };
+		4EF97B9C2D8739630007377E /* OIMlineViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF97B9A2D8739630007377E /* OIMlineViews.swift */; };
 		4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFA395F2AA7946B00742548 /* ToSButtonView.swift */; };
 		4EFFDD6B2A501121000C1C6A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */; };
@@ -539,6 +543,8 @@
 		4EED38542D140C1400F6C038 /* TabBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarModel.swift; sourceTree = "<group>"; };
 		4EED38572D1485AB00F6C038 /* ForEachWithIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEachWithIndex.swift; sourceTree = "<group>"; };
 		4EF840A62A0B85F400EE0D47 /* CopyShare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyShare.swift; sourceTree = "<group>"; };
+		4EF97B972D8737250007377E /* OIMcurrencyViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OIMcurrencyViews.swift; sourceTree = "<group>"; };
+		4EF97B9A2D8739630007377E /* OIMlineViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OIMlineViews.swift; sourceTree = "<group>"; };
 		4EFA395F2AA7946B00742548 /* ToSButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSButtonView.swift; sourceTree = "<group>"; };
 		4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AB710490285995B6008B04F0 /* taler-swift */ = {isa = PBXFileReference; lastKnownFileType = text; path = "taler-swift"; sourceTree = SOURCE_ROOT; };
@@ -746,7 +752,6 @@
 				4E16E12229F3BB99008B9C86 /* CurrencySpecification.swift */,
 				4EAD117529F672FA008EDD0B /* KeyboardResponder.swift */,
 				4E363CC12A2621C200D7E98C /* LocalizedAlertError.swift */,
-				4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */,
 				4E578E912A481D8600F21F1C /* Controller+playSound.swift */,
 				4EB095062989CB7C0043A8A1 /* TalerDater.swift */,
 				4EB095072989CB7C0043A8A1 /* TalerStrings.swift */,
@@ -809,6 +814,7 @@
 				4EB095412989CBFE0043A8A1 /* Main */,
 				4EE77E832C1012F7007C9064 /* Actions */,
 				4EB095342989CBFE0043A8A1 /* Balances */,
+				4EF97B962D8735E10007377E /* OIM */,
 				4EB0952E2989CBFE0043A8A1 /* Transactions */,
 				4EB095242989CBFE0043A8A1 /* Settings */,
 				4EEC157129F7188B00D46A03 /* Sheets */,
@@ -870,7 +876,6 @@
 			isa = PBXGroup;
 			children = (
 				4EB095372989CBFE0043A8A1 /* BalancesListView.swift */,
-				4E47924F2D660C5600749393 /* OIMView.swift */,
 				4EB0953A2989CBFE0043A8A1 /* BalancesSectionView.swift */,
 				4E77976E2C4BEA4E005D6ECB /* BalanceCellV.swift */,
 				4E448AB62C4A4109007D5C92 /* BalancesPendingRowV.swift */,
@@ -973,6 +978,17 @@
 				4E3B4BBF2A41E64000CC88B8 /* P2P_Sheets */,
 			);
 			path = Sheets;
+			sourceTree = "<group>";
+		};
+		4EF97B962D8735E10007377E /* OIM */ = {
+			isa = PBXGroup;
+			children = (
+				4EE9E1F92D7D516800365E72 /* OIMcurrency.swift */,
+				4EF97B972D8737250007377E /* OIMcurrencyViews.swift */,
+				4EF97B9A2D8739630007377E /* OIMlineViews.swift */,
+				4E47924F2D660C5600749393 /* OIMView.swift */,
+			);
+			path = OIM;
 			sourceTree = "<group>";
 		};
 		4EFDC38E2CBE8D4E00BE8DBC /* Banking */ = {
@@ -1339,6 +1355,7 @@
 				4E605DBA2AB05FB6002FB9A7 /* BarGraph.swift in Sources */,
 				4E2B337D2C8B1D5500186A3E /* ActionsSheet.swift in Sources */,
 				4E3EAE4D2A990778009F1BE8 /* P2pAcceptDone.swift in Sources */,
+				4EF97B982D8737250007377E /* OIMcurrencyViews.swift in Sources */,
 				4E3EAE4E2A990778009F1BE8 /* AnyTransition+backslide.swift in Sources */,
 				4EFA39602AA7946B00742548 /* ToSButtonView.swift in Sources */,
 				4E3EAE4F2A990778009F1BE8 /* TwoRowButtons.swift in Sources */,
@@ -1377,6 +1394,7 @@
 				E37AA62A2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4E3EAE682A990778009F1BE8 /* WalletModel.swift in Sources */,
 				4E3EAE692A990778009F1BE8 /* URLSheet.swift in Sources */,
+				4EF97B9B2D8739630007377E /* OIMlineViews.swift in Sources */,
 				4E3EAE6A2A990778009F1BE8 /* ThreeAmountsSection.swift in Sources */,
 				4E3EAE6B2A990778009F1BE8 /* Model+Withdraw.swift in Sources */,
 				4ED80E882B8F5FB8008BD576 /* CStringArray.swift in Sources */,
@@ -1484,6 +1502,7 @@
 				4E605DBB2AB05FB6002FB9A7 /* BarGraph.swift in Sources */,
 				4E2B337E2C8B1D5500186A3E /* ActionsSheet.swift in Sources */,
 				4E3B4BC32A42252300CC88B8 /* P2pAcceptDone.swift in Sources */,
+				4EF97B992D8737250007377E /* OIMcurrencyViews.swift in Sources */,
 				4E363CBE2A23CB2100D7E98C /* AnyTransition+backslide.swift in Sources */,
 				4EFA39612AA7946B00742548 /* ToSButtonView.swift in Sources */,
 				4EB065442A4CD1A80039B91D /* TwoRowButtons.swift in Sources */,
@@ -1522,6 +1541,7 @@
 				E37AA62B2AF197E5003850CF /* Model+Refund.swift in Sources */,
 				4EB095162989CBB00043A8A1 /* WalletModel.swift in Sources */,
 				4EB0955A2989CBFE0043A8A1 /* URLSheet.swift in Sources */,
+				4EF97B9C2D8739630007377E /* OIMlineViews.swift in Sources */,
 				4ED2F94B2A278F5100453B40 /* ThreeAmountsSection.swift in Sources */,
 				4EB095622989CBFE0043A8A1 /* Model+Withdraw.swift in Sources */,
 				4ED80E892B8F5FB8008BD576 /* CStringArray.swift in Sources */,
