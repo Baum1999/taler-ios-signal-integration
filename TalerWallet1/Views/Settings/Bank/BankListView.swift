@@ -112,7 +112,7 @@ struct BankListView: View {
         .navigationTitle(navTitle)
         .navigationBarItems(trailing: plusButton)
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_PAYMENT_SERVICES, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_BANK_ACCOUNTS, stack: stack.push())
         }
     } // body
 }
