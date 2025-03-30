@@ -86,7 +86,6 @@ struct AmountInputV: View {
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
-//        let insufficientLabel = String(localized: "You don't have enough \(currency).")
         VStack(alignment: .trailing) {
             CurrencyInputView(scope: scope,
                              amount: $amountToTransfer,

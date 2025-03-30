@@ -181,43 +181,5 @@ struct SendAmountView: View {
             DebugViewC.shared.setViewID(VIEW_P2P_SEND, stack: stack.push())
             symLog.log("❗️ onAppear")
         }
-        .onDisappear {
-            symLog.log("❗️ onDisappear")
-        }
-//        .task(id: amountToTransfer.value) {
-//            if exchange == nil {
-//                if let url = scopeInfo.url {
-//                    exchange = try? await model.getExchangeByUrl(url: url)
-//                }
-//            }
-//            do {
-//                insufficient = try amountToTransfer > amountAvailable
-//            } catch {
-//                print("Yikes❗️ insufficient failed❗️")
-//                insufficient = true
-//            }
-//
-//            if insufficient {
-//                announce("\(amountVoiceOver), \(insufficientLabel2)")
-//            } else if amountToTransfer.isZero {
-//                feeStr = EMPTYSTRING
-//            } else {
-//                if let ppCheck = try? await model.checkPeerPushDebitM(amountToTransfer) {
-//                // TODO: set from exchange
-////                agePicker.setAges(ages: peerPushCheck?.ageRestrictionOptions)
-//                    if let feeAmount = fee(ppCheck: ppCheck) {
-//                        feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-//                        let feeLabel = feeLabel(feeStr)
-//                        announce("\(amountVoiceOver), \(feeLabel)")
-//                    } else {
-//                        feeStr = EMPTYSTRING
-//                        announce(amountVoiceOver)
-//                    }
-//                    peerPushCheck = ppCheck
-//                } else {
-//                    peerPushCheck = nil
-//                }
-//            }
-//        }
     } // body
 }

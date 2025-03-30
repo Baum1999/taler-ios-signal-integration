@@ -43,7 +43,7 @@ struct TransactionSummaryV: View {
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
@@ -93,7 +93,7 @@ struct TransactionSummaryV: View {
         if hasDone {        // if this view is in a sheet then dissmiss the whole sheet
             dismissTop(stack.push())
         } else {            // on a NavigationStack just pop
-            presentationMode.wrappedValue.dismiss()
+            dismiss()
         }
     }
 
