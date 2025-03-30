@@ -14,6 +14,7 @@ struct SendAmountView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance
+    @Binding var buttonSelected: Bool
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
     @Binding var amountAvailable: Amount
@@ -28,7 +29,6 @@ struct SendAmountView: View {
     @State private var insufficient = false
 //    @State private var feeAmount: Amount? = nil
     @State private var feeString = (EMPTYSTRING, EMPTYSTRING)
-    @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var exchange: Exchange? = nil                                // wg. noFees

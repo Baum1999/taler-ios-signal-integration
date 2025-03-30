@@ -25,6 +25,7 @@ struct SendAmountV: View {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
+    @State private var buttonSelected = false
 
     @MainActor
     private func viewDidLoad() async {
@@ -88,6 +89,7 @@ struct SendAmountV: View {
             if let balance {
                 SendAmountView(stack: stack.push(),
                              balance: balance,
+                      buttonSelected: $buttonSelected,
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,
                      amountAvailable: $amountAvailable,
