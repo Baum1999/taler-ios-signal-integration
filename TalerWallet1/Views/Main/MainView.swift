@@ -65,6 +65,7 @@ struct MainView: View {
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
                    showScanner: $showScanner,
+                qrButtonTapped: $qrButtonTapped,
                     userAction: $userAction)
             .onAppear() {
 #if DEBUG
@@ -233,6 +234,7 @@ extension MainView {
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
+        @Binding var qrButtonTapped: Bool
         @Binding var userAction: Int
 
 #if DEBUG
@@ -356,7 +358,8 @@ extension MainView {
                 BalancesListView(stack: stack.push(balancesTitle),
                        selectedBalance: $selectedBalance,
 //                   shouldReloadPending: $shouldReloadPending,
-                    reloadTransactions: $shouldReloadTransactions)
+                    reloadTransactions: $shouldReloadTransactions,
+                        qrButtonTapped: $qrButtonTapped)
                 .navigationTitle(balancesTitle)
                 .background(balanceActions)
             }.navigationViewStyle(.stack)

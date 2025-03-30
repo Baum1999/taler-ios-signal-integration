@@ -103,7 +103,15 @@ struct SendAmountV: View {
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
-
+            .overlay {
+                if controller.oimModeActive {
+                    OIMEditView(stack: stack.push(),
+                                scope: balance?.scopeInfo,
+                               amount: $amountToTransfer,
+                            available: $amountAvailable,
+                       buttonSelected: $buttonSelected)
+                }
+            }
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
                 scrollView.toolbar(.hidden, for: .tabBar)

@@ -16,6 +16,7 @@ struct BalancesListView: View {
     let stack: CallStack
     @Binding var selectedBalance: Balance?
     @Binding var reloadTransactions: Int
+    @Binding var qrButtonTapped: Bool
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -62,6 +63,15 @@ struct BalancesListView: View {
                     .listStyle(myListStyle.style).anyView
                     .refreshable {
                         await refresh()
+                    }
+                }
+                .overlay {
+                    if controller.oimModeActive {
+                        let balance = controller.balances.first
+                        OIMView(stack: stack.push(),
+                                scope: balance?.scopeInfo,
+                               amount: balance?.available,
+                       qrButtonTapped: $qrButtonTapped)
                     }
                 }
             }

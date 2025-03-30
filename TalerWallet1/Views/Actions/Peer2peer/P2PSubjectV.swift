@@ -29,6 +29,7 @@ struct P2PSubjectV: View {
     @Binding var summary: String
     @Binding var expireDays: UInt
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -174,6 +175,14 @@ struct P2PSubjectV: View {
         }
 
         scrollView
+            .overlay {
+                if controller.oimModeActive {
+                    OIMSubjectView(stack: stack.push(),
+                                   scope: scope,
+                                  amount: $amountToTransfer,
+                          buttonSelected: $sendOrRequest)
+                }
+            }
     }
 }
 // MARK: -
