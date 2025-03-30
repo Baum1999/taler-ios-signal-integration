@@ -68,7 +68,6 @@ struct CurrencyInputView: View {
     @EnvironmentObject private var controller: Controller
     
     @State private var hasBeenShown = false
-    @State private var showKeyboard = 0
     @State private var useShortcut = 0
 
     @MainActor
@@ -167,7 +166,6 @@ struct CurrencyInputView: View {
                         amount = Amount.zero(currency: amount.currencyStr)
                         useShortcut = 0
                     }
-                    showKeyboard += 1
                 }
             if #available(iOS 16.0, *) {
                 let shortcuts = shortcuts(currencyField)
@@ -210,18 +208,23 @@ struct CurrencyInputView: View {
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
             if hasBeenShown {
 //                print("❗️Yikes: CurrencyInputView hasBeenShown")
-            } else if !UIAccessibility.isVoiceOverRunning {
+            } else if !UIAccessibility.isVoiceOverRunning && !controller.oimModeActive {
 //                print("❗️CurrencyInputView❗️")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     hasBeenShown = true
-                    if !currencyField.becomeFirstResponder() {
-                        print("❗️Yikes❗️ cannot becomeFirstResponder")
+                    if !controller.oimModeActive {
+                        if !currencyField.becomeFirstResponder() {
+                            print("❗️Yikes❗️ cannot becomeFirstResponder")
+                        }
                     }
                 }
             }
         }.onDisappear {
             currencyField.resignFirstResponder()
             hasBeenShown = false
+        }
+        .onChange(of: controller.oimModeActive) {_ in
+            currencyField.resignFirstResponder()
         }
     }
 }
