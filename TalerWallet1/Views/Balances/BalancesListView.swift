@@ -46,22 +46,24 @@ struct BalancesListView: View {
                         await refresh()
                     }
             } else {
-                List(controller.balances, id: \.self) { balance in
-                    BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
-                                      balance: balance,                     // this is the currency to be used
-                              selectedBalance: $selectedBalance,
-                                 sectionCount: count,
-                             amountToTransfer: $amountToTransfer,           // does still have the wrong currency
-                                      summary: $summary,
-                           reloadTransactions: $reloadTransactions)
-                }
-                .onAppear() {
-                    DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
-                    selectedBalance = nil
-                }
-                .listStyle(myListStyle.style).anyView
-                .refreshable {
-                    await refresh()
+                Group {
+                    List(controller.balances, id: \.self) { balance in
+                        BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
+                                          balance: balance,                     // this is the currency to be used
+                                  selectedBalance: $selectedBalance,
+                                     sectionCount: count,
+                                 amountToTransfer: $amountToTransfer,           // does still have the wrong currency
+                                          summary: $summary,
+                               reloadTransactions: $reloadTransactions)
+                    }
+                    .onAppear() {
+                        DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
+                        selectedBalance = nil
+                    }
+                    .listStyle(myListStyle.style).anyView
+                    .refreshable {
+                        await refresh()
+                    }
                 }
                 .fullScreenCover(isPresented: $controller.oimModeActive) {
                     let balance = controller.balances.first
