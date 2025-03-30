@@ -13,23 +13,37 @@ struct OIMnotesView1: View {
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
+    let namespace: Namespace.ID
+    let tappedVal: Int
+    @Binding var isFlyingToDeck: Bool
+    let shake: Bool
     let canEdit: Bool
 
     var body: some View {
+#if PRINT_CHANGES || true
+        let _ = Self._printChanges()
+#endif
         let nrOfNotes = currency.bankNotes.count - 1
         HStack(alignment: .top, spacing: 10) {
             ForEach(0...nrOfNotes, id: \.self) { index in
                 let count = spread[index]
-                if count > 0 {
-                    let value = currency.bankNotes[index]
-                    let noteStack = OIMnoteStackV(value: value, count: count, currency: currency)
-                    if canEdit {
-                        noteStack.onTapGesture {
-                            withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amountVal -= value
-                            }
+                let value = currency.bankNotes[index]
+                let flyingVal = tappedVal == value
+                if count > 0 || flyingVal {
+                    OIMnoteStackV(value: value,
+                                  count: count + (flyingVal ? 1 : 0),
+                               currency: currency,
+                              namespace: namespace,
+                              tappedVal: tappedVal,
+                         isFlyingToDeck: $isFlyingToDeck,
+                                  shake: shake,
+                                canEdit: canEdit
+                    ) {
+                        withAnimation(.basic) {
+                            amountVal -= value     // remove on button press
                         }
-                    } else { noteStack }
+                    }
+                        .matchedGeometryEffect(id: tappedVal, in: namespace, isSource: false)
                 }
             }
         }
@@ -42,6 +56,7 @@ struct OIMcoinsView1: View {
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
+    let namespace: Namespace.ID
     let canEdit: Bool
 
     var body: some View {
@@ -51,14 +66,14 @@ struct OIMcoinsView1: View {
                 let count = spread[index]
                 if count > 0 {
                     let value = currency.bankCoins[index]
-                    let coinStack = OIMcoinStackV(value: value, count: count, currency: currency)
-                    if canEdit {
-                        coinStack.onTapGesture {
-                            withAnimation(Animation.easeIn(duration: 0.25)) {
-                                amountVal -= value
-                            }
+                    OIMcoinStackV(value: value,
+                                  count: count,
+                               currency: currency,
+                                canEdit: canEdit) {
+                        withAnimation(Animation.easeIn(duration: 0.25)) {
+                            amountVal -= value
                         }
-                    } else { coinStack }
+                    }
                 }
             }
         }
@@ -66,32 +81,123 @@ struct OIMcoinsView1: View {
 }
 
 // MARK: -
+fileprivate let horzSpacing: CGFloat = 20
+fileprivate let vertSpacing: CGFloat = 10
 
 struct OIMlineView: View {
     let currency: OIMcurrency
     @Binding var amountVal: Int
+    let namespace: Namespace.ID
+    let tappedVal: Int
+    @Binding var isFlyingToDeck: Bool
+    let shake: Bool
     let canEdit: Bool
-    let oneLine: Bool
+
+    @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
     var body: some View {
+#if PRINT_CHANGES || true
+        let _ = Self._printChanges()
+#endif
+#if DEBUG
+        let debug = 1==0
+        let red = debug ? Color.red : Color.clear
+        let green = debug ? Color.green : Color.clear
+        let blue = debug ? Color.blue : Color.clear
+        let orange = debug ? Color.orange : Color.clear
+#endif
         let result = currency.notesCoins(amountVal)
         // Text("notes: \(result.0), coins: \(result.1)")
-        let notes = OIMnotesView1(spread: result.0, currency: currency, amountVal: $amountVal, canEdit: canEdit)
-        let coins = OIMcoinsView1(spread: result.1, currency: currency, amountVal: $amountVal, canEdit: canEdit)
-        if oneLine {
-            HStack {
-                notes.padding(.trailing, 20)
-                coins
+        let notes = OIMnotesView1(spread: result.0,
+                                currency: currency,
+                               amountVal: $amountVal,
+                               namespace: namespace,
+                               tappedVal: tappedVal,
+                          isFlyingToDeck: $isFlyingToDeck,
+                                   shake: shake,
+                                 canEdit: canEdit
+                    ).id("notes")
+                    .matchedGeometryEffect(id: "notes", in: namespace)
+#if DEBUG
+            .border(blue)
+#endif
+        let coins = OIMcoinsView1(spread: result.1,
+                                currency: currency,
+                               amountVal: $amountVal,
+                               namespace: namespace,
+                                 canEdit: canEdit
+                    ).id("coins")
+                    .matchedGeometryEffect(id: "coins", in: namespace)
+#if DEBUG
+            .border(red)
+#endif
+
+        let oneLine = HStack(spacing: horzSpacing) {
+            notes
+            coins
+        }
+        let twoLines = VStack(spacing: vertSpacing) {
+            notes
+            coins
+        }
+
+        let scrollView = ScrollView(.horizontal) {
+            if oimTwoRows {
+                twoLines
+#if DEBUG
+                    .padding(1)
+                    .border(green)
+#endif
+            } else {
+                oneLine
+#if DEBUG
+                    .padding(1)
+                    .border(green)
+#endif
+            }
+        }
+        if #available(iOS 16.0, *) {
+            Group {
+                if false {
+                    scrollView
+#if DEBUG
+                    .padding(1)
+                    .border(orange)
+#endif
+                    .clipped()
+                    .scrollIndicators(.visible)
+                    .viewExtractor { view in
+                        if let scrollView = view as? UIScrollView {
+                            if #available(iOS 17.4, *) {
+                                scrollView.bouncesVertically = false
+                            } else {    // Fallback on earlier versions
+                                scrollView.bounces = false
+                            }
+                        }
+                    }
+                } else {
+                    LayoutThatFits([HStackLayout(), VStackLayout()]) {
+                        notes
+#if DEBUG
+                            .padding(1)
+                            .border(green)
+#endif
+                        coins
+                    }
+#if DEBUG
+                    .padding(1)
+                    .border(orange)
+#endif
+                }
             }
         } else {
-            VStack {
-                notes
-                coins
-            }
+            // Fallback on earlier versions
+            scrollView
         }
     }
 }
 
+// MARK: -
 //#Preview {
-//    OIMView()
+//    OIMlineView()
 //}

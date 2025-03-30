@@ -84,7 +84,6 @@ struct PaymentView: View, Sendable {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var preparePayResult: PreparePayResult? = nil
@@ -297,13 +296,6 @@ struct PaymentView: View, Sendable {
                     currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
-            }
-            .overlay{
-                if controller.oimSheetActive {
-                    let currency = sierraLeone ? OIMleones : OIMeuros
-                    let _ = print("❗️OIMView: \(currency.noteBase)")
-                    OIMView(scope: firstScope, amount: effective, currency: currency, canEdit: false)
-                }
             }
         } else {
             LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
