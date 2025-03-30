@@ -27,6 +27,12 @@ struct BalancesListView: View {
 
     private static func className() -> String {"\(self)"}
 
+    func refresh() async {
+        controller.hapticNotification(.success)
+        symLog.log("refreshing balances")
+        await controller.loadBalances(stack.push("refreshing balances"), model)
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -36,6 +42,9 @@ struct BalancesListView: View {
             let count = controller.balances.count
             if controller.balances.isEmpty {
                 WalletEmptyView(stack: stack.push("isEmpty"))
+                    .refreshable {
+                        await refresh()
+                    }
             } else {
                 List(controller.balances, id: \.self) { balance in
                     BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
@@ -51,6 +60,9 @@ struct BalancesListView: View {
                     selectedBalance = nil
                 }
                 .listStyle(myListStyle.style).anyView
+                .refreshable {
+                    await refresh()
+                }
                 .fullScreenCover(isPresented: $controller.oimModeActive) {
                     let balance = controller.balances.first
                     let currency = sierraLeone ? OIMleones : OIMeuros
@@ -62,11 +74,6 @@ struct BalancesListView: View {
                           canEdit: true)
                 }
             }
-        }
-        .refreshable {  // already async
-            controller.hapticNotification(.success)
-            symLog.log("refreshing balances")
-            await controller.loadBalances(stack.push("refreshing balances"), model)
         }
     }
 }
