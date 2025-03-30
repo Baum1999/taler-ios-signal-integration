@@ -36,6 +36,7 @@ struct P2PSubjectV: View {
 
     @State private var myFeeLabel: (String, String) = (EMPTYSTRING, EMPTYSTRING)
     @State private var transactionStarted: Bool = false
+    @State private var sendOrRequest: Bool = false
     @FocusState private var isFocused: Bool
 
     private func sendTitle(_ amountWithCurrency: String) -> String {
@@ -89,7 +90,7 @@ struct P2PSubjectV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog(amountToTransfer.readableDescription)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        ScrollView { VStack (alignment: .leading, spacing: 6) {
+        let scrollView = ScrollView { VStack (alignment: .leading, spacing: 6) {
             if let feeIsNotZero {       // don't show fee if nil
                 let label = feeLabel ?? myFeeLabel
                 if label.0.count > 0 {
@@ -145,11 +146,16 @@ struct P2PSubjectV: View {
                                      outgoing: outgoing,
                              amountToTransfer: amountToTransfer,
                            transactionStarted: $transactionStarted)
-            NavigationLink(destination: destination) {
-                let buttonTitle = buttonTitle(amountToTransfer)
-                Text(buttonTitle.0)
-                    .accessibilityLabel(buttonTitle.1)
+            let actions = Group {
+                NavLink($sendOrRequest) { destination }
             }
+
+            let buttonTitle = buttonTitle(amountToTransfer)
+            Button(buttonTitle.0) {
+                sendOrRequest = true
+            }
+                .background(actions)
+                .accessibilityLabel(buttonTitle.1)
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
                 .accessibilityHint(disabled ? String(localized: "enabled when subject and expiration are set", comment: "VoiceOver")
@@ -166,6 +172,8 @@ struct P2PSubjectV: View {
         .onDisappear {
 //            print("❗️ P2PSubjectV onDisappear")
         }
+
+        scrollView
     }
 }
 // MARK: -
