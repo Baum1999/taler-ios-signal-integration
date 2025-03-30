@@ -154,6 +154,38 @@ struct PlusButton : View  {
     }
 }
 
+struct BackButton : View  {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(ICONNAME_INCOMING + ICONNAME_FILL)
+        }
+        .talerFont(.largeTitle)
+        .accessibilityLabel("Back")
+    }
+}
+
+struct ForwardButton : View  {
+    let enabled: Bool
+    let action: () -> Void
+
+    var body: some View {
+        let myAction = {
+            if enabled {
+                action()
+            }
+        }
+        Button(action: myAction) {
+            let imageName = enabled ? ICONNAME_OUTGOING + ICONNAME_FILL
+                                    : ICONNAME_OUTGOING
+            Image(imageName)
+        }
+        .talerFont(.largeTitle)
+        .accessibilityLabel("Continue")
+    }
+}
+
 struct ArrowUpButton : View  {
     let action: () -> Void
 
