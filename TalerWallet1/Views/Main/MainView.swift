@@ -30,6 +30,7 @@ struct MainView: View {
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
+    @StateObject var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
@@ -103,6 +104,7 @@ struct MainView: View {
 
         Group {
             mainGroup
+                .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
                 .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack: stack.push(),
@@ -153,6 +155,7 @@ struct MainView: View {
         .onRotate { newOrientation in
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
             controller.setOIMmode(for: newOrientation, isSheetActive)
+            tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
@@ -240,10 +243,10 @@ extension MainView {
         @AppStorage("minimalistic") var minimalistic: Bool = false
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
+        @EnvironmentObject private var tabBarModel: TabBarModel
         @EnvironmentObject private var viewState: ViewState     // popToRootView()
         @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
 
-        @StateObject var tabBarModel = TabBarModel()
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
@@ -407,7 +410,6 @@ extension MainView {
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
-            .environmentObject(tabBarModel)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onNotification(.SendAction)    { triggerAction(1) }
             .onNotification(.RequestAction) { triggerAction(2) }
