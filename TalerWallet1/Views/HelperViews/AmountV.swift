@@ -104,7 +104,7 @@ extension AmountV {
         self.isNegative = isNegative
         self.useISO = false
         self.strikethrough = false
-        self.large = false
+        self.large = true
         self.a11yDecSep = nil
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?, strikethrough: Bool) {
