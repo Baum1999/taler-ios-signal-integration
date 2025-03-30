@@ -27,4 +27,22 @@ extension UIScreen {
             return size.height/size.width < 2
         }
     }
+    static var hasNotch: Bool {
+        let insets = UIApplication.shared.keyWindow?.safeAreaInsets
+        let bottom = insets?.bottom ?? 0
+        return bottom > 0
+    }
+    static var hasIsland: Bool {
+        let insets = UIApplication.shared.keyWindow?.safeAreaInsets
+        let left = insets?.left ?? 0
+        let bottom = insets?.bottom ?? 0
+        /// Portrait:   15PM 59,0,34    XS 38,0,29  8plus 20,0,0
+        /// Landscape:      0,59,21         0,38,21         0,0,0
+        return bottom > 30 || left > 50
+    }
+    static var horzInsets: CGFloat {
+        let insets = UIApplication.shared.keyWindow?.safeAreaInsets
+        let left = insets?.left ?? 0
+        return left
+    }
 }

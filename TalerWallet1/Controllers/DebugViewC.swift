@@ -107,13 +107,6 @@ public let SHEET_REFUND = SHEET_RCV_P2P + 10                        // 170 Recei
 
 
 // MARK: -
-extension UIDevice {
-    var hasNotch: Bool {
-        let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-        return bottom > 0
-    }
-}
-// MARK: -
 struct DebugViewV: View {
     private let symLog = SymLogV(0)
     @EnvironmentObject private var debugViewC: DebugViewC
@@ -128,7 +121,7 @@ struct DebugViewV: View {
         HStack {
             Spacer()
             Spacer()
-            if UIDevice.current.hasNotch {
+            if UIScreen.hasNotch {
                 Spacer()
                 Spacer()
             }
