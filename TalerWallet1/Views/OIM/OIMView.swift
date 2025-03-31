@@ -92,11 +92,15 @@ struct OIMnavBack<Content: View>: View {
                 content()
                 VStack {
                     HStack {
-                        BackButton() { dismiss() }
+                        BackButton() {
+                            print("dismiss")
+                            dismiss()
+                        }.padding(.leading, 4)
                         Spacer()
+                        let inset = UIScreen.horzInsets
                         ForwardButton(enabled: !amount.isZero) {
                             buttonSelected = true
-                        }.padding(.trailing, UIScreen.horzInsets)
+                        }.padding(.trailing, inset > 0 ? inset - 12 : 0)
                     }
                 }
                 .ignoresSafeArea(edges: .horizontal)
@@ -117,14 +121,12 @@ struct OIMView: View {
 
     @State private var amountVal: Int = 0
     @Namespace var namespace
-    @State private var tappedVal: Int = 0
-    @State private var isFlyingToDeck = false
+    @State private var tappedVal = 0
+    @State private var flying = 0
     @State private var shake = false
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let currency = sierraLeone ? OIMleones : OIMeuros
 
         let actions = HStack(spacing: 30) {
@@ -146,7 +148,7 @@ struct OIMView: View {
                            amountVal: $amountVal,
                            namespace: namespace,
                            tappedVal: tappedVal,
-                      isFlyingToDeck: $isFlyingToDeck,
+                              flying: $flying,
                                shake: shake,
                              canEdit: false)
                 Spacer()
@@ -167,14 +169,12 @@ struct OIMPayView: View {
 
     @State private var amountVal: Int = 0
     @Namespace var namespace
-    @State private var tappedVal: Int = 0
-    @State private var isFlyingToDeck = false
+    @State private var tappedVal = 0
+    @State private var flying = 0
     @State private var shake = false
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let currency = sierraLeone ? OIMleones : OIMeuros
 
         OIMbackground(amount: amount, currStr: currency.noteBase) {
@@ -184,7 +184,7 @@ struct OIMPayView: View {
                            amountVal: $amountVal,
                            namespace: namespace,
                            tappedVal: tappedVal,
-                      isFlyingToDeck: $isFlyingToDeck,
+                              flying: $flying,
                                shake: shake,
                              canEdit: true)
                 Spacer()
@@ -210,14 +210,12 @@ struct OIMEditView: View {
     @State private var availableVal: Int = 0
 
     @Namespace var namespace
-    @State private var tappedVal: Int = 0
-    @State private var isFlyingToDeck = false
+    @State private var tappedVal = 0
+    @State private var flying = 0
     @State private var shake = false
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let currency = sierraLeone ? OIMleones : OIMeuros
 
         OIMnavBack(stack: stack.push(),
@@ -226,15 +224,17 @@ struct OIMEditView: View {
                   amount: $amount,
           buttonSelected: $buttonSelected
         ) {
-            VStack {
+            ZStack {    // without this, money would fly below the scroller
+              VStack {  // even though this is the only item in the ZStack
                 Spacer()
                 OIMlineView(currency: currency,
                            amountVal: $amountVal,
                            namespace: namespace,
                            tappedVal: tappedVal,
-                      isFlyingToDeck: $isFlyingToDeck,
+                              flying: $flying,
                                shake: shake,
                              canEdit: true)
+                    .zIndex(1)  // make notes fly from topZ
                     .onChange(of: amountVal) { newVal in
                         let currencyStr = amount.currencyStr
                         amount = Amount(currency: currencyStr, cent: UInt64(newVal))
@@ -246,13 +246,14 @@ struct OIMEditView: View {
                                    amountVal: $amountVal,
                                    namespace: namespace,
                                    tappedVal: $tappedVal,
-                              isFlyingToDeck: $isFlyingToDeck,
+                                      flying: $flying,
                                        shake: $shake)
                     .onChange(of: available) { newVal in
                         availableVal = intValue(newVal) - intValue(amount)
                     }
+              }
+                .border(.red)
             }
-            .border(.red)
         }.task {
             amountVal = intValue(amount)
             availableVal = intValue(available) - intValue(amount)
@@ -270,9 +271,7 @@ struct OIMSubjectView: View {
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let currency = sierraLeone ? OIMleones : OIMeuros
 
         OIMnavBack(stack: stack.push(),

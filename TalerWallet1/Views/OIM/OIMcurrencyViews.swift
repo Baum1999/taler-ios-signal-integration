@@ -32,9 +32,7 @@ struct OIMnoteV: View {
     let action: () -> Void
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         // Use EmptyView, because the modifier actually ignores
         // the value passed to its body() function.
         EmptyView().modifier(OIMmod(value: value,
@@ -93,9 +91,11 @@ struct OIMcoinV: View {
     let currency: OIMcurrency
     let availableVal: Int
     let canEdit: Bool
+    var pct: CGFloat
     let action: () -> Void
 
     var body: some View {
+        let shadow = (3 - 8) * pct + 8
         if let name = currency.coinName(value), let size = currency.coinSize(value) {
             let image = Image(name)
                 .resizable()
@@ -112,6 +112,7 @@ struct OIMcoinV: View {
                 }
             }
                 .frame(width: size / 4, height: size / 4)
+                .shadow(radius: shadow)
                 .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))
         } else {
             EmptyView()
@@ -132,50 +133,51 @@ struct OIMsingleV: View {
         if value > currency.bankCoins[0] {
             OIMnoteV(value: value, currency: currency, availableVal: availableVal, canEdit: canEdit, pct: pct, action: action)
         } else {
-            OIMcoinV(value: value, currency: currency, availableVal: availableVal, canEdit: canEdit, action: action)
+            OIMcoinV(value: value, currency: currency, availableVal: availableVal, canEdit: canEdit, pct: pct, action: action)
         }
     }
 }
 
 // MARK: -
-// renders a stack of (identical) banknotes with offset 20
+// renders a stack of (identical) banknotes with offset 10,20
 struct OIMnoteStackV: View {
     let value: Int
     let count: Int
     let currency: OIMcurrency
     let namespace: Namespace.ID
     let tappedVal: Int
-    @Binding var isFlyingToDeck: Bool
+    @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
     let action: () -> Void
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let maxIndex = count - 1
         ZStack {
             ForEach(0...maxIndex, id: \.self) { index in
                 let match = tappedVal == value && index == maxIndex
-                let id = match && !isFlyingToDeck ? value : -value
+                let isFlying = flying > 0
+                let id = match && !isFlying ? value : -value
                 let xOffset = CGFloat(10 * index)
                 let yOffset = CGFloat(20 * index)
-                let shakeOffset: CGSize = shake ? .random(width: 10...40, height: 5...10)
-                                                : .zero
-                let _ = print("id \(id), flying \(isFlyingToDeck), shaking \(shakeOffset)")
+                let shakeOffset: CGFloat = shake && !match ? .random(in: 10...25)
+                                                           : .zero
+                let direction = value < tappedVal
+//                let _ = print("id \(id), flying \(flying), shaking \(shakeOffset)")
                 OIMnoteV(value: value,
                       currency: currency,
                   availableVal: value,
                        canEdit: canEdit,
                            pct: match ? 0.0 : 1.0,
                         action: action)
-                    .offset(x: xOffset + shakeOffset.width, y: yOffset - shakeOffset.height)
+                    .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
+                            y: yOffset)
                     .matchedGeometryEffect(id: id, in: namespace, isSource: false)
                     .onAppear {
-                        print("start flying \(id), shaking \(shakeOffset)")
+//                        print("start flying \(id), shaking \(shakeOffset)")
                         withAnimation(.fly1) {
-                            isFlyingToDeck = true
+                            flying = value  // start flying
                         }
                     }
             }
@@ -190,21 +192,46 @@ struct OIMcoinStackV: View {
     let value: Int
     let count: Int
     let currency: OIMcurrency
+    let namespace: Namespace.ID
+    let tappedVal: Int
+    @Binding var flying: Int
+    let shake: Bool
     let canEdit: Bool
     let action: () -> Void
 
     var body: some View {
-        let number = count - 1
+        let maxIndex = count - 1
         if let size = currency.coinSize(value) {
             let offset = size / 16
             ZStack {
-                ForEach(0...number, id: \.self) { index in
-                    OIMcoinV(value: value, currency: currency, availableVal: value, canEdit: canEdit, action: action)
-                        .offset(x: offset * CGFloat(index), y: offset * CGFloat(index))
+                ForEach(0...maxIndex, id: \.self) { index in
+                    let match = tappedVal == value && index == maxIndex
+                    let isFlying = flying > 0
+                    let id = match && !isFlying ? value : -value
+                    let yOffset = offset * CGFloat(index)
+                    let xOffset = yOffset / 2
+                    let shakeOffset: CGFloat = shake && !match ? .random(in: 5...10)
+                                                               : .zero
+                    let direction = value < tappedVal
+                    OIMcoinV(value: value,
+                          currency: currency,
+                      availableVal: value,
+                           canEdit: canEdit,
+                               pct: match ? 0.0 : 1.0,
+                            action: action)
+                        .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
+                                y: yOffset)
+                        .matchedGeometryEffect(id: id, in: namespace, isSource: false)
+                        .onAppear {
+//                        print("start flying \(id), shaking \(shakeOffset)")
+                            withAnimation(.fly1) {
+                                flying = value  // start flying
+                            }
+                        }
                 }
             }
-            .padding(.trailing, offset * CGFloat(number))
-            .padding(.bottom, offset * CGFloat(number))
+            .padding(.trailing, offset * CGFloat(maxIndex))
+            .padding(.bottom, offset * CGFloat(maxIndex))
         }
     }
 }

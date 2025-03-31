@@ -15,28 +15,34 @@ struct OIMcurrencyScroller: View {
     @Binding var amountVal: Int
     let namespace: Namespace.ID
     @Binding var tappedVal: Int
-    @Binding var isFlyingToDeck: Bool
+    @Binding var flying: Int
     @Binding var shake: Bool
 
-    func tap(value: Int, _ delay: Int = 300) {
-        isFlyingToDeck = false
-        tappedVal = value
+    func tap(value: Int, _ delay: Int = 250) {
+        withAnimation(.shake1) {
+            flying = 0
+            tappedVal = value
+        }
         let ms = debugAnimations ? 1500 : delay
-        print("tapped \(value)")
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+//        print("tapped \(value)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
 //            print("shake start")
-//            withAnimation(.shake) {
-//                shake = true
-//            }
+            withAnimation(.shake1) {
+                shake = true
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
-                print("shake end")
-                withAnimation(. shake1) {
+//                print("shake end")
+                withAnimation(.shake1) {
                     shake = false
-                    amountVal += value
-                    tappedVal = 0
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                    withAnimation(.basic1) {
+                        amountVal += value
+                        tappedVal = 0
+                    }
                 }
             }
-//        }
+        }
     }
     var body: some View {
         ScrollView(.horizontal) {
@@ -56,6 +62,7 @@ struct OIMcurrencyScroller: View {
                           currency: currency,
                       availableVal: availableVal,
                            canEdit: true,
+                               pct: 0.0,
                             action: { tap(value: value) }
                     )
                     .matchedGeometryEffect(id: value, in: namespace, isSource: true)

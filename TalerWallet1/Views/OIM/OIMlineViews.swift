@@ -15,38 +15,33 @@ struct OIMnotesView1: View {
     @Binding var amountVal: Int
     let namespace: Namespace.ID
     let tappedVal: Int
-    @Binding var isFlyingToDeck: Bool
+    @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
         let nrOfNotes = currency.bankNotes.count - 1
         HStack(alignment: .top, spacing: 10) {
             ForEach(0...nrOfNotes, id: \.self) { index in
-                let count = spread[index]
                 let value = currency.bankNotes[index]
-                let flyingVal = tappedVal == value
-                if count > 0 || flyingVal {
+                let shouldFly = tappedVal == value
+                let count = spread[index] + (shouldFly ? 1 : 0)
+                if count > 0 {
                     OIMnoteStackV(value: value,
-                                  count: count + (flyingVal ? 1 : 0),
+                                  count: count,
                                currency: currency,
                               namespace: namespace,
                               tappedVal: tappedVal,
-                         isFlyingToDeck: $isFlyingToDeck,
+                                 flying: $flying,
                                   shake: shake,
                                 canEdit: canEdit
                     ) {
                         withAnimation(.basic1) {
                             amountVal -= value     // remove on button press
-                        }
-                    }
-                        .matchedGeometryEffect(id: tappedVal, in: namespace, isSource: false)
-                }
-            }
-        }
+                }   }   }
+            } // ForEach
+        } // HStack
     }
 }
 
@@ -57,26 +52,33 @@ struct OIMcoinsView1: View {
     let currency: OIMcurrency
     @Binding var amountVal: Int
     let namespace: Namespace.ID
+    let tappedVal: Int
+    @Binding var flying: Int
+    let shake: Bool
     let canEdit: Bool
 
     var body: some View {
         let nrOfCoins = currency.bankCoins.count - 1
         HStack(alignment: .top, spacing: 10) {
             ForEach(0...nrOfCoins, id: \.self) { index in
-                let count = spread[index]
+                let value = currency.bankCoins[index]
+                let shouldFly = tappedVal == value
+                let count = spread[index] + (shouldFly ? 1 : 0)
                 if count > 0 {
-                    let value = currency.bankCoins[index]
                     OIMcoinStackV(value: value,
                                   count: count,
                                currency: currency,
-                                canEdit: canEdit) {
+                              namespace: namespace,
+                              tappedVal: tappedVal,
+                                 flying: $flying,
+                                  shake: shake,
+                                canEdit: canEdit
+                    ) {
                         withAnimation(Animation.easeIn1) {
                             amountVal -= value
-                        }
-                    }
-                }
-            }
-        }
+                }   }   }
+            } // ForEach
+        } // HStack
     }
 }
 
@@ -89,16 +91,14 @@ struct OIMlineView: View {
     @Binding var amountVal: Int
     let namespace: Namespace.ID
     let tappedVal: Int
-    @Binding var isFlyingToDeck: Bool
+    @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
 
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
     var body: some View {
-#if PRINT_CHANGES || true
-        let _ = Self._printChanges()
-#endif
+//        let _ = Self._printChanges()
 #if DEBUG
         let debug = 1==0
         let red = debug ? Color.red : Color.clear
@@ -113,7 +113,7 @@ struct OIMlineView: View {
                                amountVal: $amountVal,
                                namespace: namespace,
                                tappedVal: tappedVal,
-                          isFlyingToDeck: $isFlyingToDeck,
+                                  flying: $flying,
                                    shake: shake,
                                  canEdit: canEdit
                     ).id("notes")
@@ -125,6 +125,9 @@ struct OIMlineView: View {
                                 currency: currency,
                                amountVal: $amountVal,
                                namespace: namespace,
+                               tappedVal: tappedVal,
+                                  flying: $flying,
+                                   shake: shake,
                                  canEdit: canEdit
                     ).id("coins")
                     .matchedGeometryEffect(id: "coins", in: namespace)
@@ -176,7 +179,7 @@ struct OIMlineView: View {
                         }
                     }
                 } else {
-                    LayoutThatFits([HStackLayout(), VStackLayout()]) {
+                    LayoutThatFits([HStackLayout(alignment: .top), VStackLayout()]) {
                         notes
 #if DEBUG
                             .padding(1)
