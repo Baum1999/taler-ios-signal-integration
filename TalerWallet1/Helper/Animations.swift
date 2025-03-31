@@ -17,33 +17,53 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
+/**
+ * @author Marc Stibane
+ */
 import SwiftUI
 
 var debugAnimations = false
 
 extension Animation {
-    static var shake: Animation {
-        if debugAnimations {
-            return Animation.easeInOut(duration: 2.0)
-        } else {
-            return Animation.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.25)
-        }
+#if DEBUG
+    static var debug: Animation {
+        Animation.easeInOut(duration: 2.0)
+    }
+#endif
+
+    static var spring1: Animation {
+        Animation.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.25)
+    }
+
+    static var easeIn1: Animation {
+#if DEBUG
+        debugAnimations ? Animation.debug : Animation.easeIn(duration: 0.25)
+#else
+        Animation.easeIn(duration: 0.25)
+#endif
+    }
+
+    static var shake1: Animation {
+#if DEBUG
+        debugAnimations ? Animation.debug : Animation.spring1
+#else
+        Animation.spring1
+#endif
+    }
+
+    static var fly1: Animation {
+#if DEBUG
+        debugAnimations ? Animation.debug : Animation.spring1
+#else
+        Animation.spring1
+#endif
     }
     
-    static var fly: Animation {
-        if debugAnimations {
-            return Animation.easeInOut(duration: 2.0)
-        } else {
-            return Animation.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.25)
-        }
-    }
-    
-    static var basic: Animation {
-        if debugAnimations {
-            return Animation.easeInOut(duration: 2.0)
-        } else {
-            return Animation.default
-        }
+    static var basic1: Animation {
+#if DEBUG
+        debugAnimations ? Animation.debug : Animation.default
+#else
+        Animation.default
+#endif
     }
 }

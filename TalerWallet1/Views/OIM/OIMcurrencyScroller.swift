@@ -30,7 +30,7 @@ struct OIMcurrencyScroller: View {
 //            }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
                 print("shake end")
-                withAnimation(. shake) {
+                withAnimation(. shake1) {
                     shake = false
                     amountVal += value
                     tappedVal = 0

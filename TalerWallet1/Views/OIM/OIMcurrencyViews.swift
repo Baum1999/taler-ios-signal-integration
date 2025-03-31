@@ -174,7 +174,7 @@ struct OIMnoteStackV: View {
                     .matchedGeometryEffect(id: id, in: namespace, isSource: false)
                     .onAppear {
                         print("start flying \(id), shaking \(shakeOffset)")
-                        withAnimation(.fly) {
+                        withAnimation(.fly1) {
                             isFlyingToDeck = true
                         }
                     }

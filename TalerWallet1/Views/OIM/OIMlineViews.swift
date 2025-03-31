@@ -39,7 +39,7 @@ struct OIMnotesView1: View {
                                   shake: shake,
                                 canEdit: canEdit
                     ) {
-                        withAnimation(.basic) {
+                        withAnimation(.basic1) {
                             amountVal -= value     // remove on button press
                         }
                     }
@@ -70,7 +70,7 @@ struct OIMcoinsView1: View {
                                   count: count,
                                currency: currency,
                                 canEdit: canEdit) {
-                        withAnimation(Animation.easeIn(duration: 0.25)) {
+                        withAnimation(Animation.easeIn1) {
                             amountVal -= value
                         }
                     }
