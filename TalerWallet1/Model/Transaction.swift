@@ -25,6 +25,7 @@ enum TransactionMinorState: String, Codable {
     case deposit
     case aml        // AmlRequired
     case kyc        // KycRequired
+    case kycAuthRequired = "kyc-auth"
     case balanceKyc = "balance-kyc"             // show kycUrl
     case balanceKycInit = "balance-kyc-init"    // kycUrl not yet ready
     case mergeKycRequired = "merge-kyc"         // same as KYC but for P2P
@@ -57,6 +58,8 @@ enum TransactionMinorState: String, Codable {
     case proposed
     case refundAvailable = "refund-available"
     case acceptRefund = "accept-refund"
+    case paidByOther = "paid-by-other"
+    case completedByOtherWallet = "completed-by-other-wallet"
 
     var localizedState: String? {
         switch self {
@@ -64,6 +67,7 @@ enum TransactionMinorState: String, Codable {
             case .deposit:                  return self.rawValue
             case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
             case .balanceKyc, .balanceKycInit,
+                 .kycAuthRequired,
                  .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
             case .track:                    return self.rawValue
             case .submitPayment:            return self.rawValue
@@ -94,6 +98,8 @@ enum TransactionMinorState: String, Codable {
             case .proposed:                 return self.rawValue
             case .refundAvailable:          return self.rawValue
             case .acceptRefund:             return self.rawValue
+            case .paidByOther:              return self.rawValue
+            case .completedByOtherWallet:   return self.rawValue
 //            default: return nil
         }
     }
