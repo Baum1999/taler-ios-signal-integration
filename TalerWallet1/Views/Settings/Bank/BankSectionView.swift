@@ -71,8 +71,8 @@ struct BankSectionView: View {
         let methodStr = (paytoType == .iban) ? iban
                 : (paytoType == .xTalerBank) ? xTaler
                                              : "unknown payment method"
-        let editHint = String(localized: "Double tap to edit the account", comment: "VoiceOver")
-        let selectHint = String(localized: "Double tap to select", comment: "VoiceOver")
+        let editHint = String(localized: "Double tap to edit the account", comment: "a11y")
+        let selectHint = String(localized: "Double tap to select", comment: "a11y")
         Section {
             NavigationLink {
                 if goToEdit {

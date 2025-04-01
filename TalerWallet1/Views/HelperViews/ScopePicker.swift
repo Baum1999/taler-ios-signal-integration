@@ -47,7 +47,7 @@ struct ScopePicker: View {
                                                     useISO: true, a11yDecSep: ".")
             let url = balance.scopeInfo.url?.trimURL ?? EMPTYSTRING
 //            let a11yLabel = url + ", " + availableA11y
-            let choose = String(localized: "Choose the payment service:", comment: "VoiceOver")
+            let chooseHint = String(localized: "Choose the payment service:", comment: "a11y")
             let disabled = (count == 1)
 
             HStack(alignment: .firstTextBaseline) {
@@ -81,7 +81,7 @@ struct ScopePicker: View {
             }
             .talerFont(.picker)
 //            .accessibilityLabel(a11yLabel)
-            .accessibilityHint(disabled ? EMPTYSTRING : choose)
+            .accessibilityHint(disabled ? EMPTYSTRING : chooseHint)
             .task() {
                 withAnimation { selected = value }
             }
@@ -118,7 +118,7 @@ struct  ScopeDropDown: View {
         let formatted = formattedAmount(balance, currencyInfo)
         let amount = Text(formatted.0.nbs)
         if first {
-            let a11yLabel = String(localized: "via \(urlOrCurrency)", comment: "VoiceOver")
+            let a11yLabel = String(localized: "via \(urlOrCurrency)", comment: "a11y")
             text
                 .accessibilityLabel(a11yLabel)
         } else {

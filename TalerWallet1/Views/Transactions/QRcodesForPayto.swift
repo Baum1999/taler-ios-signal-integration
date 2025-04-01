@@ -26,7 +26,7 @@ struct QRcodesForPayto: View {
                 Text(spec.type)
                 QRGeneratorView(text: spec.qrContent)
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .accessibilityLabel("QR Code")
+                    .accessibilityLabel(Text("QR Code", comment: "a11y"))
                     .listRowSeparator(.hidden)
                 HStack {
                     Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator

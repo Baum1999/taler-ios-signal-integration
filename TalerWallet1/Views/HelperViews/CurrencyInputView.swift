@@ -42,7 +42,7 @@ struct ShortcutButton: View {
 #endif
         let shortie = Amount(currency: currency, cent: UInt64(shortcut))        // TODO: adapt for ¥
         let title = shortie.formatted(scope, isNegative: false)
-        let shortcutLabel = String(localized: "Shortcut", comment: "VoiceOver: $50,$25,$10,$5 shortcut buttons")
+        let shortcutLabel = String(localized: "Shortcut", comment: "a11y: $50,$25,$10,$5 shortcut buttons")
         let a11yLabel = "\(shortcutLabel) \(title.1)"
         Button(action: { action(shortcut, currencyField)} ) {
             Text(title.0)

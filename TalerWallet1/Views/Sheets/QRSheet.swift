@@ -37,7 +37,7 @@ struct QRSheet: View {
         let _ = symLog.vlog(scannedCode)       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-            let errorAnnouncement = String(localized: "Error while scanning QR code", comment: "VoiceOver")
+            let errorAnnouncement = String(localized: "Error while scanning QR code", comment: "a11y")
             if scannedCode != nil {
                 if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
@@ -68,7 +68,7 @@ struct QRSheet: View {
                             symLog.log("Found code: \(result.string)")
                             scannedCode = result.string
                             urlToOpen = codeToURL(result.string)
-                            closingAnnouncement = String(localized: "QR code recognized", comment: "VoiceOver")
+                            closingAnnouncement = String(localized: "QR code recognized", comment: "a11y")
                         case .failure(let error):
                             // TODO: errorAlert
                             model.setError(error)

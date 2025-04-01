@@ -277,7 +277,7 @@ struct TransactionSummaryV: View {
                         LinkButton(destination: destination,
                                      hintTitle: String(localized: "You need to pass a KYC procedure."),
                                    buttonTitle: String(localized: "Open KYC website"),
-                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "VoiceOver"),
+                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "a11y"),
                                          badge: NEEDS_KYC)
             }   }   }
             let withdrawalDetails = details.withdrawalDetails
@@ -294,7 +294,7 @@ struct TransactionSummaryV: View {
                                     LinkButton(destination: destination,
                                                  hintTitle: String(localized: "The bank is waiting for your authorization."),
                                                buttonTitle: String(localized: "Authorize now"),
-                                                  a11yHint: String(localized: "Will go to bank website to authorize this withdrawal.", comment: "VoiceOver"),
+                                                  a11yHint: String(localized: "Will go to bank website to authorize this withdrawal.", comment: "a11y"),
                                                      badge: CONFIRM_BANK)
                     }   }   }   }
                 @unknown default:
@@ -461,7 +461,7 @@ struct TransactionSummaryV: View {
                                     let stackStr = error.stack ?? EMPTYSTRING
                                     let errorStr = error.hint + "\n" + stackStr
                                     CopyButton(textToCopy: errorStr, vertical: true)
-                                        .accessibilityLabel(Text("Copy the error", comment: "VoiceOver"))
+                                        .accessibilityLabel(Text("Copy the error", comment: "a11y"))
                                         .disabled(false)
                                 }
                             }
@@ -474,7 +474,7 @@ struct TransactionSummaryV: View {
                             let expiration = details.info.expiration
                             let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
                             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-                            let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "VoiceOver")
+                            let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
                             Text("Expires: \(dateString)")
                                 .talerFont(.body)
                                 .accessibilityLabel(a11yLabel)

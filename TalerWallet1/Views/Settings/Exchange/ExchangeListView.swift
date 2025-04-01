@@ -34,7 +34,7 @@ struct ExchangeListView: View {
     }
 
     var body: some View {
-        let a11yLabelStr = String(localized: "Add payment service", comment: "VoiceOver for the + button")
+        let a11yLabelStr = String(localized: "Add payment service", comment: "a11y for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
             showAlert = true
         }

@@ -41,7 +41,7 @@ struct SelectDays: View {
     var body: some View {
         Section {   // (alignment: .leading)
             Text("Expires in:")
-                .accessibilityLabel("Choose the expiration duration")
+                .accessibilityLabel(Text("Choose the expiration duration", comment: "a11y"))
                 .accessibilityAddTraits(.isHeader)
                 .accessibilityRemoveTraits(.isStaticText)
                 .talerFont(.title3)

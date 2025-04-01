@@ -72,7 +72,7 @@ struct QRCodeDetailView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
 //                    }
                 }
-                .accessibilityLabel("QR Code")
+                .accessibilityLabel(Text("QR Code", comment: "a11y"))
                 .listRowSeparator(.hidden)
                 let amountStr = amountStr(currencyInfo)
                 let scanLong = incoming ? (requesting(amountStr.0), requesting(amountStr.1))

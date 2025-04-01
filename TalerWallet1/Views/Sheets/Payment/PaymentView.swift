@@ -173,7 +173,7 @@ struct PaymentView: View, Sendable {
                             let buttonTitle = terms.fulfillmentMessage ?? String(localized: "Open merchant website")
                             Link(buttonTitle, destination: destination)
                                 .buttonStyle(TalerButtonStyle(type: .bordered))
-                                .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "VoiceOver"))
+                                .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "a11y"))
                         }
                     }
                 }
@@ -269,7 +269,7 @@ struct PaymentView: View, Sendable {
                             NavigationLink(destination: destination) {
                                 let formatted = effective.formatted(currencyInfo, isNegative: false)
                                 Text("Pay \(formatted.0) now")
-                                    .accessibilityLabel("Pay \(formatted.1) now")
+                                    .accessibilityLabel(Text("Pay \(formatted.1) now", comment: "a11y"))
                             }
                                 .buttonStyle(TalerButtonStyle(type: .prominent))
                                 .padding(.horizontal)

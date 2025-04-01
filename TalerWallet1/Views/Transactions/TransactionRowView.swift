@@ -88,7 +88,7 @@ struct TransactionRowView: View {
 //            .fontWeight(.medium)      iOS 16
             .padding(.bottom, -2.0)
             .accessibilityLabel(doneOrPending ? topA11y!
-                                              : topA11y! +  String(localized: ", canceled", comment: "VoiceOver"))
+                                              : topA11y! +  String(localized: ", canceled", comment: "a11y"))
         let centerBottom = TimelineView(.everyMinute) { context in
             let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic, relative: true)
             Text(dateString)
@@ -200,10 +200,10 @@ struct TransactionRowView: View {
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(!doneOrPending ? EMPTYSTRING
-                                    : needsKYC ? String(localized: ". Needs K Y C")
-                               : shouldConfirm ? String(localized: ". Needs bank authorization")
+                                    : needsKYC ? String(localized: ". Needs K Y C", comment: "a11y")
+                               : shouldConfirm ? String(localized: ". Needs bank authorization", comment: "a11y")
                                                : EMPTYSTRING)
-            .accessibilityHint(String(localized: "Will go to detail view.", comment: "VoiceOver"))
+            .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
     }
 }
 // MARK: -

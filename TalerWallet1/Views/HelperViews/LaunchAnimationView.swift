@@ -15,7 +15,7 @@ struct LaunchAnimationView: View {
             RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250,
                       progress: true,
                rotationEnabled: $rotationEnabled)
-                .accessibilityLabel("Progress indicator")
+                .accessibilityLabel(Text("Progress indicator", comment: "a11y"))
         }
     }
 }
@@ -42,8 +42,8 @@ struct RotatingTaler: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
-            .accessibilityLabel(progress ? Text("In progress", comment: "VoiceOver")
-                                         : Text("Taler Logo", comment: "VoiceOver"))       // decorative logo - with button function
+            .accessibilityLabel(progress ? Text("In progress", comment: "a11y")
+                                         : Text("Taler Logo", comment: "a11y"))       // decorative logo - with button function
             .onReceive(animationTimer) { timerValue in
                 if rotationEnabled {
                     withAnimation(.easeInOut(duration: 1.9)) {

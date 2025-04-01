@@ -137,7 +137,7 @@ struct DepositAmountView: View {
                 let disabled = insufficient || amountToTransfer.isZero
 
                 Text("Available: \(availableStr.0)")
-                    .accessibilityLabel("Available: \(availableStr.1)")
+                    .accessibilityLabel(Text("Available: \(availableStr.1)", comment: "a11y"))
                     .talerFont(.title3)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.horizontal)
@@ -162,7 +162,7 @@ struct DepositAmountView: View {
                                                                                 : WalletColors().negative)
                     .padding(4)
                 let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount",
-                                    comment: "VoiceOver")
+                                    comment: "a11y")
                 Button(buttonTitle(amountToTransfer)) { startDeposit(balance.scopeInfo) }   // TODO: use exchange scope
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
                 .padding(.horizontal)

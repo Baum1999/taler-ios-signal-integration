@@ -49,7 +49,7 @@ struct BankListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let a11yLabelStr = String(localized: "Add bank account", comment: "VoiceOver for the + button")
+        let a11yLabelStr = String(localized: "Add bank account", comment: "a11y for the + button")
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
             showAddDialog = true
         }

@@ -52,7 +52,7 @@ struct Sheet: View {
                     .monospacedDigit()
                     .edgesIgnoringSafeArea(.top)
                     .id("sheetID")
-                    .accessibilityLabel(Text("Sheet.ID.", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Sheet.ID.", comment: "a11y"))
                     .accessibilityValue(idString)
             }
             if let error2 = model.error2 {

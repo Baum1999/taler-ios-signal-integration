@@ -81,10 +81,10 @@ struct ManualDetailsWireV: View {
             let cryptocode = HStack {
                 Text(details.reservePub)
                     .monospacedDigit()
-                    .accessibilityLabel(Text("Cryptocode", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 CopyButton(textToCopy: details.reservePub, vertical: true)
-                    .accessibilityLabel(Text("Copy the cryptocode", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
                     .disabled(false)
             }   .padding(.leading)
             let payeeCode = HStack {
@@ -96,9 +96,9 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Recipient", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Recipient", comment: "a11y"))
                 CopyButton(textToCopy: receiverStr, vertical: true)
-                    .accessibilityLabel(Text("Copy the recipient", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the recipient", comment: "a11y"))
                     .disabled(false)
             }   .padding(.top, -8)
             let ibanCode = HStack {
@@ -110,9 +110,9 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("IBAN of the recipient", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y"))
                 CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
-                    .accessibilityLabel(Text("Copy the IBAN", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))
                     .disabled(false)
             }   .padding(.top, -8)
             let amountCode = HStack {
@@ -125,9 +125,9 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Amount to transfer", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Amount to transfer", comment: "a11y"))
                 CopyButton(textToCopy: amountValue, vertical: true)             // only digits + separator, no currency name or symbol
-                    .accessibilityLabel(Text("Copy the amount", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the amount", comment: "a11y"))
                     .disabled(false)
             }//   .padding(.top, -8)
             let xTalerCode = HStack {
@@ -139,9 +139,9 @@ struct ManualDetailsWireV: View {
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("account of the recipient", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("account of the recipient", comment: "a11y"))
                 CopyButton(textToCopy: xTaler, vertical: true)
-                    .accessibilityLabel(Text("Copy the account", comment: "VoiceOver"))
+                    .accessibilityLabel(Text("Copy the account", comment: "a11y"))
                     .disabled(false)
             }   .padding(.top, -8)
             let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"

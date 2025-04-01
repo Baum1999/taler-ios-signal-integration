@@ -37,7 +37,7 @@ struct TransactionPayDetailV: View {
                     let buttonTitle = info.fulfillmentMessage ?? String(localized: "Open merchant website")
                     Link(buttonTitle, destination: destination)
                         .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "VoiceOver"))
+                        .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "a11y"))
                 }
             } else if let fulfillmentMessage = info.fulfillmentMessage {
                 Text(fulfillmentMessage)

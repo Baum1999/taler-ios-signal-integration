@@ -91,7 +91,7 @@ struct ErrorView: View {
                         }
 
                         CopyButton(textToCopy: message, vertical: false)
-                            .accessibilityLabel("Copy the error JSON")
+                            .accessibilityLabel(Text("Copy the error JSON", comment: "a11y"))
                             .padding()
                     } else {
                         Text(message)

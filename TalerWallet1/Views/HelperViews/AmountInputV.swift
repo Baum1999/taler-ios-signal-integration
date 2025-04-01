@@ -102,7 +102,7 @@ struct AmountInputV: View {
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
                    feeIsNegative: feeIsNegative)
             let flags = checkAvailable(coinData)
-            let hint = String(localized: "enabled when amount is non-zero", comment: "VoiceOver")
+            let hint = String(localized: "enabled when amount is non-zero", comment: "a11y")
             Button("Next") { buttonAction() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)

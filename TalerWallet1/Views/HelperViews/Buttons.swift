@@ -28,7 +28,7 @@ struct HamburgerButton : View  {
 //            Image(systemName: "sidebar.squares.leading")
         }
         .talerFont(.title)
-        .accessibilityLabel("Main Menu")
+        .accessibilityLabel(Text("Main Menu", comment: "a11y"))
     }
 }
 
@@ -74,12 +74,12 @@ struct QRButton : View  {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
     }
-    let closingAnnouncement = String(localized: "Closing Camera", comment: "VoiceOver")
+    let closingAnnouncement = String(localized: "Closing Camera", comment: "a11y")
 
-    var defaultPriorityAnnouncement = String(localized: "Opening Camera", comment: "VoiceOver")
+    var defaultPriorityAnnouncement = String(localized: "Opening Camera", comment: "a11y")
 
     var highPriorityAnnouncement: AttributedString {
-        var highPriorityString = AttributedString(localized: "Camera Active", comment: "VoiceOver")
+        var highPriorityString = AttributedString(localized: "Camera Active", comment: "a11y")
         if #available(iOS 17.0, *) {
             highPriorityString.accessibilitySpeechAnnouncementPriority = .high
         }
@@ -96,7 +96,7 @@ struct QRButton : View  {
                 if #available(iOS 17.0, *) {
                     AccessibilityNotification.Announcement(highPriorityAnnouncement).post()
                 } else {
-                    let cameraActive = String(localized: "Camera Active", comment: "VoiceOver")
+                    let cameraActive = String(localized: "Camera Active", comment: "a11y")
                     announce(cameraActive)
                 }
             } else {
@@ -162,7 +162,7 @@ struct BackButton : View  {
             Image(ICONNAME_INCOMING + ICONNAME_FILL)
         }
         .talerFont(.largeTitle)
-        .accessibilityLabel("Back")
+        .accessibilityLabel(Text("Back", comment: "a11y"))
     }
 }
 
@@ -182,7 +182,7 @@ struct ForwardButton : View  {
             Image(imageName)
         }
         .talerFont(.largeTitle)
-        .accessibilityLabel("Continue")
+        .accessibilityLabel(Text("Continue", comment: "a11y"))
     }
 }
 
@@ -194,7 +194,7 @@ struct ArrowUpButton : View  {
             Image(systemName: "arrow.up.to.line")
         }
         .talerFont(.title2)
-        .accessibilityLabel("Scroll up")
+        .accessibilityLabel(Text("Scroll up", comment: "a11y"))
     }
 }
 
@@ -206,7 +206,7 @@ struct ArrowDownButton : View  {
             Image(systemName: "arrow.down.to.line")
         }
         .talerFont(.title2)
-        .accessibilityLabel("Scroll down")
+        .accessibilityLabel(Text("Scroll down", comment: "a11y"))
     }
 }
 
@@ -219,7 +219,7 @@ struct ReloadButton : View  {
             Image(systemName: "arrow.clockwise")
         }
         .talerFont(.title)
-        .accessibilityLabel("Reload")
+        .accessibilityLabel(Text("Reload", comment: "a11y"))
         .disabled(disabled)
     }
 }

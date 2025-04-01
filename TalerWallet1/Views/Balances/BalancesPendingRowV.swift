@@ -27,8 +27,8 @@ struct BalancesPendingRowV: View {
         let needsKYCout = balance.flags.contains(.outgoingKyc)
         let shouldConfirm = balance.flags.contains(.incomingConfirmation)
         let needsKYC =  needsKYCin || needsKYCout
-        let needsKYCStr = String(localized: ". Needs K Y C", comment: "VoiceOver")
-        let needsConfStr = String(localized: ". Needs bank confirmation", comment: "VoiceOver")
+        let needsKYCStr = String(localized: ". Needs K Y C", comment: "a11y")
+        let needsConfStr = String(localized: ". Needs bank confirmation", comment: "a11y")
 
         VStack(spacing: 6) {
             if hasIncoming {
@@ -56,7 +56,7 @@ struct BalancesPendingRowV: View {
                                              needsKYC ? needsKYCStr :
                                         shouldConfirm ? needsConfStr
                                                       : EMPTYSTRING)
-        .accessibilityHint(String(localized: "Will go to Pending transactions.", comment: "VoiceOver"))
+        .accessibilityHint(String(localized: "Will go to Pending transactions.", comment: "a11y"))
     }
 
     var body: some View {

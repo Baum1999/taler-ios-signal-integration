@@ -102,7 +102,7 @@ struct P2PSubjectV: View {
                         .talerFont(.body)
                 }
             }
-            let enterSubject = String(localized: "Enter subject")
+            let enterSubject = String(localized: "Enter subject", comment: "Purpose, a11y")
             let enterColon = String("\(enterSubject):")
             if !minimalistic {
                 Text(enterSubject)    // Purpose
@@ -159,7 +159,7 @@ struct P2PSubjectV: View {
                 .accessibilityLabel(buttonTitle.1)
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
-                .accessibilityHint(disabled ? String(localized: "enabled when subject and expiration are set", comment: "VoiceOver")
+                .accessibilityHint(disabled ? String(localized: "enabled when subject and expiration are set", comment: "a11y")
                                             : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
