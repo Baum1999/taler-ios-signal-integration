@@ -84,7 +84,7 @@ struct ExchangeListCommonV: View {
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let sortedList = List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
+        let balanceList = List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
             ExchangeSectionView(stack: stack.push(),
                               balance: balance,
                              thousand: index * MAXEXCHANGES)
@@ -112,7 +112,7 @@ struct ExchangeListCommonV: View {
             if controller.balances.isEmpty {
                 emptyList
             } else {
-                sortedList
+                balanceList                 // sorted by wallet-core
             }
         }
         .listStyle(myListStyle.style).anyView

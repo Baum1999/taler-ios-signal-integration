@@ -237,18 +237,17 @@ extension MainView {
         @Binding var qrButtonTapped: Bool
         @Binding var userAction: Int
 
+        @EnvironmentObject private var controller: Controller
+        @EnvironmentObject private var model: WalletModel
+        @EnvironmentObject private var tabBarModel: TabBarModel
+        @EnvironmentObject private var viewState: ViewState     // popToRootView()
+        @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
 #if DEBUG
         @AppStorage("developerMode") var developerMode: Bool = true
 #else
         @AppStorage("developerMode") var developerMode: Bool = false
 #endif
         @AppStorage("minimalistic") var minimalistic: Bool = false
-        @EnvironmentObject private var controller: Controller
-        @EnvironmentObject private var model: WalletModel
-        @EnvironmentObject private var tabBarModel: TabBarModel
-        @EnvironmentObject private var viewState: ViewState     // popToRootView()
-        @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
-
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0

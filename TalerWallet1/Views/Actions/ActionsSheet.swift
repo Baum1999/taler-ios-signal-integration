@@ -18,9 +18,9 @@ struct ActionsSheet: View {
     let stack: CallStack
     @Binding var qrButtonTapped: Bool
 
+    @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
-    @EnvironmentObject private var controller: Controller
 
     private var hasKudos: Bool {
         for balance in controller.balances {

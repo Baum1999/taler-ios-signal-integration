@@ -15,8 +15,9 @@ struct URLSheet: View {
     @Binding var selectedBalance: Balance?
     @Binding var urlToOpen: URL?
 
-    @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
     @EnvironmentObject private var controller: Controller
+    @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
+
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var summary = EMPTYSTRING
     @State private var urlCommand: UrlCommand?
