@@ -35,9 +35,11 @@ struct OIMamountV: View {
                 let amountVal = intValue(amount)
                 AmountV(currStr, cent: UInt64(amountVal), isNegative: nil)
                     .foregroundColor(WalletColors().attention)  // talerColor)
+#if DEBUG
                     .onTapGesture {
                         debugAnimations.toggle()
                     }
+#endif
             }
         }.padding(.horizontal, UIScreen.hasFaceID ? 20 : 4)
         .ignoresSafeArea(edges: .all)

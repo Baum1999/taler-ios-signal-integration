@@ -22,7 +22,9 @@
  */
 import SwiftUI
 
-var debugAnimations = false
+#if DEBUG
+var debugAnimations = true
+#endif
 
 extension Animation {
 #if DEBUG
