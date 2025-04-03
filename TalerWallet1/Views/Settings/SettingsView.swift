@@ -189,7 +189,7 @@ struct SettingsView: View {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw DEMO KUDOS")
-                                    let amount = Amount(currency:  DEMOCURRENCY, cent: 1100)
+                                    let amount = Amount(currency:  DEMOCURRENCY, cent: 11100)
                                     try? await model.loadTestKudos(0, amount: amount)
                                 }
                             }
