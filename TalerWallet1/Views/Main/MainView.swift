@@ -217,13 +217,20 @@ enum Tab: Int, Hashable, CaseIterable {
         Label(self)
     }
 }
+// MARK: -
+class NamespaceWrapper: ObservableObject {
+    var namespace: Namespace.ID
 
+    init(_ namespace: Namespace.ID) {
+        self.namespace = namespace
+    }
+}
+// MARK: -
 extension Label where Title == Text, Icon == Image {
     init(_ tab: Tab) {
         self.init(EMPTYSTRING, systemImage: tab.a11y)
     }
 }
-
 // MARK: - Content
 extension MainView {
 

@@ -24,6 +24,7 @@ struct BalancesListView: View {
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
+    @Namespace var namespace
 
     private static func className() -> String {"\(self)"}
 
@@ -72,6 +73,7 @@ struct BalancesListView: View {
                                 scope: balance?.scopeInfo,
                                amount: balance?.available,
                        qrButtonTapped: $qrButtonTapped)
+                        .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
                 }
             }

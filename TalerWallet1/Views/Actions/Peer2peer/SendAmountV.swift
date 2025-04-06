@@ -26,6 +26,7 @@ struct SendAmountV: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var buttonSelected = false
+    @Namespace var namespace
 
     @MainActor
     private func viewDidLoad() async {
@@ -110,6 +111,7 @@ struct SendAmountV: View {
                                amount: $amountToTransfer,
                             available: $amountAvailable,
                        buttonSelected: $buttonSelected)
+                    .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             }
         if #available(iOS 16.0, *) {

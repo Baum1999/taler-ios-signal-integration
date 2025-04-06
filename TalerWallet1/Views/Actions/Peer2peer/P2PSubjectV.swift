@@ -39,6 +39,7 @@ struct P2PSubjectV: View {
     @State private var transactionStarted: Bool = false
     @State private var sendOrRequest: Bool = false
     @FocusState private var isFocused: Bool
+    @Namespace var namespace
 
     private func sendTitle(_ amountWithCurrency: String) -> String {
         String(localized: "Send \(amountWithCurrency) now",
@@ -181,6 +182,7 @@ struct P2PSubjectV: View {
                                    scope: scope,
                                   amount: $amountToTransfer,
                           buttonSelected: $sendOrRequest)
+                    .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             }
     }
