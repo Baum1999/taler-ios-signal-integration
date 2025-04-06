@@ -299,7 +299,7 @@ struct PaymentView: View, Sendable {
             }
             .overlay {
                 if controller.oimSheetActive {
-                    OIMPayView(scope: firstScope, amount: effective)
+                    OIMPayView(stack: stack.push(), scope: firstScope, amount: effective)
                 }
             }
         } else {

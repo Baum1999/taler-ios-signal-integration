@@ -162,6 +162,7 @@ struct OIMView: View {
 }
 // MARK: -
 struct OIMPayView: View {
+    let stack: CallStack
     let scope: ScopeInfo?
     let amount: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)

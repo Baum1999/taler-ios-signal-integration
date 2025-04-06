@@ -119,7 +119,7 @@ struct MainView: View {
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                                   selectedBalance: $selectedBalance))
-                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
+//                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
                     if #available(iOS 16.4, *) {
                         let scanDetent: PresentationDetent = .fraction(SCANDETENT)
                         Sheet(stack: stack.push(), sheetView: qrSheet)
@@ -134,7 +134,7 @@ struct MainView: View {
                        onDismiss: { showScanner = false; qrButtonTapped = false; userAction += 1 }
                 ) {
                     if #available(iOS 16.4, *) {
-                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
+//                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
                         DualHeightSheet(stack: stack.push(),
                                         qrButtonTapped: $qrButtonTapped)
                     } else {
