@@ -148,7 +148,6 @@ struct OIMView: View {
                 Spacer()
                 OIMlineView(currency: currency,
                            amountVal: $amountVal,
-                           namespace: namespace,
                            tappedVal: tappedVal,
                               flying: $flying,
                                shake: shake,
@@ -184,7 +183,6 @@ struct OIMPayView: View {
                 Spacer()
                 OIMlineView(currency: currency,
                            amountVal: $amountVal,
-                           namespace: namespace,
                            tappedVal: tappedVal,
                               flying: $flying,
                                shake: shake,
@@ -231,7 +229,6 @@ struct OIMEditView: View {
                 Spacer()
                 OIMlineView(currency: currency,
                            amountVal: $amountVal,
-                           namespace: namespace,
                            tappedVal: tappedVal,
                               flying: $flying,
                                shake: shake,
@@ -246,7 +243,6 @@ struct OIMEditView: View {
                 OIMcurrencyScroller(currency: currency,
                                 availableVal: $availableVal,
                                    amountVal: $amountVal,
-                                   namespace: namespace,
                                    tappedVal: $tappedVal,
                                       flying: $flying,
                                        shake: $shake)

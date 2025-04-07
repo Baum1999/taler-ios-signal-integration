@@ -144,12 +144,13 @@ struct OIMnoteStackV: View {
     let value: Int
     let count: Int
     let currency: OIMcurrency
-    let namespace: Namespace.ID
     let tappedVal: Int
     @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
     let action: () -> Void
+
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -173,7 +174,7 @@ struct OIMnoteStackV: View {
                         action: action)
                     .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                             y: yOffset)
-                    .matchedGeometryEffect(id: id, in: namespace, isSource: false)
+                    .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
                     .onAppear {
 //                        print("start flying \(id), shaking \(shakeOffset)")
                         withAnimation(.fly1) {
@@ -192,12 +193,13 @@ struct OIMcoinStackV: View {
     let value: Int
     let count: Int
     let currency: OIMcurrency
-    let namespace: Namespace.ID
     let tappedVal: Int
     @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
     let action: () -> Void
+
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
         let maxIndex = count - 1
@@ -221,7 +223,7 @@ struct OIMcoinStackV: View {
                             action: action)
                         .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                                 y: yOffset)
-                        .matchedGeometryEffect(id: id, in: namespace, isSource: false)
+                        .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
                         .onAppear {
 //                        print("start flying \(id), shaking \(shakeOffset)")
                             withAnimation(.fly1) {

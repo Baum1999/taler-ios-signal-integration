@@ -13,7 +13,6 @@ struct OIMnotesView1: View {
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
-    let namespace: Namespace.ID
     let tappedVal: Int
     @Binding var flying: Int
     let shake: Bool
@@ -31,7 +30,6 @@ struct OIMnotesView1: View {
                     OIMnoteStackV(value: value,
                                   count: count,
                                currency: currency,
-                              namespace: namespace,
                               tappedVal: tappedVal,
                                  flying: $flying,
                                   shake: shake,
@@ -51,7 +49,6 @@ struct OIMcoinsView1: View {
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
-    let namespace: Namespace.ID
     let tappedVal: Int
     @Binding var flying: Int
     let shake: Bool
@@ -68,7 +65,6 @@ struct OIMcoinsView1: View {
                     OIMcoinStackV(value: value,
                                   count: count,
                                currency: currency,
-                              namespace: namespace,
                               tappedVal: tappedVal,
                                  flying: $flying,
                                   shake: shake,
@@ -89,12 +85,12 @@ fileprivate let vertSpacing: CGFloat = 10
 struct OIMlineView: View {
     let currency: OIMcurrency
     @Binding var amountVal: Int
-    let namespace: Namespace.ID
     let tappedVal: Int
     @Binding var flying: Int
     let shake: Bool
     let canEdit: Bool
 
+    @EnvironmentObject private var wrapper: NamespaceWrapper
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
     var body: some View {
@@ -111,26 +107,24 @@ struct OIMlineView: View {
         let notes = OIMnotesView1(spread: result.0,
                                 currency: currency,
                                amountVal: $amountVal,
-                               namespace: namespace,
                                tappedVal: tappedVal,
                                   flying: $flying,
                                    shake: shake,
                                  canEdit: canEdit
                     ).id("notes")
-                    .matchedGeometryEffect(id: "notes", in: namespace)
+                     .matchedGeometryEffect(id: "notes", in: wrapper.namespace)
 #if DEBUG
             .border(blue)
 #endif
         let coins = OIMcoinsView1(spread: result.1,
                                 currency: currency,
                                amountVal: $amountVal,
-                               namespace: namespace,
                                tappedVal: tappedVal,
                                   flying: $flying,
                                    shake: shake,
                                  canEdit: canEdit
                     ).id("coins")
-                    .matchedGeometryEffect(id: "coins", in: namespace)
+                     .matchedGeometryEffect(id: "coins", in: wrapper.namespace)
 #if DEBUG
             .border(red)
 #endif

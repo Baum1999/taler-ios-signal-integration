@@ -13,10 +13,11 @@ struct OIMcurrencyScroller: View {
     let currency: OIMcurrency
     @Binding var availableVal: Int
     @Binding var amountVal: Int
-    let namespace: Namespace.ID
     @Binding var tappedVal: Int
     @Binding var flying: Int
     @Binding var shake: Bool
+
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     func tap(value: Int, _ delay: Int = 250) {
         withAnimation(.shake1) {
@@ -55,7 +56,7 @@ struct OIMcurrencyScroller: View {
                                pct: 0.0,
                             action: { tap(value: value) }
                     )
-                    .matchedGeometryEffect(id: value, in: namespace, isSource: true)
+                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
                     OIMcoinV(value: value,
@@ -65,7 +66,7 @@ struct OIMcurrencyScroller: View {
                                pct: 0.0,
                             action: { tap(value: value) }
                     )
-                    .matchedGeometryEffect(id: value, in: namespace, isSource: true)
+                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                 }
             }.padding(.trailing, UIScreen.hasNotch ? UIScreen.horzInsets : 0)   // ensure scrolling over the FaceID notch
         }
