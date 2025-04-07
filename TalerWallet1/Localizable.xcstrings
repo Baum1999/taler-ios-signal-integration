@@ -30,7 +30,7 @@
       }
     },
     ", canceled" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -59,7 +59,7 @@
       }
     },
     ". Needs bank authorization" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -88,7 +88,7 @@
       }
     },
     ". Needs bank confirmation" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -117,7 +117,7 @@
       }
     },
     ". Needs K Y C" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -698,6 +698,9 @@
           }
         }
       }
+    },
+    "%lld" : {
+      "comment" : "VoiceOver"
     },
     "%lld characters of 100" : {
       "localizations" : {
@@ -1586,7 +1589,7 @@
       }
     },
     "account of the recipient" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1707,7 +1710,7 @@
       }
     },
     "Add bank account" : {
-      "comment" : "VoiceOver for the + button",
+      "comment" : "a11y for the + button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1730,7 +1733,7 @@
       }
     },
     "Add payment service" : {
-      "comment" : "VoiceOver for the + button",
+      "comment" : "a11y for the + button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2073,7 +2076,7 @@
       }
     },
     "Amount to transfer" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2551,6 +2554,17 @@
         }
       }
     },
+    "Back" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        }
+      }
+    },
     "Backup restored" : {
       "comment" : "RefreshReason",
       "localizations" : {
@@ -2718,7 +2732,7 @@
       }
     },
     "Camera Active" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2797,6 +2811,7 @@
       }
     },
     "Choose the expiration duration" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2825,7 +2840,7 @@
       }
     },
     "Choose the payment service:" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2933,7 +2948,7 @@
       }
     },
     "Closing Camera" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3070,8 +3085,19 @@
         }
       }
     },
+    "Continue" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        }
+      }
+    },
     "Copy the account" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3100,7 +3126,7 @@
       }
     },
     "Copy the amount" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3123,7 +3149,7 @@
       }
     },
     "Copy the cryptocode" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3152,7 +3178,7 @@
       }
     },
     "Copy the error" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3181,6 +3207,7 @@
       }
     },
     "Copy the error JSON" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3209,7 +3236,7 @@
       }
     },
     "Copy the IBAN" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3262,7 +3289,7 @@
       }
     },
     "Copy the recipient" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3357,7 +3384,7 @@
       }
     },
     "Cryptocode" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3395,6 +3422,9 @@
           }
         }
       }
+    },
+    "Currency to be used for OIM" : {
+
     },
     "Currency:" : {
       "extractionState" : "stale",
@@ -3781,7 +3811,7 @@
       }
     },
     "Double tap to edit the account" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3804,7 +3834,7 @@
       }
     },
     "Double tap to select" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4233,7 +4263,7 @@
       }
     },
     "enabled when amount is non-zero" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4256,7 +4286,7 @@
       }
     },
     "enabled when amount is non-zero, but not higher than your available amount" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4285,7 +4315,7 @@
       }
     },
     "enabled when subject and expiration are set" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4314,6 +4344,7 @@
       }
     },
     "Enter subject" : {
+      "comment" : "Purpose, a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4414,7 +4445,7 @@
       }
     },
     "Error while scanning QR code" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4567,7 +4598,7 @@
       }
     },
     "Expires: %@" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4777,7 +4808,7 @@
       }
     },
     "IBAN of the recipient" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4917,7 +4948,7 @@
       }
     },
     "In progress" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5316,6 +5347,7 @@
       }
     },
     "Main Menu" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7018,6 +7050,9 @@
         }
       }
     },
+    "OIM denomination layout" : {
+
+    },
     "OK" : {
       "localizations" : {
         "de" : {
@@ -7209,7 +7244,7 @@
       }
     },
     "Opening Camera" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8008,6 +8043,7 @@
       }
     },
     "Progress indicator" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8064,6 +8100,7 @@
       }
     },
     "QR Code" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8120,7 +8157,7 @@
       }
     },
     "QR code recognized" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8404,7 +8441,7 @@
       }
     },
     "Recipient" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8622,6 +8659,7 @@
       }
     },
     "Reload" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9052,6 +9090,12 @@
         }
       }
     },
+    "Scanned QR is no talerURI" : {
+
+    },
+    "Scanned QR is no URL" : {
+
+    },
     "Scanning QR-codes requires access to the camera" : {
       "localizations" : {
         "de" : {
@@ -9133,6 +9177,7 @@
       }
     },
     "Scroll down" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9161,6 +9206,7 @@
       }
     },
     "Scroll up" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9505,7 +9551,7 @@
       }
     },
     "Share the PayTo URL" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9534,7 +9580,7 @@
       }
     },
     "Sheet.ID." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9563,7 +9609,7 @@
       }
     },
     "Shortcut" : {
-      "comment" : "VoiceOver: $50,$25,$10,$5 shortcut buttons",
+      "comment" : "a11y: $50,$25,$10,$5 shortcut buttons",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9688,6 +9734,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Показує, на якому перегляді ви зараз перебуваєте."
+          }
+        }
+      }
+    },
+    "Sierra Leone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sierra Leone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sierra Leone"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sierra Leone"
           }
         }
       }
@@ -9917,7 +9985,7 @@
       }
     },
     "Taler Logo" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10990,7 +11058,7 @@
       }
     },
     "Transaction list" : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11108,6 +11176,9 @@
           }
         }
       }
+    },
+    "Two rows" : {
+
     },
     "TxAction.Abort" : {
       "comment" : "TxAction button",
@@ -11837,7 +11908,7 @@
       }
     },
     "via %@" : {
-      "comment" : "VoiceOver\ncurrency/exchange chooser",
+      "comment" : "a11y\ncurrency/exchange chooser",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12019,7 +12090,7 @@
       }
     },
     "Will go to bank website to authorize this withdrawal." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12048,7 +12119,7 @@
       }
     },
     "Will go to detail view." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12077,7 +12148,7 @@
       }
     },
     "Will go to KYC website to permit this withdrawal." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12106,7 +12177,7 @@
       }
     },
     "Will go to main transactions list." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12135,7 +12206,7 @@
       }
     },
     "Will go to Pending transactions." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12164,7 +12235,7 @@
       }
     },
     "Will go to the demo shop website." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12193,7 +12264,7 @@
       }
     },
     "Will go to the merchant website." : {
-      "comment" : "VoiceOver",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12880,6 +12951,7 @@
     },
     "You must accept the Terms of Service of the payment service first before you can receive electronic cash in your wallet." : {
       "comment" : "P2P Receive",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12902,6 +12974,7 @@
       }
     },
     "You must accept the Terms of Service of the payment service first before you can withdraw electronic cash to your wallet." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12924,6 +12997,7 @@
       }
     },
     "You must accept the Terms of Service of the payment service first." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12935,6 +13009,55 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Debes aceptar los términos de servicio del servicio de pagos."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W pierwszej kolejności należy zaakceptować warunki korzystania z usługi płatności."
+          }
+        }
+      }
+    },
+    "You must first accept the payment service's terms of service before you can receive electronic cash in your wallet." : {
+      "comment" : "P2P Receive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Elektronic-Cash in ihrer Wallet empfangen können."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przed otrzymaniem gotówki elektronicznej w portfelu należy zaakceptować warunki korzystania z usługi płatności."
+          }
+        }
+      }
+    },
+    "You must first accept the payment service's terms of service before you can withdraw electronic cash to your wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Electronic-Cash in Ihr Wallet abheben können."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zanim będziesz mógł wypłacić gotówkę elektroniczną do swojego portfela, musisz najpierw zaakceptować Warunki korzystania z usługi płatniczej."
+          }
+        }
+      }
+    },
+    "You must first accept the payment service's terms of service." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren."
           }
         },
         "pl" : {
