@@ -16,6 +16,7 @@ struct PeerContractTerms: Codable {
     let amount: Amount
     let summary: String
     let purse_expiration: Timestamp
+    let icon_id: String?
 }
 // MARK: - max PeerPushDebit amount
 /// Check if initiating a peer push payment is possible, check fees

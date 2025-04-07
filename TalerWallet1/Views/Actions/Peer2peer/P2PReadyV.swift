@@ -47,7 +47,8 @@ struct P2PReadyV: View {
                                       : Timestamp.inSomeDays(expireDays)
         let terms = PeerContractTerms(amount: amountToTransfer,
                                      summary: summary,
-                            purse_expiration: timestamp)
+                            purse_expiration: timestamp,
+                                     icon_id: nil)
         if outgoing {
             // TODO: let user choose baseURL
             if let response = try? await model.initiatePeerPushDebit(scope: scope, terms: terms) {
