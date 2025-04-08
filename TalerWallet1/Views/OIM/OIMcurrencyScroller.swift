@@ -24,7 +24,11 @@ struct OIMcurrencyScroller: View {
             flying = 0
             tappedVal = value
         }
+#if DEBUG
         let ms = debugAnimations ? 1500 : delay
+#else
+        let ms = delay
+#endif
 //        print("tapped \(value)")
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
 //            print("shake start")
