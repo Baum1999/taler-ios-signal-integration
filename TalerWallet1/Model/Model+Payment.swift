@@ -125,6 +125,7 @@ struct PayMerchantInsufficientBalanceDetails: Codable {
     let balanceReceiverAcceptable: Amount
     let balanceReceiverDepositable: Amount
     let perExchange: [String:ExchangeFeeGapEstimate]
+    let causeHint: InsufficientBalanceHint
 }
 
 struct ExchangeFeeGapEstimate: Codable {

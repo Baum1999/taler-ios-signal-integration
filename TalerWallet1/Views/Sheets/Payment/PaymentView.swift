@@ -207,8 +207,24 @@ struct PaymentView: View, Sendable {
                                      products: terms.products)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
-                    Text("You don't have enough \(currency).")
-                        .talerFont(.headline)
+                    Group {
+                        switch balanceDetails.causeHint {
+                        case .merchantAcceptInsufficient:
+                            Text("Merchant doesn't accept money from one or more providers in this wallet")
+                        case .merchantDepositInsufficient:
+                            Text("Merchant doesn't accept the wire method of the provider, this likely means it is misconfigured")
+                        case .ageRestricted:
+                            Text("Purchase not possible due to age restriction")
+                        case .walletBalanceMaterialInsufficient:
+                            Text("Some of the coins needed for this purchase are currently unavailable")
+                        case .walletBalanceAvailableInsufficient:
+                            Text("You don't have enough \(currency).")
+                        case .exchangeMissingGlobalFees:
+                            Text("Provider is missing the global fee configuration, this likely means it is misconfigured")
+                        case .feesNotCovered:
+                            Text("Not enough funds to pay the provider fees not covered by the merchant")
+                        }
+                    }.talerFont(.headline)
                     ThreeAmountsSection(stack: stack.push(),
                                         scope: firstScope,
                                      topTitle: topTitle,
