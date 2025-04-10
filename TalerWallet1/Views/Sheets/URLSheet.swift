@@ -61,11 +61,13 @@ struct URLSheet: View {
                 case .refund:
                     RefundURIView(stack: stack.push(), url: passedURL)
                 default:        // TODO: Error view
+                    let unknown = String(localized: "Unknown command")
                     VStack {
                         let _ = symLog.log("Unknown command❗️ \(passedURL.absoluteString)")
-                        Text(controller.messageForSheet ?? passedURL.absoluteString)
+                        Text(controller.messageForSheet ?? unknown)
+                            .talerFont(.title)
                     }
-                    .navigationTitle("Unknown command")
+                    .navigationTitle(unknown)
             }
         } else {
             let message = String(localized: "Scanning...", comment: "loading")

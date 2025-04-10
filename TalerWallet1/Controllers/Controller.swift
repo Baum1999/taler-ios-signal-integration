@@ -360,6 +360,7 @@ extension Controller {
             default:
                 self.logger.error("❗️unknown command taler://\(command)")
         }
+        messageForSheet = command.lowercased()
         return .unknown
     }
 }
