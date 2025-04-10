@@ -310,12 +310,13 @@ class Controller: ObservableObject {
 // MARK: -
 extension Controller {
     func openURL(_ url: URL, stack: CallStack) -> UrlCommand {
+        guard let scheme = url.scheme else {return UrlCommand.unknown}
 #if DEBUG
         symLog.log(url)
 #else
-        self.logger.trace("openURL(\(url))")
+        let host = url.host ?? "  <- no command"
+        self.logger.trace("openURL(\(scheme)\(host)")
 #endif
-        guard let scheme = url.scheme else {return UrlCommand.unknown}
         var uncrypted = false
         switch scheme.lowercased() {
             case "taler+http":
