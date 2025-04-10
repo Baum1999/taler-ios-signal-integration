@@ -57,7 +57,7 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
     private var requests: [Int32: QuickDataTask] = [:]
 
     private lazy var urlSession: URLSession = {
-        return URLSession(configuration: .default)
+        return URLSession(configuration: .ephemeral)    // we don't want the filesystem cache - keep it in RAM
     }()
 
     public init() {
