@@ -14,14 +14,18 @@ public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // n
 public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500],
                                    noteWidth: 384,
                                   noteHeight: 352,
+                                  noteWidths: [  384,   384,  384,  384,  384, 384],
+                                 noteHeights: [  352,   352,  352,  352,  352, 352],
                                    bankCoins: [200, 100,  50,  20,  10,   5,   2,   1],
                                    coinSizes: [258, 232, 242, 222, 198, 212, 188, 162],
                                     noteBase: "EUR", coinBase: "eur")
 
 // 5 banknotes, 5 coins (all fractionals)
-public let OIMleones = OIMcurrency(bankNotes: [2000, 1000, 500, 200, 100],
+public let OIMleones = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500, 200, 100],
                                    noteWidth: 400,
                                   noteHeight: 296,
+                                  noteWidths: [  620,   600,  590,  400,  400, 400, 400, 400],
+                                 noteHeights: [  310,   320,  310,  296,  296, 296, 296, 296],
                                    bankCoins: [ 50,  25,  10,   5,   1],
                                    coinSizes: [270, 250, 240, 228, 208],
                                    // [ 260mm 270px, 240mm 250px, 230mm 240px, 225mm 228px, 200mm 208px]
@@ -31,6 +35,8 @@ public let OIMleones = OIMcurrency(bankNotes: [2000, 1000, 500, 200, 100],
 public let OIMdollars = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000, 500, 200],          // XXX x 265
                                     noteWidth: 400,
                                    noteHeight: 265,
+                                   noteWidths: [  384,  361,  380,  364, 349, 413],
+                                  noteHeights: [  265,  265,  265,  265, 265, 265],
                                     bankCoins: [100,  50,  25,  10,   5,   1],
                                     coinSizes: [265, 306, 243, 180, 212, 190],
                                      noteBase: "USD", coinBase: "usd")
@@ -39,6 +45,8 @@ public struct OIMcurrency: Sendable {
     let bankNotes: OIMdenominations             // values of each banknote, in cents
     let noteWidth: CGFloat
     let noteHeight: CGFloat
+    let noteWidths: OIMdenominations
+    let noteHeights: OIMdenominations
     let bankCoins: OIMdenominations             // values of each coin, decending
     let coinSizes: [CGFloat]                    // coin sizes in points
     let noteBase: String
