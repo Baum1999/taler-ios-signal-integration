@@ -21,7 +21,7 @@ struct OIMnotesView1: View {
     var body: some View {
 //        let _ = Self._printChanges()
         let nrOfNotes = currency.bankNotes.count - 1
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .center, spacing: 10) {
             ForEach(0...nrOfNotes, id: \.self) { index in
                 let value = currency.bankNotes[index]
                 let shouldFly = tappedVal == value
@@ -129,7 +129,7 @@ struct OIMlineView: View {
             .border(red)
 #endif
 
-        let oneLine = HStack(spacing: horzSpacing) {
+        let oneLine = HStack(alignment: .center, spacing: horzSpacing) {
             notes
             coins
         }
@@ -173,7 +173,7 @@ struct OIMlineView: View {
                         }
                     }
                 } else {
-                    LayoutThatFits([HStackLayout(alignment: .top), VStackLayout()]) {
+                    LayoutThatFits([HStackLayout(alignment: .center), VStackLayout()]) {
                         notes
 #if DEBUG
                             .padding(1)

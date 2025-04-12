@@ -17,36 +17,32 @@ struct OIMbuttonStyle: ButtonStyle {
 //            .background(RoundedRectangle(cornerRadius: 5).fill(color))
 //            .compositingGroup()
 //            .shadow(color: .black, radius: 3)
-            .opacity(configuration.isPressed ? 0.5 : 1.0)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
             .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
     }
 }
 
-/// renders 1 banknote from a currency with size/4
-struct OIMnoteV: View {
-    let value: Int
-    let currency: OIMcurrency
-    let availableVal: Int
-    let canEdit: Bool
-    var pct: CGFloat
-    let action: () -> Void
+struct OIMcurrencyImage {
+    let image: Image
+    let oWidth: CGFloat
+    let oHeight: CGFloat
 
-    var body: some View {
-//        let _ = Self._printChanges()
-        // Use EmptyView, because the modifier actually ignores
-        // the value passed to its body() function.
-        EmptyView().modifier(OIMmod(value: value,
-                                 currency: currency,
-                             availableVal: availableVal,
-                                  canEdit: canEdit,
-                                      pct: pct,
-                                   action: action))
+    init(_ name: String?) {
+        if let name, let uiImage = UIImage(named: name) {
+            self.oWidth = uiImage.size.width
+            self.oHeight = uiImage.size.height
+            self.image = Image(uiImage: uiImage)
+        } else {
+            self.image = Image(systemName: "exclamationmark.triangle")
+            self.oWidth = 300
+            self.oHeight = 300
+        }
     }
 }
 
 struct OIMmod: AnimatableModifier {
     let value: Int
-    let currency: OIMcurrency
+    let name: String?
     let availableVal: Int
     let canEdit: Bool
     var pct: CGFloat
@@ -60,46 +56,10 @@ struct OIMmod: AnimatableModifier {
     func body(content: Content) ->  some View {
         let shadow = (3 - 8) * pct + 8
         return Group {
-            if let name = currency.noteName(value) {
-                let image = Image(name)
-                    .resizable()
-                    .scaledToFit()
-                Group {
-                    if canEdit && availableVal >= value {
-                        Button(action: action) {
-                            image
-                        }
-                        .buttonStyle(OIMbuttonStyle())
-                    } else {
-                        image
-                            .opacity(canEdit ? 0.5 : 1.0)
-                    }
-                }
-                .frame(width: currency.noteWidth / 4, height: currency.noteHeight / 4)
-                .shadow(radius: shadow)
-                .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))
-            } else {
-                EmptyView()
-            }
-        }
-    }
-}
-
-/// renders 1 coin from a currency with size/4
-struct OIMcoinV: View {
-    let value: Int
-    let currency: OIMcurrency
-    let availableVal: Int
-    let canEdit: Bool
-    var pct: CGFloat
-    let action: () -> Void
-
-    var body: some View {
-        let shadow = (3 - 8) * pct + 8
-        if let name = currency.coinName(value), let size = currency.coinSize(value) {
-            let image = Image(name)
-                .resizable()
-                .scaledToFit()
+            let currencyImage = OIMcurrencyImage(name)
+            let image = currencyImage.image
+                            .resizable()
+                            .scaledToFit()
             Group {
                 if canEdit && availableVal >= value {
                     Button(action: action) {
@@ -111,17 +71,15 @@ struct OIMcoinV: View {
                         .opacity(canEdit ? 0.5 : 1.0)
                 }
             }
-                .frame(width: size / 4, height: size / 4)
+                .frame(width: currencyImage.oWidth / 4, height: currencyImage.oHeight / 4)
                 .shadow(radius: shadow)
                 .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))
-        } else {
-            EmptyView()
         }
     }
 }
 
 /// renders 1 denomination from a currency
-struct OIMsingleV: View {
+struct OIMcurrencyView: View {
     let value: Int
     let currency: OIMcurrency
     let availableVal: Int
@@ -130,11 +88,16 @@ struct OIMsingleV: View {
     let action: () -> Void
 
     var body: some View {
-        if value > currency.bankCoins[0] {
-            OIMnoteV(value: value, currency: currency, availableVal: availableVal, canEdit: canEdit, pct: pct, action: action)
-        } else {
-            OIMcoinV(value: value, currency: currency, availableVal: availableVal, canEdit: canEdit, pct: pct, action: action)
-        }
+        let name = value > currency.bankCoins[0] ? currency.noteName(value)
+                                                 : currency.coinName(value)
+        // Use EmptyView, because the modifier actually ignores
+        // the value passed to its body() function.
+        EmptyView().modifier(OIMmod(value: value,
+                                     name: name,
+                             availableVal: availableVal,
+                                  canEdit: canEdit,
+                                      pct: pct,
+                                   action: action))
     }
 }
 
@@ -166,12 +129,12 @@ struct OIMnoteStackV: View {
                                                            : .zero
                 let direction = value < tappedVal
 //                let _ = print("id \(id), flying \(flying), shaking \(shakeOffset)")
-                OIMnoteV(value: value,
-                      currency: currency,
-                  availableVal: value,
-                       canEdit: canEdit,
-                           pct: match ? 0.0 : 1.0,
-                        action: action)
+                OIMcurrencyView(value: value,
+                             currency: currency,
+                         availableVal: value,
+                              canEdit: canEdit,
+                                  pct: match ? 0.0 : 1.0,
+                               action: action)
                     .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                             y: yOffset)
                     .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
@@ -215,12 +178,12 @@ struct OIMcoinStackV: View {
                     let shakeOffset: CGFloat = shake && !match ? .random(in: 5...10)
                                                                : .zero
                     let direction = value < tappedVal
-                    OIMcoinV(value: value,
-                          currency: currency,
-                      availableVal: value,
-                           canEdit: canEdit,
-                               pct: match ? 0.0 : 1.0,
-                            action: action)
+                    OIMcurrencyView(value: value,
+                                 currency: currency,
+                             availableVal: value,
+                                  canEdit: canEdit,
+                                      pct: match ? 0.0 : 1.0,
+                                   action: action)
                         .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                                 y: yOffset)
                         .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
@@ -237,24 +200,6 @@ struct OIMcoinStackV: View {
         }
     }
 }
-
-// renders a stack of 1 denomination
-//struct OIMstackV: View {
-//    let value: Int
-//    let count: Int
-//    let currency: OIMcurrency
-//    let canEdit: Bool
-//    var pct: CGFloat
-//    let action: () -> Void
-//
-//    var body: some View {
-//        if value > currency.bankCoins[0] {
-//            OIMnoteStackV(value: value, count: count, currency: currency, canEdit: canEdit, pct: pct, action: action)
-//        } else {
-//            OIMcoinStackV(value: value, count: count, currency: currency, canEdit: canEdit, pct: pct, action: action)
-//        }
-//    }
-//}
 // MARK: -
 //#Preview {
 //    OIMstackV()
