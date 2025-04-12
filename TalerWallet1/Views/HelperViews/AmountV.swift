@@ -107,6 +107,16 @@ extension AmountV {
         self.large = true
         self.a11yDecSep = nil
     }
+    init(_ currency: String, amount: Amount, isNegative: Bool?) {
+        self.stack = nil
+        self.scope = nil
+        self.amount = Amount(currency: currency , integer: amount.integer, fraction: amount.fraction)
+        self.isNegative = isNegative
+        self.useISO = false
+        self.strikethrough = false
+        self.large = true
+        self.a11yDecSep = nil
+    }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?, strikethrough: Bool) {
         self.stack = nil
         self.scope = scope

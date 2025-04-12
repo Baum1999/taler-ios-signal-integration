@@ -94,10 +94,10 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     }
 
     /// The integer value of the amount (number to the left of the decimal point).
-    var integer: UInt64
-    
+    public var integer: UInt64
+
     /// The fractional value of the amount (number to the right of the decimal point).
-    var fraction: UInt32
+    public var fraction: UInt32
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(currency)
