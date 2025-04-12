@@ -30,6 +30,32 @@ enum InsufficientBalanceHint: String, Codable {
     /// Even though the balance looks sufficient for the instructed amount,
     /// the fees can be covered by neither the merchant nor the remaining wallet  balance
     case feesNotCovered = "fees-not-covered"
+
+    func localizedCause(_ currency: String) -> String {
+        switch self {
+            case .merchantAcceptInsufficient:
+                String(localized: "payment_balance_insufficient_hint_merchant_accept_insufficient",
+                    defaultValue: "Merchant doesn't accept money from one or more providers in this wallet")
+            case .merchantDepositInsufficient:
+                String(localized: "payment_balance_insufficient_hint_merchant_deposit_insufficient",
+                    defaultValue: "Merchant doesn't accept the wire method of the provider, this likely means it is misconfigured")
+            case .ageRestricted:
+                String(localized: "payment_balance_insufficient_hint_age_restricted",
+                    defaultValue: "Purchase not possible due to age restriction")
+            case .walletBalanceMaterialInsufficient:
+                String(localized: "payment_balance_insufficient_hint_wallet_balance_material_insufficient",
+                    defaultValue: "Some of the coins needed for this purchase are currently unavailable")
+            case .walletBalanceAvailableInsufficient:
+                String(localized: "payment_balance_insufficient_hint_fees_not_covered",
+                    defaultValue: "You don't have enough \(currency).")
+            case .exchangeMissingGlobalFees:
+                String(localized: "payment_balance_insufficient_hint_exchange_missing_global_fees",
+                    defaultValue: "Provider is missing the global fee configuration, this likely means it is misconfigured")
+            case .feesNotCovered:
+                String(localized: "payment_balance_insufficient_hint_fees_not_covered",
+                    defaultValue: "Not enough funds to pay the provider fees not covered by the merchant")
+        }
+    }
 }
 
 struct InsufficientBalanceDetailsPerExchange: Codable, Hashable {
