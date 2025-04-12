@@ -186,9 +186,9 @@ enum Tab: Int, Hashable, CaseIterable {
 
     var title: String {
         switch self {
-            case .balances: return String(localized: "TitleBalances", defaultValue: "Balances")
-            case .actions:  return String(localized: "TitleActions", defaultValue: "Actions")
-            case .settings: return String(localized: "TitleSettings", defaultValue: "Settings")
+            case .balances: String(localized: "TitleBalances", defaultValue: "Balances")
+            case .actions:  String(localized: "TitleActions", defaultValue: "Actions")
+            case .settings: String(localized: "TitleSettings", defaultValue: "Settings")
         }
     }
 
@@ -207,9 +207,9 @@ enum Tab: Int, Hashable, CaseIterable {
 
     var a11y: String {
         switch self {
-            case .balances: return BALANCES                  // 􀣉  "chart.bar.xaxis"
-            case .actions:  return "bolt"
-            case .settings: return SETTINGS                  // 􀍟 "gear"
+            case .balances: BALANCES                                            // 􀣉  "chart.bar.xaxis"
+            case .actions:  "bolt"
+            case .settings: SETTINGS                                            // 􀍟 "gear"
         }
     }
 
