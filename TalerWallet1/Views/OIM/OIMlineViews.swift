@@ -49,15 +49,15 @@ struct OIMnotesView1: View {
 fileprivate let horzSpacing: CGFloat = 20
 fileprivate let vertSpacing: CGFloat = 10
 
-struct OIMlineView: View {
+struct OIMlineViews: View {
     let stack: CallStack
-    let currency: OIMcurrency
     @Binding var amountVal: UInt64
     let tappedVal: UInt64
     @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
 
+    @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
@@ -70,6 +70,7 @@ struct OIMlineView: View {
         let blue = debug ? Color.blue : Color.clear
         let orange = debug ? Color.orange : Color.clear
 #endif
+        let currency = cash.currency
         let result = currency.notesCoins(amountVal)
         // Text("notes: \(result.0), coins: \(result.1)")
         let notes = OIMnotesView1(stack: stack.push(),
