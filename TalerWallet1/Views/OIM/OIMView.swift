@@ -60,8 +60,8 @@ struct OIMView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var qrButtonTapped: Bool
 
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @StateObject private var cash = OIMcash()
 
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
@@ -70,7 +70,7 @@ struct OIMView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let currency = sierraLeone ? OIMleones : OIMeuros
+        let currency = cash.currency
 
         let actions = HStack(spacing: 30) {
             QRButton(isNavBarItem: false) {
@@ -97,7 +97,9 @@ struct OIMView: View {
                 Spacer()
                 actions
             }//.border(.red)
-        }.task {
+        }
+        .environmentObject(cash)
+        .task {
             amountVal = intValue(amount)
         }
     }
@@ -109,8 +111,8 @@ struct OIMPayView: View {
     let amount: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
 
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @StateObject private var cash = OIMcash()
 
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
@@ -119,7 +121,7 @@ struct OIMPayView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let currency = sierraLeone ? OIMleones : OIMeuros
+        let currency = cash.currency
 
         OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
@@ -133,7 +135,9 @@ struct OIMPayView: View {
                              canEdit: true)
                 Spacer()
             }.border(.red)
-        }.task {
+        }
+        .environmentObject(cash)
+        .task {
             amountVal = intValue(amount)
         }
 
@@ -148,9 +152,9 @@ struct OIMEditView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @StateObject private var cash = OIMcash()
     @State private var amountVal: UInt64 = 0
     @State private var availableVal: UInt64 = 0
 
@@ -160,8 +164,8 @@ struct OIMEditView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let currency = sierraLeone ? OIMleones : OIMeuros
 
+        let currency = cash.currency
         OIMnavBack(stack: stack.push(),
                    scope: scope,
             currencyName: currency.noteBase,
@@ -196,8 +200,10 @@ struct OIMEditView: View {
                     }
               }
                 .border(.red)
-            }
-        }.task {
+            } // ZStack
+        }
+        .environmentObject(cash)
+        .task {
             amountVal = intValue(amount)
             availableVal = intValue(available) - intValue(amount)
         }
