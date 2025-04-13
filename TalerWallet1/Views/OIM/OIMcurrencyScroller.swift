@@ -60,7 +60,8 @@ struct OIMcurrencyScroller: View {
                                         pct: 0.0,
                                      action: { tap(value: value) }
                     )
-                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
+//                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
+                    .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
                     OIMcurrencyButton(value: value,
@@ -70,7 +71,8 @@ struct OIMcurrencyScroller: View {
                                         pct: 0.0,
                                      action: { tap(value: value) }
                     )
-                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
+//                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
+                    .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
                 }
             }.padding(.trailing, UIScreen.hasNotch ? UIScreen.horzInsets : 0)   // ensure scrolling over the FaceID notch
         }
