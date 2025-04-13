@@ -13,9 +13,9 @@ struct OIMnotesView1: View {
     let stack: CallStack
     let spread: OIMdenominations
     let currency: OIMcurrency
-    @Binding var amountVal: Int
-    let tappedVal: Int
-    @Binding var flying: Int
+    @Binding var amountVal: UInt64
+    let tappedVal: UInt64
+    @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
 
@@ -30,7 +30,7 @@ struct OIMnotesView1: View {
                 if count > 0 {
                     OIMnoteStackV(stack: stack.push(),
                                   value: value,
-                                  count: count,
+                                  count: Int(count),
                                currency: currency,
                               tappedVal: tappedVal,
                                  flying: $flying,
@@ -51,9 +51,9 @@ struct OIMcoinsView1: View {
     let stack: CallStack
     let spread: OIMdenominations
     let currency: OIMcurrency
-    @Binding var amountVal: Int
-    let tappedVal: Int
-    @Binding var flying: Int
+    @Binding var amountVal: UInt64
+    let tappedVal: UInt64
+    @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
 
@@ -67,7 +67,7 @@ struct OIMcoinsView1: View {
                 if count > 0 {
                     OIMcoinStackV(stack: stack.push(),
                                   value: value,
-                                  count: count,
+                                  count: Int(count),
                                currency: currency,
                               tappedVal: tappedVal,
                                  flying: $flying,
@@ -89,9 +89,9 @@ fileprivate let vertSpacing: CGFloat = 10
 struct OIMlineView: View {
     let stack: CallStack
     let currency: OIMcurrency
-    @Binding var amountVal: Int
-    let tappedVal: Int
-    @Binding var flying: Int
+    @Binding var amountVal: UInt64
+    let tappedVal: UInt64
+    @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
 

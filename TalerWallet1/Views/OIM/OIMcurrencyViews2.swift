@@ -13,11 +13,11 @@ import taler_swift
 // renders a stack of (identical) banknotes with offset 10,20
 struct OIMnoteStackV: View {
     let stack: CallStack
-    let value: Int
+    let value: UInt64
     let count: Int
     let currency: OIMcurrency
-    let tappedVal: Int
-    @Binding var flying: Int
+    let tappedVal: UInt64
+    @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
     let action: () -> Void
@@ -66,11 +66,11 @@ struct OIMnoteStackV: View {
 // renders a stack of (identical) coins with offset size/16
 struct OIMcoinStackV: View {
     let stack: CallStack
-    let value: Int
+    let value: UInt64
     let count: Int
     let currency: OIMcurrency
-    let tappedVal: Int
-    @Binding var flying: Int
+    let tappedVal: UInt64
+    @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool
     let action: () -> Void

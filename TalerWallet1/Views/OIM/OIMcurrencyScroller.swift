@@ -11,15 +11,15 @@ import taler_swift
 // renders all banknotes and coins in 1 horizontal scrollview
 struct OIMcurrencyScroller: View {
     let currency: OIMcurrency
-    @Binding var availableVal: Int
-    @Binding var amountVal: Int
-    @Binding var tappedVal: Int
-    @Binding var flying: Int
+    @Binding var availableVal: UInt64
+    @Binding var amountVal: UInt64
+    @Binding var tappedVal: UInt64
+    @Binding var flying: UInt64
     @Binding var shake: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
-    func tap(value: Int, _ delay: Int = 250) {
+    func tap(value: UInt64, _ delay: Int = 250) {
         withAnimation(.shake1) {
             flying = 0
             tappedVal = value

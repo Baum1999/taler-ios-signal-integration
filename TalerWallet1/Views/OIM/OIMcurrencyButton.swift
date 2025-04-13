@@ -8,6 +8,7 @@
 import SwiftUI
 import taler_swift
 
+fileprivate
 struct OIMbuttonStyle: ButtonStyle {
 
     public func makeBody(configuration: OIMbuttonStyle.Configuration) -> some View {
@@ -22,6 +23,7 @@ struct OIMbuttonStyle: ButtonStyle {
     }
 }
 
+fileprivate
 struct OIMcurrencyImage {
     let image: Image
     let oWidth: CGFloat
@@ -40,10 +42,11 @@ struct OIMcurrencyImage {
     }
 }
 
+fileprivate
 struct OIMmod: AnimatableModifier {
-    let value: Int
+    let value: UInt64
     let name: String?
-    let availableVal: Int
+    let availableVal: UInt64
     let canEdit: Bool
     var pct: CGFloat
     let action: () -> Void
@@ -80,9 +83,9 @@ struct OIMmod: AnimatableModifier {
 
 /// renders 1 denomination from a currency
 struct OIMcurrencyButton: View {
-    let value: Int
+    let value: UInt64
     let currency: OIMcurrency
-    let availableVal: Int
+    let availableVal: UInt64
     let canEdit: Bool
     var pct: CGFloat
     let action: () -> Void

@@ -7,7 +7,7 @@
  */
 import Foundation
 
-public typealias OIMdenominations = [Int]
+public typealias OIMdenominations = [UInt64]
 public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // number of notes and coins
 
 // 6 banknotes, 8 coins of which 6 are fractionals < 100
@@ -16,7 +16,7 @@ public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 5
                                    coinSizes: [258, 232, 242, 222, 198, 212, 188, 162],
                                     noteBase: "EUR", coinBase: "eur")
 
-// 5 banknotes, 5 coins (all fractionals)
+// 3 stacks, 5 banknotes, 5 coins (all fractionals)
 public let OIMleones = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500, 200, 100],
                                    bankCoins: [ 50,  25,  10,   5,   1],
                                    coinSizes: [270, 250, 240, 228, 208],
@@ -36,7 +36,7 @@ public struct OIMcurrency: Sendable {
     let noteBase: String
     let coinBase: String
 
-    func coinSize(_ value: Int) -> CGFloat? {
+    func coinSize(_ value: UInt64) -> CGFloat? {
         for (index, element) in bankCoins.enumerated() {
             if element == value {
                 if index < coinSizes.count {
@@ -47,14 +47,14 @@ public struct OIMcurrency: Sendable {
         return nil
     }
 
-    func coinName(_ value: Int) -> String? {
+    func coinName(_ value: UInt64) -> String? {
         if bankCoins.contains(value) {
             return coinBase + "-" + String(value)
         }
         return nil
     }
 
-    func noteName(_ value: Int) -> String? {
+    func noteName(_ value: UInt64) -> String? {
         if bankNotes.contains(value) {
             return noteBase + "-" + String(value)
         }
@@ -62,13 +62,13 @@ public struct OIMcurrency: Sendable {
     }
 
     /// spreads out the input value into banknotes and coins of the currency
-    func notesCoins(_ intVal: Int) -> OIMnotesCoins {
+    func notesCoins(_ intVal: UInt64) -> OIMnotesCoins {
         var notes: OIMdenominations = []
         var coins: OIMdenominations = []
 
         var value = intVal
         for (index, element) in bankNotes.enumerated() {
-            var count = 0
+            var count: UInt64 = 0
             while value >= element {
                 value = value - element
                 count += 1
@@ -77,7 +77,7 @@ public struct OIMcurrency: Sendable {
         }
 
         for (index, element) in bankCoins.enumerated() {
-            var count = 0
+            var count: UInt64 = 0
             while value >= element {
                 value = value - element
                 count += 1

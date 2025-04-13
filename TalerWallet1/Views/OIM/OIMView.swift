@@ -8,12 +8,12 @@
 import SwiftUI
 import taler_swift
 
-fileprivate func intValue(_ amount: Amount?) -> Int {
+fileprivate func intValue(_ amount: Amount?) -> UInt64 {
     if let amount {
         if !amount.isZero {
             let value = amount.value * 100          // TODO: currency specs instead of 100
 //            print("intValue: \(Int(value)) \(currency.noteBase)")
-            return Int(value)
+            return UInt64(value)
         }
     }
     return 0
@@ -62,10 +62,10 @@ struct OIMView: View {
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
-    @State private var amountVal: Int = 0
+    @State private var amountVal: UInt64 = 0
     @Namespace var namespace
-    @State private var tappedVal = 0
-    @State private var flying = 0
+    @State private var tappedVal: UInt64 = 0
+    @State private var flying: UInt64 = 0
     @State private var shake = false
 
     var body: some View {
@@ -111,10 +111,10 @@ struct OIMPayView: View {
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
-    @State private var amountVal: Int = 0
+    @State private var amountVal: UInt64 = 0
     @Namespace var namespace
-    @State private var tappedVal = 0
-    @State private var flying = 0
+    @State private var tappedVal: UInt64 = 0
+    @State private var flying: UInt64 = 0
     @State private var shake = false
 
     var body: some View {
@@ -150,12 +150,12 @@ struct OIMEditView: View {
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
-    @State private var amountVal: Int = 0
-    @State private var availableVal: Int = 0
+    @State private var amountVal: UInt64 = 0
+    @State private var availableVal: UInt64 = 0
 
     @Namespace var namespace
-    @State private var tappedVal = 0
-    @State private var flying = 0
+    @State private var tappedVal: UInt64 = 0
+    @State private var flying: UInt64 = 0
     @State private var shake = false
 
     var body: some View {
