@@ -52,7 +52,7 @@ fileprivate let vertSpacing: CGFloat = 10
 struct OIMlineViews: View {
     let stack: CallStack
     @Binding var amountVal: UInt64
-    let tappedVal: UInt64
+    @Binding var tappedVal: UInt64
     @Binding var flying: UInt64
     let shake: Bool
     let canEdit: Bool

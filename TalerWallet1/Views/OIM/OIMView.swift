@@ -89,7 +89,7 @@ struct OIMView: View {
                 Spacer()
                 OIMlineViews(stack: stack.push(),
                            amountVal: $amountVal,
-                           tappedVal: tappedVal,
+                         tappedVal: $tappedVal,
                               flying: $flying,
                                shake: shake,
                              canEdit: false)
@@ -127,7 +127,7 @@ struct OIMPayView: View {
                 Spacer()
                 OIMlineViews(stack: stack.push(),
                            amountVal: $amountVal,
-                           tappedVal: tappedVal,
+                         tappedVal: $tappedVal,
                               flying: $flying,
                                shake: shake,
                              canEdit: true)
@@ -188,7 +188,7 @@ struct OIMEditView: View {
                 Spacer()
                 OIMlineViews(stack: stack.push(),
                            amountVal: $amountVal,
-                           tappedVal: tappedVal,
+                         tappedVal: $tappedVal,
                               flying: $flying,
                                shake: shake,
                              canEdit: true)
