@@ -61,9 +61,9 @@ struct OIMView: View {
     @Binding var qrButtonTapped: Bool
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     @State private var amountVal: UInt64 = 0
-    @Namespace var namespace
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
     @State private var shake = false
@@ -110,9 +110,9 @@ struct OIMPayView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     @State private var amountVal: UInt64 = 0
-    @Namespace var namespace
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
     @State private var shake = false
@@ -150,10 +150,10 @@ struct OIMEditView: View {
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
+    @EnvironmentObject private var wrapper: NamespaceWrapper
     @State private var amountVal: UInt64 = 0
     @State private var availableVal: UInt64 = 0
 
-    @Namespace var namespace
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
     @State private var shake = false
