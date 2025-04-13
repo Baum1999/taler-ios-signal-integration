@@ -41,10 +41,12 @@ struct OIMnoteStackV: View {
                                                            : .zero
                 let direction = value < tappedVal
 //                let _ = print("id \(id), flying \(flying), shaking \(shakeOffset)")
-                OIMcurrencyButton(value: value,
+                OIMcurrencyButton(stack: stack.push(),
+                                  value: value,
                              currency: currency,
                          availableVal: value,
                               canEdit: canEdit,
+//                                  isFlipped: false,      // TODO: Flip coin
                                   pct: match ? 0.0 : 1.0,
                                action: action)
                     .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),

@@ -189,7 +189,7 @@ struct OIMEditView: View {
                         availableVal = intValue(available) - intValue(amount)
                     }
                 Spacer()
-                OIMcurrencyScroller(currency: currency,
+                OIMcurrencyScroller(stack: stack.push(),
                                 availableVal: $availableVal,
                                    amountVal: $amountVal,
                                    tappedVal: $tappedVal,

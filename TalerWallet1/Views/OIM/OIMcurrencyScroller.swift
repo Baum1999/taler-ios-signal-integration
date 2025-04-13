@@ -10,13 +10,14 @@ import taler_swift
 
 // renders all banknotes and coins in 1 horizontal scrollview
 struct OIMcurrencyScroller: View {
-    let currency: OIMcurrency
+    let stack: CallStack
     @Binding var availableVal: UInt64
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
     @Binding var flying: UInt64
     @Binding var shake: Bool
 
+    @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     func tap(value: UInt64, _ delay: Int = 250) {
@@ -50,13 +51,16 @@ struct OIMcurrencyScroller: View {
         }
     }
     var body: some View {
+        let currency = cash.currency
         ScrollView(.horizontal) {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
-                    OIMcurrencyButton(value: value,
+                    OIMcurrencyButton(stack: stack.push(),
+                                      value: value,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
+//                                  isFlipped: false,
                                         pct: 0.0,
                                      action: { tap(value: value) }
                     )
@@ -64,10 +68,12 @@ struct OIMcurrencyScroller: View {
                     .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
-                    OIMcurrencyButton(value: value,
+                    OIMcurrencyButton(stack: stack.push(),
+                                      value: value,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
+//                                  isFlipped: false,
                                         pct: 0.0,
                                      action: { tap(value: value) }
                     )

@@ -89,7 +89,7 @@ struct OIMcoinStackV1: View {
                     let shakeOffset: CGFloat = shake && !match ? .random(in: 5...10)
                                                                : .zero
                     let direction = value < tappedVal
-                    OIMcurrencyButton(//stack: stack.push(),
+                    OIMcurrencyButton(stack: stack.push(),
                                       value: value,
                                    currency: currency,
                                availableVal: value,
@@ -150,7 +150,7 @@ struct OIMcoinStackV2: View {
                     let shakeOffset: CGFloat = (cash.shake != 0) && !match ? .random(in: 5...10)
                                                                            : .zero
                     let direction = value < tappedVal
-                    OIMcurrencyButton(//stack: stack.push(),
+                    OIMcurrencyButton(stack: stack.push(),
                                       value: value,
                                    currency: cash.currency,
                                availableVal: value,
