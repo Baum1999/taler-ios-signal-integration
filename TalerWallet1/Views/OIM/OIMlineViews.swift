@@ -54,7 +54,6 @@ struct OIMlineViews: View {
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
     @Binding var flying: UInt64
-    let shake: Bool
     let canEdit: Bool
 
     @EnvironmentObject private var cash: OIMcash
@@ -79,7 +78,7 @@ struct OIMlineViews: View {
                               amountVal: $amountVal,
                               tappedVal: tappedVal,
                                  flying: $flying,
-                                  shake: shake,
+                                 shake: (cash.shake != 0),
                                 canEdit: canEdit
                     ).id("notes")
                      .matchedGeometryEffect(id: "notes", in: wrapper.namespace)
@@ -92,7 +91,7 @@ struct OIMlineViews: View {
                               amountVal: $amountVal,
                               tappedVal: tappedVal,
                                  flying: $flying,
-                                  shake: shake,
+                                  shake: (cash.shake != 0),
                                 canEdit: canEdit
                     ).id("coins")
                      .matchedGeometryEffect(id: "coins", in: wrapper.namespace)

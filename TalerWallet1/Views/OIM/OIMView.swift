@@ -66,7 +66,6 @@ struct OIMView: View {
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
-    @State private var shake = false
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -91,7 +90,6 @@ struct OIMView: View {
                            amountVal: $amountVal,
                          tappedVal: $tappedVal,
                               flying: $flying,
-                               shake: shake,
                              canEdit: false)
                 Spacer()
                 actions
@@ -116,7 +114,6 @@ struct OIMPayView: View {
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
-    @State private var shake = false
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -129,7 +126,6 @@ struct OIMPayView: View {
                            amountVal: $amountVal,
                          tappedVal: $tappedVal,
                               flying: $flying,
-                               shake: shake,
                              canEdit: true)
                 Spacer()
             }.border(.red)
@@ -159,7 +155,6 @@ struct OIMEditView: View {
 
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
-    @State private var shake = false
 
     var isAvailable: UInt64 {
         if useAvailable {
@@ -190,7 +185,6 @@ struct OIMEditView: View {
                            amountVal: $amountVal,
                          tappedVal: $tappedVal,
                               flying: $flying,
-                               shake: shake,
                              canEdit: true)
                     .zIndex(1)  // make notes fly from topZ
                     .onChange(of: amountVal) { newVal in
@@ -203,8 +197,7 @@ struct OIMEditView: View {
                                 availableVal: $availableVal,
                                    amountVal: $amountVal,
                                    tappedVal: $tappedVal,
-                                      flying: $flying,
-                                       shake: $shake)
+                                      flying: $flying)
                     .onChange(of: available) { newVal in
                         availableVal = intValue(newVal) - intValue(amount)
                     }

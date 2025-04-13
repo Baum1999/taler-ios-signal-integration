@@ -15,7 +15,7 @@ struct OIMcurrencyScroller: View {
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
     @Binding var flying: UInt64
-    @Binding var shake: Bool
+//    @Binding var shake: Bool
 
     @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -34,12 +34,12 @@ struct OIMcurrencyScroller: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
 //            print("shake start")
             withAnimation(.shake1) {
-                shake = true
+                cash.shake = value
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
 //                print("shake end")
                 withAnimation(.shake1) {
-                    shake = false
+                    cash.shake = 0
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
                     withAnimation(.basic1) {
