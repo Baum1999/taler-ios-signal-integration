@@ -149,6 +149,7 @@ struct OIMEditView: View {
     let scope: ScopeInfo?
     @Binding var amount: Amount
     @Binding var available: Amount
+    let useAvailable : Bool         // if false then we're requesting money and don't use available
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
@@ -161,6 +162,18 @@ struct OIMEditView: View {
     @State private var tappedVal: UInt64 = 0
     @State private var flying: UInt64 = 0
     @State private var shake = false
+
+    var isAvailable: UInt64 {
+        if useAvailable {
+            let have = intValue(available)
+            let want = intValue(amount)
+            if have > want {
+                return have - want
+            }
+            return 0
+        }
+        return 999_999_999
+    }
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -205,7 +218,9 @@ struct OIMEditView: View {
         .environmentObject(cash)
         .task {
             amountVal = intValue(amount)
-            availableVal = intValue(available) - intValue(amount)
+            availableVal = isAvailable
+            let result = currency.notesCoins(amountVal)
+            cash.update(result, currency: currency)
         }
     }
 }
