@@ -12,44 +12,11 @@ import taler_swift
 struct OIMcurrencyScroller: View {
     let stack: CallStack
     @Binding var availableVal: UInt64
-    @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
-    @Binding var flying: UInt64
-//    @Binding var shake: Bool
 
     @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
-    func tap(value: UInt64, _ delay: Int = 250) {
-        withAnimation(.shake1) {
-            flying = 0
-            tappedVal = value
-        }
-#if DEBUG
-        let ms = debugAnimations ? 1500 : delay
-#else
-        let ms = delay
-#endif
-//        print("tapped \(value)")
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
-//            print("shake start")
-            withAnimation(.shake1) {
-                cash.shake = value
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
-//                print("shake end")
-                withAnimation(.shake1) {
-                    cash.shake = 0
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
-                    withAnimation(.basic1) {
-                        amountVal += value
-                        tappedVal = 0
-                    }
-                }
-            }
-        }
-    }
     var body: some View {
         let currency = cash.currency
         ScrollView(.horizontal) {
@@ -62,7 +29,7 @@ struct OIMcurrencyScroller: View {
                                     canEdit: true,
 //                                  isFlipped: false,
                                         pct: 0.0,
-                                     action: { tap(value: value) }
+                                     action: { tappedVal = value }
                     )
 //                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                     .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
@@ -75,7 +42,7 @@ struct OIMcurrencyScroller: View {
                                     canEdit: true,
 //                                  isFlipped: false,
                                         pct: 0.0,
-                                     action: { tap(value: value) }
+                                     action: { tappedVal = value }
                     )
 //                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                     .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)

@@ -65,7 +65,6 @@ struct OIMView: View {
 
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
-    @State private var flying: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -87,10 +86,9 @@ struct OIMView: View {
             VStack {
                 Spacer()
                 OIMlineViews(stack: stack.push(),
-                           amountVal: $amountVal,
+                         amountVal: $amountVal,
                          tappedVal: $tappedVal,
-                              flying: $flying,
-                             canEdit: false)
+                           canEdit: false)
                 Spacer()
                 actions
             }//.border(.red)
@@ -113,7 +111,6 @@ struct OIMPayView: View {
 
     @State private var amountVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
-    @State private var flying: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -123,10 +120,9 @@ struct OIMPayView: View {
             VStack {
                 Spacer()
                 OIMlineViews(stack: stack.push(),
-                           amountVal: $amountVal,
+                         amountVal: $amountVal,
                          tappedVal: $tappedVal,
-                              flying: $flying,
-                             canEdit: true)
+                           canEdit: true)
                 Spacer()
             }.border(.red)
         }
@@ -154,7 +150,6 @@ struct OIMEditView: View {
     @State private var availableVal: UInt64 = 0
 
     @State private var tappedVal: UInt64 = 0
-    @State private var flying: UInt64 = 0
 
     var isAvailable: UInt64 {
         if useAvailable {
@@ -182,10 +177,9 @@ struct OIMEditView: View {
               VStack {  // even though this is the only item in the ZStack
                 Spacer()
                 OIMlineViews(stack: stack.push(),
-                           amountVal: $amountVal,
+                         amountVal: $amountVal,
                          tappedVal: $tappedVal,
-                              flying: $flying,
-                             canEdit: true)
+                           canEdit: true)
                     .zIndex(1)  // make notes fly from topZ
                     .onChange(of: amountVal) { newVal in
                         let currencyStr = amount.currencyStr
@@ -194,10 +188,12 @@ struct OIMEditView: View {
                     }
                 Spacer()
                 OIMcurrencyScroller(stack: stack.push(),
-                                availableVal: $availableVal,
-                                   amountVal: $amountVal,
-                                   tappedVal: $tappedVal,
-                                      flying: $flying)
+                             availableVal: $availableVal,
+                                tappedVal: $tappedVal)
+                    .zIndex(2)  // make notes fly from topZ
+                    .clipped(antialiased: true)
+                    .padding(.horizontal, 5)
+                    .ignoresSafeArea(edges: .horizontal)
                     .onChange(of: available) { newVal in
                         availableVal = intValue(newVal) - intValue(amount)
                     }

@@ -53,12 +53,14 @@ struct OIMlineViews: View {
     let stack: CallStack
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
-    @Binding var flying: UInt64
     let canEdit: Bool
 
     @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
+
+    @State private var flying: UInt64 = 0
+    @State private var myTappedVal: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -76,7 +78,7 @@ struct OIMlineViews: View {
                                  spread: result.0,
                                currency: currency,
                               amountVal: $amountVal,
-                              tappedVal: tappedVal,
+                              tappedVal: myTappedVal,
                                  flying: $flying,
                                  shake: (cash.shake != 0),
                                 canEdit: canEdit
@@ -89,7 +91,7 @@ struct OIMlineViews: View {
                                  spread: result.1,
                                currency: currency,
                               amountVal: $amountVal,
-                              tappedVal: tappedVal,
+                              tappedVal: myTappedVal,
                                  flying: $flying,
                                   shake: (cash.shake != 0),
                                 canEdit: canEdit
@@ -123,43 +125,70 @@ struct OIMlineViews: View {
 #endif
             }
         }
-        if #available(iOS 16.4, *) {
-            Group {
-                if false {
-                    scrollView
+
+        Group {
+            if #available(iOS 16.4, *) {
+                LayoutThatFits([HStackLayout(alignment: .center), VStackLayout()]) {
+                    notes
+#if DEBUG
+                        .padding(1)
+                        .border(green)
+#endif
+                    coins
+                }
+#if DEBUG
+                .padding(1)
+                .border(orange)
+#endif
+            } else {
+                scrollView
 #if DEBUG
                     .padding(1)
                     .border(orange)
 #endif
                     .clipped()
-                    .scrollIndicators(.visible)
-                    .viewExtractor { view in
-                        if let scrollView = view as? UIScrollView {
-                            if #available(iOS 17.4, *) {
-                                scrollView.bouncesVertically = false
-                            } else {    // Fallback on earlier versions
-                                scrollView.bounces = false
+            }
+        }
+        .onChange(of: tappedVal) { newVal in
+            print(">>tapped ", newVal)
+            if newVal > 0 {
+                tappedVal = 0
+                let ms = debugAnimations ? 1250 : 250
+
+                // next cycle
+                DispatchQueue.main.async {
+                    print("\n>>start flying", newVal, flying)
+                    let addedValue = (newVal == 200) ? 1000 : newVal
+                    withAnimation(.shake1) {
+                        print("addCash", addedValue)
+                        cash.addCash(addedValue)
+                        myTappedVal = newVal
+                    }
+                    print("\n>>reset flying", newVal, flying)
+                    flying = 0  // remove immediately after it flew in, but outside of the animation block
+
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                        print("\n>>shake start", newVal, flying)
+                        withAnimation(.shake1) {
+                            cash.shake = newVal
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                            print("\n>>shake end", newVal, flying)
+                            withAnimation(.shake1) {
+                                cash.shake = 0
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
+                                print("\n>>dissolve", newVal, flying)
+                                withAnimation(.basic1) {
+                                    amountVal += newVal
+                                    myTappedVal = 0
+                                }
                             }
                         }
                     }
-                } else {
-                    LayoutThatFits([HStackLayout(alignment: .center), VStackLayout()]) {
-                        notes
-#if DEBUG
-                            .padding(1)
-                            .border(green)
-#endif
-                        coins
-                    }
-#if DEBUG
-                    .padding(1)
-                    .border(orange)
-#endif
                 }
             }
-        } else {
-            // Fallback on earlier versions
-            scrollView
         }
     }
 }
