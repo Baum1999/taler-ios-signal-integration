@@ -30,7 +30,10 @@ struct OIMnoteStackV: View {
             ForEach(0...maxIndex, id: \.self) { index in
                 let match = tappedVal == value && index == maxIndex
                 let isFlying = flying > 0
-                let id = match && !isFlying ? value : -value
+                let matchNotFlying = match && !isFlying
+                let isTarget = matchNotFlying // && isTop
+                let targetId = isTarget ? String(value)
+                                        : String(value) + "+" + String(index)
                 let xOffset = CGFloat(10 * index)
                 let yOffset = CGFloat(20 * index)
                 let shakeOffset: CGFloat = shake && !match ? .random(in: 10...25)
@@ -45,7 +48,7 @@ struct OIMnoteStackV: View {
                                action: action)
                     .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                             y: yOffset)
-                    .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
+                    .matchedGeometryEffect(id: targetId, in: wrapper.namespace, isSource: false)
                     .onAppear {
 //                        print("start flying \(id), shaking \(shakeOffset)")
                         withAnimation(.fly1) {
@@ -80,7 +83,10 @@ struct OIMcoinStackV: View {
                 ForEach(0...maxIndex, id: \.self) { index in
                     let match = tappedVal == value && index == maxIndex
                     let isFlying = flying > 0
-                    let id = match && !isFlying ? value : -value
+                    let matchNotFlying = match && !isFlying
+                    let isTarget = matchNotFlying // && isTop
+                    let targetId = isTarget ? String(value)
+                                            : String(value) + "+" + String(index)
                     let yOffset = offset * CGFloat(index)
                     let xOffset = yOffset / 2
                     let shakeOffset: CGFloat = shake && !match ? .random(in: 5...10)
@@ -94,7 +100,7 @@ struct OIMcoinStackV: View {
                                    action: action)
                         .offset(x: xOffset + (direction ? shakeOffset : -shakeOffset),
                                 y: yOffset)
-                        .matchedGeometryEffect(id: id, in: wrapper.namespace, isSource: false)
+                        .matchedGeometryEffect(id: targetId, in: wrapper.namespace, isSource: false)
                         .onAppear {
 //                        print("start flying \(id), shaking \(shakeOffset)")
                             withAnimation(.fly1) {
