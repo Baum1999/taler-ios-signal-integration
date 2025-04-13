@@ -22,7 +22,7 @@ fileprivate func intValue(_ amount: Amount?) -> UInt64 {
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
     let scope: ScopeInfo?
-    let currStr: String
+    let currencyName: String
     @Binding var amount: Amount
     @Binding var buttonSelected: Bool
     var content: () -> Content
@@ -30,7 +30,7 @@ struct OIMnavBack<Content: View>: View {
     @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
 
     var body: some View {
-        OIMbackground(amount: amount, currencyName: currStr) {
+        OIMbackground(amount: amount, currencyName: currencyName) {
             ZStack {
                 content()
                 VStack {
@@ -164,7 +164,7 @@ struct OIMEditView: View {
 
         OIMnavBack(stack: stack.push(),
                    scope: scope,
-                 currStr: currency.noteBase,
+            currencyName: currency.noteBase,
                   amount: $amount,
           buttonSelected: $buttonSelected
         ) {
@@ -219,7 +219,7 @@ struct OIMSubjectView: View {
 
         OIMnavBack(stack: stack.push(),
                    scope: scope,
-                 currStr: currency.noteBase,
+            currencyName: currency.noteBase,
                   amount: $amount,
           buttonSelected: $buttonSelected
         ) {
