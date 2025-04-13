@@ -24,7 +24,7 @@ struct OIMnavBack<Content: View>: View {
     let scope: ScopeInfo?
     let currencyName: String
     @Binding var amount: Amount
-    @Binding var buttonSelected: Bool
+    @Binding var fwdButtonTapped: Bool
     var content: () -> Content
 
     @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
@@ -42,7 +42,7 @@ struct OIMnavBack<Content: View>: View {
                         Spacer()
                         let inset = UIScreen.horzInsets
                         ForwardButton(enabled: !amount.isZero) {
-                            buttonSelected = true
+                            fwdButtonTapped = true
                         }.padding(.trailing, inset > 0 ? inset - 12 : 0)
                     }
                 }
@@ -146,7 +146,7 @@ struct OIMEditView: View {
     @Binding var amount: Amount
     @Binding var available: Amount
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
-    @Binding var buttonSelected: Bool
+    @Binding var fwdButtonTapped: Bool
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
@@ -166,7 +166,7 @@ struct OIMEditView: View {
                    scope: scope,
             currencyName: currency.noteBase,
                   amount: $amount,
-          buttonSelected: $buttonSelected
+         fwdButtonTapped: $fwdButtonTapped
         ) {
             ZStack {    // without this, money would fly below the scroller
               VStack {  // even though this is the only item in the ZStack
@@ -209,7 +209,7 @@ struct OIMSubjectView: View {
     let scope: ScopeInfo?
     @Binding var amount: Amount
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
-    @Binding var buttonSelected: Bool
+    @Binding var fwdButtonTapped: Bool
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
@@ -221,7 +221,7 @@ struct OIMSubjectView: View {
                    scope: scope,
             currencyName: currency.noteBase,
                   amount: $amount,
-          buttonSelected: $buttonSelected
+         fwdButtonTapped: $fwdButtonTapped
         ) {
             VStack {
                 Spacer()

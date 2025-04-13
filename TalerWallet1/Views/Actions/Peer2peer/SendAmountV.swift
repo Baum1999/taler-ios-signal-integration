@@ -111,7 +111,8 @@ struct SendAmountV: View {
                                 scope: balance?.scopeInfo,
                                amount: $amountToTransfer,
                             available: $amountAvailable,
-                       buttonSelected: $buttonSelected)
+//                         useAvailable: true,                                    // cannot send more than we have
+                      fwdButtonTapped: $buttonSelected)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             }
