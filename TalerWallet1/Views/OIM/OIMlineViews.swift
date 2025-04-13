@@ -10,6 +10,7 @@ import taler_swift
 
 // renders a spread of banknote-stacks in 1 row
 struct OIMnotesView1: View {
+    let stack: CallStack
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
@@ -27,7 +28,8 @@ struct OIMnotesView1: View {
                 let shouldFly = tappedVal == value
                 let count = spread[index] + (shouldFly ? 1 : 0)
                 if count > 0 {
-                    OIMnoteStackV(value: value,
+                    OIMnoteStackV(stack: stack.push(),
+                                  value: value,
                                   count: count,
                                currency: currency,
                               tappedVal: tappedVal,
@@ -46,6 +48,7 @@ struct OIMnotesView1: View {
 // MARK: -
 // renders a spread of coin-stacks in 1 row
 struct OIMcoinsView1: View {
+    let stack: CallStack
     let spread: OIMdenominations
     let currency: OIMcurrency
     @Binding var amountVal: Int
@@ -62,7 +65,8 @@ struct OIMcoinsView1: View {
                 let shouldFly = tappedVal == value
                 let count = spread[index] + (shouldFly ? 1 : 0)
                 if count > 0 {
-                    OIMcoinStackV(value: value,
+                    OIMcoinStackV(stack: stack.push(),
+                                  value: value,
                                   count: count,
                                currency: currency,
                               tappedVal: tappedVal,
@@ -83,6 +87,7 @@ fileprivate let horzSpacing: CGFloat = 20
 fileprivate let vertSpacing: CGFloat = 10
 
 struct OIMlineView: View {
+    let stack: CallStack
     let currency: OIMcurrency
     @Binding var amountVal: Int
     let tappedVal: Int
@@ -104,25 +109,27 @@ struct OIMlineView: View {
 #endif
         let result = currency.notesCoins(amountVal)
         // Text("notes: \(result.0), coins: \(result.1)")
-        let notes = OIMnotesView1(spread: result.0,
-                                currency: currency,
-                               amountVal: $amountVal,
-                               tappedVal: tappedVal,
-                                  flying: $flying,
-                                   shake: shake,
-                                 canEdit: canEdit
+        let notes = OIMnotesView1(stack: stack.push(),
+                                 spread: result.0,
+                               currency: currency,
+                              amountVal: $amountVal,
+                              tappedVal: tappedVal,
+                                 flying: $flying,
+                                  shake: shake,
+                                canEdit: canEdit
                     ).id("notes")
                      .matchedGeometryEffect(id: "notes", in: wrapper.namespace)
 #if DEBUG
             .border(blue)
 #endif
-        let coins = OIMcoinsView1(spread: result.1,
-                                currency: currency,
-                               amountVal: $amountVal,
-                               tappedVal: tappedVal,
-                                  flying: $flying,
-                                   shake: shake,
-                                 canEdit: canEdit
+        let coins = OIMcoinsView1(stack: stack.push(),
+                                 spread: result.1,
+                               currency: currency,
+                              amountVal: $amountVal,
+                              tappedVal: tappedVal,
+                                 flying: $flying,
+                                  shake: shake,
+                                canEdit: canEdit
                     ).id("coins")
                      .matchedGeometryEffect(id: "coins", in: wrapper.namespace)
 #if DEBUG

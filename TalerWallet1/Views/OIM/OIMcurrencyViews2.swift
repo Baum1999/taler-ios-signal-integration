@@ -12,6 +12,7 @@ import taler_swift
 // MARK: -
 // renders a stack of (identical) banknotes with offset 10,20
 struct OIMnoteStackV: View {
+    let stack: CallStack
     let value: Int
     let count: Int
     let currency: OIMcurrency
@@ -64,6 +65,7 @@ struct OIMnoteStackV: View {
 
 // renders a stack of (identical) coins with offset size/16
 struct OIMcoinStackV: View {
+    let stack: CallStack
     let value: Int
     let count: Int
     let currency: OIMcurrency

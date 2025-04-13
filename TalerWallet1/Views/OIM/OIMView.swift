@@ -87,7 +87,8 @@ struct OIMView: View {
         OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
-                OIMlineView(currency: currency,
+                OIMlineView(stack: stack.push(),
+                            currency: currency,
                            amountVal: $amountVal,
                            tappedVal: tappedVal,
                               flying: $flying,
@@ -123,7 +124,8 @@ struct OIMPayView: View {
         OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
-                OIMlineView(currency: currency,
+                OIMlineView(stack: stack.push(),
+                            currency: currency,
                            amountVal: $amountVal,
                            tappedVal: tappedVal,
                               flying: $flying,
@@ -169,7 +171,8 @@ struct OIMEditView: View {
             ZStack {    // without this, money would fly below the scroller
               VStack {  // even though this is the only item in the ZStack
                 Spacer()
-                OIMlineView(currency: currency,
+                  OIMlineView(stack: stack.push(),
+                              currency: currency,
                            amountVal: $amountVal,
                            tappedVal: tappedVal,
                               flying: $flying,
