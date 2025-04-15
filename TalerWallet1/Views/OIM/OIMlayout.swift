@@ -50,6 +50,7 @@ struct OIMlayoutView: View {
 
     @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @State private var checkStacks: UInt64 = 0
 
     var body: some View {
         OIMlayout {
@@ -104,6 +105,9 @@ struct OIMlayoutView: View {
                                 fund.state = .idle
                                 cash.updateFund(fund)
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + (fastAnimations ? 0.6 : 1.0)) {
+                                checkStacks = value
+                            }
                         }
                     } else if isFlipped {
                         withAnimation(.fly1) {
@@ -115,6 +119,19 @@ struct OIMlayoutView: View {
 //                        print("    ->OIMlayoutView.onAppear ignore \(value), \(fund.id)")
                     }
                 }
+            }
+        }
+        .onChange(of: checkStacks) { value in
+            if value > 0 {
+                print("*** check:", value)
+                var firstCheck = value
+//                while let moreThan4 = cash.checkStacks(firstCheck) {
+//                    firstCheck = 0
+//                    withAnimation(.fly1) {
+//                        cash.compact(moreThan4)
+//                    }
+//                }
+                checkStacks = 0
             }
         }
     }
@@ -153,11 +170,12 @@ struct OIMlayout: Layout {
 //    }
 
     func sortByValue(_ subviews: LayoutSubviews) -> [LayoutSubview] {
+        // sorts DESCENDING - we render the denominations top-down
         subviews.sorted(by: { ($0.oimValue > $1.oimValue) ||
                             ( ($0.oimValue == $1.oimValue) && ($0.oimID < $1.oimID) ) })
     }
 
-    func computeSpaces(_ proposal: ProposedViewSize, _ sorted: [LayoutSubview], _ max: Int = 3) -> [Int] {
+    func computeSpaces(_ sorted: [LayoutSubview], _ max: Int = MAXSTACK) -> [Int] {
         /// returns array of stackIndexes
         /// 0  ==> next view starts a new stack
         /// 1..3  ==> next view is on the stack
@@ -176,11 +194,11 @@ struct OIMlayout: Layout {
             } else if lastValue != value {                  // different value?
                 lastValue = value                           // save this value for the next subview
                 stackIndex = 0                              // start a new stack
-            } else if stackIndex == max {                   // max 4 subviews per stack
-                stackIndex = 0                              // stack is full, start a new one but keep the value
             } else {
                 stackIndex += 1                             // Yay, we found one to add to this stack
-            }
+                if stackIndex == max {                      // max 4 subviews per stack
+                    stackIndex = 0                          // stack is full, start a new one but keep the value
+            }   }
             if index > 0 {
                 spaces.append(stackIndex)
             }
@@ -220,7 +238,7 @@ struct OIMlayout: Layout {
         let viewWidths = viewSizes.reduce(0) { $0 + $1.width }          // add up all widths
         let maxHeight = viewSizes.reduce(0) { max($0, $1.height) }      // get the max height
 
-        let spaces = computeSpaces(proposal, sorted)
+        let spaces = computeSpaces(sorted)
         let maxStackIndex = spaces.reduce(0) { max($0, $1) }
 
         var accumulatedSpaces: CGFloat = .zero
@@ -270,7 +288,7 @@ struct OIMlayout: Layout {
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let (spacing, offset) = spacing(for: proposal)
         let sorted = sortByValue(subviews)
-        let spaces = computeSpaces(proposal, sorted)
+        let spaces = computeSpaces(sorted)
         let isMax = proposal == .infinity
 
         var pt = CGPoint(x: bounds.minX, y: bounds.minY)

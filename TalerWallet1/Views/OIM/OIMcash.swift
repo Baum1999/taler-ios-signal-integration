@@ -8,6 +8,8 @@
 import SwiftUI
 import taler_swift
 
+let MAXSTACK = 4
+
 enum FundState: Int {
     case idle
     case shouldFly
@@ -46,6 +48,86 @@ class OIMcash: ObservableObject {
             self.currency = OIMleones
         }
     }
+
+    func sortByValue() -> OIMfunds {
+        // sorts ASCENDING - we check small values first
+        funds.sorted(by: { ($0.value < $1.value) ||
+            ( ($0.value == $1.value) && ($0.id > $1.id) ) })
+    }
+
+    func checkStacks(_ max: Int = MAXSTACK) -> UInt64? {
+        /// same algorithm as OIMlayout.computeSpaces
+        /// result is 0 if all stacks have 4 or less items
+        /// returns highest value with more than 4 items
+
+        let sorted = sortByValue()
+        let count = sorted.count
+
+        var stackIndex = 0
+        var lastValue: UInt64 = 0
+        for (index, fund) in sorted.enumerated() {
+            let value = fund.value
+            let state = fund.state
+            if state == .shouldFly || state == .isFlying {  // flying can not go on the stack
+                lastValue = 0                               // let the next subview...
+                stackIndex = 0                              // ...start a new stack
+            } else if lastValue != value {                  // different value?
+                lastValue = value                           // save this value for the next subview
+                stackIndex = 0                              // start a new stack
+            } else {
+                stackIndex += 1                             // Yay, we found one to add to this stack
+                if stackIndex == max {                      // stack is full
+                    return value        // <<= compact this stack
+            }   }
+        }
+        return nil
+    }
+
+//    func compactStacks(_ value: UInt64) -> Bool {
+//        let denominations = currency.bankNotes + currency.bankCoins
+//        if let index = denominations.firstIndex(where: { $0 == value }) {
+//            if index > 0 {                                  // does a bigger denomination exist?
+//                let nextIndex = index-1
+//                let nextValue = denominations[nextIndex]    // let next = next_bigger_denomination
+//                if nextValue != value * 5 {
+//                    if nextValue.isMultiple(of: value) {    // counter example: value=10, next=25
+//                        let hasNextIdx = funds.firstIndex(where: { $0.value == nextValue })
+//                        let has5xDenom
+//                       // if funds.contains(next)
+//
+//        //      || denom(5*value) doesn't exist    e.g. 50->2.50 or 25->1.25
+//        //       flip&remove X items of value, insert 1 next
+//
+//
+//                    // let next2 = even_bigger_denomination
+//
+//        //   else if funds.contains(next2)
+//        //
+//        //   else
+//        //     flip&remove 5 items of value, insert 1 next
+//
+//
+//
+//
+//
+//        }
+//
+//
+//        var newVal = 5 * value
+//        if currency.bankCoins.contains(newVal) ||
+//            currency.bankNotes.contains(newVal)
+//        {
+//            let sorted = sortByValue()
+//            // find 5 cash items of 'value'
+//            var toRemove: OIMfunds = []
+//
+//        }
+//        if  {
+//            
+//            return true
+//        }
+//        return false
+//    }
 
     func notes() -> OIMfunds {
         let firstCoinVal = currency.bankCoins[0]
