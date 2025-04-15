@@ -10,7 +10,8 @@ import taler_swift
 
 enum FundState: Int {
     case idle
-    case flying
+    case shouldFly
+    case isFlying
     case flipped
 }
 
@@ -21,8 +22,8 @@ public struct OIMfund: Identifiable, Equatable, Hashable {
     var state: FundState
 
     var targetID: String {
-        String(state == .flying ? -Int(value)       // match sourceID
-                                : id)
+        String(state == .shouldFly ? -Int(value)        // match sourceID
+                                   : id)
     }
 }
 public typealias OIMfunds = [OIMfund]
@@ -57,7 +58,7 @@ class OIMcash: ObservableObject {
     }
 
     func addCash(_ value: UInt64) {
-        let fund = OIMfund(id: ticker, value: value, state: .flying)
+        let fund = OIMfund(id: ticker, value: value, state: .shouldFly)
         ticker += 1
         funds.append(fund)
     }

@@ -118,8 +118,8 @@ struct OIMlineView: View {
             if newVal > 0 {
                 tappedVal = 0
                 let ms = debugAnimations ? 1250 : 250
-                // next cycle
-                DispatchQueue.main.async {
+
+                DispatchQueue.main.async {                      // next layout cycle
                     withAnimation(.fly1) {
                         if #available(iOS 16.4, *) {
                             print("\n>>addCash", newVal)
@@ -130,16 +130,13 @@ struct OIMlineView: View {
                             myTappedVal = newVal
                         }
                     }
-
-                    print("\n>>reset flying", newVal, flying)
-                    flying = 0  // remove immediately after it flew in, but outside of the animation block
-
-
                     if #unavailable(iOS 16.4) {
+                        print("\n>>reset flying", newVal, flying)
+                        flying = 0  // remove immediately after it flew in, but outside of the animation block
                         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
                             print("\n>>dissolve", newVal, flying)
                             withAnimation(.basic1) {
-                                amountVal += newVal
+                                amountVal += newVal             // update after value flew in
                                 myTappedVal = 0
                             }
                         }
