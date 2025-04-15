@@ -163,11 +163,10 @@ struct ManualDetailsWireV: View {
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            let step3A11y = step3(amountStr.1)
-            let step3Str = step3(amountStr.0)
-            let step3Head = String(localized: "**Step 3:**")
-            let step3 = Text(step3Head + step3Str)
-                .accessibilityLabel(step3Head + step3A11y)
+            let step3A11y: LocalizedStringKey = "**Step 3:** \(step3(amountStr.1))"
+            let step3Head: LocalizedStringKey = "**Step 3:** \(step3(amountStr.0))"
+            let step3 = Text(step3Head)
+                .accessibilityLabel(step3A11y)
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
 
