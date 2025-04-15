@@ -18,7 +18,7 @@ enum FundState: Int {
 }
 
 /// data structure for a cash item on the table
-public struct OIMfund: Identifiable, Equatable, Hashable {
+public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     public let id: Int                  // support multiple funds with the same value
     let value: UInt64
     var state: FundState
@@ -55,7 +55,7 @@ class OIMcash: ObservableObject {
             ( ($0.value == $1.value) && ($0.id > $1.id) ) })
     }
 
-    func checkStacks(_ max: Int = MAXSTACK) -> UInt64? {
+    func checkStacks(first firstCheck: UInt64, _ max: Int = MAXSTACK) -> UInt64? {
         /// same algorithm as OIMlayout.computeSpaces
         /// result is 0 if all stacks have 4 or less items
         /// returns highest value with more than 4 items
@@ -83,51 +83,86 @@ class OIMcash: ObservableObject {
         return nil
     }
 
-//    func compactStacks(_ value: UInt64) -> Bool {
-//        let denominations = currency.bankNotes + currency.bankCoins
-//        if let index = denominations.firstIndex(where: { $0 == value }) {
-//            if index > 0 {                                  // does a bigger denomination exist?
-//                let nextIndex = index-1
-//                let nextValue = denominations[nextIndex]    // let next = next_bigger_denomination
-//                if nextValue != value * 5 {
-//                    if nextValue.isMultiple(of: value) {    // counter example: value=10, next=25
-//                        let hasNextIdx = funds.firstIndex(where: { $0.value == nextValue })
-//                        let has5xDenom
-//                       // if funds.contains(next)
-//
-//        //      || denom(5*value) doesn't exist    e.g. 50->2.50 or 25->1.25
-//        //       flip&remove X items of value, insert 1 next
-//
-//
-//                    // let next2 = even_bigger_denomination
-//
-//        //   else if funds.contains(next2)
-//        //
-//        //   else
-//        //     flip&remove 5 items of value, insert 1 next
-//
-//
-//
-//
-//
-//        }
-//
-//
-//        var newVal = 5 * value
-//        if currency.bankCoins.contains(newVal) ||
-//            currency.bankNotes.contains(newVal)
-//        {
-//            let sorted = sortByValue()
-//            // find 5 cash items of 'value'
-//            var toRemove: OIMfunds = []
-//
-//        }
-//        if  {
-//            
-//            return true
-//        }
-//        return false
-//    }
+    func convert(_ nr: UInt64, of stackValue: UInt64, to biggerDenom: UInt64) -> Bool {
+        let sorted = sortByValue()
+        var counter = nr
+        var toDelete: OIMfunds = []
+        var amount: UInt64 = 0
+        for var fund in sorted {
+            if fund.value == stackValue && counter > 0 {
+                withAnimation(.basic1) {
+                    fund.state = .flipped
+                    updateFund(fund)
+                }
+                toDelete.append(fund)
+                counter -= 1
+                amount += stackValue
+            }
+        }
+        DispatchQueue.main.async {
+            withAnimation(.remove1) {
+                for fund in toDelete {
+                    self.removeCash(id: fund.id, value: fund.value)
+                }
+            }
+            withAnimation(.basic1) {
+                while amount >= biggerDenom {
+                    self.addCash(value: biggerDenom, .flipped)
+                    amount -= biggerDenom
+                }
+            }
+            if amount > 0 {
+                print("  ❗️Yikes: convert failed", amount)
+            }
+        }
+        return counter == 0
+    }
+
+    func compactStacks(_ value: UInt64) -> Bool {
+        let denominations = currency.bankNotes + currency.bankCoins
+        if let index = denominations.firstIndex(where: { $0 == value }) {
+            if index > 0 {                                  // does a bigger denomination exist?
+                let value5x = value * 5
+                let nextIndex = index-1
+                let nextValue = denominations[nextIndex]    // let next = next_bigger_denomination
+                if nextValue == value5x {
+                    return convert(5, of: value, to: nextValue)
+                }
+                // since we want to "convert" adjacent denominations (some smaller will become 1 larger fund),
+                // we cannot use the whole 5 smaller funds (4 in stack, 1 just added) if next is not 5 times bigger
+                // check whether there are any items of next already on the table
+                let hasNextIdx = funds.firstIndex(where: { $0.value == nextValue })
+                if hasNextIdx == nil {                      // no, then...
+                    if index > 1 {                          // check the second bigger denomination
+                        let secondIdx = index-2
+                        let secondValue = denominations[secondIdx]
+                        if secondValue <= value5x && secondValue.isMultiple(of: value) {
+                            let nrToDelete = secondValue / value
+                            return convert(nrToDelete, of: value, to: secondValue)
+                        }
+                    }
+                }
+                // If we arrive here, either there is no second denomination any more, or it is not a multiple of value,
+                // or there are already some funds of next on the table
+                if nextValue.isMultiple(of: value) {
+                    let nrToDelete = nextValue / value
+                    return convert(nrToDelete, of: value, to: nextValue)
+                }
+                // Now this is tricky - there are already some funds of next on the table, but next is not a multiple of value
+                // But maybe 2 of next are a multiple - e.g. value=10, next=25
+                let nextValue2x = nextValue * 2
+                if nextValue2x.isMultiple(of: value) {
+                    let nrToDelete = nextValue * 2 / value
+                    if nrToDelete <= 5 {
+                        return convert(nrToDelete, of: value, to: nextValue)    // 5*10 = 2*25
+                    }
+                }
+            }
+            // It seems we cannot merge with adjacent funds :-(
+            // Or there is no "next", the user already has the highest denomination
+        }
+        return false
+    }
 
     func notes() -> OIMfunds {
         let firstCoinVal = currency.bankCoins[0]
@@ -139,14 +174,14 @@ class OIMcash: ObservableObject {
         return funds.filter { $0.value <= firstCoinVal }
     }
 
-    func addCash(_ value: UInt64) {
-        let fund = OIMfund(id: ticker, value: value, state: .shouldFly)
+    func addCash(value: UInt64, _ newState: FundState = .shouldFly) {
+        let fund = OIMfund(id: ticker, value: value, state: newState)
         ticker += 1
         funds.append(fund)
     }
 
     func removeCash(id: Int, value: UInt64) {
-        if let index = funds.firstIndex(where: { $0.id == id }) {
+        if let index = funds.firstIndex(where: { $0.id == id && $0.value == value }) {
             funds.remove(at: index)
         } else if let index = funds.lastIndex(where: { $0.value == value && $0.state == .flipped }) {
             funds.remove(at: index)

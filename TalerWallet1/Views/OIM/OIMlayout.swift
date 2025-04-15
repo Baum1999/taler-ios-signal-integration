@@ -125,12 +125,12 @@ struct OIMlayoutView: View {
             if value > 0 {
                 print("*** check:", value)
                 var firstCheck = value
-//                while let moreThan4 = cash.checkStacks(firstCheck) {
-//                    firstCheck = 0
+                if let moreThan4 = cash.checkStacks(first: firstCheck) {
+                    firstCheck = 0
 //                    withAnimation(.fly1) {
-//                        cash.compact(moreThan4)
+                        cash.compactStacks(moreThan4)
 //                    }
-//                }
+                }
                 checkStacks = 0
             }
         }
@@ -262,7 +262,7 @@ struct OIMlayout: Layout {
             default:
                 if var spaceToFill = proposal.width {
                     if var heightToFill = proposal.height {
-                        print("Yikes❗️ width + height:", spaceToFill, heightToFill)
+            //            print("Yikes❗️ width + height:", spaceToFill, heightToFill)
 //                      // TODO: compute the inner-stack offsets
 //                      spaceToFill -= viewWidths       // might be negative
                     } else { // unspecified
@@ -281,7 +281,7 @@ struct OIMlayout: Layout {
         }
         let result = CGSize(width: viewWidths + accumulatedSpaces,
                       height: maxHeight + stackHeight)
-        print("   sizeThatFits:", result)
+//        print("   ***sizeThatFits:", result)
         return result
     }
 

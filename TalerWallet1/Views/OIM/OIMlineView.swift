@@ -123,7 +123,7 @@ struct OIMlineView: View {
                     withAnimation(.fly1) {
                         if #available(iOS 16.4, *) {
                             print("\n>>addCash", newVal)
-                            cash.addCash(newVal)
+                            cash.addCash(value: newVal)
                             amountVal += newVal                 // update directly
                         } else {
                             print("\n>>start flying", newVal, flying)
