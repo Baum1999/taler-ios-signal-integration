@@ -84,17 +84,6 @@ class OIMcash: ObservableObject {
         }
     }
 
-//    func sortedFunds() -> OIMfunds {
-//        Self.sorted(funds)
-//    }
-//
-//    static func sorted(_ array: OIMfunds) -> OIMfunds {
-//        array.sorted {
-//            $0.value > $1.value
-//            && $0.fundState.rawValue < $1.fundState.rawValue
-//        }
-//    }
-
     func update(_ notesCoins: OIMnotesCoins, currency: OIMcurrency) {
         let chng1 = update(notesCoins.0, currencyNotesCoins: currency.bankNotes)
         let chng2 = update(notesCoins.1, currencyNotesCoins: currency.bankCoins)

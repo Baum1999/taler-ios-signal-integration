@@ -29,7 +29,7 @@ struct OIMcurrencyScroller: View {
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
-                                        pct: 0.0,
+                                        pct: 0.9,
                                      action: { tappedVal = value }
                     )
                     .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
@@ -42,7 +42,7 @@ struct OIMcurrencyScroller: View {
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
-                                        pct: 0.0,
+                                        pct: 0.9,
                                      action: { tappedVal = value }
                     )
                     .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
