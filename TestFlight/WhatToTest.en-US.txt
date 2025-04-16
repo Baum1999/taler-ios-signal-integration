@@ -1,3 +1,8 @@
+Version 0.14.8 (wallet-core 0.14.14)
+
+- improved OIM
+
+
 Version 0.14.7 (wallet-core 0.14.13)
 
 - security fixes
