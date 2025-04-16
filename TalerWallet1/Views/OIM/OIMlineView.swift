@@ -114,10 +114,10 @@ struct OIMlineView: View {
             } // iOS 15
         }
         .onChange(of: tappedVal) { newVal in
-            print(">>tapped ", newVal)
             if newVal > 0 {
+                print(">>tapped ", newVal)
                 tappedVal = 0
-                let ms = debugAnimations ? 1250 : 250
+                let ms = fastAnimations ? 250 : 500
 
                 DispatchQueue.main.async {                      // next layout cycle
                     withAnimation(.fly1) {
