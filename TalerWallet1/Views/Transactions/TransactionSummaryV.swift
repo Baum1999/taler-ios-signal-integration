@@ -244,7 +244,9 @@ struct TransactionSummaryV: View {
                 checkReload(notification, "pending ready ==> reload for talerURI")
             }
             .onNotification(.TransactionStateTransition) { notification in
-                checkReload(notification, "some transition ==> reload")
+                if !didDelete {
+                    checkReload(notification, "some transition ==> reload")
+                }
             }
             .navigationTitle(navTitle ?? navTitle2)
             .onAppear {
