@@ -19,9 +19,14 @@ struct OIMamountV: View {
     @State private var color = WalletColors().talerColor
 
     func updateColor() {
+#if DEBUG
         color = debugAnimations ? WalletColors().attention
                                 : fastAnimations ? WalletColors().talerColor
                                                  : WalletColors().confirm
+#else
+        color = fastAnimations ? WalletColors().talerColor
+                               : WalletColors().confirm
+#endif
     }
     var body: some View {
         HStack {
