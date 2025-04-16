@@ -108,7 +108,7 @@ struct OIMcurrencyButton: View {
                                      name: name,
                              availableVal: availableVal,
                                   canEdit: canEdit,
-                                isFlipped: fund.state == .flipped,
+                                isFlipped: fund.state == .flipping,
                                       pct: pct,
                                    action: action))
     }

@@ -60,12 +60,13 @@ struct OIMlayoutView: View {
                 let value = fund.value
                 let fundState = fund.state
                 let shouldFly = fundState == .shouldFly
-                let isFlipped = fundState == .flipped
+                let isFlipped = fundState == .flipping
+                let shouldMorph = fundState == .morphingIn
                 OIMcurrencyButton(stack: stack.push(),
                                    fund: fund,
                                currency: cash.currency,
                            availableVal: value,
-                                canEdit: canEdit && !isFlipped,                               // && isTop,
+                                canEdit: canEdit && !isFlipped,
                                     pct: shouldFly ? 0.0 : 1.0
                 ) {   // remove on button press
                     if amountVal >= fund.value {
@@ -75,7 +76,7 @@ struct OIMlayoutView: View {
                         amountVal = 0
                     }
                     withAnimation(.basic1) {
-                        fund.state = .flipped                                       // button animates itself anyway
+                        fund.state = .flipping
                         cash.updateFund(fund)
                     }
                     DispatchQueue.main.async {
@@ -95,14 +96,14 @@ struct OIMlayoutView: View {
                     if shouldFly {
 //                        print("    ->OIMlayoutView.onAppear stop matching \(value), \(fund.id)")
                         withAnimation(.fly1) {
-                            print("*** start flying:", value)
+                            print("*** start flying:", value, fund.id)
                             fund.state = .isFlying               // switch off matching
                             cash.updateFund(fund)
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + (fastAnimations ? 0.6 : 1.0)) {
                             withAnimation(.fly1) {
-                                print("*** end flying:", value)
-                                fund.state = .idle
+                                print("*** end flying:", value, fund.id)
+                                fund.state = .idle              // move onto stack
                                 cash.updateFund(fund)
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + (fastAnimations ? 0.6 : 1.0)) {
@@ -111,9 +112,22 @@ struct OIMlayoutView: View {
                         }
                     } else if isFlipped {
                         withAnimation(.fly1) {
-                            print("*** start flipping:", value)
+                            print("*** start flipping:", value, fund.id)
                             fund.state = .idle
                             cash.updateFund(fund)
+                        }
+                    } else if shouldMorph {
+                        withAnimation(.fly1) {
+                            print("*** start morphing:", value, fund.id)
+                            fund.state = .isMorphing
+                            cash.updateFund(fund)
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + (fastAnimations ? 0.6 : 1.0)) {
+                            withAnimation(.fly1) {
+                                print("*** end morphing:", value, fund.id)
+                                fund.state = .idle              // move onto stack
+                                cash.updateFund(fund)
+                            }
                         }
 //                    } else {
 //                        print("    ->OIMlayoutView.onAppear ignore \(value), \(fund.id)")
@@ -188,16 +202,19 @@ struct OIMlayout: Layout {
         for (index, subview) in sorted.enumerated() {
             let value = subview.oimValue
             let state = subview.oimFundState
-            if state == .shouldFly || state == .isFlying {  // flying can not go on the stack
-                lastValue = 0                               // let the next subview...
-                stackIndex = 0                              // ...start a new stack
-            } else if lastValue != value {                  // different value?
-                lastValue = value                           // save this value for the next subview
-                stackIndex = 0                              // start a new stack
+            if state == .shouldFly || state == .isFlying        // flying can not go on the stack
+                                   || state == .morphingIn      // nor can morphing in...
+                                   || state == .morphingOut {   // ...or morphing out
+                // we always morph out from the end, thus there will be no more idling funds with the same value
+                lastValue = 0                                   // let the next subview...
+                stackIndex = 0                                  // ...start a new stack
+            } else if lastValue != value {                      // different value?
+                lastValue = value                               // save this value for the next subview
+                stackIndex = 0                                  // start a new stack
             } else {
-                stackIndex += 1                             // Yay, we found one to add to this stack
-                if stackIndex == max {                      // max 4 subviews per stack
-                    stackIndex = 0                          // stack is full, start a new one but keep the value
+                stackIndex += 1                                 // Yay, we found one to add to this stack
+                if stackIndex == max {                          // max 4 subviews per stack
+                    stackIndex = 0                              // stack is full, start a new one but keep the value
             }   }
             if index > 0 {
                 spaces.append(stackIndex)
@@ -206,7 +223,7 @@ struct OIMlayout: Layout {
         return spaces
     }
 
-    func accumulate(_ spaces: [Int], _ viewSizes: [CGSize], spacing: CGFloat, xOffset: CGFloat) -> CGFloat {
+    func accumulate(spaces: [Int], _ viewSizes: [CGSize], spacing: CGFloat, xOffset: CGFloat) -> CGFloat {
         var accumulatedSpaces: CGFloat = .zero
         for (idx, stackIndex) in spaces.enumerated() {
             if stackIndex > 0 {
@@ -230,13 +247,26 @@ struct OIMlayout: Layout {
         }
     }
 
+    func accumulate(views: [LayoutSubview], sizes: [CGSize]) -> CGFloat {
+        var result = CGFloat.zero
+        for (index, subview) in views.enumerated() {
+            let state = subview.oimFundState
+            if state != .morphingOut {
+                let size = sizes[index]
+                result += size.width
+            }
+        }
+        return result
+    }
+
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         guard subviews.count > 0 else { return CGSize.zero }
         let (spacing, offset) = spacing(for: proposal)
         let sorted = sortByValue(subviews)
         let viewSizes = sorted.map { $0.sizeThatFits(proposal) }        // <- THIS takes time...
-        let viewWidths = viewSizes.reduce(0) { $0 + $1.width }          // add up all widths
         let maxHeight = viewSizes.reduce(0) { max($0, $1.height) }      // get the max height
+//        let viewWidths = viewSizes.reduce(0) { $0 + $1.width }          // add up all widths
+        let viewWidths = accumulate(views: sorted, sizes: viewSizes)    // add up all widths
 
         let spaces = computeSpaces(sorted)
         let maxStackIndex = spaces.reduce(0) { max($0, $1) }
@@ -245,19 +275,19 @@ struct OIMlayout: Layout {
         var stackHeight: CGFloat = .zero
         switch proposal {
             case .infinity:         // max size: just place all views in one row
-                print("MAX:", proposal)
+//                print("MAX:", proposal)
                 accumulatedSpaces = spacing * CGFloat(sorted.count - 1)
                 break
             case .zero:             // minimum size:
-                print("min:", proposal)
+//                print("min:", proposal)
                 // all stacks with offset x = 8, y = 20
                 stackHeight = offset.y * CGFloat(maxStackIndex)
-                accumulatedSpaces = accumulate(spaces, viewSizes, spacing: spacing, xOffset: offset.x)
+                accumulatedSpaces = accumulate(spaces: spaces, viewSizes, spacing: spacing, xOffset: offset.x)
                 break
             case .unspecified:    // => ideal size
-                print("Ideal:", proposal)
+//                print("Ideal:", proposal)
                 stackHeight = offset.y * CGFloat(maxStackIndex)
-                accumulatedSpaces = accumulate(spaces, viewSizes, spacing: spacing, xOffset: offset.x)
+                accumulatedSpaces = accumulate(spaces: spaces, viewSizes, spacing: spacing, xOffset: offset.x)
                 break
             default:
                 if var spaceToFill = proposal.width {
@@ -276,7 +306,7 @@ struct OIMlayout: Layout {
 
                 // while inner-stack offsets is not yet implemented, return ideal size
                 stackHeight = offset.y * CGFloat(maxStackIndex)
-                accumulatedSpaces = accumulate(spaces, viewSizes, spacing: spacing, xOffset: offset.x)
+                accumulatedSpaces = accumulate(spaces: spaces, viewSizes, spacing: spacing, xOffset: offset.x)
                 break
         }
         let result = CGSize(width: viewWidths + accumulatedSpaces,
@@ -292,22 +322,42 @@ struct OIMlayout: Layout {
         let isMax = proposal == .infinity
 
         var pt = CGPoint(x: bounds.minX, y: bounds.minY)
+        var morphPt = CGPoint.zero
         for idx in sorted.indices {
             let subview = sorted[idx]
+            let state = subview.oimFundState
+            if state == .morphingIn || state == .isMorphing {
+                print("morphing into ク\(subview.oimValue),\(subview.oimID) at", pt)
+                morphPt = pt
+            }
             subview.place(at: pt, anchor: .topLeading, proposal: proposal)
+            if state == .morphingOut {
+                if morphPt != CGPoint.zero {
+                    print("morphing ク\(subview.oimValue),\(subview.oimID) from \(pt) to", morphPt)
+                    subview.place(at: morphPt, anchor: .topLeading, proposal: proposal)
+                } else {
+                    print("Yikes: no morphing point for ク", subview.oimValue, subview.oimID)
+                }
+            } else if state != .morphingIn && state != .isMorphing {
+                print("placing ク\(subview.oimValue),\(subview.oimID) at", pt)
+            }
 
             if idx < sorted.count - 1 {
                 let space = spaces[idx]
-                if space == 0 || isMax {
-                    // next subview starts a new stack
-                    let width = subview.sizeThatFits(proposal).width
-                    pt.x += width + spacing
-                    pt.y = bounds.minY
-                } else {
-                    // netx subview is on this stack
-                    pt.x += offset.x
-                    pt.y += offset.y
-                }
+                let nextView = sorted[idx+1]
+                let state = nextView.oimFundState
+                if state != .morphingOut {
+                    if space == 0 || isMax {
+                        // next subview starts a new stack
+                        let width = subview.sizeThatFits(proposal).width
+                        pt.x += width + spacing
+                        pt.y = bounds.minY
+                    } else {
+                        // netx subview is on this stack
+                        pt.x += offset.x
+                        pt.y += offset.y
+                    }
+                } // place subviews morphing out at position of view morphing in
             }
         }
     }

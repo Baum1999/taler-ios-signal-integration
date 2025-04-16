@@ -12,9 +12,12 @@ let MAXSTACK = 4
 
 enum FundState: Int {
     case idle
-    case shouldFly
-    case isFlying
-    case flipped
+    case shouldFly          // + button tapped
+    case isFlying           // after onAppear
+    case flipping           // user tapped to remove
+    case morphingOut        // too much in stack
+    case morphingIn         // replacement
+    case isMorphing         //
 }
 
 /// data structure for a cash item on the table
@@ -52,7 +55,7 @@ class OIMcash: ObservableObject {
     func sortByValue() -> OIMfunds {
         // sorts ASCENDING - we check small values first
         funds.sorted(by: { ($0.value < $1.value) ||
-            ( ($0.value == $1.value) && ($0.id > $1.id) ) })
+            ( ($0.value == $1.value) && ($0.id < $1.id) ) })            // but keep the order of the IDs
     }
 
     func checkStacks(first firstCheck: UInt64, _ max: Int = MAXSTACK) -> UInt64? {
@@ -91,7 +94,7 @@ class OIMcash: ObservableObject {
         for var fund in sorted {
             if fund.value == stackValue && counter > 0 {
                 withAnimation(.basic1) {
-                    fund.state = .flipped
+                    fund.state = .morphingOut
                     updateFund(fund)
                 }
                 toDelete.append(fund)
@@ -100,19 +103,30 @@ class OIMcash: ObservableObject {
             }
         }
         DispatchQueue.main.async {
+            var added: OIMfunds = []
+            withAnimation(.basic1) {
+                while amount >= biggerDenom {
+                    let fund = self.addCash(value: biggerDenom, .morphingIn)
+                    print(">>morphing to", fund.value, fund.id)
+                    added.append(fund)
+                    amount -= biggerDenom
+                }
+            }
             withAnimation(.remove1) {
                 for fund in toDelete {
                     self.removeCash(id: fund.id, value: fund.value)
                 }
             }
-            withAnimation(.basic1) {
-                while amount >= biggerDenom {
-                    self.addCash(value: biggerDenom, .flipped)
-                    amount -= biggerDenom
+            withAnimation(.fly1) {
+                for var fund in added {
+                    print("finish morphing", fund.id)
+                    fund.state = .idle
+                    self.updateFund(fund)
                 }
             }
+
             if amount > 0 {
-                print("  ❗️Yikes: convert failed", amount)
+                print("  ❗️Yikes: convert failed, leftover:", amount)
             }
         }
         return counter == 0
@@ -174,16 +188,18 @@ class OIMcash: ObservableObject {
         return funds.filter { $0.value <= firstCoinVal }
     }
 
-    func addCash(value: UInt64, _ newState: FundState = .shouldFly) {
+    func addCash(value: UInt64, _ newState: FundState = .shouldFly) -> OIMfund {
         let fund = OIMfund(id: ticker, value: value, state: newState)
         ticker += 1
+        print(">>adding", value, fund.id)
         funds.append(fund)
+        return fund
     }
 
     func removeCash(id: Int, value: UInt64) {
         if let index = funds.firstIndex(where: { $0.id == id && $0.value == value }) {
             funds.remove(at: index)
-        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state == .flipped }) {
+        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state == .flipping }) {
             funds.remove(at: index)
         } else if let index = funds.firstIndex(where: { $0.value == value }) {
             funds.remove(at: index)
