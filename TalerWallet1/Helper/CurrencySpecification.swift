@@ -138,7 +138,7 @@ public struct CurrencyInfo: Sendable {
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
                   fractionalTrailingZeroDigits: 2,
-                                  altUnitNames: [0 : " CHF"])                   // ensure altUnitName0
+                                  altUnitNames: [0 : " Fr."])                   // ensure altUnitName0
         let formatter = CurrencyFormatter.formatter(currency: currency, specs: specs)
     print(formatter.name ?? formatter.altUnitSymbol ?? formatter.altUnitName0 ?? formatter.currency)
         return CurrencyInfo(specs: specs, formatter: formatter)
