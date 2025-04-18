@@ -113,6 +113,7 @@ struct OIMlayoutView: View {
                 let fundID = fund.id
                 let fundState = fund.state
                 let shouldFly = fundState == .shouldFly
+//                let willMutate = fundState == .arriving || fundState == .mutating
                 OIMcurrencyButton(stack: stack.push(),
                                    fund: fund,
                                currency: cash.currency,
@@ -178,7 +179,8 @@ struct OIMlayout: Layout {
 
             let isMorphing1 = state1 == .position
                            || state1 == .morphing
-                           || state1 == .morphed
+                           || state1 == .arriving
+                           || state1 == .mutating
             if isMorphing1 {
                 if flipV1 > 0 {
                     let firstIsBigger = value0 > flipV1
@@ -192,7 +194,8 @@ struct OIMlayout: Layout {
 
             let isMorphing0 = state0 == .position
                            || state0 == .morphing
-                           || state0 == .morphed
+                           || state0 == .arriving
+                           || state0 == .mutating
             if isMorphing0 {
                 if flipV0 > 0 {
                     let firstIsBigger = flipV0 > value1
@@ -225,15 +228,15 @@ struct OIMlayout: Layout {
             let value = subview.oimValue
             let state = subview.oimFundState
             let id = subview.oimID
+//            let flippedVal = subview.oimFlippedVal ?? 0
             var ignore = 0
-            if state == .shouldFly || state == .isFlying        // flying can not go on the stack
-                                   || state == .position        // nor can the position where we morph...
-                                   || state == .morphing        // ...or the morphing fund...
-                                   || state == .morphed {       // ...or morphed fund
+            if state.shouldFly || state.isFlying                // flying can not go on the stack
+                               || state.position                // nor can the position where we morph...
+                               || state.morphing  {             // ...or the morphing fund
                 // we always morph out from the end, thus there will be no more idling funds with the same value
                 lastValue = 0                                   // let the next subview...
                 stackIndex = 0                                  // ...start a new stack
-            } else if state == .moving || state == .hiding {
+            } else if state.moving || state.hiding {
                 ignore = -1
             } else if lastValue != value {                      // different value?
                 lastValue = value                               // save this value for the next subview
@@ -353,12 +356,12 @@ struct OIMlayout: Layout {
             let subview = sorted[idx]
             let id = subview.oimID
             let state = subview.oimFundState
-            if state == .position || state == .morphing || state == .morphed {
+            if state.position || state.morphing {
 //                if morphPt != pt { print("set morphPt \(morphPt) to ク\(subview.oimValue),\(subview.oimID) at", pt) }
                 morphPt = pt
             }
             subview.place(at: pt, anchor: .topLeading, proposal: proposal)
-            if state == .moving || state == .hiding  {
+            if state.moving || state.hiding  {
                 if morphPt != CGPoint.zero {
 //                    print("morphing ク\(subview.oimValue) \(subview.oimID) \(state) from \(pt) to", morphPt)
                     subview.place(at: morphPt, anchor: .topLeading, proposal: proposal)

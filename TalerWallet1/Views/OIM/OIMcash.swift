@@ -22,8 +22,18 @@ enum FundState: Int {
     case position           // position to move to
     case moving             // move to position
     case hiding             // hide at position
-    case morphing           // start -180
-    case morphed            // flip 180 + change value
+    case morphing           // flip
+    case arriving           // keep flipped image, move to final position
+    case mutating           // flip back with disbled transition
+
+    var flipping: Bool { self == .flipping }
+    var shouldFly: Bool { self == .shouldFly }
+    var isFlying: Bool { self == .isFlying }
+    var position: Bool { self == .position }
+    var morphing: Bool { self == .morphing }
+    var moving: Bool { self == .moving }
+    var hiding: Bool { self == .hiding }
+    var mutating: Bool { self == .mutating }
 }
 
 /// data structure for a cash item on the table
@@ -31,22 +41,17 @@ public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     public let id: Int                  // support multiple funds with the same value
     var state: FundState
     var value: UInt64                   // can be morphed
-    var morphTicker: Int?               // `semaphore´ to reserve a fund - don't morph this twice
-    var flippedVal: UInt64?             // the value to morph into
+    var morphTicker: Int?               // `semaphore´ to reserve a fund - don't morph this twice concurrently
+    var flippedVal: UInt64?             // the value to morph into - layout.sortByValue will take this instead of value
+    var outValue: UInt64?               // if this is set it determines the image (used for flipping)
 
     var targetID: String {
-        String(state == .shouldFly ? -Int(value)        // match sourceID
-                                   : id)
+        String(state.shouldFly ? -Int(value)        // match sourceID
+                               : id)
     }
-    var shouldFly: Bool {
-        state == .shouldFly
-    }
-    var isFlying: Bool {
-        state == .isFlying
-    }
-    var isFlipping: Bool {
-        state == .flipping
-    }
+    var shouldFly: Bool { state.shouldFly }
+    var isFlying: Bool { state.isFlying }
+    var isFlipping: Bool { state.flipping }
 
 }
 public typealias OIMfunds = [OIMfund]
@@ -152,11 +157,11 @@ final class OIMcash: ObservableObject, Sendable {
         added -= 1
         symLog.log(">>taking this anchor \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
         withAnimation(.basic1) {
-            morphFund.flippedVal = inValue               // layout.sortByValue will take this instead of value
-            morphFund.state = .position                  // to compute the position where the morph happens
+            morphFund.outValue = outValue               // save old image
+            morphFund.flippedVal = inValue              // layout.sortByValue will take this instead of value
+            morphFund.state = .position                 // to compute the position where the morph happens
             updateFund(morphFund)
         }
-
         withAnimation(.easeInOutDelay2) {
             symLog.log(">>moving outgoing to \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
             for var delFund in toDelete {               // move the rest of the leaving funds
@@ -165,7 +170,7 @@ final class OIMcash: ObservableObject, Sendable {
             }
         }
 
-        /// Stage 2: After arriving at the position, without animation hide all outValues (except `morphing´)
+        /// Stage 2: After arriving at the position, without animation hide all outValues (except our anchor)
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             for var delFund in toDelete {
                 self.symLog.log(">>hide \(delFund.id)")
@@ -173,38 +178,25 @@ final class OIMcash: ObservableObject, Sendable {
                 self.updateFund(delFund)                // TODO: check if stack remains!!!
             }
 
-            /// Stage 3: prepare flipping
+            /// Stage 3: flip animated
             morphFund.state = .morphing
-            self.symLog.log(">>prepare \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
-            self.updateFund(morphFund)
-            /// flip animated
-            morphFund.state = .morphed
             self.symLog.log(">>flip \(morphFund.id), \(morphFund.value) \(morphFund.state.rawValue)")
-//            withAnimation(.easeIn1) {   - not needed, the button animates itself when flipping
-                self.updateFund(morphFund)
-//            }
-              self.symLog.log(">>flipped \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
+            self.updateFund(morphFund)  // withAnimation not needed, it animates itself when flipping
+            self.symLog.log(">>flipped \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
 
-            /// Stage 4: move inValue to final position
+            /// Stage 4: move inValues to final position, delete outValues from funds array
             DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
-                /// transmute the fund
-                morphFund.value = inValue
-                morphFund.flippedVal = nil
+                morphFund.state = .arriving
+                morphFund.value = inValue                       // stack position
                 morphFund.morphTicker = nil                     // release `semaphore´
-                self.symLog.log(">>transmute \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
-                self.updateFund(morphFund)
-
-
-
-                morphFund.state = .idle
                 self.symLog.log(">>move to final position \(morphFund.id) \(morphFund.state.rawValue)")
                 withAnimation(.move1) {
                     self.updateFund(morphFund)
                     while added > 0 {
                         var fund = toDelete.removeFirst()
-                        fund.value = inValue                    // transmute to inValue
+                        fund.value = inValue                    // transmute to inValue (without flip)
                         fund.morphTicker = nil                  // release `semaphore´
-                        fund.state = .idle
+                        fund.state = .idle                      // move to their positions
                         self.updateFund(fund)
                         added -= 1
                     }
@@ -214,6 +206,25 @@ final class OIMcash: ObservableObject, Sendable {
                         self.removeCash(id: delFund.id, value: delFund.value)
                     }
                 }
+
+                /// Stage 5: transmute morphFund
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
+                    morphFund.state = .mutating
+//                    morphFund.state = .idle
+                    morphFund.outValue = nil
+                    morphFund.flippedVal = nil
+                    self.symLog.log(">>transmute \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
+                    self.updateFund(morphFund)
+
+                    /// Stage 6: back to idle
+                    DispatchQueue.main.async {
+                        withAnimation(.move1) {
+                            morphFund.state = .idle
+                            self.updateFund(morphFund)
+                        }
+                    }
+                }
+
             }
         } // asyncAfter delay
         return counter == 0
@@ -287,7 +298,7 @@ final class OIMcash: ObservableObject, Sendable {
     func removeCash(id: Int, value: UInt64) {
         if let index = funds.firstIndex(where: { $0.id == id && $0.value == value }) {
             funds.remove(at: index)
-        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state == .flipping }) {
+        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state.flipping }) {
             funds.remove(at: index)
         } else if let index = funds.firstIndex(where: { $0.value == value }) {
             funds.remove(at: index)

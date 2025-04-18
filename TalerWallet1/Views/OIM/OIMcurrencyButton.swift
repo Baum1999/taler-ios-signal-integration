@@ -44,13 +44,14 @@ struct OIMcurrencyImage {
 
 fileprivate
 struct OIMmod: AnimatableModifier {
-    let value: UInt64
     let name: String?
     let flippedName: String?
-    let availableVal: UInt64
-    let canEdit: Bool
-    let invisible: Bool
+    let flipTime: TimeInterval
     let isFlipped: Bool
+    let flipBack: Bool            // if true, then don't animate flipping back
+    let disabled: Bool
+    let unavailable: Bool
+    let invisible: Bool
     var pct: CGFloat
     let action: () -> Void
 
@@ -60,7 +61,6 @@ struct OIMmod: AnimatableModifier {
     }
 
     func body(content: Content) ->  some View {
-        let shadow = (3 - 8) * pct + 8
         let currencyImage = OIMcurrencyImage(name)
         let oWidth = currencyImage.oWidth / 4
         let oHeight = currencyImage.oHeight / 4
@@ -74,45 +74,40 @@ struct OIMmod: AnimatableModifier {
         let backImage = Group {
             if let flippedName {
                 let flippedImage = OIMcurrencyImage(flippedName)
-//                            let _ = print("  OIMmod", isFlipped, value, flippedName)
                 flippedImage.image
                     .resizable()
                     .scaledToFit()
             } else {
-//                if isFlipped {
-//                            let _ = print("  OIMmod no image", isFlipped, value, flippedName)
-//                }
                 EmptyView()
             }
         }
             .rotation3DEffect(.degrees(isFlipped ? 0 : -90),
                               axis: (x: 0.0, y: 1.0, z: 0.0))
+
+        let linTime: Animation = .linear(duration:flipTime)
+        let frontAnimation = isFlipped ? linTime
+                                       : linTime.delay(flipTime)
+        let backAnimation  = isFlipped ? linTime.delay(flipTime)
+                                       : linTime
         let animatedImage = ZStack {
             valueImage
-                .animation(isFlipped ? .linear : .linear.delay(0.35), value: isFlipped)
+                .animation(flipBack ? nil : frontAnimation, value: isFlipped)
             backImage
-                .animation(isFlipped ? .linear.delay(0.35) : .linear, value: isFlipped)
+                .animation(flipBack ? nil : backAnimation, value: isFlipped)
         }
 
-        return Group {
-            if invisible {
-                image.opacity(0)
-            } else if !canEdit || availableVal < value {
-                animatedImage
-                    .opacity(canEdit ? 0.5 : 1.0)
-            } else {
-                Button(action: action) {        // TODO: disable after tapped
-                    animatedImage
+        let shadow = (3 - 8) * pct + 8
+        return Button(action: action) {
+                    animatedImage.opacity(invisible ? 0.001
+                                      : unavailable ? 0.5
+                                                    : 1.0)
                 }
                 .buttonStyle(OIMbuttonStyle())
-            }
-        } // Group
-//            .frame(width: (isFlipped != 0 ? 0.7 * oWidth : oWidth),
-//                  height: (isFlipped != 0 ? 0.7 * oHeight : oHeight))
-            .frame(width: oWidth, height: oHeight)
-            .shadow(radius: shadow)
-            .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))         // TODO: currency name
+                .disabled(disabled)
+                .frame(width: oWidth, height: oHeight)
+                .shadow(radius: shadow)
     }
+
 }
 // MARK: -
 /// renders 1 denomination from a currency
@@ -125,8 +120,6 @@ struct OIMcurrencyButton: View {
     var pct: CGFloat
     let action: () -> Void
 
-    @EnvironmentObject private var cash: OIMcash
-
     func imgName(_ value: UInt64?) -> String? {
         if let value {
             return value > currency.bankCoins[0] ? currency.noteName(value)
@@ -136,33 +129,37 @@ struct OIMcurrencyButton: View {
     }
 
     var body: some View {
-        let currency = cash.currency
         let value = fund.value
+        let outValue = fund.outValue
+        let state = fund.state
         let isMorphing = fund.morphTicker != nil
         let flippedVal = fund.flippedVal
         // Use EmptyView, because the modifier actually ignores
         // the value passed to its body() function.
-        let isFlipped: Bool = switch fund.state {
-            case .morphed:  true
+        let isFlipped: Bool = switch state {
             case .flipping: true
+            case .morphing: true
+            case .arriving: true
             default:        false
         }
-//    if fund.id == 6 {
-//        let _ = print("Fund", fund.id, value, fund.state, flippedVal)
+//    if fund.id >= 0 {
+//        let _ = print("***Fund", fund.id, value, state, flippedVal)
 //    }
-        EmptyView().modifier(OIMmod(value: value,
-                                     name: imgName(value),
-                              flippedName: imgName(flippedVal),
-                             availableVal: availableVal,
-                                  canEdit: canEdit && !isMorphing,  //    cannot edit morphing funds
-                                invisible: fund.state == .hiding,
-                                isFlipped: isFlipped && flippedVal != nil,
-                                      pct: pct,
-                                   action: action))
+        let mutating = state.mutating
+        let flipTime = mutating ? 0.0001       // flip back quickly from morphed
+               : fastAnimations ? 0.3
+                                : 0.5
+        //                    checkDisabled = true    // TODO: don't run twice
+        EmptyView().modifier(OIMmod(name: imgName(outValue ?? value),
+                             flippedName: imgName(flippedVal),
+                                flipTime: flipTime,
+                               isFlipped: isFlipped,
+                                flipBack: mutating,
+                                disabled: !canEdit || isMorphing,  //    cannot edit morphing funds
+                             unavailable: availableVal < value,
+                               invisible: state.hiding,
+                                     pct: pct,
+                                  action: action))
+        .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))         // TODO: currency name
     }
 }
-
-// MARK: -
-//#Preview {
-//    OIMcurrencyView()
-//}
