@@ -24,8 +24,13 @@ import SwiftUI
 
 var fastAnimations = true
 #if DEBUG
-var debugAnimations = true
+var debugAnimations = false
 #endif
+
+fileprivate
+let FAST: TimeInterval = 0.25
+fileprivate
+let SLOW: TimeInterval = 0.5
 
 extension Animation {
 #if DEBUG
@@ -33,20 +38,34 @@ extension Animation {
 #endif
 
     static var springFast: Animation {
-        .interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.25)
+        .interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: FAST)
     }
     static var springSlow: Animation {
-        .interactiveSpring(response: 0.9, dampingFraction: 0.75, blendDuration: 0.5)
+        .interactiveSpring(response: 0.9, dampingFraction: 0.75, blendDuration: SLOW)
     }
 
     static var easeIn1: Animation {
 #if DEBUG
         if debugAnimations { return .debug }
 #endif
-        return .easeIn(duration: (fastAnimations ? 0.25 : 0.5))
+        return .easeIn(duration: (fastAnimations ? FAST : SLOW))
     }
 
-    static var fly1: Animation {
+    static var easeOut1: Animation {
+#if DEBUG
+        if debugAnimations { return .debug }
+#endif
+        return .easeOut(duration: (fastAnimations ? FAST : SLOW))
+    }
+
+    static var easeInOut1: Animation {
+#if DEBUG
+        if debugAnimations { return .debug }
+#endif
+        return .easeInOut(duration: (fastAnimations ? FAST : SLOW))
+    }
+
+    static var move1: Animation {
 #if DEBUG
         if debugAnimations { return .debug }
 #endif
@@ -54,12 +73,26 @@ extension Animation {
                               : .springSlow
     }
 
-    static var remove1: Animation {
+    static var springDelay1: Animation {
 #if DEBUG
         if debugAnimations { return .debug }
 #endif
-        return fastAnimations ? .springFast.delay(0.2)
-                              : .springSlow.delay(0.5)
+        return fastAnimations ? .springFast.delay(FAST)
+                              : .springSlow.delay(SLOW)
+    }
+
+    static var easeOutDelay1: Animation {
+        fastAnimations ? .easeOut1.delay(FAST)
+                       : .easeOut1.delay(SLOW)
+    }
+
+    static var easeInOutDelay1: Animation {
+        fastAnimations ? .easeInOut1.delay(FAST)
+                       : .easeInOut1.delay(SLOW)
+    }
+    static var easeInOutDelay2: Animation {
+        fastAnimations ? .easeInOut1.delay(FAST/2)
+                       : .easeInOut1.delay(SLOW/2)
     }
 
     static var basic1: Animation {
