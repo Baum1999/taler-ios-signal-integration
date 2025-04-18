@@ -7,11 +7,13 @@
  */
 import SwiftUI
 import taler_swift
+import SymLog
 
 fileprivate let horzSpacing: CGFloat = 20
 fileprivate let vertSpacing: CGFloat = 10
 
 struct OIMlineView: View {
+    private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
@@ -40,11 +42,11 @@ struct OIMlineView: View {
                 let notes = OIMlayoutView(stack: stack.push(),
                                           funds: cash.notes(),
                                       amountVal: $amountVal,
-                                        canEdit: true)
+                                        canEdit: canEdit)
                 let coins = OIMlayoutView(stack: stack.push(),
                                           funds: cash.coins(),
                                       amountVal: $amountVal,
-                                        canEdit: true)
+                                        canEdit: canEdit)
                 LayoutThatFits([HStackLayout(alignment: .center), VStackLayout()]) {
                     notes
 #if DEBUG
@@ -115,26 +117,25 @@ struct OIMlineView: View {
         }
         .onChange(of: tappedVal) { newVal in
             if newVal > 0 {
-                print(">>tapped ", newVal)
+                symLog.log(">>tapped \(newVal)")
                 tappedVal = 0
-                let ms = fastAnimations ? 250 : 500
 
                 DispatchQueue.main.async {                      // next layout cycle
-                    withAnimation(.fly1) {
-                        if #available(iOS 16.4, *) {
-                            print("\n>>addCash", newVal)
+                    withAnimation(.move1) {
+                        if #available(iOS 16.0, *) {
+                            symLog.log(">>addCash \(newVal)")
                             cash.addCash(value: newVal)
                             amountVal += newVal                 // update directly
                         } else {
-                            print("\n>>start flying", newVal, flying)
+                            symLog.log("\n>>start flying \(newVal) \(flying)")
                             myTappedVal = newVal
                         }
                     }
-                    if #unavailable(iOS 16.4) {
-                        print("\n>>reset flying", newVal, flying)
+                    if #unavailable(iOS 16.0) {
+                        symLog.log("\n>>reset flying \(newVal) \(flying)")
                         flying = 0  // remove immediately after it flew in, but outside of the animation block
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(ms)) {
-                            print("\n>>dissolve", newVal, flying)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + cash.delay) {
+                            symLog.log("\n>>dissolve \(newVal) \(flying)")
                             withAnimation(.basic1) {
                                 amountVal += newVal             // update after value flew in
                                 myTappedVal = 0

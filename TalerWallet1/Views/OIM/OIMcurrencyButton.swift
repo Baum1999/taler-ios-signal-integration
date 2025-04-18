@@ -46,8 +46,10 @@ fileprivate
 struct OIMmod: AnimatableModifier {
     let value: UInt64
     let name: String?
+    let flippedName: String?
     let availableVal: UInt64
     let canEdit: Bool
+    let invisible: Bool
     let isFlipped: Bool
     var pct: CGFloat
     let action: () -> Void
@@ -60,27 +62,55 @@ struct OIMmod: AnimatableModifier {
     func body(content: Content) ->  some View {
         let shadow = (3 - 8) * pct + 8
         let currencyImage = OIMcurrencyImage(name)
-        let image = currencyImage.image
-                        .resizable()
-                        .scaledToFit()
         let oWidth = currencyImage.oWidth / 4
         let oHeight = currencyImage.oHeight / 4
-        return Group {
-            if canEdit && availableVal >= value {
-                Button(action: action) {
-                    image
-                }
-                .buttonStyle(OIMbuttonStyle())
+        let image = currencyImage.image
+                .resizable()
+                .scaledToFit()
+
+        let valueImage = image
+            .rotation3DEffect(.degrees(isFlipped ? 90 : 0),
+                              axis: (x: 0.0, y: 1.0, z: 0.0))
+        let backImage = Group {
+            if let flippedName {
+                let flippedImage = OIMcurrencyImage(flippedName)
+//                            let _ = print("  OIMmod", isFlipped, value, flippedName)
+                flippedImage.image
+                    .resizable()
+                    .scaledToFit()
             } else {
-                image
-                    .opacity(canEdit ? 0.5 : 1.0)
+//                if isFlipped {
+//                            let _ = print("  OIMmod no image", isFlipped, value, flippedName)
+//                }
+                EmptyView()
             }
         }
-            .frame(width: (isFlipped ? 0.7 * oWidth : oWidth),
-                  height: (isFlipped ? 0.7 * oHeight : oHeight))
+            .rotation3DEffect(.degrees(isFlipped ? 0 : -90),
+                              axis: (x: 0.0, y: 1.0, z: 0.0))
+        let animatedImage = ZStack {
+            valueImage
+                .animation(isFlipped ? .linear : .linear.delay(0.35), value: isFlipped)
+            backImage
+                .animation(isFlipped ? .linear.delay(0.35) : .linear, value: isFlipped)
+        }
+
+        return Group {
+            if invisible {
+                image.opacity(0)
+            } else if !canEdit || availableVal < value {
+                animatedImage
+                    .opacity(canEdit ? 0.5 : 1.0)
+            } else {
+                Button(action: action) {        // TODO: disable after tapped
+                    animatedImage
+                }
+                .buttonStyle(OIMbuttonStyle())
+            }
+        } // Group
+//            .frame(width: (isFlipped != 0 ? 0.7 * oWidth : oWidth),
+//                  height: (isFlipped != 0 ? 0.7 * oHeight : oHeight))
+            .frame(width: oWidth, height: oHeight)
             .shadow(radius: shadow)
-            .rotation3DEffect(.degrees(isFlipped ? 135 : 0), axis: (x: 0, y: 1, z: 0))
-            .animation(.basic1, value: isFlipped)
             .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))         // TODO: currency name
     }
 }
@@ -97,18 +127,36 @@ struct OIMcurrencyButton: View {
 
     @EnvironmentObject private var cash: OIMcash
 
+    func imgName(_ value: UInt64?) -> String? {
+        if let value {
+            return value > currency.bankCoins[0] ? currency.noteName(value)
+                                                 : currency.coinName(value)
+        }
+        return nil
+    }
+
     var body: some View {
         let currency = cash.currency
         let value = fund.value
-        let name = value > currency.bankCoins[0] ? currency.noteName(value)
-                                                 : currency.coinName(value)
+        let isMorphing = fund.morphTicker != nil
+        let flippedVal = fund.flippedVal
         // Use EmptyView, because the modifier actually ignores
         // the value passed to its body() function.
+        let isFlipped: Bool = switch fund.state {
+            case .morphed:  true
+            case .flipping: true
+            default:        false
+        }
+//    if fund.id == 6 {
+//        let _ = print("Fund", fund.id, value, fund.state, flippedVal)
+//    }
         EmptyView().modifier(OIMmod(value: value,
-                                     name: name,
+                                     name: imgName(value),
+                              flippedName: imgName(flippedVal),
                              availableVal: availableVal,
-                                  canEdit: canEdit,
-                                isFlipped: fund.state == .flipping,
+                                  canEdit: canEdit && !isMorphing,  //    cannot edit morphing funds
+                                invisible: fund.state == .hiding,
+                                isFlipped: isFlipped && flippedVal != nil,
                                       pct: pct,
                                    action: action))
     }

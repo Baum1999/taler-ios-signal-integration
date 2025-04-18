@@ -22,7 +22,7 @@ struct OIMcurrencyScroller: View {
         ScrollView(.horizontal) {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
-                    let fund = OIMfund(id: -Int(value), value: value, state: .idle)
+                    let fund = OIMfund(id: -Int(value), state: .idle, value: value, flippedVal: nil)
                     let sourceID = -Int(value)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
@@ -35,7 +35,7 @@ struct OIMcurrencyScroller: View {
                     .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
-                    let fund = OIMfund(id: -Int(value), value: value, state: .idle)
+                    let fund = OIMfund(id: -Int(value), state: .idle, value: value, flippedVal: nil)
                     let sourceID = -Int(value)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,

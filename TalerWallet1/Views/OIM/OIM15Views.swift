@@ -39,7 +39,7 @@ struct OIMnoteStackV: View {
                 let xOffset = CGFloat(10 * index)
                 let yOffset = CGFloat(20 * index)
                 let _ = print("targetID \(targetID), flying \(flying)")
-                let fund = OIMfund(id: Int(value), value: value, state: .idle)
+                let fund = OIMfund(id: Int(value), state: .idle, value: value, flippedVal: nil)
                 OIMcurrencyButton(stack: stack.push(),
 //                                  value: value,
                 fund: fund,
@@ -53,7 +53,7 @@ struct OIMnoteStackV: View {
                     .matchedGeometryEffect(id: targetID, in: wrapper.namespace, isSource: false)
                     .onAppear {
                         print("start flying \(targetID)")
-                        withAnimation(.fly1) {
+                        withAnimation(.move1) {
                             flying = value  // start flying
                         }
                     }
@@ -93,7 +93,7 @@ struct OIMcoinStackV: View {
                     let yOffset = offset * CGFloat(index)
                     let xOffset = yOffset / 2
                     let _ = print("targetID \(targetID), flying \(flying)")
-                    let fund = OIMfund(id: Int(value), value: value, state: .idle)    // TODO: Flip coin
+                    let fund = OIMfund(id: Int(value), state: .idle, value: value, flippedVal: nil)    // TODO: Flip coin
                     OIMcurrencyButton(stack: stack.push(),
 //                                    value: value,
                                        fund: fund,
@@ -107,7 +107,7 @@ struct OIMcoinStackV: View {
                     .matchedGeometryEffect(id: targetID, in: wrapper.namespace, isSource: false)
                     .onAppear {
                         print("start flying \(targetID)")
-                        withAnimation(.fly1) {
+                        withAnimation(.move1) {
                             flying = value  // start flying
                         }
                     }
@@ -147,7 +147,7 @@ struct OIMnotesView1: View {
                                  flying: $flying,
                                 canEdit: canEdit
                     ) {
-                        withAnimation(.fly1) {
+                        withAnimation(.easeOut1) {
                             amountVal -= value     // remove on button press
                         }   }   }
             } // ForEach
@@ -181,7 +181,7 @@ struct OIMcoinsView1: View {
                                   flying: $flying,
                                   canEdit: canEdit
                     ) {
-                        withAnimation(Animation.easeIn1) {
+                        withAnimation(.easeIn1) {
                             amountVal -= value
                         }   }   }
             } // ForEach
