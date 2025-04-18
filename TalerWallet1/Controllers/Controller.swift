@@ -125,18 +125,22 @@ class Controller: ObservableObject {
         monitor.cancel()
     }
 
+    func printFonts() {
+        for family in UIFont.familyNames {
+            print(family)
+            for names in UIFont.fontNames(forFamilyName: family) {
+                print("== \(names)")
+            }
+        }
+    }
+
     init() {
-//        for family in UIFont.familyNames {
-//            print(family)
-//            for names in UIFont.fontNames(forFamilyName: family) {
-//                print("== \(names)")
-//            }
-//        }
         backendState = .instantiated
         currencyTicker = 0
         currencyInfos = [:]
         exchanges = []
         balances = []
+//        printFonts()
 //        checkInternetConnection()
         startObserving()
     }
