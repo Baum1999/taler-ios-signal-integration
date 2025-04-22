@@ -92,9 +92,9 @@ struct OIMlayoutView: View {
     func flipRemove(fundID: Int) {
         if let index = funds.firstIndex(where: { $0.id == fundID }) {
             var fund = funds[index]
-            symLog.log("*** start flipping:\(fund.value) \(fundID)")
-            withAnimation(.basic1) {
-                fund.state = .flipping
+            symLog.log("*** fly back:\(fund.value) \(fundID)")
+            withAnimation(.move1) {
+                fund.state = .returning
                 cash.updateFund(fund)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + cash.delay) {

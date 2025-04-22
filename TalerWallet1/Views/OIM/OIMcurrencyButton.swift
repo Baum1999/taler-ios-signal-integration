@@ -137,7 +137,6 @@ struct OIMcurrencyButton: View {
         // Use EmptyView, because the modifier actually ignores
         // the value passed to its body() function.
         let isFlipped: Bool = switch state {
-            case .flipping: true
             case .morphing: true
             case .arriving: true
             default:        false

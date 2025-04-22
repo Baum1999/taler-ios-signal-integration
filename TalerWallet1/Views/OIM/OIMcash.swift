@@ -14,7 +14,7 @@ let MAXSTACK = 4
 
 enum FundState: Int {
     case idle
-    case flipping           // user tapped to remove
+    case returning           // user tapped to remove
 
     case shouldFly          // + button tapped
     case isFlying           // after onAppear
@@ -26,7 +26,7 @@ enum FundState: Int {
     case arriving           // keep flipped image, move to final position
     case mutating           // flip back with disbled transition
 
-    var flipping: Bool { self == .flipping }
+    var returning: Bool { self == .returning }
     var shouldFly: Bool { self == .shouldFly }
     var isFlying: Bool { self == .isFlying }
     var position: Bool { self == .position }
@@ -46,12 +46,12 @@ public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     var outValue: UInt64?               // if this is set it determines the image (used for flipping)
 
     var targetID: String {
-        String(state.shouldFly ? -Int(value)        // match sourceID
-                               : id)
+        String(state.shouldFly || state.returning ? -Int(value)        // match sourceID
+                                                  : id)
     }
     var shouldFly: Bool { state.shouldFly }
     var isFlying: Bool { state.isFlying }
-    var isFlipping: Bool { state.flipping }
+//    var isFlipping: Bool { state.flipping }
 
 }
 public typealias OIMfunds = [OIMfund]
@@ -298,7 +298,7 @@ final class OIMcash: ObservableObject, Sendable {
     func removeCash(id: Int, value: UInt64) {
         if let index = funds.firstIndex(where: { $0.id == id && $0.value == value }) {
             funds.remove(at: index)
-        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state.flipping }) {
+        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state.returning }) {
             funds.remove(at: index)
         } else if let index = funds.firstIndex(where: { $0.value == value }) {
             funds.remove(at: index)
