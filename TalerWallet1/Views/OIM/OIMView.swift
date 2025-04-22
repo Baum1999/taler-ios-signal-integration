@@ -70,7 +70,7 @@ struct OIMView: View {
         let currency = cash.currency
 
         let actions = HStack(spacing: 30) {
-            QRButton(isNavBarItem: false) {
+            QRButton(hideTitle: true) {
                 qrButtonTapped = true
             }
             .lineLimit(5)

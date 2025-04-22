@@ -82,7 +82,7 @@ struct ActionsSheet: View {
             let recvDisabled = controller.balances.count == 0
             SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
             DepositWithdrawV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
-            QRButton(isNavBarItem: false) {
+            QRButton(hideTitle: false) {
                 qrButtonTapped = true
             }
                 .lineLimit(5)

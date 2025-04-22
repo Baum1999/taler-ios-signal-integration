@@ -62,7 +62,7 @@ struct LinkButton: View {
 }
 
 struct QRButton : View  {
-    let isNavBarItem: Bool
+    let hideTitle: Bool
     let action: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -114,17 +114,13 @@ struct QRButton : View  {
         let qrImage = Image(systemName: QRBUTTON)
         let qrText = Text("\(qrImage)", comment: "QR Image")
         Button(action: checkCameraAvailable) {
-            if isNavBarItem {
-                if !minimalistic {
-                    Text("Scan QR", comment: "Button title")
-                        .talerFont(.title3)
-                }
-                qrText.talerFont(.title2)
+            if hideTitle {
+                qrText.talerFont(.largeTitle)
+                    .padding(.horizontal)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
                 qrText.talerFont(.largeTitle)
                     .padding(.horizontal, width)
-//                    .padding(.vertical)
             } else {
                 HStack(spacing: 16) {
                     qrText.talerFont(.title)
