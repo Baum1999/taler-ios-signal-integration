@@ -20,20 +20,22 @@ struct OIMamountV: View {
 
     func updateColor() {
 #if DEBUG
-        color = debugAnimations ? WalletColors().attention
+        color = debugAnimations ? .orange
                                 : fastAnimations ? WalletColors().talerColor
-                                                 : WalletColors().confirm
+                                                 : .red
 #else
         color = fastAnimations ? WalletColors().talerColor
                                : WalletColors().confirm
 #endif
     }
     var body: some View {
-        HStack {
-            Spacer()
             if let amount {
                 AmountV(currencyName, amount: amount, isNegative: nil)
+                    .ignoresSafeArea(edges: .top)
                     .foregroundColor(color)
+                    .task {
+                        updateColor()
+                    }
 #if DEBUG
                     .onTapGesture(count: 2) {
                         if debugAnimations {
@@ -59,11 +61,6 @@ struct OIMamountV: View {
                         updateColor()
                     }
             }
-        }.padding(.horizontal, UIScreen.hasFaceID ? 20 : 4)
-        .ignoresSafeArea(edges: .all)
-        .task {
-            updateColor()
-        }
     }
 }
 // MARK: -
