@@ -316,6 +316,24 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
+    func moveDown() -> Double {
+        let sorted = sortByValue()
+
+        var counter = 0.0
+        var lastVal: UInt64 = 0
+        for var fund in sorted {
+            withAnimation(.easeOut1.delay(counter * 0.1)) {
+                fund.state = .returning
+                self.updateFund(fund)
+            }
+            if lastVal != fund.value {
+                lastVal = fund.value
+                counter += 1
+            }
+        }
+        return counter * 0.1
+    }
+
     func update(_ notesCoins: OIMnotesCoins, currency: OIMcurrency) {
         let chng1 = update(notesCoins.0, currencyNotesCoins: currency.bankNotes)
         let chng2 = update(notesCoins.1, currencyNotesCoins: currency.bankCoins)

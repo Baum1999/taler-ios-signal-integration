@@ -31,22 +31,27 @@ struct OIMnavBack<Content: View>: View {
 
     var body: some View {
         OIMbackground(amount: amount, currencyName: currencyName) {
-            ZStack {
+            ZStack(alignment: .top) {
                 content()
                 VStack {
                     HStack {
                         BackButton() {
-                            print("dismiss")
-                            dismiss()
-                        }.padding(.leading, 4)
+                            var transaction = Transaction()
+                            transaction.disablesAnimations = true
+                            withTransaction(transaction) {
+                                dismiss()
+                            }
+                        }
                         Spacer()
-                        let inset = UIScreen.horzInsets
                         ForwardButton(enabled: !amount.isZero) {
-                            fwdButtonTapped = true
-                        }.padding(.trailing, inset > 0 ? inset - 12 : 0)
+                            var transaction = Transaction()
+                            transaction.disablesAnimations = true
+                            withTransaction(transaction) {
+                                fwdButtonTapped = true
+                            }
+                        }
                     }
                 }
-                .ignoresSafeArea(edges: .horizontal)
 #if DEBUG
                 .border(.blue)
 #endif
@@ -67,34 +72,83 @@ struct OIMView: View {
 
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
+    @State private var sending = false
+
+    func sendAction() {
+        let delay = cash.moveDown()
+        withAnimation(.basic1.delay(delay)) {
+            sending = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay + 0.5) {       // cash.delay
+            let actionType = ActionType(animationDisabled: true)
+            let userinfo = [NOTIFICATIONANIMATION: actionType]
+            // will trigger NavigationLink
+            NotificationCenter.default.post(name: .SendAction,
+                                          object: nil,
+                                        userInfo: userinfo)
+        }
+    }
 
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
 
-        let actions = HStack(spacing: 30) {
+        let actions = HStack {
             QRButton(hideTitle: true) {
-                qrButtonTapped = true
+                // TODO: morph into view
+//                var transaction = Transaction()
+//                transaction.disablesAnimations = true
+//                withTransaction(transaction) {
+                    qrButtonTapped = true
+//                }
             }
-            .lineLimit(5)
             .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
-
-            SendRequestV(stack: stack.push(),
-                  sendDisabled: false,
-                  recvDisabled: false)
+            Spacer()
+            Button(action: sendAction) {
+                Image("SendTaler")
+                    .resizable()
+                    .scaledToFit()
+                    .tint(WalletColors().talerColor)
+//                    .foregroundStyle(WalletColors().talerColor)
+            }
+            .frame(width: 66, height: 66)
+            .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
+//            .buttonStyle(.bordered)
+            .disabled(available?.isZero ?? true)
         }
+#if DEBUG
+            .border(.blue)
+#endif
 
         OIMbackground(amount: available, currencyName: currency.noteBase) {
+            ZStack(alignment: .top) {
+                actions
+                VStack {
+                    Spacer()
+                    OIMcurrencyScroller(stack: stack.push(),
+                                 availableVal: $availableVal,
+                                    tappedVal: $tappedVal,
+                                      canEdit: false)
+                    .zIndex(1)  // make notes fly from topZ
+                    .clipped(antialiased: true)
+                    .padding(.horizontal, 5)
+                    .ignoresSafeArea(edges: .horizontal)
+                    .opacity(sending ? 1.0 : 0.01)
+                }
             VStack {
                 Spacer()
-                OIMlineView(stack: stack.push(),
+                    OIMlineView(stack: stack.push(),
                             amountVal: $availableVal,
-                        tappedVal: $tappedVal,
-                          canEdit: false)
-                .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
-                Spacer()
-                actions
-            }//.border(.red)
+                            tappedVal: $tappedVal,
+                              canEdit: false)
+                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
+                    .zIndex(2)  // make notes fly from topZ
+                    Spacer()
+                }
+#if DEBUG
+//                .border(.red)
+#endif
+            }
         }
         .environmentObject(cash)
         .task {
