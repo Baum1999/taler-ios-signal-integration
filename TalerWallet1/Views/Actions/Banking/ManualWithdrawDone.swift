@@ -22,7 +22,7 @@ struct ManualWithdrawDone: View {
 
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State private var transactionId: String?
-    @State private var noTransaction: Transaction? = nil
+    @State private var noTransaction: TalerTransaction? = nil
 
     let navTitle = String(localized: "Wire Transfer")
 

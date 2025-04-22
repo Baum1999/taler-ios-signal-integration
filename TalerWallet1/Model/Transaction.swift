@@ -575,7 +575,7 @@ struct DummyTransaction : Sendable {
     var common: TransactionCommon
 }
 // MARK: - Transaction
-enum Transaction: Decodable, Hashable, Identifiable, Sendable {
+enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
     case dummy (DummyTransaction)
     case withdrawal (WithdrawalTransaction)
     case deposit (DepositTransaction)
@@ -651,7 +651,7 @@ enum Transaction: Decodable, Hashable, Identifiable, Sendable {
         common.localizedTypePast(common.type)
     }
 
-    static func == (lhs: Transaction, rhs: Transaction) -> Bool {
+    static func == (lhs: TalerTransaction, rhs: TalerTransaction) -> Bool {
         return (lhs.id == rhs.id)
             && (lhs.common.txState == rhs.common.txState)
     }

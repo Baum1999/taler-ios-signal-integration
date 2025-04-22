@@ -186,7 +186,7 @@ extension WalletModel {
 // MARK: -
 /// A request to get a wallet transaction by ID.
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
-    typealias Response = Transaction
+    typealias Response = TalerTransaction
     func operation() -> String { "getTransactionById" }
     func args() -> Args { Args(transactionId: transactionId, includeContractTerms: withTerms) }
 
@@ -202,7 +202,7 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 extension WalletModel {
     /// get the specified transaction from Wallet-Core. No networking involved
     nonisolated func getTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
-      async throws -> Transaction {
+      async throws -> TalerTransaction {
         let request = GetTransactionById(transactionId: transactionId, withTerms: withTerms)
         return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
     }

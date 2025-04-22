@@ -18,7 +18,7 @@ struct PaymentDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var paymentDone: Bool = false
-    @State private var noTransaction: Transaction? = nil
+    @State private var noTransaction: TalerTransaction? = nil
 
     @MainActor
     private func viewDidLoad() async {

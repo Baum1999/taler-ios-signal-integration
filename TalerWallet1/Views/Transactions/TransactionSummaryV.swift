@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-extension Transaction {             // for Dummys
+extension TalerTransaction {             // for Dummys
     init(dummyCurrency: String) {
         let amount = Amount.zero(currency: dummyCurrency)
         let now = Timestamp.now()
@@ -30,7 +30,7 @@ struct TransactionSummaryV: View {
     let stack: CallStack
 //    let scope: ScopeInfo?
     let transactionId: String
-    @Binding var outTransaction: Transaction?
+    @Binding var outTransaction: TalerTransaction?
     let navTitle: String?
     let hasDone: Bool
     let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
@@ -54,7 +54,7 @@ struct TransactionSummaryV: View {
 
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
-    @State var transaction = Transaction(dummyCurrency: DEMOCURRENCY)
+    @State var transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
     @State var viewId = UUID()
     @Namespace var topID
 
@@ -67,7 +67,7 @@ struct TransactionSummaryV: View {
                 outTransaction = reloadedTransaction
             }
         } else {
-            withAnimation{ transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+            withAnimation{ transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
         }
     }
 
@@ -103,7 +103,7 @@ struct TransactionSummaryV: View {
                 let newMajor = transition.newTxState.major
                 Task { // runs on MainActor
                        // flush the screen first, then reload
-                    withAnimation { transaction = Transaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                    withAnimation { transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
                     symLog.log("newState: \(newMajor), reloading transaction")
                     if newMajor != .none {              // don't reload after delete
                         await loadTransaction()
@@ -268,7 +268,7 @@ struct TransactionSummaryV: View {
 
     struct PendingWithdrawalDetails: View {
         let stack: CallStack
-        @Binding var transaction: Transaction
+        @Binding var transaction: TalerTransaction
         let details: WithdrawalTransactionDetails
 
         var body: some View {
@@ -312,7 +312,7 @@ struct TransactionSummaryV: View {
     struct TypeDetail: View {
         let stack: CallStack
         let scope: ScopeInfo?
-        @Binding var transaction: Transaction
+        @Binding var transaction: TalerTransaction
         let hasDone: Bool
         @Environment(\.colorScheme) private var colorScheme
         @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -548,7 +548,7 @@ struct TransactionSummaryV: View {
     }
 
     struct QRCodeDetails: View {
-        var transaction : Transaction
+        var transaction : TalerTransaction
         var body: some View {
             let details = transaction.detailsToShow()
             let keys = details.keys
@@ -577,15 +577,15 @@ struct TransactionSummaryV: View {
 //struct TransactionSummary_Previews: PreviewProvider {
 //    static func deleteTransactionDummy(transactionId: String) async throws {}
 //    static func doneActionDummy() {}
-//    static var withdrawal = Transaction(incoming: true,
+//    static var withdrawal = TalerTransaction(incoming: true,
 //                                         pending: true,
 //                                              id: "some withdrawal ID",
 //                                            time: Timestamp(from: 1_666_000_000_000))
-//    static var payment = Transaction(incoming: false,
+//    static var payment = TalerTransaction(incoming: false,
 //                                      pending: false,
 //                                           id: "some payment ID",
 //                                         time: Timestamp(from: 1_666_666_000_000))
-//    static func reloadActionDummy(transactionId: String) async -> Transaction { return withdrawal }
+//    static func reloadActionDummy(transactionId: String) async -> TalerTransaction { return withdrawal }
 //    static var previews: some View {
 //        Group {
 //            TransactionSummaryV(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)

@@ -22,7 +22,7 @@ struct RefundURIView: View {
     @State var refundTransactionId: String? = nil
 //    @State var transaction: Transaction?
 //    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var noTransaction: Transaction? = nil
+    @State private var noTransaction: TalerTransaction? = nil
 
     @MainActor
     private func viewDidLoad() async {

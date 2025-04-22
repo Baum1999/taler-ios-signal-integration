@@ -30,7 +30,7 @@ struct P2PReadyV: View {
 
     let navTitle = String(localized: "Ready")
     @State private var transactionId: String? = nil
-    @State private var noTransaction: Transaction? = nil
+    @State private var noTransaction: TalerTransaction? = nil
 
     @MainActor
     private func initiateP2P() async {

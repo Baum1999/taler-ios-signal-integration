@@ -14,7 +14,7 @@ struct BalancesPendingRowV: View {
     let stack: CallStack
     let balance: Balance
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
-    @Binding var pendingTransactions: [Transaction]
+    @Binding var pendingTransactions: [TalerTransaction]
     let reloadPending: (_ stack: CallStack) async -> ()
 
     @ViewBuilder func pendingRowLabel() -> some View {
@@ -77,7 +77,7 @@ struct BalancesPendingRowV: View {
 fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
     @MainActor
     struct BindingViewContainer: View {
-        @State private var previewTransactions: [Transaction] = []
+        @State private var previewTransactions: [TalerTransaction] = []
         @State private var previewD: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
         @State private var selectedPreviewBalance: Balance? = nil
         var body: some View {

@@ -10,7 +10,7 @@ import taler_swift
 
 struct TransactionRowView: View {
     let scope: ScopeInfo
-    let transaction : Transaction
+    let transaction : TalerTransaction
 
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorScheme) private var colorScheme
@@ -209,11 +209,11 @@ struct TransactionRowView: View {
 // MARK: -
 #if DEBUG
 struct TransactionRow_Previews: PreviewProvider {
-    static var withdrawal = Transaction(incoming: true,
+    static var withdrawal = TalerTransaction(incoming: true,
                                          pending: false,
                                               id: "some withdrawal ID",
                                             time: Timestamp(from: 1_666_000_000_000))
-    static var payment = Transaction(incoming: false,
+    static var payment = TalerTransaction(incoming: false,
                                       pending: false,
                                            id: "some payment ID",
                                          time: Timestamp(from: 1_666_666_000_000))
@@ -237,7 +237,7 @@ struct TransactionRow_Previews: PreviewProvider {
     }
 }
 // MARK: -
-extension Transaction {             // for PreViews
+extension TalerTransaction {             // for PreViews
     init(incoming: Bool, pending: Bool, id: String, time: Timestamp) {
         let txState = TransactionState(major: pending ? TransactionMajorState.pending
                                                       : TransactionMajorState.done)

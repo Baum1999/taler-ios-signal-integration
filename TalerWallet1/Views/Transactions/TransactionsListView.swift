@@ -21,7 +21,7 @@ struct TransactionsListView: View {
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
     let navTitle: String?
 
-    @Binding var transactions: [Transaction]
+    @Binding var transactions: [TalerTransaction]
 
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
@@ -100,11 +100,11 @@ struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
     let stack: CallStack
     let scope: ScopeInfo
-    @Binding var transactions: [Transaction]
+    @Binding var transactions: [TalerTransaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
     @EnvironmentObject private var model: WalletModel
-    @State private var noTransaction: Transaction? = nil
+    @State private var noTransaction: TalerTransaction? = nil
 
     var body: some View {
 #if PRINT_CHANGES

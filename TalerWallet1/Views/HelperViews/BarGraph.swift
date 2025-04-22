@@ -22,7 +22,7 @@ struct BarGraphHeader: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State private var completedTransactions: [Transaction] = []
+    @State private var completedTransactions: [TalerTransaction] = []
     @ScaledMetric var barHeight = 9       // relative to fontSize
 
     @MainActor
@@ -54,11 +54,11 @@ struct BarGraphHeader: View {
 }
 // MARK: -
 struct BarGraph: View {
-    @Binding var transactions: [Transaction]
+    @Binding var transactions: [TalerTransaction]
     let maxBars: Int
     let barHeight: Double
 
-    func maxValue(_ someTransactions: [Transaction]) -> Double {
+    func maxValue(_ someTransactions: [TalerTransaction]) -> Double {
         var maxValue = 0.0
         for transaction in someTransactions {
             let value = transaction.common.amountEffective.value
@@ -72,7 +72,7 @@ struct BarGraph: View {
     var body: some View {
         let slice = transactions.prefix(maxBars)
         let count = slice.count
-        let tenTransactions: [Transaction] = Array(slice)
+        let tenTransactions: [TalerTransaction] = Array(slice)
         let maxValue = maxValue(tenTransactions)
 
         HStack(alignment: .center, spacing: 1) {

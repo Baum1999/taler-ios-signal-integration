@@ -12,12 +12,12 @@ fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 extension WalletModel {
-    static func completedTransactions(_ transactions: [Transaction]) -> [Transaction] {
+    static func completedTransactions(_ transactions: [TalerTransaction]) -> [TalerTransaction] {
         transactions.filter { transaction in
             !transaction.isPending
         }
     }
-    static func pendingTransactions(_ transactions: [Transaction]) -> [Transaction] {
+    static func pendingTransactions(_ transactions: [TalerTransaction]) -> [TalerTransaction] {
         transactions.filter { transaction in
             transaction.isPending
         }
@@ -45,7 +45,7 @@ fileprivate struct GetTransactions: WalletBackendFormattedRequest {
     }
 
     struct Response: Decodable {                    // list of transactions
-        var transactions: [Transaction]
+        var transactions: [TalerTransaction]
     }
 }
 enum TransactionStateFilter: String, Codable {
@@ -82,7 +82,7 @@ fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
     }
 
     struct Response: Decodable {                    // list of transactions
-        var transactions: [Transaction]
+        var transactions: [TalerTransaction]
     }
 }
 /// A request to abort a wallet transaction by ID.
@@ -150,7 +150,7 @@ extension WalletModel {
                                         offset: TransactionOffset? = nil,
                               includeRefreshes: Bool = false,
                                    viewHandles: Bool = false)
-      async throws -> [Transaction] {
+      async throws -> [TalerTransaction] {
         let request = GetTransactionsV2(scope: scope,
                                 filterByState: filterByState,
                                         limit: limit,

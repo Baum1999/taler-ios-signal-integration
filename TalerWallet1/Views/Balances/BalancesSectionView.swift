@@ -38,9 +38,9 @@ struct BalancesSectionView {
 
     @State private var showSpendingHint = true
     @State private var isShowingDetailView = false
-    @State private var completedTransactions: [Transaction] = []
-    @State private var recentTransactions: [Transaction] = []
-    @State private var pendingTransactions: [Transaction] = []
+    @State private var completedTransactions: [TalerTransaction] = []
+    @State private var recentTransactions: [TalerTransaction] = []
+    @State private var pendingTransactions: [TalerTransaction] = []
 
     private static func className() -> String {"\(self)"}
 

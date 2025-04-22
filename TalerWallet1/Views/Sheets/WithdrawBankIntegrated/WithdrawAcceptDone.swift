@@ -21,7 +21,7 @@ struct WithdrawAcceptDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
-    @State private var transaction: Transaction? = Transaction(dummyCurrency: DEMOCURRENCY)
+    @State private var transaction: TalerTransaction? = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     let navTitle = String(localized: "Authorize at Bank", comment: "Nav title")
 
