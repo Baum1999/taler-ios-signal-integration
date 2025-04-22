@@ -234,6 +234,10 @@ extension Label where Title == Text, Icon == Image {
     }
 }
 // MARK: - Content
+struct ActionType: Hashable {
+    let animationDisabled: Bool
+}
+// MARK: - Content
 extension MainView {
 
     struct MainContent: View {
@@ -422,7 +426,17 @@ extension MainView {
                     .accessibilityHidden(true)                  // for a11y we use the original tabBar, not our custom one
             } // ZStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .onNotification(.SendAction)    { triggerAction(1) }
+            .onNotification(.SendAction)    { notification in
+                if let actionType = notification.userInfo?[NOTIFICATIONANIMATION] as? ActionType {
+                    if actionType.animationDisabled {
+                        var transaction = Transaction()
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            triggerAction(1)
+                        }
+                    } else { triggerAction(1) }
+                } else { triggerAction(1) }
+            }
             .onNotification(.RequestAction) { triggerAction(2) }
             .onNotification(.DepositAction) { triggerAction(3) }
             .onNotification(.WithdrawAction){ triggerAction(4) }
