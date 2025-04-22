@@ -13,6 +13,7 @@ struct OIMcurrencyScroller: View {
     let stack: CallStack
     @Binding var availableVal: UInt64
     @Binding var tappedVal: UInt64
+    let canEdit: Bool
 
     @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -28,7 +29,7 @@ struct OIMcurrencyScroller: View {
                                        fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
-                                    canEdit: true,
+                                    canEdit: canEdit,
                                         pct: 0.9,
                                      action: { tappedVal = value }
                     )
@@ -41,7 +42,7 @@ struct OIMcurrencyScroller: View {
                                        fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
-                                    canEdit: true,
+                                    canEdit: canEdit,
                                         pct: 0.9,
                                      action: { tappedVal = value }
                     )

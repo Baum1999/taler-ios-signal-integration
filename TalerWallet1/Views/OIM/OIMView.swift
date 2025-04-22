@@ -190,7 +190,8 @@ struct OIMEditView: View {
                 Spacer()
                 OIMcurrencyScroller(stack: stack.push(),
                              availableVal: $availableVal,
-                                tappedVal: $tappedVal)
+                                tappedVal: $tappedVal,
+                                  canEdit: true)
                     .zIndex(2)  // make notes fly from topZ
                     .clipped(antialiased: true)
                     .padding(.horizontal, 5)
