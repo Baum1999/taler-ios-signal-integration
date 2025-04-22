@@ -47,6 +47,9 @@ struct OIMnavBack<Content: View>: View {
                     }
                 }
                 .ignoresSafeArea(edges: .horizontal)
+#if DEBUG
+                .border(.blue)
+#endif
             }
         }
     }
@@ -127,7 +130,10 @@ struct OIMPayView: View {
                           canEdit: true)
                 .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                 Spacer()
-            }.border(.red)
+            }
+#if DEBUG
+            .border(.red)
+#endif
         }
         .environmentObject(cash)
         .task {
@@ -148,6 +154,7 @@ struct OIMEditView: View {
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @StateObject private var cash = OIMcash()
+
     @State private var amountVal: UInt64 = 0
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
@@ -167,6 +174,7 @@ struct OIMEditView: View {
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
+
         OIMnavBack(stack: stack.push(),
                    scope: scope,
             currencyName: currency.noteBase,
@@ -201,7 +209,9 @@ struct OIMEditView: View {
                         availableVal = intValue(newVal) - intValue(amount)
                     }
               }
-                .border(.red)
+#if DEBUG
+              .border(.red)
+#endif
 //                .if(.iOS15) { view in
 //                    view.ignoresSafeArea(edges: .bottom)            // sadly, this does not work, because there is always a bottom bar :-(
 //                }
@@ -224,11 +234,11 @@ struct OIMSubjectView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
+    @StateObject private var cash = OIMcash()
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let currency = sierraLeone ? OIMleones : OIMeuros
+        let currency = cash.currency
 
         OIMnavBack(stack: stack.push(),
                    scope: scope,
@@ -242,7 +252,10 @@ struct OIMSubjectView: View {
                     Text("Subject")
                 }
                 Spacer()
-            }.border(.red)
+            }
+#if DEBUG
+            .border(.red)
+#endif
         }.task {
 
         }
