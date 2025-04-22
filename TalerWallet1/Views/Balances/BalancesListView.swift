@@ -75,7 +75,7 @@ struct BalancesListView: View {
                         let balance = controller.balances.first
                         OIMView(stack: stack.push(),
                                 scope: balance?.scopeInfo,
-                               amount: balance?.available,
+                            available: balance?.available,
                        qrButtonTapped: $qrButtonTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }

@@ -55,14 +55,14 @@ struct OIMnavBack<Content: View>: View {
 struct OIMView: View {
     let stack: CallStack
     let scope: ScopeInfo?
-    let amount: Amount?
+    let available: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var qrButtonTapped: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @StateObject private var cash = OIMcash()
 
-    @State private var amountVal: UInt64 = 0
+    @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
 
     var body: some View {
@@ -81,11 +81,11 @@ struct OIMView: View {
                   recvDisabled: false)
         }
 
-        OIMbackground(amount: amount, currencyName: currency.noteBase) {
+        OIMbackground(amount: available, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
                 OIMlineView(stack: stack.push(),
-                        amountVal: $amountVal,
+                            amountVal: $availableVal,
                         tappedVal: $tappedVal,
                           canEdit: false)
                 .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
@@ -95,8 +95,8 @@ struct OIMView: View {
         }
         .environmentObject(cash)
         .task {
-            amountVal = intValue(amount)
-            let result = currency.notesCoins(amountVal)
+            availableVal = intValue(available)
+            let result = currency.notesCoins(availableVal)
             cash.update(result, currency: currency)
         }
     }
