@@ -94,16 +94,16 @@ struct OIMView: View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
 
-        let actions = HStack {
+        let actions = HStack(alignment: .top) {
             QRButton(hideTitle: true) {
-                // TODO: morph into view
 //                var transaction = Transaction()
 //                transaction.disablesAnimations = true
 //                withTransaction(transaction) {
                     qrButtonTapped = true
 //                }
             }
-            .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
+                .frame(width: 66, height: 66)
+                .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace,isSource: true)
             Spacer()
             Button(action: sendAction) {
                 Image("SendTaler")

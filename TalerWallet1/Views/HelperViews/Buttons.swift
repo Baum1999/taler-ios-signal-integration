@@ -115,8 +115,10 @@ struct QRButton : View  {
         let qrText = Text("\(qrImage)", comment: "QR Image")
         Button(action: checkCameraAvailable) {
             if hideTitle {
-                qrText.talerFont(.largeTitle)
-                    .padding(.horizontal)
+                qrImage
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(WalletColors().talerColor)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
                 qrText.talerFont(.largeTitle)
