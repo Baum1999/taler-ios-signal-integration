@@ -181,7 +181,6 @@ struct P2PSubjectV: View {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMSubjectView(stack: stack.push(),
-                                   scope: scope,
                                   amount: $amountToTransfer,
                          fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart

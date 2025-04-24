@@ -21,7 +21,6 @@ fileprivate func intValue(_ amount: Amount?) -> UInt64 {
 // MARK: -
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
-    let scope: ScopeInfo?
     let currencyName: String
     @Binding var amount: Amount
     @Binding var fwdButtonTapped: Bool
@@ -65,7 +64,6 @@ struct OIMnavBack<Content: View>: View {
 @available(iOS 16.4, *)
 struct OIMView: View {
     let stack: CallStack
-    let scope: ScopeInfo?
     let available: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var qrButtonTapped: Bool
@@ -165,7 +163,6 @@ struct OIMView: View {
 @available(iOS 16.4, *)
 struct OIMPayView: View {
     let stack: CallStack
-    let scope: ScopeInfo?
     let amount: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
 
@@ -204,7 +201,6 @@ struct OIMPayView: View {
 @available(iOS 16.4, *)
 struct OIMEditView: View {
     let stack: CallStack
-    let scope: ScopeInfo?
     @Binding var amount: Amount
     @Binding var available: Amount
     let useAvailable : Bool         // if false then we're requesting money and don't use available
@@ -235,7 +231,6 @@ struct OIMEditView: View {
         let currency = cash.currency
 
         OIMnavBack(stack: stack.push(),
-                   scope: scope,
             currencyName: currency.noteBase,
                   amount: $amount,
          fwdButtonTapped: $fwdButtonTapped
@@ -288,7 +283,6 @@ struct OIMEditView: View {
 // MARK: -
 struct OIMSubjectView: View {
     let stack: CallStack
-    let scope: ScopeInfo?
     @Binding var amount: Amount
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
@@ -300,7 +294,6 @@ struct OIMSubjectView: View {
         let currency = cash.currency
 
         OIMnavBack(stack: stack.push(),
-                   scope: scope,
             currencyName: currency.noteBase,
                   amount: $amount,
          fwdButtonTapped: $fwdButtonTapped

@@ -109,7 +109,6 @@ struct SendAmountV: View {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMEditView(stack: stack.push(),
-                                scope: balance?.scopeInfo,
                                amount: $amountToTransfer,
                             available: $amountAvailable,
                          useAvailable: true,                                    // cannot send more than we have

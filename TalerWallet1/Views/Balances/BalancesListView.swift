@@ -75,7 +75,6 @@ struct BalancesListView: View {
                     if controller.oimModeActive {
                         let balance = controller.balances.first
                         OIMView(stack: stack.push(),
-                                scope: balance?.scopeInfo,
                             available: balance?.available,
                        qrButtonTapped: $qrButtonTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
