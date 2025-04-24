@@ -1,0 +1,80 @@
+/*
+ * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * See LICENSE.md
+ */
+/**
+ * @author Marc Stibane
+ */
+import SwiftUI
+import taler_swift
+
+public let OIMBACKDARK = "tara-meinczinger-G_yCplAsnB4-unsplash"
+public let OIMBACKLIGHT = "andrey-haimin-VFUTPASjhB8-unsplash"
+
+// MARK: -
+struct OIMamountV: View {
+    let amount: Amount?
+    let currencyName: String
+
+    @State private var color = WalletColors().talerColor
+
+    func updateColor() {
+        color = debugAnimations ? WalletColors().attention
+                                : WalletColors().talerColor
+    }
+    var body: some View {
+        HStack {
+            Spacer()
+            if let amount {
+                AmountV(currencyName, amount: amount, isNegative: nil)
+                    .foregroundColor(color)
+#if DEBUG
+                    .onTapGesture {
+                        debugAnimations.toggle()
+                        updateColor()
+                    }
+#endif
+            }
+        }.padding(.horizontal, UIScreen.hasFaceID ? 20 : 4)
+        .ignoresSafeArea(edges: .all)
+        .task {
+            updateColor()
+        }
+    }
+}
+// MARK: -
+struct OIMbackground<Content: View>: View {
+    let amount: Amount?
+    let currencyName: String
+    var content: () -> Content
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        let background = colorScheme == .dark ? OIMBACKDARK
+                                              : OIMBACKLIGHT
+        let backImage = Image(background)
+            .resizable()
+        let zStack = ZStack(alignment: .top) {
+            backImage
+                .ignoresSafeArea(edges: .all)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            content()
+            OIMamountV(amount: amount, currencyName: currencyName)
+        }
+        if #available(iOS 16.4, *) {
+            zStack
+                .toolbar(.hidden, for: .navigationBar, .tabBar)
+                .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+        } else {        // Fallback on earlier versions
+            zStack
+//                .navigationBarTitle("")       // must set the title...
+                .navigationBarHidden(true)      // before you can hide the navigation bar
+//                .tabBarHidden(true)           // unfortunately this call doesn't exist
+        }
+    }
+}
+// MARK: -
+//#Preview {
+//    OIMbackground()
+//}

@@ -8,11 +8,6 @@
 import SwiftUI
 import taler_swift
 
-let DESCENDING = true
-
-public let OIMBACKDARK = "tara-meinczinger-G_yCplAsnB4-unsplash"
-public let OIMBACKLIGHT = "andrey-haimin-VFUTPASjhB8-unsplash"
-
 fileprivate func intValue(_ amount: Amount?) -> Int {
     if let amount {
         if !amount.isZero {
@@ -22,60 +17,6 @@ fileprivate func intValue(_ amount: Amount?) -> Int {
         }
     }
     return 0
-}
-// MARK: -
-struct OIMamountV: View {
-    let amount: Amount?
-    let currStr: String
-
-    var body: some View {
-        HStack {
-            Spacer()
-            if let amount {
-                let amountVal = intValue(amount)
-                AmountV(currStr, cent: UInt64(amountVal), isNegative: nil)
-                    .foregroundColor(WalletColors().attention)  // talerColor)
-#if DEBUG
-                    .onTapGesture {
-                        debugAnimations.toggle()
-                    }
-#endif
-            }
-        }.padding(.horizontal, UIScreen.hasFaceID ? 20 : 4)
-        .ignoresSafeArea(edges: .all)
-    }
-}
-// MARK: -
-struct OIMbackground<Content: View>: View {
-    let amount: Amount?
-    let currStr: String
-    var content: () -> Content
-
-    @Environment(\.colorScheme) private var colorScheme
-
-    var body: some View {
-        let background = colorScheme == .dark ? OIMBACKDARK
-                                              : OIMBACKLIGHT
-        let backImage = Image(background)
-            .resizable()
-        let zStack = ZStack(alignment: .top) {
-            backImage
-                .ignoresSafeArea(edges: .all)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            content()
-            OIMamountV(amount: amount, currStr: currStr)
-        }
-        if #available(iOS 16.4, *) {
-            zStack
-                .toolbar(.hidden, for: .navigationBar, .tabBar)
-                .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-        } else {        // Fallback on earlier versions
-            zStack
-//                .navigationBarTitle("")       // must set the title before you can hide the navigation bar
-                .navigationBarHidden(true)
-//                .tabBarHidden(true)           // unfortunately this call doesn't exist
-        }
-    }
 }
 // MARK: -
 struct OIMnavBack<Content: View>: View {
@@ -89,7 +30,7 @@ struct OIMnavBack<Content: View>: View {
     @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
 
     var body: some View {
-        OIMbackground(amount: amount, currStr: currStr) {
+        OIMbackground(amount: amount, currencyName: currStr) {
             ZStack {
                 content()
                 VStack {
@@ -143,7 +84,7 @@ struct OIMView: View {
                   recvDisabled: false)
         }
 
-        OIMbackground(amount: amount, currStr: currency.noteBase) {
+        OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
                 OIMlineView(currency: currency,
@@ -179,7 +120,7 @@ struct OIMPayView: View {
 //        let _ = Self._printChanges()
         let currency = sierraLeone ? OIMleones : OIMeuros
 
-        OIMbackground(amount: amount, currStr: currency.noteBase) {
+        OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
                 OIMlineView(currency: currency,
