@@ -29,7 +29,7 @@ struct OIMnavBack<Content: View>: View {
     @Environment(\.dismiss) var dismiss     // pop back once
 
     var body: some View {
-        OIMbackground(amount: amount, currencyName: currencyName) {
+        OIMbackground() {
             ZStack(alignment: .top) {
                 content()
                 VStack {
@@ -121,7 +121,7 @@ struct OIMView: View {
             .border(.blue)
 #endif
 
-        OIMbackground(amount: available, currencyName: currency.noteBase) {
+        OIMbackground() {
             ZStack(alignment: .top) {
                 actions
                 VStack {
@@ -175,7 +175,7 @@ struct OIMPayView: View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
 
-        OIMbackground(amount: amount, currencyName: currency.noteBase) {
+        OIMbackground() {
             VStack {
                 Spacer()
                 OIMlineView(stack: stack.push(),

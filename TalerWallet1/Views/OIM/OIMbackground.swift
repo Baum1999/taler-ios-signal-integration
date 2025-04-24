@@ -65,8 +65,6 @@ struct OIMamountV: View {
 }
 // MARK: -
 struct OIMbackground<Content: View>: View {
-    let amount: Amount?
-    let currencyName: String
     var content: () -> Content
 
     @Environment(\.colorScheme) private var colorScheme
@@ -81,7 +79,6 @@ struct OIMbackground<Content: View>: View {
                 .ignoresSafeArea(edges: .all)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             content()
-            OIMamountV(amount: amount, currencyName: currencyName)
         }
         if #available(iOS 16.4, *) {
             zStack
