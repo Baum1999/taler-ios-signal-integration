@@ -76,6 +76,7 @@ struct SendAmountV: View {
         let navTitle = SendAmountView.navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
+        let taskID = balanceIndex + (1000 * controller.currencyTicker)
         let scrollView = ScrollView {
             if count > 0 {
                 ScopePicker(value: $balanceIndex,
@@ -103,7 +104,7 @@ struct SendAmountV: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task { await viewDidLoad() }
-            .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
+            .task(id: taskID) { await newBalance() }
 #if OIM
             .overlay {
               if #available(iOS 16.4, *) {
