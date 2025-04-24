@@ -71,6 +71,7 @@ struct BalancesListView: View {
                 }
 #if OIM
                 .overlay {
+                  if #available(iOS 16.4, *) {
                     if controller.oimModeActive {
                         let balance = controller.balances.first
                         OIMView(stack: stack.push(),
@@ -79,6 +80,7 @@ struct BalancesListView: View {
                        qrButtonTapped: $qrButtonTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
+                  }
                 }
 #endif
             }

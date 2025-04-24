@@ -178,6 +178,7 @@ struct P2PSubjectV: View {
         scrollView
 #if OIM
             .overlay {
+              if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMSubjectView(stack: stack.push(),
                                    scope: scope,
@@ -185,6 +186,7 @@ struct P2PSubjectV: View {
                          fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
+              }
             }
 #endif
     }

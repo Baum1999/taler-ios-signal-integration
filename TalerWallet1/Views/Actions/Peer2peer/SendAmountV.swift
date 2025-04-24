@@ -106,6 +106,7 @@ struct SendAmountV: View {
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 #if OIM
             .overlay {
+              if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMEditView(stack: stack.push(),
                                 scope: balance?.scopeInfo,
@@ -115,6 +116,7 @@ struct SendAmountV: View {
                       fwdButtonTapped: $buttonSelected)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
+              }
             }
 #endif
         if #available(iOS 16.4, *) {

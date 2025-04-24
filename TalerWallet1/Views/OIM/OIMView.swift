@@ -60,6 +60,7 @@ struct OIMnavBack<Content: View>: View {
     }
 }
 // MARK: -
+@available(iOS 16.4, *)
 struct OIMView: View {
     let stack: CallStack
     let scope: ScopeInfo?
@@ -159,6 +160,7 @@ struct OIMView: View {
     }
 }
 // MARK: -
+@available(iOS 16.4, *)
 struct OIMPayView: View {
     let stack: CallStack
     let scope: ScopeInfo?
@@ -197,6 +199,7 @@ struct OIMPayView: View {
     }
 }
 // MARK: -
+@available(iOS 16.4, *)
 struct OIMEditView: View {
     let stack: CallStack
     let scope: ScopeInfo?

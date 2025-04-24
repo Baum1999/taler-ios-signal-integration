@@ -300,9 +300,11 @@ struct PaymentView: View, Sendable {
             }
 #if OIM
             .overlay {
+              if #available(iOS 16.4, *) {
                 if controller.oimSheetActive {
                     OIMPayView(stack: stack.push(), scope: firstScope, amount: effective)
                 }
+              }
             }
 #endif
         } else {
