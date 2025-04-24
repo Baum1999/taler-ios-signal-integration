@@ -64,8 +64,8 @@ struct OIMnavBack<Content: View>: View {
 @available(iOS 16.4, *)
 struct OIMView: View {
     let stack: CallStack
-    let available: Amount?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
+    @Binding var selectedBalance: Balance?      // return user's choice
     @Binding var qrButtonTapped: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -74,6 +74,7 @@ struct OIMView: View {
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
     @State private var sending = false
+    @State private var available: Amount? = nil
 
     func sendAction() {
         let delay = cash.moveDown()
