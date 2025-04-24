@@ -11,9 +11,9 @@ import taler_swift
 fileprivate func intValue(_ amount: Amount?) -> UInt64 {
     if let amount {
         if !amount.isZero {
-            let value = amount.value * 100          // TODO: currency specs instead of 100
-//            print("intValue: \(Int(value)) \(currency.noteBase)")
-            return UInt64(value)
+            let int = amount.integer * 100              // TODO: currency specs instead of 100
+            let frac = amount.fraction / 1_000_000      // drop 6 zeroes
+            return int + UInt64(frac)
         }
     }
     return 0
