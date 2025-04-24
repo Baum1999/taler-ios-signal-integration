@@ -53,22 +53,22 @@ struct OIMcurrencyScroller: View {
         ScrollView(.horizontal) {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
-                    OIMcurrencyView(value: value,
-                                 currency: currency,
-                             availableVal: availableVal,
-                                  canEdit: true,
-                                      pct: 0.0,
-                                   action: { tap(value: value) }
+                    OIMcurrencyButton(value: value,
+                                   currency: currency,
+                               availableVal: availableVal,
+                                    canEdit: true,
+                                        pct: 0.0,
+                                     action: { tap(value: value) }
                     )
                     .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
-                    OIMcurrencyView(value: value,
-                                 currency: currency,
-                             availableVal: availableVal,
-                                  canEdit: true,
-                                      pct: 0.0,
-                                   action: { tap(value: value) }
+                    OIMcurrencyButton(value: value,
+                                   currency: currency,
+                               availableVal: availableVal,
+                                    canEdit: true,
+                                        pct: 0.0,
+                                     action: { tap(value: value) }
                     )
                     .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
                 }
