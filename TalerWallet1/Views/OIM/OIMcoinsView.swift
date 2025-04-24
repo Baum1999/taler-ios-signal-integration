@@ -28,14 +28,14 @@ struct OIMcoinsView1: View {
                 let shouldFly = tappedVal == value
                 let count = spread[index] + (shouldFly ? 1 : 0)
                 if count > 0 {
-                    OIMcoinStackV(stack: stack.push(),
-                                  value: value,
-                                  count: Int(count),
-                               currency: currency,
-                              tappedVal: tappedVal,
-                                 flying: $flying,
-                                  shake: shake,
-                                 canEdit: canEdit
+                    OIMcoinStackV1(stack: stack.push(),
+                                   value: value,
+                                   count: Int(count),
+                                currency: currency,
+                               tappedVal: tappedVal,
+                                  flying: $flying,
+                                   shake: shake,
+                                  canEdit: canEdit
                     ) {
                         withAnimation(Animation.easeIn1) {
                             amountVal -= value
