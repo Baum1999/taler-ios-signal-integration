@@ -64,17 +64,26 @@ final class OIMcash: ObservableObject, Sendable {
     var currency: OIMcurrency
     @Published var funds: OIMfunds = []
 
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
-
     init(_ currency: OIMcurrency? = nil) {
         if let currency {
             self.currency = currency
         } else {
             self.currency = OIMeuros
         }
-        if sierraLeone {
-            self.currency = OIMleones
+    }
+
+    func max(available: UInt64) -> UInt64 {
+        for note in currency.bankNotes {
+            if note <= available {
+                return note
+            }
         }
+        for coin in currency.bankCoins {
+            if coin <= available {
+                return coin
+            }
+        }
+        return 0
     }
 
     var delay: Double {
@@ -316,13 +325,15 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
+    @discardableResult
     func moveDown() -> Double {
         let sorted = sortByValue()
 
         var counter = 0.0
         var lastVal: UInt64 = 0
         for var fund in sorted {
-            withAnimation(.easeOut1.delay(counter * 0.1)) {
+//            withAnimation(.easeOut1.delay(counter * 0.1)) {
+            withAnimation(.easeOut1) {
                 fund.state = .returning
                 self.updateFund(fund)
             }
@@ -334,9 +345,19 @@ final class OIMcash: ObservableObject, Sendable {
         return counter * 0.1
     }
 
-    func update(_ notesCoins: OIMnotesCoins, currency: OIMcurrency) {
-        let chng1 = update(notesCoins.0, currencyNotesCoins: currency.bankNotes)
-        let chng2 = update(notesCoins.1, currencyNotesCoins: currency.bankCoins)
+    func moveBack() {
+        for var fund in funds {
+            if fund.state == .returning {
+                fund.state = .idle
+                self.updateFund(fund)
+            }
+        }
+    }
+
+    func update(_ intVal: UInt64) {
+        let result = currency.notesCoins(intVal)
+        let chng1 = update(result.0, currencyNotesCoins: currency.bankNotes)
+        let chng2 = update(result.1, currencyNotesCoins: currency.bankCoins)
     }
 
     func update(_ notesCoins: OIMdenominations, currencyNotesCoins: OIMdenominations) -> Bool {

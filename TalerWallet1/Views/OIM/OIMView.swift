@@ -154,8 +154,7 @@ struct OIMView: View {
         .environmentObject(cash)
         .task {
             availableVal = intValue(available)
-            let result = currency.notesCoins(availableVal)
-            cash.update(result, currency: currency)
+            cash.update(availableVal)
         }
     }
 }
@@ -275,8 +274,7 @@ struct OIMEditView: View {
         .task {
             amountVal = intValue(amount)
             availableVal = isAvailable
-            let result = currency.notesCoins(amountVal)
-            cash.update(result, currency: currency)
+            cash.update(amountVal)
         }
     }
 }
