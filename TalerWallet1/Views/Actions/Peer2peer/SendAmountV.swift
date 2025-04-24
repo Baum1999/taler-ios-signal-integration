@@ -104,6 +104,7 @@ struct SendAmountV: View {
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
+#if OIM
             .overlay {
                 if controller.oimModeActive {
                     OIMEditView(stack: stack.push(),
@@ -114,6 +115,7 @@ struct SendAmountV: View {
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             }
+#endif
         if #available(iOS 16.0, *) {
             if #available(iOS 16.4, *) {
                 scrollView.toolbar(.hidden, for: .tabBar)

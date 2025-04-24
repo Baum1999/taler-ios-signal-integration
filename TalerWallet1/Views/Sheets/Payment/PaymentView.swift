@@ -298,11 +298,13 @@ struct PaymentView: View, Sendable {
                 }
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
             }
+#if OIM
             .overlay {
                 if controller.oimSheetActive {
                     OIMPayView(stack: stack.push(), scope: firstScope, amount: effective)
                 }
             }
+#endif
         } else {
             LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
                 .task { await viewDidLoad() }

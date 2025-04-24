@@ -153,11 +153,13 @@ struct MainView: View {
                     } // iOS 15
                 }
         }
+#if OIM
         .onRotate { newOrientation in
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
             controller.setOIMmode(for: newOrientation, isSheetActive)
             tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
+#endif
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
             // will be called on a taler:// scheme either

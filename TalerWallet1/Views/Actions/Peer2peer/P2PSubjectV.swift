@@ -176,6 +176,7 @@ struct P2PSubjectV: View {
         }
 
         scrollView
+#if OIM
             .overlay {
                 if controller.oimModeActive {
                     OIMSubjectView(stack: stack.push(),
@@ -185,6 +186,7 @@ struct P2PSubjectV: View {
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             }
+#endif
     }
 }
 // MARK: -

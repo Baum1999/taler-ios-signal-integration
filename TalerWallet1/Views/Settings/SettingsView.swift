@@ -43,7 +43,6 @@ struct SettingsView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
     @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
-    @AppStorage("sierraLeone") var sierraLeone: Bool = false
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
     @State private var checkDisabled = false
@@ -147,12 +146,10 @@ struct SettingsView: View {
                     consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
                 }
-                if controller.oimModeEnabled {
-                    SettingsToggle(name: String(localized: "Two rows"), value: $oimTwoRows, id1: "oimTwoRows",
-                                   description: minimalistic ? nil : String(localized: "OIM denomination layout"))
-                    SettingsToggle(name: String(localized: "Sierra Leone"), value: $sierraLeone, id1: "sierraLeone",
-                                   description: minimalistic ? nil : String(localized: "Currency to be used for OIM"))
-                }
+#if OIM
+                SettingsToggle(name: String(localized: "Two rows"), value: $oimTwoRows, id1: "oimTwoRows",
+                                description: minimalistic ? nil : String(localized: "OIM denomination layout"))
+#endif
 #if DEBUG
                 let showDiagnostic = diagnosticModeEnabled
 #else

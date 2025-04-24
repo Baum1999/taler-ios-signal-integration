@@ -55,9 +55,10 @@ class Controller: ObservableObject {
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
 
     @Published var isConnected: Bool = true
-    @Published var oimModeEnabled: Bool = false
+#if OIM
     @Published var oimModeActive: Bool = false
     @Published var oimSheetActive: Bool = false
+#endif
     @Published var diagnosticModeEnabled: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
@@ -73,22 +74,18 @@ class Controller: ObservableObject {
 
     private let monitor = NWPathMonitor()
 
-    private var oimModeObservation: NSKeyValueObservation?
     private var diagnosticModeObservation: NSKeyValueObservation?
-
+#if OIM
     func setOIMmode(for newOrientation: UIDeviceOrientation, _ sheetActive: Bool) {
         let isLandscapeRight = newOrientation == .landscapeRight
-        oimSheetActive = sheetActive && oimModeEnabled && isLandscapeRight
-        oimModeActive = sheetActive ? false
-                   : oimModeEnabled ? isLandscapeRight
-                                    : false
+        oimSheetActive = sheetActive && isLandscapeRight
+         oimModeActive = sheetActive ? false
+                                     : isLandscapeRight
     }
+#endif
 
     func startObserving() {
         let defaults = UserDefaults.standard
-        self.oimModeObservation = defaults.observe(\.oimModeEnabled, options: [.new, .old, .prior, .initial]) { [weak self](_, _) in
-            self?.oimModeEnabled = UserDefaults.standard.oimModeEnabled
-        }
         self.diagnosticModeObservation = defaults.observe(\.diagnosticModeEnabled, options: [.new, .old,.prior,.initial]) {  [weak self](_, _) in
             self?.diagnosticModeEnabled = UserDefaults.standard.diagnosticModeEnabled
         }

@@ -69,6 +69,7 @@ struct BalancesListView: View {
                         await refresh()
                     }
                 }
+#if OIM
                 .overlay {
                     if controller.oimModeActive {
                         let balance = controller.balances.first
@@ -79,6 +80,7 @@ struct BalancesListView: View {
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
                 }
+#endif
             }
         }
     }
