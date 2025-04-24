@@ -14,7 +14,7 @@ import SymLog
 struct WithdrawExchangeV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?
     var url: URL
 
     @EnvironmentObject private var controller: Controller
@@ -61,7 +61,7 @@ struct WithdrawExchangeV: View {
             let scopeInfo = exchange.scopeInfo
             Group {
                 ManualWithdraw(stack: stack.push(),
-                     selectedBalance: $selectedBalance,
+                     selectedBalance: selectedBalance,
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,
                             exchange: $exchange,           // only for withdraw-exchange

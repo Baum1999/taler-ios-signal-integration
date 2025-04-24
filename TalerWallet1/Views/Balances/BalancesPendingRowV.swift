@@ -63,7 +63,7 @@ struct BalancesPendingRowV: View {
             let destination = TransactionsListView(stack: stack.push(),
                                                    scope: balance.scopeInfo,
                                                  balance: balance,
-                                         selectedBalance: $selectedBalance,
+                                         selectedBalance: $selectedBalance,     // set in there
                                                 navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
                                             transactions: $pendingTransactions,
                                          reloadAllAction: reloadPending)

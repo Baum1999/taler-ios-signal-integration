@@ -14,7 +14,7 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    @Binding var selectedBalance: Balance?                      // pass down to TransactionsListView
     @Binding var reloadTransactions: Int
     @Binding var qrButtonTapped: Bool
 
@@ -47,11 +47,14 @@ struct BalancesListView: View {
                         await refresh()
                     }
             } else {
+                /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
+                ///   However, the user can select another balance (with the picker) in each action
+                /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
                 Group {
                     List(controller.balances, id: \.self) { balance in
                         BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                           balance: balance,                     // this is the currency to be used
-                                  selectedBalance: $selectedBalance,
+                                  selectedBalance: $selectedBalance,            // set in TransactionsListView
                                      sectionCount: count,
                                  amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                           summary: $summary,
@@ -59,7 +62,7 @@ struct BalancesListView: View {
                     }
                     .onAppear() {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
-                        selectedBalance = nil
+                        selectedBalance = nil                                   // reset
                     }
                     .listStyle(myListStyle.style).anyView
                     .refreshable {

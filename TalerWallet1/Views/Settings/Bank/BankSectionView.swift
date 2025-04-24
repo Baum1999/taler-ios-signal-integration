@@ -15,7 +15,7 @@ struct BankSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let account: BankAccountsInfo
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     let goToEdit: Bool
 
@@ -82,7 +82,7 @@ struct BankSectionView: View {
                     let navTitle = String(localized: "NavTitle_Deposit",    // _Currency",
                                        defaultValue: "Deposit")             // \(currencySymbol)"
                     DepositAmountV(stack: stack.push(),
-                         selectedBalance: $selectedBalance,
+                         selectedBalance: selectedBalance,
                           amountLastUsed: $amountLastUsed,
                                 paytoUri: account.paytoUri,
                                    label: account.label)

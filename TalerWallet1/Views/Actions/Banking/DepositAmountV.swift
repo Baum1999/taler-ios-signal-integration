@@ -13,7 +13,7 @@ import SymLog
 struct DepositAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     let paytoUri: String?
     let label: String?

@@ -14,7 +14,7 @@ import SymLog
 struct DepositSelectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
 
 //    let amountAvailable: Amount?
@@ -79,7 +79,7 @@ struct DepositSelectV: View {
 //                  let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
                     BankSectionView(stack: stack.push(),
                                   account: account,
-                          selectedBalance: $selectedBalance,
+                          selectedBalance: selectedBalance,
                            amountLastUsed: $amountLastUsed,
                                  goToEdit: false)
                 }

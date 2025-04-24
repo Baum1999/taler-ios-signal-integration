@@ -20,7 +20,6 @@ struct BankListView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var selectedBalance: Balance? = nil
     @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // needed for Deposit, ignore
     @State private var showAddDialog: Bool = false
     @State private var bankAccounts: [BankAccountsInfo] = []
@@ -91,7 +90,7 @@ struct BankListView: View {
                 ForEach(bankAccounts, id: \.self) { account in
                     BankSectionView(stack: stack.push(),
                                   account: account,
-                          selectedBalance: $selectedBalance,                    // needed for Deposit, ignore
+                          selectedBalance: nil,                                 // needed for Deposit, ignore
                            amountLastUsed: $amountLastUsed,                     // needed for Deposit, ignore
                                  goToEdit: true)
                 }

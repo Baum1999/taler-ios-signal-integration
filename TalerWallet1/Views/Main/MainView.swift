@@ -31,7 +31,7 @@ struct MainView: View {
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
 
     @StateObject var tabBarModel = TabBarModel()
-    @State private var selectedBalance: Balance? = nil
+    @State private var selectedBalance: Balance? = nil              // gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
     @State private var showActionSheet = false
@@ -109,7 +109,7 @@ struct MainView: View {
 //            .animation(.default, value: model.error2 == nil)
                 .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack: stack.push(),
-                               selectedBalance: $selectedBalance,
+                               selectedBalance: selectedBalance,
                                      urlToOpen: $urlToOpen)
                         .id("onOpenURL")
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
@@ -118,7 +118,7 @@ struct MainView: View {
                        onDismiss: { showActionSheet = false; qrButtonTapped = false; userAction += 1 }
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                                  selectedBalance: $selectedBalance))
+                                        selectedBalance: selectedBalance))
 //                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
                     if #available(iOS 16.4, *) {
                         let scanDetent: PresentationDetent = .fraction(SCANDETENT)
@@ -320,18 +320,18 @@ extension MainView {
         private var tabContent: some View {
             /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
-                             selectedBalance: $selectedBalance,                 // if nil shows currency picker
+                             selectedBalance: selectedBalance,                  // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary)
             let requestDest = RequestPayment(stack: stack.push(Self.name),
-                                   selectedBalance: $selectedBalance,
+                                   selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary)
             let depositDest = DepositSelectV(stack: stack.push(Self.name),
-                                   selectedBalance: $selectedBalance,
+                                   selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed)
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
-                                          selectedBalance: $selectedBalance,
+                                          selectedBalance: selectedBalance,
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!
                                          amountToTransfer: $amountToTransfer,
                                                  exchange: $exchange,           // only for withdraw-exchange
@@ -362,7 +362,7 @@ extension MainView {
             /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
-                       selectedBalance: $selectedBalance,
+                       selectedBalance: $selectedBalance,                       // <= gets set in TransactionsListView
 //                   shouldReloadPending: $shouldReloadPending,
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)

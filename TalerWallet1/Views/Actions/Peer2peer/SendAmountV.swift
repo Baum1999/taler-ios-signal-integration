@@ -13,7 +13,7 @@ import SymLog
 struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?           // coming from transaction list or OIM
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
 
@@ -152,7 +152,7 @@ fileprivate struct Preview_Content: View {
                         pendingOutgoing: pending,
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
-          selectedBalance: $noBalance,
+          selectedBalance: noBalance,
            amountLastUsed: $amountToPreview,
                   summary: $summary)
     }

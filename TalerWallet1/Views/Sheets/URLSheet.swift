@@ -12,7 +12,7 @@ import SymLog
 struct URLSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?
+    let selectedBalance: Balance?
     @Binding var urlToOpen: URL?
 
     @EnvironmentObject private var controller: Controller
@@ -46,7 +46,7 @@ struct URLSheet: View {
                     WithdrawURIView(stack: stack.push(), url: passedURL)
                 case .withdrawExchange:
                     WithdrawExchangeV(stack: stack.push(),
-                            selectedBalance: $selectedBalance,
+                            selectedBalance: selectedBalance,
                                         url: passedURL)
                 case .pay:
                     PaymentView(stack: stack.push(), url: passedURL,
