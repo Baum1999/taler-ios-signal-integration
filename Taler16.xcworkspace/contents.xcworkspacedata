@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:TalerWallet.xcodeproj">
+      location = "group:TalerWallet16.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../quickjs-tart/QuickJS-rt.xcodeproj">
+      location = "group:../quickjs-tart/QuickJS-rt16.xcodeproj">
    </FileRef>
 </Workspace>
