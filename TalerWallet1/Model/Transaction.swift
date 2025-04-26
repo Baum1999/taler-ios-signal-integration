@@ -153,7 +153,7 @@ struct TransactionTransition: Codable {             // Notification
         case transition = "transaction-state-transition"
     }
     var type: TransitionType
-    var oldTxState: TransactionState
+    var oldTxState: TransactionState?
     var newTxState: TransactionState
     var transactionId: String
     var experimentalUserData: String?       // KYC

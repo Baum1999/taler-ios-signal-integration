@@ -215,7 +215,7 @@ extension WalletCore {
                     guard type != .refresh else { return }
                     let newMajor = decoded.newTxState.major
                     let newMinor = decoded.newTxState.minor
-                    let oldMinor = decoded.oldTxState.minor
+                    let oldMinor = decoded.oldTxState?.minor
                     switch newMajor {
                         case .done:
                             logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
