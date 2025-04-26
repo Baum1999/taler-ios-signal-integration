@@ -1,3 +1,9 @@
+Version 0.14.10 (wallet-core 0.14.16)
+
+- OIM is now only active for GNU Taler, not for Taler Wallet
+- bugfixes & animations
+
+
 Version 0.14.9 (wallet-core 0.14.15)
 
 - improved OIM
