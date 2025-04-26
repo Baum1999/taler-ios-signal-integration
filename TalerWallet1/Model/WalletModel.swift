@@ -46,8 +46,8 @@ enum InsufficientBalanceHint: String, Codable {
                 String(localized: "payment_balance_insufficient_hint_wallet_balance_material_insufficient",
                     defaultValue: "Some of the coins needed for this purchase are currently unavailable")
             case .walletBalanceAvailableInsufficient:
-                String(localized: "payment_balance_insufficient_hint_fees_not_covered",
-                    defaultValue: "You don't have enough \(currency).")
+                String(localized: "payment_balance_insufficient_max",
+                    defaultValue: "Balance insufficient! You don't have enough \(currency).")
             case .exchangeMissingGlobalFees:
                 String(localized: "payment_balance_insufficient_hint_exchange_missing_global_fees",
                     defaultValue: "Provider is missing the global fee configuration, this likely means it is misconfigured")
