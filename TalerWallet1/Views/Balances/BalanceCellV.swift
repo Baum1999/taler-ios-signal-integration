@@ -64,7 +64,7 @@ struct BalanceCellV: View {
                     hLayout
                 }
 
-                if #available(iOS 16.0, *) {
+                if #available(iOS 16.4, *) {
                     ViewThatFits(in: .horizontal) {
                         HStack(spacing: HSPACING) {
                             balanceText

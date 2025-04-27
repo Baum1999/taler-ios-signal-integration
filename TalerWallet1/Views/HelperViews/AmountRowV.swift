@@ -37,7 +37,7 @@ struct AmountRowV: View {
             }
         }
         Group {
-            if #available(iOS 16.0, *) {
+            if #available(iOS 16.4, *) {
                 ViewThatFits(in: .horizontal) {
                     HStack(alignment: .lastTextBaseline) {
                         titleV//.border(.orange)

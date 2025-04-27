@@ -153,7 +153,7 @@ struct OIMlineView: View {
 #endif
             }
         }
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             Group {
                 if false {
                     scrollView

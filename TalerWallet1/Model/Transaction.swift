@@ -184,7 +184,7 @@ enum TxAction: String, Codable {
         return switch self {
             case .delete:   "trash"                     // 􀈑
             case .suspend:
-                if #available(iOS 16.0, *) {
+                if #available(iOS 16.4, *) {
                     "clock.badge.xmark"                 // 􁜒
                 } else {
                     "clock.badge.exclamationmark"       // 􀹶

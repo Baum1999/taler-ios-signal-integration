@@ -167,7 +167,7 @@ struct CurrencyInputView: View {
                         useShortcut = 0
                     }
                 }
-            if #available(iOS 16.0, *) {
+            if #available(iOS 16.4, *) {
                 let shortcuts = shortcuts(currencyField)
                 ViewThatFits(in: .horizontal) {
                     HStack {

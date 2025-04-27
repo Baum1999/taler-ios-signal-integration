@@ -111,7 +111,7 @@ struct P2PSubjectV: View {
                     .accessibilityHidden(true)
                     .padding(.top)
             }
-            Group { if #available(iOS 16.0, *) {
+            Group { if #available(iOS 16.4, *) {
                 TextField(placeHolder, text: $summary, axis: .vertical)
             } else {
                 TextField(placeHolder, text: $summary)

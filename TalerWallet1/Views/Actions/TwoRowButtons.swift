@@ -80,7 +80,7 @@ struct TypeButton: View {
             if minimalistic {
                 badge
             } else {
-                if #available(iOS 16.0, *) {
+                if #available(iOS 16.4, *) {
                     ViewThatFits(in: .horizontal) {
                         hLayout
                         vLayout
@@ -141,7 +141,7 @@ struct TwoRowButtons: View {
             recvButton(recvTitle.tabbed(oneLine: true))
         }
 
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             ViewThatFits(in: .horizontal) {
                 hLayout
 //                    .border(.green)

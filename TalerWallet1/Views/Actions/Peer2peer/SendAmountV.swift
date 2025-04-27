@@ -116,13 +116,9 @@ struct SendAmountV: View {
                 }
             }
 #endif
-        if #available(iOS 16.0, *) {
-            if #available(iOS 16.4, *) {
-                scrollView.toolbar(.hidden, for: .tabBar)
-                    .scrollBounceBehavior(.basedOnSize)
-            } else {
-                scrollView.toolbar(.hidden, for: .tabBar)
-            }
+        if #available(iOS 16.4, *) {
+            scrollView.toolbar(.hidden, for: .tabBar)
+                .scrollBounceBehavior(.basedOnSize)
         } else {
             scrollView
         }

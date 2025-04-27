@@ -171,7 +171,7 @@ struct TransactionSummaryV: View {
                         statusT
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    if #available(iOS 16.0, *) {
+                    if #available(iOS 16.4, *) {
                         ViewThatFits(in: .horizontal) {
                             HStack(spacing: HSPACING) {
                                 imageT

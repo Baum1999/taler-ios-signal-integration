@@ -177,7 +177,7 @@ struct TransactionRowView: View {
 #if DEBUG
                 .border(blue)
 #endif
-            if #available(iOS 16.0, *) {
+            if #available(iOS 16.4, *) {
                 ViewThatFits(in: .horizontal) {
                     layout1
 #if DEBUG

@@ -136,7 +136,7 @@ struct BankSectionRow: View {
 
         if minimalistic {
             Text(value)
-        } else if #available(iOS 16.0, *) {
+        } else if #available(iOS 16.4, *) {
             ViewThatFits(in: .horizontal) {
                 hLayout
                 vLayout

@@ -49,7 +49,7 @@ struct PendingRowView: View {
             }
         }
 
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             ViewThatFits(in: .horizontal) {
                 HStack {
                     iconBadge

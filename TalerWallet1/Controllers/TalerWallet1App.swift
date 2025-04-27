@@ -71,7 +71,7 @@ struct TalerWallet1App: App {
                 default: break
             }
         }
-//        if #available(iOS 16.0, *) {
+//        if #available(iOS 16.4, *) {
 //            .backgroundTask(.appRefresh("net.taler.refresh")) {
 //                symLog.log("backgroundTask running")
 //#if 0

@@ -41,7 +41,7 @@ struct ExchangeListView: View {
         let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         let enterURL = String(localized: "Enter the URL")
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             ExchangeListCommonV(symLog: symLog, stack: stack.push())
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)

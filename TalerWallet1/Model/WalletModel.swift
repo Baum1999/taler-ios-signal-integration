@@ -376,7 +376,7 @@ extension WalletModel {
     }
 
     private func dbPath(_ export:Bool = false) throws -> String {
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             let documents = URL.documentsDirectory                              // accessible by FileSharing
             let docsPath = documents.path(percentEncoded: false)
             if export {

@@ -59,7 +59,7 @@ struct QRCodeDetailView: View {
         if talerURI.count > 10 {
             Section {
                 Group {
-//                    if #available(iOS 16.0, *) {
+//                    if #available(iOS 16.4, *) {
 //                        let screenWidth = UIScreen.screenWidth
 //                        GradientBorder(size: screenWidth/1.8,
 //                                      color: .accentColor,

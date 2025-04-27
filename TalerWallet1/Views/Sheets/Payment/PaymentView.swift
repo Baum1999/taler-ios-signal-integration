@@ -252,7 +252,7 @@ struct PaymentView: View, Sendable {
                                             text
                                                 .contentTransition(.numericText(countsDown: true))
                                                 .animation(.default, value: elapsed)
-                                        } else if #available(iOS 16.0, *) {
+                                        } else if #available(iOS 16.4, *) {
                                             text
                                                 .animation(.default, value: elapsed)
                                         } else {

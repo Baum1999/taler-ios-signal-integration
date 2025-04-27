@@ -55,7 +55,7 @@ struct ScopePicker: View {
                     .accessibilityHidden(true)
                     .foregroundColor(disabled ? .secondary : .primary)
 
-                if #available(iOS 16.0, *) {
+                if #available(iOS 16.4, *) {
                     ScopeDropDown(selection: $selected,
                                 onlyNonZero: onlyNonZero,
                                    disabled: disabled)
@@ -92,7 +92,7 @@ struct ScopePicker: View {
     }
 }
 // MARK: -
-@available(iOS 16.0, *)
+@available(iOS 16.4, *)
 struct  ScopeDropDown: View {
     @Binding  var selection: Int
     let onlyNonZero: Bool

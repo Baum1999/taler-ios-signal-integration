@@ -60,7 +60,7 @@ struct SubjectInputV<TargetView: View>: View {
                     .accessibilityRemoveTraits(.isStaticText)
                     .padding(.top)
             }
-            Group { if #available(iOS 16.0, *) {
+            Group { if #available(iOS 16.4, *) {
                 TextField(minimalistic ? "Subject" : EMPTYSTRING, text: $summary, axis: .vertical)
                     .focused($isFocused)
                     .lineLimit(2...)

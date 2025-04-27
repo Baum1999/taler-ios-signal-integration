@@ -329,7 +329,7 @@ public class CurrencyFormatter: NumberFormatter {
 //        self.currencyCode = EUR_4217
 //        self.currencySymbol = "€"
         self.locale = Locale.autoupdatingCurrent                                // TODO: Yikes, might override my currency! Needs testing!
-        if #available(iOS 16.0, *) {
+        if #available(iOS 16.4, *) {
             let currency = self.locale.currency
             if let currencyCode = currency?.identifier {
                 self.name = self.locale.localizedString(forCurrencyCode: currencyCode)
