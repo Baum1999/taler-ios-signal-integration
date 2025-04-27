@@ -10,37 +10,28 @@ import taler_swift
 
 enum FundState: Int {
     case idle
-    case shaking
     case flying
     case flipped
 }
 
 /// data structure for a cash item on the table
 public struct OIMfund: Identifiable, Equatable, Hashable {
+    public let id: Int                  // support multiple funds with the same value
     let value: UInt64
-    var fundState: FundState
-    public let id: UUID                // support multiple funds with the same value
+    var state: FundState
 
-    var match: String {
-        if fundState == .flying {
-            return String(value)
-        }
-        return String("\(id)")
-//        return String("-\(value)")
+    var targetID: String {
+        String(state == .flying ? -Int(value)       // match sourceID
+                                : id)
     }
 }
 public typealias OIMfunds = [OIMfund]
 
-//public struct OIMfunds: Identifiable, Hashable {
-//    var funds: [OIMfund]
-//    public let id: UUID                // support multiple funds with the same value
-//}
 // MARK: -
 class OIMcash: ObservableObject {
+    var ticker = 0                  // increment each time a fund is added (or melted from others)
     var currency: OIMcurrency
-    @Published var shake: UInt64 = 0
     @Published var funds: OIMfunds = []
-//    @Published var funds = OIMfunds(funds: [], id: UUID())
 
     @AppStorage("sierraLeone") var sierraLeone: Bool = false
 
@@ -55,47 +46,40 @@ class OIMcash: ObservableObject {
         }
     }
 
-    func insertFund(_ item: OIMfund) {
-        var didInsert = false
-//        for (index, fund) in funds.funds.enumerated() {
-        for (index, fund) in funds.enumerated() {
-            if !didInsert {
-                if fund.value < item.value {
-                    funds.insert(item, at: index)
-//                    funds.funds.insert(item, at: index)
-                    didInsert = true
-                    break
-                }
-            }
-        }
-        if !didInsert {
-            funds.append(item)
-//            funds.funds.append(item)
-        }
+    func notes() -> OIMfunds {
+        let firstCoinVal = currency.bankCoins[0]
+        return funds.filter { $0.value > firstCoinVal }
+    }
+
+    func coins() -> OIMfunds {
+        let firstCoinVal = currency.bankCoins[0]
+        return funds.filter { $0.value <= firstCoinVal }
     }
 
     func addCash(_ value: UInt64) {
-        let fund = OIMfund(value: value, fundState: .flying, id: UUID())
-        insertFund(fund)
+        let fund = OIMfund(id: ticker, value: value, state: .flying)
+        ticker += 1
+        funds.append(fund)
     }
 
-    func removeCash(value: UInt64) {
-        if let index = funds.lastIndex(where: { $0.value == value && $0.fundState == .flipped }) {
-//        if let index = funds.funds.lastIndex(where: { $0.value == value && $0.fundState == .idle }) {
+    func removeCash(id: Int, value: UInt64) {
+        if let index = funds.firstIndex(where: { $0.id == id }) {
             funds.remove(at: index)
-//            funds.funds.remove(at: index)
+        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state == .flipped }) {
+            funds.remove(at: index)
         } else if let index = funds.firstIndex(where: { $0.value == value }) {
-//        } else if let index = funds.funds.firstIndex(where: { $0.value == value }) {
             funds.remove(at: index)
-//            funds.funds.remove(at: index)
         }
     }
 
     func updateFund(_ item: OIMfund) {
         let itemID = item.id
-        funds = funds.map {
-//        funds.funds = funds.funds.map {
-            $0.id == itemID ? item : $0
+        if let index = funds.firstIndex(where: { $0.id == itemID }) {
+            funds[index] = item
+        } else {
+            funds = funds.map {
+                $0.id == itemID ? item : $0
+            }
         }
     }
 
@@ -117,7 +101,6 @@ class OIMcash: ObservableObject {
 
     func update(_ notesCoins: OIMdenominations, currencyNotesCoins: OIMdenominations) -> Bool {
         var array = funds
-//        var array = funds.funds
         var changed = false
         for (index, value) in currencyNotesCoins.enumerated() {
             let wanted = notesCoins[index]      // number of notes which should be shown
@@ -134,8 +117,8 @@ class OIMcash: ObservableObject {
                 count -= 1
             }
             while count < wanted {
-//                let note = OIMcashItem(value: value, pos: -1, isFlying: false, shake: false, id: UUID())
-                let note = OIMfund(value: value, fundState: .idle, id: UUID())
+                let note = OIMfund(id: ticker, value: value, state: .idle)
+                ticker += 1
                 print("update: add \(note.value)")
                 array.append(note)
                 changed = true
@@ -144,7 +127,6 @@ class OIMcash: ObservableObject {
         }
         if changed {
             funds = array
-//            funds.funds = array
         }
         return changed
     }

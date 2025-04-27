@@ -48,7 +48,7 @@ struct OIMmod: AnimatableModifier {
     let name: String?
     let availableVal: UInt64
     let canEdit: Bool
-//    let isFlipped: Bool
+    let isFlipped: Bool
     var pct: CGFloat
     let action: () -> Void
 
@@ -63,6 +63,8 @@ struct OIMmod: AnimatableModifier {
         let image = currencyImage.image
                         .resizable()
                         .scaledToFit()
+        let oWidth = currencyImage.oWidth / 4
+        let oHeight = currencyImage.oHeight / 4
         return Group {
             if canEdit && availableVal >= value {
                 Button(action: action) {
@@ -74,10 +76,11 @@ struct OIMmod: AnimatableModifier {
                     .opacity(canEdit ? 0.5 : 1.0)
             }
         }
-            .frame(width: currencyImage.oWidth / 4, height: currencyImage.oHeight / 4)
+            .frame(width: (isFlipped ? 0.7 * oWidth : oWidth),
+                  height: (isFlipped ? 0.7 * oHeight : oHeight))
             .shadow(radius: shadow)
-//            .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
-//            .animation(.basic1, value: isFlipped)
+            .rotation3DEffect(.degrees(isFlipped ? 135 : 0), axis: (x: 0, y: 1, z: 0))
+            .animation(.basic1, value: isFlipped)
             .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))         // TODO: currency name
     }
 }
@@ -85,11 +88,10 @@ struct OIMmod: AnimatableModifier {
 /// renders 1 denomination from a currency
 struct OIMcurrencyButton: View {
     let stack: CallStack
-    let value: UInt64
+    let fund: OIMfund
     let currency: OIMcurrency
     let availableVal: UInt64
     let canEdit: Bool
-//    let isFlipped: Bool
     var pct: CGFloat
     let action: () -> Void
 
@@ -97,6 +99,7 @@ struct OIMcurrencyButton: View {
 
     var body: some View {
         let currency = cash.currency
+        let value = fund.value
         let name = value > currency.bankCoins[0] ? currency.noteName(value)
                                                  : currency.coinName(value)
         // Use EmptyView, because the modifier actually ignores
@@ -105,7 +108,7 @@ struct OIMcurrencyButton: View {
                                      name: name,
                              availableVal: availableVal,
                                   canEdit: canEdit,
-//                                isFlipped: isFlipped,
+                                isFlipped: fund.state == .flipped,
                                       pct: pct,
                                    action: action))
     }

@@ -18,7 +18,7 @@ struct OIMfundState: LayoutValueKey {
     static let defaultValue: FundState = .idle
 }
 
-@available(iOS 16.0, *)
+@available(iOS 16.4, *)
 extension View {
     func oimID(_ value: Int) -> some View {
         self.layoutValue(key: OIMid.self, value: value)
@@ -31,7 +31,7 @@ extension View {
     }
 }
 
-@available(iOS 16.0, *)
+@available(iOS 16.4, *)
 extension LayoutSubview {
     var oimID: Int { self[OIMid.self] }
     var oimValue: UInt64 { self[OIMvalue.self] }
@@ -40,7 +40,7 @@ extension LayoutSubview {
 
 // MARK: -
 // renders a stack of (identical) banknotes with offset 10,20
-@available(iOS 16.0, *)
+@available(iOS 16.4, *)
 struct OIMlayoutView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -78,7 +78,7 @@ struct OIMlayoutView: View {
                         cash.updateFund(fund)
                     }
                     DispatchQueue.main.async {
-                        withAnimation(.remove1) {
+                        withAnimation(.fly1) {
                             symLog.log("    OIMlayoutView remove \(value)")
                             cash.removeCash(id: fund.id, value: fund.value)
                         }
@@ -111,7 +111,7 @@ struct OIMlayoutView: View {
     }
 }
 // MARK: -
-@available(iOS 16.0, *)
+@available(iOS 16.4, *)
 struct OIMlayout: Layout {
     struct CacheData {
         var maxHeight: CGFloat

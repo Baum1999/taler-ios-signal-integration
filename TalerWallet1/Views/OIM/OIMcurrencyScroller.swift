@@ -22,36 +22,33 @@ struct OIMcurrencyScroller: View {
         ScrollView(.horizontal) {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
+                    let fund = OIMfund(id: -Int(value), value: value, state: .idle)
+                    let sourceID = -Int(value)
                     OIMcurrencyButton(stack: stack.push(),
-                                      value: value,
+                                       fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
-//                                  isFlipped: false,
                                         pct: 0.0,
                                      action: { tappedVal = value }
                     )
-//                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
-                    .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
+                    .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
+                    let fund = OIMfund(id: -Int(value), value: value, state: .idle)
+                    let sourceID = -Int(value)
                     OIMcurrencyButton(stack: stack.push(),
-                                      value: value,
+                                       fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: true,
-//                                  isFlipped: false,
                                         pct: 0.0,
                                      action: { tappedVal = value }
                     )
-//                    .matchedGeometryEffect(id: value, in: wrapper.namespace, isSource: true)
-                    .matchedGeometryEffect(id: String(value), in: wrapper.namespace, isSource: true)
+                    .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
                 }
             }.padding(.trailing, UIScreen.hasNotch ? UIScreen.horzInsets : 0)   // ensure scrolling over the FaceID notch
         }
-        .clipped(antialiased: true)
-        .padding(.horizontal, 5)
-        .ignoresSafeArea(edges: .horizontal)
         .viewExtractor { view in
             if let scrollView = view as? UIScrollView {
                 if #available(iOS 17.4, *) {

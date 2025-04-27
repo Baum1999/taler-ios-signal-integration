@@ -84,10 +84,10 @@ struct OIMView: View {
         OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
-                OIMlineViews(stack: stack.push(),
-                         amountVal: $amountVal,
-                         tappedVal: $tappedVal,
-                           canEdit: false)
+                OIMlineView(stack: stack.push(),
+                        amountVal: $amountVal,
+                        tappedVal: $tappedVal,
+                          canEdit: false)
                 .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                 Spacer()
                 actions
@@ -121,10 +121,10 @@ struct OIMPayView: View {
         OIMbackground(amount: amount, currencyName: currency.noteBase) {
             VStack {
                 Spacer()
-                OIMlineViews(stack: stack.push(),
-                         amountVal: $amountVal,
-                         tappedVal: $tappedVal,
-                           canEdit: true)
+                OIMlineView(stack: stack.push(),
+                        amountVal: $amountVal,
+                        tappedVal: $tappedVal,
+                          canEdit: true)
                 .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                 Spacer()
             }.border(.red)
@@ -176,10 +176,10 @@ struct OIMEditView: View {
             ZStack {    // without this, money would fly below the scroller
               VStack {  // even though this is the only item in the ZStack
                 Spacer()
-                OIMlineViews(stack: stack.push(),
-                         amountVal: $amountVal,
-                         tappedVal: $tappedVal,
-                           canEdit: true)
+                OIMlineView(stack: stack.push(),
+                        amountVal: $amountVal,
+                        tappedVal: $tappedVal,
+                          canEdit: true)
                     .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                     .zIndex(1)  // make notes fly from topZ
                     .onChange(of: amountVal) { newVal in
@@ -201,6 +201,9 @@ struct OIMEditView: View {
                     }
               }
                 .border(.red)
+//                .if(.iOS15) { view in
+//                    view.ignoresSafeArea(edges: .bottom)            // sadly, this does not work, because there is always a bottom bar :-(
+//                }
             } // ZStack
         }
         .environmentObject(cash)
@@ -242,7 +245,6 @@ struct OIMSubjectView: View {
         }.task {
 
         }
-
     }
 }
 
