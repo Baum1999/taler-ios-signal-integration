@@ -78,7 +78,7 @@ struct OIMlayoutView: View {
                         cash.updateFund(fund)
                     }
                     DispatchQueue.main.async {
-                        withAnimation(.fly1) {
+                        withAnimation(.remove1) {
                             symLog.log("    OIMlayoutView remove \(value)")
                             cash.removeCash(id: fund.id, value: fund.value)
                         }
