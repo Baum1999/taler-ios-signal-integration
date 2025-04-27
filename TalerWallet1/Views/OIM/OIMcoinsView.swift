@@ -82,5 +82,5 @@ struct OIMcoinsView2: View {
 }
 // MARK: -
 //#Preview {
-//    OIMlineView()
+//    OIMcoinsView()
 //}

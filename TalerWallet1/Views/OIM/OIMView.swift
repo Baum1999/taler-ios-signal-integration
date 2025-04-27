@@ -27,7 +27,7 @@ struct OIMnavBack<Content: View>: View {
     @Binding var fwdButtonTapped: Bool
     var content: () -> Content
 
-    @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
+    @Environment(\.dismiss) var dismiss     // pop back once
 
     var body: some View {
         OIMbackground(amount: amount, currencyName: currencyName) {
@@ -51,7 +51,6 @@ struct OIMnavBack<Content: View>: View {
         }
     }
 }
-
 // MARK: -
 struct OIMView: View {
     let stack: CallStack
@@ -89,6 +88,7 @@ struct OIMView: View {
                          amountVal: $amountVal,
                          tappedVal: $tappedVal,
                            canEdit: false)
+                .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                 Spacer()
                 actions
             }//.border(.red)
@@ -96,6 +96,8 @@ struct OIMView: View {
         .environmentObject(cash)
         .task {
             amountVal = intValue(amount)
+            let result = currency.notesCoins(amountVal)
+            cash.update(result, currency: currency)
         }
     }
 }
@@ -123,6 +125,7 @@ struct OIMPayView: View {
                          amountVal: $amountVal,
                          tappedVal: $tappedVal,
                            canEdit: true)
+                .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                 Spacer()
             }.border(.red)
         }
@@ -143,12 +146,10 @@ struct OIMEditView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
-
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @StateObject private var cash = OIMcash()
     @State private var amountVal: UInt64 = 0
     @State private var availableVal: UInt64 = 0
-
     @State private var tappedVal: UInt64 = 0
 
     var isAvailable: UInt64 {
@@ -165,7 +166,6 @@ struct OIMEditView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-
         let currency = cash.currency
         OIMnavBack(stack: stack.push(),
                    scope: scope,
@@ -180,11 +180,12 @@ struct OIMEditView: View {
                          amountVal: $amountVal,
                          tappedVal: $tappedVal,
                            canEdit: true)
+                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                     .zIndex(1)  // make notes fly from topZ
                     .onChange(of: amountVal) { newVal in
                         let currencyStr = amount.currencyStr
                         amount = Amount(currency: currencyStr, cent: UInt64(newVal))
-                        availableVal = intValue(available) - intValue(amount)
+                        availableVal = isAvailable
                     }
                 Spacer()
                 OIMcurrencyScroller(stack: stack.push(),
@@ -195,6 +196,7 @@ struct OIMEditView: View {
                     .padding(.horizontal, 5)
                     .ignoresSafeArea(edges: .horizontal)
                     .onChange(of: available) { newVal in
+                        // disable denominations if > available
                         availableVal = intValue(newVal) - intValue(amount)
                     }
               }
