@@ -160,44 +160,6 @@ struct OIMView: View {
 }
 // MARK: -
 @available(iOS 16.4, *)
-struct OIMPayView: View {
-    let stack: CallStack
-    let amount: Amount?
-//    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
-
-    @EnvironmentObject private var wrapper: NamespaceWrapper
-    @StateObject private var cash = OIMcash()
-
-    @State private var amountVal: UInt64 = 0
-    @State private var tappedVal: UInt64 = 0
-
-    var body: some View {
-//        let _ = Self._printChanges()
-        let currency = cash.currency
-
-        OIMbackground() {
-            VStack {
-                Spacer()
-                OIMlineView(stack: stack.push(),
-                        amountVal: $amountVal,
-                        tappedVal: $tappedVal,
-                          canEdit: true)
-                .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
-                Spacer()
-            }
-#if DEBUG
-            .border(.red)
-#endif
-        }
-        .environmentObject(cash)
-        .task {
-            amountVal = intValue(amount)
-        }
-
-    }
-}
-// MARK: -
-@available(iOS 16.4, *)
 struct OIMEditView: View {
     let stack: CallStack
     @Binding var amount: Amount
@@ -311,10 +273,3 @@ struct OIMSubjectView: View {
         }
     }
 }
-
-
-
-// MARK: -
-//#Preview {
-//    OIMView()
-//}

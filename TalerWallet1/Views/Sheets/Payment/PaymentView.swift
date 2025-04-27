@@ -302,7 +302,7 @@ struct PaymentView: View, Sendable {
             .overlay {
               if #available(iOS 16.4, *) {
                 if controller.oimSheetActive {
-                    OIMPayView(stack: stack.push(),
+                    OIMpayView(stack: stack.push(),
                               amount: effective)
                 }
               }
