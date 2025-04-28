@@ -125,6 +125,9 @@ struct OIMView: View {
             .border(.blue)
 #endif
 
+        let maxAvailable = cash.max(available: intValue(available))
+        let _ = print("maxAvailable", maxAvailable)
+
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
@@ -186,6 +189,7 @@ struct OIMView: View {
                                          cash: cash,
                                  availableVal: $availableVal,
                                     tappedVal: $tappedVal,
+                               scrollPosition: maxAvailable,
                                       canEdit: false)
                     .clipped(antialiased: true)
                     .padding(.horizontal, 5)
@@ -259,10 +263,12 @@ struct OIMEditView: View {
                         availableVal = isAvailable
                     }
                 Spacer()
+                let maxAvailable = useAvailable ? cash.max(available: intValue(available)) : 0
                 OIMcurrencyScroller(stack: stack.push(),
                                      cash: cash,
                              availableVal: $availableVal,
                                 tappedVal: $tappedVal,
+                           scrollPosition: maxAvailable,            // max note or coin (available)
                                   canEdit: true)
                     .zIndex(2)  // make notes fly from topZ
                     .clipped(antialiased: true)

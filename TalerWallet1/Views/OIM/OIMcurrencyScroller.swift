@@ -14,17 +14,23 @@ struct OIMcurrencyScroller: View {
     let cash: OIMcash
     @Binding var availableVal: UInt64
     @Binding var tappedVal: UInt64
+    let scrollPosition: UInt64
     let canEdit: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
+        var debugTick = 0
+        let _ = Self._printChanges()
+
         let currency = cash.currency
-        ScrollView(.horizontal) {
+        let taskID = currency.noteBase + String(scrollPosition)
+        ScrollViewReader { proxy in
+          ScrollView(.horizontal) {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
-                    let fund = OIMfund(id: -Int(value), state: .idle, value: value, flippedVal: nil)
                     let sourceID = -Int(value)
+                    let fund = OIMfund(id: sourceID, state: .idle, value: value, flippedVal: nil)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
@@ -33,11 +39,12 @@ struct OIMcurrencyScroller: View {
                                         pct: 0.9,
                                      action: { tappedVal = value }
                     )
+                    .id(currency.noteBase + String(sourceID))
                     .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
-                    let fund = OIMfund(id: -Int(value), state: .idle, value: value, flippedVal: nil)
                     let sourceID = -Int(value)
+                    let fund = OIMfund(id: sourceID, state: .idle, value: value, flippedVal: nil)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
@@ -46,10 +53,32 @@ struct OIMcurrencyScroller: View {
                                         pct: 0.9,
                                      action: { tappedVal = value }
                     )
+                    .id(currency.noteBase + String(sourceID))
                     .matchedGeometryEffect(id: String(sourceID), in: wrapper.namespace, isSource: true)
                 }
             }.padding(.trailing, UIScreen.hasNotch ? UIScreen.horzInsets : 0)   // ensure scrolling over the FaceID notch
         }
+          .onAppear {
+              if scrollPosition > 0 {
+                  print(">>> OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit)
+                  proxy.scrollTo(currency.noteBase + String(-Int(scrollPosition)), anchor: .leading)
+//                  DispatchQueue.main.async {
+//                      print(">>> OIMcurrencyScroller.onAppear scrolling AGAIN to", scrollPosition, canEdit)
+//                      proxy.scrollTo(-Int(scrollPosition), anchor: .leading)
+//                  }
+                  debugTick += 1
+              } else {      // should only happen if available is zero
+                  print("❗️❗️ OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit, stack.peek()?.file)
+              }
+          }
+          .task(id: taskID) {
+              if !canEdit && scrollPosition > 0 {
+                  debugTick += 1
+                  print(">>❗️ OIMcurrencyScroller.task", cash.currency.noteBase, availableVal, scrollPosition)
+                  proxy.scrollTo(currency.noteBase + String(-Int(scrollPosition)), anchor: .leading)
+                  debugTick += 1
+              }
+          }
         .viewExtractor { view in
             if let scrollView = view as? UIScrollView {
                 if #available(iOS 17.4, *) {
@@ -59,9 +88,6 @@ struct OIMcurrencyScroller: View {
                 }
             }
         }
+      }
     }
 }
-// MARK: -
-//#Preview {
-//    OIMcurrencyScroller()
-//}
