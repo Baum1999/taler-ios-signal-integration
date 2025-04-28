@@ -32,6 +32,7 @@ struct MainView: View {
 
     @StateObject var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil              // gets set in TransactionsListView
+    @State private var selectedIndex: Int? = nil                    // user selects savings box in OIMview
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
     @State private var showActionSheet = false
@@ -62,6 +63,7 @@ struct MainView: View {
         let mainContent = ZStack {
             MainContent(logger: logger, stack: stack.push("Content"),
                selectedBalance: $selectedBalance,
+                 selectedIndex: $selectedIndex,                     // user selects savings box in OIMview
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
                    showScanner: $showScanner,
@@ -244,6 +246,7 @@ extension MainView {
         let logger: Logger
         let stack: CallStack
         @Binding var selectedBalance: Balance?
+        @Binding var selectedIndex: Int?                            // user selects savings box in OIMview
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
@@ -327,10 +330,12 @@ extension MainView {
             /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
                              selectedBalance: selectedBalance,                  // if nil shows currency picker
+                               selectedIndex: selectedIndex,                    // selected savings box from OIMview
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary)
             let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
+                                   selectedIndex: selectedIndex,                // selected savings box from OIMview
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary)
             let depositDest = DepositSelectV(stack: stack.push(Self.name),
@@ -369,6 +374,7 @@ extension MainView {
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
                        selectedBalance: $selectedBalance,                       // <= gets set in TransactionsListView
+                         selectedIndex: $selectedIndex,                 // user selects savings box in OIMview
 //                   shouldReloadPending: $shouldReloadPending,
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)

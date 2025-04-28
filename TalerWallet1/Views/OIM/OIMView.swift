@@ -66,8 +66,10 @@ struct OIMView: View {
     let stack: CallStack
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var selectedBalance: Balance?      // return user's choice
+    @Binding var selectedIndex: Int?
     @Binding var qrButtonTapped: Bool
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @StateObject private var cash = OIMcash()
 
@@ -75,6 +77,7 @@ struct OIMView: View {
     @State private var tappedVal: UInt64 = 0
     @State private var sending = false
     @State private var available: Amount? = nil
+    @State private var isOpen: Int? = nil
 
     func sendAction() {
         let delay = cash.moveDown()
@@ -127,16 +130,41 @@ struct OIMView: View {
                 actions
                 VStack {
                     Spacer()
-                    OIMcurrencyScroller(stack: stack.push(),
-                                         cash: cash,
-                                 availableVal: $availableVal,
-                                    tappedVal: $tappedVal,
-                                      canEdit: false)
-                    .zIndex(1)  // make notes fly from topZ
-                    .clipped(antialiased: true)
-                    .padding(.horizontal, 5)
-                    .ignoresSafeArea(edges: .horizontal)
-                    .opacity(sending ? 1.0 : 0.01)
+                    HStack(spacing: 30) {
+//                        ForEach(controller.balances, id: \.self) { balance in
+//                            OIMbalanceButton(isOpen: selectedBalance == balance) {
+
+                        let balance = controller.balances[0]
+                        ForEach(0...1, id: \.self) { index in
+                            let itsMe = isOpen == index
+                            let isClosed = isOpen == nil
+                            let size = isClosed ? 120.0 : 66.0
+                            OIMbalanceButton(isOpen: itsMe, tint: index > 0) {
+                                withAnimation(.basic1) {
+                                    if itsMe {
+                                        isOpen = nil
+                                        selectedBalance = nil
+                                        selectedIndex = nil
+                                        available = nil
+                                    } else {
+                                        isOpen = index
+                                        selectedIndex = index
+                                        cash.currency = index == 0 ? OIMeuros : OIMleones
+                                        selectedBalance = balance
+                                        available = balance.available
+                                    }
+                                }
+                            }
+                            .frame(width: size, height: size)
+                            .zIndex(itsMe ? 3 : 0)
+                            .opacity((isClosed || itsMe) ? 1.0 : 0.01)
+                            .matchedGeometryEffect(id: itsMe ? (sending ? "OIMback" : "OIMnumber")
+                                                             : String(index),
+                                                   in: wrapper.namespace,isSource: false)
+                            .frame(width: size, height: size)
+                        }
+                    }
+                    Spacer()
                 }
             VStack {
                 Spacer()
@@ -152,6 +180,23 @@ struct OIMView: View {
 #if DEBUG
 //                .border(.red)
 #endif
+                VStack {
+                    Spacer()
+                    OIMcurrencyScroller(stack: stack.push(),
+                                         cash: cash,
+                                 availableVal: $availableVal,
+                                    tappedVal: $tappedVal,
+                                      canEdit: false)
+                    .clipped(antialiased: true)
+                    .padding(.horizontal, 5)
+                    .ignoresSafeArea(edges: .horizontal)
+                    .scrollDisabled(true)
+#if DEBUG
+                    .opacity(sending ? 1.0 : 0.3)
+#else
+                    .opacity(sending ? 1.0 : 0.01)
+#endif
+                }
             }
         }
         .task {

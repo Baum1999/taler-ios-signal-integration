@@ -21,7 +21,7 @@ struct SendAmountV: View {
     @EnvironmentObject private var model: WalletModel
 
 #if OIM
-    @StateObject private var cash = OIMcash()
+    @StateObject private var cash: OIMcash
 #endif
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
@@ -30,6 +30,25 @@ struct SendAmountV: View {
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
     @State private var buttonSelected = false
     @Namespace var namespace
+
+    init(stack: CallStack,
+         selectedBalance: Balance?,
+         selectedIndex: Int?,
+         amountLastUsed: Binding<Amount>,
+         summary: Binding<String>
+    ) {
+        // SwiftUI ensures that the initialization uses the
+        // closure only once during the lifetime of the view, so
+        // later changes to the currency have no effect.
+        self.stack = stack
+        self.selectedBalance = selectedBalance
+        self._amountLastUsed = amountLastUsed
+        self._summary = summary
+#if OIM
+        let currency = selectedIndex == 1 ? OIMleones : OIMeuros
+        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
+#endif
+    }
 
     @MainActor
     private func viewDidLoad() async {
@@ -159,6 +178,7 @@ fileprivate struct Preview_Content: View {
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
           selectedBalance: noBalance,
+            selectedIndex: nil,
            amountLastUsed: $amountToPreview,
                   summary: $summary)
     }
