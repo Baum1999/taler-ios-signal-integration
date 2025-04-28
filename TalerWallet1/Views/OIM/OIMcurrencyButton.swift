@@ -150,12 +150,13 @@ struct OIMcurrencyButton: View {
                                 : 0.5
         //                    checkDisabled = true    // TODO: don't run twice
         let unavailable = availableVal < value
+        let disabled = !canEdit || isMorphing || unavailable        // cannot edit morphing funds
         EmptyView().modifier(OIMmod(name: imgName(outValue ?? value),
                              flippedName: imgName(flippedVal),
                                 flipTime: flipTime,
                                isFlipped: isFlipped,
                                 flipBack: mutating,
-                                disabled: !canEdit || isMorphing || unavailable,  //    cannot edit morphing funds
+                                disabled: disabled,
                              unavailable: unavailable,
                                invisible: state.hiding,
                                      pct: pct,

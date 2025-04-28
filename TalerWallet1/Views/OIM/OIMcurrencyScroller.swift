@@ -21,7 +21,7 @@ struct OIMcurrencyScroller: View {
 
     var body: some View {
         var debugTick = 0
-        let _ = Self._printChanges()
+//        let _ = Self._printChanges()
 
         let currency = cash.currency
         let taskID = currency.noteBase + String(scrollPosition)
@@ -60,7 +60,7 @@ struct OIMcurrencyScroller: View {
         }
           .onAppear {
               if scrollPosition > 0 {
-                  print(">>> OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit)
+//                  print(">>> OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit)
                   proxy.scrollTo(currency.noteBase + String(-Int(scrollPosition)), anchor: .leading)
 //                  DispatchQueue.main.async {
 //                      print(">>> OIMcurrencyScroller.onAppear scrolling AGAIN to", scrollPosition, canEdit)
@@ -68,13 +68,13 @@ struct OIMcurrencyScroller: View {
 //                  }
                   debugTick += 1
               } else {      // should only happen if available is zero
-                  print("❗️❗️ OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit, stack.peek()?.file)
+                  print("❗️❗️ OIMcurrencyScroller.onAppear scrolling to", scrollPosition, canEdit) // , stack.peek()?.file)
               }
           }
           .task(id: taskID) {
               if !canEdit && scrollPosition > 0 {
                   debugTick += 1
-                  print(">>❗️ OIMcurrencyScroller.task", cash.currency.noteBase, availableVal, scrollPosition)
+//                  print(">>❗️ OIMcurrencyScroller.task", cash.currency.noteBase, availableVal, scrollPosition)
                   proxy.scrollTo(currency.noteBase + String(-Int(scrollPosition)), anchor: .leading)
                   debugTick += 1
               }

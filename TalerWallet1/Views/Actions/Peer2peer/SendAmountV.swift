@@ -127,11 +127,16 @@ struct SendAmountV: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task { await viewDidLoad() }
-            .task(id: taskID) { await newBalance() }
+            .task(id: taskID) {
+                let avail = amountAvailable
+                await newBalance()
+//                print(">>> SendAmountV.task", taskID, avail, amountAvailable, stack.peek()?.file)
+            }
 #if OIM
             .overlay {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
+//                    let _ = print(">>> SendAmountV", amountAvailable, amountToTransfer, stack.peek()?.file)
                     let available = !amountAvailable.isZero ? amountAvailable
                                                             : balance?.available ??
                                                       selectedBalance?.available ??
