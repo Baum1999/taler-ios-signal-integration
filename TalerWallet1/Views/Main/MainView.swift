@@ -39,6 +39,7 @@ struct MainView: View {
     @State private var showScanner = false
 //    @State private var showCameraAlert: Bool = false
     @State private var qrButtonTapped = false
+    @State private var qrButton2Tapped = false
     @State private var innerHeight: CGFloat = .zero
     @State private var userAction = 0
 
@@ -53,6 +54,12 @@ struct MainView: View {
 //        if #available(iOS 17.0, *) {
 //            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
 //        }
+    }
+    private func dismissScanner() {
+        showActionSheet = false
+        qrButtonTapped = false
+        qrButton2Tapped = false
+        userAction += 1
     }
 
     var body: some View {
@@ -117,7 +124,7 @@ struct MainView: View {
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
                 }
                 .sheet(isPresented: $showScanner,
-                       onDismiss: { showActionSheet = false; qrButtonTapped = false; userAction += 1 }
+                         onDismiss: dismissScanner
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                         selectedBalance: selectedBalance))
@@ -133,18 +140,30 @@ struct MainView: View {
                     }
                 }
                 .sheet(isPresented: $showActionSheet,
-                       onDismiss: { showScanner = false; qrButtonTapped = false; userAction += 1 }
+                       onDismiss: { showScanner = false
+                                    qrButtonTapped = false
+                                    qrButton2Tapped = false
+                                    userAction += 1 }
                 ) {
                     if #available(iOS 16.4, *) {
 //                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
-                        DualHeightSheet(stack: stack.push(),
-                                        qrButtonTapped: $qrButtonTapped)
+                        if #available(iOS 18.3, *) {
+                            DualHeightSheet(stack: stack.push(),
+                                  selectedBalance: selectedBalance,
+                                   qrButtonTapped: $qrButton2Tapped,
+                                   dismissScanner: dismissScanner)
+                        } else {
+                            DualHeightSheet(stack: stack.push(),
+                                  selectedBalance: selectedBalance,
+                                   qrButtonTapped: $qrButtonTapped,
+                                   dismissScanner: dismissScanner)
+                        }
                     } else {
                         Group {
-                            Spacer()
+                            Spacer(minLength: 1)
                             ScrollView {
                                 ActionsSheet(stack: stack.push(),
-                                             qrButtonTapped: $qrButtonTapped)
+                                    qrButtonTapped: $qrButtonTapped)
                                 .innerHeight($innerHeight)
 //                              .padding()
                             }

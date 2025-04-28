@@ -95,7 +95,9 @@ struct ActionsSheet: View {
 @available(iOS 16.4, *)
 struct DualHeightSheet: View {
     let stack: CallStack
+    let selectedBalance: Balance?
     @Binding var qrButtonTapped: Bool
+    let dismissScanner: () -> Void
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
     @Environment(\.colorScheme) private var colorScheme
@@ -119,7 +121,7 @@ struct DualHeightSheet: View {
     }
 
     var body: some View {
-        ScrollView {
+        let scrollView = ScrollView {
             let background = colorScheme == .dark ? WalletColors().gray6
                                                   : WalletColors().gray2
             ActionsSheet(stack: stack.push(),
@@ -175,5 +177,22 @@ struct DualHeightSheet: View {
         }
         .edgesIgnoringSafeArea(.all)
         .frame(maxHeight: innerHeight)
+
+        if #available(iOS 18.3, *) {
+            scrollView
+                .sheet(isPresented: $qrButtonTapped,
+                         onDismiss: dismissScanner
+                ) {
+                    let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+                                        selectedBalance: selectedBalance))
+                    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+                    Sheet(stack: stack.push(), sheetView: qrSheet)
+                        .presentationDetents([scanDetent])
+                        .transition(.opacity)
+
+                }
+        } else {
+            scrollView
+        }
     }
 }
