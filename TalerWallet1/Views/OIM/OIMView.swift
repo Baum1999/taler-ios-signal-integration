@@ -63,6 +63,33 @@ struct OIMnavBack<Content: View>: View {
     }
 }
 // MARK: -
+struct OIMtitleView: View {
+    let cash: OIMcash
+    let amount: Amount?
+
+    @EnvironmentObject private var wrapper: NamespaceWrapper
+
+    var body: some View {
+        HStack {
+            // invisible - only serves as point where the selected balance chest moves to
+            OIMbalanceButton(isOpen: true, isSierra: false, isFinal: false) {}
+                .frame(width: 66, height: 66)
+                .disabled(true)
+                .opacity(0.01)
+                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace,isSource: true)
+
+            OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
+
+            OIMsendButton(isGoal: false, isFinal: false, enabled: false) {}
+                .frame(width: 66, height: 66)
+                .disabled(true)
+                .opacity(0.01)
+                .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace,isSource: true)
+
+        }
+    }
+}
+// MARK: -
 @available(iOS 16.4, *)
 struct OIMView: View {
     let stack: CallStack
@@ -77,7 +104,7 @@ struct OIMView: View {
     @StateObject private var cash = OIMcash()
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
-    @State private var sending = false
+    @State private var sending = false              // user tapped on Send
     @State private var available: Amount? = nil
     @State private var isOpen: Int? = nil
 
@@ -99,6 +126,15 @@ struct OIMView: View {
         }
     }
 
+    func close() {
+        withAnimation(.basic1) {
+            isOpen = nil
+            selectedBalance = nil
+            selectedIndex = nil
+            available = nil
+        }
+    }
+
     var body: some View {
         var debugTick = 0
 //        let _ = Self._printChanges()
@@ -108,11 +144,7 @@ struct OIMView: View {
         } else { false }
         let actions = HStack(alignment: .top) {
             QRButton(hideTitle: true) {
-//                var transaction = Transaction()
-//                transaction.disablesAnimations = true
-//                withTransaction(transaction) {
-                    qrButtonTapped = true
-//                }
+                qrButtonTapped = true
             }
                 .opacity(sending ? 0.01 : 1.0)
                 .frame(width: 66, height: 66)
@@ -123,12 +155,15 @@ struct OIMView: View {
         }
 
         let maxAvailable = cash.max(available: intValue(available))
-        let _ = print("maxAvailable", maxAvailable)
+//        let _ = print("maxAvailable", maxAvailable)
 
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
+                OIMtitleView(cash: cash, amount: available)
+
                 VStack {
+                    // this shows the two savings boxes (Germany and Sierra Leone)
                     Spacer()
                     HStack(spacing: 30) {
 //                        ForEach(controller.balances, id: \.self) { balance in
@@ -140,20 +175,15 @@ struct OIMView: View {
                             let isClosed = isOpen == nil
                             let size = isClosed ? 120.0 : 66.0
                             OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
-                                withAnimation(.basic1) {
-                                    if itsMe {
-                                        isOpen = nil
-                                        selectedBalance = nil
-                                        selectedIndex = nil
-                                        available = nil
-                                    } else {
-                                        isOpen = index
-                                        selectedIndex = index
-                                        cash.currency = index == 0 ? OIMeuros : OIMleones
-                                        selectedBalance = balance
-                                        available = balance.available
-                                    }
-                                }
+                                if itsMe {
+                                    close()
+                                } else { withAnimation(.basic1) {
+                                    isOpen = index
+                                    selectedIndex = index
+                                    cash.currency = index == 0 ? OIMeuros : OIMleones
+                                    selectedBalance = balance
+                                    available = balance.available
+                                } }
                             }
                             .frame(width: size, height: size)
                             .zIndex(itsMe ? 3 : 0)
@@ -165,7 +195,7 @@ struct OIMView: View {
                         }
                     }
                     Spacer()
-                }
+                } // two boxes
                 VStack {
                     Spacer()
                     OIMlineView(stack: stack.push(),
@@ -174,12 +204,12 @@ struct OIMView: View {
                             tappedVal: $tappedVal,
                               canEdit: false)
                     .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
-                    .zIndex(2)  // make notes fly from topZ
+                    .onTapGesture { close() }
+//                    .zIndex(2)  // make notes fly from topZ
                     Spacer()
                 }
-#if DEBUG
 //                .border(.red)
-#endif
+
                 VStack {
                     Spacer()
                     OIMcurrencyScroller(stack: stack.push(),
@@ -192,11 +222,7 @@ struct OIMView: View {
                     .padding(.horizontal, 5)
                     .ignoresSafeArea(edges: .horizontal)
                     .scrollDisabled(true)
-#if DEBUG
-                    .opacity(sending ? 1.0 : 0.3)
-#else
                     .opacity(sending ? 1.0 : 0.01)
-#endif
                 }
             }
         }
@@ -204,12 +230,12 @@ struct OIMView: View {
             availableVal = intValue(available)
             cash.update(availableVal)
             let maxAvailable = cash.max(available: intValue(available))
-            print("OIMView.task availableVal", availableVal, maxAvailable)
+//            print("OIMView.task availableVal", availableVal, maxAvailable)
             debugTick += 1
         }
         .onAppear {
             let maxAvailable = cash.max(available: intValue(available))
-            print("OIMView.onAppear availableVal", availableVal, maxAvailable)
+//            print("OIMView.onAppear availableVal", availableVal, maxAvailable)
             debugTick += 1
         }
         .onDisappear {
@@ -287,7 +313,7 @@ struct OIMEditView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
+//        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
         let noteBase = cash.currency.noteBase
         let isSierra = noteBase == "SLE"
@@ -300,51 +326,58 @@ struct OIMEditView: View {
                   amount: $amount,
                   action: sendAction
         ) {
-            ZStack {    // without this, money would fly below the scroller
-              VStack {  // even though this is the only item in the ZStack
-                Spacer()
-                OIMlineView(stack: stack.push(),
-                             cash: cash,
-                        amountVal: $amountVal,
-                        tappedVal: $tappedVal,          // <- user tapped a val in the scroller
-                          canEdit: true)
-                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
-                    .zIndex(1)  // make notes fly from topZ
-                    .onChange(of: amountVal) { newVal in
-                        let currencyStr = amount.currencyStr
-                        amount = Amount(currency: currencyStr, cent: UInt64(newVal))
-                        availableVal = isAvailable
+            ZStack(alignment: .top) {
+                VStack {
+                    OIMtitleView(cash: cash, amount: amount)
+                    Spacer()
+                    OIMlineView(stack: stack.push(),
+                                 cash: cash,
+                            amountVal: $amountVal,
+                            tappedVal: $tappedVal,          // <- user tapped a val in the scroller
+                              canEdit: true)
+                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
+                        .zIndex(1)  // make notes fly from topZ
+                        .onChange(of: amountVal) { newVal in
+                            let currencyStr = amount.currencyStr
+                            amount = Amount(currency: currencyStr, cent: UInt64(newVal))
+                            availableVal = isAvailable
+                        }
+                    if !sending {
+                        Spacer()
+                        Spacer()
                     }
-                Spacer()
-                let maxAvailable = useAvailable ? cash.max(available: intValue(available)) : 0
-                OIMcurrencyScroller(stack: stack.push(),
-                                     cash: cash,
-                             availableVal: $availableVal,           // ==> available - amount
-                                tappedVal: $tappedVal,
-                           scrollPosition: maxAvailable,            // max note or coin (available)
-                                  canEdit: true)
-                    .zIndex(2)  // make notes fly from topZ
-                    .clipped(antialiased: true)
-                    .padding(.horizontal, 5)
-                    .ignoresSafeArea(edges: .horizontal)
-//                    .onChange(of: available) { newVal in
-//                        print("available from \(available) to", newVal)
-//                        // disable denominations if > available
-//                        availableVal = intValue(newVal) - intValue(amount)
-//                    }
-              }
-#if DEBUG
-              .border(.red)
-#endif
-              .task {
-                  availableVal = intValue(available) - intValue(amount)
-              }
+                }
+                VStack {
+                    Spacer()
+                    let maxAvailable = useAvailable ? cash.max(available: intValue(available)) : 0
+                    OIMcurrencyScroller(stack: stack.push(),
+                                         cash: cash,
+                                 availableVal: $availableVal,           // ==> available - amount
+                                    tappedVal: $tappedVal,
+                               scrollPosition: maxAvailable,            // max note or coin (available)
+                                      canEdit: true)
+                        .zIndex(2)  // make notes fly from topZ
+                        .clipped(antialiased: true)
+                        .padding(.horizontal, 5)
+                        .ignoresSafeArea(edges: .horizontal)
+                        .opacity(sending ? 0.01 : 1.0)
+                }
+//              .border(.red)
+
+//                            .task {
+//                                availableVal = intValue(available) - intValue(amount)
+//                            }
             } // ZStack
         }
         .task {
             amountVal = intValue(amount)
             availableVal = isAvailable
             cash.update(amountVal)
+        }
+        .onAppear {
+            withAnimation(.basic1) {
+                sending = false                              //
+            }
         }
     }
 }
@@ -357,6 +390,23 @@ struct OIMSubjectView: View {
     @Binding var fwdButtonTapped: Bool
 
     @State private var sending = false              // user tapped on Send
+    @State private var selectedGoals: [String] = []
+    let goals = ["Buy goods in shop", "Rent", "Schooling", "Repay loan", "Medical or health issue"]
+
+//    init(stack: CallStack,
+//      currency: OIMcurrency,
+//        amount: Binding<Amount>,
+//        fwdButtonTapped: Binding<Bool>
+//    ) {
+//        // SwiftUI ensures that the initialization uses the
+//        // closure only once during the lifetime of the view, so
+//        // later changes to the currency have no effect.
+//        self.stack = stack
+//        self._amount = amount
+//        self._fwdButtonTapped = fwdButtonTapped
+//        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
+//    }
+
     func sendAction() {
         withAnimation(.basic1) {
             sending = true                              //
@@ -386,13 +436,24 @@ struct OIMSubjectView: View {
             VStack {
                 Spacer()
                 HStack {
-                    Text("Subject")
+                    ForEach(goals, id: \.self) { goal in
+                        let isSelected = selectedGoals.contains(goal)
+                        Image(goal)
+                            .resizable()
+                            .scaledToFit()
+                            .border(isSelected ? WalletColors().talerColor : Color.clear)
+                            .onTapGesture {
+                                if isSelected {
+                                    selectedGoals.removeAll(where: { $0 == goal } )
+                                } else {
+                                    selectedGoals.append(goal)
+                                }
+                            }
+                    }
                 }
                 Spacer()
             }
-#if DEBUG
-            .border(.red)
-#endif
+//            .border(.red)
         }.task {
 
         }
