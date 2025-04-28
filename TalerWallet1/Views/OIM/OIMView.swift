@@ -22,11 +22,16 @@ fileprivate func intValue(_ amount: Amount?) -> UInt64 {
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
     let currencyName: String
+    let isFinal: Bool
+    let isGoal: Bool
+    let isSierra: Bool
+    let isSending: Bool
     @Binding var amount: Amount
-    @Binding var fwdButtonTapped: Bool
+    let action: () -> Void
     var content: () -> Content
 
     @Environment(\.dismiss) var dismiss     // pop back once
+    @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
         OIMbackground() {
@@ -34,28 +39,25 @@ struct OIMnavBack<Content: View>: View {
                 content()
                 VStack {
                     HStack {
-                        OIMbalanceButton(isOpen: true, tint: false) {
+                        OIMbalanceButton(isOpen: true, isSierra: isSierra, isFinal: false) {
                             var transaction = Transaction()
                             transaction.disablesAnimations = true
                             withTransaction(transaction) {
                                 dismiss()
                             }
                         }
-                        .frame(width: 66, height: 66)
+                            .frame(width: 66, height: 66)
                         Spacer()
-                        OIMsendButton(isGoal: true, enabled: !amount.isZero) {
-                            var transaction = Transaction()
-                            transaction.disablesAnimations = true
-                            withTransaction(transaction) {
-                                fwdButtonTapped = true
-                            }
-                        }
-                        .frame(width: 66, height: 66)
+                        OIMsendButton(isGoal: isGoal,
+                                     isFinal: isFinal,
+                                     enabled: !amount.isZero,
+                                      action: action)
+                            .frame(width: 66, height: 66)
+                            .matchedGeometryEffect(id: isSending ? "OIMaction" : "OIMaction2",
+                                                   in: wrapper.namespace, isSource: false)
                     }
                 }
-#if DEBUG
-                .border(.blue)
-#endif
+//                .border(.blue)
             }
         }
     }
@@ -101,6 +103,9 @@ struct OIMView: View {
         var debugTick = 0
 //        let _ = Self._printChanges()
 
+        let enabled = if let available {
+            !available.isZero
+        } else { false }
         let actions = HStack(alignment: .top) {
             QRButton(hideTitle: true) {
 //                var transaction = Transaction()
@@ -113,21 +118,8 @@ struct OIMView: View {
                 .frame(width: 66, height: 66)
                 .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace,isSource: true)
             Spacer()
-            let enabled = if let available {
-                !available.isZero
-            } else { false }
-            OIMsendButton(isGoal: false, enabled: enabled, action: sendAction)
+            OIMsendButton(isGoal: false, isFinal: false, enabled: enabled, action: sendAction)
                 .frame(width: 66, height: 66)
-        }
-
-        let numberView = HStack {
-            OIMbalanceButton(isOpen: true, tint: false) {}
-                .frame(width: 66, height: 66)
-                .disabled(true)
-                .opacity(0.01)
-                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace,isSource: true)
-
-            OIMamountV(amount: available, currencyName: cash.currency.noteBase)
         }
 
         let maxAvailable = cash.max(available: intValue(available))
@@ -136,7 +128,6 @@ struct OIMView: View {
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
-                numberView
                 VStack {
                     Spacer()
                     HStack(spacing: 30) {
@@ -148,7 +139,7 @@ struct OIMView: View {
                             let itsMe = isOpen == index
                             let isClosed = isOpen == nil
                             let size = isClosed ? 120.0 : 66.0
-                            OIMbalanceButton(isOpen: itsMe, tint: index > 0) {
+                            OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
                                 withAnimation(.basic1) {
                                     if itsMe {
                                         isOpen = nil
@@ -241,6 +232,7 @@ struct OIMEditView: View {
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     @State private var amountVal: UInt64 = 0
+    @State private var sending = false              // user tapped on Send
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
 
@@ -275,14 +267,38 @@ struct OIMEditView: View {
         return 999_999_999
     }
 
+    func sendAction() {
+        // TODO: hide scroller
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+//          withAnimation(.basic1.delay(delay + 0.5)) {
+            withAnimation(.basic1) {
+                sending = true                              //
+            }
+//          DispatchQueue.main.asyncAfter(deadline: .now() + delay + 1) {       // cash.delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    fwdButtonTapped = true          // ==> go to purpose/goal
+                }
+            }
+//        }
+    }
+
     var body: some View {
 //        let _ = Self._printChanges()
         let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
+        let noteBase = cash.currency.noteBase
+        let isSierra = noteBase == "SLE"
         OIMnavBack(stack: stack.push(),
-            currencyName: cash.currency.noteBase,
+            currencyName: noteBase,
+                 isFinal: false,
+                  isGoal: true,
+                isSierra: isSierra,
+               isSending: sending,
                   amount: $amount,
-         fwdButtonTapped: $fwdButtonTapped
+                  action: sendAction
         ) {
             ZStack {    // without this, money would fly below the scroller
               VStack {  // even though this is the only item in the ZStack
@@ -340,15 +356,32 @@ struct OIMSubjectView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
+    @State private var sending = false              // user tapped on Send
+    func sendAction() {
+        withAnimation(.basic1) {
+            sending = true                              //
+        }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            fwdButtonTapped = true          // ==> Send the money
+        }
+    }
 
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
+        let noteBase = currency.noteBase
+        let isSierra = noteBase == "SLE"
 
         OIMnavBack(stack: stack.push(),
-            currencyName: currency.noteBase,
+            currencyName: noteBase,
+                 isFinal: true,
+                  isGoal: false,
+                isSierra: isSierra,
+               isSending: sending,
                   amount: $amount,
-         fwdButtonTapped: $fwdButtonTapped
+                  action: sendAction
         ) {
             VStack {
                 Spacer()
