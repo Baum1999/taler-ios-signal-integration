@@ -132,10 +132,14 @@ struct SendAmountV: View {
             .overlay {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
+                    let available = !amountAvailable.isZero ? amountAvailable
+                                                            : balance?.available ??
+                                                      selectedBalance?.available ??
+                                                              amountAvailable
                     OIMEditView(stack: stack.push(),
                                  cash: cash,
                                amount: $amountToTransfer,
-                            available: $amountAvailable,
+                            available: available,
                          useAvailable: true,                                    // cannot send more than we have
                       fwdButtonTapped: $buttonSelected)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
