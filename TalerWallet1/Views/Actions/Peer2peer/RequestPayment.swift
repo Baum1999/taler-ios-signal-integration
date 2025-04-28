@@ -19,6 +19,9 @@ struct RequestPayment: View {
 
     @EnvironmentObject private var controller: Controller
 
+#if OIM
+    @StateObject private var cash = OIMcash()
+#endif
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -76,6 +79,7 @@ struct RequestPayment: View {
             }
             if let balance {
                 RequestPaymentContent(stack: stack.push(),
+                                       cash: cash,
                                     balance: balance,
                              amountLastUsed: $amountLastUsed,
                            amountToTransfer: $amountToTransfer,
@@ -102,6 +106,7 @@ struct RequestPayment: View {
 struct RequestPaymentContent: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let cash: OIMcash
     let balance: Balance
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
@@ -226,6 +231,7 @@ struct RequestPaymentContent: View {
                                         feeZero: String(localized: "No fee"),
                                      isNegative: false)
                 let inputDestination = P2PSubjectV(stack: stack.push(),
+                                                    cash: cash,
                                                    scope: balance.scopeInfo,
                                                 feeLabel: feeLabel,
                                             feeIsNotZero: feeIsNotZero(),
@@ -234,6 +240,7 @@ struct RequestPaymentContent: View {
                                                  summary: $summary,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
+                                                       cash: cash,
                                                       scope: balance.scopeInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),

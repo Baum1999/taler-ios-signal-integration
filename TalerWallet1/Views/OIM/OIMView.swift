@@ -128,6 +128,7 @@ struct OIMView: View {
                 VStack {
                     Spacer()
                     OIMcurrencyScroller(stack: stack.push(),
+                                         cash: cash,
                                  availableVal: $availableVal,
                                     tappedVal: $tappedVal,
                                       canEdit: false)
@@ -140,6 +141,7 @@ struct OIMView: View {
             VStack {
                 Spacer()
                     OIMlineView(stack: stack.push(),
+                                 cash: cash,
                             amountVal: $availableVal,
                             tappedVal: $tappedVal,
                               canEdit: false)
@@ -152,7 +154,6 @@ struct OIMView: View {
 #endif
             }
         }
-        .environmentObject(cash)
         .task {
             availableVal = intValue(available)
             cash.update(availableVal)
@@ -163,6 +164,7 @@ struct OIMView: View {
 @available(iOS 16.4, *)
 struct OIMEditView: View {
     let stack: CallStack
+    let cash: OIMcash
     @Binding var amount: Amount
     @Binding var available: Amount
     let useAvailable : Bool         // if false then we're requesting money and don't use available
@@ -170,7 +172,6 @@ struct OIMEditView: View {
     @Binding var fwdButtonTapped: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
-    @StateObject private var cash = OIMcash()
 
     @State private var amountVal: UInt64 = 0
     @State private var availableVal: UInt64 = 0
@@ -193,7 +194,7 @@ struct OIMEditView: View {
         let currency = cash.currency
 
         OIMnavBack(stack: stack.push(),
-            currencyName: currency.noteBase,
+            currencyName: cash.currency.noteBase,
                   amount: $amount,
          fwdButtonTapped: $fwdButtonTapped
         ) {
@@ -201,6 +202,7 @@ struct OIMEditView: View {
               VStack {  // even though this is the only item in the ZStack
                 Spacer()
                 OIMlineView(stack: stack.push(),
+                             cash: cash,
                         amountVal: $amountVal,
                         tappedVal: $tappedVal,
                           canEdit: true)
@@ -213,6 +215,7 @@ struct OIMEditView: View {
                     }
                 Spacer()
                 OIMcurrencyScroller(stack: stack.push(),
+                                     cash: cash,
                              availableVal: $availableVal,
                                 tappedVal: $tappedVal,
                                   canEdit: true)
@@ -233,7 +236,6 @@ struct OIMEditView: View {
 //                }
             } // ZStack
         }
-        .environmentObject(cash)
         .task {
             amountVal = intValue(amount)
             availableVal = isAvailable
@@ -244,11 +246,11 @@ struct OIMEditView: View {
 // MARK: -
 struct OIMSubjectView: View {
     let stack: CallStack
+    let cash: OIMcash
     @Binding var amount: Amount
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
-    @StateObject private var cash = OIMcash()
 
     var body: some View {
 //        let _ = Self._printChanges()

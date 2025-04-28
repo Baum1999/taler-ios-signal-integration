@@ -40,6 +40,7 @@ struct OIMpayView: View {
             VStack {
                 Spacer()
                 OIMlineView(stack: stack.push(),
+                             cash: cash,
                         amountVal: $amountVal,
                         tappedVal: $tappedVal,
                           canEdit: true)
@@ -50,7 +51,6 @@ struct OIMpayView: View {
             .border(.red)
 #endif
         }
-        .environmentObject(cash)
         .task {
             amountVal = intValue(amount)
         }

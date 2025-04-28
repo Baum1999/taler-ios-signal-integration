@@ -21,6 +21,7 @@ func p2pFee(ppCheck: CheckPeerPushDebitResponse) -> Amount? {
 struct P2PSubjectV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let cash: OIMcash
     let scope: ScopeInfo
     let feeLabel: (String, String)?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
@@ -181,6 +182,7 @@ struct P2PSubjectV: View {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMSubjectView(stack: stack.push(),
+                                    cash: cash,
                                   amount: $amountToTransfer,
                          fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart

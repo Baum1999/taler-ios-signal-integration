@@ -13,6 +13,7 @@ import SymLog
 struct SendAmountView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let cash: OIMcash
     let balance: Balance
     @Binding var buttonSelected: Bool
     @Binding var amountLastUsed: Amount
@@ -141,6 +142,7 @@ struct SendAmountView: View {
 //              let insufficientLabel2 = String(localized: "but you only have \(availableStr) to send.")
 
                 let inputDestination = P2PSubjectV(stack: stack.push(),
+                                                    cash: cash,
                                                    scope: balance.scopeInfo,
                                                 feeLabel: (feeLabel(feeString.0), feeLabel(feeString.1)),
                                             feeIsNotZero: feeIsNotZero(),
@@ -149,6 +151,7 @@ struct SendAmountView: View {
                                                  summary: $summary,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
+                                                       cash: cash,
                                                       scope: balance.scopeInfo,
                                                    feeLabel: nil,
                                                feeIsNotZero: feeIsNotZero(),

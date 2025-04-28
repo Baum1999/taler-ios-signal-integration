@@ -20,6 +20,9 @@ struct SendAmountV: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
+#if OIM
+    @StateObject private var cash = OIMcash()
+#endif
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -90,6 +93,7 @@ struct SendAmountV: View {
             }
             if let balance {
                 SendAmountView(stack: stack.push(),
+                                cash: cash,
                              balance: balance,
                       buttonSelected: $buttonSelected,
                       amountLastUsed: $amountLastUsed,
@@ -110,6 +114,7 @@ struct SendAmountV: View {
               if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
                     OIMEditView(stack: stack.push(),
+                                 cash: cash,
                                amount: $amountToTransfer,
                             available: $amountAvailable,
                          useAvailable: true,                                    // cannot send more than we have

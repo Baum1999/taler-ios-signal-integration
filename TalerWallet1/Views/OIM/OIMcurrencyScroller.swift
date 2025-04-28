@@ -11,11 +11,11 @@ import taler_swift
 // renders all banknotes and coins in 1 horizontal scrollview
 struct OIMcurrencyScroller: View {
     let stack: CallStack
+    let cash: OIMcash
     @Binding var availableVal: UInt64
     @Binding var tappedVal: UInt64
     let canEdit: Bool
 
-    @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {

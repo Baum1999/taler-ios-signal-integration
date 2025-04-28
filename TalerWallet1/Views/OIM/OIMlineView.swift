@@ -16,11 +16,11 @@ fileprivate let vertSpacing: CGFloat = 10
 struct OIMlineView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let cash: OIMcash
     @Binding var amountVal: UInt64
     @Binding var tappedVal: UInt64
     let canEdit: Bool
 
-    @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
 
@@ -38,10 +38,12 @@ struct OIMlineView: View {
 #endif
 
         let notes = OIMlayoutView(stack: stack.push(),
+                                   cash: cash,
                                   funds: cash.notes(),
                               amountVal: $amountVal,
                                 canEdit: canEdit)
         let coins = OIMlayoutView(stack: stack.push(),
+                                   cash: cash,
                                   funds: cash.coins(),
                               amountVal: $amountVal,
                                 canEdit: canEdit)

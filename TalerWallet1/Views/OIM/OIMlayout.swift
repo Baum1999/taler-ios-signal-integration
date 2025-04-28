@@ -59,11 +59,11 @@ struct OIMlayoutView: View {
     private let symLog = SymLogV(0)
 //    let logger = Logger(subsystem: "net.taler.gnu", category: "OIMlayoutView")
     let stack: CallStack
+    let cash: OIMcash
     let funds: OIMfunds
     @Binding var amountVal: UInt64
     let canEdit: Bool
 
-    @EnvironmentObject private var cash: OIMcash
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @State private var checkStacks: UInt64 = 0
 
