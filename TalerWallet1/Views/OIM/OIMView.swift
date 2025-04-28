@@ -71,8 +71,8 @@ struct OIMView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
-    @StateObject private var cash = OIMcash()
 
+    @StateObject private var cash = OIMcash()
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
     @State private var sending = false
@@ -80,23 +80,26 @@ struct OIMView: View {
     @State private var isOpen: Int? = nil
 
     func sendAction() {
-        let delay = cash.moveDown()
-        withAnimation(.basic1.delay(delay)) {
-            sending = true
+//        let delay =
+            cash.moveDown()                                 // cash animates itself
+//        withAnimation(.basic1.delay(delay + 0.5)) {
+        withAnimation(.basic1.delay(0.6)) {
+            sending = true                                  // blends in the missing denominations
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay + 0.5) {       // cash.delay
+//        DispatchQueue.main.asyncAfter(deadline: .now() + delay + 1) {       // cash.delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             let actionType = ActionType(animationDisabled: true)
             let userinfo = [NOTIFICATIONANIMATION: actionType]
             // will trigger NavigationLink
-            NotificationCenter.default.post(name: .SendAction,
+            NotificationCenter.default.post(name: .SendAction,          // switch to OIMEditView
                                           object: nil,
                                         userInfo: userinfo)
         }
     }
 
     var body: some View {
+        var debugTick = 0
 //        let _ = Self._printChanges()
-        let currency = cash.currency
 
         let actions = HStack(alignment: .top) {
             QRButton(hideTitle: true) {
@@ -106,24 +109,26 @@ struct OIMView: View {
                     qrButtonTapped = true
 //                }
             }
+                .opacity(sending ? 0.01 : 1.0)
                 .frame(width: 66, height: 66)
                 .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace,isSource: true)
             Spacer()
-            Button(action: sendAction) {
-                Image("SendTaler")
-                    .resizable()
-                    .scaledToFit()
-                    .tint(WalletColors().talerColor)
-//                    .foregroundStyle(WalletColors().talerColor)
-            }
-            .frame(width: 66, height: 66)
-            .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
-//            .buttonStyle(.bordered)
-            .disabled(available?.isZero ?? true)
+            let enabled = if let available {
+                !available.isZero
+            } else { false }
+            OIMsendButton(isGoal: false, enabled: enabled, action: sendAction)
+                .frame(width: 66, height: 66)
         }
-#if DEBUG
-            .border(.blue)
-#endif
+
+        let numberView = HStack {
+            OIMbalanceButton(isOpen: true, tint: false) {}
+                .frame(width: 66, height: 66)
+                .disabled(true)
+                .opacity(0.01)
+                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace,isSource: true)
+
+            OIMamountV(amount: available, currencyName: cash.currency.noteBase)
+        }
 
         let maxAvailable = cash.max(available: intValue(available))
         let _ = print("maxAvailable", maxAvailable)
@@ -131,6 +136,7 @@ struct OIMView: View {
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
+                numberView
                 VStack {
                     Spacer()
                     HStack(spacing: 30) {
@@ -169,8 +175,8 @@ struct OIMView: View {
                     }
                     Spacer()
                 }
-            VStack {
-                Spacer()
+                VStack {
+                    Spacer()
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
                             amountVal: $availableVal,
@@ -203,9 +209,21 @@ struct OIMView: View {
                 }
             }
         }
-        .task {
+        .task(id: isOpen) {
             availableVal = intValue(available)
             cash.update(availableVal)
+            let maxAvailable = cash.max(available: intValue(available))
+            print("OIMView.task availableVal", availableVal, maxAvailable)
+            debugTick += 1
+        }
+        .onAppear {
+            let maxAvailable = cash.max(available: intValue(available))
+            print("OIMView.onAppear availableVal", availableVal, maxAvailable)
+            debugTick += 1
+        }
+        .onDisappear {
+            cash.moveBack()
+            sending = false
         }
     }
 }
@@ -226,6 +244,25 @@ struct OIMEditView: View {
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
 
+//    init(stack: CallStack,
+//      currency: OIMcurrency,
+//        amount: Binding<Amount>,
+//        available: Amount,
+//        useAvailable : Bool,
+//        fwdButtonTapped: Binding<Bool>
+//    ) {
+//        // SwiftUI ensures that the initialization uses the
+//        // closure only once during the lifetime of the view, so
+//        // later changes to the currency have no effect.
+//        self.stack = stack
+//        self._amount = amount
+//        self.available = available
+//        self.useAvailable = useAvailable
+//        self._fwdButtonTapped = fwdButtonTapped
+//        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
+//    }
+
+    // available minus amountVal - what's still available from the balance when amount is on the table
     var isAvailable: UInt64 {
         if useAvailable {
             let have = intValue(available)
@@ -240,7 +277,7 @@ struct OIMEditView: View {
 
     var body: some View {
 //        let _ = Self._printChanges()
-        let currency = cash.currency
+        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
         OIMnavBack(stack: stack.push(),
             currencyName: cash.currency.noteBase,
@@ -253,7 +290,7 @@ struct OIMEditView: View {
                 OIMlineView(stack: stack.push(),
                              cash: cash,
                         amountVal: $amountVal,
-                        tappedVal: $tappedVal,
+                        tappedVal: $tappedVal,          // <- user tapped a val in the scroller
                           canEdit: true)
                     .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                     .zIndex(1)  // make notes fly from topZ
@@ -266,7 +303,7 @@ struct OIMEditView: View {
                 let maxAvailable = useAvailable ? cash.max(available: intValue(available)) : 0
                 OIMcurrencyScroller(stack: stack.push(),
                                      cash: cash,
-                             availableVal: $availableVal,
+                             availableVal: $availableVal,           // ==> available - amount
                                 tappedVal: $tappedVal,
                            scrollPosition: maxAvailable,            // max note or coin (available)
                                   canEdit: true)
@@ -274,17 +311,18 @@ struct OIMEditView: View {
                     .clipped(antialiased: true)
                     .padding(.horizontal, 5)
                     .ignoresSafeArea(edges: .horizontal)
-                    .onChange(of: available) { newVal in
-                        // disable denominations if > available
-                        availableVal = intValue(newVal) - intValue(amount)
-                    }
+//                    .onChange(of: available) { newVal in
+//                        print("available from \(available) to", newVal)
+//                        // disable denominations if > available
+//                        availableVal = intValue(newVal) - intValue(amount)
+//                    }
               }
 #if DEBUG
               .border(.red)
 #endif
-//                .if(.iOS15) { view in
-//                    view.ignoresSafeArea(edges: .bottom)            // sadly, this does not work, because there is always a bottom bar :-(
-//                }
+              .task {
+                  availableVal = intValue(available) - intValue(amount)
+              }
             } // ZStack
         }
         .task {
