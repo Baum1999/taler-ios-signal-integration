@@ -206,13 +206,18 @@ struct CurrencyInputView: View {
                 .padding(.vertical, 6)
             } // iOS 16+ only
         }.onAppear {   // make CurrencyField show the keyboard after 0.4 seconds
+#if OIM
+            let oimModeActive = controller.oimModeActive
+#else
+            let oimModeActive = false
+#endif
             if hasBeenShown {
 //                print("❗️Yikes: CurrencyInputView hasBeenShown")
-            } else if !UIAccessibility.isVoiceOverRunning && !controller.oimModeActive {
+            } else if !UIAccessibility.isVoiceOverRunning && !oimModeActive {
 //                print("❗️CurrencyInputView❗️")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     hasBeenShown = true
-                    if !controller.oimModeActive {
+                    if !oimModeActive {
                         if !currencyField.becomeFirstResponder() {
                             print("❗️Yikes❗️ cannot becomeFirstResponder")
                         }
@@ -223,9 +228,11 @@ struct CurrencyInputView: View {
             currencyField.resignFirstResponder()
             hasBeenShown = false
         }
+#if OIM
         .onChange(of: controller.oimModeActive) {_ in
             currencyField.resignFirstResponder()
         }
+#endif
     }
 }
 // MARK: -

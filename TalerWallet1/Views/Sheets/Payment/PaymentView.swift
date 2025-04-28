@@ -299,14 +299,12 @@ struct PaymentView: View, Sendable {
                 symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
             }
 #if OIM
-            .overlay {
-              if #available(iOS 16.4, *) {
+            .overlay { if #available(iOS 16.4, *) {
                 if controller.oimSheetActive {
                     OIMpayView(stack: stack.push(),
                               amount: effective)
                 }
-              }
-            }
+            } }
 #endif
         } else {
             LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)

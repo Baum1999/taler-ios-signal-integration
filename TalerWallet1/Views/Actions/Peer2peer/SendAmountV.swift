@@ -20,9 +20,9 @@ struct SendAmountV: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
-#if OIM
+//#if OIM
     @StateObject private var cash: OIMcash
-#endif
+//#endif
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -44,10 +44,10 @@ struct SendAmountV: View {
         self.selectedBalance = selectedBalance
         self._amountLastUsed = amountLastUsed
         self._summary = summary
-#if OIM
+//#if OIM
         let currency = selectedIndex == 1 ? OIMleones : OIMeuros
         self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
-#endif
+//#endif
     }
 
     @MainActor
@@ -133,8 +133,7 @@ struct SendAmountV: View {
 //                print(">>> SendAmountV.task", taskID, avail, amountAvailable, stack.peek()?.file)
             }
 #if OIM
-            .overlay {
-              if #available(iOS 16.4, *) {
+            .overlay { if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
 //                    let _ = print(">>> SendAmountV", amountAvailable, amountToTransfer, stack.peek()?.file)
                     let available = !amountAvailable.isZero ? amountAvailable
@@ -149,8 +148,7 @@ struct SendAmountV: View {
                       fwdButtonTapped: $buttonSelected)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
-              }
-            }
+            } }
 #endif
         if #available(iOS 16.4, *) {
             scrollView.toolbar(.hidden, for: .tabBar)
