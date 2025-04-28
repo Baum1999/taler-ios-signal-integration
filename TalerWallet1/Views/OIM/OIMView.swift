@@ -35,21 +35,23 @@ struct OIMnavBack<Content: View>: View {
                 content()
                 VStack {
                     HStack {
-                        BackButton() {
+                        OIMbalanceButton(isOpen: true, tint: false) {
                             var transaction = Transaction()
                             transaction.disablesAnimations = true
                             withTransaction(transaction) {
                                 dismiss()
                             }
                         }
+                        .frame(width: 66, height: 66)
                         Spacer()
-                        ForwardButton(enabled: !amount.isZero) {
+                        OIMsendButton(isGoal: true, enabled: !amount.isZero) {
                             var transaction = Transaction()
                             transaction.disablesAnimations = true
                             withTransaction(transaction) {
                                 fwdButtonTapped = true
                             }
                         }
+                        .frame(width: 66, height: 66)
                     }
                 }
 #if DEBUG
