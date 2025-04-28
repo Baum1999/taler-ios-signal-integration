@@ -262,23 +262,6 @@ struct OIMEditView: View {
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
 
-//    init(stack: CallStack,
-//      currency: OIMcurrency,
-//        amount: Binding<Amount>,
-//        available: Amount,
-//        useAvailable : Bool,
-//        fwdButtonTapped: Binding<Bool>
-//    ) {
-//        // SwiftUI ensures that the initialization uses the
-//        // closure only once during the lifetime of the view, so
-//        // later changes to the currency have no effect.
-//        self.stack = stack
-//        self._amount = amount
-//        self.available = available
-//        self.useAvailable = useAvailable
-//        self._fwdButtonTapped = fwdButtonTapped
-//        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
-//    }
 
     // available minus amountVal - what's still available from the balance when amount is on the table
     var isAvailable: UInt64 {
@@ -294,11 +277,10 @@ struct OIMEditView: View {
     }
 
     func sendAction() {
-        // TODO: hide scroller
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 //          withAnimation(.basic1.delay(delay + 0.5)) {
             withAnimation(.basic1) {
-                sending = true                              //
+                sending = true                // hide scroller
             }
 //          DispatchQueue.main.asyncAfter(deadline: .now() + delay + 1) {       // cash.delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
@@ -337,12 +319,13 @@ struct OIMEditView: View {
                               canEdit: true)
                         .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
                         .zIndex(1)  // make notes fly from topZ
+                        .scaleEffect(sending ? 0.6 : 1.0)
                         .onChange(of: amountVal) { newVal in
                             let currencyStr = amount.currencyStr
                             amount = Amount(currency: currencyStr, cent: UInt64(newVal))
                             availableVal = isAvailable
                         }
-                    if !sending {
+                    if !sending {       // need space for currency scroller
                         Spacer()
                         Spacer()
                     }
@@ -376,12 +359,13 @@ struct OIMEditView: View {
         }
         .onAppear {
             withAnimation(.basic1) {
-                sending = false                              //
+                sending = false                              // move back up when coming back
             }
         }
     }
 }
 // MARK: -
+@available(iOS 16.4, *)
 struct OIMSubjectView: View {
     let stack: CallStack
     let cash: OIMcash
@@ -389,23 +373,12 @@ struct OIMSubjectView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
+    @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
+    @State private var smallAmount = false
+    @State private var tappedVal: UInt64 = 0
     @State private var selectedGoals: [String] = []
     let goals = ["Buy goods in shop", "Rent", "Schooling", "Repay loan", "Medical or health issue"]
-
-//    init(stack: CallStack,
-//      currency: OIMcurrency,
-//        amount: Binding<Amount>,
-//        fwdButtonTapped: Binding<Bool>
-//    ) {
-//        // SwiftUI ensures that the initialization uses the
-//        // closure only once during the lifetime of the view, so
-//        // later changes to the currency have no effect.
-//        self.stack = stack
-//        self._amount = amount
-//        self._fwdButtonTapped = fwdButtonTapped
-//        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
-//    }
 
     func sendAction() {
         withAnimation(.basic1) {
@@ -433,29 +406,43 @@ struct OIMSubjectView: View {
                   amount: $amount,
                   action: sendAction
         ) {
-            VStack {
-                Spacer()
-                HStack {
-                    ForEach(goals, id: \.self) { goal in
-                        let isSelected = selectedGoals.contains(goal)
-                        Image(goal)
-                            .resizable()
-                            .scaledToFit()
-                            .border(isSelected ? WalletColors().talerColor : Color.clear)
-                            .onTapGesture {
-                                if isSelected {
-                                    selectedGoals.removeAll(where: { $0 == goal } )
-                                } else {
-                                    selectedGoals.append(goal)
-                                }
-                            }
-                    }
+            ZStack(alignment: .top) {
+                VStack {
+                    Spacer()
+                    OIMlineView(stack: stack.push(),
+                                 cash: cash,
+                            amountVal: $amountVal,
+                            tappedVal: $tappedVal,          // <- user tapped a val in the scroller
+                              canEdit: false)
+                    .scaleEffect(0.6)
                 }
-                Spacer()
+                VStack {
+                    Spacer()
+                    HStack {
+                        ForEach(goals, id: \.self) { goal in
+                            let isSelected = selectedGoals.contains(goal)
+                            Image(goal)
+                                .resizable()
+                                .scaledToFit()
+                                .border(isSelected ? WalletColors().talerColor : Color.clear)
+                                .onTapGesture {
+                                    if isSelected {
+                                        selectedGoals.removeAll(where: { $0 == goal } )
+                                    } else {
+                                        selectedGoals.append(goal)
+                                    }
+                                }
+                        }
+                    }
+                    Spacer()
+                }
+//              .border(.red)
             }
-//            .border(.red)
         }.task {
-
+            let amountVal = intValue(amount)
+            withAnimation(.basic1) {
+                smallAmount = true
+            }
         }
     }
 }
