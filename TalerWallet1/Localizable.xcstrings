@@ -558,6 +558,7 @@
       }
     },
     "**Step 3:**" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -578,6 +579,9 @@
           }
         }
       }
+    },
+    "**Step 3:** %@" : {
+
     },
     "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
       "extractionState" : "stale",
@@ -698,9 +702,6 @@
           }
         }
       }
-    },
-    "%lld" : {
-      "comment" : "VoiceOver"
     },
     "%lld characters of 100" : {
       "localizations" : {
@@ -887,6 +888,9 @@
           }
         }
       }
+    },
+    "%llu" : {
+      "comment" : "VoiceOver"
     },
     "%llu Day" : {
       "comment" : "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer",
@@ -1710,7 +1714,7 @@
       }
     },
     "Add bank account" : {
-      "comment" : "a11y for the + button",
+      "comment" : "a11y for the + button\ntitle of the addExchange alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1733,7 +1737,7 @@
       }
     },
     "Add payment service" : {
-      "comment" : "a11y for the + button",
+      "comment" : "a11y for the + button\ntitle of the addExchange alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2533,6 +2537,7 @@
       }
     },
     "Available: %@" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3423,9 +3428,6 @@
         }
       }
     },
-    "Currency to be used for OIM" : {
-
-    },
     "Currency:" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3590,7 +3592,7 @@
       }
     },
     "Deposit" : {
-      "comment" : "TransactionType",
+      "comment" : "RefreshReason\nTransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7481,6 +7483,7 @@
       }
     },
     "Pay %@ now" : {
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7816,6 +7819,83 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usługa płatności:"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_age_restricted" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Purchase not possible due to age restriction"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_exchange_missing_global_fees" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Provider is missing the global fee configuration, this likely means it is misconfigured"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_fees_not_covered" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Not enough funds to pay the provider fees not covered by the merchant"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_merchant_accept_insufficient" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merchant doesn't accept money from one or more providers in this wallet"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_merchant_deposit_insufficient" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merchant doesn't accept the wire method of the provider, this likely means it is misconfigured"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_hint_wallet_balance_material_insufficient" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Some of the coins needed for this purchase are currently unavailable"
+          }
+        }
+      }
+    },
+    "payment_balance_insufficient_max" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Balance insufficient! You don't have enough %@."
           }
         }
       }
@@ -8486,7 +8566,7 @@
       }
     },
     "Recoup" : {
-      "comment" : "TransactionType",
+      "comment" : "RefreshReason\nTransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8573,7 +8653,7 @@
       }
     },
     "Refund" : {
-      "comment" : "TransactionType",
+      "comment" : "RefreshReason\nTransactionType",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9016,6 +9096,7 @@
     },
     "Scan QR" : {
       "comment" : "Button title",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9739,6 +9820,7 @@
       }
     },
     "Sierra Leone" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
