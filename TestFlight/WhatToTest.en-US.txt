@@ -1,3 +1,11 @@
+Version 0.14.12 (wallet-core 0.14.20)
+
+- bugfixes
+• New feature: devExperiment (only for GNU Taler)
+    try to scan e.g. taler://dev-experiment/foobar (will fail)
+    or taler://dev-experiment/insert-denom-loss (but you need TESTKUDOS)
+
+
 Version 0.14.11 (wallet-core 0.14.19)
 
 - bugfixes & animations
