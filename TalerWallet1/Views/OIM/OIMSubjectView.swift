@@ -17,11 +17,13 @@ struct OIMSubjectView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
+    @EnvironmentObject private var wrapper: NamespaceWrapper
+
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
-    @State private var smallAmount = false
-    @State private var tappedVal: UInt64 = 0
-    @State private var selectedGoals: [String] = []
+    @State private var appearing = false
+    @State private var ignoreTapped: UInt64 = 0
+    @State private var selectedGoal: String?
     let goals = ["Buy goods in shop", "Rent", "Schooling", "Repay loan", "Medical or health issue"]
 
     func sendAction() {
@@ -50,42 +52,54 @@ struct OIMSubjectView: View {
                   amount: $amount,
                   action: sendAction
         ) {
-            ZStack(alignment: .top) {
-                VStack {
-                    Spacer()
-                    OIMlineView(stack: stack.push(),
-                                 cash: cash,
-                            amountVal: $amountVal,
-                            tappedVal: $tappedVal,          // <- user tapped a val in the scroller
-                              canEdit: false)
-                    .scaleEffect(0.6)
-                }
-                VStack {
-                    Spacer()
-                    HStack {
-                        ForEach(goals, id: \.self) { goal in
-                            let isSelected = selectedGoals.contains(goal)
+            VStack {
+                OIMtitleView(cash: cash, amount: amount)
+                Spacer()
+                HStack {
+                    ForEach(goals, id: \.self) { goal in
+                        if let selectedGoal {
+                            if goal == selectedGoal {
+                                Image(goal)
+                                    .resizable()
+                                    .scaledToFit()
+//                                    .id(goal)
+                                    .matchedGeometryEffect(id: goal, in: wrapper.namespace)
+                                    .onTapGesture {
+                                        withAnimation(.basic1) {
+                                            self.selectedGoal = nil
+                                        }
+                                    }
+                            }
+                        } else {
                             Image(goal)
                                 .resizable()
                                 .scaledToFit()
-                                .border(isSelected ? WalletColors().talerColor : Color.clear)
+//                                .id(goal)
+                                .matchedGeometryEffect(id: goal, in: wrapper.namespace)
                                 .onTapGesture {
-                                    if isSelected {
-                                        selectedGoals.removeAll(where: { $0 == goal } )
-                                    } else {
-                                        selectedGoals.append(goal)
+                                    withAnimation(.basic1) {
+                                        selectedGoal = goal
                                     }
                                 }
                         }
                     }
-                    Spacer()
                 }
-//              .border(.red)
+                .opacity(appearing ? 1.0 : 0.01)
+                .scaleEffect(appearing ? 1.0 : 0.3)
+
+                Spacer()
+                OIMlineView(stack: stack.push(),
+                             cash: cash,
+                        amountVal: $amountVal,
+                        tappedVal: $ignoreTapped,
+                          canEdit: false)
+                .scaleEffect(selectedGoal == nil ? 0.6 : 1.0)
             }
+//              .border(.red)
         }.task {
             amountVal = amount.centValue
             withAnimation(.basic1) {
-                smallAmount = true
+                appearing = true
             }
         }
     }
