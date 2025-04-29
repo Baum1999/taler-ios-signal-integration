@@ -16,6 +16,7 @@ struct URLSheet: View {
     @Binding var urlToOpen: URL?
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
@@ -60,6 +61,10 @@ struct URLSheet: View {
                     PayTemplateV(stack: stack.push(), url: passedURL)
                 case .refund:
                     RefundURIView(stack: stack.push(), url: passedURL)
+#if GNU_TALER
+                case .devExperiment:
+                    DevExperimentView(stack: stack.push(), url: passedURL)
+#endif
                 default:        // TODO: Error view
                     let unknown = String(localized: "Unknown command")
                     VStack {

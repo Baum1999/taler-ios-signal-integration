@@ -33,6 +33,9 @@ enum UrlCommand {
     case payPush
     case payTemplate
     case refund
+#if GNU_TALER
+    case devExperiment
+#endif
 
     var isOutgoing: Bool {
         switch self {
@@ -358,6 +361,9 @@ extension Controller {
             case "pay-push":            return .payPush
             case "pay-template":        return .payTemplate
             case "refund":              return .refund
+#if GNU_TALER
+            case "dev-experiment":      return .devExperiment
+#endif
             default:
                 self.logger.error("❗️unknown command taler://\(command)")
         }
