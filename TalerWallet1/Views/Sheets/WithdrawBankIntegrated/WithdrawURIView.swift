@@ -30,6 +30,7 @@ struct WithdrawURIView: View {
     @State private var amountShortcut = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // Update currency when used
     @State private var amountZero = Amount.zero(currency: EMPTYSTRING)          // needed for isZero
+    @State private var amountLastChecked = Amount.zero(currency: EMPTYSTRING)   //
     @State private var buttonSelected = false
     @State private var shortcutSelected = false
     @State private var amountAvailable: Amount? = nil
@@ -69,6 +70,9 @@ struct WithdrawURIView: View {
     @MainActor
     private func computeFeeWithdraw(_ amount: Amount) async -> ComputeFeeResult? {
         if let exchange {
+          if amountLastChecked != amount {
+            amountLastChecked = amount
+
             if let details = try? await model.getWithdrawalDetailsForAmount(amount,
                                                                    baseUrl: exchange.exchangeBaseUrl,
                                                                      scope: nil) {     // TODO: scope
@@ -84,7 +88,10 @@ struct WithdrawURIView: View {
                 return ComputeFeeResult(insufficient: insufficient, feeAmount: fee,
                                               feeStr: (feeLabel(feeStr.0), feeLabel(feeStr.1)),
                                             numCoins: details.numCoins)
+            } else {
+                // TODO: don't call this again
             }
+          }
         } else {
             symLog.log("No exchange!")
         }
