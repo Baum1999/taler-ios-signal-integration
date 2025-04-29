@@ -66,7 +66,7 @@ struct OIMtitleView: View {
                 .frame(width: 66, height: 66)
                 .disabled(true)
                 .opacity(0.01)
-                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace,isSource: true)
+                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace, isSource: true)
 
             OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
 
@@ -74,7 +74,7 @@ struct OIMtitleView: View {
                 .frame(width: 66, height: 66)
                 .disabled(true)
                 .opacity(0.01)
-                .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace,isSource: true)
+                .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace, isSource: true)
 
         }
     }
@@ -138,7 +138,7 @@ struct OIMView: View {
             }
                 .opacity(sending ? 0.01 : 1.0)
                 .frame(width: 66, height: 66)
-                .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace,isSource: true)
+                .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace, isSource: true)
             Spacer()
             OIMsendButton(isGoal: false, isFinal: false, enabled: enabled, action: sendAction)
                 .frame(width: 66, height: 66)
@@ -180,7 +180,7 @@ struct OIMView: View {
                             .opacity((isClosed || itsMe) ? 1.0 : 0.01)
                             .matchedGeometryEffect(id: itsMe ? (sending ? "OIMback" : "OIMnumber")
                                                              : String(index),
-                                                   in: wrapper.namespace,isSource: false)
+                                                   in: wrapper.namespace, isSource: false)
                             .frame(width: size, height: size)
                         }
                     }
@@ -193,7 +193,7 @@ struct OIMView: View {
                             amountVal: $availableVal,
                             tappedVal: $tappedVal,
                               canEdit: false)
-                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
+                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
                     .onTapGesture { close() }
 //                    .zIndex(2)  // make notes fly from topZ
                     Spacer()

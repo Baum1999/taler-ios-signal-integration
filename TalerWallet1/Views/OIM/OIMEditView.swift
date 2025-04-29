@@ -81,7 +81,7 @@ struct OIMEditView: View {
                             amountVal: $amountVal,
                             tappedVal: $tappedVal,          // <- user tapped a val in the scroller
                               canEdit: true)
-                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace,isSource: true)
+                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
                         .zIndex(1)  // make notes fly from topZ
                         .scaleEffect(sending ? 0.6 : 1.0)
                         .onChange(of: amountVal) { newVal in
