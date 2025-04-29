@@ -59,8 +59,9 @@ public typealias OIMfunds = [OIMfund]
 // MARK: -
 final class OIMcash: ObservableObject, Sendable {
     private let symLog = SymLogV(0)
-    let logger = Logger(subsystem: "net.taler.gnu", category: "OIMcash")
-    var ticker = 0                  // increment each time a fund is added (or melted from others)
+    private let logger = Logger(subsystem: "net.taler.gnu", category: "OIMcash")
+    private var ticker = 0                  // increment each time a fund is added (or melted from others)
+//    let semaphore = AsyncSemaphore(value: 1)
     var currency: OIMcurrency
     @Published var funds: OIMfunds = []
 
@@ -141,6 +142,11 @@ final class OIMcash: ObservableObject, Sendable {
         var first = true
         for var fund in sorted {                        // remove newest funds first
             if fund.value == outValue && fund.morphTicker == nil && counter > 0 {
+                if first {
+                    logger.log("  ❗️added first \(fund.id) to morph for \(morphTicker)")
+                } else {
+                    logger.log("  ❗️added \(fund.id) to morph for \(morphTicker)")
+                }
                 fund.morphTicker = first ? morphTicker : -morphTicker
                 first = false
                 updateFund(fund)
@@ -149,22 +155,29 @@ final class OIMcash: ObservableObject, Sendable {
                 amount += outValue
             }
         }
-        if counter > 0 {
+        guard counter == 0 else {
             logger.warning("  ❗️Yikes: didn't find \(nr) funds to morph, missing \(counter)")
+            for var delFund in toDelete {
+                logger.log("  ❗️free \(delFund.id) from morphing \(morphTicker)")
+                delFund.morphTicker = nil
+                updateFund(delFund)
+            }
+            return true
         }
 
         while amount >= inValue {
             amount -= inValue
-            added += 1          // TODO: If we added more than 1, then we must morph more
+            added += 1          // TODO: If we added more than 1, then we must flip more than 1
         }
         if amount > 0 {
             logger.warning("  ❗️Yikes: morph leftover:\(amount)")
         }
 
+        guard toDelete.count > 1 else { return true }
         /// Stage 1: the fund with the highest id just got added - that is the anchor position for the morph
         var morphFund = toDelete.removeFirst()
         added -= 1
-        symLog.log(">>taking this anchor \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
+        logger.log(">>taking this anchor \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
         withAnimation(.basic1) {
             morphFund.outValue = outValue               // save old image
             morphFund.flippedVal = inValue              // layout.sortByValue will take this instead of value
@@ -297,8 +310,8 @@ final class OIMcash: ObservableObject, Sendable {
     }
 
     func addCash(value: UInt64, _ newState: FundState = .shouldFly, _ flippedVal: UInt64? = nil) -> OIMfund {
-        let fund = OIMfund(id: ticker, state: newState, value: value, flippedVal: flippedVal)
-        ticker += 1
+        let myTicker = ticker; ticker += 1 // TODO: atomic increment!
+        let fund = OIMfund(id: myTicker, state: newState, value: value, flippedVal: flippedVal)
         symLog.log(">>adding \(value) \(fund.id)")
         funds.append(fund)
         return fund
