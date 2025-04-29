@@ -8,17 +8,6 @@
 import SwiftUI
 import taler_swift
 
-fileprivate func intValue(_ amount: Amount?) -> UInt64 {
-    if let amount {
-        if !amount.isZero {
-            let int = amount.integer * 100              // TODO: currency specs instead of 100
-            let frac = amount.fraction / 1_000_000      // drop 6 zeroes
-            return int + UInt64(frac)
-        }
-    }
-    return 0
-}
-
 // MARK: -
 @available(iOS 16.4, *)
 struct OIMpayView: View {
@@ -52,7 +41,7 @@ struct OIMpayView: View {
 #endif
         }
         .task {
-            amountVal = intValue(amount)
+            amountVal = amount?.centValue ?? 0
         }
 
     }

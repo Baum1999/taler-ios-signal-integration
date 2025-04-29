@@ -110,6 +110,26 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
         }
     }
 
+    public var milliValue: UInt64 {
+        if !isZero {
+            let oneThousand: UInt64 = 1000
+            let base = UInt64(fractionalBase()) / oneThousand
+            let thousandths = UInt64(fraction) / base
+            return integer * oneThousand + thousandths
+        }
+        return 0
+    }
+
+    public var centValue: UInt64 {
+        if !isZero {
+            let oneHundred: UInt64 = 100
+            let base = UInt64(fractionalBase()) / oneHundred
+            let hundredths = UInt64(fraction) / base
+            return integer * oneHundred + hundredths
+        }
+        return 0
+    }
+
     /// The floating point representation of the integer.
     public var intValue: Double {
         Double(integer)

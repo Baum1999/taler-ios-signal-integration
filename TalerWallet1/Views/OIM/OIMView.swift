@@ -8,16 +8,6 @@
 import SwiftUI
 import taler_swift
 
-fileprivate func intValue(_ amount: Amount?) -> UInt64 {
-    if let amount {
-        if !amount.isZero {
-            let int = amount.integer * 100              // TODO: currency specs instead of 100
-            let frac = amount.fraction / 1_000_000      // drop 6 zeroes
-            return int + UInt64(frac)
-        }
-    }
-    return 0
-}
 // MARK: -
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
@@ -154,7 +144,7 @@ struct OIMView: View {
                 .frame(width: 66, height: 66)
         }
 
-        let maxAvailable = cash.max(available: intValue(available))
+        let maxAvailable = cash.max(available: available?.centValue ?? 0)
 //        let _ = print("maxAvailable", maxAvailable)
 
         OIMbackground() {
@@ -227,17 +217,17 @@ struct OIMView: View {
             }
         }
         .task(id: isOpen) {
-            availableVal = intValue(available)
-            cash.update(availableVal)
-            let maxAvailable = cash.max(available: intValue(available))
+            availableVal = available?.centValue ?? 0
+            cash.update(availableVal)           // set cash to available
+//            let maxAvailable = cash.max(available: availableVal)
 //            print("OIMView.task availableVal", availableVal, maxAvailable)
             debugTick += 1
         }
-        .onAppear {
-            let maxAvailable = cash.max(available: intValue(available))
+//        .onAppear {
+//            let maxAvailable = cash.max(available: available?.centValue ?? 0)
 //            print("OIMView.onAppear availableVal", availableVal, maxAvailable)
-            debugTick += 1
-        }
+//            debugTick += 1
+//        }
         .onDisappear {
             cash.moveBack()
             sending = false
@@ -266,8 +256,8 @@ struct OIMEditView: View {
     // available minus amountVal - what's still available from the balance when amount is on the table
     var isAvailable: UInt64 {
         if useAvailable {
-            let have = intValue(available)
-            let want = intValue(amount)
+            let have = available.centValue
+            let want = amount.centValue
             if have > want {
                 return have - want
             }
@@ -332,7 +322,7 @@ struct OIMEditView: View {
                 }
                 VStack {
                     Spacer()
-                    let maxAvailable = useAvailable ? cash.max(available: intValue(available)) : 0
+                    let maxAvailable = useAvailable ? cash.max(available: available.centValue) : 0
                     OIMcurrencyScroller(stack: stack.push(),
                                          cash: cash,
                                  availableVal: $availableVal,           // ==> available - amount
@@ -346,14 +336,10 @@ struct OIMEditView: View {
                         .opacity(sending ? 0.01 : 1.0)
                 }
 //              .border(.red)
-
-//                            .task {
-//                                availableVal = intValue(available) - intValue(amount)
-//                            }
             } // ZStack
         }
         .task {
-            amountVal = intValue(amount)
+            amountVal = amount.centValue
             availableVal = isAvailable
             cash.update(amountVal)
         }
@@ -439,7 +425,7 @@ struct OIMSubjectView: View {
 //              .border(.red)
             }
         }.task {
-            let amountVal = intValue(amount)
+            amountVal = amount.centValue
             withAnimation(.basic1) {
                 smallAmount = true
             }
