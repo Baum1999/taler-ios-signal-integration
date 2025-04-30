@@ -1,3 +1,8 @@
+Version 0.14.12 (wallet-core 0.14.20.1)
+
+- bugfixes
+
+
 Version 0.14.12 (wallet-core 0.14.20)
 
 - bugfixes
