@@ -88,6 +88,8 @@ struct SettingsView: View {
             List {
 #if TALER_WALLET
                 let appName = "Taler Wallet"
+#elseif TALER_NIGHTLY
+                let appName = "Taler Nightly"
 #else
                 let appName = "GNU Taler"
 #endif

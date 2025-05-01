@@ -28,7 +28,9 @@ struct RotatingTaler: View {
     @State private var rotationDirection = false
 #if TALER_WALLET
     let logo = "taler-logo-2023-blue"
-#else       // GNU Taler
+#elseif TALER_NIGHTLY
+    let logo = "taler-logo-2023-black"
+#else   // GNU_TALER
     let logo = "taler-logo-2023-red"
 #endif
 
