@@ -1,3 +1,11 @@
+Version 0.14.13 (wallet-core 0.14.22)
+
+- bugfixes
+• New feature: Taler Nightly is a clone of Taler Wallet intended for TestFlight only
+    to allow users to keep their Taler Wallet (with their money) and play around
+    with new features or bugfixes, without risk for their money in Taler Wallet
+
+
 Version 0.14.12 (wallet-core 0.14.20.1)
 
 - bugfixes
