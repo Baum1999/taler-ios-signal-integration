@@ -56,6 +56,8 @@ struct OIMnavBack<Content: View>: View {
 struct OIMtitleView: View {
     let cash: OIMcash
     let amount: Amount?
+    let isSending: Bool
+    let secondAmount: Amount?
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
@@ -69,6 +71,11 @@ struct OIMtitleView: View {
                 .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace, isSource: true)
 
             OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
+
+            if isSending {
+                Spacer()
+                OIMamountV(amount: secondAmount, currencyName: cash.currency.noteBase)
+            }
 
             OIMsendButton(isGoal: false, isFinal: false, enabled: false) {}
                 .frame(width: 66, height: 66)
@@ -150,7 +157,7 @@ struct OIMView: View {
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
-                OIMtitleView(cash: cash, amount: available)
+                OIMtitleView(cash: cash, amount: available, isSending: sending, secondAmount: nil)
 
                 VStack {
                     // this shows the two savings boxes (Germany and Sierra Leone)
@@ -178,7 +185,7 @@ struct OIMView: View {
                             .frame(width: size, height: size)
                             .zIndex(itsMe ? 3 : 0)
                             .opacity((isClosed || itsMe) ? 1.0 : 0.01)
-                            .matchedGeometryEffect(id: itsMe ? (sending ? "OIMback" : "OIMnumber")
+                            .matchedGeometryEffect(id: itsMe ? "OIMnumber" // (sending ? "OIMback" : "OIMnumber")
                                                              : String(index),
                                                    in: wrapper.namespace, isSource: false)
                             .frame(width: size, height: size)

@@ -24,7 +24,23 @@ struct OIMEditView: View {
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
     @State private var availableVal: UInt64 = 0
+    @State private var availRest: Amount
     @State private var tappedVal: UInt64 = 0
+
+    init(stack: CallStack, cash: OIMcash,
+         amount: Binding<Amount>,
+         available: Amount,
+         useAvailable : Bool,
+         fwdButtonTapped: Binding<Bool>
+    ) {
+        self.stack = stack
+        self.cash = cash
+        self._amount = amount
+        self.available = available
+        self.useAvailable = useAvailable
+        self._fwdButtonTapped = fwdButtonTapped
+        self._availRest = State(wrappedValue: { available }())
+    }
 
 
     // available minus amountVal - what's still available from the balance when amount is on the table
@@ -74,7 +90,7 @@ struct OIMEditView: View {
         ) {
             ZStack(alignment: .top) {
                 VStack {
-                    OIMtitleView(cash: cash, amount: amount)
+                    OIMtitleView(cash: cash, amount: availRest, isSending: true, secondAmount: amount)
                     Spacer()
                     OIMlineView(stack: stack.push(),
                                  cash: cash,

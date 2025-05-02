@@ -53,7 +53,7 @@ struct OIMSubjectView: View {
                   action: sendAction
         ) {
             VStack {
-                OIMtitleView(cash: cash, amount: amount)
+                OIMtitleView(cash: cash, amount: amount, isSending: true, secondAmount: amount)
                 Spacer()
                 HStack {
                     ForEach(goals, id: \.self) { goal in
