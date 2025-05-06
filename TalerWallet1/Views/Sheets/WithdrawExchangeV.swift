@@ -64,7 +64,8 @@ struct WithdrawExchangeV: View {
                      selectedBalance: selectedBalance,
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,
-                            exchange: $exchange,           // only for withdraw-exchange
+                            exchange: exchange,                     // only for withdraw-exchange
+                 maySwitchCurrencies: false,
                              isSheet: true)
             }
             .task(id: controller.currencyTicker) {

@@ -12,20 +12,21 @@ import SymLog
 // Called when tapping [􁾭Withdraw]
 // or from WithdrawExchangeV after a withdraw-exchange QR was scanned
 struct ManualWithdraw: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     let stack: CallStack
     let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
-    @Binding var amountToTransfer: Amount
-    @Binding var exchange: Exchange?           // only for withdraw-exchange
+    @Binding var amountToTransfer: Amount           // Update currency when used
+    let exchange: Exchange?                         // only for withdraw-exchange
+    let maySwitchCurrencies: Bool                   // not for withdraw-exchange
     let isSheet: Bool
 
     @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-//    @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
 
     private func viewDidLoad() async {
         if let exchange {
@@ -61,29 +62,24 @@ struct ManualWithdraw: View {
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
-            if let exchange {
+            if maySwitchCurrencies && count > 0 {
+                ScopePicker(value: $balanceIndex, onlyNonZero: false) { index in
+                    balanceIndex = index
+                    balance = controller.balances[index]
+                    symLog.log("balance = \(balance?.scopeInfo.url)")
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 4)
+            }
+            if let scope = balance?.scopeInfo ?? exchange?.scopeInfo {
+                let _ = symLog.log("exchange = \(exchange?.exchangeBaseUrl), scope = \(scope.url)")
                 ManualWithdrawContent(stack: stack.push(),
-                                      scope: exchange.scopeInfo,
+                                      scope: scope,
                              amountLastUsed: $amountLastUsed,
                            amountToTransfer: $amountToTransfer,
-                                   exchange: $exchange)
-            } else {
-                if count > 0 {
-                    ScopePicker(value: $balanceIndex, onlyNonZero: false)
-                    { index in
-                        balanceIndex = index
-                        balance = controller.balances[index]
-                    }
-                    .padding(.horizontal)
-                    .padding(.bottom, 4)
-                }
-                if let balance {
-                    ManualWithdrawContent(stack: stack.push(),
-                                          scope: balance.scopeInfo,
-                                 amountLastUsed: $amountLastUsed,
-                               amountToTransfer: $amountToTransfer,
-                                       exchange: $exchange)
-                }
+                                   exchange: exchange)
+            } else {  // should never happen, we either have an exchange or a balance
+                Text("ManualWithdrawContent: Cannot determine scope.")
             }
         } // ScrollView
             .navigationTitle(navTitle)
@@ -105,12 +101,7 @@ struct ManualWithdraw: View {
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
                 // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
                 symLog.log("❗️ task \(balanceIndex)")
-                if let exchange {
-                    let scopeInfo = exchange.scopeInfo
-                    amountToTransfer.setCurrency(scopeInfo.currency)
-                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
-                } else if let balance {
-                    let scopeInfo = balance.scopeInfo
+                if let scopeInfo = balance?.scopeInfo ?? exchange?.scopeInfo {
                     amountToTransfer.setCurrency(scopeInfo.currency)
                     currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
                 }
@@ -131,7 +122,7 @@ struct ManualWithdrawContent: View {
     let scope: ScopeInfo
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
-    @Binding var exchange: Exchange?
+    let exchange: Exchange?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -140,6 +131,7 @@ struct ManualWithdrawContent: View {
     @State private var detailsForAmount: WithdrawalDetailsForAmount? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
+    @State private var tosAccepted = false
 
     private func exchangeVia(_ baseURL: String?) -> String? {
         if let baseURL {
@@ -154,7 +146,9 @@ struct ManualWithdrawContent: View {
             return ComputeFeeResult.zero()
         }
         do {
-            let details = try await model.getWithdrawalDetailsForAmount(amount, baseUrl: nil, scope: scope,
+            let details = try await model.getWithdrawalDetailsForAmount(amount,
+                                                                baseUrl: nil,
+                                                                  scope: scope,
                                                             viewHandles: true)
             detailsForAmount = details
 //          agePicker.setAges(ages: detailsForAmount?.ageRestrictionOptions)
@@ -165,6 +159,7 @@ struct ManualWithdrawContent: View {
                 // when calling getWithdrawalDetailsForAmount again before the last call returned.
                 // Since amountToTransfer changed and we don't need the old fee anymore, we just
                 // ignore it and do nothing.
+            // especially DON'T set detailsForAmount to nil
         } catch {
             symLog.log(error.localizedDescription)
             detailsForAmount = nil
@@ -174,16 +169,18 @@ struct ManualWithdrawContent: View {
 
     @MainActor
     private func reloadExchange(_ baseURL: String) async {
-        if exchange == nil || exchange?.tosStatus != .accepted {
-            symLog.log("getExchangeByUrl(\(baseURL))")
-            exchange = try? await model.getExchangeByUrl(url: baseURL)
-        }
+        symLog.log("getExchangeByUrl(\(baseURL))")
+        let exchange = try? await model.getExchangeByUrl(url: baseURL)
+        tosAccepted = (exchange?.tosStatus == .accepted) ?? false
     }
+
     @MainActor
     private func viewDidLoad2() async {
         // neues scope wenn balance geändert wird?
-        let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer, baseUrl: nil, scope: scope,
-                                                         viewHandles: true)
+        let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer,
+                                                            baseUrl: nil,
+                                                              scope: scope,
+                                                        viewHandles: true)
         if let details {
             detailsForAmount = details
         }
@@ -220,7 +217,6 @@ struct ManualWithdrawContent: View {
                                           amountToTransfer: amountToTransfer)
 //                                             restrictAge: restrictAge)
                 let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
-                let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
 
                 if tosAccepted {
                     let a11yLabel = String(localized: "Amount to withdraw:", comment: "accessibility, no abbreviations")
@@ -250,8 +246,8 @@ struct ManualWithdrawContent: View {
                     .padding(.top)
                 } else {
                     ToSButtonView(stack: stack.push(),
-                        exchangeBaseUrl: baseURL,
-                                 viewID: VIEW_WITHDRAW_TOS,   // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
+                        exchangeBaseUrl: scope.url ?? baseURL,
+                                 viewID: VIEW_WITHDRAW_TOS,   // 31 WithdrawTOSView   TODO: might be withdraw-exchange
                                     p2p: false,
                            acceptAction: nil)
                     .padding(.top)
