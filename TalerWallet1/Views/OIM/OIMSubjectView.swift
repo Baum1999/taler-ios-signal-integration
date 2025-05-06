@@ -13,6 +13,7 @@ import taler_swift
 struct OIMSubjectView: View {
     let stack: CallStack
     let cash: OIMcash
+    let available: Amount
     @Binding var amount: Amount
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
@@ -21,7 +22,7 @@ struct OIMSubjectView: View {
 
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
-    @State private var appearing = false
+    @State private var appeared = false
     @State private var ignoreTapped: UInt64 = 0
     @State private var selectedGoal: String?
     let goals = ["Buy goods in shop", "Rent", "Schooling", "Repay loan", "Medical or health issue"]
@@ -53,7 +54,7 @@ struct OIMSubjectView: View {
                   action: sendAction
         ) {
             VStack {
-                OIMtitleView(cash: cash, amount: amount, isSending: true, secondAmount: amount)
+                OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
                 Spacer()
                 HStack {
                     ForEach(goals, id: \.self) { goal in
@@ -61,6 +62,7 @@ struct OIMSubjectView: View {
                             if goal == selectedGoal {
                                 Image(goal)
                                     .resizable()
+                                    .background(Color.white)
                                     .scaledToFit()
 //                                    .id(goal)
                                     .matchedGeometryEffect(id: goal, in: wrapper.namespace)
@@ -73,6 +75,7 @@ struct OIMSubjectView: View {
                         } else {
                             Image(goal)
                                 .resizable()
+                                .background(Color.white)
                                 .scaledToFit()
 //                                .id(goal)
                                 .matchedGeometryEffect(id: goal, in: wrapper.namespace)
@@ -84,8 +87,8 @@ struct OIMSubjectView: View {
                         }
                     }
                 }
-                .opacity(appearing ? 1.0 : 0.01)
-                .scaleEffect(appearing ? 1.0 : 0.3)
+                .opacity(appeared ? 1.0 : 0.01)
+                .scaleEffect(appeared ? 1.0 : 0.3)
 
                 Spacer()
                 OIMlineView(stack: stack.push(),
@@ -99,7 +102,7 @@ struct OIMSubjectView: View {
         }.task {
             amountVal = amount.centValue
             withAnimation(.basic1) {
-                appearing = true
+                appeared = true
             }
         }
     }

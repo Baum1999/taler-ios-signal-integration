@@ -23,6 +23,7 @@ struct P2PSubjectV: View {
     let stack: CallStack
     let cash: OIMcash
     let scope: ScopeInfo
+    let available: Amount
     let feeLabel: (String, String)?
     let feeIsNotZero: Bool?             // nil = no fees at all, false = no fee for this tx
     let outgoing: Bool
@@ -182,6 +183,7 @@ struct P2PSubjectV: View {
                 if controller.oimModeActive {
                     OIMSubjectView(stack: stack.push(),
                                     cash: cash,
+                               available: available,
                                   amount: $amountToTransfer,
                          fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
