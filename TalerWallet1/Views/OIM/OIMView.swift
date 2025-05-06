@@ -147,8 +147,8 @@ struct OIMView: View {
                 .frame(width: 66, height: 66)
                 .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace, isSource: true)
             Spacer()
-            OIMsendButton(isGoal: false, isFinal: false, enabled: enabled, action: sendAction)
-                .frame(width: 66, height: 66)
+//            OIMsendButton(isGoal: false, isFinal: false, enabled: enabled, action: sendAction)
+//                .frame(width: 66, height: 66)
         }
 
         let maxAvailable = cash.max(available: available?.centValue ?? 0)
@@ -157,10 +157,23 @@ struct OIMView: View {
         OIMbackground() {
             ZStack(alignment: .top) {
                 actions
-                OIMtitleView(cash: cash, amount: available, isSending: sending, secondAmount: nil)
+                VStack {
+                    OIMtitleView(cash: cash, amount: available, isSending: sending, secondAmount: nil)
+                    Spacer()
+                    OIMlineView(stack: stack.push(),
+                                 cash: cash,
+                            amountVal: $availableVal,
+                            tappedVal: $tappedVal,
+                              canEdit: false)
+                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
+                        .onTapGesture { sendAction() }
+                    Spacer()
+                }
+//                .border(.red)
+
 
                 VStack {
-                    // this shows the two savings boxes (Germany and Sierra Leone)
+                    // this shows the two savings boxes (Euro and Sierra Leone)
                     Spacer()
                     HStack(spacing: 30) {
 //                        ForEach(controller.balances, id: \.self) { balance in
@@ -195,20 +208,6 @@ struct OIMView: View {
                 } // two boxes
                 VStack {
                     Spacer()
-                    OIMlineView(stack: stack.push(),
-                                 cash: cash,
-                            amountVal: $availableVal,
-                            tappedVal: $tappedVal,
-                              canEdit: false)
-                    .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
-                    .onTapGesture { close() }
-//                    .zIndex(2)  // make notes fly from topZ
-                    Spacer()
-                }
-//                .border(.red)
-
-                VStack {
-                    Spacer()
                     OIMcurrencyScroller(stack: stack.push(),
                                          cash: cash,
                                  availableVal: $availableVal,
@@ -230,11 +229,15 @@ struct OIMView: View {
 //            print("OIMView.task availableVal", availableVal, maxAvailable)
             debugTick += 1
         }
-//        .onAppear {
-//            let maxAvailable = cash.max(available: available?.centValue ?? 0)
-//            print("OIMView.onAppear availableVal", availableVal, maxAvailable)
-//            debugTick += 1
-//        }
+        .onAppear {
+            if (isOpen != nil) {
+                let balance = controller.balances[0]
+                available = balance.available
+            }
+            availableVal = available?.centValue ?? 0
+            cash.update(availableVal)           // set cash to available
+            debugTick += 1
+        }
         .onDisappear {
             cash.moveBack()
             sending = false
