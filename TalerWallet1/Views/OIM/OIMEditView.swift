@@ -90,7 +90,8 @@ struct OIMEditView: View {
         ) {
             ZStack(alignment: .top) {
                 VStack {
-                    OIMtitleView(cash: cash, amount: availRest, isSending: true, secondAmount: amount)
+//                    OIMtitleView(cash: cash, amount: availRest, isSending: true, secondAmount: amount)
+                    OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
                     Spacer()
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
@@ -104,6 +105,7 @@ struct OIMEditView: View {
                             let currencyStr = amount.currencyStr
                             amount = Amount(currency: currencyStr, cent: UInt64(newVal))
                             availableVal = isAvailable
+                            availRest = Amount(currency: currencyStr, cent: UInt64(availableVal))
                         }
                     if !sending {       // need space for currency scroller
                         Spacer()
@@ -131,9 +133,11 @@ struct OIMEditView: View {
         .task {
             amountVal = amount.centValue
             availableVal = isAvailable
+//            print("OIMEditView.task", availableVal, amountVal)
             cash.update(amountVal)
         }
         .onAppear {
+//            print("OIMEditView.onAppear", availableVal, amountVal)
             withAnimation(.basic1) {
                 sending = false                              // move back up when coming back
             }
