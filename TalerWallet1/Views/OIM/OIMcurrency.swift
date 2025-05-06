@@ -17,9 +17,9 @@ public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 5
                                     noteBase: "EUR", coinBase: "eur")
 
 // 3 stacks, 5 banknotes, 5 coins (all fractionals)
-public let OIMleones = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500, 200, 100],
-                                   bankCoins: [ 50,  25,  10,   5,   1],
-                                   coinSizes: [270, 250, 240, 228, 208],
+public let OIMleones = OIMcurrency(bankNotes: [ 10000, 2000, 1000, 500, 200, 100],
+                                   bankCoins: [ 50,  10,   5,   1],
+                                   coinSizes: [270, 240, 228, 208],
                                    // [ 260mm 270px, 240mm 250px, 230mm 240px, 225mm 228px, 200mm 208px]
                                     noteBase: "SLE", coinBase: "sle")
 
