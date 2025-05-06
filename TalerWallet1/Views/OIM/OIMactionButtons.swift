@@ -15,7 +15,7 @@ struct OIMsendButton: View {
 
     var body: some View {
         let imageName = isGoal ? "noun-football-goal-4935574"
-                               : "SendTaler"
+                               : "SendMoney"    // "SendTaler"
         Button(action: action) {
             Image(imageName)
                 .resizable()
