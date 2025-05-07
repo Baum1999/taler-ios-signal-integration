@@ -43,6 +43,7 @@ struct ManualWithdraw: View {
             currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
         }
     }
+
     func navTitle(_ currency: String, _ condition: Bool = false) -> String {
         condition ? String(localized: "NavTitle_Withdraw_Currency)",
                         defaultValue: "Withdraw \(currency)",
@@ -50,6 +51,12 @@ struct ManualWithdraw: View {
                   : String(localized: "NavTitle_Withdraw",
                         defaultValue: "Withdraw",
                              comment: "NavTitle: Withdraw")
+    }
+
+    func updateCurrInfo(_ scope: ScopeInfo) {
+        symLog.log("balance = \(scope.url)")
+        amountToTransfer.setCurrency(scope.currency)
+        currencyInfo = controller.info(for: scope, controller.currencyTicker)
     }
 
     var body: some View {
@@ -60,19 +67,20 @@ struct ManualWithdraw: View {
         let navA11y = navTitle(currencyInfo.name)                               // always include currency for a11y
         let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
-        let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if maySwitchCurrencies && count > 0 {
                 ScopePicker(value: $balanceIndex, onlyNonZero: false) { index in
                     balanceIndex = index
                     balance = controller.balances[index]
-                    symLog.log("balance = \(balance?.scopeInfo.url)")
+                    if let balance {
+                        updateCurrInfo(balance.scopeInfo)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
             }
             if let scope = balance?.scopeInfo ?? exchange?.scopeInfo {
-                let _ = symLog.log("exchange = \(exchange?.exchangeBaseUrl), scope = \(scope.url)")
+                let _ = symLog.log("exchange = \(exchange?.exchangeBaseUrl), scope = \(scope.url), amountToTransfer = \(amountToTransfer.currencyStr)")
                 ManualWithdrawContent(stack: stack.push(),
                                       scope: scope,
                              amountLastUsed: $amountLastUsed,
@@ -98,12 +106,13 @@ struct ManualWithdraw: View {
                 symLog.log("❗️ \(navTitle) onDisappear")
             }
             .task { await viewDidLoad() }
-            .task(id: balanceIndex + (1000 * controller.currencyTicker)) {
-                // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
-                symLog.log("❗️ task \(balanceIndex)")
-                if let scopeInfo = balance?.scopeInfo ?? exchange?.scopeInfo {
-                    amountToTransfer.setCurrency(scopeInfo.currency)
-                    currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+            .task(id: controller.currencyTicker) {
+                // runs whenever a new currencyInfo is available
+                symLog.log("❗️ task \(controller.currencyTicker)")
+                let scopeInfo = maySwitchCurrencies ? balance?.scopeInfo
+                                                    : exchange?.scopeInfo
+                if let scopeInfo {
+                    updateCurrInfo(scopeInfo)
                 }
             }
 
@@ -141,15 +150,22 @@ struct ManualWithdrawContent: View {
     }
 
     @MainActor
-    private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
-        if amount.isZero {
-            return ComputeFeeResult.zero()
-        }
+    private func reloadExchange(_ baseURL: String) async {
+        symLog.log("getExchangeByUrl(\(baseURL))")
+        let exchange = try? await model.getExchangeByUrl(url: baseURL)
+        tosAccepted = (exchange?.tosStatus == .accepted) ?? false
+    }
+
+    @MainActor
+    private func getWithdrawalDetailsForAmount(_ amount: Amount, _ reload: Bool = false) async {
         do {
             let details = try await model.getWithdrawalDetailsForAmount(amount,
                                                                 baseUrl: nil,
                                                                   scope: scope,
                                                             viewHandles: true)
+            if reload {
+                await reloadExchange(details.exchangeBaseUrl)
+            }
             detailsForAmount = details
 //          agePicker.setAges(ages: detailsForAmount?.ageRestrictionOptions)
         } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
@@ -164,26 +180,22 @@ struct ManualWithdrawContent: View {
             symLog.log(error.localizedDescription)
             detailsForAmount = nil
         }
+    }
+
+    @MainActor
+    private func computeFee(_ amount: Amount) async -> ComputeFeeResult? {
+        if amount.isZero {
+            return ComputeFeeResult.zero()
+        }
+        await getWithdrawalDetailsForAmount(amount)
+        // TODO: actually compute the fee
         return nil
     } // computeFee
 
     @MainActor
-    private func reloadExchange(_ baseURL: String) async {
-        symLog.log("getExchangeByUrl(\(baseURL))")
-        let exchange = try? await model.getExchangeByUrl(url: baseURL)
-        tosAccepted = (exchange?.tosStatus == .accepted) ?? false
-    }
-
-    @MainActor
     private func viewDidLoad2() async {
         // neues scope wenn balance geändert wird?
-        let details = try? await model.getWithdrawalDetailsForAmount(amountToTransfer,
-                                                            baseUrl: nil,
-                                                              scope: scope,
-                                                        viewHandles: true)
-        if let details {
-            detailsForAmount = details
-        }
+        await getWithdrawalDetailsForAmount(amountToTransfer, true)
     }
 
     private func withdrawButtonTitle(_ currency: String) -> String {
@@ -196,6 +208,7 @@ struct ManualWithdrawContent: View {
                 String(localized: "WITHDRAW_CONFIRM_BUTTONTITLE", defaultValue: "Confirm Withdrawal")
         }
     }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -254,7 +267,9 @@ struct ManualWithdrawContent: View {
                 }
             } // Group
                 .padding(.horizontal)
-                .task { await reloadExchange(detailsForAmount.exchangeBaseUrl) }
+                .task(id: amountToTransfer.currencyStr) {
+                    await getWithdrawalDetailsForAmount(amountToTransfer, true)
+                }
         } else {
             LoadingView(stack: stack.push(), scopeInfo: scope, message: nil)
                 .task { await viewDidLoad2() }
