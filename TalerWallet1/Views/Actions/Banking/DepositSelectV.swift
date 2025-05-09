@@ -99,10 +99,10 @@ struct DepositSelectV: View {
 //        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT_ACCEPT, stack: stack.push())
-//            print("❗️ P2PSubjectV onAppear")
+//            print("❗️ DepositSelectV onAppear")
         }
         .onDisappear {
-//            print("❗️ P2PSubjectV onDisappear")
+//            print("❗️ DepositSelectV onDisappear")
         }
 //        .task(id: depositIBAN) { await validateIban() }
     }

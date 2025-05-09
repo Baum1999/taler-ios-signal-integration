@@ -89,7 +89,7 @@ struct OIMlayoutView: View {
         }
     }
 
-    func flipRemove(fundID: Int) {
+    func flyBack(fundID: Int) {
         if let index = funds.firstIndex(where: { $0.id == fundID }) {
             var fund = funds[index]
             symLog.log("*** fly back:\(fund.value) \(fundID)")
@@ -127,7 +127,7 @@ struct OIMlayoutView: View {
                         symLog.log("  ❗️Yikes - trying to subtract \(fund.value) from amount \(amountVal)")
                         amountVal = 0
                     }
-                    flipRemove(fundID: fundID)
+                    flyBack(fundID: fundID)
                 }
                 .zIndex(Double(fundID))
                 .id(fundID)
