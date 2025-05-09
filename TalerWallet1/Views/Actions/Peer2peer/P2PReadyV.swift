@@ -20,6 +20,7 @@ struct P2PReadyV: View {
     let amountToTransfer: Amount
     @Binding var transactionStarted: Bool
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -31,6 +32,7 @@ struct P2PReadyV: View {
     let navTitle = String(localized: "Ready")
     @State private var transactionId: String? = nil
     @State private var noTransaction: TalerTransaction? = nil
+    @Namespace var namespace
 
     @MainActor
     private func initiateP2P() async {
@@ -64,6 +66,10 @@ struct P2PReadyV: View {
         }
     }
 
+    func doneAction() {
+        dismissTop(stack.push())
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -85,7 +91,7 @@ struct P2PReadyV: View {
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .safeAreaInset(edge: .bottom) {
-                    Button("Done") { dismissTop(stack.push()) }
+                    Button("Done", action: doneAction)
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }
@@ -107,6 +113,17 @@ struct P2PReadyV: View {
         .onDisappear {
 //            print("❗️ P2PReadyV onDisappear")
         }
+#if OIM
+            .overlay { if #available(iOS 16.4, *) {
+                if controller.oimModeActive {
+                    OIMp2pReadyView(stack: stack.push(),
+                            transactionId: $transactionId,
+                                    scope: scope,
+                                   action: doneAction)
+                    .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
+                }
+            } }
+#endif
     }
 }
 // MARK: -
