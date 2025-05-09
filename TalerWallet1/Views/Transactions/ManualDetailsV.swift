@@ -224,6 +224,7 @@ struct ManualDetailsV: View {
                                 }
                                 .listRowSeparator(.automatic)
                             }
+#if DEBUG
                             if let iban {
                                 Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
                                     : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
@@ -240,6 +241,7 @@ struct ManualDetailsV: View {
                                     .disabled(false)
                                     .listRowSeparator(.hidden)
                             }
+#endif
                         }.id(listID)
                             .talerFont(.body)
                             .task { await viewDidLoad(payto) }
