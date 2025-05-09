@@ -40,6 +40,9 @@ extension Animation {
     static var springFast: Animation {
         .interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: FAST)
     }
+    static var springFast2: Animation {
+        .interactiveSpring(response: 0.3, dampingFraction: 0.3, blendDuration: FAST)
+    }
     static var springSlow: Animation {
         .interactiveSpring(response: 0.9, dampingFraction: 0.75, blendDuration: SLOW)
     }
@@ -108,5 +111,13 @@ extension Animation {
         /// Prior to iOS 17, macOS 14, tvOS 17, and watchOS 10, the `default` animation is ``easeInOut``.
         return fastAnimations ? .default
                               : .springSlow
+    }
+
+    static var basicFast: Animation {
+#if DEBUG
+        if debugAnimations { return .debug }
+#endif
+        return fastAnimations ? .springFast2
+                              : .springFast
     }
 }
