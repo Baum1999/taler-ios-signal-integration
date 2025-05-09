@@ -15,8 +15,10 @@ struct OIMSubjectView: View {
     let cash: OIMcash
     let available: Amount
     @Binding var amount: Amount
+    @Binding var selectedGoal: String?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
+    let randomGoal: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
@@ -24,8 +26,6 @@ struct OIMSubjectView: View {
     @State private var sending = false              // user tapped on Send
     @State private var appeared = false
     @State private var ignoreTapped: UInt64 = 0
-    @State private var selectedGoal: String?
-    let goals = ["Buy goods in shop", "Rent", "Schooling", "Repay loan", "Medical or health issue"]
 
     func sendAction() {
         withAnimation(.basic1) {
@@ -43,10 +43,12 @@ struct OIMSubjectView: View {
         let currency = cash.currency
         let noteBase = currency.noteBase
         let isSierra = noteBase == "SLE"
+        let goals1 = ["shopping", "Rent", "Schooling", "Repay loan", "Medical"].shuffled()
+        let goals2 = ["Phone", "Electricity", "gas pump", "Hammer", "Water"].shuffled()
 
         OIMnavBack(stack: stack.push(),
             currencyName: noteBase,
-                 isFinal: true,
+                 isFinal: false,
                   isGoal: false,
                 isSierra: isSierra,
                isSending: sending,
@@ -57,6 +59,7 @@ struct OIMSubjectView: View {
                 OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
                 Spacer()
                 HStack {
+                    let goals = randomGoal ? goals1 : goals2
                     ForEach(goals, id: \.self) { goal in
                         if let selectedGoal {
                             if goal == selectedGoal {

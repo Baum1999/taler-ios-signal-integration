@@ -20,6 +20,7 @@ struct SendAmountView: View {
     @Binding var amountToTransfer: Amount
     @Binding var amountAvailable: Amount
     @Binding var summary: String
+    @Binding var iconID: String?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -150,6 +151,7 @@ struct SendAmountView: View {
                                                 outgoing: true,
                                         amountToTransfer: $amountToTransfer,    // from the textedit
                                                  summary: $summary,
+                                                  iconID: $iconID,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
                                                        cash: cash,
@@ -160,6 +162,7 @@ struct SendAmountView: View {
                                                    outgoing: true,
                                            amountToTransfer: $amountShortcut,   // from the tapped shortcut button
                                                     summary: $summary,
+                                                     iconID: $iconID,
                                                  expireDays: $expireDays)
                 let actions = Group {
                     NavLink($buttonSelected) { inputDestination }

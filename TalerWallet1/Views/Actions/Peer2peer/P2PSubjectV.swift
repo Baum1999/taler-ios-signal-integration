@@ -29,6 +29,7 @@ struct P2PSubjectV: View {
     let outgoing: Bool
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    @Binding var iconID: String?
     @Binding var expireDays: UInt
 
     @EnvironmentObject private var controller: Controller
@@ -146,6 +147,7 @@ struct P2PSubjectV: View {
             let destination = P2PReadyV(stack: stack.push(),
                                         scope: scope,
                                       summary: summary.count > 0 ? summary : placeHolder,
+                                       iconID: iconID,
                                    expireDays: expireDays,
                                      outgoing: outgoing,
                              amountToTransfer: amountToTransfer,
@@ -185,7 +187,9 @@ struct P2PSubjectV: View {
                                     cash: cash,
                                available: available,
                                   amount: $amountToTransfer,
-                         fwdButtonTapped: $sendOrRequest)
+                            selectedGoal: $iconID,
+                         fwdButtonTapped: $sendOrRequest,
+                              randomGoal: Bool.random())
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             } }

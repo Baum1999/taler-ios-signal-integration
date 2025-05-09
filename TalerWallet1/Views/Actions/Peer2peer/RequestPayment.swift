@@ -16,6 +16,7 @@ struct RequestPayment: View {
     let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
+    @Binding var iconID: String?
 
     @EnvironmentObject private var controller: Controller
 
@@ -31,7 +32,8 @@ struct RequestPayment: View {
          selectedBalance: Balance?,
          selectedIndex: Int?,
          amountLastUsed: Binding<Amount>,
-         summary: Binding<String>
+         summary: Binding<String>,
+         iconID: Binding<String?>
     ) {
         // SwiftUI ensures that the initialization uses the
         // closure only once during the lifetime of the view, so
@@ -40,6 +42,7 @@ struct RequestPayment: View {
         self.selectedBalance = selectedBalance
         self._amountLastUsed = amountLastUsed
         self._summary = summary
+        self._iconID = iconID
 //#if OIM
         let currency = selectedIndex == 1 ? OIMleones : OIMeuros
         self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
@@ -102,7 +105,8 @@ struct RequestPayment: View {
                                     balance: balance,
                              amountLastUsed: $amountLastUsed,
                            amountToTransfer: $amountToTransfer,
-                                    summary: $summary)
+                                    summary: $summary,
+                                     iconID: $iconID)
             } else {    // TODO: Error no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }
@@ -130,6 +134,7 @@ struct RequestPaymentContent: View {
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
     @Binding var summary: String
+    @Binding var iconID: String?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -258,6 +263,7 @@ struct RequestPaymentContent: View {
                                                 outgoing: false,
                                         amountToTransfer: $amountToTransfer,
                                                  summary: $summary,
+                                                  iconID: $iconID,
                                               expireDays: $expireDays)
                 let shortcutDestination = P2PSubjectV(stack: stack.push(),
                                                        cash: cash,
@@ -268,6 +274,7 @@ struct RequestPaymentContent: View {
                                                    outgoing: false,
                                            amountToTransfer: $amountShortcut,
                                                     summary: $summary,
+                                                     iconID: $iconID,
                                                  expireDays: $expireDays)
                 let actions = Group {
                     NavLink($buttonSelected) { inputDestination }

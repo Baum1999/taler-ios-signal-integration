@@ -296,6 +296,7 @@ extension MainView {
         @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)  // Update currency when used
         @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
         @State private var summary: String = EMPTYSTRING
+        @State private var iconID: String? = nil
 
         private var openKycButton: some View {
             Button("KYC") {
@@ -352,12 +353,14 @@ extension MainView {
                              selectedBalance: selectedBalance,                  // if nil shows currency picker
                                selectedIndex: selectedIndex,                    // selected savings box from OIMview
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
-                                     summary: $summary)
+                                     summary: $summary,
+                                      iconID: $iconID)
             let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
-                                   selectedIndex: selectedIndex,                // selected savings box from OIMview
+                                     selectedIndex: selectedIndex,              // selected savings box from OIMview
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
-                                           summary: $summary)
+                                           summary: $summary,
+                                            iconID: $iconID)
             let depositDest = DepositSelectV(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed)

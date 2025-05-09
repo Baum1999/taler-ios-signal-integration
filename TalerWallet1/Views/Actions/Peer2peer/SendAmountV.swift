@@ -16,6 +16,7 @@ struct SendAmountV: View {
     let selectedBalance: Balance?           // coming from transaction list or OIM
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
+    @Binding var iconID: String?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -35,7 +36,8 @@ struct SendAmountV: View {
          selectedBalance: Balance?,
          selectedIndex: Int?,
          amountLastUsed: Binding<Amount>,
-         summary: Binding<String>
+         summary: Binding<String>,
+         iconID: Binding<String?>
     ) {
         // SwiftUI ensures that the initialization uses the
         // closure only once during the lifetime of the view, so
@@ -44,6 +46,7 @@ struct SendAmountV: View {
         self.selectedBalance = selectedBalance
         self._amountLastUsed = amountLastUsed
         self._summary = summary
+        self._iconID = iconID
 //#if OIM
         let currency = selectedIndex == 1 ? OIMleones : OIMeuros
         self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
@@ -118,7 +121,8 @@ struct SendAmountV: View {
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,
                      amountAvailable: $amountAvailable,
-                             summary: $summary)
+                             summary: $summary,
+                              iconID: $iconID)
             } else {    // TODO: Error no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }
@@ -163,6 +167,7 @@ struct SendAmountV: View {
 fileprivate struct Preview_Content: View {
     @State private var amountToPreview = Amount(currency: DEMOCURRENCY, cent: 510)
     @State private var summary: String = EMPTYSTRING
+    @State private var iconID: String? = nil
     @State private var currencyInfoL: CurrencyInfo = CurrencyInfo.zero(DEMOCURRENCY)
     @State private var noBalance: Balance? = nil
 
@@ -187,7 +192,8 @@ fileprivate struct Preview_Content: View {
           selectedBalance: noBalance,
             selectedIndex: nil,
            amountLastUsed: $amountToPreview,
-                  summary: $summary)
+                  summary: $summary,
+                   iconID: $iconID)
     }
 }
 
