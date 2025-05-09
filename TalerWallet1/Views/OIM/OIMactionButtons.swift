@@ -7,15 +7,29 @@
  */
 import SwiftUI
 
-struct OIMsendButton: View {
-    let isGoal: Bool
+enum OIMactions {
+    case withdrawal
+    case deposit
+    case sendP2P
+    case requestP2P
+    case goal
+//    case scanQR
+}
+
+struct OIMactionButton: View {
+    let type: OIMactions
     let isFinal: Bool
     let enabled: Bool
     let action: () -> Void
 
     var body: some View {
-        let imageName = isGoal ? "noun-football-goal-4935574"
-                               : "SendMoney"    // "SendTaler"
+        let imageName = switch type {
+            case .goal:         "Goal"
+            case .sendP2P :     "SendMoney"    // "SendTaler"
+            case .withdrawal:   "Withdraw"
+            case .deposit:      "Deposit"
+            case .requestP2P:   "Request"
+        }
         Button(action: action) {
             Image(imageName)
                 .resizable()
@@ -23,7 +37,26 @@ struct OIMsendButton: View {
 //                .tint(WalletColors().talerColor)
                 .foregroundStyle(WalletColors().talerColor)
         }
-        .tagStyle(isFinal ? .prominent : .borderless)
+        .tagStyle(isFinal ? .bordered : .borderless)
+        .opacity(enabled ? 1.0 : 0.01)
+        .disabled(!enabled)
+    }
+}
+
+struct OIMrequestButton: View {
+    let enabled: Bool
+    let action: () -> Void
+
+    var body: some View {
+        let imageName = "Request.png"    // "SendTaler"
+        Button(action: action) {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+//                .tint(WalletColors().talerColor)
+                .foregroundStyle(WalletColors().talerColor)
+        }
+        .tagStyle(.bordered)
         .opacity(enabled ? 1.0 : 0.01)
         .disabled(!enabled)
     }

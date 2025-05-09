@@ -8,6 +8,9 @@
 import SwiftUI
 import taler_swift
 
+let OIMbuttonSize = 80.0
+let OIMactionSize = 120.0
+
 // MARK: -
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
@@ -36,13 +39,13 @@ struct OIMnavBack<Content: View>: View {
                                 dismiss()
                             }
                         }
-                            .frame(width: 66, height: 66)
+                            .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()
-                        OIMsendButton(isGoal: isGoal,
+                        OIMactionButton(type: isGoal ? .goal : .sendP2P,
                                      isFinal: isFinal,
                                      enabled: !amount.isZero,
                                       action: action)
-                            .frame(width: 66, height: 66)
+                            .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                             .matchedGeometryEffect(id: isSending ? "OIMaction" : "OIMaction2",
                                                    in: wrapper.namespace, isSource: false)
                     }
@@ -62,13 +65,14 @@ struct OIMtitleView: View {
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             // invisible - only serves as point where the selected balance chest moves to
             OIMbalanceButton(isOpen: true, isSierra: false, isFinal: false) {}
-                .frame(width: 66, height: 66)
+                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
                 .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace, isSource: true)
+                .accessibilityHidden(true)
 
             OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
 
@@ -77,11 +81,12 @@ struct OIMtitleView: View {
                 OIMamountV(amount: secondAmount, currencyName: cash.currency.noteBase)
             }
 
-            OIMsendButton(isGoal: false, isFinal: false, enabled: false) {}
-                .frame(width: 66, height: 66)
+            OIMactionButton(type: .sendP2P, isFinal: false, enabled: false) {}
+                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
                 .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace, isSource: true)
+                .accessibilityHidden(true)
 
         }
     }
@@ -101,11 +106,17 @@ struct OIMView: View {
     @StateObject private var cash = OIMcash()
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
-    @State private var sending = false              // user tapped on Send
     @State private var available: Amount? = nil
-    @State private var isOpen: Int? = nil
+    @State private var chestOpen: Int? = nil
+    @State private var showingActions = false               // set true after user opened a chest, set false when choosing an action
+    @State private var sending = false                      // after user tapped on Send or on the money
+
+    func noAction() { }
 
     func sendAction() {
+        withAnimation(.basicFast) {
+            showingActions = false                           //
+        }
 //        let delay =
             cash.moveDown()                                 // cash animates itself
 //        withAnimation(.basic1.delay(delay + 0.5)) {
@@ -125,10 +136,11 @@ struct OIMView: View {
 
     func close() {
         withAnimation(.basic1) {
-            isOpen = nil
+            chestOpen = nil
             selectedBalance = nil
             selectedIndex = nil
             available = nil
+            showingActions = false
         }
     }
 
@@ -139,41 +151,60 @@ struct OIMView: View {
         let enabled = if let available {
             !available.isZero
         } else { false }
-        let actions = HStack(alignment: .top) {
+        let topButtons = HStack(alignment: .top) {
             QRButton(hideTitle: true) {
                 qrButtonTapped = true
             }
                 .opacity(sending ? 0.01 : 1.0)
-                .frame(width: 66, height: 66)
+                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .matchedGeometryEffect(id: "OIMback", in: wrapper.namespace, isSource: true)
             Spacer()
 //            OIMsendButton(isGoal: false, isFinal: false, enabled: enabled, action: sendAction)
-//                .frame(width: 66, height: 66)
+//                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
         }
 
         let maxAvailable = cash.max(available: available?.centValue ?? 0)
 //        let _ = print("maxAvailable", maxAvailable)
 
+        let botButtons = HStack() {
+            let buttons: [OIMactions] = [.deposit, .withdrawal, .requestP2P, .sendP2P].shuffled()
+            Spacer()
+            ForEach(buttons, id: \.self) { button in
+                let action = switch button {
+                    case .sendP2P:      sendAction
+                    case .withdrawal:   noAction
+                    case .deposit:      noAction
+                    case .requestP2P:   noAction
+                    case .goal:         noAction
+                }
+                OIMactionButton(type: button, isFinal: false,
+                             enabled: true, action: action)
+                    .frame(width: OIMactionSize, height: OIMactionSize)
+                Spacer()
+            }
+        }
+
         OIMbackground() {
             ZStack(alignment: .top) {
-                actions
+                topButtons
                 VStack {
                     OIMtitleView(cash: cash, amount: available, isSending: sending, secondAmount: nil)
                     Spacer()
+                    let isOpen = chestOpen != nil
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
                             amountVal: $availableVal,
                             tappedVal: $tappedVal,
                               canEdit: false)
-                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
-                        .onTapGesture { sendAction() }
+                        .opacity(isOpen ? 1.0 : 0.01)
+                        .onTapGesture { close() }
                     Spacer()
-                }
-//                .border(.red)
-
+                    botButtons
+                        .opacity(showingActions ? 1.0 : 0.01)
+                } // title, money, buttons
 
                 VStack {
-                    // this shows the two savings boxes (Euro and Sierra Leone)
+                    // two savings chests (Euro and Sierra Leone)
                     Spacer()
                     HStack(spacing: 30) {
 //                        ForEach(controller.balances, id: \.self) { balance in
@@ -181,19 +212,24 @@ struct OIMView: View {
 
                         let balance = controller.balances[0]
                         ForEach(0...1, id: \.self) { index in
-                            let itsMe = isOpen == index
-                            let isClosed = isOpen == nil
-                            let size = isClosed ? 120.0 : 66.0
+                            let itsMe = chestOpen == index
+                            let isClosed = chestOpen == nil
+                            let size = isClosed ? 160.0 : OIMbuttonSize
                             OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
                                 if itsMe {
                                     close()
-                                } else { withAnimation(.basic1) {
-                                    isOpen = index
-                                    selectedIndex = index
-                                    cash.currency = index == 0 ? OIMeuros : OIMleones
-                                    selectedBalance = balance
-                                    available = balance.available
-                                } }
+                                } else {
+                                    withAnimation(.basic1) {
+                                        chestOpen = index
+                                        selectedIndex = index
+                                        cash.currency = index == 0 ? OIMeuros : OIMleones
+                                        selectedBalance = balance
+                                        available = balance.available
+                                    }
+                                    withAnimation(.basic1.delay(0.3)) {
+                                        showingActions = true
+                                    }
+                                }
                             }
                             .frame(width: size, height: size)
                             .zIndex(itsMe ? 3 : 0)
@@ -205,7 +241,8 @@ struct OIMView: View {
                         }
                     }
                     Spacer()
-                } // two boxes
+                } // two chests
+
                 VStack {
                     Spacer()
                     OIMcurrencyScroller(stack: stack.push(),
@@ -222,17 +259,21 @@ struct OIMView: View {
                 }
             }
         }
-        .task(id: isOpen) {
-            availableVal = available?.centValue ?? 0
-            cash.update(availableVal)           // set cash to available
-//            let maxAvailable = cash.max(available: availableVal)
-//            print("OIMView.task availableVal", availableVal, maxAvailable)
-            debugTick += 1
+        .task(id: chestOpen) {
+            if chestOpen != nil {
+                availableVal = available?.centValue ?? 0
+                cash.update(availableVal)           // set cash to available
+                let maxAvailable = cash.max(available: availableVal)
+                print("OIMView.task availableVal", availableVal, maxAvailable)
+                debugTick += 1
+            }
         }
         .onAppear {
-            if (isOpen != nil) {
+            showingActions = false
+            if (chestOpen != nil) {
                 let balance = controller.balances[0]
                 available = balance.available
+                showingActions = true
             }
             availableVal = available?.centValue ?? 0
             cash.update(availableVal)           // set cash to available
