@@ -16,6 +16,7 @@ struct AmountV: View {
     let useISO: Bool
     let strikethrough: Bool
     let large: Bool             // set to false for QR or IBAN
+    let xLarge: Bool
     let a11yDecSep: String?
     
     @EnvironmentObject private var controller: Controller
@@ -61,7 +62,8 @@ struct AmountV: View {
         Text(amountTuple.0)
             .strikethrough(strikethrough, color: WalletColors().attention)
             .multilineTextAlignment(.center)
-            .talerFont(large ? .title : .title2)
+            .talerFont(xLarge ? .largeTitle
+                      : large ? .title : .title2)
 //            .fontWeight(large ? .medium : .regular)       // @available(iOS 16.0, *)
             .monospacedDigit()
             .accessibilityLabel(amountTuple.1)     // TODO: locale.leadingCurrencySymbol
@@ -85,6 +87,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = false
+        self.xLarge = false
         self.a11yDecSep = nil
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?) {
@@ -95,6 +98,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = false
+        self.xLarge = false
         self.a11yDecSep = nil
     }
     init(_ currency: String, cent: UInt64, isNegative: Bool?) {
@@ -105,9 +109,10 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = true
+        self.xLarge = false
         self.a11yDecSep = nil
     }
-    init(_ currency: String, amount: Amount, isNegative: Bool?) {
+    init(_ currency: String, amount: Amount, isNegative: Bool?) {   // for OIM
         self.stack = nil
         self.scope = nil
         self.amount = Amount(currency: currency , integer: amount.integer, fraction: amount.fraction)
@@ -115,6 +120,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = false
         self.large = true
+        self.xLarge = true
         self.a11yDecSep = nil
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?, strikethrough: Bool) {
@@ -125,6 +131,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = strikethrough
         self.large = false
+        self.xLarge = false
         self.a11yDecSep = nil
     }
     init(stack: CallStack?, scope: ScopeInfo?, amount: Amount, isNegative: Bool?,
@@ -136,6 +143,7 @@ extension AmountV {
         self.useISO = false
         self.strikethrough = strikethrough
         self.large = false
+        self.xLarge = false
         self.a11yDecSep = nil
     }
 }
