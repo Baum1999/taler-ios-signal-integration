@@ -167,6 +167,14 @@ class Controller: ObservableObject {
         return nil
     }
 
+    func balance(for scope: ScopeInfo) -> Balance? {
+        for balance in balances {
+            if balance.scopeInfo == scope {
+                return balance
+            }
+        }
+        return nil
+    }
 // MARK: -
     func exchange(for baseUrl: String) -> Exchange? {
         for exchange in exchanges {
