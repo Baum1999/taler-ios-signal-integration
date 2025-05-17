@@ -57,6 +57,7 @@ struct OIMSubjectView: View {
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
 
+    @Environment(\.dismiss) var dismiss     // pop back once
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     @State private var amount2: Amount? = nil
@@ -81,16 +82,17 @@ struct OIMSubjectView: View {
         let currency = cash.currency
         let noteBase = currency.noteBase
         let isSierra = noteBase == "SLE"
-        let goals1 = ["shopping", "Rent", "Schooling", "Repay loan", "Medical"].shuffled()
-        let goals2 = ["Phone", "Electricity", "gas pump", "Hammer", "Water"].shuffled()
+        let goals1 = ["blank", "Phone", "Electricity", "gas pump", "Hammer", "Water"]
+        let goals2 = ["shopping", "Rent", "Schooling", "Repay loan", "Medical"].shuffled()
 
+        let gotAction = (selectedGoal != nil) ? sendAction : nil
         OIMnavBack(stack: stack.push(),
             currencyName: noteBase,
                  isFinal: false,
                 isSierra: isSierra,
                isSending: sending,
                   amount: $amount2,
-                  action: sendAction
+                  action: gotAction
         ) {
             VStack {
                 OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amountToTransfer)
@@ -107,7 +109,14 @@ struct OIMSubjectView: View {
                         amountVal: $amountVal,
                         tappedVal: $ignoreTapped,
                           canEdit: false)
-                .scaleEffect(selectedGoal == nil ? 0.6 : 1.0)
+                    .scaleEffect(selectedGoal == nil ? 0.6 : 1.0)
+                    .onTapGesture {
+                        var transaction = Transaction()
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            dismiss()
+                        }
+                    }
             }
 //              .border(.red)
         }.task {
