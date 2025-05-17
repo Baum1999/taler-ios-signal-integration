@@ -581,7 +581,15 @@
       }
     },
     "**Step 3:** %@" : {
-
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 3:** %@"
+          }
+        }
+      }
     },
     "**Step 3:** Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
       "extractionState" : "stale",
@@ -890,7 +898,15 @@
       }
     },
     "%llu" : {
-      "comment" : "VoiceOver"
+      "comment" : "VoiceOver",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu"
+          }
+        }
+      }
     },
     "%llu Day" : {
       "comment" : "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer",
@@ -2098,6 +2114,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kwota do przelewu"
+          }
+        }
+      }
+    },
+    "Amount to withdraw from bank" : {
+      "comment" : "a11y, no abbreviations",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von der Bank abzuhebender Betrag"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wypłacenia z banku"
+          }
+        }
+      }
+    },
+    "Amount to withdraw from bank:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von der Bank abzuhebender Betrag:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwota do wypłacenia z banku:"
           }
         }
       }
@@ -5291,6 +5340,9 @@
         }
       }
     },
+    "loading" : {
+
+    },
     "Loading…" : {
       "localizations" : {
         "de" : {
@@ -5745,6 +5797,9 @@
           }
         }
       }
+    },
+    "ManualWithdrawContent: Cannot determine scope." : {
+
     },
     "Merchant" : {
       "comment" : "RefreshReason",
@@ -7892,6 +7947,12 @@
     "payment_balance_insufficient_max" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo unzureichend! Sie haben nicht genug %@."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10009,6 +10070,17 @@
         }
       }
     },
+    "Step 3: %@" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritt 3: %@"
+          }
+        }
+      }
+    },
     "Subject" : {
       "localizations" : {
         "de" : {
@@ -10374,7 +10446,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Zahlungsdienst sendet Ihr Geld zurück wenn es nicht rechtzeitig abgerufen wird, oder wenn Sie die Operation abbrechen."
+            "value" : "Der Zahlungsdienst sendet Ihr Geld zurück, wenn es nicht rechtzeitig abgerufen wird, oder wenn Sie die Operation abbrechen."
           }
         }
       }
@@ -10384,7 +10456,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Zahlungsdienst sendet Ihr Geld zurück wenn es nicht rechtzeitig abgerufen wird, oder wenn Sie die Operation abbrechen."
+            "value" : "Der Zahlungsdienst sendet Ihr Geld zurück, wenn es nicht rechtzeitig abgerufen wird, oder wenn Sie die Operation abbrechen."
           }
         },
         "es" : {
@@ -10705,7 +10777,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Anforderung wird abgebrochen wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
+            "value" : "Diese Anforderung wird abgebrochen, wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
           }
         },
         "uk" : {
@@ -10721,7 +10793,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese Anforderung wird abgebrochen wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
+            "value" : "Diese Anforderung wird abgebrochen, wenn sie nicht bis zum Ablaufdatum bezahlt wird, oder wenn Sie die Operation abbrechen."
           }
         },
         "es" : {
@@ -11167,6 +11239,9 @@
           }
         }
       }
+    },
+    "transaction sent" : {
+
     },
     "Transactions" : {
       "comment" : "ViewTitle of TransactionList",
@@ -11990,7 +12065,7 @@
       }
     },
     "via %@" : {
-      "comment" : "a11y\ncurrency/exchange chooser",
+      "comment" : "a11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
