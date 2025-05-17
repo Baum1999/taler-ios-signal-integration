@@ -13,7 +13,7 @@ import taler_swift
 struct OIMEditView: View {
     let stack: CallStack
     let cash: OIMcash
-    @Binding var amount: Amount
+    @Binding var amountToTransfer: Amount
     let available: Amount
     let useAvailable : Bool         // if false then we're requesting money and don't use available
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
@@ -28,15 +28,16 @@ struct OIMEditView: View {
     @State private var availRest: Amount
     @State private var tappedVal: UInt64 = 0
 
-    init(stack: CallStack, cash: OIMcash,
-         amount: Binding<Amount>,
-         available: Amount,
-         useAvailable : Bool,
-         fwdButtonTapped: Binding<Bool>
+    init(stack: CallStack,
+                     cash: OIMcash,
+         amountToTransfer: Binding<Amount>,
+                available: Amount,
+             useAvailable: Bool,
+          fwdButtonTapped: Binding<Bool>
     ) {
         self.stack = stack
         self.cash = cash
-        self._amount = amount
+        self._amountToTransfer = amountToTransfer
         self.available = available
         self.useAvailable = useAvailable
         self._fwdButtonTapped = fwdButtonTapped
@@ -48,7 +49,7 @@ struct OIMEditView: View {
     var isAvailable: UInt64 {
         if useAvailable {
             let have = available.centValue
-            let want = amount.centValue
+            let want = amountToTransfer.centValue
             if have > want {
                 return have - want
             }
@@ -133,8 +134,8 @@ struct OIMEditView: View {
             } // ZStack
         }
         .task {     // re-set cash to amount (once)
-            amount2 = amount
-            amountVal = amount.centValue
+            amount2 = amountToTransfer
+            amountVal = amountToTransfer.centValue
             availableVal = isAvailable
 //            print("OIMEditView.task", availableVal, amountVal)
             cash.update(amountVal)

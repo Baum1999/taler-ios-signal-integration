@@ -21,9 +21,7 @@ struct SendAmountV: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
-//#if OIM
     @StateObject private var cash: OIMcash
-//#endif
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -146,7 +144,7 @@ struct SendAmountV: View {
                                                               amountAvailable
                     OIMEditView(stack: stack.push(),
                                  cash: cash,
-                               amount: $amountToTransfer,
+                     amountToTransfer: $amountToTransfer,
                             available: available,
                          useAvailable: true,                                    // cannot send more than we have
                       fwdButtonTapped: $buttonSelected)

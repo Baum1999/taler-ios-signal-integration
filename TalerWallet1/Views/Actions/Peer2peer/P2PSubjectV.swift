@@ -186,7 +186,7 @@ struct P2PSubjectV: View {
                     OIMSubjectView(stack: stack.push(),
                                     cash: cash,
                                available: available,
-                                  amount: $amountToTransfer,
+                        amountToTransfer: $amountToTransfer,
                             selectedGoal: $iconID,
                          fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart

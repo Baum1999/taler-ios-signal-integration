@@ -52,7 +52,7 @@ struct OIMSubjectView: View {
     let stack: CallStack
     let cash: OIMcash
     let available: Amount
-    @Binding var amount: Amount
+    @Binding var amountToTransfer: Amount
     @Binding var selectedGoal: String?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
@@ -93,7 +93,7 @@ struct OIMSubjectView: View {
                   action: sendAction
         ) {
             VStack {
-                OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
+                OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amountToTransfer)
                 Spacer()
                 GoalsHStack(goals: goals1, selectedGoal: $selectedGoal)
                     .opacity(appeared ? 1.0 : 0.01)
@@ -111,8 +111,8 @@ struct OIMSubjectView: View {
             }
 //              .border(.red)
         }.task {
-            amount2 = amount
-            amountVal = amount.centValue
+            amount2 = amountToTransfer
+            amountVal = amountToTransfer.centValue
             withAnimation(.basic1) {
                 appeared = true
             }
