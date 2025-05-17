@@ -188,8 +188,7 @@ struct P2PSubjectV: View {
                                available: available,
                                   amount: $amountToTransfer,
                             selectedGoal: $iconID,
-                         fwdButtonTapped: $sendOrRequest,
-                              randomGoal: Bool.random())
+                         fwdButtonTapped: $sendOrRequest)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             } }

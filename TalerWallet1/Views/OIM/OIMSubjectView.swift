@@ -8,6 +8,44 @@
 import SwiftUI
 import taler_swift
 
+struct GoalsHStack: View {
+    let goals: [String]
+    @Binding var selectedGoal: String?
+
+    @EnvironmentObject private var wrapper: NamespaceWrapper
+
+    var body: some View {
+        HStack {
+            ForEach(goals, id: \.self) { goal in
+                if let selectedGoal {
+                    if goal == selectedGoal {
+                        Image(goal)
+                            .resizable()
+                            .background(Color.white)
+                            .scaledToFit()
+                            .matchedGeometryEffect(id: goal, in: wrapper.namespace)
+                            .onTapGesture {
+                                withAnimation(.basic1) {
+                                    self.selectedGoal = nil
+                                }
+                            }
+                    }
+                } else {
+                    Image(goal)
+                        .resizable()
+                        .background(Color.white)
+                        .scaledToFit()
+                        .matchedGeometryEffect(id: goal, in: wrapper.namespace)
+                        .onTapGesture {
+                            withAnimation(.basic1) {
+                                selectedGoal = goal
+                            }
+                        }
+                }
+            }
+        }
+    }
+}
 // MARK: -
 @available(iOS 16.4, *)
 struct OIMSubjectView: View {
@@ -18,10 +56,10 @@ struct OIMSubjectView: View {
     @Binding var selectedGoal: String?
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var fwdButtonTapped: Bool
-    let randomGoal: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
+    @State private var amount2: Amount? = nil
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
     @State private var appeared = false
@@ -49,50 +87,20 @@ struct OIMSubjectView: View {
         OIMnavBack(stack: stack.push(),
             currencyName: noteBase,
                  isFinal: false,
-                  isGoal: false,
                 isSierra: isSierra,
                isSending: sending,
-                  amount: $amount,
+                  amount: $amount2,
                   action: sendAction
         ) {
             VStack {
                 OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
                 Spacer()
-                HStack {
-                    let goals = randomGoal ? goals1 : goals2
-                    ForEach(goals, id: \.self) { goal in
-                        if let selectedGoal {
-                            if goal == selectedGoal {
-                                Image(goal)
-                                    .resizable()
-                                    .background(Color.white)
-                                    .scaledToFit()
-//                                    .id(goal)
-                                    .matchedGeometryEffect(id: goal, in: wrapper.namespace)
-                                    .onTapGesture {
-                                        withAnimation(.basic1) {
-                                            self.selectedGoal = nil
-                                        }
-                                    }
-                            }
-                        } else {
-                            Image(goal)
-                                .resizable()
-                                .background(Color.white)
-                                .scaledToFit()
-//                                .id(goal)
-                                .matchedGeometryEffect(id: goal, in: wrapper.namespace)
-                                .onTapGesture {
-                                    withAnimation(.basic1) {
-                                        selectedGoal = goal
-                                    }
-                                }
-                        }
-                    }
-                }
-                .opacity(appeared ? 1.0 : 0.01)
-                .scaleEffect(appeared ? 1.0 : 0.3)
-
+                GoalsHStack(goals: goals1, selectedGoal: $selectedGoal)
+                    .opacity(appeared ? 1.0 : 0.01)
+                    .scaleEffect(appeared ? 1.0 : 0.3)
+                GoalsHStack(goals: goals2, selectedGoal: $selectedGoal)
+                    .opacity(appeared ? 1.0 : 0.01)
+                    .scaleEffect(appeared ? 1.0 : 0.3)
                 Spacer()
                 OIMlineView(stack: stack.push(),
                              cash: cash,
@@ -103,6 +111,7 @@ struct OIMSubjectView: View {
             }
 //              .border(.red)
         }.task {
+            amount2 = amount
             amountVal = amount.centValue
             withAnimation(.basic1) {
                 appeared = true

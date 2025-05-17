@@ -21,6 +21,7 @@ struct OIMEditView: View {
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
+    @State private var amount2: Amount?
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
     @State private var availableVal: UInt64 = 0
@@ -82,16 +83,15 @@ struct OIMEditView: View {
         OIMnavBack(stack: stack.push(),
             currencyName: noteBase,
                  isFinal: false,
-                  isGoal: true,
                 isSierra: isSierra,
                isSending: sending,
-                  amount: $amount,
+                  amount: $amount2,
                   action: sendAction
         ) {
             ZStack(alignment: .top) {
                 VStack {
 //                    OIMtitleView(cash: cash, amount: availRest, isSending: true, secondAmount: amount)
-                    OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount)
+                    OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount2)
                     Spacer()
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
@@ -102,10 +102,12 @@ struct OIMEditView: View {
                         .zIndex(1)  // make notes fly from topZ
                         .scaleEffect(sending ? 0.6 : 1.0)
                         .onChange(of: amountVal) { newVal in
-                            let currencyStr = amount.currencyStr
-                            amount = Amount(currency: currencyStr, cent: UInt64(newVal))
-                            availableVal = isAvailable
-                            availRest = Amount(currency: currencyStr, cent: UInt64(availableVal))
+                            if let amountOld = amount2 {
+                                let currencyStr = amountOld.currencyStr
+                                amount2 = Amount(currency: currencyStr, cent: UInt64(newVal))
+                                availableVal = isAvailable
+                                availRest = Amount(currency: currencyStr, cent: UInt64(availableVal))
+                            }
                         }
                     if !sending {       // need space for currency scroller
                         Spacer()
@@ -130,7 +132,8 @@ struct OIMEditView: View {
 //              .border(.red)
             } // ZStack
         }
-        .task {
+        .task {     // re-set cash to amount (once)
+            amount2 = amount
             amountVal = amount.centValue
             availableVal = isAvailable
 //            print("OIMEditView.task", availableVal, amountVal)

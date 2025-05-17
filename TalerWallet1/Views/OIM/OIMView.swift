@@ -15,12 +15,11 @@ let OIMactionSize = 120.0
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
     let currencyName: String
-    let isFinal: Bool
-    let isGoal: Bool
+    let isFinal: Bool                   // bordered action button
     let isSierra: Bool
-    let isSending: Bool
-    @Binding var amount: Amount
-    let action: () -> Void
+    let isSending: Bool                 // move action button
+    @Binding var amount: Amount?
+    let action: (() -> Void)?
     var content: () -> Content
 
     @Environment(\.dismiss) var dismiss     // pop back once
@@ -41,9 +40,8 @@ struct OIMnavBack<Content: View>: View {
                         }
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()
-                        OIMactionButton(type: isGoal ? .goal : .sendP2P,
+                        OIMactionButton(type: .sendP2P,
                                      isFinal: isFinal,
-                                     enabled: !amount.isZero,
                                       action: action)
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                             .matchedGeometryEffect(id: isSending ? "OIMaction" : "OIMaction2",
@@ -81,7 +79,7 @@ struct OIMtitleView: View {
                 OIMamountV(amount: secondAmount, currencyName: cash.currency.noteBase)
             }
 
-            OIMactionButton(type: .sendP2P, isFinal: false, enabled: false) {}
+            OIMactionButton(type: .sendP2P, isFinal: false) {}
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
@@ -175,10 +173,8 @@ struct OIMView: View {
                     case .withdrawal:   noAction
                     case .deposit:      noAction
                     case .requestP2P:   noAction
-                    case .goal:         noAction
                 }
-                OIMactionButton(type: button, isFinal: false,
-                             enabled: true, action: action)
+                OIMactionButton(type: button, isFinal: false, action: action)
                     .frame(width: OIMactionSize, height: OIMactionSize)
                 Spacer()
             }
