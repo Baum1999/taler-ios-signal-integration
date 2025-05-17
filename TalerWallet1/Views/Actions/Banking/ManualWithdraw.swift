@@ -231,10 +231,11 @@ struct ManualWithdrawContent: View {
 //                                             restrictAge: restrictAge)
                 let disabled = amountToTransfer.isZero || coinData.invalid || coinData.tooMany
 
-                if tosAccepted {
-                    let a11yLabel = String(localized: "Amount to withdraw:", comment: "accessibility, no abbreviations")
+                if tosAccepted {    // Von der Bank abzuhebender Betrag
+                    let a11yLabel = String(localized: "Amount to withdraw from bank", comment: "a11y, no abbreviations")
+                    let title = String(localized: "Amount to withdraw from bank:")
                     let amountLabel = minimalistic ? String(localized: "Amount:")
-                                                   : a11yLabel
+                                                   : title
                     CurrencyInputView(scope: scope,
                                      amount: $amountToTransfer,
                              amountLastUsed: amountLastUsed,
