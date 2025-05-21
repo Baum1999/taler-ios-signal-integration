@@ -40,10 +40,11 @@ struct OIMnavBack<Content: View>: View {
                         }
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()
+                        let amountIsZero = amount?.isZero ?? true
                         OIMactionButton(type: .sendP2P,
                                      isFinal: isFinal,
-                                      action: action)
-                            .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+                                      action: amountIsZero ? nil : action)
+                            .frame(width: OIMactionSize, height: OIMbuttonSize)
                             .matchedGeometryEffect(id: isSending ? "OIMaction" : "OIMaction2",
                                                    in: wrapper.namespace, isSource: false)
                     }
@@ -79,8 +80,8 @@ struct OIMtitleView: View {
                 OIMamountV(amount: secondAmount, currencyName: cash.currency.noteBase)
             }
 
-            OIMactionButton(type: .sendP2P, isFinal: false) {}
-                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+            OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
+                .frame(width: OIMactionSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
                 .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace, isSource: true)
@@ -132,7 +133,7 @@ struct OIMView: View {
         }
     }
 
-    func close() {
+    func closeAnimated() {
         withAnimation(.basic1) {
             chestOpen = nil
             selectedBalance = nil
@@ -140,6 +141,19 @@ struct OIMView: View {
             available = nil
             showingActions = false
         }
+    }
+
+    func openChest(_ index: Int, _ balance: Balance) {
+        chestOpen = index
+        selectedIndex = index
+        cash.currency = index == 0 ? OIMeuros : OIMleones
+        selectedBalance = balance
+        available = balance.available
+
+        availableVal = available?.centValue ?? 0
+        cash.update2(availableVal, 0.2)           // set cash to available
+        let maxAvailable = cash.max(available: availableVal)
+        print("OIMView.task availableVal", availableVal, maxAvailable)
     }
 
     var body: some View {
@@ -193,7 +207,12 @@ struct OIMView: View {
                             tappedVal: $tappedVal,
                               canEdit: false)
                         .opacity(isOpen ? 1.0 : 0.01)
-                        .onTapGesture { close() }
+                        .scaleEffect(showingActions ? 0.6 : 1.0)
+                        .onTapGesture {
+                            withAnimation(.basic1) {
+                                showingActions.toggle()
+                            }
+                        }
                     Spacer()
                     botButtons
                         .opacity(showingActions ? 1.0 : 0.01)
@@ -213,17 +232,10 @@ struct OIMView: View {
                             let size = isClosed ? 160.0 : OIMbuttonSize
                             OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
                                 if itsMe {
-                                    close()
+                                    closeAnimated()
                                 } else {
                                     withAnimation(.basic1) {
-                                        chestOpen = index
-                                        selectedIndex = index
-                                        cash.currency = index == 0 ? OIMeuros : OIMleones
-                                        selectedBalance = balance
-                                        available = balance.available
-                                    }
-                                    withAnimation(.basic1.delay(0.3)) {
-                                        showingActions = true
+                                        openChest(index, balance)
                                     }
                                 }
                             }
