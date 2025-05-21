@@ -266,6 +266,22 @@ struct TransactionSummaryV: View {
         }
     }
 
+    struct KYCbutton: View {
+        let kycUrl: String?
+
+        var body: some View {
+            if let kycUrl {
+                if let destination = URL(string: kycUrl) {
+                    LinkButton(destination: destination,
+                                 hintTitle: String(localized: "You need to pass a KYC procedure."),
+                               buttonTitle: String(localized: "Open KYC website"),
+                                  a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "a11y"),
+                                     badge: NEEDS_KYC)
+                }
+            }
+        }
+    }
+
     struct PendingWithdrawalDetails: View {
         let stack: CallStack
         @Binding var transaction: TalerTransaction
@@ -274,14 +290,8 @@ struct TransactionSummaryV: View {
         var body: some View {
             let common = transaction.common
             if transaction.isPendingKYC {
-                if let kycUrl = common.kycUrl {
-                    if let destination = URL(string: kycUrl) {
-                        LinkButton(destination: destination,
-                                     hintTitle: String(localized: "You need to pass a KYC procedure."),
-                                   buttonTitle: String(localized: "Open KYC website"),
-                                      a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "a11y"),
-                                         badge: NEEDS_KYC)
-            }   }   }
+                KYCbutton(kycUrl: common.kycUrl)
+            }
             let withdrawalDetails = details.withdrawalDetails
             switch withdrawalDetails.type {
                 case .manual:               // "Make a wire transfer of \(amount) to"
@@ -472,6 +482,9 @@ struct TransactionSummaryV: View {
 
                     case .peer2peer(let p2pTransaction): Group {
                         let details = p2pTransaction.details
+                        if transaction.isPendingKYC {
+                            KYCbutton(kycUrl: common.kycUrl)
+                        }
                         if !transaction.isDone {
                             let expiration = details.info.expiration
                             let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
