@@ -185,7 +185,7 @@ struct WithdrawURIView: View {
                                        summary: $summary,
                                 shortcutAction: shortcutAction,
                                   buttonAction: buttonAction,
-                                 feeIsNegative: true,
+                                    isIncoming: true,
                                     computeFee: computeFeeWithdraw)
                             .background(actions)
                         } // ScrollView

@@ -186,7 +186,7 @@ struct PayTemplateV: View {
                                              summary: $summary,
                                       shortcutAction: shortcutAction,
                                         buttonAction: buttonAction1,
-                                       feeIsNegative: false,
+                                          isIncoming: false,
                                           computeFee: computeFeePayTemplate)
                 ScrollView {
                     if summaryIsEditable {  // after amount input,

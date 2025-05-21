@@ -44,7 +44,8 @@ struct AmountInputV: View {
 //    @Binding var feeAmount: Amount?
     let shortcutAction: ((_ amount: Amount) -> Void)?
     let buttonAction: () -> Void
-    let feeIsNegative: Bool
+//    let feeIsNegative: Bool
+    let isIncoming: Bool
     let computeFee: ((_ amount: Amount) async -> ComputeFeeResult?)?
 
     @EnvironmentObject private var controller: Controller
@@ -90,7 +91,7 @@ struct AmountInputV: View {
             CurrencyInputView(scope: scope,
                              amount: $amountToTransfer,
                      amountLastUsed: amountLastUsed,
-                          available: amountAvailable,
+                          available: isIncoming ? nil : amountAvailable,
                               title: amountLabel,
                           a11yTitle: a11yLabel,
                      shortcutAction: shortcutAction)
@@ -100,7 +101,7 @@ struct AmountInputV: View {
             QuiteSomeCoins(scope: scope,
                         coinData: coinData,
                    shouldShowFee: true,       // TODO: set to false if we never charge withdrawal fees
-                   feeIsNegative: feeIsNegative)
+                   feeIsNegative: isIncoming)
             let flags = checkAvailable(coinData)
             let hint = String(localized: "enabled when amount is non-zero", comment: "a11y")
             Button("Next") { buttonAction() }

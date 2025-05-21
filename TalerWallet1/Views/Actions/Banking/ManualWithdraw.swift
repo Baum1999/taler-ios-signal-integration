@@ -239,7 +239,7 @@ struct ManualWithdrawContent: View {
                     CurrencyInputView(scope: scope,
                                      amount: $amountToTransfer,
                              amountLastUsed: amountLastUsed,
-                                  available: nil,
+                                  available: nil,               // enable shortcuts always
                                       title: amountLabel,
                                   a11yTitle: a11yLabel,
                              shortcutAction: nil)

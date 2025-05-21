@@ -16,7 +16,7 @@ struct ShortcutButton: View {
     let currency: String
     let currencyField: CurrencyField
     let shortcut: Int
-    let available: Amount?
+    let available: Amount?                      // disable if available < value
     let action: (Int, CurrencyField) -> Void
 
     func makeButton(with newShortcut: Int) -> ShortcutButton {

@@ -296,7 +296,7 @@ struct RequestPaymentContent: View {
                                summary: $summary,
                         shortcutAction: shortcutAction,
                           buttonAction: buttonAction,
-                         feeIsNegative: true,
+                            isIncoming: true,
                             computeFee: computeFee)
                     .background(actions)
                 } else {

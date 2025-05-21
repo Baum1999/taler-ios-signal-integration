@@ -180,7 +180,7 @@ struct SendAmountView: View {
                            summary: $summary,
                     shortcutAction: shortcutAction,
                       buttonAction: buttonAction,
-                     feeIsNegative: false,
+                        isIncoming: false,
                         computeFee: computeFee)
                 .background(actions)
         } // Group

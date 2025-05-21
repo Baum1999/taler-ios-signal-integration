@@ -148,7 +148,7 @@ struct DepositAmountView: View {
                 CurrencyInputView(scope: scopeInfo,
                                  amount: $amountToTransfer,
                          amountLastUsed: amountLastUsed,
-                              available: nil,  // amountAvailable,
+                              available: amountAvailable,       // enable shortcuts if available >= value
                                   title: amountLabel,
                               a11yTitle: a11yLabel,
                          shortcutAction: nil)
