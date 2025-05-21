@@ -367,22 +367,30 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
-    func update(_ intVal: UInt64) {
+    func update2(_ intVal: UInt64, _ duration: TimeInterval = 0, _ initial: TimeInterval = 0) {
         let result = currency.notesCoins(intVal)
-        let chng1 = update(result.0, currencyNotesCoins: currency.bankNotes)
-        let chng2 = update(result.1, currencyNotesCoins: currency.bankCoins)
+        let chng1 = update1(result.0, currencyNotesCoins: currency.bankNotes, duration, initial)
+        let chng2 = update1(result.1, currencyNotesCoins: currency.bankCoins, duration, initial)
     }
 
-    func update(_ notesCoins: OIMdenominations, currencyNotesCoins: OIMdenominations) -> Bool {
+    func update1(_ notesCoins: OIMdenominations,
+          currencyNotesCoins: OIMdenominations,
+                  _ duration: TimeInterval = 0,
+                   _ initial: TimeInterval = 0) -> Bool {
         var array = funds
         var changed = false
+        var accumulatedDelay = initial
+        let count = notesCoins.reduce(0) {  x, y in
+            x + y
+        }
+        let interval: TimeInterval = (duration <= initial) || (count == 0) ? 0 : (duration - initial) / Double(count)
         for (index, value) in currencyNotesCoins.enumerated() {
             let wanted = notesCoins[index]      // number of notes which should be shown
             var shownNotes = array.filter { $0.value == value }
             var count = shownNotes.count
             while count > wanted {
                 let note = shownNotes[0]
-                symLog.log("update: remove \(note.value)")
+                symLog.log("update: remove \(note.value), \(note.id)")
                 if let index = array.firstIndex(of: note) {
                     array.remove(at: index)
                     changed = true
@@ -393,8 +401,15 @@ final class OIMcash: ObservableObject, Sendable {
             while count < wanted {
                 let note = OIMfund(id: ticker, state: .idle, value: value, flippedVal: nil)
                 ticker += 1
-                symLog.log("update: add \(note.value)")
-                array.append(note)
+                symLog.log("update: add \(note.value), \(note.id)")
+                if duration > 0 {
+                    withAnimation(.move1.delay(accumulatedDelay)) {
+                        array.append(note)
+                    }
+                    accumulatedDelay += interval
+                } else {
+                    array.append(note)
+                }
                 changed = true
                 count += 1
             }

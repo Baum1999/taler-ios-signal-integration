@@ -137,8 +137,8 @@ struct OIMEditView: View {
             amount2 = amountToTransfer
             amountVal = amountToTransfer.centValue
             availableVal = isAvailable
-//            print("OIMEditView.task", availableVal, amountVal)
-            cash.update(amountVal)
+//          print("OIMEditView.task", availableVal, amountVal)
+            cash.update2(amountVal)
         }
         .onAppear {
 //            print("OIMEditView.onAppear", availableVal, amountVal)

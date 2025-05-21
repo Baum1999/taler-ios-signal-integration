@@ -252,16 +252,7 @@ struct OIMView: View {
                     .ignoresSafeArea(edges: .horizontal)
                     .scrollDisabled(true)
                     .opacity(sending ? 1.0 : 0.01)
-                }
-            }
-        }
-        .task(id: chestOpen) {
-            if chestOpen != nil {
-                availableVal = available?.centValue ?? 0
-                cash.update(availableVal)           // set cash to available
-                let maxAvailable = cash.max(available: availableVal)
-                print("OIMView.task availableVal", availableVal, maxAvailable)
-                debugTick += 1
+                } // for matching positions of money
             }
         }
         .onAppear {
@@ -269,10 +260,13 @@ struct OIMView: View {
             if (chestOpen != nil) {
                 let balance = controller.balances[0]
                 available = balance.available
+                availableVal = available?.centValue ?? 0
+                cash.update2(availableVal)           // set cash to available
                 showingActions = true
+            } else {
+                availableVal = 0
+                cash.update2(availableVal)           // set cash to available
             }
-            availableVal = available?.centValue ?? 0
-            cash.update(availableVal)           // set cash to available
             debugTick += 1
         }
         .onDisappear {
