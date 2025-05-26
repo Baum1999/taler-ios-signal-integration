@@ -2127,10 +2127,22 @@
             "value" : "Von der Bank abzuhebender Betrag"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monto a retirar del banco"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kwota do wypłacenia z banku"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до зняття  з банку"
           }
         }
       }
@@ -2143,10 +2155,22 @@
             "value" : "Von der Bank abzuhebender Betrag:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monto a retirar del banco:"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kwota do wypłacenia z banku:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сума до зняття  з банку:"
           }
         }
       }
