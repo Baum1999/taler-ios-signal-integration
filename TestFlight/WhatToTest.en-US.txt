@@ -1,3 +1,9 @@
+Version 1.0.8 (wallet-core 1.0.10)
+
+• wallet-core: report pending outgoing for deposit in KYC
+- wallet-core: fix aborting deposit transactions
+
+
 Version 1.0.7 (wallet-core 1.0.8)
 
 • KYC also for deposit (#10016)
