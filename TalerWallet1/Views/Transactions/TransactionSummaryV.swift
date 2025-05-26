@@ -391,6 +391,9 @@ struct TransactionSummaryV: View {
                     }
                     case .deposit(let depositTransaction): Group {
                         let details = depositTransaction.details
+                        if transaction.isPendingKYC {
+                            KYCbutton(kycUrl: common.kycUrl)
+                        }
                         ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,

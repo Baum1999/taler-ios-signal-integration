@@ -145,7 +145,10 @@ struct TransactionState: Codable, Hashable {
     var minor: TransactionMinorState?
 
     var isReady: Bool { minor == .ready }
-    var isKYC: Bool { minor == .kyc || minor == .balanceKyc || minor == .mergeKycRequired }
+    var isKYC: Bool { minor == .kyc
+                   || minor == .balanceKyc
+                   || minor == .mergeKycRequired
+                   || minor == .kycAuthRequired }
 }
 
 struct TransactionTransition: Codable {             // Notification
