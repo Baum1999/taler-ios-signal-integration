@@ -11,7 +11,7 @@ import taler_swift
 
 struct SegmentControl: View {
     @Binding var value: Int
-    let accountDetails: [WithdrawalExchangeAccountDetails]
+    let accountDetails: [ExchangeAccountDetails]
     let action: (Int) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -82,7 +82,7 @@ struct SegmentControl: View {
 struct AccountPicker: View {
     let title: String
     @Binding var value: Int
-    let accountDetails: [WithdrawalExchangeAccountDetails]
+    let accountDetails: [ExchangeAccountDetails]
     let action: (Int) -> Void
 
     @State private var selected = 0
@@ -135,7 +135,7 @@ struct ManualDetailsV: View {
             withAnimation { listID = UUID() }
         }
     }
-    func validDetails(_ details: [WithdrawalExchangeAccountDetails]) -> [WithdrawalExchangeAccountDetails] {
+    func validDetails(_ details: [ExchangeAccountDetails]) -> [ExchangeAccountDetails] {
         details.filter { detail in
             detail.status.lowercased() == "ok"
         }

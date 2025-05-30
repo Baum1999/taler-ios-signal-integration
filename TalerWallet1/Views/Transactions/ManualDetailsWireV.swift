@@ -65,7 +65,7 @@ struct ManualDetailsWireV: View {
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
     let amountStr: (String, String)
     let obtainStr: (String, String)
-    let account: WithdrawalExchangeAccountDetails
+    let account: ExchangeAccountDetails
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer instructions")
@@ -226,7 +226,7 @@ struct ManualDetailsWireV: View {
 //                              xTaler: <#T##String#>,
 //                           amountStr: <#T##String#>,
 //                           obtainStr: <#T##String#>,
-//                             account: <#T##WithdrawalExchangeAccountDetails#>)
+//                             account: T##ExchangeAccountDetails)
 //        }
 //    }
 //}

@@ -403,7 +403,7 @@ struct WithdrawalDetails: Decodable {
     /// The public key of the reserve.
     var reservePub: String
     var reserveIsReady: Bool
-    var exchangeCreditAccountDetails: [WithdrawalExchangeAccountDetails]?
+    var exchangeCreditAccountDetails: [ExchangeAccountDetails]?
 
   /// Details for manual withdrawals:
     var reserveClosingDelay: RelativeTime?

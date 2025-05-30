@@ -34,14 +34,15 @@ extension AccountRestriction: Identifiable {
 ////    [x: string]: unknown;
 //}
 
-struct WithdrawalExchangeAccountDetails: Decodable {
-    var status: String                                          // "OK" or error - then conversionError
+struct ExchangeAccountDetails: Decodable {
+    var status: String                                          // "OK" or "error" - then conversionError
     var paytoUri: String
     var transferAmount: Amount?                                 // only if "OK"
     var bankLabel: String?                                      // only if wallet-core knows it
     var currencySpecification: CurrencySpecification?           // only if wallet-core knows it
     var creditRestrictions: [AccountRestriction]?               // only if restrictions apply
 //    var conversionError: TalerErrorDetail?                    // only if error
+    var scope: ScopeInfo?                                       // for Deposit
 }
 // MARK: -
 enum WithdrawalOperationStatus: String, Codable {
@@ -99,7 +100,7 @@ struct WithdrawalDetailsForAmount: Decodable {
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
     var numCoins: Int?                  // Number of coins this amountEffective will create
-    var withdrawalAccountsList: [WithdrawalExchangeAccountDetails]?
+    var withdrawalAccountsList: [ExchangeAccountDetails]?
     var ageRestrictionOptions: [Int]?   // Array of ages
     var scopeInfo: ScopeInfo
 }
@@ -193,7 +194,7 @@ fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest
 struct AcceptManualWithdrawalResult: Decodable {
     var reservePub: String
     var exchangePaytoUris: [String]
-    var withdrawalAccountsList: [WithdrawalExchangeAccountDetails]
+    var withdrawalAccountsList: [ExchangeAccountDetails]
     var transactionId: String
 }
 /// A request to accept a manual withdrawl.
