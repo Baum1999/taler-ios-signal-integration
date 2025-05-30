@@ -13,7 +13,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Taler Wallet"
           }
         },
@@ -37,7 +37,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Taler_Wallet"
           }
         },
@@ -61,7 +61,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Scan QR Codes"
           }
         },
@@ -85,7 +85,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "© Taler-Systems.com"
           }
         },

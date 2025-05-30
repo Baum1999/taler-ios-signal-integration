@@ -3664,6 +3664,16 @@
         }
       }
     },
+    "Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
+          }
+        }
+      }
+    },
     "Deposit" : {
       "comment" : "RefreshReason\nTransactionType",
       "localizations" : {
@@ -4722,6 +4732,19 @@
           }
         }
       }
+    },
+    "Finish the wire transfer of %@ in your banking app or website to verify your bank account %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Finish the wire transfer of %1$@ in your banking app or website to verify your bank account %2$@."
+          }
+        }
+      }
+    },
+    "Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically." : {
+
     },
     "Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
       "localizations" : {
@@ -11291,6 +11314,32 @@
         }
       }
     },
+    "Transfer %@ from %@ to the payment service." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Transfer %1$@ from %2$@ to the payment service."
+          }
+        }
+      }
+    },
+    "Transfer %@ from %@." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transferieren Sie %1$@ von %2$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Transfer %1$@ from %2$@."
+          }
+        }
+      }
+    },
     "Transfer %@ to the payment service." : {
       "localizations" : {
         "de" : {
@@ -13277,6 +13326,16 @@
         }
       }
     },
+    "You need to transfer %@ from the bank account %@ to the payment service to verify your deposit." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You need to transfer %1$@ from the bank account %2$@ to the payment service to verify your deposit."
+          }
+        }
+      }
+    },
     "You need to transfer %@ from your regular bank account to the Payment Service Provider to receive %@ as electronic cash in this wallet." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13330,6 +13389,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym portfelu."
+          }
+        }
+      }
+    },
+    "You need to verify having control over the bank account for the deposit." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für die Einzahlung müssen Sie verifizieren, dass Sie Kontrolle über das Bankkonto haben."
           }
         }
       }
