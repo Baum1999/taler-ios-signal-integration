@@ -37,8 +37,12 @@ struct SegmentControl: View {
                 ForEach((0..<count), id: \.self) { index in
                     let detail = accountDetails[index]
                     let specs = detail.currencySpecification
+                    let scope = detail.scope
                     let amount = detail.transferAmount
-                    let formatted = amount?.formatted(specs: specs, isNegative: false, useISO: false)
+                    let formatted = amount?.formatted(specs: specs,
+                                                 isNegative: false,
+                                                      scope: scope,
+                                                     useISO: false)
                                     ?? (EMPTYSTRING, EMPTYSTRING)
                     let bankName = detail.bankLabel
                     let a11yLabel = bankName != nil ? (bankName! + SPACE + formatted.1)
@@ -93,7 +97,9 @@ struct AccountPicker: View {
                 let detail = accountDetails[index]
                     if let amount = detail.transferAmount {
                         let amountStr = amount.formatted(specs: detail.currencySpecification,
-                                                    isNegative: false, useISO: false)
+                                                    isNegative: false,
+                                                         scope: detail.scope,
+                                                        useISO: false)
 //            let _ = print(amountStr)
                         if let bankName = detail.bankLabel {
                             Text(bankName + ":   " + amountStr.0)
@@ -187,26 +193,17 @@ struct ManualDetailsV: View {
 //                            Text(amountStr)
                         }
                     }
-                    let payto = account.paytoUri
-                    let payURL = URL(string: payto)
-                    if let queryParameters = payURL?.queryParameters {
-                        let iban = payURL?.iban
-                        let xTaler = payURL?.xTaler ??
-//                                   payURL?.host() ??
-                                     String(localized: "unknown payment method")
-                        let receiverStr = (queryParameters["receiver-name"] ?? EMPTYSTRING)
-                                            .replacingOccurrences(of: "+", with: SPACE)
-//                        let amountStr = queryParameters["amount"] ?? EMPTYSTRING
-//                        let messageStr = queryParameters["message"] ?? EMPTYSTRING
-//                        let senderStr = queryParameters["sender-name"] ?? EMPTYSTRING
+                    let payto = PayTo(account.paytoUri)
+                    if let receiverStr = payto.receiver {
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
-                                                           details: details,
+                                                        reservePub: details.reservePub,
                                                        receiverStr: receiverStr,
-                                                              iban: iban,
-                                                            xTaler: xTaler,
+                                                              iban: payto.iban,
+                                                            xTaler: payto.xTaler ?? EMPTYSTRING,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,
                                                          obtainStr: obtainStr,
+                                                         debitIBAN: nil,        // only for deposit auth
                                                            account: account)
                         Group {
                             NavigationLink(destination: wireDetails) {
@@ -225,7 +222,7 @@ struct ManualDetailsV: View {
                                 .listRowSeparator(.automatic)
                             }
 #if DEBUG
-                            if let iban {
+                            if let iban = payto.iban {
                                 Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
                                     : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
                                     .multilineTextAlignment(.leading)
@@ -244,7 +241,7 @@ struct ManualDetailsV: View {
 #endif
                         }.id(listID)
                             .talerFont(.body)
-                            .task { await viewDidLoad(payto) }
+                            .task { await viewDidLoad(account.paytoUri) }
                     } else {
                         // TODO: Error No payto URL
                     }

@@ -11,7 +11,8 @@ import taler_swift
 
 struct TransferRestrictionsV: View {
     let amountStr: (String, String)
-    let obtainStr: (String, String)
+    let obtainStr: (String, String)?
+    let debitIBAN: String?
     let restrictions: [AccountRestriction]?
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -28,14 +29,32 @@ struct TransferRestrictionsV: View {
         return String(localized: "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as electronic cash in this wallet.")
     }
 
+    private func authMini(_ amountS: String, _ debitS: String) -> String {
+        let amountNBS = amountS.nbs
+        return String(localized: "Transfer \(amountNBS) from \(debitS) to the payment service.")
+    }
+    private func authMaxi(_ amountS: String, _ debitS: String) -> String {
+        let amountNBS = amountS.nbs
+        return String(localized: "You need to transfer \(amountNBS) from the bank account \(debitS) to the payment service to verify your deposit.")
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
-            Text(minimalistic ? transferMini(amountStr.0)
-                              : transferMaxi(amountStr.0, obtainStr.0))
-            .accessibilityLabel(minimalistic ? transferMini(amountStr.1)
-                                             : transferMaxi(amountStr.1, obtainStr.1))
-                .talerFont(.body)
-                .multilineTextAlignment(.leading)
+            if let obtainStr {
+                Text(minimalistic ? transferMini(amountStr.0)
+                                  : transferMaxi(amountStr.0, obtainStr.0))
+                    .accessibilityLabel(minimalistic ? transferMini(amountStr.1)
+                                                     : transferMaxi(amountStr.1, obtainStr.1))
+                    .talerFont(.body)
+                    .multilineTextAlignment(.leading)
+            } else if let debitIBAN {
+                Text(minimalistic ? authMini(amountStr.0, debitIBAN)
+                                  : authMaxi(amountStr.0, debitIBAN))
+                    .accessibilityLabel(minimalistic ? authMini(amountStr.1, debitIBAN)
+                                                     : authMaxi(amountStr.1, debitIBAN))
+                    .talerFont(.body)
+                    .multilineTextAlignment(.leading)
+            }
             if let restrictions {
                 ForEach(restrictions) { restriction in
                     if let hintsI18 = restriction.human_hint_i18n {
@@ -58,13 +77,14 @@ struct TransferRestrictionsV: View {
 // MARK: -
 struct ManualDetailsWireV: View {
     let stack: CallStack
-    let details : WithdrawalDetails
+    let reservePub: String
     let receiverStr: String
     let iban: String?
     let xTaler: String
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
     let amountStr: (String, String)
-    let obtainStr: (String, String)
+    let obtainStr: (String, String)?    // only for withdrawal
+    let debitIBAN: String?              // only for deposit auth
     let account: ExchangeAccountDetails
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -72,18 +92,23 @@ struct ManualDetailsWireV: View {
 
     private func step3(_ amountS: String) -> String {
         let amountNBS = amountS.nbs
+        let bePatient = String(localized: "Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+        if let debitIBAN {
+            return minimalistic ? String(localized: "Transfer \(amountNBS) from \(debitIBAN).")
+                                : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website to verify your bank account \(debitIBAN).") + "\n" + bePatient
+        }
         return minimalistic ? String(localized: "Transfer \(amountNBS).")
-                            : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient.")
+                            : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
     }
 
     var body: some View {
         List {
             let cryptocode = HStack {
-                Text(details.reservePub)
+                Text(reservePub)
                     .monospacedDigit()
                     .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                CopyButton(textToCopy: details.reservePub, vertical: true)
+                CopyButton(textToCopy: reservePub, vertical: true)
                     .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
                     .disabled(false)
             }   .padding(.leading)
@@ -173,7 +198,8 @@ struct ManualDetailsWireV: View {
             Group {
                 TransferRestrictionsV(amountStr: amountStr,
                                       obtainStr: obtainStr,
-                                      restrictions: account.creditRestrictions)
+                                      debitIBAN: debitIBAN,
+                                   restrictions: account.creditRestrictions)
                 .listRowSeparator(.visible)
                 step1.listRowSeparator(.hidden)
                 if !minimalistic {

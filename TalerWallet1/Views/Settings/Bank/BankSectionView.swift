@@ -45,18 +45,14 @@ struct BankSectionView: View {
 
     @MainActor
     private func viewDidLoad() async {
-        let payURL = URL(string: account.paytoUri)
-        iban = payURL?.iban ?? EMPTYSTRING
-        xTaler = payURL?.xTaler ?? EMPTYSTRING
-        label = account.label ?? EMPTYSTRING
-        if let queryParameters = payURL?.queryParameters {
-            let name = if let rcv = queryParameters["receiver-name"] {
-                rcv.replacingOccurrences(of: "+", with: SPACE)
-            } else {
-                ownerName
-            }
-            accountHolder = name
+        let payTo = PayTo(account.paytoUri)
+        iban = payTo.iban ?? EMPTYSTRING
+        xTaler = payTo.xTaler ?? EMPTYSTRING
+        if iban.count < 1 && xTaler.count > 1 {
+            paytoType = .xTalerBank
         }
+        label = account.label ?? EMPTYSTRING
+        accountHolder = payTo.receiver ?? ownerName
     }
 
     var body: some View {

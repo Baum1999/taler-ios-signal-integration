@@ -58,18 +58,15 @@ struct BankEditView: View {
     private func viewDidLoad() async {
         if let accountID {
             if let account = try? await model.getBankAccountById(accountID) {
-                let payURL = URL(string: account.paytoUri)
-                iban = payURL?.iban ?? EMPTYSTRING
-                xTaler = payURL?.xTaler ?? EMPTYSTRING
+                let payTo = PayTo(account.paytoUri)
+                iban = payTo.iban ?? EMPTYSTRING
+                xTaler = payTo.xTaler ?? EMPTYSTRING
                 if iban.count < 1 && xTaler.count > 1 {
                     paytoType = .xTalerBank
                 }
                 accountLabel = account.label ?? EMPTYSTRING
                 kycCompleted = account.kycCompleted
-                if let queryParameters = payURL?.queryParameters {
-                    let name = queryParameters["receiver-name"] ?? ownerName
-                    accountHolder = name.replacingOccurrences(of: "+", with: SPACE)
-                }
+                accountHolder = payTo.receiver ?? ownerName
             }
         } else {
 

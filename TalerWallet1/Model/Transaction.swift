@@ -140,6 +140,31 @@ enum TransactionMajorState: String, Codable {
     }
 }
 
+struct PayTo {
+    var iban: String?
+    var xTaler: String?
+    var sender: String?
+    var receiver: String?
+    var amountStr: String?
+    var messageStr: String?
+
+    init(_ string: String) {
+        let payURL = URL(string: string)
+        if let queryParameters = payURL?.queryParameters {
+            iban = payURL?.iban
+            xTaler = payURL?.xTaler ??
+//                   payURL?.host() ??
+                     String(localized: "unknown payment method")
+            sender = queryParameters["sender-name"] ?? EMPTYSTRING
+                        .replacingOccurrences(of: "+", with: SPACE)
+            receiver = (queryParameters["receiver-name"] ?? EMPTYSTRING)
+                        .replacingOccurrences(of: "+", with: SPACE)
+            amountStr = queryParameters["amount"] ?? EMPTYSTRING
+            messageStr = queryParameters["message"] ?? EMPTYSTRING
+        }
+    }
+}
+
 struct TransactionState: Codable, Hashable {
     var major: TransactionMajorState
     var minor: TransactionMinorState?
@@ -147,8 +172,8 @@ struct TransactionState: Codable, Hashable {
     var isReady: Bool { minor == .ready }
     var isKYC: Bool { minor == .kyc
                    || minor == .balanceKyc
-                   || minor == .mergeKycRequired
-                   || minor == .kycAuthRequired }
+                   || minor == .mergeKycRequired }
+    var isKYCauth: Bool { minor == .kycAuthRequired }
 }
 
 struct TransactionTransition: Codable {             // Notification
@@ -300,6 +325,7 @@ struct KycAuthTransferInfo: Decodable, Sendable {
      /// The KYC auth transfer will *not* work if it originates from a different account.
     var debitPaytoUri: String       /// Payto URI of the account that must make the transfer
     var accountPub: String          /// Account public key that must be included in the subject
+    var amount: Amount
     var creditPaytoUris: [String]   /// Possible target payto URIs
 }
 
@@ -319,6 +345,7 @@ struct TransactionCommon: Decodable, Sendable {
     var isPending       : Bool { txState.major == .pending }
     var isPendingReady  : Bool { isPending && txState.isReady }
     var isPendingKYC    : Bool { isPending && txState.isKYC }
+    var isPendingKYCauth: Bool { isPending && txState.isKYCauth }
     var isDone          : Bool { txState.major == .done }
     var isAborting      : Bool { txState.major == .aborting }
     var isAborted       : Bool { txState.major == .aborted }
