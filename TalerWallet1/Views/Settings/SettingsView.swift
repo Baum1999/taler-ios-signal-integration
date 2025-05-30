@@ -138,9 +138,6 @@ struct SettingsView: View {
                     .id("liststyle")
                 let localConsStr = String(localized: "on LocalConsole")
                 let observability = String(localized: "Observe walletCore")
-//                SettingsToggle(name: observability, value: $localConsoleO.onChange({ isObserving in
-//                    walletCore.isObserving = isObserving}), id1: "localConsoleO",
-//                               description: hideDescriptions ? nil : localConsStr) {
                 SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
                     walletCore.isObserving = isObserving}),
                                 description: hideDescriptions ? nil : localConsStr) { isObserving in

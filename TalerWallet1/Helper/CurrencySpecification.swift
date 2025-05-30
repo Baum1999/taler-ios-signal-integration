@@ -22,7 +22,7 @@ extension Locale {
         return Locale.preferredLanguages.compactMap({Locale(identifier: $0).languageCode})
     }
 }
-
+// MARK: -
 extension Locale {
     func leadingCurrencySymbol() -> Bool {
         let currencyFormatter = NumberFormatter()
@@ -35,7 +35,7 @@ extension Locale {
         return currencySymbolLocation == 0
     }
 }
-
+// MARK: -
 extension Amount {
     func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool,
                            useISO: Bool = false, a11yDecSep: String? = nil
@@ -103,7 +103,7 @@ extension Amount {
         return plainString(inputDigits: inputDigits(currencyInfo))
     }
 }
-
+// MARK: -
 public struct CurrencyInfo: Sendable {
 //    let scope: ScopeInfo
     let specs: CurrencySpecification
@@ -268,7 +268,7 @@ public struct CurrencyInfo: Sendable {
         return madeUpStr
     }
 }
-
+// MARK: -
 public struct CurrencySpecification: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
         case name = "name"
@@ -291,8 +291,7 @@ public struct CurrencySpecification: Codable, Sendable {
     /// This way, we can also communicate the currency symbol to be used.
     let altUnitNames: [Int : String]?
 }
-
-
+// MARK: -
 public class CurrencyFormatter: NumberFormatter {
 
     var name: String?

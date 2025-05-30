@@ -12,7 +12,7 @@ import SymLog
 // Called when tapping [􁾭Withdraw]
 // or from WithdrawExchangeV after a withdraw-exchange QR was scanned
 struct ManualWithdraw: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let selectedBalance: Balance?
     @Binding var amountLastUsed: Amount
@@ -126,7 +126,7 @@ struct ManualWithdraw: View {
 }
 // MARK: -
 struct ManualWithdrawContent: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let scope: ScopeInfo
     @Binding var amountLastUsed: Amount

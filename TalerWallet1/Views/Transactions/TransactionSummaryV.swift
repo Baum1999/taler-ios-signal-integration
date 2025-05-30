@@ -265,7 +265,7 @@ struct TransactionSummaryV: View {
                 }
         }
     }
-
+    // MARK: -
     struct KYCbutton: View {
         let kycUrl: String?
 
@@ -318,7 +318,7 @@ struct TransactionSummaryV: View {
             } // switch
         }
     }
-
+    // MARK: -
     struct TypeDetail: View {
         let stack: CallStack
         let scope: ScopeInfo?
@@ -562,7 +562,7 @@ struct TransactionSummaryV: View {
             } // Group
         }
     }
-
+    // MARK: -
     struct QRCodeDetails: View {
         var transaction : TalerTransaction
         var body: some View {

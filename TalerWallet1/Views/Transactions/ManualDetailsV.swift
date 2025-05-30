@@ -120,8 +120,8 @@ struct AccountPicker: View {
 // MARK: -
 struct ManualDetailsV: View {
     let stack: CallStack
-    var common : TransactionCommon
-    var details : WithdrawalDetails
+    let common: TransactionCommon
+    let details: WithdrawalDetails
 
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -142,8 +142,8 @@ struct ManualDetailsV: View {
     }
 
     @MainActor
-    private func viewDidLoad(_ payto: String) async {
-        if let specs = try? await model.getQrCodesForPayto(payto) {
+    private func viewDidLoad(_ paytoUri: String) async {
+        if let specs = try? await model.getQrCodesForPayto(paytoUri) {
             qrCodeSpecs = specs
             return
         }
