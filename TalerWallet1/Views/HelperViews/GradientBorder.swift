@@ -36,43 +36,34 @@ struct GradientBorder<Content: View>: View {
     @State var rotation: CGFloat = 0
 
     var body: some View {
-        ZStack {
-            Group {
-                if radius < 2 {
-                    Rectangle()
-                } else {
-                    RoundedRectangle(cornerRadius: radius, style: .continuous)
-                }
-            }
-                .frame(width: size, height: size).foregroundStyle(background)
-                .shadow(color: background.opacity(0.5), radius: 10, x: 0, y: 10)
-            let gradient = Gradient(colors: [
-                color.opacity(0.01),
-                color,
-                color,
-                color.opacity(0.01)]
-            )
-            let rotatingRect = Rectangle()
-                .frame(width: size*2, height: size/2)
-                .foregroundStyle(LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom))
-                .rotationEffect(.degrees(rotation))
-            let border = lineWidth - 0.5
-            if radius < 2 {
-                rotatingRect
-                    .mask {
-                        Rectangle()
-                            .stroke(lineWidth: lineWidth)
-                            .frame(width: size - border, height: size - border)
-                    }
-            } else {
+        HStack {
+            Spacer()
+            ZStack {
+                RoundedRectangle(cornerRadius: radius, style: .continuous)
+                    .frame(width: size, height: size).foregroundStyle(background)
+                    .shadow(color: background.opacity(0.5), radius: 10, x: 0, y: 10)
+                let gradient = Gradient(colors: [
+                    color.opacity(0.01),
+                    color,
+                    color,
+                    color.opacity(0.01)]
+                )
+                let linearGradient = LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom)
+                let rotatingRect = Rectangle()
+                    .frame(width: size*2, height: size/2)
+                    .foregroundStyle(linearGradient)
+                    .rotationEffect(.degrees(rotation))
+                let border = lineWidth - 0.5
                 rotatingRect
                     .mask {
                         RoundedRectangle(cornerRadius: radius - lineWidth/2, style: .continuous)
                             .stroke(lineWidth: lineWidth)
                             .frame(width: size - border, height: size - border)
                     }
+                content()
             }
-            content()
+            .frame(width: size, height: size)
+            Spacer()
         }
         .onAppear {
             withAnimation(.linear(duration: 4).repeatForever(autoreverses: false)) {
