@@ -588,6 +588,24 @@
             "state" : "translated",
             "value" : "**Schritt 3:** %@"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Paso 3:** %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Krok 3:** %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Крок 3:** %@"
+          }
         }
       }
     },
@@ -3671,6 +3689,18 @@
             "state" : "translated",
             "value" : "Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W zależności od banku przelew może potrwać od kilku minut do dwóch dni roboczych, prosimy o cierpliwość."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Залежно від вашого банку, переказ може зайняти від декількох хвилин до двох робочих днів, будь ласка, наберіться терпіння."
+          }
         }
       }
     },
@@ -4735,6 +4765,12 @@
     },
     "Finish the wire transfer of %@ in your banking app or website to verify your bank account %@." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen Sie die Überweisung von %1$@ in Ihrer Banking-App oder Bank-Webseite ab, um Ihr Konto %2$@ zu verifizieren."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4744,9 +4780,17 @@
       }
     },
     "Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt."
+          }
+        }
+      }
     },
     "Finish the wire transfer of %@ in your banking app or website, then this withdrawal will proceed automatically. Depending on your bank the transfer can take from minutes to two working days, please be patient." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9283,7 +9327,14 @@
 
     },
     "Scanned QR is no URL" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der gescannte QR-Code enthält keine URL"
+          }
+        }
+      }
     },
     "Scanning QR-codes requires access to the camera" : {
       "localizations" : {
@@ -10125,6 +10176,24 @@
             "state" : "translated",
             "value" : "Schritt 3: %@"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paso 3: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krok 3: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Крок 3: %@"
+          }
         }
       }
     },
@@ -10254,6 +10323,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Naciśnij %@ lub zeskanuj kod QR wypłaty z banku, aby dodać usługę płatności."
+          }
+        }
+      }
+    },
+    "Tap QR for NFC:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für NFC tippen Sie den QR-Code:"
           }
         }
       }
@@ -10725,6 +10804,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu dni"
+          }
+        }
+      }
+    },
+    "This is mandatory, otherwise the verification will fail." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist obligatorisch, da sonst die Verifizierung fehlschlägt."
           }
         }
       }
@@ -11314,16 +11403,6 @@
         }
       }
     },
-    "Transfer %@ from %@ to the payment service." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Transfer %1$@ from %2$@ to the payment service."
-          }
-        }
-      }
-    },
     "Transfer %@ from %@." : {
       "localizations" : {
         "de" : {
@@ -11336,6 +11415,22 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Transfer %1$@ from %2$@."
+          }
+        }
+      }
+    },
+    "Transfer %@ from account %@ to verify having control over it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisen Sie %1$@ vom Konto %2$@ um den Zugriff darauf zu verifizieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Transfer %1$@ from account %2$@ to verify having control over it."
           }
         }
       }
@@ -13326,16 +13421,6 @@
         }
       }
     },
-    "You need to transfer %@ from the bank account %@ to the payment service to verify your deposit." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You need to transfer %1$@ from the bank account %2$@ to the payment service to verify your deposit."
-          }
-        }
-      }
-    },
     "You need to transfer %@ from your regular bank account to the Payment Service Provider to receive %@ as electronic cash in this wallet." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13389,6 +13474,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym portfelu."
+          }
+        }
+      }
+    },
+    "You need to transfer %@ to the payment service from your bank account %@ to verify having control over it. Don't use a different bank account, or the verification will fail." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen an den Zahlungsdienst %1$@ von Ihrem Bankkonto %2$@ überweisen, um zu verifizieren dass sie darauf Zugriff haben. Verwenden Sie kein anderes Konto, oder die Verifizierung schlägt fehl."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You need to transfer %1$@ to the payment service from your bank account %2$@ to verify having control over it. Don't use a different bank account, or the verification will fail."
           }
         }
       }

@@ -31,7 +31,7 @@ struct TransferRestrictionsV: View {
 
     private func authMini(_ amountS: String, _ debitS: String) -> String {
         let amountNBS = amountS.nbs
-        return String(localized: "Transfer \(amountNBS) to the payment service from \(debitS) to verify having control over it.")
+        return String(localized: "Transfer \(amountNBS) from account \(debitS) to verify having control over it.")
     }
     private func authMaxi(_ amountS: String, _ debitS: String) -> String {
         let amountNBS = amountS.nbs
