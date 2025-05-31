@@ -24,6 +24,43 @@
  */
 import SwiftUI
 
+@available(iOS 18.3, *)
+struct BorderWithNFC<Content: View>: View {
+    let talerURI: String
+    let size: CGFloat
+    var content: () -> Content
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    @StateObject private var tagEmulation = TagEmulation.shared
+
+    var body: some View {
+        let _ = Self._printChanges()
+        if tagEmulation.canUseHCE {
+            VStack {
+                if !minimalistic {
+                    Text("Tap for NFC:")
+                        .talerFont(.subheadline)
+                        .padding(.vertical, -4)
+                }
+                let screenWidth = UIScreen.screenWidth
+                GradientBorder(size: size + 20.0,
+                               color: .accentColor,
+                               background: WalletColors().backgroundColor)
+                {
+                    content()
+                        .onTapGesture {
+                            tagEmulation.emulateTag(talerURI)
+                        }
+                }
+            }.onDisappear() {
+                tagEmulation.killEmulation()
+            }
+        } else {
+            content()
+        }
+    }
+}
+// MARK: -
 // Use radius: 0 for rect instead of rounded rect
 struct GradientBorder<Content: View>: View {
     let size: CGFloat

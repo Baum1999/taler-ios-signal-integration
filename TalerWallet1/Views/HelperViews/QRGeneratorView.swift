@@ -22,7 +22,8 @@
 import SwiftUI
 
 struct QRGeneratorView: View {
-    var text: String
+    let text: String
+    let size: CGFloat
 
     var body: some View {
         if let data = getQRCodeData(text: text) {
@@ -31,7 +32,7 @@ struct QRGeneratorView: View {
                     .interpolation(.none)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 200, height: 200)
+                    .frame(width: size, height: size)
             } else {
                 EmptyView()
             }
@@ -55,8 +56,9 @@ struct QRGeneratorView: View {
 struct QRGeneratorView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            QRGeneratorView(text: "Hello World!")
-            QRGeneratorView(text: "taler://pay-pull/exchange.demo.taler.net/7J7SNHYMCCAZ1ARY9YCB5Z9FTY0YZP8F2KDRXV94KZCQ6WAVMTX0")
+            QRGeneratorView(text: "Hello World!", size: 200)
+            QRGeneratorView(text: "taler://pay-pull/exchange.demo.taler.net/7J7SNHYMCCAZ1ARY9YCB5Z9FTY0YZP8F2KDRXV94KZCQ6WAVMTX0",
+                            size: 200)
         }
     }
 }

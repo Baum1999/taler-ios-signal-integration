@@ -9,38 +9,6 @@ import SwiftUI
 import taler_swift
 import AVFoundation
 
-@available(iOS 18.3, *)
-struct QRCodewithNFC<Content: View>: View {
-    let talerURI: String
-    var content: () -> Content
-
-    @AppStorage("minimalistic") var minimalistic: Bool = false
-    @StateObject private var tagEmulation = TagEmulation()
-
-    var body: some View {
-        if tagEmulation.canUseHCE {
-            if !minimalistic {
-                Text("Tap QR for NFC:")
-            }
-            let screenWidth = UIScreen.screenWidth
-            GradientBorder(size: screenWidth/1.8,
-                          color: .accentColor,
-                     background: WalletColors().backgroundColor)
-            {
-                content()
-                    .onTapGesture {
-                        tagEmulation.emulateTag(talerURI)
-                    }
-            }
-            .onDisappear() {
-                tagEmulation.killEmulation()
-            }
-        } else {
-            content()
-        }
-    }
-}
-
 struct QRCodeDetailView: View {
     let talerURI: String
     let talerCopyShare: String
@@ -90,12 +58,13 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             Section {
-                let qrView = QRGeneratorView(text: talerURI)
+                let size = 240.0
+                let qrView = QRGeneratorView(text: talerURI, size: size)
                                 .frame(maxWidth: .infinity, alignment: .center)
                 Group {
 #if TALER_NIGHTLY || GNU_TALER
                     if #available(iOS 18.3, *) {
-                        QRCodewithNFC(talerURI: talerURI) {
+                        BorderWithNFC(talerURI: talerURI, size: size) {
                             qrView
                         }
                     } else {

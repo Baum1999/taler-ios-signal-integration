@@ -11,7 +11,7 @@ import os.log
 @available(iOS 18.3, *)
 @MainActor
 class TagEmulation: ObservableObject {
-
+    public static let shared = TagEmulation()
     @Published var canUseHCE: Bool = false
 
     nonisolated let logger = Logger(subsystem: "net.taler.gnu", category: "TagEmulation")
@@ -68,8 +68,12 @@ class TagEmulation: ObservableObject {
                 logger.info("starting eventStream")
                 try await eventStream(cardSession, data: emulatedData)
                 logger.info("eventStream finished")
+
+                logger.info("cardSession.invalidate")
+                await cardSession.invalidate()
                 result = true
             }
+            cardSession = nil
         } catch let error {
             // Handle failure to acquire NFC presentment intent assertion or card session.
             logger.error("❗️NFCPresentmentIntentAssertion not possible: \(error.localizedDescription)")
@@ -82,9 +86,6 @@ class TagEmulation: ObservableObject {
     func killEmulation() {
         Task() {
             if let session = cardSession {
-                if await session.isEmulationInProgress {
-                    logger.info("cardSession.invalidate")
-                }
                 await session.invalidate()
                 cardSession = nil
             }

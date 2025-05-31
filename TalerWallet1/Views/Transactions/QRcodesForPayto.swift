@@ -23,8 +23,9 @@ struct QRcodesForPayto: View {
                     .listRowSeparator(.hidden)
             }
             ForEach(qrCodeSpecs, id: \.self) { spec in
+                let size = 200.0
                 Text(spec.type)
-                QRGeneratorView(text: spec.qrContent)
+                QRGeneratorView(text: spec.qrContent, size: size)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .accessibilityLabel(Text("QR Code", comment: "a11y"))
                     .listRowSeparator(.hidden)
