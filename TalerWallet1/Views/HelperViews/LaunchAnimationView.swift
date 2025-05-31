@@ -19,7 +19,7 @@ struct LaunchAnimationView: View {
         }
     }
 }
-
+// MARK: -
 struct RotatingTaler: View {
     let size: CGFloat
     let progress: Bool

@@ -36,13 +36,27 @@ struct AboutView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let walletCore = WalletCore.shared
+        let size = 100.0
+        let rotatingTaler = RotatingTaler(size: size,
+                                      progress: false,
+                               rotationEnabled: $rotationEnabled)
+            .accessibilityHidden(true)   // has its own accessibilityLabel
+            .frame(maxWidth: .infinity, alignment: .center)
+            .onTapGesture(count: 2) { rotationEnabled.toggle() }
         Group {
             List {
-                RotatingTaler(size: 100, progress: false, rotationEnabled: $rotationEnabled)
-                    // has its own accessibilityLabel
-                    .accessibilityHidden(true)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .onTapGesture(count: 1) { rotationEnabled.toggle() }
+#if TALER_NIGHTLY || GNU_TALER
+                if #available(iOS 18.3, *) {
+                    let talerURI = "taler://withdraw-exchange/exchange.taler-ops.ch"
+                    BorderWithNFC(talerURI: talerURI, size: size) {
+                        rotatingTaler
+                    }
+                } else {
+                    rotatingTaler
+                }
+#else
+                rotatingTaler
+#endif
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",
                         imageName: "link",
