@@ -365,7 +365,11 @@ struct TransactionSummaryV: View {
                                                          obtainStr: nil,        // only for withdrawal
                                                          debitIBAN: debitPayTo.iban,
                                                            account: account)
-
+                        NavigationLink(destination: wireDetails) {
+                            Text(minimalistic ? "Instructions"
+                                 : "Wire transfer instructions")
+                            .talerFont(.title3)
+                        }
                     }
                 }
             }
