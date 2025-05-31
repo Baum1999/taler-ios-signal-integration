@@ -367,7 +367,7 @@ struct TransactionSummaryV: View {
                                                            account: account)
                         NavigationLink(destination: wireDetails) {
                             Text(minimalistic ? "Instructions"
-                                 : "Wire transfer instructions")
+                                              : "Wire transfer instructions")
                             .talerFont(.title3)
                         }
                     }

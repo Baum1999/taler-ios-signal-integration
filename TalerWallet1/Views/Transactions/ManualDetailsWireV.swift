@@ -31,11 +31,11 @@ struct TransferRestrictionsV: View {
 
     private func authMini(_ amountS: String, _ debitS: String) -> String {
         let amountNBS = amountS.nbs
-        return String(localized: "Transfer \(amountNBS) from \(debitS) to the payment service.")
+        return String(localized: "Transfer \(amountNBS) to the payment service from \(debitS) to verify having control over it.")
     }
     private func authMaxi(_ amountS: String, _ debitS: String) -> String {
         let amountNBS = amountS.nbs
-        return String(localized: "You need to transfer \(amountNBS) from the bank account \(debitS) to the payment service to verify your deposit.")
+        return String(localized: "You need to transfer \(amountNBS) to the payment service from your bank account \(debitS) to verify having control over it. Don't use a different bank account, or the verification will fail.")
     }
 
     var body: some View {
@@ -173,7 +173,9 @@ struct ManualDetailsWireV: View {
                              : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
-            let mandatory = Text("This is mandatory, otherwise your money will not arrive in this wallet.")
+            let manda1 = String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
+            let manda2 = String(localized: "This is mandatory, otherwise the verification will fail.")
+            let mandatory = Text(debitIBAN == nil ? manda1 : manda2)
                 .bold()
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
