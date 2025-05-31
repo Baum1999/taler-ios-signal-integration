@@ -1,3 +1,10 @@
+Version 1.0.10 (wallet-core 1.0.12)
+
+• NFC for QR-Codes (requires iOS 18.3)
+- update German & Polish localization
+- fix KYC auth for deposit (#10050)
+
+
 Version 1.0.9 (wallet-core 1.0.12)
 
 • KYC auth for deposit (#10050)
