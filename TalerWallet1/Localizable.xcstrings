@@ -2658,6 +2658,12 @@
             "state" : "translated",
             "value" : "Zurück"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wróć"
+          }
         }
       }
     },
@@ -3188,6 +3194,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weiter"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dalej"
           }
         }
       }
@@ -4776,6 +4788,12 @@
             "state" : "new",
             "value" : "Finish the wire transfer of %1$@ in your banking app or website to verify your bank account %2$@."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelej %1$@ w aplikacji bankowej lub na stronie internetowej, aby zweryfikować swoje konto bankowe %2$@."
+          }
         }
       }
     },
@@ -4785,6 +4803,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokończ przelew w wysokości %@ w aplikacji bankowej lub na stronie internetowej, a wypłata nastąpi automatycznie"
           }
         }
       }
@@ -10327,12 +10351,30 @@
         }
       }
     },
-    "Tap QR for NFC:" : {
+    "Tap for NFC:" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Für NFC tippen Sie den QR-Code:"
+            "value" : "Für NFC antippen:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca para NFC:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij dla NFC:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Торкніться для NFC:"
           }
         }
       }
@@ -11416,6 +11458,12 @@
             "state" : "new",
             "value" : "Transfer %1$@ from %2$@."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelew %1$@ z %2$@."
+          }
         }
       }
     },
@@ -11431,6 +11479,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Transfer %1$@ from account %2$@ to verify having control over it."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przelew %1$@ z konta %2$@ aby zweryfikować posiadanie nad nim kontroli."
           }
         }
       }
@@ -13491,6 +13545,12 @@
             "state" : "new",
             "value" : "You need to transfer %1$@ to the payment service from your bank account %2$@ to verify having control over it. Don't use a different bank account, or the verification will fail."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz przelać %1$@ do usługi płatności ze swojego konta bankowego %2$@ aby zweryfikować, że masz nad nim kontrolę. Nie używaj innego konta bankowego, ponieważ weryfikacja nie powiedzie się."
+          }
         }
       }
     },
@@ -13500,6 +13560,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Für die Einzahlung müssen Sie verifizieren, dass Sie Kontrolle über das Bankkonto haben."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz zweryfikować posiadanie kontroli nad kontem bankowym do wpłaty."
           }
         }
       }
