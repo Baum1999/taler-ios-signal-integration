@@ -9,7 +9,6 @@ import Foundation
 import taler_swift
 import AnyCodable
 //import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 struct AccountChange: Codable {             // Notification
     enum TransitionType: String, Codable {
@@ -39,7 +38,7 @@ extension WalletModel {
     nonisolated func validateIban(_ iban: String, viewHandles: Bool = false)
       async throws -> Bool {
         let request = ValidateIban(iban: iban)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.valid
     }
 }
@@ -81,7 +80,7 @@ extension WalletModel {
     nonisolated func depositWireTypes(_ currency: String?, scopeInfo: ScopeInfo? = nil, viewHandles: Bool = false)
       async throws -> [WireTypeDetails] {
         let request = DepositWireTypes(currency: currency, scopeInfo: scopeInfo)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.wireTypeDetails
     }
 }
@@ -107,7 +106,7 @@ extension WalletModel {
     nonisolated func getMaxDepositAmount(_ scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> Amount {
         let request = GetMaxDepositAmount(scope: scope)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.rawAmount
     }
 } // getMaxDepositAmount
@@ -145,7 +144,7 @@ extension WalletModel {
     nonisolated func checkDeposit4711(_ depositPaytoUri: String, amount: Amount, viewHandles: Bool = false)
       async throws -> CheckDepositResponse {
         let request = CheckDeposit(depositPaytoUri: depositPaytoUri, amount: amount)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -175,7 +174,7 @@ extension WalletModel {
     nonisolated func createDepositGroup(_ depositPaytoUri: String, scope: ScopeInfo, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
         let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, scope: scope, amount: amount)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -204,7 +203,7 @@ extension WalletModel {
     nonisolated func listBankAccounts(_ currency: String? = nil, viewHandles: Bool = false)
       async throws -> [BankAccountsInfo] {
         let request = ListBankAccounts(currency: currency)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.accounts
     }
 }
@@ -224,7 +223,7 @@ extension WalletModel {
     nonisolated func getBankAccountById(_ bankAccountId: String, viewHandles: Bool = false)
       async throws -> BankAccountsInfo {
         let request = GetBankAccountById(bankAccountId: bankAccountId)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }
@@ -256,7 +255,7 @@ extension WalletModel {
                               viewHandles: Bool = false)
       async throws -> String {
         let request = AddBankAccount(uri: uri, label: label, replace: replace)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.bankAccountId
     }
 }
@@ -276,6 +275,6 @@ extension WalletModel {
     nonisolated func forgetBankAccount(_ accountId: String, viewHandles: Bool = false)
       async throws {
         let request = ForgetBankAccount(accountId: accountId)
-        _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

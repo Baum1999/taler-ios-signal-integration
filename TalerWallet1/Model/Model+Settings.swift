@@ -8,7 +8,6 @@
 import Foundation
 import taler_swift
 import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 
@@ -43,7 +42,7 @@ extension WalletModel {
                                                        : test == 1 ? TESTBANK : DEMOBANK,
                                         exchangeBaseUrl: test == 2 ? HEADEXCHANGE
                                                        : test == 1 ? TESTEXCHANGE : DEMOEXCHANGE)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // loadTestKudos
 // MARK: -
@@ -90,7 +89,7 @@ extension WalletModel {
                                   merchantAuthToken: MERCHANTAUTHTOKEN,
                                    amountToWithdraw: amountW,
                                       amountToSpend: amountS)
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // runIntegrationTest
   // MARK: -
@@ -115,6 +114,6 @@ extension WalletModel {
     nonisolated func testingInfiniteTransaction(delayMs: Int32, shouldFetch: Bool, viewHandles: Bool = false)
       async throws {
         let request = InfiniteTransactionLoop(delayMs: delayMs, shouldFetch: shouldFetch)
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 } // testingInfiniteTransaction

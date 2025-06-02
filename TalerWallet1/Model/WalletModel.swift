@@ -10,8 +10,6 @@ import taler_swift
 import SymLog
 import os.log
 
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
-
 enum InsufficientBalanceHint: String, Codable {
     /// Merchant doesn't accept money from exchange(s) that the wallet supports
     case merchantAcceptInsufficient = "merchant-accept-insufficient"
@@ -134,7 +132,7 @@ class WalletModel: ObservableObject {
         }
     }
 
-    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, _ delay: UInt = 0, viewHandles: Bool = false)
+    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, viewHandles: Bool = false)
       async throws -> T.Response {    // T for any Thread
 #if !DEBUG
         logger.log("sending: \(request.operation(), privacy: .public)")
@@ -146,10 +144,6 @@ class WalletModel: ObservableObject {
             let timeUsed = Date.now - sendTime
             logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
 #endif
-            let asyncDelay: UInt = delay > 0 ? delay : UInt(ASYNCDELAY)
-            if asyncDelay > 0 {     // test LoadingView, sleep some seconds
-                try? await Task.sleep(nanoseconds: 1_000_000_000 * UInt64(asyncDelay))
-            }
             return response
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
@@ -180,7 +174,7 @@ extension WalletModel {
     func hintNetworkAvailabilityT(_ isNetworkAvailable: Bool = false) async {
         // T for any Thread
         let request = NetworkAvailabilityRequest(isNetworkAvailable: isNetworkAvailable)
-        _ = try? await sendRequest(request, 0)
+        _ = try? await sendRequest(request)
     }
 }
 // MARK: -
@@ -204,7 +198,7 @@ extension WalletModel {
     nonisolated func getTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
         let request = GetTransactionById(transactionId: transactionId, withTerms: withTerms)
-        return try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        return try await sendRequest(request, viewHandles: viewHandles)
     }
 }
 // MARK: -
@@ -271,7 +265,7 @@ extension WalletModel {
     /// initalize Wallet-Core. Will do networking
     nonisolated func setConfig(setTesting: Bool) async throws -> VersionInfo {
         let request = ConfigRequest(setTesting: setTesting)
-        let response = try await sendRequest(request, 0)    // no Delay
+        let response = try await sendRequest(request)
         return response.versionInfo
     }
 }
@@ -311,7 +305,7 @@ extension WalletModel {
         let dbPath = try dbPath()
 //        logger.debug("dbPath: \(dbPath)")
         let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
-        let response = try await sendRequest(request, 0, viewHandles: viewHandles)    // no Delay
+        let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
         return response.versionInfo
     }
 
@@ -446,7 +440,7 @@ extension WalletModel {
     /// reset Wallet-Core
     nonisolated func resetWalletCore(viewHandles: Bool = false) async throws {
         let request = ResetRequest()
-        _ = try await sendRequest(request, 0, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
 // MARK: -
@@ -472,7 +466,7 @@ extension WalletModel {
         if let dbPath = try? dbPath(true) {
             let stem = String("Taler " + TalerDater.dateString())
             let request = ExportDbToFile(directory: dbPath, stem: stem)
-            let response = try await sendRequest(request, 0, viewHandles: viewHandles)
+            let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.path
         } else {
             return nil
@@ -497,6 +491,6 @@ extension WalletModel {
     nonisolated func devExperimentT(talerUri: String, viewHandles: Bool = false) async throws {
         // T for any Thread
         let request = DevExperimentRequest(talerUri: talerUri)
-        _ = try await sendRequest(request, 0, viewHandles: viewHandles)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

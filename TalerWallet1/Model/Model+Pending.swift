@@ -9,7 +9,6 @@ import Foundation
 import AnyCodable
 import taler_swift
 import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 /// A request to list the backend's currently pending operations.
@@ -48,7 +47,7 @@ extension WalletModel {
     nonisolated func getPendingOperations4711(viewHandles: Bool = false)
       async throws -> [PendingOperation] {   // M for MainActor
         let request = GetPendingOperations()
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.pendingOperations
     }
 }

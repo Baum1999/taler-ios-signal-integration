@@ -8,7 +8,6 @@
 import Foundation
 import taler_swift
 import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 enum AccountRestrictionType: String, Codable {
     case deny
@@ -240,7 +239,7 @@ extension WalletModel {
                                                  viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -249,7 +248,7 @@ extension WalletModel {
                                                viewHandles: Bool = false)
       async throws -> WithdrawUriInfoResponse {
         let request = GetWithdrawalDetailsForURI(talerUri: talerUri)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -259,7 +258,7 @@ extension WalletModel {
                                                 viewHandles: Bool = false)
       async throws -> WithdrawalDetailsForAmount {
         let request = GetWithdrawalDetailsForAmount(amount: amount, baseUrl: baseUrl, scope: scope)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -271,7 +270,7 @@ extension WalletModel {
         let request = GetExchangeTermsOfService(baseUrl: baseUrl,
                                          acceptedFormat: acceptedFormat,
                                          acceptLanguage: acceptLanguage)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -279,7 +278,7 @@ extension WalletModel {
                                           viewHandles: Bool = false)
       async throws -> Decodable {
         let request = SetExchangeTOSAccepted(baseUrl: baseUrl)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -291,7 +290,7 @@ extension WalletModel {
       async throws -> AcceptWithdrawalResponse? {
           let request = AcceptBankIntegratedWithdrawal(talerUri: withdrawURL, baseUrl: baseUrl,
                                                          amount: amount, restrictAge: restrictAge)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -301,7 +300,7 @@ extension WalletModel {
                                          viewHandles: Bool = false)
       async throws -> AcceptManualWithdrawalResult? {
         let request = AcceptManualWithdrawal(amount: amount, baseUrl: baseUrl, restrictAge: restrictAge)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -309,7 +308,7 @@ extension WalletModel {
                                        viewHandles: Bool = false)
       async throws -> [QrCodeSpec]? {
         let request = GetQrCodesForPayto(paytoUri: paytoUri)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.codes
     }
 }

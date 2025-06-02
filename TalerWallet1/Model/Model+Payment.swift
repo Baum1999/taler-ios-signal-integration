@@ -9,7 +9,6 @@ import Foundation
 import taler_swift
 import AnyCodable
 //import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: - ContractTerms
 
@@ -256,7 +255,7 @@ extension WalletModel {
     nonisolated func checkPayForTemplate(_ talerPayTemplateUri: String, viewHandles: Bool = false)
       async throws -> WalletTemplateDetails {
         let request = CheckPayForTemplate(talerPayTemplateUri: talerPayTemplateUri)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
@@ -264,21 +263,21 @@ extension WalletModel {
       async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
     nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
       async throws -> PreparePayResult {
         let request = PreparePayForUri(talerPayUri: talerPayUri)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
     nonisolated func confirmPay(_ transactionId: String, viewHandles: Bool = false)
       async throws -> ConfirmPayResult {
         let request = ConfirmPayForUri(transactionId: transactionId)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 }

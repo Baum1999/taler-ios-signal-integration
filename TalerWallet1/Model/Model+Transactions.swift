@@ -8,7 +8,6 @@
 import Foundation
 import taler_swift
 import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 extension WalletModel {
@@ -156,7 +155,7 @@ extension WalletModel {
                                         limit: limit,
                                        offset: offset,
                              includeRefreshes: includeRefreshes)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.transactions
     }
     // MARK: -
@@ -164,31 +163,31 @@ extension WalletModel {
     nonisolated func abortTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = AbortTransaction(transactionId: transactionId)
         logger.notice("abortTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     /// delete the specified transaction from Wallet-Core. No networking involved
     nonisolated func deleteTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = DeleteTransaction(transactionId: transactionId)
         logger.notice("deleteTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     nonisolated func failTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = FailTransaction(transactionId: transactionId)
         logger.notice("failTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     nonisolated func suspendTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = SuspendTransaction(transactionId: transactionId)
         logger.notice("suspendTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
     nonisolated func resumeTransaction(transactionId: String, viewHandles: Bool = false) async throws {
         let request = ResumeTransaction(transactionId: transactionId)
         logger.notice("resumeTransaction: \(transactionId, privacy: .private(mask: .hash))")
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

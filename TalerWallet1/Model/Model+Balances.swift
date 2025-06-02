@@ -7,7 +7,6 @@
  */
 import Foundation
 import taler_swift
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 
@@ -74,7 +73,7 @@ extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
     nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> [Balance] {
         let request = Balances()
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.balances
     }
 }

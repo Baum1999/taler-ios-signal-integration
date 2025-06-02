@@ -10,7 +10,6 @@
 import Foundation
 import taler_swift
 import SymLog
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 struct ExchangeError: Codable, Hashable {
     var error: TalerErrorDetail
@@ -208,7 +207,7 @@ extension WalletModel {
       async -> [Exchange] {   // M for MainActor
         do {
             let request = ListExchanges(scope: scope, filterByStatus: filterByStatus)    // .used, .preset
-            let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+            let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.exchanges
         } catch {
             return []               // empty, but not nil
@@ -255,7 +254,7 @@ extension WalletModel {
     nonisolated func getCurrencyInfo(scope: ScopeInfo, delay: UInt = 0, viewHandles: Bool = false)
       async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
-        let response = try await sendRequest(request, ASYNCDELAY + delay, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return CurrencyInfo(specs: response.currencySpecification,
                         formatter: CurrencyFormatter.formatter(currency: scope.currency,
                                                                   specs: response.currencySpecification))

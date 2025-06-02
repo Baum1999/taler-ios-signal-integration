@@ -6,7 +6,6 @@
  * @author Marc Stibane
  */
 import Foundation
-fileprivate let ASYNCDELAY: UInt = 0   //set e.g to 6 or 9 seconds for debugging
 
 // MARK: -
 /// A request to prepare a refund with an obtained URI
@@ -44,12 +43,12 @@ struct StartRefundQueryRequest: WalletBackendFormattedRequest {
 extension WalletModel {
     nonisolated func startRefundForUri(url: String, viewHandles: Bool = false) async throws -> String {
         let request = StartRefundURIRequest(talerRefundUri: url)
-        let response = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
         return response.transactionId
     }
 
     nonisolated func startRefund4711(transactionId: String, viewHandles: Bool = false) async throws {
         let request = StartRefundQueryRequest(transactionId: transactionId)
-        let _ = try await sendRequest(request, ASYNCDELAY, viewHandles: viewHandles)
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
