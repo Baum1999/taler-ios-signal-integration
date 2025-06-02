@@ -285,7 +285,7 @@ class Controller: ObservableObject {
         if let info = info(for: scope) {
             return info
         }
-        let info = try await model.getCurrencyInfo(scope: scope, delay: 0)
+        let info = try await model.getCurrencyInfo(scope: scope)
         await setInfo(info, for: scope)
         return info
     }

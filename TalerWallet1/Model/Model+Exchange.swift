@@ -251,7 +251,7 @@ extension WalletModel {
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
-    nonisolated func getCurrencyInfo(scope: ScopeInfo, delay: UInt = 0, viewHandles: Bool = false)
+    nonisolated func getCurrencyInfo(scope: ScopeInfo, viewHandles: Bool = false)
       async throws -> CurrencyInfo {
         let request = GetCurrencySpecification(scope: scope)
         let response = try await sendRequest(request, viewHandles: viewHandles)
