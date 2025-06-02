@@ -1,3 +1,8 @@
+Version 1.0.11 (wallet-core 1.0.12)
+
+• Copy JSON in details (developer mode)
+
+
 Version 1.0.10 (wallet-core 1.0.12)
 
 • NFC for QR-Codes (requires iOS 18.3)
