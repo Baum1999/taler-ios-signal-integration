@@ -13,9 +13,22 @@ struct CopyButton: View {
     private let symLog = SymLogV(0)
     let textToCopy: String
     let vertical: Bool
+    let title: String?
 
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
+
+    init(textToCopy: String, vertical: Bool) {
+        self.textToCopy = textToCopy
+        self.vertical = vertical
+        self.title = nil
+    }
+
+    init(textToCopy: String, title: String) {
+        self.textToCopy = textToCopy
+        self.vertical = false
+        self.title = title
+    }
 
     func copyAction() -> Void {
         symLog.log(textToCopy)
@@ -38,7 +51,7 @@ struct CopyButton: View {
                 HStack {
                     Image(systemName: "doc.on.doc")
                         .accessibility(hidden: true)
-                    Text(longCopy)
+                    Text(title ?? longCopy)
                 }
             }
         }

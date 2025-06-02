@@ -132,14 +132,14 @@ class WalletModel: ObservableObject {
         }
     }
 
-    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, viewHandles: Bool = false)
+    func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, viewHandles: Bool = false, asJSON: Bool = false)
       async throws -> T.Response {    // T for any Thread
 #if !DEBUG
         logger.log("sending: \(request.operation(), privacy: .public)")
 #endif
         let sendTime = Date.now
         do {
-            let (response, id) = try await WalletCore.shared.sendFormattedRequest(request)
+            let (response, id) = try await WalletCore.shared.sendFormattedRequest(request, asJSON: asJSON)
 #if !DEBUG
             let timeUsed = Date.now - sendTime
             logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
@@ -193,12 +193,31 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     }
 }
 
+fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
+    typealias Response = String
+    func operation() -> String { "getTransactionById" }
+    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: withTerms) }
+
+    var transactionId: String
+    var withTerms: Bool?
+
+    struct Args: Encodable {
+        var transactionId: String
+        var includeContractTerms: Bool?
+    }
+}
+
 extension WalletModel {
     /// get the specified transaction from Wallet-Core. No networking involved
     nonisolated func getTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
         let request = GetTransactionById(transactionId: transactionId, withTerms: withTerms)
         return try await sendRequest(request, viewHandles: viewHandles)
+    }
+    nonisolated func jsonTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
+      async throws -> String {
+        let request = JSONTransactionById(transactionId: transactionId, withTerms: withTerms)
+        return try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
     }
 }
 // MARK: -

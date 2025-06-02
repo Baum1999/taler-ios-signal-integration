@@ -30,7 +30,7 @@ class WalletCore: QuickjsMessageHandler {
 
     private let quickjs: Quickjs
     private var requestsMade: UInt          // counter for array of completion closures
-    private var completions: [UInt : (Date, (UInt, Date, Data?, WalletBackendResponseError?) -> Void)] = [:]
+    private var completions: [UInt : (Date, (UInt, Date, String?, Data?, WalletBackendResponseError?) -> Void)] = [:]
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
@@ -101,7 +101,7 @@ class WalletCore: QuickjsMessageHandler {
 }
 // MARK: -  completionHandler functions
 extension WalletCore {
-    private func handleError(_ decoded: ResponseOrNotification) throws {
+    private func handleError(_ decoded: ResponseOrNotification, _ message: String?) throws {
         guard let requestId = decoded.id else {
             logger.error("didn't find requestId in error response")
             // TODO: show error alert
@@ -119,18 +119,18 @@ extension WalletCore {
                 let responseCode = walletError.errorResponse?.code ?? 0
                 logger.error("wallet-core sent back error \(walletError.code, privacy: .public), \(responseCode, privacy: .public) for request \(requestId, privacy: .public)")
                 symLog.log("id:\(requestId)  \(walletError)")
-                completion(requestId, timeSent, jsonData, walletError)
+                completion(requestId, timeSent, message, jsonData, walletError)
             } catch {        // JSON encoding of response.result failed / should never happen
                 symLog.log(decoded)
                 logger.error("cannot encode wallet-core Error")
-                completion(requestId, timeSent, nil, WalletCore.parseFailureError())
+                completion(requestId, timeSent, message, nil, WalletCore.parseFailureError())
             }
         } else {             // JSON decoding of error message failed
-            completion(requestId, timeSent, nil, WalletCore.parseFailureError())
+            completion(requestId, timeSent, message, nil, WalletCore.parseFailureError())
         }
     }
 
-    private func handleResponse(_ decoded: ResponseOrNotification) throws {
+    private func handleResponse(_ decoded: ResponseOrNotification, _ message: String?) throws {
         guard let requestId = decoded.id else {
             logger.error("didn't find requestId in response")
             symLog.log(decoded)                 // TODO: .error
@@ -149,10 +149,10 @@ extension WalletCore {
             let jsonData = try JSONEncoder().encode(result)
 //            symLog.log("\"id\":\(requestId)  \(result)")
 //            logger.info(result)   TODO: log result
-            completion(requestId, timeSent, jsonData, nil)
+            completion(requestId, timeSent, message, jsonData, nil)
         } catch {        // JSON encoding of response.result failed / should never happen
             symLog.log(result)                 // TODO: .error
-            completion(requestId, timeSent, nil, WalletCore.parseResponseError())
+            completion(requestId, timeSent, message, nil, WalletCore.parseResponseError())
         }
     }
 
@@ -429,10 +429,10 @@ extension WalletCore {
             switch decoded.type {
                 case "error":
                     symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
-                    try handleError(decoded)
+                    try handleError(decoded, message)
                 case "response":
                     symLog.log(message)
-                    try handleResponse(decoded)
+                    try handleResponse(decoded, message)
                 case "notification":
 //                    symLog.log(message)
                     try handleNotification(decoded.payload, message)
@@ -461,7 +461,7 @@ extension WalletCore {
         }
     }
     
-    private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, Data?, WalletBackendResponseError?) -> Void) {
+    private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, String?, Data?, WalletBackendResponseError?) -> Void) {
         // Encode the request and send it to the backend.
         queue.async {
             self.semaphore.wait()               // guard access to requestsMade
@@ -487,7 +487,7 @@ extension WalletCore {
                 self.semaphore.signal()         // free requestsMade
                 self.logger.error("\(error.localizedDescription)")
 //              self.symLog.log(error)
-                completionHandler(requestId, sendTime, nil, WalletCore.serializeRequestError());
+                completionHandler(requestId, sendTime, nil, nil, WalletCore.serializeRequestError());
             }
         }
     }
@@ -495,11 +495,11 @@ extension WalletCore {
 // MARK: -  async / await function
 extension WalletCore {
     /// send async requests to wallet-core
-    func sendFormattedRequest<T: WalletBackendFormattedRequest> (_ request: T) async throws -> (T.Response, UInt) {
+    func sendFormattedRequest<T: WalletBackendFormattedRequest> (_ request: T, asJSON: Bool = false) async throws -> (T.Response, UInt) {
         let reqData = WalletBackendRequest(operation: request.operation(),
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
-            encodeAndSend(reqData) { [self] requestId, timeSent, result, error in
+            encodeAndSend(reqData) { [self] requestId, timeSent, message, result, error in
                 let timeUsed = Date.now - timeSent
                 let millisecs = timeUsed.milliseconds
                 if let error {
@@ -512,8 +512,16 @@ extension WalletCore {
                 var err: Error? = nil
                 if let json = result, error == nil {
                     do {
-                        let decoded = try JSONDecoder().decode(T.Response.self, from: json)
-                        continuation.resume(returning: (decoded, requestId))
+                        if asJSON {
+                            if let message {
+                                continuation.resume(returning: (message as! T.Response, requestId))
+                            } else {
+                                continuation.resume(throwing: TransactionDecodingError.invalidStringValue)
+                            }
+                        } else {
+                            let decoded = try JSONDecoder().decode(T.Response.self, from: json)
+                            continuation.resume(returning: (decoded, requestId))
+                        }
                         return
                     } catch DecodingError.dataCorrupted(let context) {
                         logger.error("\(context.debugDescription)")

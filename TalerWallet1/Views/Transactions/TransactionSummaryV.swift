@@ -55,6 +55,7 @@ struct TransactionSummaryV: View {
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
     @State var transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
+    @State var jsonTransaction: String = ""
     @State var viewId = UUID()
     @Namespace var topID
 
@@ -66,8 +67,17 @@ struct TransactionSummaryV: View {
             if outTransaction != nil {
                 outTransaction = reloadedTransaction
             }
+            if developerMode {
+                if let json = try? await model.jsonTransactionById(transactionId,
+                                                         withTerms: true, viewHandles: false) {
+                    jsonTransaction = json
+                } else {
+                    jsonTransaction = ""
+                }
+            }
         } else {
             withAnimation{ transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+            jsonTransaction = ""
         }
     }
 
@@ -138,6 +148,7 @@ struct TransactionSummaryV: View {
                                                 warning: nil,
                                              didExecute: $ignoreThis,
                                                  action: suspendAction)
+                        .listRowSeparator(.hidden)
                     } }
                     if transaction.isResumable { if let resumeAction {
                         TransactionButton(transactionId: common.transactionId,
@@ -145,6 +156,7 @@ struct TransactionSummaryV: View {
                                                 warning: nil,
                                              didExecute: $ignoreThis,
                                                  action: resumeAction)
+                        .listRowSeparator(.hidden)
                     } }
                 } // Suspend + Resume buttons
                 Group {
@@ -182,6 +194,11 @@ struct TransactionSummaryV: View {
                             vLayout
                         }
                     } else { vLayout } // view for iOS 15
+                    if developerMode {
+                        if !jsonTransaction.isEmpty {
+                            CopyButton(textToCopy: jsonTransaction, title: "Copy JSON")
+                        }
+                    }
                 }   .listRowSeparator(.hidden)
                     .talerFont(.title)
                     .onAppear {     // doesn't work - view still jumps
