@@ -19,7 +19,7 @@ struct TalerWallet1App: App {
     @Environment(\.scenePhase) private var phase
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
-    @State private var isActive = true
+    @State private var backgrounded: Date?
     @State private var soundPlayed = false
 
     private let walletCore = WalletCore.shared
@@ -34,6 +34,11 @@ struct TalerWallet1App: App {
         try? BGTaskScheduler.shared.submit(request)
     }
 
+    func hintApplicationResumed() {
+        Task.detached {
+            await model.hintApplicationResumedT()
+        }
+    }
     var body: some Scene {
         WindowGroup {
             MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
@@ -51,11 +56,18 @@ struct TalerWallet1App: App {
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
                     logger.log("❗️App Will Resign")
-                    isActive = false
+                    backgrounded = Date.now
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
                     logger.log("❗️App Will Enter Foreground")
-                    isActive = true
+                    if let backgrounded {
+                        let interval = Date.now - backgrounded
+                        if interval.seconds > 300 {     // 5 minutes
+                            logger.log("More than 5 minutes in background - tell wallet-core")
+                            hintApplicationResumed()
+                        }
+                    }
+                    backgrounded = nil
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
                     logger.log("❗️App Did Become Active")

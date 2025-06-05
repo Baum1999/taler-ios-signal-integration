@@ -158,6 +158,14 @@ class WalletModel: ObservableObject {
 }
 // MARK: -
 /// A request to tell wallet-core about the network.
+fileprivate struct ApplicationResumedRequest: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { "hintApplicationResumed" }
+    func args() -> Args { Args() }
+
+    struct Args: Encodable {}                           // no arguments needed
+}
+
 fileprivate struct NetworkAvailabilityRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
     func operation() -> String { "hintNetworkAvailability" }
@@ -174,6 +182,11 @@ extension WalletModel {
     func hintNetworkAvailabilityT(_ isNetworkAvailable: Bool = false) async {
         // T for any Thread
         let request = NetworkAvailabilityRequest(isNetworkAvailable: isNetworkAvailable)
+        _ = try? await sendRequest(request)
+    }
+    func hintApplicationResumedT() async {
+        // T for any Thread
+        let request = ApplicationResumedRequest()
         _ = try? await sendRequest(request)
     }
 }
