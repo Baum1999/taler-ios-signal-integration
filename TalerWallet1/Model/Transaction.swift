@@ -707,6 +707,7 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
     var isPending       : Bool { common.isPending }
     var isPendingReady  : Bool { common.isPendingReady }
     var isPendingKYC    : Bool { common.isPendingKYC }
+    var isPendingKYCauth: Bool { common.isPendingKYCauth }
     var isDone          : Bool { common.isDone }
     var isAborting      : Bool { common.isAborting }
     var isAborted       : Bool { common.isAborted }

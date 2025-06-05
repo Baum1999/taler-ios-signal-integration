@@ -51,7 +51,7 @@ struct TransactionRowView: View {
 
     var body: some View {
         let pending = transaction.isPending
-        let needsKYC = transaction.isPendingKYC
+        let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
         let shouldConfirm = transaction.shouldConfirm
         let done = transaction.isDone
         let doneOrPending = done || pending

@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping [􁾭Withdraw]
+// Called from DepositAmountV
 struct DepositAmountView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -98,9 +98,16 @@ struct DepositAmountView: View {
                                                              scope: scope,
                                                             amount: amountToTransfer) {
                     symLog.log(result.transactionId)
-//                    ViewState2.shared.popToRootView(stack.push())
-                    NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
-                    dismissTop(stack.push())
+                    if let txState = result.txState {
+                        if txState.isKYC || txState.isKYCauth {
+                            symLog.log("Deposit KYC")
+
+                        } else {
+//                          ViewState2.shared.popToRootView(stack.push())
+                            NotificationCenter.default.post(name: .TransactionDone, object: nil, userInfo: nil)
+                            dismissTop(stack.push())
+                        }
+                    }
                 } else {
                     depositStarted = false
                 }
