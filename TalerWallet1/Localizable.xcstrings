@@ -2301,6 +2301,17 @@
         }
       }
     },
+    "An unknown error occurred." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein unbekannter Fehler ist aufgetreten."
+          }
+        }
+      }
+    },
     "App Version" : {
       "localizations" : {
         "de" : {
@@ -2464,6 +2475,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Czy na pewno chcesz zapomnieć o tym koncie bankowym?"
+          }
+        }
+      }
+    },
+    "Authenticate to access your money" : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifizieren Sie sich für den Zugriff auf Ihr Geld"
+          }
+        }
+      }
+    },
+    "Authenticating..." : {
+
+    },
+    "Authentication failed. Please try again." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifizierung fehlgeschlagen. Bitte versuchen Sie es erneut."
+          }
+        }
+      }
+    },
+    "Authentication is not available on this device." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf diesem Gerät ist keine Authentifizierung verfügbar."
           }
         }
       }
@@ -2787,6 +2834,28 @@
         }
       }
     },
+    "Biometric authentication is locked. Enter your passcode to unlock." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die biometrische Authentifizierung ist gesperrt. Geben Sie zum Entsperren Ihren Passcode ein."
+          }
+        }
+      }
+    },
+    "Biometric authentication is not available on this device." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf diesem Gerät ist keine biometrische Authentifizierung verfügbar"
+          }
+        }
+      }
+    },
     "but you only have %@ to deposit." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2857,6 +2926,7 @@
       }
     },
     "Cancel" : {
+      "comment" : "FaceID",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4771,6 +4841,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Przycisk do wyjaśnienia akcji"
+          }
+        }
+      }
+    },
+    "Failed to initialize authentication context." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Authentifizierung konnte nicht initialisiert werden."
           }
         }
       }
@@ -6842,6 +6923,17 @@
         }
       }
     },
+    "No biometrics are enrolled on this device." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf diesem Gerät wurden bisher keine biometrischen Daten erfasst."
+          }
+        }
+      }
+    },
     "No date" : {
       "comment" : "Timestamp missing or invalid",
       "localizations" : {
@@ -7221,9 +7313,6 @@
           }
         }
       }
-    },
-    "OIM denomination layout" : {
-
     },
     "OK" : {
       "localizations" : {
@@ -7648,6 +7737,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Оплачено:"
+          }
+        }
+      }
+    },
+    "Passcode is not set on this device." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf diesem Gerät ist keine Passcode eingestellt."
           }
         }
       }
@@ -8323,6 +8423,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Індикатор прогресу"
+          }
+        }
+      }
+    },
+    "Protect your money" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schützen Sie Ihr Geld"
           }
         }
       }
@@ -10641,6 +10751,17 @@
         }
       }
     },
+    "The system canceled the authentication." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das System hat die Authentifizierung abgebrochen."
+          }
+        }
+      }
+    },
     "The withdrawal was aborted.\nIf you have already sent money to the exchange, it will wire it back in %@ days." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11556,9 +11677,6 @@
         }
       }
     },
-    "Two rows" : {
-
-    },
     "TxAction.Abort" : {
       "comment" : "TxAction button",
       "extractionState" : "extracted_with_value",
@@ -11898,6 +12016,17 @@
         }
       }
     },
+    "Unknown authentication error occurred." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es ist ein unbekannter Authentifizierungsfehler aufgetreten."
+          }
+        }
+      }
+    },
     "unknown command" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -12116,6 +12245,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Użyj opcji „%@ Skanuj kod QR” w menu Działania, aby rozpocząć wypłatę, jeśli Twój bank już obsługuje płatności Taler."
+          }
+        }
+      }
+    },
+    "Use FaceID / TouchID" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FaceID / TouchID verwenden"
+          }
+        }
+      }
+    },
+    "Use Passcode" : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passcode verwenden"
           }
         }
       }
@@ -13226,6 +13376,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Możesz wydać swoje %@ w sklepie Demo lub wysłać je do innego portfela."
+          }
+        }
+      }
+    },
+    "You canceled the authentication." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie haben die Authentifizierung abgebrochen."
+          }
+        }
+      }
+    },
+    "You chose to use the fallback option." : {
+      "comment" : "FaceID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie haben sich für die Ausweichoption entschieden."
           }
         }
       }
