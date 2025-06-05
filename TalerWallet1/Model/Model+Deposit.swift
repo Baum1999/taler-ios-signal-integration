@@ -150,8 +150,8 @@ extension WalletModel {
 }
 // MARK: -
 struct DepositGroupResult: Decodable {
-    var depositGroupId: String
     var transactionId: String
+    var txState: TransactionState?
 }
 /// A request to deposit some coins.
 fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
