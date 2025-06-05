@@ -27,6 +27,7 @@ struct TalerWallet1App: App {
     private let model = WalletModel.shared
     private let debugViewC = DebugViewC.shared
     let logger = Logger(subsystem: "net.taler.gnu", category: "Main App")
+    private let biometricService = BiometricService.shared
 
     func scheduleAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: "net.taler.gnu.refresh")
@@ -47,6 +48,7 @@ struct TalerWallet1App: App {
                 .environmentObject(viewState2)      // popToRoot
                 .environmentObject(controller)
                 .environmentObject(model)
+                .environmentObject(biometricService)
                 .addKeyboardVisibilityToEnvironment()
                     /// external events are taler:// or payto:// URLs passed to this app
                     /// we handle them in .onOpenURL in MainView.swift
@@ -65,6 +67,9 @@ struct TalerWallet1App: App {
                         if interval.seconds > 300 {     // 5 minutes
                             logger.log("More than 5 minutes in background - tell wallet-core")
                             hintApplicationResumed()
+                        }
+                        if interval.seconds > 60 {
+                            biometricService.isAuthenticated = false
                         }
                     }
                     backgrounded = nil

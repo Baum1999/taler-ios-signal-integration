@@ -26,11 +26,13 @@ struct MainView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var biometricService: BiometricService
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
+    @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
-    @StateObject var tabBarModel = TabBarModel()
+    @StateObject private var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil              // gets set in TransactionsListView
     @State private var selectedIndex: Int? = nil                    // user selects savings box in OIMview
     @State private var urlToOpen: URL? = nil
@@ -100,7 +102,42 @@ struct MainView: View {
 //                    Color.clear
                 }
             }
-        }//.transition(.move(edge: .top))
+        }
+            .overlay {
+                if useAuthentication && !biometricService.isAuthenticated {
+                    Color.gray.opacity(0.75)
+                        .animation(.easeInOut, value: biometricService.isAuthenticated)
+                    if let errorMessage = biometricService.authenticationError {
+                        Text(errorMessage)
+                            .talerFont(.title)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .background(WalletColors().backgroundColor)
+                            .onTapGesture {
+                                biometricService.authenticationError = nil
+                                biometricService.authenticateUser()
+                            }
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    biometricService.authenticationError = nil
+                                }
+                            }
+                    } else {
+                        Text("Authenticating...")
+                            .talerFont(.largeTitle)
+                            .foregroundStyle(WalletColors().talerColor)
+                            .padding()
+                            .background(WalletColors().backgroundColor)
+                            .onAppear {
+                                biometricService.authenticateUser()
+                            }
+                            .onTapGesture {
+                                biometricService.authenticateUser()
+                            }
+                    }
+                }
+            }
 
         let mainGroup = Group {
             // show launch animation until either ready or error

@@ -26,6 +26,7 @@ struct SettingsView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var biometricService: BiometricService
 //    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -43,7 +44,7 @@ struct SettingsView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
     @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
-    @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
+    @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -120,6 +121,10 @@ struct SettingsView: View {
                     SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
                                  description: hideDescriptions ? nil : String(localized: "Your accounts for deposit...")) {}
                 }
+                SettingsToggle(name: String(localized: "Use FaceID / TouchID"), value: $useAuthentication, id1: "useFaceID",
+                               description: minimalistic ? nil : String(localized: "Protect your money")) {
+                    biometricService.isAuthenticated = false
+                }
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                                description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
                     hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
@@ -145,10 +150,6 @@ struct SettingsView: View {
                     consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
                 }
-#if OIM
-                SettingsToggle(name: String(localized: "Two rows"), value: $oimTwoRows, id1: "oimTwoRows",
-                                description: minimalistic ? nil : String(localized: "OIM denomination layout"))
-#endif
 #if DEBUG
                 let showDiagnostic = diagnosticModeEnabled
 #else
