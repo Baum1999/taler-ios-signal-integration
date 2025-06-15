@@ -341,17 +341,6 @@ extension WalletModel {
         return response.versionInfo
     }
 
-    private func path(_ url: URL) -> String {
-        let path = url.path
-        if let char = path.last {
-            let slash: String.Element = "/"
-            if char != slash {
-                return path + String(slash)
-            }
-        }
-        return path
-    }
-
     private func dbUrl(_ folder: URL) -> URL {
         let DATABASE = "talerwalletdb-v30"
         let dbUrl = folder.appendingPathComponent(DATABASE, isDirectory: false)
@@ -401,39 +390,22 @@ extension WalletModel {
         }
     }
 
-    private func dbPath(_ export:Bool = false) throws -> String {
-        if #available(iOS 16.4, *) {
-            let documents = URL.documentsDirectory                              // accessible by FileSharing
-            let docsPath = documents.path(percentEncoded: false)
-            if export {
-                return docsPath
-            }
-            let appSupport = URL.applicationSupportDirectory
+    private func dbPath() throws -> String {
+        if let docDirUrl = URL.docDirUrl {
 #if DEBUG || GNU_TALER
-            return docsPath
-#else     // TALER_WALLET
-            migrate(from: documents, to: appSupport)
-            return appSupport.path(percentEncoded: false)
-#endif
-        } else {
-            let docDirNr: FileManager.SearchPathDirectory = .documentDirectory
-            let appDirNr: FileManager.SearchPathDirectory = .applicationSupportDirectory
-            if let documentsDir = FileManager.default.urls(for: docDirNr, in: .userDomainMask).first,
-               let appSupportDir = FileManager.default.urls(for: appDirNr, in: .userDomainMask).first {
-                if export {
-                    return path(documentsDir)
-                }
-#if DEBUG || GNU_TALER
-                return path(documentsDir)
-#else
-                migrate(from: documentsDir, to: appSupportDir)
-                return path(appSupportDir)
-#endif
-            } else {    // should never happen
-                logger.error("No documentDirectory")
-                throw WalletBackendError.initializationError
+            return docDirUrl.path(withSlash: true)
+#else // TALER_WALLET or TALER_NIGHTLY
+            if let appSupport = URL.appSuppUrl {
+                migrate(from: docDirUrl, to: appSupport)
+                return appSupport.path(withSlash: true)
+            } else { // should never happen
+                logger.error("No applicationSupportDirectory")
             }
+#endif
+        } else { // should never happen
+            logger.error("No documentDirectory")
         }
+        throw WalletBackendError.initializationError
     }
 
     private func cachePath() throws -> String {
@@ -493,11 +465,12 @@ fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// export DB
-    nonisolated func exportDbToFile(viewHandles: Bool = false)
+    nonisolated func exportDbToFile(stem: String, viewHandles: Bool = false)
       async throws -> String? {
-        if let dbPath = try? dbPath(true) {
-            let stem = String("Taler " + TalerDater.dateString())
+        if let docDirUrl = URL.docDirUrl {
+            let dbPath = docDirUrl.path(withSlash: false)
             let request = ExportDbToFile(directory: dbPath, stem: stem)
+    print(dbPath, stem)
             let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.path
         } else {
