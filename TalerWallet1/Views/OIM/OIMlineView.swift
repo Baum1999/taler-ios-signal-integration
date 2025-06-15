@@ -22,10 +22,6 @@ struct OIMlineView: View {
     let canEdit: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
-    @AppStorage("oimTwoRows") var oimTwoRows: Bool = false
-
-    @State private var flying: UInt64 = 0          // needed for iOS 15
-    @State private var myTappedVal: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()

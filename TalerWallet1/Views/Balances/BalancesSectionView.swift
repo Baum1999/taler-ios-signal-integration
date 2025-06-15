@@ -77,8 +77,6 @@ struct BalancesSectionView {
                                                           scope: balance.scopeInfo,
                                                   filterByState: .nonfinal,
                                                includeRefreshes: developerMode) {
-//            let pending = WalletModel.pendingTransactions(transactions)
-//            withAnimation { pendingTransactions = pending }
             withAnimation { pendingTransactions = transactions }
         }
     }

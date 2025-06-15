@@ -47,7 +47,8 @@ struct AboutView: View {
             List {
 #if TALER_NIGHTLY || GNU_TALER
                 if #available(iOS 18.3, *) {
-                    let talerURI = "taler://withdraw-exchange/exchange.taler-ops.ch"
+                    let talerURI = TALER_NET
+//                    let talerURI = "taler://withdraw-exchange/exchange.taler-ops.ch"
                     BorderWithNFC(talerURI: talerURI, size: size) {
                         rotatingTaler
                     }

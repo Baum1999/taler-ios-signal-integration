@@ -57,10 +57,10 @@ struct TransferRestrictionsV: View {
             }
             if let restrictions {
                 ForEach(restrictions) { restriction in
-                    if let hintsI18 = restriction.human_hint_i18n {
-//                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18.keys, values: hintsI18.values)
+                    if let hintsI18n = restriction.human_hint_i18n {
+//                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18n.keys, values: hintsI18n.values)
 //                        var sorted: OrderedDictionary<String:String>
-                        let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18.sorted { $0.key < $1.key })
+                        let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18n.sorted { $0.key < $1.key })
                         Picker("Restriction:", selection: $selectedLanguage) {
                             ForEach(sortedDict.keys, id: \.self) {
                                 Text(sortedDict[$0] ?? "missing hint")

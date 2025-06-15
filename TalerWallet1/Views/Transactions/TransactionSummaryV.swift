@@ -134,7 +134,7 @@ struct TransactionSummaryV: View {
         let common = transaction.common
         if common.type != .dummy {
             let scope = common.scopes.first                                     // might be nil if scopes == []
-            let pending = transaction.isPending
+//            let pending = transaction.isPending
             let locale = TalerDater.shared.locale
             let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
