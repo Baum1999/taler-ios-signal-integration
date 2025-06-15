@@ -346,6 +346,7 @@ struct TransactionCommon: Decodable, Sendable {
     var isPendingReady  : Bool { isPending && txState.isReady }
     var isPendingKYC    : Bool { isPending && txState.isKYC }
     var isPendingKYCauth: Bool { isPending && txState.isKYCauth }
+    var isFinalizing    : Bool { txState.major == .finalizing }
     var isDone          : Bool { txState.major == .done }
     var isAborting      : Bool { txState.major == .aborting }
     var isAborted       : Bool { txState.major == .aborted }
