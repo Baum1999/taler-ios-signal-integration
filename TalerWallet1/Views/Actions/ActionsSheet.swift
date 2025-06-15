@@ -178,7 +178,7 @@ struct DualHeightSheet: View {
         .edgesIgnoringSafeArea(.all)
         .frame(maxHeight: innerHeight)
 
-        if #available(iOS 18.3, *) {
+        if #available(iOS 18.0, *) {
             scrollView
                 .sheet(isPresented: $qrButtonTapped,
                          onDismiss: dismissScanner

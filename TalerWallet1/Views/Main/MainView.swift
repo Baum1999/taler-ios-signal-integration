@@ -184,7 +184,7 @@ struct MainView: View {
                 ) {
                     if #available(iOS 16.4, *) {
 //                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
-                        if #available(iOS 18.3, *) {
+                        if #available(iOS 18.0, *) {
                             DualHeightSheet(stack: stack.push(),
                                   selectedBalance: selectedBalance,
                                    qrButtonTapped: $qrButton2Tapped,
