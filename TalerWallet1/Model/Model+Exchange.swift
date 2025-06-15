@@ -47,6 +47,21 @@ struct ExchangeTransition: Codable {             // Notification
     var oldExchangeState: ExchangeState
     var newExchangeState: ExchangeState
 }
+
+enum BankDialect: Codable, Hashable {
+    case gls
+    case unknown(value: String)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let status = try? container.decode(String.self)
+        switch status {
+            case "gls": self = .gls
+            default:
+                self = .unknown(value: status ?? "unknown")
+        }
+    }
+}
 // MARK: -
 /// The result from wallet-core's ListExchanges
 struct Exchange: Codable, Hashable, Identifiable {
@@ -73,8 +88,17 @@ struct Exchange: Codable, Hashable, Identifiable {
     var peerPaymentsDisabled: Bool?
     var noFees: Bool?
     var ageRestrictionOptions: [Int]
+    var bankComplianceLanguage: BankDialect?
     var lastUpdateTimestamp: Timestamp?
     var lastUpdateErrorInfo: ExchangeError?
+
+//    walletKycStatus?: ExchangeWalletKycStatus;
+//    walletKycReservePub?: string;
+//    walletKycAccessToken?: string;
+//    walletKycUrl?: string;
+
+    /** Threshold that we've requested to satisfy. */
+//    walletKycRequestedThreshold?: string;
 
     var id: String { exchangeBaseUrl + tosStatus.rawValue }
     var name: String? {
