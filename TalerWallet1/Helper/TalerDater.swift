@@ -120,6 +120,12 @@ extension Date {
     static func - (lhs: Date, rhs: Date) -> TimeInterval {
         lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
+
+    var iso:String {
+        self.formatted(.iso8601
+//                       .day().month().year().dateSeparator(.dash)
+                       .timeSeparator(.omitted))
+    }
 }
 extension TimeInterval {
     var seconds: Int {
