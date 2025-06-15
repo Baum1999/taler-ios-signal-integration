@@ -125,6 +125,17 @@ struct SettingsView: View {
                                description: minimalistic ? nil : String(localized: "Protect your money")) {
                     biometricService.isAuthenticated = false
                 }
+#if TALER_NIGHTLY || DEBUG
+                let backupTitle = String(localized: "TitleBackup", defaultValue: "Backup / Restore")
+                let backupDest = BackupView(stack: stack.push(backupTitle),
+                                         navTitle: backupTitle)
+                NavigationLink {        // whole row like in a tableView
+                    backupDest
+                } label: {
+                    SettingsItem(name: backupTitle, id1: "backup",
+                                 description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
+                }
+#endif
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                                description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
                     hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
