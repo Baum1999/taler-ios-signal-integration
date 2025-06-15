@@ -44,6 +44,7 @@ struct MainView: View {
     @State private var qrButton2Tapped = false
     @State private var innerHeight: CGFloat = .zero
     @State private var userAction = 0
+    @State private var networkUnavailable = false
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -149,7 +150,22 @@ struct MainView: View {
             }
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
 
-        Group {
+        VStack {
+#if DEBUG
+            if networkUnavailable {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.red)
+                    .frame(
+                        width: UIScreen.screenWidth * 0.9,
+                        height: 100
+                    )
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .top),
+                        removal: .move(edge: .top)
+                    ))
+
+            }
+#endif
             mainGroup
                 .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
@@ -234,6 +250,17 @@ struct MainView: View {
                 withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
                     showScanner = true      // switch to qrSheet => camera on
         }   }   }
+        .onChange(of: controller.isConnected) { isConnected in
+            if isConnected {
+                withAnimation(Animation.easeIn(duration: 1.0)) {
+                    networkUnavailable = false
+                }
+            } else {
+                withAnimation(Animation.easeOut(duration: 1.0)) {
+                    networkUnavailable = true
+                }
+            }
+        }
     } // body
 }
 // MARK: - TabBar
