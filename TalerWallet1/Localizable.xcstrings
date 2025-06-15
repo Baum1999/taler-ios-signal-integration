@@ -2479,6 +2479,16 @@
         }
       }
     },
+    "Are you sure you want to overwrite your wallet with this backup?\nThis cannot be reverted, all money which is now still in your wallet will be lost." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie Ihr Wallet mit diesem Backup überschreiben wollen?\nDas kann nicht rückgängig gemacht werden. Alles Geld, das sich jetzt noch in Ihrem Wallet befindet, geht verloren."
+          }
+        }
+      }
+    },
     "Authenticate to access your money" : {
       "comment" : "FaceID",
       "localizations" : {
@@ -2739,6 +2749,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Резервну копію відновлено"
+          }
+        }
+      }
+    },
+    "Backup your money..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sicherheitskopie Ihres Geldes…"
           }
         }
       }
@@ -3557,6 +3577,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Коп."
+          }
+        }
+      }
+    },
+    "Create Backup" : {
+      "comment" : "button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup erstellen"
           }
         }
       }
@@ -7561,6 +7592,16 @@
         }
       }
     },
+    "Overwrite Wallet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wallet überschreiben"
+          }
+        }
+      }
+    },
     "P2P Ready" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -9296,6 +9337,16 @@
         }
       }
     },
+    "Restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen"
+          }
+        }
+      }
+    },
     "Restriction:" : {
       "localizations" : {
         "de" : {
@@ -10417,6 +10468,16 @@
         }
       }
     },
+    "Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to your computer's harddisk." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Geldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf die Festplatte Ihres Computers."
+          }
+        }
+      }
+    },
     "Tap %@ or scan a withdrawal QR code from your bank to add a bank account." : {
       "localizations" : {
         "de" : {
@@ -11188,6 +11249,23 @@
         }
       }
     },
+    "TitleBackup" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup / Wiederherstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Backup / Restore"
+          }
+        }
+      }
+    },
     "TitleBalances" : {
       "localizations" : {
         "de" : {
@@ -11506,6 +11584,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "do %@"
+          }
+        }
+      }
+    },
+    "To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um Ihr digitales Geld wiederherzustellen, schließen Sie Ihr iPhone an Ihren Computer an, verwenden Sie dann den Dialog ‘Dateien’, und kopieren Sie eine zuvor gespeicherte Sicherungskopie von Ihrem Computer in die Taler Wallet."
           }
         }
       }
@@ -13798,7 +13886,6 @@
       }
     },
     "Your bank's wire fee: %@" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
