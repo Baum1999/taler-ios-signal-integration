@@ -46,4 +46,51 @@ extension URL {
         }
         return items
     }
+
+    static var docDirUrl: URL? {                    // accessible by FileSharing
+        if #available(iOS 16.4, *) {
+            return URL.documentsDirectory
+        } else {
+            let docDirNr: FileManager.SearchPathDirectory = .documentDirectory
+            if let documentsDir = FileManager.default.urls(for: docDirNr, in: .userDomainMask).first {
+                return documentsDir
+            }
+        }
+        return nil
+    }
+
+    static var appSuppUrl: URL? {
+        if #available(iOS 16.4, *) {
+            return URL.applicationSupportDirectory
+        } else {
+            let appDirNr: FileManager.SearchPathDirectory = .applicationSupportDirectory
+            if let appSupportDir = FileManager.default.urls(for: appDirNr, in: .userDomainMask).first {
+                return appSupportDir
+            }
+        }
+        return nil
+    }
+
+    func path(withSlash: Bool) -> String {
+        let path: String
+        if #available(iOS 16.4, *) {
+            path = self.path(percentEncoded: false)
+        } else {
+            path = self.path
+        }
+        if let char = path.last {
+            let slash: String.Element = "/"
+
+            if withSlash {
+                if char != slash {
+                    return path + String(slash)
+                }
+            } else {
+                if char == slash {
+                    return String(path.dropLast())
+                }
+            }
+        }
+        return path
+    }
 }
