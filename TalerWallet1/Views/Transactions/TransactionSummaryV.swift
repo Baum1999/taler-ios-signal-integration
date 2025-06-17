@@ -687,7 +687,8 @@ struct TransactionSummaryV: View {
                                    talerCopyShare: talerURI,
                                          incoming: transaction.isP2pIncoming,
                                            amount: transaction.common.amountRaw,
-                                            scope: transaction.common.scopes[0])
+                                            scope: transaction.common.scopes.first)
+                                            // scopes shouldn't (- but might) be nil!
                     }
                 }
             } else if keys.contains(EXCHANGEBASEURL) {

@@ -14,7 +14,7 @@ struct QRCodeDetailView: View {
     let talerCopyShare: String
     let incoming: Bool
     let amount: Amount
-    let scope: ScopeInfo
+    let scope: ScopeInfo?
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -22,13 +22,15 @@ struct QRCodeDetailView: View {
     @State private var currencyInfo: CurrencyInfo?
 
     private func currencyTickerChanged() async {
-        currencyInfo = controller.info(for: scope)
+        if let scope {
+            currencyInfo = controller.info(for: scope)
+        }
     }
 
     private func amountStr(_ currencyInfo : CurrencyInfo?) -> (String, String) {
         let amountFormatted: (String, String)
         let readable = amount.readableDescription
-        let myCurrencyInfo = currencyInfo ?? controller.info(for: scope)
+        let myCurrencyInfo = currencyInfo ?? (scope != nil ? controller.info(for: scope!) : nil)
         if let myCurrencyInfo {
             amountFormatted = amount.formatted(myCurrencyInfo, isNegative: false,
                                                useISO: false, a11yDecSep: nil)
