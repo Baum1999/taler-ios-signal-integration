@@ -4797,6 +4797,52 @@
         }
       }
     },
+    "Exchange.Delete.Button" : {
+      "comment" : "button title",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete payment service"
+          }
+        }
+      }
+    },
+    "Exchange.Delete.Warning1" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Are you sure you want to delete this payment service?"
+          }
+        }
+      }
+    },
+    "Exchange.Delete.Warning2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This payment service is in use. Delete anyway?"
+          }
+        }
+      }
+    },
+    "Exchange.Delete.Warning3" : {
+      "comment" : "Currency",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You will loose all %@ of this payment service."
+          }
+        }
+      }
+    },
     "Expires in:" : {
       "localizations" : {
         "de" : {
@@ -5001,6 +5047,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "від %@"
+          }
+        }
+      }
+    },
+    "GLS.Exchange.Delete.Button" : {
+      "comment" : "button title",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Terminate contract"
+          }
+        }
+      }
+    },
+    "GLS.Exchange.Delete.Warning1" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Are you sure you want to terminate this contract?"
+          }
+        }
+      }
+    },
+    "GLS.Exchange.Delete.Warning2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You still have digital money in your wallet. Terminate anyway?"
+          }
+        }
+      }
+    },
+    "GLS.Exchange.Delete.Warning3" : {
+      "comment" : "Currency",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You will loose all %@ of this contract."
           }
         }
       }
