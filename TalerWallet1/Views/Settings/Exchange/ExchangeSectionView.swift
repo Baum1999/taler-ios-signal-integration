@@ -139,14 +139,15 @@ struct ExchangeSectionView: View {
                     .listRowSeparator(.hidden)
                 }
             }
-
-            let buttonTitle = String(localized: "Exchange.Delete", defaultValue: "Delete payment service", comment: "Action button")
-            let warningText1 = String(localized: "Are you sure you want to delete this payment service?")
-            let warningText2 = String(localized: "This payment service is in use. Delete anyway?")
+            let dialect = exchanges.first?.bankComplianceLanguage
+            let buttonTitle = localizedString(.deleteExchange, forDialect: dialect)
+            let warningText1 = localizedString(.warningText1, forDialect: dialect)
+            let warningText2 = localizedString(.warningText2, forDialect: dialect)
+            let warningText3 = localizedString(.warningText3, forDialect: dialect, currency)
             WarningButton(warningText: warningText1,
                           buttonTitle: buttonTitle,
                            buttonIcon: "trash",
-                                 role: .destructive,                            // TODO: WalletColors().errorColor
+                                 role: .destructive,       // optional: use WalletColors().errorColor
                              disabled: $disabled,
                                action: deleteExchange)
             .padding(.top)
@@ -154,12 +155,16 @@ struct ExchangeSectionView: View {
                 Button("Cancel", role: .cancel) {
                     showAlert = false
                 }
+                Button("Deposit") {
+                    // TODO: Go to "Deposit" view
+                    showAlert = false
+                }
                 Button(buttonTitle) {
                     deleteExchange()
                     showAlert = false
                 }
             }, message: {
-                Text("You will loose all \(currency) of this payment service")
+                Text(warningText3)
             })
         } header: {
             BarGraphHeader(stack: stack.push(),
