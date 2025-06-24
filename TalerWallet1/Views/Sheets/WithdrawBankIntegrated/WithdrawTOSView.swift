@@ -55,12 +55,16 @@ struct WithdrawTOSView: View {
     var body: some View {
         let languageCode = Locale.preferredLanguageCode
 //        let languageName = Locale.current.localizedString(forLanguageCode: languageCode)
-        if let exchangeTOS {
+        if let exchangeTOS, let exchangeBaseUrl {
             Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
                   language: languageCode, languageAction: loadToS) {
                 Task { await viewDidLoad() }
             }
             .navigationTitle(navTitle)
+            .refreshable {
+                try? await model.updateExchange(exchangeBaseUrl: exchangeBaseUrl, force: true)
+                await loadToS(languageCode)
+            }
             .onAppear() {
                 if viewID > SHEET_WITHDRAWAL {
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS)
