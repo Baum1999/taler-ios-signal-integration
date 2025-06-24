@@ -450,17 +450,29 @@ extension WalletModel {
 // MARK: -
 fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
     func operation() -> String { "exportDbToFile" }
-    func args() -> Args { Args(directory: directory, stem: stem) }
+    func args() -> Args { Args(directory: directory, stem: stem, forceFormat: "json") }
 
     var directory: String
     var stem: String
     struct Args: Encodable {
         var directory: String
         var stem: String
-    }                           // no arguments needed
+        var forceFormat: String
+    }
     struct Response: Decodable, Sendable {              // path of the copied DB
         var path: String
     }
+}
+
+fileprivate struct ImportDbFromFile: WalletBackendFormattedRequest {
+    func operation() -> String { "importDbFromFile" }
+    func args() -> Args { Args(path: path ) }
+
+    var path: String
+    struct Args: Encodable {
+        var path: String
+    }
+    struct Response: Decodable {}
 }
 
 extension WalletModel {
@@ -476,6 +488,11 @@ extension WalletModel {
         } else {
             return nil
         }
+    }
+    nonisolated func importDbFromFile(path: String, viewHandles: Bool = false)
+      async throws {
+        let request = ImportDbFromFile(path: path)
+        _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
 // MARK: -
