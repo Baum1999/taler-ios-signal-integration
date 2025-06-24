@@ -130,8 +130,9 @@ public let TALERURI = "talerUri"
 public let TRANSACTIONTRANSITION = "transactionTransition"
 public let TRANSACTIONID = "transactionID"
 
-public let NOTIFICATIONERROR = "error"
-public let NOTIFICATIONANIMATION = "animation"
+public let NOTIFICATIONTIME = "notif.time"
+public let NOTIFICATIONERROR = "notif.error"
+public let NOTIFICATIONANIMATION = "notif.animation"
 
 /// Notifications sent by wallet-core
 extension Notification.Name {
