@@ -22,4 +22,16 @@ extension Data {
         let format = options.contains(.upperCase) ? "%02hhX" : "%02hhx"
         return self.map { String(format: format, $0) }.joined()
     }
+
+    mutating func append(data: Data, offset: Int, size: Int) {
+        let start = data.startIndex + offset
+        let end = start + size
+        self.append(data[start..<end])
+    }
+
+    init(fromData data: Data, offset: Int, size: Int) {
+        let start = data.startIndex + offset
+        let end = start + size
+        self.init(data[start..<end])
+    }
 }

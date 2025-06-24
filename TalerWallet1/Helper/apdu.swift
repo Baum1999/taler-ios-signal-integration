@@ -58,22 +58,6 @@ class APDU {
         ])
     } // 00b0 0000 0f
 
-//    private var READ_CAPABILITY_CONTAINER_RESPONSE: Data {
-//        Data(fromUInt8Array: [
-//            0x00, 0x11,     // CCLEN length of the CC file
-//            0x20,           // Mapping Version 2.0
-//            0xFF, 0xFF,     // MLe maximum
-//            0xFF, 0xFF,     // MLc maximum
-//            0x04,           // T field of the NDEF File Control TLV
-//            0x06,           // L field of the NDEF File Control TLV
-//            0xE1, 0x04,     // File Identifier of NDEF file
-//            0xFF, 0xFE,     // Maximum NDEF file size of 65534 bytes
-//            0x00,           // Read access without any security
-//            0xFF,           // Write access without any security
-//            0x90, 0x00,     // A_OKAY
-//        ])
-//    } // 0011 20ffffffff 0406 e104 ffff 00ff 9000
-
     private var READ_CAPABILITY_CONTAINER_RESPONSE: Data {
         Data(fromUInt8Array: [
             0x00, 0x0f,     // CCLEN length of the CC file
@@ -83,13 +67,12 @@ class APDU {
             0x04,           // T field of the NDEF File Control TLV
             0x06,           // L field of the NDEF File Control TLV
             0xE1, 0x04,     // File Identifier of NDEF file
-            0x00, 0xFF,     // Maximum NDEF file size of 65534 bytes
+            0x00, 0xFE,     // Maximum NDEF file size of 65534 bytes    // 254 bytes
             0x00,           // Read access without any security
             0xFF,           // Write access without any security
             0x90, 0x00,     // A_OKAY
         ])
     } //000f 20 003b 0034 04 06 e104 00ff 00ff9000
-
 
     private var NDEF_SELECT_OK: Data {
         Data(fromUInt8Array: [
@@ -131,17 +114,6 @@ class APDU {
                     // since we have no ID length, there is no Payload ID
         ])
     } // d101
-
-    private var NDEF_RECORD_HEADER_LONG: Data {
-        Data(fromUInt8Array: [
-            0xD1,   // 1100 + 0001 = MessageBegin, MessageEnd + Format "Well-Known" (but no ID Length and no ShortRecord)
-            0x01,   // TypeLength
-      //    0x0000, 0x0000,  // Payload Length 4 bytes since ShortRecord is false
-                    // no ID Length byte since the IDlength flag is false
-      //    0x55,   // Payload Type = “U” for URI, 1 byte as specified in the TypeLength field
-                    // since we have no ID length, there is no Payload ID
-        ])
-    } // c101
 
     private var A_OKAY_ARRAY: [UInt8] {
         [
@@ -234,9 +206,9 @@ class APDU {
 
         let uriCount = talerUri.count
         let ndefLen = UInt16(uriCount + 5)     // NDEF_RECORD_HEADER is 4 bytes
-        /// Fifth Command: Read the Length of the NDEF File
+        /// Fifth Command: Read the Length of the NDEF File     // 00b0 00 00 02
         if NDEF_READ_BINARY_NLEN == commandApdu {
-            logger.info("NDEF_READ_BINARY_NLEN triggered. Our Response: length + A_OKAY")
+            logger.info("NDEF_READ_BINARY_NLEN triggered. Our Response: length \(ndefLen) + A_OKAY")
             readCapabilityContainerCheck = false
 
             let ndefLenHi = UInt8(ndefLen >> 8)
@@ -248,33 +220,34 @@ class APDU {
             return lenData
         } // 00b0000002
 
-        /// Sixth Command: Read the NDEF File
+        /// Sixth (and seventh) Command: Read the NDEF File       // 00b0 00 02 3b, and 00b0 00 3d 27
         if NDEF_READ_BINARY == commandApdu[0..<2] {
             let count = commandApdu.count
             if count > 4 {
                 var arrayApdu = Array<UInt8>(repeating: 0, count: count)
                 _ = arrayApdu.withUnsafeMutableBytes { commandApdu.copyBytes(to: $0) }
-//        if arrayApdu[..<2] == NDEF_READ_BINARY[..<2] {
-//            if count == 5 {
-                let length = arrayApdu[4]
-                let offset = UInt16(arrayApdu[3]) + (UInt16(arrayApdu[2]) << 8)
-                logger.info("NDEF_READ_BINARY triggered. Our Response: data + A_OKAY")
-//                if offset == 2 && length == ndefLen {
-//                    var data = NDEF_RECORD_HEADER_SHORT
-                    var data = NDEF_RECORD_HEADER_LONG
-                    let uriCount8 = UInt8((uriCount + 1) & 0xff)
-                    let lenData = withUnsafeBytes(of: uriCount8) { Data($0) }
-                    data.append(lenData)
-                    data.append("U".data(using: .utf8)!)
-                    let zero: UInt8 = 0
-                    let zeroData = withUnsafeBytes(of: zero) { Data($0) }
-                    data.append(zeroData)
-                    data.append(talerUri.data(using: .utf8)!)
-                    data.append(A_OKAY)
 
-                    readCapabilityContainerCheck = false
-                    return data
-//                }
+                let wantedLength = Int(arrayApdu[4])
+                let offset = Int(arrayApdu[3]) + (Int(arrayApdu[2]) << 8)
+                logger.info("NDEF_READ_BINARY offset \(offset), length \(wantedLength) triggered. Our Response: data + A_OKAY")
+
+                var data = NDEF_RECORD_HEADER_SHORT                             // 2 bytes
+                let uriCount8 = UInt8((uriCount + 1) & 0xff)
+                let lenData = withUnsafeBytes(of: uriCount8) { Data($0) }
+                data.append(lenData)                                            // 1 byte
+                data.append("U".data(using: .utf8)!)                            // 1 byte
+                let zero: UInt8 = 0
+                let zeroData = withUnsafeBytes(of: zero) { Data($0) }
+                data.append(zeroData)                                           // 1 byte
+                data.append(talerUri.data(using: .utf8)!)
+
+                var result = Data(fromData: data,
+                                    offset: Int(offset) - 2,    // subtract 2 length bytes
+                                      size: wantedLength)
+                result.append(A_OKAY)                                           // 2 bytes
+
+                readCapabilityContainerCheck = false
+                return result
             }
         }
 

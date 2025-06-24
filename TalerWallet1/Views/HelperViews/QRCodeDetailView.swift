@@ -65,8 +65,8 @@ struct QRCodeDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                 Group {
 #if TALER_NIGHTLY || GNU_TALER
-                    if #available(iOS 18.3, *) {
-                        BorderWithNFC(talerURI: talerURI, size: size) {
+                    if #available(iOS 17.7, *) {
+                        BorderWithNFC(talerURI: talerURI, nfcHint: true, size: size) {
                             qrView
                         }
                     } else {

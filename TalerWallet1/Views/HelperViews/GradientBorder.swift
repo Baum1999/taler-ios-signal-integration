@@ -24,9 +24,10 @@
  */
 import SwiftUI
 
-@available(iOS 18.3, *)
+@available(iOS 17.7, *)
 struct BorderWithNFC<Content: View>: View {
     let talerURI: String
+    let nfcHint: Bool
     let size: CGFloat
     var content: () -> Content
 
@@ -37,18 +38,25 @@ struct BorderWithNFC<Content: View>: View {
         let _ = Self._printChanges()
         if tagEmulation.canUseHCE {
             VStack {
-                if !minimalistic {
-                    Text("Tap for NFC:")
-                        .talerFont(.subheadline)
-                        .padding(.vertical, -4)
-                }
-                let screenWidth = UIScreen.screenWidth
-                GradientBorder(size: size + 20.0,
-                               color: .accentColor,
-                               background: WalletColors().backgroundColor)
-                {
+                if nfcHint {
+                    if !minimalistic {
+                        Text("Tap for NFC:")
+                            .talerFont(.subheadline)
+                            .padding(.vertical, -4)
+                    }
+                    let screenWidth = UIScreen.screenWidth
+                    GradientBorder(size: size + 20.0,
+                                  color: .accentColor,
+                             background: WalletColors().backgroundColor)
+                    {
+                        content()
+                            .onTapGesture(count: 1) {
+                                tagEmulation.emulateTag(talerURI)
+                            }
+                    }
+                } else {
                     content()
-                        .onTapGesture {
+                        .onTapGesture(count: 2) {
                             tagEmulation.emulateTag(talerURI)
                         }
                 }

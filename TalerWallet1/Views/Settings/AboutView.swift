@@ -42,21 +42,22 @@ struct AboutView: View {
                                rotationEnabled: $rotationEnabled)
             .accessibilityHidden(true)   // has its own accessibilityLabel
             .frame(maxWidth: .infinity, alignment: .center)
-            .onTapGesture(count: 2) { rotationEnabled.toggle() }
+//            .onTapGesture(count: 3) { rotationEnabled.toggle() }      // would suppress double-tap in BorderWithNFC
         Group {
             List {
 #if TALER_NIGHTLY || GNU_TALER
-                if #available(iOS 18.3, *) {
+                if #available(iOS 17.7, *) {
                     let talerURI = TALER_NET
-//                    let talerURI = "taler://withdraw-exchange/exchange.taler-ops.ch"
-                    BorderWithNFC(talerURI: talerURI, size: size) {
+                    BorderWithNFC(talerURI: talerURI, nfcHint: false, size: size) {
                         rotatingTaler
                     }
                 } else {
                     rotatingTaler
+                        .onTapGesture(count: 2) { rotationEnabled.toggle() }
                 }
 #else
                 rotatingTaler
+                    .onTapGesture(count: 2) { rotationEnabled.toggle() }
 #endif
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",

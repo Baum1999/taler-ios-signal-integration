@@ -8,7 +8,7 @@
 import CoreNFC
 import os.log
 
-@available(iOS 18.3, *)
+@available(iOS 17.7, *)
 @MainActor
 class TagEmulation: ObservableObject {
     public static let shared = TagEmulation()
@@ -51,6 +51,11 @@ class TagEmulation: ObservableObject {
         do {
             if presentmentIntent == nil {
                 presentmentIntent = try await NFCPresentmentIntentAssertion.acquire()
+                /// The presentment intent assertion expires if any of the following occur:
+                /// • The presentment intent assertion object deinitializes.
+                /// • Your app goes into the background.
+                /// • 15 seconds elapse.
+                /// After the presentment intent assertion expires, you must wait through a 15-second cool-down period before you can acquire a new instance.
                 logger.info("NFCPresentmentIntentAssertion acquired")
             } else {
                 logger.info("NFCPresentmentIntentAssertion exists")
@@ -69,6 +74,8 @@ class TagEmulation: ObservableObject {
                 try await eventStream(cardSession, data: emulatedData)
                 logger.info("eventStream finished")
 
+                try? await Task.sleep(nanoseconds: 1_000_000_000 * 3)
+
                 logger.info("cardSession.invalidate")
                 await cardSession.invalidate()
                 result = true
@@ -77,7 +84,9 @@ class TagEmulation: ObservableObject {
         } catch let error {
             // Handle failure to acquire NFC presentment intent assertion or card session.
             logger.error("❗️NFCPresentmentIntentAssertion not possible: \(error.localizedDescription)")
-            presentmentIntent = nil /// Release presentment intent assertion.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.presentmentIntent = nil /// Release presentment intent assertion.
+            }
             return false
         }
         return result
@@ -90,7 +99,11 @@ class TagEmulation: ObservableObject {
                 cardSession = nil
             }
             logger.info("NFCPresentmentIntentAssertion released")
-            presentmentIntent = nil /// Release presentment intent assertion
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                if self.cardSession == nil {        // don't release if there is a new session
+                    self.presentmentIntent = nil    // release presentment intent assertion
+                }
+            }
         }
     }
 
