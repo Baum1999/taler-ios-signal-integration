@@ -1,3 +1,9 @@
+Version 1.0.15 (wallet-core 1.0.19)
+
+• NFC for QR-Codes (requires iOS 17.7)
+- wallet-core: migrations for BFH and GLS
+
+
 Version 1.0.14 (wallet-core 1.0.18)
 
 - fix 10039, 10093, 10101
@@ -21,7 +27,6 @@ Version 1.0.11 (wallet-core 1.0.12)
 
 Version 1.0.10 (wallet-core 1.0.12)
 
-• NFC for QR-Codes (requires iOS 18.3)
 - update German & Polish localization
 - fix KYC auth for deposit (#10050)
 
