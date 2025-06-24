@@ -325,14 +325,15 @@ extension WalletCore {
                 case Notification.Name.PendingOperationProcessed.rawValue:
                     try handlePendingProcessed(payload)
                 case Notification.Name.BalanceChange.rawValue:
+                    let now = Date()
                     symLog.log(message)
                     if !(payload.isInternal ?? false) {     // don't re-post internals
                         if let txID = payload.hintTransactionId {
                             if txID.contains("txn:refresh:") {
-                                break
+                                break                       // don't re-post refresh
                             }
                         }
-                        postNotification(.BalanceChange)
+                        postNotification(.BalanceChange, userInfo: [NOTIFICATIONTIME: now])
                     }
                 case Notification.Name.BankAccountChange.rawValue:
                     symLog.log(message)
