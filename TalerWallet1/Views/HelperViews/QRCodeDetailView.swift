@@ -64,7 +64,6 @@ struct QRCodeDetailView: View {
                 let qrView = QRGeneratorView(text: talerURI, size: size)
                                 .frame(maxWidth: .infinity, alignment: .center)
                 Group {
-#if TALER_NIGHTLY || GNU_TALER
                     if #available(iOS 17.7, *) {
                         BorderWithNFC(talerURI: talerURI, nfcHint: true, size: size) {
                             qrView
@@ -72,9 +71,6 @@ struct QRCodeDetailView: View {
                     } else {
                         qrView
                     }
-#else
-                    qrView
-#endif
                 }
                 .accessibilityLabel(Text("QR Code", comment: "a11y"))
                 .listRowSeparator(.hidden)

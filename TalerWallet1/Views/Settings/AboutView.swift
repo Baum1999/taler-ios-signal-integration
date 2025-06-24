@@ -45,7 +45,6 @@ struct AboutView: View {
 //            .onTapGesture(count: 3) { rotationEnabled.toggle() }      // would suppress double-tap in BorderWithNFC
         Group {
             List {
-#if TALER_NIGHTLY || GNU_TALER
                 if #available(iOS 17.7, *) {
                     let talerURI = TALER_NET
                     BorderWithNFC(talerURI: talerURI, nfcHint: false, size: size) {
@@ -55,10 +54,6 @@ struct AboutView: View {
                     rotatingTaler
                         .onTapGesture(count: 2) { rotationEnabled.toggle() }
                 }
-#else
-                rotatingTaler
-                    .onTapGesture(count: 2) { rotationEnabled.toggle() }
-#endif
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",
                         imageName: "link",
