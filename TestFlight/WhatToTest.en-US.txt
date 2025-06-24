@@ -1,6 +1,10 @@
-Version 1.0.15 (wallet-core 1.0.20)
+Version 1.0.16 (wallet-core 1.0.20.1)
 
 • NFC for QR-Codes (requires iOS 17.7)
+
+
+Version 1.0.15 (wallet-core 1.0.20)
+
 - wallet-core: migrations for BFH and GLS
 
 
