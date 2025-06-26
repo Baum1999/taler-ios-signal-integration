@@ -40,7 +40,8 @@ struct BorderWithNFC<Content: View>: View {
             VStack {
                 if nfcHint {
                     if !minimalistic {
-                        Text("Tap for NFC:")
+                        let nfcLogo = Image(systemName: NFCLOGO)               // 􀎻 "qrcode.viewfinder"
+                        Text("\(nfcLogo) Tap for NFC")
                             .talerFont(.subheadline)
                             .padding(.vertical, -4)
                     }

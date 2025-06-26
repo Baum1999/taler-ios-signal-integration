@@ -39,6 +39,7 @@ public let UNKNOWN = String(localized: "UNKNOWN", comment: "merchant didn't spec
 public let BALANCES = "chart.bar.xaxis"             // 􀣉                       2.0 (iOS 14)
 public let SETTINGS = "gear"                        // 􀍟                       1.0 (iOS 13)
 public let QRBUTTON = "qrcode.viewfinder"           // 􀎻                       1.0 (iOS 13)
+public let NFCLOGO = "wave.3.right.circle"          //
 
 public let CONFIRM_BANK = "circle.fill"             // 􀀁 badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // 􀋃 badge in PendingRow, TransactionRow and TransactionSummary
