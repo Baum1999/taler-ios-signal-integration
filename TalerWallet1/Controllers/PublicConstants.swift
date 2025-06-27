@@ -7,6 +7,14 @@
  */
 import Foundation
 
+#if TALER_WALLET
+let TALER_LOGO = "taler-logo-2023-blue"
+#elseif TALER_NIGHTLY
+let TALER_LOGO = "taler-logo-2023-black"
+#else   // GNU_TALER
+let TALER_LOGO = "taler-logo-2023-red"
+#endif
+
 public let MAXEXCHANGES = 1000          // per currency
 public let CHF_4217 = "CHF"             // ISO-4217 Swiss Francs
 public let EUR_4217 = "EUR"             // ISO-4217 Euro

@@ -125,11 +125,10 @@ struct MainView: View {
                                 }
                             }
                     } else {
-                        Text("Authenticating...")
-                            .talerFont(.largeTitle)
-                            .foregroundStyle(WalletColors().talerColor)
-                            .padding()
-                            .background(WalletColors().backgroundColor)
+                        Image(TALER_LOGO)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
                             .onAppear {
                                 biometricService.authenticateUser()
                             }
@@ -280,16 +279,9 @@ enum Tab: Int, Hashable, CaseIterable {
     }
 
     var image: Image {
-#if TALER_WALLET
-        let logo = "taler-logo-2023-blue"
-#elseif TALER_NIGHTLY
-        let logo = "taler-logo-2023-black"
-#else   // GNU_TALER
-        let logo = "taler-logo-2023-red"
-#endif
         switch self {
             case .balances: return Image(systemName: BALANCES)                  // 􀣉  "chart.bar.xaxis"
-            case .actions:  return Image(logo)
+            case .actions:  return Image(TALER_LOGO)
             case .settings: return Image(systemName: SETTINGS)                  // 􀍟 "gear"
         }
     }
