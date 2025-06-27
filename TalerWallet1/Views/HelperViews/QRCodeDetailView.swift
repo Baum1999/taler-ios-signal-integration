@@ -18,7 +18,10 @@ struct QRCodeDetailView: View {
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false
 
+    @State private var showQRcode = false
     @State private var currencyInfo: CurrencyInfo?
 
     private func currencyTickerChanged() async {
@@ -60,34 +63,40 @@ struct QRCodeDetailView: View {
     var body: some View {
         if talerURI.count > 10 {
             Section {
-                let size = 240.0
-                let qrView = QRGeneratorView(text: talerURI, size: size)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                Group {
-                    if #available(iOS 17.7, *) {
-                        BorderWithNFC(talerURI: talerURI, nfcHint: true, size: size) {
-                            qrView
-                        }
-                    } else {
-                        qrView
-                    }
-                }
-                .accessibilityLabel(Text("QR Code", comment: "a11y"))
-                .listRowSeparator(.hidden)
                 let amountStr = amountStr(currencyInfo)
                 let scanLong = incoming ? (requesting(amountStr.0), requesting(amountStr.1))
                                         : (sending(amountStr.0), sending(amountStr.1))
-                Text(scanLong.0)
-                    .accessibilityLabel(scanLong.1)
-                    .multilineTextAlignment(.leading)
-                    .talerFont(.title3)
-                    .listRowSeparator(.hidden)
-                    .task(id: controller.currencyTicker) { await currencyTickerChanged() }
+                let size = 240.0
+                let qrView = QRGeneratorView(text: talerURI, size: size)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .accessibilityLabel(Text("QR Code", comment: "a11y"))
+                if #available(iOS 17.7, *) {
+                    BorderWithNFC(talerURI: talerURI, nfcHint: true, size: size, scanHints: scanLong) {
+                        qrView
+                    }
+                } else if showQRcode {
+                    qrView
+                } else {
+                    let qrCode = Image(systemName: QRCODE)                      // 􀖂 "qrcode"
+                    Button(minimalistic ? "\(qrCode)" : "\(qrCode) Show QR code") {
+                        withAnimation { showQRcode = true }
+                    }.buttonStyle(TalerButtonStyle(type: .prominent))
+                }
                 CopyShare(textToCopy: talerCopyShare)
                     .disabled(false)
 //                  .padding(.bottom)
                     .listRowSeparator(.hidden)
                 
+            }
+            .task(id: controller.currencyTicker) { await currencyTickerChanged() }
+            .task {
+                withAnimation {
+                    if #available(iOS 17.7, *) {
+                        showQRcode = showQRauto17
+                    } else {
+                        showQRcode = showQRauto16
+                    }
+                }
             }
         }
     }

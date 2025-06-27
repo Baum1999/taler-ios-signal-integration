@@ -29,43 +29,87 @@ struct BorderWithNFC<Content: View>: View {
     let talerURI: String
     let nfcHint: Bool
     let size: CGFloat
+    let scanHints: (String, String)?
     var content: () -> Content
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false
     @StateObject private var tagEmulation = TagEmulation.shared
+    @State private var showQRcode = false
 
     var body: some View {
-        let _ = Self._printChanges()
+//        let _ = Self._printChanges()
+        let qrCode = Image(systemName: QRCODE)                                  // 􀖂 "qrcode"
+        let qrButton = Button(minimalistic ? "\(qrCode)" : "\(qrCode) Show QR code") {
+            withAnimation { showQRcode = true }
+        }
+
+        let hint = Group {
+            if let scanHints {
+                Text(scanHints.0)
+                    .accessibilityLabel(scanHints.1)
+                    .multilineTextAlignment(.leading)
+                    .talerFont(.title3)
+            }
+        }
+
         if tagEmulation.canUseHCE {
+            let nfcLogo = Image(systemName: NFCLOGO)                            // 􀭹 "wave.3.right.circle"
+            let nfcButton = Button(minimalistic ? "\(nfcLogo)" : "\(nfcLogo) Start NFC") {
+                tagEmulation.emulateTag(talerURI)
+            }.buttonStyle(TalerButtonStyle(type: .prominent))
+
             VStack {
                 if nfcHint {
-                    if !minimalistic {
-                        let nfcLogo = Image(systemName: NFCLOGO)               // 􀎻 "qrcode.viewfinder"
-                        Text("\(nfcLogo) Tap for NFC")
-                            .talerFont(.subheadline)
-                            .padding(.vertical, -4)
-                    }
-                    let screenWidth = UIScreen.screenWidth
-                    GradientBorder(size: size + 20.0,
-                                  color: .accentColor,
-                             background: WalletColors().backgroundColor)
-                    {
-                        content()
-                            .onTapGesture(count: 1) {
-                                tagEmulation.emulateTag(talerURI)
-                            }
+                    if showQRcode {
+                        if !minimalistic {
+                            Text("\(nfcLogo) Tap for NFC")
+                                .talerFont(.subheadline)
+                                .padding(.vertical, -4)
+                        }
+                        let screenWidth = UIScreen.screenWidth
+                        GradientBorder(size: size + 20.0,
+                                      color: .accentColor,
+                                 background: WalletColors().backgroundColor)
+                        {
+                            content()
+                                .onTapGesture(count: 1) { tagEmulation.emulateTag(talerURI) }
+                        }
+                        hint
+                    } else {
+                        nfcButton
+                        qrButton.buttonStyle(TalerButtonStyle(type: .bordered))
                     }
                 } else {
-                    content()
-                        .onTapGesture(count: 2) {
-                            tagEmulation.emulateTag(talerURI)
-                        }
+                    if showQRcode {
+                        content()
+                            .onTapGesture(count: 2) { tagEmulation.emulateTag(talerURI) }
+                        hint
+                    } else {
+                        nfcButton
+                        qrButton.buttonStyle(TalerButtonStyle(type: .bordered))
+                    }
                 }
-            }.onDisappear() {
+            }.listRowSeparator(.hidden)
+            .onDisappear() {
                 tagEmulation.killEmulation()
+            }.task {
+                withAnimation {
+                    if #available(iOS 17.7, *) {
+                        showQRcode = showQRauto17
+                    } else {
+                        showQRcode = showQRauto16
+                    }
+                }
             }
         } else {
-            content()
+            if showQRcode {
+                content()
+                hint
+            } else {
+                qrButton.buttonStyle(TalerButtonStyle(type: .prominent))
+            }
         }
     }
 }

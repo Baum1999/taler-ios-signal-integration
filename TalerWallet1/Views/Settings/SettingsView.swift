@@ -45,6 +45,8 @@ struct SettingsView: View {
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
     @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -121,8 +123,17 @@ struct SettingsView: View {
                     SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
                                  description: hideDescriptions ? nil : String(localized: "Your accounts for deposit...")) {}
                 }
+                let showQRstring = String(localized: "Show QR codes")
+                let showQRhint = String(localized: "Automatically for P2P transactions")
+                if #available(iOS 17.7, *) {
+                    SettingsToggle(name: showQRstring, value: $showQRauto17, id1: "showQRautomatic",
+                            description: minimalistic ? nil : showQRhint) {}
+                } else {
+                    SettingsToggle(name: showQRstring, value: $showQRauto16, id1: "showQRautomatic",
+                            description: minimalistic ? nil : showQRhint) {}
+                }
                 SettingsToggle(name: String(localized: "Use FaceID / TouchID"), value: $useAuthentication, id1: "useFaceID",
-                               description: minimalistic ? nil : String(localized: "Protect your money")) {
+                        description: minimalistic ? nil : String(localized: "Protect your money")) {
                     biometricService.isAuthenticated = false
                 }
 #if TALER_NIGHTLY || DEBUG
@@ -133,11 +144,11 @@ struct SettingsView: View {
                     backupDest
                 } label: {
                     SettingsItem(name: backupTitle, id1: "backup",
-                                 description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
+                          description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
                 }
 #endif
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
-                               description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
+                        description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
                     hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
                 }
                 if controller.hapticCapability.supportsHaptics {
@@ -145,7 +156,7 @@ struct SettingsView: View {
                             description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
                 }
                 SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB, id1: "playSounds",
-                               description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
+                        description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
                 SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
                         description: hideDescriptions ? nil : String(localized: "For Delete, Abandon & Abort buttons"))
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
@@ -156,7 +167,7 @@ struct SettingsView: View {
                 let observability = String(localized: "Observe walletCore")
                 SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
                     walletCore.isObserving = isObserving}),
-                                description: hideDescriptions ? nil : localConsStr) { isObserving in
+                          description: hideDescriptions ? nil : localConsStr) { isObserving in
                     let consoleManager = LCManager.shared
                     consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                     consoleManager.clear()
@@ -170,7 +181,7 @@ struct SettingsView: View {
                     let showLogs = String(localized: "Show logs")
                     SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
                         walletCore.isLogging = isLogging}), id1: "localConsoleL",
-                                   description: hideDescriptions ? nil : localConsStr) {
+                            description: hideDescriptions ? nil : localConsStr) {
                         let consoleManager = LCManager.shared
                         consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                         consoleManager.clear()
@@ -181,7 +192,8 @@ struct SettingsView: View {
                     }
 #if DEBUG
                     if showDevelopItems {
-                        let banks = ["taler.fdold.eu", "regio-taler.fdold.eu", "taler.grothoff.org", "taler.ar",
+                        let banks = ["glstest.taler.net", "glsint.fdold.eu", "taler.fdold.eu", "regio-taler.fdold.eu",
+                                     "taler.grothoff.org", "taler.ar",
                                      "head.taler.net", "test.taler.net", "demo.taler.net", "kyctest.taler.net"]
                         ForEach(banks, id: \.self) { bank in
                             let urlStr = "https://bank." + bank
@@ -211,7 +223,8 @@ struct SettingsView: View {
                                 withDrawDisabled = true    // don't run twice
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
-                                    let amount = Amount(currency:  TESTCURRENCY, cent: 1100)
+                                    let cent = UInt64.random(in: 110...195) * 100
+                                    let amount = Amount(currency:  DEMOCURRENCY, cent: cent)
                                     try? await model.loadTestKudos(1, amount: amount)
                                 }
                             }
@@ -219,7 +232,7 @@ struct SettingsView: View {
                             .disabled(withDrawDisabled)
                         }.id("test1withdraw")
                         SettingsItem(name: String("HEAD"), id1: "head1with",
-                                     description: hideDescriptions ? nil : String("Get money for testing")) {
+                              description: hideDescriptions ? nil : String("Get money for testing")) {
                             let title = "Withdraw"
                             Button(title) {
                                 withDrawDisabled = true    // don't run twice
@@ -333,7 +346,7 @@ struct SettingsView: View {
                                 showResetAlert = true
                             }
                             .buttonStyle(.bordered)
-                            .disabled(didReset)
+//                            .disabled(didReset)
                         }.id("resetWallet")
                     }
                 }
