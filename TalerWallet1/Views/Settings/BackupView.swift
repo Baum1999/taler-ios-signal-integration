@@ -9,7 +9,15 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-let PREFIX = "Taler-"
+let BACKUP = "Taler-"
+let PREFIX = "file://"
+
+extension String {
+    func deletingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
+}
 
 /// This view shows the list of backups
 struct BackupView: View {
@@ -24,17 +32,25 @@ struct BackupView: View {
 
     @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // needed for Deposit, ignore
     @State private var created: Bool = false
+    @State private var restored: Bool = false
     @State private var files: [String] = []
     @State private var filename: String = ""
     @State private var selectedBackup: String? = nil
     @State private var showRestoreAlert: Bool = false
 
 
+    private func restoreBackup(_ path: String) {
+        restored = true
+        Task {
+            try? await model.importDbFromFile(path: path)
+        }
+    }
+
     private func createBackup() {
         created = true
         Task {
             let dateString = Date().iso
-            let stem = String(PREFIX + dateString)
+            let stem = String(BACKUP + dateString)
             if let backupFile = try? await model.exportDbToFile(stem: stem) {
                 filename = backupFile
             }
@@ -44,23 +60,27 @@ struct BackupView: View {
     private var dismissAlertButton: some View {
         Button("Cancel", role: .cancel) {
             showRestoreAlert = false
-            selectedBackup = nil
+            withAnimation { selectedBackup = nil }
         }
     }
     private var resetButton: some View {
         Button("Restore", role: .destructive) {                                   // TODO: WalletColors().errorColor
 //            didReset = true
 
-            showRestoreAlert = false
-            Task { // runs on MainActor
-                symLog.log("❗️Restore \(selectedBackup)❗️")
-//                try? await model.resetWalletCore()
-                selectedBackup = nil
+            if let selectedBackup, let docDirUrl = URL.docDirUrl {
+                showRestoreAlert = false
+//                symLog.log("❗️Restore \(selectedBackup)❗️")
+//                if #available(iOS 16.0, *) {
+//                    backupPath = docDirUrl.appending(component: selectedBackup)
+//                }
+                let backupPath = docDirUrl.appendingPathComponent(selectedBackup).absoluteString
+                let path = backupPath.deletingPrefix(PREFIX)
+                symLog.log("❗️Restore \(path)❗️")
+                restoreBackup(path)
+                withAnimation { self.selectedBackup = nil }
             }
         }
     }
-
-
 
     @MainActor
     private func viewDidLoad() async {
@@ -69,7 +89,8 @@ struct BackupView: View {
             if let contentsOfDocDir = try? fm.contentsOfDirectory(at: docDirUrl,
                                           includingPropertiesForKeys: nil,
                                                              options: []) {
-                withAnimation { files = contentsOfDocDir.map { $0.lastPathComponent } }
+                let filenames = contentsOfDocDir.map { $0.lastPathComponent }
+                withAnimation { files = filenames }
             }
         }
     }
@@ -88,7 +109,8 @@ struct BackupView: View {
 
         let restoreHint = Text("To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet.")
 
-        let backups = files.filter { $0.hasPrefix(PREFIX) }
+        let backups = files.filter { $0.hasPrefix(BACKUP) }
+        let hasBackups = !backups.isEmpty
         List {
             Section {
                 backupHint
@@ -100,17 +122,26 @@ struct BackupView: View {
                     .disabled(created)
                 restoreHint
             }
-#if DEBUG
-            Text(filename)
-#endif
-            if !backups.isEmpty {
+            if hasBackups {
                 Section {
                     ForEach(backups, id: \.self) { file in
-                        Text(file)
-                            .onTapGesture {
-                                selectedBackup = file
-                            }
+                        let isSelected = file == selectedBackup
+                        HStack {
+                            Text(file)
+                                .padding(.vertical, 2)
+                            Spacer()
+                        }
+                        .background {
+                            Color.primary.opacity(isSelected ? 0.2 : 0.05)
+                        }
+                        .onTapGesture {
+                            withAnimation { selectedBackup = file }
+                            showRestoreAlert = true
+                        }
                     }
+                } header: {
+                    Text("Available for restore:")
+                        .talerFont(.title3)
                 }
             }
         }
