@@ -54,7 +54,7 @@ struct PaymentDone: View {
                 .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
                     Button("Done") { dismissTop(stack.push()) }
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
+                        .buttonStyle(TalerButtonStyle(type: .bordered))
                         .padding(.horizontal)
                 }
             } else {
