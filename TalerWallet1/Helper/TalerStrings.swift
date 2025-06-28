@@ -79,6 +79,11 @@ extension String {
         return self
     }
 
+    func deletingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
+
     var spaced: String {
         String(self.map {
             $0 == NONBREAKING ? SPACECHAR : $0
