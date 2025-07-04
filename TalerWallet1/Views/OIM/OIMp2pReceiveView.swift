@@ -35,7 +35,7 @@ struct OIMp2pReceiveView: View {
                  isFinal: false,
                 isSierra: isSierra,
                isSending: false,
-                  amount: $amount,
+                  amount: amount,
                   action: { }
         ) {
             Group {

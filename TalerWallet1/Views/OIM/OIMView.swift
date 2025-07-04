@@ -18,7 +18,7 @@ struct OIMnavBack<Content: View>: View {
     let isFinal: Bool                   // bordered action button
     let isSierra: Bool
     let isSending: Bool                 // move action button
-    @Binding var amount: Amount?
+    let amount: Amount?
     let action: (() -> Void)?
     var content: () -> Content
 

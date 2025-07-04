@@ -91,7 +91,7 @@ struct OIMSubjectView: View {
                  isFinal: false,
                 isSierra: isSierra,
                isSending: sending,
-                  amount: $amount2,
+                  amount: amount2,
                   action: gotAction
         ) {
             VStack {
