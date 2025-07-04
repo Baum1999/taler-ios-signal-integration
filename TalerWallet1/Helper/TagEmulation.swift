@@ -114,9 +114,11 @@ class TagEmulation: ObservableObject {
 //            if presentmentIntent?.isValid ?? false {
                 switch event {
                     case .sessionStarted:
+#if DEBUG
                         let message = "sessionStarted"
                         mySession.alertMessage = message
                         logger.info("\(message)")
+#endif
                         break
 
                     case .readerDetected:
@@ -146,16 +148,21 @@ class TagEmulation: ObservableObject {
                         }
 
                     case .sessionInvalidated(reason: _):
+#if DEBUG
                         mySession.alertMessage = "Ending communication with card reader."
                         logger.info("❗️cardSession invalidation")
+#endif
                         /// Handle the reason for session invalidation.
                         await mySession.stopEmulation(status: .failure)
                         return
 
                     default:
+#if DEBUG
                         let message = "Unknown event from card reader."
                         mySession.alertMessage = message
                         logger.info("❗️\(message)")
+#endif
+                        break
                 }
 //            } else {
 //                logger.error("❗️presentmentIntent is not valid")

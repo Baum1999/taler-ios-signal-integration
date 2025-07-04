@@ -42,7 +42,7 @@ struct AboutView: View {
                                rotationEnabled: $rotationEnabled)
             .accessibilityHidden(true)   // has its own accessibilityLabel
             .frame(maxWidth: .infinity, alignment: .center)
-//            .onTapGesture(count: 3) { rotationEnabled.toggle() }      // would suppress double-tap in BorderWithNFC
+            .onTapGesture(count: 1) { rotationEnabled.toggle() }
         Group {
             List {
                 if #available(iOS 17.7, *) {
@@ -52,7 +52,6 @@ struct AboutView: View {
                     }
                 } else {
                     rotatingTaler
-                        .onTapGesture(count: 2) { rotationEnabled.toggle() }
                 }
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",

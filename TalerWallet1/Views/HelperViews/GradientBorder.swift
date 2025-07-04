@@ -61,7 +61,7 @@ struct BorderWithNFC<Content: View>: View {
             }.buttonStyle(TalerButtonStyle(type: .prominent))
 
             VStack {
-                if nfcHint {
+                if nfcHint {    // QRCodeDetailView
                     if showQRcode {
                         if !minimalistic {
                             Text("\(nfcLogo) Tap for NFC")
@@ -81,15 +81,9 @@ struct BorderWithNFC<Content: View>: View {
                         nfcButton
                         qrButton.buttonStyle(TalerButtonStyle(type: .bordered))
                     }
-                } else {
-                    if showQRcode {
-                        content()
-                            .onTapGesture(count: 2) { tagEmulation.emulateTag(talerURI) }
-                        hint
-                    } else {
-                        nfcButton
-                        qrButton.buttonStyle(TalerButtonStyle(type: .bordered))
-                    }
+                } else {        // AboutView
+                    content()
+                        .onTapGesture(count: 2) { tagEmulation.emulateTag(talerURI) }
                 }
             }.listRowSeparator(.hidden)
             .onDisappear() {
