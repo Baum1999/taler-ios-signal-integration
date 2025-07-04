@@ -19,7 +19,6 @@
 		4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE152A990778009F1BE8 /* taler-swift */; };
 		4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE1A2A990778009F1BE8 /* CodeScanner */; };
 		4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
-		4E3EAE842A990778009F1BE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094EF298979D30043A8A1 /* Assets.xcassets */; };
 		4E563DF82DC3C52C008FA91D /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE62DC3C52C008FA91D /* AnyCodable */; };
 		4E563DF92DC3C52C008FA91D /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE82DC3C52C008FA91D /* SymLog */; };
 		4E563DFA2DC3C52C008FA91D /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DF02DC3C52C008FA91D /* LocalConsole */; };
@@ -29,25 +28,18 @@
 		4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEE2DC3C52C008FA91D /* OrderedCollections */; };
 		4E563DFF2DC3C52C008FA91D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEA2DC3C52C008FA91D /* CodeScanner */; };
 		4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
-		4E563E032DC3C52C008FA91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094EF298979D30043A8A1 /* Assets.xcassets */; };
-		4E563E052DC3C52C008FA91D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */; };
 		4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
 		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
 		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
 		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
 		4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DA29896D030043A8A1 /* TalerUITests.swift */; };
 		4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */; };
-		4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EB094EF298979D30043A8A1 /* Assets.xcassets */; };
 		4EB094F829897CA20043A8A1 /* FTalerWalletcore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */; };
 		4EB094FD29897D280043A8A1 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4EB094FC29897D280043A8A1 /* SymLog */; };
-		4EB236112DC3CF1A00D999BD /* Taler_Nightly InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EB236102DC3CF1A00D999BD /* Taler_Nightly InfoPlist.xcstrings */; };
 		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
 		4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */; };
 		4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171912B49FE4E00BF9FF5 /* OrderedCollections */; };
-		4EE77E7D2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */; };
-		4EE77E7F2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */; };
 		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
-		4EFFDD6B2A501121000C1C6A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */; };
 		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
 		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 /* End PBXBuildFile section */
@@ -111,17 +103,40 @@
 		4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4EB094DA29896D030043A8A1 /* TalerUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
 		4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITests.swift; sourceTree = "<group>"; };
-		4EB094EF298979D30043A8A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4EB094F329897A510043A8A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4EB094F729897CA20043A8A1 /* FTalerWalletcore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FTalerWalletcore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4EB236102DC3CF1A00D999BD /* Taler_Nightly InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Taler_Nightly InfoPlist.xcstrings"; sourceTree = "<group>"; };
-		4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "GNU_Taler InfoPlist.xcstrings"; sourceTree = "<group>"; };
-		4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Taler_Wallet InfoPlist.xcstrings"; sourceTree = "<group>"; };
-		4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		D14AFD1D24D232B300C51073 /* Taler_Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+				"Taler_Nightly InfoPlist.xcstrings",
+				"Taler_Wallet InfoPlist.xcstrings",
+			);
+			target = 4E3EAE142A990778009F1BE8 /* GNU_Taler */;
+		};
+		4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GNU_Taler InfoPlist.xcstrings",
+				"Taler_Wallet InfoPlist.xcstrings",
+			);
+			target = 4E563DE42DC3C52C008FA91D /* Taler_Nightly */;
+		};
+		4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GNU_Taler InfoPlist.xcstrings",
+				"Taler_Nightly InfoPlist.xcstrings",
+			);
+			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4E13EE9E2DB0408B0081F9DF /* OIM */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OIM; sourceTree = "<group>"; };
@@ -139,6 +154,7 @@
 		4E4A40E42CD573D500CA6A90 /* Sounds */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sounds; sourceTree = "<group>"; };
 		4E4A41252CD5769900CA6A90 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
 		4E77D0ED2D7C3A12009756A5 /* ViewModifier */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModifier; sourceTree = "<group>"; };
+		4EB66D772E18238000BE0651 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		4EF888112DF094A700382858 /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -222,13 +238,9 @@
 				4E4A40852CD5731A00CA6A90 /* Backend */,
 				4E4A40A62CD5735600CA6A90 /* Helper */,
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
-				4EB094EF298979D30043A8A1 /* Assets.xcassets */,
+				4EB66D772E18238000BE0651 /* Resources */,
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
-				4EFFDD6A2A501121000C1C6A /* Localizable.xcstrings */,
-				4EE77E7C2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings */,
-				4EE77E7E2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings */,
-				4EB236102DC3CF1A00D999BD /* Taler_Nightly InfoPlist.xcstrings */,
 				4E363CBF2A24754200D7E98C /* Settings.bundle */,
 				4EB094F529897A9A0043A8A1 /* Preview Content */,
 				4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */,
@@ -344,6 +356,7 @@
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4EB66D772E18238000BE0651 /* Resources */,
 				4EF888112DF094A700382858 /* Controllers */,
 			);
 			name = GNU_Taler;
@@ -389,6 +402,7 @@
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4EB66D772E18238000BE0651 /* Resources */,
 				4EF888112DF094A700382858 /* Controllers */,
 			);
 			name = Taler_Nightly;
@@ -434,6 +448,7 @@
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
 				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4EB66D772E18238000BE0651 /* Resources */,
 				4EF888112DF094A700382858 /* Controllers */,
 			);
 			name = Taler_Wallet;
@@ -553,8 +568,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */,
-				4E3EAE842A990778009F1BE8 /* Assets.xcassets in Resources */,
-				4EE77E7D2C0280E5007C9064 /* GNU_Taler InfoPlist.xcstrings in Resources */,
 				4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -564,9 +577,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */,
-				4E563E032DC3C52C008FA91D /* Assets.xcassets in Resources */,
-				4EB236112DC3CF1A00D999BD /* Taler_Nightly InfoPlist.xcstrings in Resources */,
-				4E563E052DC3C52C008FA91D /* Localizable.xcstrings in Resources */,
 				4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -576,9 +586,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
-				4EB094F0298979D30043A8A1 /* Assets.xcassets in Resources */,
-				4EE77E7F2C0280E5007C9064 /* Taler_Wallet InfoPlist.xcstrings in Resources */,
-				4EFFDD6B2A501121000C1C6A /* Localizable.xcstrings in Resources */,
 				4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
