@@ -7,8 +7,27 @@
  */
 import SwiftUI
 import taler_swift
+import SymLog
+
+struct TransactionTimeline: View {
+    let timestamp: Timestamp
+    let textColor: Color
+    let layout: Int
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        TimelineView(.everyMinute) { context in
+            let (dateString, date) = TalerDater.dateString(timestamp, minimalistic, relative: true)
+            TruncationDetectingText(dateString, maxLines: 1, layout: layout, index: 1)
+                .foregroundColor(textColor)
+                .talerFont(.callout)
+        }
+    }
+}
 
 struct TransactionRowView: View {
+    private let symLog = SymLogV(0)
     let scope: ScopeInfo
     let transaction : TalerTransaction
 
@@ -16,6 +35,28 @@ struct TransactionRowView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    @State private var layoutStati0: [Int: Bool] = [:]
+    @State private var layoutStati1: [Int: Bool] = [:]
+
+    /// The first layout mode that can display the content without truncation
+    private var optimalLayout: Int? {
+        let keys0 = layoutStati0.keys.sorted(by: { $0 < $1 })
+        let keys1 = layoutStati1.keys.sorted(by: { $0 < $1 })
+
+        for key in keys0 {
+            let val0 = layoutStati0[key] ?? true
+            let val1 = layoutStati1[key] ?? true
+            if !val0 && !val1 {
+                return key
+            }
+        }
+        return keys0.last
+    }
+
+    private func isLayoutSelected(_ mode: Int) -> Bool {
+        return optimalLayout == mode
+    }
 
     func needVStack(available: CGFloat, contentWidth: CGFloat, valueWidth: CGFloat) -> Bool {
         available < (contentWidth + valueWidth + 40)
@@ -50,6 +91,10 @@ struct TransactionRowView: View {
     }
 
     var body: some View {
+#if DEBUG
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
         let pending = transaction.isPending || transaction.common.isFinalizing
         let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
         let shouldConfirm = transaction.shouldConfirm
@@ -77,24 +122,12 @@ struct TransactionRowView: View {
                                          needsKYC: needsKYC && pending)
         let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
                               strikethrough: !doneOrPending)
-            .foregroundColor(foreColor)
-
-        let topA11y = topString(forA11y: true)
+                        .foregroundColor(foreColor)
+        let topA11y = topString(forA11y: true)!
         let topString = topString()
-        let centerTop = Text(topString ?? EMPTYSTRING)
-            .foregroundColor(textColor)
-            .strikethrough(!doneOrPending, color: WalletColors().negative)
-            .talerFont(.headline)
-//            .fontWeight(.medium)      iOS 16
-            .padding(.bottom, -2.0)
-            .accessibilityLabel(doneOrPending ? topA11y!
-                                              : topA11y! +  String(localized: ", canceled", comment: "a11y"))
-        let centerBottom = TimelineView(.everyMinute) { context in
-            let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic, relative: true)
-            Text(dateString)
-                .foregroundColor(textColor)
-                .talerFont(.callout)
-        }
+        let strikeColor = doneOrPending ? nil : WalletColors().negative
+        let a11yLabel = doneOrPending ? topA11y
+                                      : topA11y +  String(localized: ", canceled", comment: "a11y")
 
 #if DEBUG
         let debug = 1==0
@@ -102,101 +135,143 @@ struct TransactionRowView: View {
         let green = debug ? Color.green : Color.clear
         let blue = debug ? Color.blue : Color.clear
         let orange = debug ? Color.orange : Color.clear
+        let purple = debug ? Color.purple : Color.clear
 #endif
 
-        let layout1 = HStack(spacing: 4) {                                      // amount right centered, top & bottom left
+        let layout0 = HStack(spacing: 4) {                                      // amount right centered, top & bottom left
                 VStack(alignment: .leading, spacing: 2) {
-                    if topString != nil { centerTop }
-                    centerBottom
+                    if let topString {
+                        TruncationDetectingText(topString,
+                                       maxLines: 1,
+                                         layout: 0,
+                                    strikeColor: strikeColor)
+                        .foregroundColor(textColor)
+                        .talerFont(.headline)
+                        .padding(.bottom, -2.0)
+                        .accessibilityLabel(a11yLabel)
+                    }
+                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0)
                 }
+//                .border(orange)
+                Spacer(minLength: 0)
+                amountV //.frame(maxWidth: .infinity, alignment: .trailing)
 #if DEBUG
-                .border(orange)
+                .background(orange.opacity(0.2))
 #endif
-            Spacer(minLength: 0)
-            amountV //.frame(maxWidth: .infinity, alignment: .trailing)
         }
 
-        let layout2 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, bottom & amount below
-            if topString != nil { centerTop }
+        let layout1 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, bottom & amount below
+            if let topString {
+                TruncationDetectingText(topString,
+                               maxLines: 1,
+                                 layout: 1,
+                            strikeColor: strikeColor)
+                .foregroundColor(textColor)
+                .talerFont(.headline)
+                .padding(.bottom, -2.0)
+                .accessibilityLabel(a11yLabel)
+            }
             HStack(spacing: 6) {
-                centerBottom
-#if DEBUG
-                    .border(green)
-#endif
+                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1)
                 Spacer(minLength: 0)
                 amountV
 #if DEBUG
-                    .border(red)
+                    .background(green.opacity(0.2))
 #endif
             }
-#if DEBUG
-            .border(blue)
-#endif
+//            .border(blue)
         }
 
-        let layout3 = VStack(alignment: .leading, spacing: 0) {
-            if topString != nil {                                               // top & amount, bottom below
+        let layout2 = VStack(alignment: .leading, spacing: 0) {
+            if let topString {   // top & amount, bottom below
                 HStack(spacing: 8) {
-                    centerTop
-#if DEBUG
-                        .border(blue)
-#endif
+                    TruncationDetectingText(topString,
+                                   maxLines: 1,
+                                     layout: 2,
+                                strikeColor: strikeColor)
+                    .foregroundColor(textColor)
+                    .talerFont(.headline)
+                    .padding(.bottom, -2.0)
+                    .accessibilityLabel(a11yLabel)
+//                        .border(blue)
                     Spacer(minLength: 2)
                     amountV
 #if DEBUG
-                        .border(green)
+                        .background(red.opacity(0.2))
 #endif
                 }
-                centerBottom
-            } else {                                                            // no top, bottom & amount
+                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2)
+            } else {        // no top, bottom & amount
                 HStack(spacing: 8) {
-                    centerBottom
+                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2)
                     Spacer(minLength: 2)
                     amountV
+#if DEBUG
+                        .background(purple.opacity(0.2))
+#endif
                 }
             }
         }
 
-        let layout4 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount right, bottom full-width
-            if topString != nil { centerTop }
+        let layout3 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount right, bottom full-width
+            if let topString {
+                TruncationDetectingText(topString,
+                               maxLines: 1,
+                                 layout: 3,
+                            strikeColor: strikeColor)
+                .foregroundColor(textColor)
+  //            .strikethrough(!doneOrPending, color: WalletColors().negative)
+                .talerFont(.headline)
+  //            .fontWeight(.medium)      iOS 16 only
+                .padding(.bottom, -2.0)
+                .accessibilityLabel(a11yLabel)
+
+            }
             HStack(spacing: -4) {
                 Spacer(minLength: 2)
                 amountV
 #if DEBUG
-                    .border(green)
+                    .background(blue.opacity(0.2))
 #endif
             }
-#if DEBUG
-                .border(orange)
-#endif
-            centerBottom
+            TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3)
         }
 
         HStack {
             iconBadge
+//                .border(blue)
+            ZStack {
+                layout0
+                    .layoutPriority(isLayoutSelected(0) ? 2 : 1)
+                    .opacity(isLayoutSelected(0) ? 1 : 0)
 #if DEBUG
-                .border(blue)
+                    .border(orange)
 #endif
-            if #available(iOS 16.4, *) {
-                ViewThatFits(in: .horizontal) {
-                    layout1
+                layout1
+                    .layoutPriority(isLayoutSelected(1) ? 2 : 1)
+                    .opacity(isLayoutSelected(1) ? 1 : 0)
 #if DEBUG
-                        .border(green)
+                    .border(green)
 #endif
-                    layout2
+                layout2
+                    .layoutPriority(isLayoutSelected(2) ? 2 : 1)
+                    .opacity(isLayoutSelected(2) ? 1 : 0)
 #if DEBUG
-                        .border(orange)
+//                  .border(red)
 #endif
                     layout3
-#if DEBUG
-                        .border(red)
-#endif
-                    layout4
+                        .layoutPriority(isLayoutSelected(3) ? 2 : 1)
+                        .opacity(isLayoutSelected(3) ? 1 : 0)
 #if DEBUG
                         .border(blue)
 #endif
                 }
-            } else { layout4 } // view for iOS 15
+                .onPreferenceChange(LayoutTruncationStatus0.self) { stati in
+                    self.layoutStati0 = stati
+                }
+                .onPreferenceChange(LayoutTruncationStatus1.self) { stati in
+                    self.layoutStati1 = stati
+                }
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(!doneOrPending ? EMPTYSTRING
@@ -206,6 +281,10 @@ struct TransactionRowView: View {
             .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
     }
 }
+
+
+
+
 // MARK: -
 #if DEBUG
 struct TransactionRow_Previews: PreviewProvider {
