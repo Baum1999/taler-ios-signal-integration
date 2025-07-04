@@ -1,4 +1,4 @@
-Copyright ©2022-23 Taler Systems S.A.
+Copyright ©2022-25 Taler Systems S.A.
 
 GNU Taler is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software

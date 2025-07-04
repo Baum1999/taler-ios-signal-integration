@@ -58,24 +58,12 @@ extension String {
         }
         return result
     }
-//    func replacingOccurrences(of char1: String.Element, with char2: String.Element) -> String {
-//        String(self.map {
-//            $0 == char1 ? char2 : $0
-//        })
-//    }
 
     func replacingOccurrences(of str1: String, with str2: String) -> String {
         let fragments = self.components(separatedBy: str1)
         if fragments.count > 1 {
             return fragments.joined(separator: str2)
         }
-//        if let index = self.index(of: str1) {
-//            if let endIndex = self.endIndex(of: str1) {
-//                let substring1 = self[..<index]
-//                let substring2 = self[endIndex...]
-//                return substring1 + str2 + substring2
-//            }
-//        }
         return self
     }
 

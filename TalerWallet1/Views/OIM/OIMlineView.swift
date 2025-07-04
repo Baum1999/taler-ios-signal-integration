@@ -43,7 +43,7 @@ struct OIMlineView: View {
                                   funds: cash.coins(),
                               amountVal: $amountVal,
                                 canEdit: canEdit)
-        LayoutThatFits([HStackLayout(alignment: .center), VStackLayout()]) {
+        LayoutThatFits([HStackLayout(), VStackLayout()]) {
             notes
 #if DEBUG
                 .padding(1)
