@@ -26,7 +26,9 @@
 
 /**
  * @author Marc Stibane
- *      added strikethrough, more compact modes
+ *    added strikethrough,
+ *    simplified LayoutMode to Int,
+ *    multiple TruncationStatus PreferenceKey
  */
 import SwiftUI
 
@@ -36,7 +38,8 @@ struct TruncationDetectingText: View {
 
     private let content: String
     private let maxLines: Int?
-    private let layoutMode: LayoutMode
+    private let layout: Int
+    private let index: Int
     private let strikeColor: Color?
 
     @State private var actualSize: CGSize = .zero
@@ -69,17 +72,15 @@ struct TruncationDetectingText: View {
     /// Creates a truncation-detecting text view
     /// - Parameters:
     ///   - content: The text content to display
-    ///   - maxLines: Maximum number of lines (nil for unlimited)
-    ///   - layoutMode: The layout mode this text belongs to
-    init(_ content: String, maxLines: Int?, layoutMode: LayoutMode, strikeColor: Color? = nil) {
+    ///   - maxLines: Maximum number of lines (0 or nil for unlimited)
+    ///   - layout: The layout this text belongs to
+    ///   - strikeColor: either nil, or the color for strikethrough()
+    init(_ content: String, maxLines: Int?, layout: Int, index: Int = 0, strikeColor: Color? = nil) {
         self.content = content
-        self.layoutMode = layoutMode
+        self.layout = layout
+        self.index = index
 
-        if let maxLines = maxLines, maxLines <= 0 {
-            fatalError("maxLines cannot be less than or equal to 0")
-        }
-
-        self.maxLines = maxLines
+        self.maxLines = (maxLines ?? 0) > 0 ? maxLines : nil
         self.strikeColor = strikeColor
     }
 
@@ -100,16 +101,27 @@ struct TruncationDetectingText: View {
             }
             .overlay {
                 if let isContentTruncated = isContentTruncated {
-                    Color.clear
-                        .preference(
-                            key: LayoutTruncationStatus.self,
-                            value: [layoutMode: isContentTruncated])
+                    let value = [layout: isContentTruncated]
+                    switch index {
+                        case 0:
+                            Color.clear
+                                .preference(key: LayoutTruncationStatus0.self,
+                                          value: value)
+                        case 1:
+                            Color.clear
+                                .preference(key: LayoutTruncationStatus1.self,
+                                          value: value)
+                        default:
+                            Color.clear
+                                .preference(key: LayoutTruncationStatus2.self,
+                                          value: value)
+                    }
                 }
             }
 #if DEBUG
             .task(id: isContentTruncated) {
                 if let isContentTruncated = isContentTruncated {
-                    print("Layout \(layoutMode.description) - Content truncated: \(isContentTruncated)")
+                    print("Layout \(layout) - Content truncated: \(isContentTruncated)")
                 }
             }
 #endif
@@ -146,50 +158,38 @@ struct TruncationDetectingText: View {
     }
 }
 
-// MARK: - Layout Mode
-
-/// Represents different layout modes for amount rows
-enum LayoutMode: Int, Hashable, Identifiable, CaseIterable {
-    case compact1 // Single line horizontal layout
-    case compact2 // Single line horizontal layout
-    case compact3 // Single line horizontal layout
-    case compact4 // Single line horizontal layout
-    case standard // Two-line horizontal layout
-    case extended // Vertical layout
-
-    var id: Self { self }
-}
-
-// MARK: - Layout Mode Extensions
-
-extension LayoutMode: Comparable {
-    static func < (lhs: LayoutMode, rhs: LayoutMode) -> Bool {
-        lhs.rawValue < rhs.rawValue
-    }
-}
-
-extension LayoutMode: CustomStringConvertible {
-    var description: String {
-        switch self {
-            case .compact1: "compact1"
-            case .compact2: "compact2"
-            case .compact3: "compact3"
-            case .compact4: "compact3"
-            case .standard: "standard"
-            case .extended: "extended"
-        }
-    }
-}
 
 // MARK: - Preference Key
 
 /// Preference key for collecting truncation status from multiple layout modes
-struct LayoutTruncationStatus: PreferenceKey {
-    static var defaultValue: [LayoutMode: Bool] = [:]
+struct LayoutTruncationStatus0: PreferenceKey {
+    static let defaultValue: [Int: Bool] = [:]
 
     static func reduce(
-        value: inout [LayoutMode: Bool],
-        nextValue: () -> [LayoutMode: Bool])
+        value: inout [Int: Bool],
+        nextValue: () -> [Int: Bool])
+    {
+        value.merge(nextValue(), uniquingKeysWith: { _, new in new })
+    }
+}
+
+struct LayoutTruncationStatus1: PreferenceKey {
+    static let defaultValue: [Int: Bool] = [:]
+
+    static func reduce(
+        value: inout [Int: Bool],
+        nextValue: () -> [Int: Bool])
+    {
+        value.merge(nextValue(), uniquingKeysWith: { _, new in new })
+    }
+}
+
+struct LayoutTruncationStatus2: PreferenceKey {
+    static let defaultValue: [Int: Bool] = [:]
+
+    static func reduce(
+        value: inout [Int: Bool],
+        nextValue: () -> [Int: Bool])
     {
         value.merge(nextValue(), uniquingKeysWith: { _, new in new })
     }
