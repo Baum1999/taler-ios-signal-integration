@@ -11,31 +11,39 @@ import LocalAuthentication
 
 class BiometricService: ObservableObject {
     static let shared = BiometricService()
+    @Published var canAuthenticate: Bool = true
     @Published var isAuthenticated = false
     @Published var authenticationError: String?
+
+    @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
     private var context: LAContext?
 
     func authenticateUser() {
         let reason = resetContext()
 
-        guard let context = context else {
-            authenticationError = String(localized: "Failed to initialize authentication context.", comment: "FaceID")
-            return
-        }
-        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) else {
-            authenticationError = String(localized: "Authentication is not available on this device.", comment: "FaceID")
-            return
-        }
-        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { [weak self] success, authenticationError in
-            DispatchQueue.main.async {
-                if success {
-                    self?.isAuthenticated = true
-                    self?.authenticationError = nil
-                } else if let error = authenticationError as? LAError {
-                    self?.authenticationError = self?.errorMessage(for: error)
-                } else {
-                    self?.authenticationError = String(localized: "Unknown authentication error occurred.", comment: "FaceID")
+        if useAuthentication {
+            guard let context = context else {
+                authenticationError = String(localized: "Failed to initialize authentication context.", comment: "FaceID")
+                canAuthenticate = false
+                return
+            }
+            guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) else {
+                authenticationError = String(localized: "Authentication is not available on this device.", comment: "FaceID")
+                canAuthenticate = false
+                return
+            }
+            canAuthenticate = true
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { [weak self] success, authenticationError in
+                DispatchQueue.main.async {
+                    if success {
+                        self?.isAuthenticated = true
+                        self?.authenticationError = nil
+                    } else if let error = authenticationError as? LAError {
+                        self?.authenticationError = self?.errorMessage(for: error)
+                    } else {
+                        self?.authenticationError = String(localized: "Unknown authentication error occurred.", comment: "FaceID")
+                    }
                 }
             }
         }
