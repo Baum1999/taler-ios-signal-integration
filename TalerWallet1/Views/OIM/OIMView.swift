@@ -253,12 +253,12 @@ struct OIMView: View {
 
                 VStack {
                     Spacer()
-                    OIMcurrencyScroller(stack: stack.push(),
-                                         cash: cash,
-                                 availableVal: $availableVal,
-                                    tappedVal: $tappedVal,
-                               scrollPosition: maxAvailable,
-                                      canEdit: false)
+                    OIMcurrencyDrawer(stack: stack.push(),
+                                       cash: cash,
+                               availableVal: $availableVal,
+                                  tappedVal: $tappedVal,
+                             scrollPosition: maxAvailable,
+                                    canEdit: false)
                     .clipped(antialiased: true)
                     .padding(.horizontal, 5)
                     .ignoresSafeArea(edges: .horizontal)

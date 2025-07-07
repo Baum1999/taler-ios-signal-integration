@@ -122,12 +122,12 @@ struct OIMEditView: View {
                 VStack {
                     Spacer()
                     let maxAvailable = useAvailable ? cash.max(available: available.centValue) : 0
-                    OIMcurrencyScroller(stack: stack.push(),
-                                         cash: cash,
-                                 availableVal: $availableVal,           // ==> available - amount
-                                    tappedVal: $tappedVal,
-                               scrollPosition: maxAvailable,            // max note or coin (available)
-                                      canEdit: true)
+                    OIMcurrencyDrawer(stack: stack.push(),
+                                       cash: cash,
+                               availableVal: $availableVal,           // ==> available - amount
+                                  tappedVal: $tappedVal,
+                             scrollPosition: maxAvailable,            // max note or coin (available)
+                                    canEdit: true)
                         .zIndex(2)  // make notes fly from topZ
                         .clipped(antialiased: true)
                         .padding(.horizontal, 5)

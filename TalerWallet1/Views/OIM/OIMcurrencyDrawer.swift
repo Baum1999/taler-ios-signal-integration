@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 
 // renders all banknotes and coins in 1 horizontal scrollview
-struct OIMcurrencyScroller: View {
+struct OIMcurrencyDrawer: View {
     let stack: CallStack
     let cash: OIMcash
     @Binding var availableVal: UInt64
@@ -30,13 +30,13 @@ struct OIMcurrencyScroller: View {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
                     let sourceID = -Int(value)
-                    let fund = OIMfund(id: sourceID, state: .idle, value: value, flippedVal: nil)
+                    let fund = OIMfund(id: sourceID, state: .idle, value: value)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: canEdit,
-                                        pct: 0.9,
+                                        pct: 0.9,                       // hover a bit above the desk
                                      action: { tappedVal = value }
                     )
                     .id(currency.noteBase + String(sourceID))
@@ -44,7 +44,7 @@ struct OIMcurrencyScroller: View {
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
                     let sourceID = -Int(value)
-                    let fund = OIMfund(id: sourceID, state: .idle, value: value, flippedVal: nil)
+                    let fund = OIMfund(id: sourceID, state: .idle, value: value)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
