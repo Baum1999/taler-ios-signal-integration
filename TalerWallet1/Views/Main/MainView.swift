@@ -359,7 +359,7 @@ extension MainView {
         @State private var iconID: String? = nil
 
         private var openKycButton: some View {
-            Button("KYC") {
+            Button("Legitimization") {
                 showKycAlert = false
                 if let kycURI {
                     UIApplication.shared.open(kycURI)
@@ -544,11 +544,11 @@ extension MainView {
                     }
                 }
             }
-            .alert("You need to pass a KYC procedure.",
+            .alert("You need to pass a legitimization procedure.",
                  isPresented: $showKycAlert,
                  actions: {   openKycButton
                               dismissAlertButton },
-                 message: {   Text("Tap the button to go to the KYC website.") })
+                 message: {   Text("Tap the button to go to the legitimization website.") })
             .onNotification(.BalanceChange) { notification in
                 logger.info(".onNotification(.BalanceChange) ==> reload balances")
                 shouldReloadBalances += 1

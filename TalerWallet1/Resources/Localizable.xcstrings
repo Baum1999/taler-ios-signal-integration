@@ -58,6 +58,23 @@
         }
       }
     },
+    ". Legitimization required" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Legitimierung erforderlich"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Wymagany legitymizacja"
+          }
+        }
+      }
+    },
     ". Needs bank authorization" : {
       "comment" : "a11y",
       "localizations" : {
@@ -118,6 +135,7 @@
     },
     ". Needs K Y C" : {
       "comment" : "a11y",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4448,6 +4466,7 @@
       }
     },
     "If you change the account holder name or the IBAN, you may have to perform the KYC procedure again." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4465,6 +4484,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "W przypadku zmiany nazwy posiadacza konta lub numeru IBAN konieczne może być ponowne przeprowadzenie procedury KYC."
+          }
+        }
+      }
+    },
+    "If you change the account holder name or the IBAN, you may have to perform the legitimization procedure again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn Sie den Kontoinhaber oder die IBAN ändern, müssen sie evtl. die Legitimierung wiederholen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W przypadku zmiany nazwy posiadacza konta lub numeru IBAN konieczne może być ponowne przeprowadzenie procedury legitymizacji."
           }
         }
       }
@@ -4611,6 +4646,7 @@
       }
     },
     "KYC" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4685,6 +4721,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Мова:"
+          }
+        }
+      }
+    },
+    "Legitimization" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legitimierung"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legitymizacja"
+          }
+        }
+      }
+    },
+    "Legitimization procedure required" : {
+      "comment" : "KYC",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legitimierungsverfahren erforderlich"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymagana procedura legitymizacji"
           }
         }
       }
@@ -5396,30 +5465,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KYC benötigt"
+            "value" : "Legitimierung erforderlich"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "KYC required"
+            "value" : "Legitimization required"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Requiere KYC"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wymagany KYC"
+            "value" : "Wymagany legitymizacja"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Потрібна перевірка KYC"
           }
         }
@@ -6532,6 +6601,7 @@
       }
     },
     "Open KYC website" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6555,6 +6625,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Відкрити вебсайт KYC"
+          }
+        }
+      }
+    },
+    "Open legitimization website" : {
+      "comment" : "KYC",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legitimierungs-Webseite öffnen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz stronę legitymizacji"
           }
         }
       }
@@ -9188,11 +9275,12 @@
       }
     },
     "Tap the button to go to the KYC website." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tippen Sie die Taste um auf die KYC Webseite zu gehen."
+            "value" : "Tippen Sie um auf die Legitimierungs-Webseite zu gehen."
           }
         },
         "es" : {
@@ -9211,6 +9299,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Натисніть кнопку, щоб перейти на сайт KYC."
+          }
+        }
+      }
+    },
+    "Tap the button to go to the legitimization website." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen Sie um auf die Legitimierungs-Webseite zu gehen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naciśnij przycisk, aby przejść do strony legitymizacji."
           }
         }
       }
@@ -10964,11 +11068,12 @@
     },
     "Will go to KYC website to permit this withdrawal." : {
       "comment" : "a11y",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geht zur KYC-Webseite um diese Abhebung zu erlauben."
+            "value" : "Geht zur Legitimierung-Webseite um diese Abhebung zu erlauben."
           }
         },
         "es" : {
@@ -10987,6 +11092,23 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Перейде на вебсайт KYC для підтвердження цього зняття."
+          }
+        }
+      }
+    },
+    "Will go to legitimization website to permit this withdrawal." : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zur Legitimierung-Webseite um diese Abhebung zu erlauben."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przejdź do strony legitymizacji, aby zezwolić na tę wypłatę."
           }
         }
       }
@@ -11674,6 +11796,7 @@
       }
     },
     "You need to pass a KYC procedure." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11697,6 +11820,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ви повинні пройти процедуру KYC."
+          }
+        }
+      }
+    },
+    "You need to pass a legitimization procedure." : {
+      "comment" : "KYC",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen ein Legitimierungsverfahren durchlaufen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz przejść procedurę legitymizacji."
           }
         }
       }

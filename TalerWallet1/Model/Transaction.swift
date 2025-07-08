@@ -25,6 +25,7 @@ enum TransactionMinorState: String, Codable {
     case deposit
     case aml        // AmlRequired
     case kyc        // KycRequired
+    case kycInit = "kyc-init"
     case kycAuthRequired = "kyc-auth"
     case balanceKyc = "balance-kyc"             // show kycUrl
     case balanceKycInit = "balance-kyc-init"    // kycUrl not yet ready
@@ -67,8 +68,8 @@ enum TransactionMinorState: String, Codable {
             case .deposit:                  return self.rawValue
             case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
             case .balanceKyc, .balanceKycInit,
-                 .kycAuthRequired,
-                 .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "KYC required", comment: "TxMinorState heading")
+                    .kycAuthRequired, .kycInit,
+                 .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "Legitimization required", comment: "TxMinorState heading")
             case .track:                    return self.rawValue
             case .submitPayment:            return self.rawValue
             case .rebindSession:            return self.rawValue
@@ -171,6 +172,7 @@ struct TransactionState: Codable, Hashable {
 
     var isReady: Bool { minor == .ready }
     var isKYC: Bool { minor == .kyc
+                   || minor == .kycInit
                    || minor == .balanceKyc
                    || minor == .mergeKycRequired }
     var isKYCauth: Bool { minor == .kycAuthRequired }

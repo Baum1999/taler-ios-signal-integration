@@ -118,7 +118,7 @@ struct BankEditView: View {
         List {
             if kycCompleted // || true
             {   Section {
-                    Text("If you change the account holder name or the IBAN, you may have to perform the KYC procedure again.")
+                    Text("If you change the account holder name or the IBAN, you may have to perform the legitimization procedure again.")
                         .talerFont(.body)
                 }
             }

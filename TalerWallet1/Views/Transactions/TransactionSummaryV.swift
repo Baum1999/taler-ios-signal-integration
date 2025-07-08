@@ -290,9 +290,9 @@ struct TransactionSummaryV: View {
             if let kycUrl {
                 if let destination = URL(string: kycUrl) {
                     LinkButton(destination: destination,
-                                 hintTitle: String(localized: "You need to pass a KYC procedure."),
-                               buttonTitle: String(localized: "Open KYC website"),
-                                  a11yHint: String(localized: "Will go to KYC website to permit this withdrawal.", comment: "a11y"),
+                               hintTitle: String(localized: "You need to pass a legitimization procedure.", comment: "KYC"),
+                               buttonTitle: String(localized: "Open legitimization website", comment: "KYC"),
+                                  a11yHint: String(localized: "Will go to legitimization website to permit this withdrawal.", comment: "a11y"),
                                      badge: NEEDS_KYC)
                 }
             }
@@ -401,7 +401,11 @@ struct TransactionSummaryV: View {
         var body: some View {
             let common = transaction.common
             if transaction.isPendingKYC {
-                KYCbutton(kycUrl: common.kycUrl)
+                if let kycUrl = common.kycUrl {
+                    KYCbutton(kycUrl: common.kycUrl)
+                } else {
+                    Text("Legitimization procedure required", comment: "KYC")
+                }
             }
             let withdrawalDetails = details.withdrawalDetails
             switch withdrawalDetails.type {

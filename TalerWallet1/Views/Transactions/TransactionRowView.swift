@@ -277,7 +277,7 @@ struct TransactionRowView: View {
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(!doneOrPending ? EMPTYSTRING
-                                    : needsKYC ? String(localized: ". Needs K Y C", comment: "a11y")
+                                    : needsKYC ? String(localized: ". Legitimization required", comment: "a11y")
                                : shouldConfirm ? String(localized: ". Needs bank authorization", comment: "a11y")
                                                : EMPTYSTRING)
             .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
