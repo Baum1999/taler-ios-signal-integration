@@ -42,30 +42,7 @@ struct TruncationDetectingText: View {
     private let index: Int
     private let strikeColor: Color?
 
-    @State private var actualSize: CGSize = .zero
-    @State private var naturalHeightSize: CGSize = .zero
-    @State private var naturalWidthSize: CGSize = .zero
-
-    /// Indicates whether the text content is truncated under current constraints
-    private var isContentTruncated: Bool? {
-        guard actualSize != .zero,
-              naturalWidthSize != .zero,
-              naturalHeightSize != .zero
-        else {
-            return nil
-        }
-
-        switch maxLines {
-            case .none:
-                return false
-            case 1:
-                // For single line: check if natural width exceeds actual width
-                return naturalWidthSize.width > actualSize.width
-            default:
-                // For multiple lines: check if natural height exceeds actual height
-                return naturalHeightSize.height > actualSize.height
-        }
-    }
+    @StateObject var sizeHolder: SizeHolder
 
     // MARK: - Initialization
 
@@ -82,25 +59,26 @@ struct TruncationDetectingText: View {
 
         self.maxLines = (maxLines ?? 0) > 0 ? maxLines : nil
         self.strikeColor = strikeColor
+        self._sizeHolder = StateObject(wrappedValue: SizeHolder(maxLine: maxLines))
     }
 
     // MARK: - Body
 
     var body: some View {
         constrainedText
-            .measureSize($actualSize)
+            .measureSize(sizeHolder.binding(keyPath: \.actualSize))
             .background {
                 naturalHeightText
-                    .measureSize($naturalHeightSize)
+                    .measureSize(sizeHolder.binding(keyPath: \.naturalHeightSize))
                     .hidden()
             }
             .background {
                 naturalWidthText
-                    .measureSize($naturalWidthSize)
+                    .measureSize(sizeHolder.binding(keyPath: \.naturalWidthSize))
                     .hidden()
             }
             .overlay {
-                if let isContentTruncated = isContentTruncated {
+                if let isContentTruncated = sizeHolder.isContentTruncated {
                     let value = [layout: isContentTruncated]
                     switch index {
                         case 0:
@@ -118,9 +96,9 @@ struct TruncationDetectingText: View {
                     }
                 }
             }
-#if DEBUG
-            .task(id: isContentTruncated) {
-                if let isContentTruncated = isContentTruncated {
+#if DEBUG2
+            .task(id: sizeHolder.isContentTruncated) {
+                if let isContentTruncated = sizeHolder.isContentTruncated {
                     print("Layout \(layout) - Content truncated: \(isContentTruncated)")
                 }
             }
@@ -210,5 +188,62 @@ extension View {
                         size.wrappedValue = currentSize
                     }
             })
+    }
+}
+// MARK: - SizeHolder
+
+@MainActor
+final class SizeHolder: ObservableObject {
+    var actualSize: CGSize = .zero {
+        didSet {
+            needsUpdate()
+        }
+    }
+
+    var naturalHeightSize: CGSize = .zero {
+        didSet {
+            needsUpdate()
+        }
+    }
+
+    var naturalWidthSize: CGSize = .zero {
+        didSet {
+            needsUpdate()
+        }
+    }
+
+    var maxLines: Int?
+
+    init(maxLine: Int? = nil) {
+        maxLines = maxLine
+    }
+
+    // Indicates whether the text content is truncated under current constraints
+    @Published var isContentTruncated: Bool?
+
+    func needsUpdate() {
+        guard actualSize != .zero,
+              naturalWidthSize != .zero,
+              naturalHeightSize != .zero
+        else {
+            return
+        }
+
+        switch maxLines {
+            case .none:
+                isContentTruncated = false
+            case 1:
+                // For single line: check if natural width exceeds actual width
+                isContentTruncated = naturalWidthSize.width > actualSize.width
+            default:
+                // For multiple lines: check if natural height exceeds actual height
+                isContentTruncated = naturalHeightSize.height > actualSize.height
+        }
+    }
+
+    func binding(keyPath: ReferenceWritableKeyPath<SizeHolder, CGSize>) -> Binding<CGSize> {
+        Binding(
+            get: { self[keyPath: keyPath] },
+            set: { self[keyPath: keyPath] = $0 })
     }
 }

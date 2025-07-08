@@ -27,6 +27,7 @@ struct TransactionTimeline: View {
     }
 }
 
+@MainActor
 struct TransactionRowView: View {
     private let symLog = SymLogV(0)
     let scope: ScopeInfo
@@ -46,9 +47,9 @@ struct TransactionRowView: View {
         let keys1 = layoutStati1.keys.sorted(by: { $0 < $1 })
 
         for key in keys0 {
-            let val0 = layoutStati0[key] ?? true
-            let val1 = layoutStati1[key] ?? true
-            if !val0 && !val1 {
+            let isTruncated0 = layoutStati0[key] ?? true
+            let isTruncated1 = layoutStati1[key] ?? true
+            if !isTruncated0 && !isTruncated1 {
                 return key
             }
         }
@@ -149,6 +150,9 @@ struct TransactionRowView: View {
                         .foregroundColor(textColor)
                         .talerFont(.headline)
                         .padding(.bottom, -2.0)
+#if DEBUG
+                        .border(red)
+#endif
                         .accessibilityLabel(a11yLabel)
                     }
                     TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
@@ -170,6 +174,9 @@ struct TransactionRowView: View {
                 .foregroundColor(textColor)
                 .talerFont(.headline)
                 .padding(.bottom, -2.0)
+#if DEBUG
+                .border(red)
+#endif
                 .accessibilityLabel(a11yLabel)
             }
             HStack(spacing: 6) {
@@ -180,12 +187,11 @@ struct TransactionRowView: View {
                     .background(green.opacity(0.2))
 #endif
             }
-//            .border(blue)
         }
 
         let layout2 = VStack(alignment: .leading, spacing: 0) {
             if let topString {   // top & amount, bottom below
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     TruncationDetectingText(topString,
                                    maxLines: 1,
                                      layout: 2,
@@ -194,7 +200,9 @@ struct TransactionRowView: View {
                     .talerFont(.headline)
                     .padding(.bottom, -2.0)
                     .accessibilityLabel(a11yLabel)
-//                        .border(blue)
+#if DEBUG
+//                    .border(red)
+#endif
                     Spacer(minLength: 2)
                     amountV
 #if DEBUG
@@ -203,7 +211,7 @@ struct TransactionRowView: View {
                 }
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
             } else {        // no top, bottom & amount
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
                     Spacer(minLength: 2)
                     amountV
@@ -214,7 +222,7 @@ struct TransactionRowView: View {
             }
         }
 
-        let layout3 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount right, bottom full-width
+        let layout3 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount trailing, bottom full-width
             if let topString {
                 TruncationDetectingText(topString,
                                maxLines: 10,
@@ -225,11 +233,14 @@ struct TransactionRowView: View {
                 .talerFont(.headline)
   //            .fontWeight(.medium)      iOS 16 only
                 .padding(.bottom, -2.0)
+#if DEBUG
+                .border(red)
+#endif
                 .accessibilityLabel(a11yLabel)
 
             }
             HStack(spacing: -4) {
-                Spacer(minLength: 2)
+                Spacer(minLength: 0)
                 amountV
 #if DEBUG
                     .background(blue.opacity(0.2))
@@ -240,37 +251,27 @@ struct TransactionRowView: View {
 
         HStack {
             iconBadge
-//                .border(blue)
+#if DEBUG
+                .border(blue)
+#endif
             ZStack {
                 layout0
                     .layoutPriority(isLayoutSelected(0) ? 2 : 1)
                     .opacity(isLayoutSelected(0) ? 1 : 0)
-#if DEBUG
-                    .border(orange)
-#endif
                 layout1
                     .layoutPriority(isLayoutSelected(1) ? 2 : 1)
                     .opacity(isLayoutSelected(1) ? 1 : 0)
-#if DEBUG
-                    .border(green)
-#endif
                 layout2
                     .layoutPriority(isLayoutSelected(2) ? 2 : 1)
                     .opacity(isLayoutSelected(2) ? 1 : 0)
-#if DEBUG
-//                  .border(red)
-#endif
-                    layout3
-                        .layoutPriority(isLayoutSelected(3) ? 2 : 1)
-                        .opacity(isLayoutSelected(3) ? 1 : 0)
-#if DEBUG
-                        .border(blue)
-#endif
-                }
-                .onPreferenceChange(LayoutTruncationStatus0.self) { stati in
+                layout3
+                    .layoutPriority(isLayoutSelected(3) ? 2 : 1)
+                    .opacity(isLayoutSelected(3) ? 1 : 0)
+            }
+                .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
                     self.layoutStati0 = stati
                 }
-                .onPreferenceChange(LayoutTruncationStatus1.self) { stati in
+                .onPreferenceChange(LayoutTruncationStatus1.self) { stati in    // Timeline
                     self.layoutStati1 = stati
                 }
         }
