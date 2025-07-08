@@ -44,8 +44,10 @@ struct RequestPayment: View {
         self._summary = summary
         self._iconID = iconID
 //#if OIM
-        let currency = selectedIndex == 1 ? OIMleones : OIMeuros
-        self._cash = StateObject(wrappedValue: { OIMcash(currency) }())
+        let index = selectedIndex ?? 0
+        let currency = index == 0 ? OIMeuros : OIMleones
+        let oimCash = OIMcash(currency, currencyIndex: (index > 0) ? 1 : 0)
+        self._cash = StateObject(wrappedValue: { oimCash }())
 //#endif
     }
 

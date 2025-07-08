@@ -117,6 +117,7 @@ struct OIMcurrencyButton: View {
     let currency: OIMcurrency
     let availableVal: UInt64
     let canEdit: Bool
+    let isDrawer: Bool              // debugging - button in the drawer
     var pct: CGFloat
     let action: () -> Void
 
@@ -150,6 +151,11 @@ struct OIMcurrencyButton: View {
                                 : 0.5
         //                    checkDisabled = true    // TODO: don't run twice
         let unavailable = availableVal < value
+        if isDrawer && value == 2000 {
+            if unavailable {
+                let _ = print("OIMcurrencyButton❗️❗️", availableVal, value)
+            }
+        }
         let disabled = !canEdit || isMorphing || unavailable        // cannot edit morphing funds
         EmptyView().modifier(OIMmod(name: imgName(outValue ?? value),
                              flippedName: imgName(flippedVal),

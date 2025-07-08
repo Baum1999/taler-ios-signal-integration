@@ -11,6 +11,11 @@ import taler_swift
 let OIMbuttonSize = 80.0
 let OIMactionSize = 120.0
 
+let OIMACTION = "OIMaction"
+let OIMACTION2 = "OIMaction2"
+let OIMNUMBER = "OIMnumber"
+let OIMCHEST = "OIMchest"
+
 // MARK: -
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
@@ -45,7 +50,7 @@ struct OIMnavBack<Content: View>: View {
                                      isFinal: isFinal,
                                       action: amountIsZero ? nil : action)
                             .frame(width: OIMactionSize, height: OIMbuttonSize)
-                            .matchedGeometryEffect(id: isSending ? "OIMaction" : "OIMaction2",
+                            .matchedGeometryEffect(id: isSending ? OIMACTION : OIMACTION2,
                                                    in: wrapper.namespace, isSource: false)
                     }
                 }
@@ -70,7 +75,7 @@ struct OIMtitleView: View {
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
-                .matchedGeometryEffect(id: "OIMnumber", in: wrapper.namespace, isSource: true)
+                .matchedGeometryEffect(id: OIMNUMBER, in: wrapper.namespace, isSource: true)
                 .accessibilityHidden(true)
 
             OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
@@ -84,7 +89,7 @@ struct OIMtitleView: View {
                 .frame(width: OIMactionSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
-                .matchedGeometryEffect(id: "OIMaction", in: wrapper.namespace, isSource: true)
+                .matchedGeometryEffect(id: OIMACTION, in: wrapper.namespace, isSource: true)
                 .accessibilityHidden(true)
 
         }
@@ -144,16 +149,29 @@ struct OIMView: View {
     }
 
     func openChest(_ index: Int, _ balance: Balance) {
-        chestOpen = index
-        selectedIndex = index
-        cash.currency = index == 0 ? OIMeuros : OIMleones
-        selectedBalance = balance
-        available = balance.available
-
-        availableVal = available?.centValue ?? 0
-        cash.update2(availableVal, 0.2)           // set cash to available
-        let maxAvailable = cash.max(available: availableVal)
-        print("OIMView.task availableVal", availableVal, maxAvailable)
+        cash.clearFunds()
+        print("❗️openChest❗️")
+        let duration: TimeInterval
+        let initial: TimeInterval
+#if DEBUG
+        duration = debugAnimations ? 2.5 :
+                    fastAnimations ? 0.6 : 1.1
+        initial = debugAnimations ? 1.0 : 0.1
+#else
+        duration = fastAnimations ? 0.6 : 1.1
+        initial = 0.1
+#endif
+        withAnimation(.basic1) {
+            chestOpen = index
+            selectedIndex = index
+            cash.currency = index == 0 ? OIMeuros : OIMleones
+            selectedBalance = balance
+            available = balance.available
+            availableVal = balance.available.centValue
+            cash.update2(availableVal, state: .chestOpening, duration, initial)  // set cash to available
+            let maxAvailable = cash.max(available: availableVal)
+            print("OIMView.openChest availableVal", availableVal, maxAvailable)
+        }
     }
 
     var body: some View {
@@ -230,22 +248,25 @@ struct OIMView: View {
                             let itsMe = chestOpen == index
                             let isClosed = chestOpen == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize
-                            OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
-                                if itsMe {
-                                    closeAnimated()
-                                } else {
-                                    withAnimation(.basic1) {
+                            ZStack {
+                                OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
+                                    if itsMe {
+                                        closeAnimated()
+                                    } else {
                                         openChest(index, balance)
                                     }
                                 }
+                                .frame(width: size, height: size)
+                                .zIndex(itsMe ? 3 : 0)
+                                .opacity((isClosed || itsMe) ? 1.0 : 0.01)
+                                .matchedGeometryEffect(id: itsMe ? OIMNUMBER // (sending ? "OIMback" : OIMNUMBER)
+                                                                 : String(index),
+                                                       in: wrapper.namespace, isSource: false)
+                                .frame(width: size, height: size)
+                                Color.clear
+                                    .frame(width: 40, height: 40)
+                                    .matchedGeometryEffect(id: OIMCHEST + String(index), in: wrapper.namespace, isSource: true)
                             }
-                            .frame(width: size, height: size)
-                            .zIndex(itsMe ? 3 : 0)
-                            .opacity((isClosed || itsMe) ? 1.0 : 0.01)
-                            .matchedGeometryEffect(id: itsMe ? "OIMnumber" // (sending ? "OIMback" : "OIMnumber")
-                                                             : String(index),
-                                                   in: wrapper.namespace, isSource: false)
-                            .frame(width: size, height: size)
                         }
                     }
                     Spacer()

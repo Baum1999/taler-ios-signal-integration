@@ -18,6 +18,9 @@ enum FundState: Int {
 
     case shouldFly          // + button tapped
     case isFlying           // after onAppear
+    case chestOpening       // chest tapped, money flies out
+    case reveal             // move (invisible) together with the chest to the top
+    case curve              // fly out of the chest in a curve to the topRight corner
 
     case position           // position to move to
     case moving             // move to position
@@ -28,7 +31,10 @@ enum FundState: Int {
 
     var returning: Bool { self == .returning }
     var shouldFly: Bool { self == .shouldFly }
-    var isFlying: Bool { self == .isFlying }
+    var isFlying: Bool { self == .isFlying || self == .reveal || self == .curve }
+    var chestOpening: Bool { self == .chestOpening }
+    var reveal: Bool { self == .reveal }
+    var curve: Bool { self == .curve }
     var position: Bool { self == .position }
     var morphing: Bool { self == .morphing }
     var moving: Bool { self == .moving }
@@ -39,37 +45,56 @@ enum FundState: Int {
 /// data structure for a cash item on the table
 public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     public let id: Int                  // support multiple funds with the same value
-    var state: FundState
     var value: UInt64                   // can be morphed
+    var currencyIndex: Int
+    var state: FundState
+    var delay: TimeInterval
     var morphTicker: Int?               // `semaphore´ to reserve a fund - don't morph this twice concurrently
     var flippedVal: UInt64?             // the value to morph into - layout.sortByValue will take this instead of value
     var outValue: UInt64?               // if this is set it determines the image (used for flipping)
-
-    var targetID: String {
-        String(state.shouldFly || state.returning ? -Int(value)        // match sourceID
-                                                  : id)
+    var targetID: String {              // match sourceID for SwiftUI animations
+        state.chestOpening ? OIMCHEST + String(currencyIndex)
+            : state.reveal ? OIMNUMBER
+             : state.curve ? OIMACTION
+                     : String(state.shouldFly || state.returning ? -Int(value)  // match currencyScroller
+                                                                 : id)
     }
-    var shouldFly: Bool { state.shouldFly }
-    var isFlying: Bool { state.isFlying }
-//    var isFlipping: Bool { state.flipping }
+    var shouldFly2: Bool { state.shouldFly || state.chestOpening }
+    var isFlying2: Bool { state.isFlying }
 
+    init(id: Int, value: UInt64, currencyIndex: Int,
+         state: FundState = .idle, delay: TimeInterval = 0,
+         morphTicker: Int? = nil, flippedVal: UInt64? = nil, outValue: UInt64? = nil
+    ) {
+        self.id = id
+        self.value = value
+        self.currencyIndex = currencyIndex
+        self.state = state
+        self.delay = delay
+        self.morphTicker = morphTicker
+        self.flippedVal = flippedVal
+        self.outValue = outValue
+    }
 }
 public typealias OIMfunds = [OIMfund]
 
 // MARK: -
 final class OIMcash: ObservableObject, Sendable {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
     private let logger = Logger(subsystem: "net.taler.gnu", category: "OIMcash")
     private var ticker = 0                  // increment each time a fund is added (or melted from others)
 //    let semaphore = AsyncSemaphore(value: 1)
     var currency: OIMcurrency
+    var currencyIndex: Int
     @Published var funds: OIMfunds = []
 
-    init(_ currency: OIMcurrency? = nil) {
+    init(_ currency: OIMcurrency? = nil, currencyIndex: Int = 0) {
         if let currency {
             self.currency = currency
+            self.currencyIndex = currencyIndex
         } else {
             self.currency = OIMeuros
+            self.currencyIndex = 0
         }
     }
 
@@ -87,7 +112,7 @@ final class OIMcash: ObservableObject, Sendable {
         return 0
     }
 
-    var delay: Double {
+    var flyDelay: Double {     // time
 #if DEBUG
         if debugAnimations { return 5.0 }
 //        return fastAnimations ? 5 : 1.0
@@ -95,6 +120,9 @@ final class OIMcash: ObservableObject, Sendable {
         return fastAnimations ? 0.4 : 0.8
     }
 
+    var curveDelay: Double {
+        flyDelay * 2 / 3
+    }
 
     func sortByValue() -> OIMfunds {
         /// sorts ASCENDING but keeps the order of the IDs for identical values
@@ -115,7 +143,7 @@ final class OIMcash: ObservableObject, Sendable {
         for fund in sorted {
             let value = fund.value
             let state = fund.state
-            if fund.shouldFly || fund.isFlying      {  // flying can not go on the stack
+            if fund.shouldFly2 || fund.isFlying2      {  // flying can not go on the stack
                 lastValue = 0                               // let the next subview...
                 stackIndex = 0                              // ...start a new stack
             } else if lastValue != value {                  // different value?
@@ -193,7 +221,7 @@ final class OIMcash: ObservableObject, Sendable {
         }
 
         /// Stage 2: After arriving at the position, without animation hide all outValues (except our anchor)
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + flyDelay) {
             for var delFund in toDelete {
                 self.symLog.log(">>hide \(delFund.id)")
                 delFund.state = .hiding                 // make invisible
@@ -207,7 +235,7 @@ final class OIMcash: ObservableObject, Sendable {
             self.symLog.log(">>flipped \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
 
             /// Stage 4: move inValues to final position, delete outValues from funds array
-            DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.flyDelay) {
                 morphFund.state = .arriving
                 morphFund.value = inValue                       // stack position
                 morphFund.morphTicker = nil                     // release `semaphore´
@@ -230,7 +258,7 @@ final class OIMcash: ObservableObject, Sendable {
                 }
 
                 /// Stage 5: transmute morphFund
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + self.flyDelay) {
                     morphFund.state = .mutating
 //                    morphFund.state = .idle
                     morphFund.outValue = nil
@@ -309,10 +337,12 @@ final class OIMcash: ObservableObject, Sendable {
         return funds.filter { $0.value <= firstCoinVal }
     }
 
+    @discardableResult
     func addCash(value: UInt64, _ newState: FundState = .shouldFly, _ flippedVal: UInt64? = nil) -> OIMfund {
         let myTicker = ticker; ticker += 1 // TODO: atomic increment!
-        let fund = OIMfund(id: myTicker, state: newState, value: value, flippedVal: flippedVal)
-        symLog.log(">>adding \(value) \(fund.id)")
+        let fund = OIMfund(id: myTicker, value: value, currencyIndex: currencyIndex,
+                           state: newState, flippedVal: flippedVal)
+        symLog.log(">>adding \(value) \(fund.id) \(newState)")
         funds.append(fund)
         return fund
     }
@@ -367,24 +397,47 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
-    func update2(_ intVal: UInt64, _ duration: TimeInterval = 0, _ initial: TimeInterval = 0) {
-        let result = currency.notesCoins(intVal)
-        let chng1 = update1(result.0, currencyNotesCoins: currency.bankNotes, duration, initial)
-        let chng2 = update1(result.1, currencyNotesCoins: currency.bankCoins, duration, initial)
+    func clearFunds() {
+        funds = []
     }
 
+    func countDosh(_ dosh: OIMdenominations) -> UInt64 {
+        dosh.reduce(0) {  x, y in
+            x + y
+        }
+    }
+
+    func interval(count: UInt64,
+               duration: TimeInterval,
+                initial: TimeInterval = 0
+    ) -> TimeInterval {
+        (duration <= initial) || (count == 0) ? 0
+                                              : (duration - initial) / Double(count)
+    }
+
+    func update2(_ intVal: UInt64,
+                    state: FundState = .idle,
+               _ duration: TimeInterval = 0,
+                _ initial: TimeInterval = 0) {
+        // optimize/rebuild funds
+        let dosh = currency.notesCoins(intVal)
+        let count = countDosh(dosh.0) + countDosh(dosh.1)
+        let interval = interval(count: count, duration: duration, initial: initial)
+        let delay = update1(dosh.0, denominations: currency.bankNotes, state: state, count, interval, initial)
+        update1(dosh.1, denominations: currency.bankCoins, state: state, count, interval, delay)
+    }
+
+    @discardableResult
     func update1(_ notesCoins: OIMdenominations,
-          currencyNotesCoins: OIMdenominations,
-                  _ duration: TimeInterval = 0,
-                   _ initial: TimeInterval = 0) -> Bool {
+                denominations: OIMdenominations,
+                        state: FundState = .idle,
+                      _ count: UInt64,
+                   _ interval: TimeInterval = 0,
+                    _ initial: TimeInterval = 0) -> TimeInterval {
         var array = funds
         var changed = false
         var accumulatedDelay = initial
-        let count = notesCoins.reduce(0) {  x, y in
-            x + y
-        }
-        let interval: TimeInterval = (duration <= initial) || (count == 0) ? 0 : (duration - initial) / Double(count)
-        for (index, value) in currencyNotesCoins.enumerated() {
+        for (index, value) in denominations.enumerated() {
             let wanted = notesCoins[index]      // number of notes which should be shown
             var shownNotes = array.filter { $0.value == value }
             var count = shownNotes.count
@@ -399,24 +452,29 @@ final class OIMcash: ObservableObject, Sendable {
                 count -= 1
             }
             while count < wanted {
-                let note = OIMfund(id: ticker, state: .idle, value: value, flippedVal: nil)
-                ticker += 1
-                symLog.log("update: add \(note.value), \(note.id)")
-                if duration > 0 {
-                    withAnimation(.move1.delay(accumulatedDelay)) {
-                        array.append(note)
-                    }
+//                if interval == 0 {            // add all at once
+                    let fund = OIMfund(id: ticker, value: value,
+                            currencyIndex: currencyIndex, state: state,
+                                    delay: accumulatedDelay)
+                    ticker += 1
+                    symLog.log("update: add \(fund.value), \(fund.id)")
+                    array.append(fund)
+                    changed = true
+//                } else {   // add each delayed
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + accumulatedDelay) {
+//                        withAnimation(.move1) {
+//                            self.addCash(value: value, state)
+//                            return
+//                        }
+//                    }
                     accumulatedDelay += interval
-                } else {
-                    array.append(note)
-                }
-                changed = true
+//                }
                 count += 1
             }
         }
         if changed {
             funds = array
         }
-        return changed
+        return accumulatedDelay
     }
 }

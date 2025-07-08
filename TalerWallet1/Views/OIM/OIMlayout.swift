@@ -56,7 +56,7 @@ extension LayoutSubview {
 // renders a stack of funds (banknotes, coins)
 @available(iOS 16.4, *)
 struct OIMlayoutView: View {
-    private let symLog = SymLogV(0)
+    private let symLog = SymLogV()
 //    let logger = Logger(subsystem: "net.taler.gnu", category: "OIMlayoutView")
     let stack: CallStack
     let cash: OIMcash
@@ -67,24 +67,39 @@ struct OIMlayoutView: View {
     @EnvironmentObject private var wrapper: NamespaceWrapper
     @State private var checkStacks: UInt64 = 0
 
-    func startFlying(fundID: Int) {
+    func endFlying(_ index: Int, after delay: Double) {
+        var fund = funds[index]
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            symLog.log("*** end flying:\(fund.value) \(fund.id)")
+            withAnimation(.move1) {
+                fund.state = .idle              // move onto stack
+                cash.updateFund(fund)
+            }
+            if checkStacks > fund.value || checkStacks == 0 {
+                symLog.log("*** checkStacks:\(fund.value)")
+                checkStacks = fund.value
+            }
+        }
+    }
+
+    func startFlying(fundID: Int, fromChest: Bool = false) {
         if let index = funds.firstIndex(where: { $0.id == fundID }) {
             var fund = funds[index]
             symLog.log("*** start flying:\(fund.value) \(fundID)")
-            withAnimation(.move1) {
-                fund.state = .isFlying               // switch off matching
-                cash.updateFund(fund)
+            if fromChest && fund.delay > 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + fund.delay) {
+                    withAnimation(.move1) {
+                        fund.state = .curve
+                        cash.updateFund(fund)
+                    }
+                    endFlying(index, after: cash.flyDelay / 3)
+                }
+            } else {
+                endFlying(index, after: cash.flyDelay)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + cash.delay) {
-                symLog.log("*** end flying:\(fund.value) \(fundID)")
-                withAnimation(.move1) {
-                    fund.state = .idle              // move onto stack
-                    cash.updateFund(fund)
-                }
-                if checkStacks > fund.value || checkStacks == 0 {
-                    symLog.log("*** checkStacks:\(fund.value)")
-                    checkStacks = fund.value
-                }
+            withAnimation(.move1) {
+                fund.state = fromChest ? .reveal : .isFlying               // switch off matching
+                cash.updateFund(fund)
             }
         }
     }
@@ -97,7 +112,7 @@ struct OIMlayoutView: View {
                 fund.state = .returning
                 cash.updateFund(fund)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + cash.delay) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + cash.flyDelay) {
                 symLog.log("*** remove:\(fund.value) \(fundID)")
                 withAnimation(.move1) {
                     cash.removeCash(id: fundID, value: fund.value)
@@ -112,13 +127,14 @@ struct OIMlayoutView: View {
                 let value = fund.value
                 let fundID = fund.id
                 let fundState = fund.state
-                let shouldFly = fundState == .shouldFly
+                let shouldFly = fundState.shouldFly
 //                let willMutate = fundState == .arriving || fundState == .mutating
                 OIMcurrencyButton(stack: stack.push(),
                                    fund: fund,
                                currency: cash.currency,
                            availableVal: value,
                                 canEdit: canEdit,
+                               isDrawer: false,
                                     pct: shouldFly ? 0.0 : 1.0
                 ) {   // remove on button press
                     if amountVal >= fund.value {
@@ -139,7 +155,8 @@ struct OIMlayoutView: View {
                 .onAppear {
                     if shouldFly {
                         startFlying(fundID: fundID)
-                    } else {
+                    } else if fundState.chestOpening {
+                        startFlying(fundID: fundID, fromChest: true)
 //                        print("    ->OIMlayout ForEach fund.onAppear ignore \(value), \(fundID)")
                     }
                 }
