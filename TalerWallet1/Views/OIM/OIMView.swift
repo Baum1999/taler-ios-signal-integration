@@ -114,6 +114,7 @@ struct OIMView: View {
     @State private var chestOpen: Int? = nil
     @State private var showingActions = false               // set true after user opened a chest, set false when choosing an action
     @State private var sending = false                      // after user tapped on Send or on the money
+    @State private var closing = false                      // after user tapped on the open chest
 
     func noAction() { }
 
@@ -139,12 +140,21 @@ struct OIMView: View {
     }
 
     func closeAnimated() {
-        withAnimation(.basic1) {
-            chestOpen = nil
-            selectedBalance = nil
-            selectedIndex = nil
-            available = nil
-            showingActions = false
+        if !closing {
+            closing = true
+            let duration = fastAnimations ? 0.6 : 1.1
+            let delay = cash.backToChest(duration)
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                print("closeAnimated", delay)
+                withAnimation(.basic1) {
+                    chestOpen = nil
+                    selectedBalance = nil
+                    selectedIndex = nil
+                    available = nil
+                    showingActions = false
+                }
+                closing = false
+            }
         }
     }
 

@@ -407,7 +407,45 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
-    func interval(count: UInt64,
+    func flyToChest(_ index: Int, after delay: TimeInterval) {
+        let interval = fastAnimations ? 0.2 : 0.4
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            var fund = self.funds[index]
+            withAnimation(.move1) {
+                fund.state = .curve
+                self.updateFund(fund)
+            }
+            print("backToChest", fund.id, fund.value, delay)
+            DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                withAnimation(.move1) {
+                    fund.state = .reveal
+                    self.updateFund(fund)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                    withAnimation(.move1) {
+                        do {
+                            self.funds.remove(at: index)
+                        } catch {}
+                    }
+                }
+            }
+        }
+    }
+
+    func backToChest(_ duration: TimeInterval) -> TimeInterval {
+        var count = funds.count
+        var initial: TimeInterval = 0.01
+        let interval = interval(count: count, duration: duration, initial: initial)
+
+        while count > 0 {
+            count -= 1
+            flyToChest(count, after: initial)
+            initial += interval
+        }
+        return initial - interval + (fastAnimations ? 0.1 : 0.2)
+    }
+
+    func interval(count: Int,
                duration: TimeInterval,
                 initial: TimeInterval = 0
     ) -> TimeInterval {
@@ -421,17 +459,16 @@ final class OIMcash: ObservableObject, Sendable {
                 _ initial: TimeInterval = 0) {
         // optimize/rebuild funds
         let dosh = currency.notesCoins(intVal)
-        let count = countDosh(dosh.0) + countDosh(dosh.1)
+        let count = Int(countDosh(dosh.0) + countDosh(dosh.1))
         let interval = interval(count: count, duration: duration, initial: initial)
-        let delay = update1(dosh.0, denominations: currency.bankNotes, state: state, count, interval, initial)
-        update1(dosh.1, denominations: currency.bankCoins, state: state, count, interval, delay)
+        let delay = update1(dosh.0, denominations: currency.bankNotes, state: state, interval, initial)
+        update1(dosh.1, denominations: currency.bankCoins, state: state, interval, delay)
     }
 
     @discardableResult
     func update1(_ notesCoins: OIMdenominations,
                 denominations: OIMdenominations,
                         state: FundState = .idle,
-                      _ count: UInt64,
                    _ interval: TimeInterval = 0,
                     _ initial: TimeInterval = 0) -> TimeInterval {
         var array = funds

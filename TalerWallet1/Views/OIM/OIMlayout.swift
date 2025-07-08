@@ -153,11 +153,12 @@ struct OIMlayoutView: View {
                 .oimFundState(fundState)
                 .matchedGeometryEffect(id: fund.targetID, in: wrapper.namespace, isSource: false)
                 .onAppear {
-                    if shouldFly {
-                        startFlying(fundID: fundID)
-                    } else if fundState.chestOpening {
+                    if fundState.chestOpening {
                         startFlying(fundID: fundID, fromChest: true)
-//                        print("    ->OIMlayout ForEach fund.onAppear ignore \(value), \(fundID)")
+                    } else if fundState.shouldFly {
+                        startFlying(fundID: fundID)
+                    } else {
+//                      print("    ->OIMlayout ForEach fund.onAppear ignore \(value), \(fundID)")
                     }
                 }
             }

@@ -164,7 +164,7 @@ struct OIMcurrencyButton: View {
                                 flipBack: mutating,
                                 disabled: disabled,
                              unavailable: unavailable,
-                               invisible: state.hiding,
+                               invisible: state.hiding || state.chestOpening,
                                      pct: pct,
                                   action: action))
         .accessibilityLabel(Text("\(value)", comment: "VoiceOver"))         // TODO: currency name
