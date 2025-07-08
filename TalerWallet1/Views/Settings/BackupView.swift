@@ -98,7 +98,7 @@ struct BackupView: View {
         let buttonTitle = String(localized: "Create Backup", comment: "button")
 
 
-        let backupHint = Text("Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to your computer's harddisk.")
+        let backupHint = Text("Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to the computer.")
 
         let restoreHint = Text("To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet.")
 

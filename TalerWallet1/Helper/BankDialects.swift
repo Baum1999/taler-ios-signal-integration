@@ -27,7 +27,7 @@ func localizedString(_ key: BankDialectString, forDialect: BankDialect?, _ optio
                 return String(localized: "GLS.Exchange.Delete.Warning2", defaultValue: "You still have digital money in your wallet. Terminate anyway?")
 
             case .warningText3:
-                return String(localized: "GLS.Exchange.Delete.Warning3", defaultValue: "You will loose all \(option) of this contract.", comment: "Currency")
+                return String(localized: "GLS.Exchange.Delete.Warning3", defaultValue: "You will lose all \(option) of this contract.", comment: "Currency")
         }
     }
     // more dialects here... 
@@ -42,6 +42,6 @@ func localizedString(_ key: BankDialectString, forDialect: BankDialect?, _ optio
             return String(localized: "Exchange.Delete.Warning2", defaultValue: "This payment service is in use. Delete anyway?")
 
         case .warningText3:
-            return String(localized: "Exchange.Delete.Warning3", defaultValue: "You will loose all \(option) of this payment service.", comment: "Currency")
+            return String(localized: "Exchange.Delete.Warning3", defaultValue: "You will lose all \(option) of this payment service.", comment: "Currency")
     }
 }
