@@ -169,8 +169,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Zeskanuj ten kod QR, aby otrzymać %@"
+            "state" : "translated",
+            "value" : "Zeskanuj aby otrzymać %@"
           }
         }
       }
@@ -229,8 +229,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Zeskanuj ten kod QR, aby zapłacić %@"
+            "state" : "translated",
+            "value" : "Zeskanuj aby zapłacić %@"
           }
         }
       }
@@ -552,6 +552,12 @@
             "state" : "translated",
             "value" : "%@ QR code anzeigen"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Pokaż kod QR"
+          }
         }
       }
     },
@@ -562,6 +568,12 @@
             "state" : "translated",
             "value" : "%@ NFC starten"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Rozpocznij NFC"
+          }
         }
       }
     },
@@ -571,6 +583,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Tippen für NFC"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Stuknij dla NFC"
           }
         }
       }
@@ -788,6 +806,12 @@
       "comment" : "VoiceOver",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu"
+          }
+        },
+        "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu"
@@ -2003,6 +2027,12 @@
             "state" : "translated",
             "value" : "Ein unbekannter Fehler ist aufgetreten."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wystąpił nieznany błąd."
+          }
         }
       }
     },
@@ -2147,6 +2177,12 @@
             "state" : "translated",
             "value" : "Sind Sie sicher, dass Sie Ihr Wallet mit diesem Backup überschreiben wollen?\nDas kann nicht rückgängig gemacht werden. Alles Geld, das sich jetzt noch in Ihrem Wallet befindet, geht verloren."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz zastąpić swój wallet tą kopią zapasową?\nNie można tego cofnąć, wszystkie pieniądze, które są teraz w wallet, zostaną utracone."
+          }
         }
       }
     },
@@ -2157,6 +2193,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Authentifizieren Sie sich für den Zugriff auf Ihr Geld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja w celu uzyskania dostępu do pieniędzy"
           }
         }
       }
@@ -2169,6 +2211,12 @@
             "state" : "translated",
             "value" : "Authentifizierung fehlgeschlagen. Bitte versuchen Sie es erneut."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja nie powiodła się. Spróbuj ponownie."
+          }
         }
       }
     },
@@ -2179,6 +2227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät ist keine Authentifizierung verfügbar."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja nie jest dostępna na tym urządzeniu."
           }
         }
       }
@@ -2284,6 +2338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verfügbar für Wiederherstellung:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne do przywrócenia:"
           }
         }
       }
@@ -2415,6 +2475,12 @@
             "state" : "translated",
             "value" : "Sicherheitskopie Ihres Geldes…"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopia zapasowa pieniędzy..."
+          }
         }
       }
     },
@@ -2506,6 +2572,12 @@
             "state" : "translated",
             "value" : "Die biometrische Authentifizierung ist gesperrt. Geben Sie zum Entsperren Ihren Passcode ein."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja biometryczna jest zablokowana. Wprowadź kod dostępu, aby odblokować."
+          }
         }
       }
     },
@@ -2516,6 +2588,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät ist keine biometrische Authentifizierung verfügbar"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja biometryczna nie jest dostępna na tym urządzeniu."
           }
         }
       }
@@ -3139,6 +3217,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Backup erstellen"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utwórz kopię zapasową"
           }
         }
       }
@@ -3864,6 +3948,12 @@
             "state" : "new",
             "value" : "Delete payment service"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń usługę płatności"
+          }
         }
       }
     },
@@ -3880,6 +3970,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to delete this payment service?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz usunąć tę usługę płatności?"
           }
         }
       }
@@ -3898,6 +3994,12 @@
             "state" : "new",
             "value" : "This payment service is in use. Delete anyway?"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta usługa płatności jest w użyciu. Usunąć mimo to?"
+          }
         }
       }
     },
@@ -3915,6 +4017,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You will lose all %@ of this payment service."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stracisz wszystkie %@ z tej usługi płatności."
           }
         }
       }
@@ -4005,6 +4113,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Authentifizierung konnte nicht initialisiert werden."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zainicjować kontekstu autoryzacji."
           }
         }
       }
@@ -4119,6 +4233,12 @@
             "state" : "new",
             "value" : "Terminate contract"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozwiązanie umowy"
+          }
         }
       }
     },
@@ -4135,6 +4255,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Are you sure you want to terminate this contract?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czy na pewno chcesz rozwiązać tę umowę?"
           }
         }
       }
@@ -4153,6 +4279,12 @@
             "state" : "new",
             "value" : "You still have digital money in your wallet. Terminate anyway?"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadal masz cyfrowe pieniądze w wallet. Mimo tego zakończyć?"
+          }
         }
       }
     },
@@ -4170,6 +4302,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You will lose all %@ of this contract."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stracisz wszystkie %@ tej umowy."
           }
         }
       }
@@ -5966,6 +6104,12 @@
             "state" : "translated",
             "value" : "Auf diesem Gerät wurden bisher keine biometrischen Daten erfasst."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na tym urządzeniu nie są zarejestrowane żadne dane biometryczne."
+          }
         }
       }
     },
@@ -6535,6 +6679,12 @@
             "state" : "translated",
             "value" : "Wallet überschreiben"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastąp wallet"
+          }
         }
       }
     },
@@ -6631,6 +6781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät ist keine Passcode eingestellt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod dostępu nie jest ustawiony na tym urządzeniu."
           }
         }
       }
@@ -7199,6 +7355,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schützen Sie Ihr Geld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chroń swoje pieniądze"
           }
         }
       }
@@ -7973,6 +8135,12 @@
             "state" : "translated",
             "value" : "Wiederherstellen"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć"
+          }
         }
       }
     },
@@ -8636,6 +8804,12 @@
             "state" : "translated",
             "value" : "QR Codes anzeigen"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Pokaż kody QR"
+          }
         }
       }
     },
@@ -8909,12 +9083,18 @@
         }
       }
     },
-    "Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to your computer's harddisk." : {
+    "Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to the computer." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Geldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf die Festplatte Ihres Computers."
+            "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Geldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf den Computer."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stuknij ‘Utwórz kopię zapasową’, aby utworzyć kopię swoich cyfrowych pieniędzy. Podłącz iPhone'a do komputera, a następnie użyj okna dialogowego Pliki i skopiuj kopię zapasową na komputer."
           }
         }
       }
@@ -9079,8 +9259,8 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Kwota zostanie określona przez Akceptanta Gotówki."
+            "state" : "translated",
+            "value" : "Kwota jest określana przez urządzenie akceptujące gotówkę."
           }
         }
       }
@@ -9164,6 +9344,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Das System hat die Authentifizierung abgebrochen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System anulował autoryzację"
           }
         }
       }
@@ -9320,6 +9506,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dies ist obligatorisch, da sonst die Verifizierung fehlschlägt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jest to obowiązkowe, w przeciwnym razie weryfikacja zakończy się niepowodzeniem."
           }
         }
       }
@@ -9494,6 +9686,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Backup / Restore"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopia zapasowa / przywracanie"
           }
         }
       }
@@ -9803,6 +10001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Um Ihr digitales Geld wiederherzustellen, schließen Sie Ihr iPhone an Ihren Computer an, verwenden Sie dann den Dialog ‘Dateien’, und kopieren Sie eine zuvor gespeicherte Sicherungskopie von Ihrem Computer in die Taler Wallet."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby przywrócić cyfrowe pieniądze, podłącz iPhone'a do komputera, a następnie użyj okna dialogowego Pliki i skopiuj wcześniej zapisaną kopię zapasową z komputera do Taler Wallet."
           }
         }
       }
@@ -10274,6 +10478,12 @@
             "state" : "translated",
             "value" : "Es ist ein unbekannter Authentifizierungsfehler aufgetreten."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wystąpił nieznany błąd autoryzacji."
+          }
         }
       }
     },
@@ -10436,6 +10646,12 @@
             "state" : "translated",
             "value" : "FaceID / TouchID verwenden"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj FaceID / TouchID"
+          }
         }
       }
     },
@@ -10446,6 +10662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Passcode verwenden"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj kodu dostępu"
           }
         }
       }
@@ -11348,6 +11570,12 @@
             "state" : "translated",
             "value" : "Sie haben die Authentifizierung abgebrochen."
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoryzacja została anulowana."
+          }
         }
       }
     },
@@ -11358,6 +11586,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sie haben sich für die Ausweichoption entschieden."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybrałeś opcję alternatywną."
           }
         }
       }
