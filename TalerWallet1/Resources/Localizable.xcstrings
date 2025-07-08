@@ -152,24 +152,24 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scannen Sie diesen QR-Code, um %@ zu erhalten."
+            "value" : "Scannen um %@ zu erhalten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Scan this QR code to receive %@"
+            "value" : "Scan this to receive %@"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Escanea este código QR para recibir %@"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Zeskanuj ten kod QR, aby otrzymać %@"
           }
         }
@@ -212,24 +212,24 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scannen Sie diesen QR-Code, um  %@ zu bezahlen."
+            "value" : "Scannen um  %@ zu bezahlen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Scan this QR code to pay %@"
+            "value" : "Scan this to pay %@"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Escanea este código QR para pagar %@"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Zeskanuj ten kod QR, aby zapłacić %@"
           }
         }
@@ -546,13 +546,34 @@
       }
     },
     "%@ Show QR code" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ QR code anzeigen"
+          }
+        }
+      }
     },
     "%@ Start NFC" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ NFC starten"
+          }
+        }
+      }
     },
     "%@ Tap for NFC" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Tippen für NFC"
+          }
+        }
+      }
     },
     "%@:" : {
       "comment" : "methodType:",
@@ -1284,7 +1305,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nutzungsbedingungen akzeptieren"
+            "value" : "Allgemeine Geschäftsbedingungen akzeptieren"
           }
         },
         "es" : {
@@ -2248,10 +2269,24 @@
       }
     },
     "Automatically for P2P transactions" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch for P2P transactions"
+          }
+        }
+      }
     },
     "Available for restore:" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar für Wiederherstellung:"
+          }
+        }
+      }
     },
     "Available for transfer: %@" : {
       "localizations" : {
@@ -3818,6 +3853,12 @@
       "comment" : "button title",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahlungsdienst löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -3829,6 +3870,12 @@
     "Exchange.Delete.Warning1" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie diesen Zahlungsdienst löschen wollen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -3840,6 +3887,12 @@
     "Exchange.Delete.Warning2" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Zahlungsdienst wird verwendet. Trotzdem löschen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -3852,10 +3905,16 @@
       "comment" : "Currency",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie verlieren alle %@ des Zahlungsdienstes."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You will loose all %@ of this payment service."
+            "value" : "You will lose all %@ of this payment service."
           }
         }
       }
@@ -4049,6 +4108,12 @@
       "comment" : "button title",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertrag kündigen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4060,6 +4125,12 @@
     "GLS.Exchange.Delete.Warning1" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie den Vertrag kündigen wollen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4071,6 +4142,12 @@
     "GLS.Exchange.Delete.Warning2" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie haben noch digitales Geld in Ihrem Wallet. Trotzdem kündigen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4083,10 +4160,16 @@
       "comment" : "Currency",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie verlieren alle %@ dieses Vertrages."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You will loose all %@ of this contract."
+            "value" : "You will lose all %@ of this contract."
           }
         }
       }
@@ -8001,7 +8084,14 @@
       }
     },
     "Scanned QR is no talerURI" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der gescannte QR Code ist keine talerURI"
+          }
+        }
+      }
     },
     "Scanned QR is no URL" : {
       "localizations" : {
@@ -8540,7 +8630,14 @@
       }
     },
     "Show QR codes" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Codes anzeigen"
+          }
+        }
+      }
     },
     "Show Warnings" : {
       "localizations" : {
@@ -8943,7 +9040,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nutzungsbedingungen"
+            "value" : "Allgemeine Geschäftsbedingungen"
           }
         },
         "es" : {
@@ -11299,7 +11396,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Elektronic-Cash in ihrer Wallet empfangen können."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Elektronic-Cash in ihrer Wallet empfangen können."
           }
         },
         "pl" : {
@@ -11315,7 +11412,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Electronic-Cash in Ihr Wallet abheben können."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Electronic-Cash in Ihr Wallet abheben können."
           }
         },
         "pl" : {
@@ -11331,7 +11428,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Nutzungsbedingungen des Zahlungsdienstes akzeptieren."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren."
           }
         },
         "pl" : {
