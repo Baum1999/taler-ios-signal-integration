@@ -68,6 +68,7 @@ struct AmountV: View {
             .monospacedDigit()
             .accessibilityLabel(amountTuple.1)     // TODO: locale.leadingCurrencySymbol
             .privacySensitive()
+            .layoutPriority(10)
             .task(id: controller.currencyTicker) { await currencyTickerChanged() }
 //            .onLongPressGesture(minimumDuration: 0.3) {
 //                showValue = true

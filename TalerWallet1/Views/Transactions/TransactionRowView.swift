@@ -13,13 +13,14 @@ struct TransactionTimeline: View {
     let timestamp: Timestamp
     let textColor: Color
     let layout: Int
+    let maxLines: Int
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
         TimelineView(.everyMinute) { context in
             let (dateString, date) = TalerDater.dateString(timestamp, minimalistic, relative: true)
-            TruncationDetectingText(dateString, maxLines: 1, layout: layout, index: 1)
+            TruncationDetectingText(dateString, maxLines: maxLines, layout: layout, index: 1)
                 .foregroundColor(textColor)
                 .talerFont(.callout)
         }
@@ -150,7 +151,7 @@ struct TransactionRowView: View {
                         .padding(.bottom, -2.0)
                         .accessibilityLabel(a11yLabel)
                     }
-                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0)
+                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
                 }
 //                .border(orange)
                 Spacer(minLength: 0)
@@ -163,7 +164,7 @@ struct TransactionRowView: View {
         let layout1 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, bottom & amount below
             if let topString {
                 TruncationDetectingText(topString,
-                               maxLines: 1,
+                               maxLines: 10,
                                  layout: 1,
                             strikeColor: strikeColor)
                 .foregroundColor(textColor)
@@ -172,7 +173,7 @@ struct TransactionRowView: View {
                 .accessibilityLabel(a11yLabel)
             }
             HStack(spacing: 6) {
-                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1)
+                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1, maxLines: 1)
                 Spacer(minLength: 0)
                 amountV
 #if DEBUG
@@ -200,10 +201,10 @@ struct TransactionRowView: View {
                         .background(red.opacity(0.2))
 #endif
                 }
-                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2)
+                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
             } else {        // no top, bottom & amount
                 HStack(spacing: 8) {
-                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2)
+                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
                     Spacer(minLength: 2)
                     amountV
 #if DEBUG
@@ -216,7 +217,7 @@ struct TransactionRowView: View {
         let layout3 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount right, bottom full-width
             if let topString {
                 TruncationDetectingText(topString,
-                               maxLines: 1,
+                               maxLines: 10,
                                  layout: 3,
                             strikeColor: strikeColor)
                 .foregroundColor(textColor)
@@ -234,7 +235,7 @@ struct TransactionRowView: View {
                     .background(blue.opacity(0.2))
 #endif
             }
-            TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3)
+            TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3, maxLines: 10)
         }
 
         HStack {
