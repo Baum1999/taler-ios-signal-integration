@@ -163,22 +163,22 @@ struct SettingsView: View {
 //                    .id("font")
                 SettingsStyle(title: String(localized: "List Style:"), myListStyle: $myListStyle)
                     .id("liststyle")
-                let localConsStr = String(localized: "on LocalConsole")
-                let observability = String(localized: "Observe walletCore")
-                SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
-                    walletCore.isObserving = isObserving}),
-                          description: hideDescriptions ? nil : localConsStr) { isObserving in
-                    let consoleManager = LCManager.shared
-                    consoleManager.isVisible = localConsoleO != 0 || localConsoleL
-                    consoleManager.clear()
-                }
 #if DEBUG
                 let showDiagnostic = diagnosticModeEnabled
 #else
                 let showDiagnostic = controller.diagnosticModeEnabled
 #endif
                 if showDiagnostic {
-                    let showLogs = String(localized: "Show logs")
+                    let localConsStr = String("on LocalConsole")
+                    let observability = String("Observe walletCore")
+                    SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
+                        walletCore.isObserving = isObserving}),
+                              description: hideDescriptions ? nil : localConsStr) { isObserving in
+                        let consoleManager = LCManager.shared
+                        consoleManager.isVisible = localConsoleO != 0 || localConsoleL
+                        consoleManager.clear()
+                    }
+                    let showLogs = String("Show logs")
                     SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
                         walletCore.isLogging = isLogging}), id1: "localConsoleL",
                             description: hideDescriptions ? nil : localConsStr) {
