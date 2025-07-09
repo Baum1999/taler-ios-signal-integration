@@ -26,7 +26,7 @@ struct TransferRestrictionsV: View {
     private func transferMaxi(_ amountS: String, _ obtainS: String) -> String {
         let amountNBS = amountS.nbs
         let obtainNBS = obtainS.nbs
-        return String(localized: "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as electronic cash in this wallet.")
+        return String(localized: "You need to transfer \(amountNBS) from your regular bank account to the payment service to receive \(obtainNBS) as digital cash in this wallet.")
     }
 
     private func authMini(_ amountS: String, _ debitS: String) -> String {

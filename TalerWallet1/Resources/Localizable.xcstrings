@@ -2347,6 +2347,12 @@
             "state" : "translated",
             "value" : "Automatisch for P2P transactions"
           }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatycznie dla transakcji P2P"
+          }
         }
       }
     },
@@ -4141,6 +4147,77 @@
         }
       }
     },
+    "FEE_WITHDRAW_BANK_WIRE" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisungsgebühren ihrer Bank: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your bank's wire fee: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comisión de transferencia de tu banco: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowizja za przelew bankowy: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія вашого банку за переказ: %@"
+          }
+        }
+      }
+    },
+    "FEE_WITHDRAW_BANK_WIRE_A11Y" : {
+      "comment" : "a11y",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überweisungsgebühren ihrer Bank: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your bank's wire fee: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comisión de transferencia de tu banco: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowizja za przelew bankowy: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Комісія вашого банку за переказ: %@"
+          }
+        }
+      }
+    },
     "Finish the wire transfer of %@ in your banking app or website to verify your bank account %@." : {
       "localizations" : {
         "de" : {
@@ -4437,7 +4514,24 @@
         }
       }
     },
+    "If this wallet belongs to a child or teenager, the generated digital cash should be age-restricted:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn diese Wallet einem Kind oder Minderjährigen gehört, sollte das generierte digitale Geld altersbeschränkt sein."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Jeśli wallet należy do dziecka lub nastolatka, wygenerowana elektroniczna gotówka powinna być ograniczona wiekowo:"
+          }
+        }
+      }
+    },
     "If this wallet belongs to a child or teenager, the generated electronic cash should be age-restricted:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4454,7 +4548,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeśli portfel należy do dziecka lub nastolatka, wygenerowana elektroniczna gotówka powinna być ograniczona wiekowo:"
+            "value" : "Jeśli wallet należy do dziecka lub nastolatka, wygenerowana elektroniczna gotówka powinna być ograniczona wiekowo:"
           }
         },
         "uk" : {
@@ -4891,9 +4985,6 @@
         }
       }
     },
-    "loading" : {
-
-    },
     "Loading…" : {
       "localizations" : {
         "de" : {
@@ -5325,9 +5416,6 @@
           }
         }
       }
-    },
-    "ManualWithdrawContent: Cannot determine scope." : {
-
     },
     "Merchant" : {
       "comment" : "RefreshReason",
@@ -6139,6 +6227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Brak bilansu. Wygląda na to, że wystąpił problem z bazą danych..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Балансу немає. Здається, проблема з базою даних..."
           }
         }
       }
@@ -7128,10 +7222,34 @@
     "payment_balance_insufficient_hint_age_restricted" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kauf aufgrund der Altersbeschränkung nicht möglich"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Purchase not possible due to age restriction"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compra imposible debido a la restricción de edad"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakup niemożliwy ze względu na ograniczenia wiekowe"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Покупка неможлива через вікові обмеження"
           }
         }
       }
@@ -7139,10 +7257,34 @@
     "payment_balance_insufficient_hint_exchange_missing_global_fees" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dem Zahlungsdienst fehlt die globale Gebührenkonfiguration, das bedeutet wahrscheinlich, dass er falsch konfiguriert ist"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Provider is missing the global fee configuration, this likely means it is misconfigured"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Al proveedor le falta la configuración de la tasa global, lo que probablemente significa que está mal configurado."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostawca nie ma globalnej konfiguracji opłat, co prawdopodobnie oznacza, że jest źle skonfigurowany"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "У провайдера відсутня глобальна конфігурація зборів, це, ймовірно, означає, що він неправильно налаштований"
           }
         }
       }
@@ -7150,10 +7292,34 @@
     "payment_balance_insufficient_hint_fees_not_covered" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht genügend Mittel, um die vom Händler nicht gedeckten Zahlungsdienstgebühren zu bezahlen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Not enough funds to pay the provider fees not covered by the merchant"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "No hay fondos suficientes para pagar los honorarios del proveedor no cubiertos por el comerciante"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Brak wystarczających środków, aby zapłacić dostawcy opłaty niepokryte przez sprzedawcę"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Недостатньо коштів для оплати послуг провайдера, які не покриваються продавцем"
           }
         }
       }
@@ -7161,10 +7327,34 @@
     "payment_balance_insufficient_hint_merchant_accept_insufficient" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Händler akzeptiert kein Geld von einem oder mehreren Zahlungsdiensten in dieser Wallet"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Merchant doesn't accept money from one or more providers in this wallet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "El comerciante no acepta dinero de uno o más proveedores en este wallet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sprzedawca nie akceptuje pieniędzy od jednego lub więcej dostawców w tym wallet."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Торговець не приймає гроші від одного або декількох провайдерів на цей wallet"
           }
         }
       }
@@ -7172,10 +7362,34 @@
     "payment_balance_insufficient_hint_merchant_deposit_insufficient" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Händler akzeptiert die Überweisungsmethode des Zahlungsdienstes nicht, was wahrscheinlich bedeutet, dass er falsch konfiguriert ist."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Merchant doesn't accept the wire method of the provider, this likely means it is misconfigured"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "El comerciante no acepta el método de transferencia del proveedor, lo que probablemente significa que está mal configurado."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sprzedawca nie akceptuje metody przewodowej dostawcy, co prawdopodobnie oznacza, że jest ona źle skonfigurowana."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Мерчант не приймає банківський метод провайдера, це, ймовірно, означає, що він неправильно налаштований"
           }
         }
       }
@@ -7183,10 +7397,34 @@
     "payment_balance_insufficient_hint_wallet_balance_material_insufficient" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Teil des für diesen Kauf benötigten digitalen Geldes ist derzeit nicht verfügbar"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Some of the coins needed for this purchase are currently unavailable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Algunas de las monedas necesarias para esta compra no están disponibles actualmente"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Niektóre monety potrzebne do tego zakupu są obecnie niedostępne"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Деякі з монет, необхідних для цієї покупки, наразі недоступні"
           }
         }
       }
@@ -7204,6 +7442,24 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Balance insufficient! You don't have enough %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "¡Saldo insuficiente! No tiene suficiente %@."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Niewystarczające saldo! Nie masz wystarczającej ilości %@."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Баланс недостатній! У вас недостатньо %@."
           }
         }
       }
@@ -8204,13 +8460,13 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zresetuj portfel"
+            "value" : "Zresetuj wallet"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скидання гаманця"
+            "value" : "Скидання wallet"
           }
         }
       }
@@ -8345,6 +8601,24 @@
             "state" : "translated",
             "value" : "Der gescannte QR Code ist keine talerURI"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "QR escaneado no es talerURI"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zeskanowany QR nie jest talerURI"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Відсканований QR не є talerURI"
+          }
         }
       }
     },
@@ -8354,6 +8628,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der gescannte QR-Code enthält keine URL"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeskanowany QR nie jest adresem URL"
           }
         }
       }
@@ -9557,7 +9837,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Es gibt noch kein digitales Geld in Ihrem Wallet."
+            "value" : "Es gibt noch kein digitales Geld in Ihrer Wallet."
           }
         },
         "es" : {
@@ -9569,7 +9849,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nie ma jeszcze cyfrowej gotówki w portfelu."
+            "value" : "Nie ma jeszcze cyfrowej gotówki w wallet."
           }
         }
       }
@@ -9637,7 +9917,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jest to obowiązkowe, w przeciwnym wypadku pieniądze nie dotrą do portfela."
+            "value" : "Jest to obowiązkowe, w przeciwnym wypadku pieniądze nie dotrą do wallet."
           }
         },
         "uk" : {
@@ -10143,9 +10423,6 @@
           }
         }
       }
-    },
-    "transaction sent" : {
-
     },
     "Transfer %@ from %@." : {
       "localizations" : {
@@ -11679,7 +11956,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Możesz wydać swoje %@ w sklepie Demo lub wysłać je do innego portfela."
+            "value" : "Możesz wydać swoje %@ w sklepie Demo lub wysłać je do innego wallet."
           }
         }
       }
@@ -11746,24 +12023,59 @@
         }
       }
     },
-    "You must first accept the payment service's terms of service before you can receive electronic cash in your wallet." : {
+    "You must first accept the payment service's terms of service before you can receive digital cash in your wallet." : {
       "comment" : "P2P Receive",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie Elektronic-Cash in ihrer Wallet empfangen können."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in ihrer Wallet empfangen können."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Przed otrzymaniem gotówki elektronicznej w wallet należy zaakceptować warunki korzystania z usługi płatności."
+          }
+        }
+      }
+    },
+    "You must first accept the payment service's terms of service before you can receive electronic cash in your wallet." : {
+      "comment" : "P2P Receive",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in ihrer Wallet empfangen können."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Przed otrzymaniem gotówki elektronicznej w portfelu należy zaakceptować warunki korzystania z usługi płatności."
+            "value" : "Przed otrzymaniem gotówki elektronicznej w wallet należy zaakceptować warunki korzystania z usługi płatności."
+          }
+        }
+      }
+    },
+    "You must first accept the payment service's terms of service before you can withdraw digital cash to your wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in Ihr Wallet abheben können."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zanim będziesz mógł wypłacić gotówkę elektroniczną do swojego wallet, musisz najpierw zaakceptować Warunki korzystania z usługi płatniczej."
           }
         }
       }
     },
     "You must first accept the payment service's terms of service before you can withdraw electronic cash to your wallet." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11774,7 +12086,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zanim będziesz mógł wypłacić gotówkę elektroniczną do swojego portfela, musisz najpierw zaakceptować Warunki korzystania z usługi płatniczej."
+            "value" : "Zanim będziesz mógł wypłacić gotówkę elektroniczną do swojego wallet, musisz najpierw zaakceptować Warunki korzystania z usługi płatniczej."
           }
         }
       }
@@ -11841,7 +12153,30 @@
         }
       }
     },
+    "You need to transfer %@ from your regular bank account to the payment service to receive %@ as digital cash in this wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie müssen %1$@ von Ihrem regulären Bankkonto an den Zahlungsdienst überweisen, um %2$@ als digitales Geld in diese Wallet zu erhalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You need to transfer %1$@ from your regular bank account to the payment service to receive %2$@ as digital cash in this wallet."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym wallet."
+          }
+        }
+      }
+    },
     "You need to transfer %@ from your regular bank account to the payment service to receive %@ as electronic cash in this wallet." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11864,7 +12199,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym portfelu."
+            "value" : "Musisz przelać %1$@ ze swojego zwykłego konta bankowego do usługi płatności, aby otrzymać %2$@ jako gotówkę elektroniczną w tym wallet."
           }
         }
       }
@@ -11925,35 +12260,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Twoje konta do wpłaty..."
-          }
-        }
-      }
-    },
-    "Your bank's wire fee: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Überweisungsgebühren ihrer Bank: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La comisión de transferencia de tu banco: %@"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prowizja za przelew bankowy: %@"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Комісія вашого банку за переказ: %@"
           }
         }
       }

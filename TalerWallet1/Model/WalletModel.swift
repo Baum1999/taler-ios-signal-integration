@@ -42,7 +42,7 @@ enum InsufficientBalanceHint: String, Codable {
                     defaultValue: "Purchase not possible due to age restriction")
             case .walletBalanceMaterialInsufficient:
                 String(localized: "payment_balance_insufficient_hint_wallet_balance_material_insufficient",
-                    defaultValue: "Some of the coins needed for this purchase are currently unavailable")
+                    defaultValue: "Some of the digital cash needed for this purchase is currently unavailable")
             case .walletBalanceAvailableInsufficient:
                 String(localized: "payment_balance_insufficient_max",
                     defaultValue: "Balance insufficient! You don't have enough \(currency).")

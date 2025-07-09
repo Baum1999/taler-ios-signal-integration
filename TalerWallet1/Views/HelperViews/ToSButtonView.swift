@@ -18,8 +18,8 @@ struct ToSButtonView: View {
 
     var body: some View {
         let hint = minimalistic ? String(localized: "You must first accept the payment service's terms of service.")
-                          : p2p ? String(localized: "You must first accept the payment service's terms of service before you can receive electronic cash in your wallet.", comment: "P2P Receive")
-                                : String(localized: "You must first accept the payment service's terms of service before you can withdraw electronic cash to your wallet.")
+                          : p2p ? String(localized: "You must first accept the payment service's terms of service before you can receive digital cash in your wallet.", comment: "P2P Receive")
+                                : String(localized: "You must first accept the payment service's terms of service before you can withdraw digital cash to your wallet.")
         Text(hint)
             .talerFont(.body)
             .multilineTextAlignment(.leading)
