@@ -28,7 +28,7 @@ struct OIMp2pReadyView: View {
         OIMbackground() {
             VStack {
                 if let transactionId {
-                    Text("transaction sent")
+                    Text(verbatim: "transaction sent")
                 } else {
                     LoadingView(stack: stack.push(),
                             scopeInfo: scope,

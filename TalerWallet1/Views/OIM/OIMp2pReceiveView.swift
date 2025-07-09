@@ -71,7 +71,7 @@ struct OIMp2pReceiveView: View {
                         }
                     }
                 } else {
-                    Text("loading")
+                    Text(verbatim: "loading")
                 }
             }
         }

@@ -437,7 +437,7 @@ final class OIMcash: ObservableObject, Sendable {
         var initial: TimeInterval = 0.01
         let interval = interval(count: count, duration: duration, initial: initial)
 
-        while count > 0 {
+        while count > 0 {   // for each fund, small to high
             count -= 1
             flyToChest(count, after: initial)
             initial += interval
