@@ -1,3 +1,10 @@
+Version 1.0.19 (wallet-core 1.0.21)
+
+- update German & Polish localization
+- authentication only if available
+- better layout for transaction list
+
+
 Version 1.0.18 (wallet-core 1.0.20.3)
 
 - fix 10133: flickering layout
