@@ -284,7 +284,7 @@ struct RequestPaymentContent: View {
                 }
                 let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
                 if tosAccepted {
-                    let a11yLabel = String(localized: "Amount to request:", comment: "accessibility, no abbreviations")
+                    let a11yLabel = String(localized: "Amount to request:", comment: "a11y, no abbreviations")
                     let amountLabel = minimalistic ? String(localized: "Amount:")
                                                    : a11yLabel
                     AmountInputV(stack: stack.push(),

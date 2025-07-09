@@ -149,7 +149,7 @@ struct DepositAmountView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.horizontal)
 //                    .padding(.bottom, 2)
-                let a11yLabel = String(localized: "Amount to deposit:", comment: "accessibility, no abbreviations")
+                let a11yLabel = String(localized: "Amount to deposit:", comment: "a11y, no abbreviations")
                 let amountLabel = minimalistic ? String(localized: "Amount:")
                                                : a11yLabel
                 CurrencyInputView(scope: scopeInfo,

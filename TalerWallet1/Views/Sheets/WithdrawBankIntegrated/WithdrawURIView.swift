@@ -170,7 +170,7 @@ struct WithdrawURIView: View {
                                 NavLink($shortcutSelected) { shortcutDest }
                                 NavLink($buttonSelected) { acceptDestination }
                             }
-                            let a11yLabel = String(localized: "Amount to withdraw:", comment: "accessibility, no abbreviations")
+                            let a11yLabel = String(localized: "Amount to withdraw:", comment: "a11y, no abbreviations")
                             let amountLabel = minimalistic ? String(localized: "Amount:")        // maxAmount
                                                            : a11yLabel
                             // TODO: input amount, then

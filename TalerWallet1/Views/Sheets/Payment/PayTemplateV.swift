@@ -129,7 +129,7 @@ struct PayTemplateV: View {
     var body: some View {
         if let templateContract {       // preparePayResult
 //            let currency = templateContract.currency ?? templateContract.amount?.currencyStr ?? UNKNOWN
-            let a11yLabel = String(localized: "Amount to pay:", comment: "accessibility, no abbreviations")
+            let a11yLabel = String(localized: "Amount to pay:", comment: "a11y, no abbreviations")
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : a11yLabel
             // final destination with amountToTransfer, after user input of amount

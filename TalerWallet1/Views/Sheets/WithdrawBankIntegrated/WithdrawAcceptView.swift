@@ -100,7 +100,12 @@ struct WithdrawAcceptView: View {
                             if !wireFee.isZero {
                                 let currencyInfo = controller.info(for: scope, controller.currencyTicker)
                                 let feeStr = wireFee.formatted(currencyInfo, isNegative: false)
-                                Text("Your bank's wire fee: \(feeStr)")
+                                let feeTitle = String(localized: "FEE_WITHDRAW_BANK_WIRE",
+                                                   defaultValue: "Your bank's wire fee: \(feeStr.0)")
+                                let feeA11y = String(localized: "FEE_WITHDRAW_BANK_WIRE_A11Y",
+                                                  defaultValue: "Your bank's wire fee: \(feeStr.1)", comment: "a11y")
+                                Text(feeTitle)
+                                    .accessibilityLabel(Text(feeA11y))
                             }
                         }
                     } else {

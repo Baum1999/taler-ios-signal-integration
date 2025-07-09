@@ -1701,7 +1701,7 @@
       }
     },
     "Amount to deposit:" : {
-      "comment" : "accessibility, no abbreviations",
+      "comment" : "a11y, no abbreviations",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1758,7 +1758,7 @@
       }
     },
     "Amount to pay:" : {
-      "comment" : "accessibility, no abbreviations",
+      "comment" : "a11y, no abbreviations",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1787,7 +1787,7 @@
       }
     },
     "Amount to request:" : {
-      "comment" : "accessibility, no abbreviations",
+      "comment" : "a11y, no abbreviations",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1816,7 +1816,7 @@
       }
     },
     "Amount to send:" : {
-      "comment" : "accessibility, no abbreviations",
+      "comment" : "a11y, no abbreviations",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1953,7 +1953,7 @@
       }
     },
     "Amount to withdraw:" : {
-      "comment" : "accessibility, no abbreviations",
+      "comment" : "a11y, no abbreviations",
       "localizations" : {
         "de" : {
           "stringUnit" : {
