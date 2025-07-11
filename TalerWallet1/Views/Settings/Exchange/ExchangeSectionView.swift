@@ -158,6 +158,8 @@ struct ExchangeSectionView: View {
                 Button("Deposit") {
                     // TODO: Go to "Deposit" view
                     showAlert = false
+                    dismissTop(stack.push())
+                    NotificationCenter.default.post(name: .DepositAction, object: nil)                // will trigger NavigationLink
                 }
                 Button(buttonTitle) {
                     deleteExchange()
