@@ -141,11 +141,13 @@ enum TransactionMajorState: String, Codable {
     }
 }
 
-struct PayTo {
+struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-code=2502&receiver-town=Biel-Bienne"
     var iban: String?
     var xTaler: String?
     var sender: String?
     var receiver: String?
+    var postalCode: String?
+    var town: String?
     var amountStr: String?
     var messageStr: String?
 
@@ -159,6 +161,10 @@ struct PayTo {
             sender = queryParameters["sender-name"] ?? EMPTYSTRING
                         .replacingOccurrences(of: "+", with: SPACE)
             receiver = (queryParameters["receiver-name"] ?? EMPTYSTRING)
+                        .replacingOccurrences(of: "+", with: SPACE)
+            postalCode = (queryParameters["receiver-postal-code"] ?? EMPTYSTRING)
+                        .replacingOccurrences(of: "+", with: SPACE)
+            town = (queryParameters["receiver-town"] ?? EMPTYSTRING)
                         .replacingOccurrences(of: "+", with: SPACE)
             amountStr = queryParameters["amount"] ?? EMPTYSTRING
             messageStr = queryParameters["message"] ?? EMPTYSTRING
