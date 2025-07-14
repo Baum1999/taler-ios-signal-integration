@@ -821,7 +821,7 @@
       }
     },
     "%llu" : {
-      "comment" : "VoiceOver",
+      "comment" : "A11y",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6474,34 +6474,6 @@
         }
       }
     },
-    "Observe walletCore" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WalleCore observieren"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Observar wallet-core"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Obserwuj walletCore"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Спостерігати за walletCore"
-          }
-        }
-      }
-    },
     "Obtain:" : {
       "comment" : "Amount to obtain:",
       "localizations" : {
@@ -6640,34 +6612,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Виключіть текст, де це можливо"
-          }
-        }
-      }
-    },
-    "on LocalConsole" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "on LocalConsole"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "en LocalConsole"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "w LocalConsole"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "на LocalConsole"
           }
         }
       }
@@ -7399,14 +7343,14 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Ein Teil des für diesen Kauf benötigten digitalen Geldes ist derzeit nicht verfügbar"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Some of the coins needed for this purchase are currently unavailable"
+            "value" : "Some of the digital cash needed for this purchase is currently unavailable"
           }
         },
         "es" : {
@@ -9132,34 +9076,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pokaż wskazówki dotyczące pieniędzy demo"
-          }
-        }
-      }
-    },
-    "Show logs" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Logs anzeigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar logs"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaż logi"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показати журнали"
           }
         }
       }
