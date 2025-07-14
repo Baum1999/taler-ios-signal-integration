@@ -269,10 +269,14 @@ struct TransactionRowView: View {
                     .opacity(isLayoutSelected(3) ? 1 : 0)
             }
                 .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
-                    self.layoutStati0 = stati
+                    DispatchQueue.main.async {
+                        self.layoutStati0 = stati
+                    }
                 }
                 .onPreferenceChange(LayoutTruncationStatus1.self) { stati in    // Timeline
-                    self.layoutStati1 = stati
+                    DispatchQueue.main.async {
+                        self.layoutStati1 = stati
+                    }
                 }
         }
             .accessibilityElement(children: .combine)
