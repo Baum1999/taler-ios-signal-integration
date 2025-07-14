@@ -44,7 +44,11 @@ struct OIMp2pReceiveView: View {
                     let goal = terms.icon_id
                     let effective = terms.amount
                     VStack {
-                        OIMtitleView(cash: cash, amount: effective, isSending: false, secondAmount: nil)
+                        OIMtitleView(cash: cash,
+                                   amount: effective,
+                                isSending: false,
+                                  history: false,
+                             secondAmount: nil)
                         Spacer()
                         if let goal {
                             Image(goal)

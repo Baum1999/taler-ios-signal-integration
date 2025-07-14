@@ -109,7 +109,7 @@ struct OIMlayoutView: View {
             var fund = funds[index]
             symLog.log("*** fly back:\(fund.value) \(fundID)")
             withAnimation(.move1) {
-                fund.state = .returning
+                fund.state = .removing
                 cash.updateFund(fund)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + cash.flyDelay) {

@@ -95,7 +95,11 @@ struct OIMSubjectView: View {
                   action: gotAction
         ) {
             VStack {
-                OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amountToTransfer)
+                OIMtitleView(cash: cash,
+                           amount: available,
+                        isSending: true,
+                          history: false,
+                     secondAmount: amountToTransfer)
                 Spacer()
                 GoalsHStack(goals: goals1, selectedGoal: $selectedGoal)
                     .opacity(appeared ? 1.0 : 0.01)

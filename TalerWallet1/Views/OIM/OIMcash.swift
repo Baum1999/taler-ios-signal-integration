@@ -14,13 +14,16 @@ let MAXSTACK = 4
 
 enum FundState: Int {
     case idle
-    case returning           // user tapped to remove
+    case removing           // user tapped to remove
+    case drawer
 
     case shouldFly          // + button tapped
     case isFlying           // after onAppear
+
     case chestOpening       // chest tapped, money flies out
     case reveal             // move (invisible) together with the chest to the top
     case curve              // fly out of the chest in a curve to the topRight corner
+    case history            // pile up for history
 
     case position           // position to move to
     case moving             // move to position
@@ -29,12 +32,14 @@ enum FundState: Int {
     case arriving           // keep flipped image, move to final position
     case mutating           // flip back with disbled transition
 
-    var returning: Bool { self == .returning }
+    var removing: Bool { self == .removing }
+    var drawer: Bool { self == .drawer }
     var shouldFly: Bool { self == .shouldFly }
     var isFlying: Bool { self == .isFlying || self == .reveal || self == .curve }
     var chestOpening: Bool { self == .chestOpening }
     var reveal: Bool { self == .reveal }
     var curve: Bool { self == .curve }
+    var history: Bool { self == .history }
     var position: Bool { self == .position }
     var morphing: Bool { self == .morphing }
     var moving: Bool { self == .moving }
@@ -53,11 +58,13 @@ public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     var flippedVal: UInt64?             // the value to morph into - layout.sortByValue will take this instead of value
     var outValue: UInt64?               // if this is set it determines the image (used for flipping)
     var targetID: String {              // match sourceID for SwiftUI animations
-        state.chestOpening ? OIMCHEST + String(currencyIndex)
-            : state.reveal ? OIMNUMBER
-             : state.curve ? OIMACTION
-                     : String(state.shouldFly || state.returning ? -Int(value)  // match currencyScroller
-                                                                 : id)
+        let isDrawer = state.shouldFly || state.drawer || state.removing
+        return state.chestOpening ? OIMCHEST + String(currencyIndex)
+                   : state.reveal ? OIMNUMBER
+                    : state.curve ? OIMACTION
+                  : state.history ? OIMSIDE
+                : String(isDrawer ? -Int(value)              // match currencyDrawer
+                                  : id)
     }
     var shouldFly2: Bool { state.shouldFly || state.chestOpening }
     var isFlying2: Bool { state.isFlying }
@@ -350,7 +357,7 @@ final class OIMcash: ObservableObject, Sendable {
     func removeCash(id: Int, value: UInt64) {
         if let index = funds.firstIndex(where: { $0.id == id && $0.value == value }) {
             funds.remove(at: index)
-        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state.returning }) {
+        } else if let index = funds.lastIndex(where: { $0.value == value && $0.state.removing }) {
             funds.remove(at: index)
         } else if let index = funds.firstIndex(where: { $0.value == value }) {
             funds.remove(at: index)
@@ -377,7 +384,7 @@ final class OIMcash: ObservableObject, Sendable {
         for var fund in sorted {
 //            withAnimation(.easeOut1.delay(counter * 0.1)) {
             withAnimation(.easeOut1) {
-                fund.state = .returning
+                fund.state = .drawer
                 self.updateFund(fund)
             }
             if lastVal != fund.value {
@@ -390,7 +397,7 @@ final class OIMcash: ObservableObject, Sendable {
 
     func moveBack() {
         for var fund in funds {
-            if fund.state == .returning {
+            if fund.state == .drawer {
                 fund.state = .idle
                 self.updateFund(fund)
             }
@@ -407,39 +414,49 @@ final class OIMcash: ObservableObject, Sendable {
         }
     }
 
-    func flyToChest(_ index: Int, after delay: TimeInterval) {
+    func flyToTarget(target: FundState, index: Int, after delay: TimeInterval) {
         let interval = fastAnimations ? 0.2 : 0.4
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             var fund = self.funds[index]
             withAnimation(.move1) {
-                fund.state = .curve
+                fund.state = target
                 self.updateFund(fund)
             }
-            print("backToChest", fund.id, fund.value, delay)
-            DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-                withAnimation(.move1) {
-                    fund.state = .reveal
-                    self.updateFund(fund)
-                }
+            print("flyToTarget", target, fund.id, fund.value, delay)
+            if target == .curve {
                 DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
                     withAnimation(.move1) {
-                        do {
-                            self.funds.remove(at: index)
-                        } catch {}
+                        fund.state = .reveal
+                        self.updateFund(fund)
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                        withAnimation(.move1) {
+                            do {
+                                self.funds.remove(at: index)
+                            } catch {}
+                        }
                     }
                 }
-            }
+            } // curve
         }
     }
 
-    func backToChest(_ duration: TimeInterval) -> TimeInterval {
+    func flyOneByOne(to target: FundState,
+                  _ increasing: Bool = false,
+                    _ duration: TimeInterval? = nil
+    ) -> TimeInterval {
         var count = funds.count
         var initial: TimeInterval = 0.01
-        let interval = interval(count: count, duration: duration, initial: initial)
-
+        let interval = interval(count: count,
+                             duration: duration ?? (fastAnimations ? 0.6 : 1.1),
+                              initial: initial)
+        var index = 0
         while count > 0 {   // for each fund, small to high
             count -= 1
-            flyToChest(count, after: initial)
+            flyToTarget(target: target,
+                         index: increasing ? index : count,
+                         after: initial)
+            index += 1
             initial += interval
         }
         return initial - interval + (fastAnimations ? 0.1 : 0.2)

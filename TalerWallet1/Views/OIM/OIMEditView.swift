@@ -92,9 +92,11 @@ struct OIMEditView: View {
         ) {
             ZStack(alignment: .top) {
                 VStack {
-//                    OIMtitleView(cash: cash, amount: availRest, isSending: true, secondAmount: amount)
-//                    OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amount2)
-                    OIMtitleView(cash: cash, amount: available, isSending: true, secondAmount: amountToTransfer)
+                    OIMtitleView(cash: cash,
+                               amount: available,
+                            isSending: true,
+                              history: false,
+                         secondAmount: amountToTransfer)
                     Spacer()
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
