@@ -27,13 +27,10 @@ struct OIMp2pReceiveView: View {
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
-        let noteBase = currency.noteBase
-        let isSierra = noteBase == "SLE"
-
         OIMnavBack(stack: stack.push(),
-            currencyName: noteBase,
+            currencyName: currency.currency,
+                   chest: currency.chest,
                  isFinal: false,
-                isSierra: isSierra,
                isSending: false,
                   amount: amount,
                   action: { }

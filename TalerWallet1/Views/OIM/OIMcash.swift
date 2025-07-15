@@ -95,14 +95,23 @@ final class OIMcash: ObservableObject, Sendable {
     var currencyIndex: Int
     @Published var funds: OIMfunds = []
 
-    init(_ currency: OIMcurrency? = nil, currencyIndex: Int = 0) {
-        if let currency {
-            self.currency = currency
-            self.currencyIndex = currencyIndex
-        } else {
-            self.currency = OIMeuros
-            self.currencyIndex = 0
+    init(_ index: Int? = 0) {
+        self.currencyIndex = 0
+        self.currency = OIMeuros
+        setIndex(index)
+    }
+
+    func setIndex(_ index: Int? = 0) {
+        if let index {
+            let count = OIMcurrencies.count
+            if index < count {
+                self.currencyIndex = index
+                self.currency = OIMcurrencies[index]
+                return
+            }
         }
+        self.currencyIndex = 0
+        self.currency = OIMeuros
     }
 
     func max(available: UInt64) -> UInt64 {

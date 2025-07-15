@@ -7,6 +7,9 @@
  */
 import SwiftUI
 
+fileprivate let chestOpen = "ChestOpen"
+fileprivate let chestClosed = "ChestClosed"
+
 enum OIMactions {
     case withdrawal
     case deposit
@@ -62,15 +65,13 @@ struct OIMrequestButton: View {
 
 struct OIMbalanceButton: View {
     let isOpen: Bool
-    let isSierra: Bool
+    let chest: String
     let isFinal: Bool
     let action: () -> Void
 
     var body: some View {
-        let imageName = isSierra ? (isOpen ? "ChestSLopen" : "ChestSLclosed")
-//                                 : (isOpen ? "ChestDEopen" : "ChestDEclosed")
-//                                 : (isOpen ? "ChestEUopen" : "ChestEUclosed")
-                                 : (isOpen ? "ChestEUopen1" : "ChestEUclosed1")
+        let chestName = isOpen ? chestOpen : chestClosed
+        let imageName = chestName + chest
         Button(action: action) {
             Image(imageName)
                 .resizable()

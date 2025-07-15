@@ -22,8 +22,8 @@ let OIMSIDE = "OIMside"
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
     let currencyName: String
+    let chest: String
     let isFinal: Bool                   // bordered action button
-    let isSierra: Bool
     let isSending: Bool                 // move action button
     let amount: Amount?
     let action: (() -> Void)?
@@ -38,7 +38,7 @@ struct OIMnavBack<Content: View>: View {
                 content()
                 VStack {
                     HStack {
-                        OIMbalanceButton(isOpen: true, isSierra: isSierra, isFinal: false) {
+                        OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {
                             var transaction = Transaction()
                             transaction.disablesAnimations = true
                             withTransaction(transaction) {
@@ -72,9 +72,10 @@ struct OIMtitleView: View {
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
     var body: some View {
+        let chest = cash.currency.chest
         HStack(alignment: .top) {
             // invisible - only serves as point where the selected balance chest moves to
-            OIMbalanceButton(isOpen: true, isSierra: false, isFinal: false) {}
+            OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {}
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
                 .opacity(0.01)
@@ -84,11 +85,11 @@ struct OIMtitleView: View {
             if history {
                 Spacer()
             }
-            OIMamountV(amount: amount, currencyName: cash.currency.noteBase)
+            OIMamountV(amount: amount, currencyName: cash.currency.currency)
             if !history {
                 if isSending {
                     Spacer()
-                    OIMamountV(amount: secondAmount, currencyName: cash.currency.noteBase)
+                    OIMamountV(amount: secondAmount, currencyName: cash.currency.currency)
                 }
 
                 OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
@@ -207,7 +208,7 @@ struct OIMView: View {
             chestOpen = index
             viewState = .chestIsOpen
             selectedIndex = index
-            cash.currency = index == 0 ? OIMeuros : OIMleones
+            cash.setIndex(index)
             selectedBalance = balance
             available = balance.available
             availableVal = balance.available.centValue
@@ -321,13 +322,14 @@ struct OIMView: View {
 //                        ForEach(controller.balances, id: \.self) { balance in
 //                            OIMbalanceButton(isOpen: selectedBalance == balance) {
 
+                        let chests = ["EUR", "SLE", "CdI"]
                         let balance = controller.balances[0]
-                        ForEach(0...1, id: \.self) { index in
+                        ForEach(0...2, id: \.self) { index in
                             let itsMe = chestOpen == index
                             let isClosed = chestOpen == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize
                             ZStack {
-                                OIMbalanceButton(isOpen: itsMe, isSierra: index > 0, isFinal: false) {
+                                OIMbalanceButton(isOpen: itsMe, chest: chests[index], isFinal: false) {
                                     if itsMe {
                                         closeChest()
                                     } else {

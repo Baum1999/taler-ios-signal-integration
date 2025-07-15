@@ -79,12 +79,10 @@ struct OIMEditView: View {
 //        let _ = Self._printChanges()
 //        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
-        let noteBase = cash.currency.noteBase
-        let isSierra = noteBase == "SLE"
         OIMnavBack(stack: stack.push(),
-            currencyName: noteBase,
+            currencyName: cash.currency.currency,
+                   chest: cash.currency.chest,
                  isFinal: false,
-                isSierra: isSierra,
                isSending: sending,
 //                  amount: $amount2,
                   amount: amountToTransfer,
