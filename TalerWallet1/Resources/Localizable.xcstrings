@@ -2781,6 +2781,39 @@
         }
       }
     },
+    "City" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stadt"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miasto"
+          }
+        }
+      }
+    },
+    "City:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stadt:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miasto:"
+          }
+        }
+      }
+    },
     "Close" : {
       "localizations" : {
         "de" : {
@@ -2993,6 +3026,23 @@
         }
       }
     },
+    "Copy the city" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stadt kopieren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj miasto"
+          }
+        }
+      }
+    },
     "Copy the cryptocode" : {
       "comment" : "a11y",
       "localizations" : {
@@ -3128,6 +3178,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Skopiuj odbiorcę"
+          }
+        }
+      }
+    },
+    "Copy the zip code" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postleitzahl kopieren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skopiuj kod pocztowy"
           }
         }
       }
@@ -11884,6 +11951,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Twoje konta do wpłaty..."
+          }
+        }
+      }
+    },
+    "Zip code" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postleitzahl"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod pocztowy"
+          }
+        }
+      }
+    },
+    "Zip code:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postleitzahl:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kod pocztowy:"
           }
         }
       }
