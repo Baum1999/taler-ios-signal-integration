@@ -79,6 +79,9 @@ struct ManualDetailsWireV: View {
     let stack: CallStack
     let reservePub: String
     let receiverStr: String
+//    let receiverAux: String?
+    let receiverZip: String?
+    let receiverTown: String?
     let iban: String?
     let xTaler: String
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
@@ -101,6 +104,47 @@ struct ManualDetailsWireV: View {
                             : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
     }
 
+//    func buildReceiver() -> String {
+//        if let receiverAux {
+//            return receiverStr + ", " + receiverAux
+//        }
+//        return receiverStr
+//    }
+
+    @ViewBuilder func payeeZip() -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Zip code:")
+                    .talerFont(.subheadline)
+                Text(receiverZip ?? EMPTYSTRING)
+                    .monospacedDigit()
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Zip code", comment: "a11y"))
+            CopyButton(textToCopy: receiverZip ?? EMPTYSTRING, vertical: true)
+                .accessibilityLabel(Text("Copy the zip code", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+
+    @ViewBuilder func payeeTown() -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("City:")
+                    .talerFont(.subheadline)
+                Text(receiverTown ?? EMPTYSTRING)
+                    .monospacedDigit()
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("City", comment: "a11y"))
+            CopyButton(textToCopy: receiverTown ?? EMPTYSTRING, vertical: true)
+                .accessibilityLabel(Text("Copy the city", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+
     var body: some View {
         List {
             let cryptocode = HStack {
@@ -119,10 +163,16 @@ struct ManualDetailsWireV: View {
                     Text(receiverStr)
                         .monospacedDigit()
                         .padding(.leading)
+//                    if let receiverAux {
+//                        Text(receiverAux)
+//                            .monospacedDigit()
+//                            .padding(.leading)
+//                    }
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(Text("Recipient", comment: "a11y"))
                 CopyButton(textToCopy: receiverStr, vertical: true)
+//                CopyButton(textToCopy: buildReceiver(), vertical: true)
                     .accessibilityLabel(Text("Copy the recipient", comment: "a11y"))
                     .disabled(false)
             }   .padding(.top, -8)
@@ -139,7 +189,7 @@ struct ManualDetailsWireV: View {
                 CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
                     .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))
                     .disabled(false)
-            }   .padding(.top, -8)
+            } //  .padding(.top, -8)
             let amountCode = HStack {
                 VStack(alignment: .leading) {
                     Text("Amount:")
@@ -154,7 +204,7 @@ struct ManualDetailsWireV: View {
                 CopyButton(textToCopy: amountValue, vertical: true)             // only digits + separator, no currency name or symbol
                     .accessibilityLabel(Text("Copy the amount", comment: "a11y"))
                     .disabled(false)
-            }//   .padding(.top, -8)
+            }   .padding(.top, -8)
             let xTalerCode = HStack {
                 VStack(alignment: .leading) {
                     Text("Account:")
@@ -203,24 +253,30 @@ struct ManualDetailsWireV: View {
                                       debitIBAN: debitIBAN,
                                    restrictions: account.creditRestrictions)
                 .listRowSeparator(.visible)
-                step1.listRowSeparator(.hidden)
+                step1
                 if !minimalistic {
                     mandatory
                 }
-                cryptocode.listRowSeparator(.hidden)
+                cryptocode
                 if iban != nil {
-                    step2i.listRowSeparator(.hidden)
-                    payeeCode.listRowSeparator(.hidden)
-                    ibanCode.listRowSeparator(.hidden)
+                    step2i
+                    payeeCode
+                    if let receiverZip {
+                        payeeZip()
+                    }
+                    if let receiverTown {
+                        payeeTown()
+                    }
+                    ibanCode
                 } else {
-                    step2x.listRowSeparator(.hidden)
-                    payeeCode.listRowSeparator(.hidden)
-                    xTalerCode.listRowSeparator(.hidden)
+                    step2x
+                    payeeCode
+                    xTalerCode
                 }
-                amountCode.listRowSeparator(.hidden)
-                    .padding(.top)
+                amountCode
+//                    .padding(.top)
                 step3 // .padding(.top, 6)
-            }
+            }.listRowSeparator(.hidden)
         }
         .navigationTitle(navTitle)
         .onAppear() {
