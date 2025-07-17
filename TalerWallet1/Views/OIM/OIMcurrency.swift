@@ -21,13 +21,13 @@ public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 5
 // 5 banknotes, 7 coins (no fractionals)
 public let OIMxofN   = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000, 500],
                                    bankCoins: [200, 100,  50,  25,  10,   5,   1],
-                                   coinSizes: [180, 207, 174, 207, 175, 170, 131],
+                                   coinSizes: [180, 207, 174, 207, 175, 150, 131],
                                     noteBase: "XOFn", coinBase: "xof",
                                     currency: "CFA", chest: "CdI")
 // 4 banknotes, 8 coins (no fractionals)
 public let OIMxofC   = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000],
                                    bankCoins: [500, 200, 100,  50,  25,  10,   5,   1],
-                                   coinSizes: [200, 180, 207, 174, 207, 175, 170, 131],
+                                   coinSizes: [200, 180, 207, 174, 207, 175, 150, 131],
                                     noteBase: "XOFn", coinBase: "xof",
                                     currency: "CFA", chest: "CdI")
 // 1 stack, 5 banknotes, 5 coins (all fractionals)
