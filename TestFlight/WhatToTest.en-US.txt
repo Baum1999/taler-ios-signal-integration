@@ -1,3 +1,11 @@
+Version 1.0.20 (wallet-core 1.0.22)
+
+• French localization
+• Zip & city for withdrawals
+- Observation needs dev mode
+- more OIM animations
+
+
 Version 1.0.19 (wallet-core 1.0.21)
 
 - update German & Polish localization
