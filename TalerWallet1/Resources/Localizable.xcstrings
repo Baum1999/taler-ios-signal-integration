@@ -713,9 +713,21 @@
     "%lld minutes ago" : {
       "localizations" : {
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vor %lld Minuten"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vor %lld Minute"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vor %lld Minuten"
+                }
+              }
+            }
           }
         },
         "es" : {
