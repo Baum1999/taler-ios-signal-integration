@@ -537,7 +537,8 @@
 				Base,
 				de,
 				es,
-                pl,
+				fr,
+				pl,
 				uk,
 			);
 			mainGroup = D14AFD1424D232B300C51073;

@@ -15,6 +15,12 @@
             "value" : "- %@ comisión"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- %@ frais"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44,6 +50,12 @@
             "value" : ", cancelado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", annulée"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67,6 +79,12 @@
             "value" : ". Legitimierung erforderlich"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Légitimation requise"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -88,6 +106,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ". Necesita autorización bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Nécessite une autorisation bancaire"
           }
         },
         "pl" : {
@@ -117,6 +141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ". Necesita confirmación bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ". Nécessite une confirmation bancaire"
           }
         },
         "pl" : {
@@ -155,6 +185,12 @@
             "value" : "Escanea este código QR para recibir %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannez ceci pour recevoir %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -183,6 +219,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviando %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi de %@"
           }
         },
         "pl" : {
@@ -215,6 +257,12 @@
             "value" : "Escanea este código QR para pagar %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannez ceci pour payer %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -245,6 +293,12 @@
             "value" : "Solicitando %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande de %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -265,6 +319,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Alternativa:** Si tu banco ya soporta PayTo, puedes usar este PayTo-Link:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternative:** Si votre banque supporte déjà PayTo, vous pouvez utiliser ce lien PayTo à la place :"
           }
         },
         "pl" : {
@@ -295,6 +355,12 @@
             "value" : "**Alternativa:** Usar este enlace PayTo:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Alternative :** Utilisez ce lien PayTo :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -321,6 +387,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 1:** Copia este código y pégalo en el campo asunto de tu aplicación bancaria:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 1 :** Copiez ce code et collez-le dans le champ Référence de votre application bancaire ou du site web de votre banque :"
           }
         },
         "pl" : {
@@ -351,6 +423,12 @@
             "value" : "**Paso 1:** Copia y pega este asunto:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 1 :** Copier + Coller cette référence :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -379,6 +457,12 @@
             "value" : "**Paso 2:** Copia y pega el beneficiario y la cuenta en los campos correspondientes en tu aplicación bancaria o sitio web bancario:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 2 :** Copiez et collez le destinataire et le compte dans les champs correspondants de votre application bancaire ou du site web :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -399,6 +483,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Copia y pega el beneficiario y cuenta:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 2 :** Copier + Coller le destinataire et le compte :"
           }
         },
         "pl" : {
@@ -423,6 +513,12 @@
             "value" : "**Paso 2:** Copia y pega el beneficiario e IBAN:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 2 :** Copier + Coller le destinataire et l'IBAN :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -443,6 +539,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 2:** Si todavía no la tienes en tu lista de favoritos, entonces copia y pega el beneficiario e IBAN en los campos correspondientes en tu aplicación bancaria (y guárdalos en favoritos para la próxima vez):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 2 :** Si vous ne l'avez pas déjà dans votre liste de favoris bancaires, copiez et collez le destinataire et l'IBAN dans les champs destinataire/IBAN de votre application bancaire ou de votre site web (et sauvegardez-le en tant que favori pour la prochaine fois) :"
           }
         },
         "pl" : {
@@ -466,6 +568,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Paso 3:** %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Étape 3 :** %@"
           }
         },
         "pl" : {
@@ -497,6 +605,12 @@
             "value" : "%@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -519,6 +633,12 @@
             "value" : "%@ comisión"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ frais"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -538,7 +658,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ QR-Code anzeigen"
+            "value" : "%@ QR code anzeigen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Afficher le code QR"
           }
         },
         "pl" : {
@@ -557,6 +683,12 @@
             "value" : "%@ NFC starten"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Démarrer NFC"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -571,6 +703,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Tippen für NFC"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Cliquez pour NFC"
           }
         },
         "pl" : {
@@ -596,6 +734,12 @@
             "value" : "%@:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -616,6 +760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld caracteres de 100"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld caractères parmi 100"
           }
         },
         "pl" : {
@@ -646,6 +796,12 @@
             "value" : "hace %lld días"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a %lld jours"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -672,6 +828,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace %lld horas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a %lld heures"
           }
         },
         "pl" : {
@@ -702,6 +864,12 @@
             "value" : "hace %lld min"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a %lld min"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -713,27 +881,21 @@
     "%lld minutes ago" : {
       "localizations" : {
         "de" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Vor %lld Minute"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Vor %lld Minuten"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor %lld Minuten"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace %lld minutos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a %lld minutes"
           }
         },
         "pl" : {
@@ -788,6 +950,12 @@
             "value" : "%lld años"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld années"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -806,6 +974,12 @@
       "comment" : "A11y",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu"
@@ -832,6 +1006,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu jour"
           }
         },
         "pl" : {
@@ -873,6 +1053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu jours"
           }
         },
         "pl" : {
@@ -927,6 +1113,12 @@
             "value" : "+ %@ de comisión"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ %@ frais"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -955,6 +1147,12 @@
             "value" : "hace ~1 hora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ 1 heure"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -975,6 +1173,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace ~1½ hora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ 1 heure et demie"
           }
         },
         "pl" : {
@@ -999,6 +1203,12 @@
             "value" : "hace ~2 horas"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ 2 heures"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1019,6 +1229,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace 1 hora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a 1 heure"
           }
         },
         "pl" : {
@@ -1049,6 +1265,12 @@
             "value" : "hace 1 min"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a 1 min"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1069,6 +1291,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "hace 1 minuto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a 1 minute"
           }
         },
         "pl" : {
@@ -1100,6 +1328,12 @@
             "value" : "Cancelar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exécuter l'annulation"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1121,6 +1355,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detener deposito"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner le dépôt"
           }
         },
         "pl" : {
@@ -1152,6 +1392,12 @@
             "value" : "Detener pago"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner le paiement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1181,6 +1427,12 @@
             "value" : "Detener envío"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner l'envoi"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1201,6 +1453,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Acerca de %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos de %@"
           }
         },
         "pl" : {
@@ -1231,6 +1489,12 @@
             "value" : "Hace 1½ horas"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ 1 heure et demie"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1257,6 +1521,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "HAce 2 horas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ 2 heures"
           }
         },
         "pl" : {
@@ -1287,6 +1557,12 @@
             "value" : "Hace una hora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a environ une heure"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1315,6 +1591,12 @@
             "value" : "Aceptar y recibir"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepter et recevoir"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1336,6 +1618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aceptar términos de servicio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepter les conditions générales d'utilisation"
           }
         },
         "pl" : {
@@ -1367,6 +1655,12 @@
             "value" : "Aceptando…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acceptation..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1389,6 +1683,12 @@
             "value" : "Beneficiario"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titulaire du compte"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1409,6 +1709,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beneficiario:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titulaire du compte :"
           }
         },
         "pl" : {
@@ -1440,6 +1746,12 @@
             "value" : "cuenta del beneficiario"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "compte du destinataire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1460,6 +1772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuenta:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte :"
           }
         },
         "pl" : {
@@ -1498,6 +1816,12 @@
             "value" : "Olvidar cuenta bancaria"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oublier le compte bancaire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1519,6 +1843,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Añadir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
           }
         },
         "pl" : {
@@ -1550,6 +1880,12 @@
             "value" : "Añadir cuenta bancaria"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un compte bancaire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1573,6 +1909,12 @@
             "value" : "Añadir proveedor de servicio"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un prestataire de services de paiement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1593,6 +1935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dirección del servicio de pagos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse du prestataire de services de paiement"
           }
         },
         "pl" : {
@@ -1618,6 +1966,12 @@
             "value" : "Ya fue pagado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déjà payé"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1638,6 +1992,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto disponible:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant disponible :"
           }
         },
         "pl" : {
@@ -1666,6 +2026,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant disponible à dépenser :"
           }
         },
         "pl" : {
@@ -1697,6 +2063,12 @@
             "value" : "Monto a depositar:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à déposer :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1723,6 +2095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a obtener:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à obtenir :"
           }
         },
         "pl" : {
@@ -1754,6 +2132,12 @@
             "value" : "Monto a pagar:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à payer :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +2165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a solicitar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à demander :"
           }
         },
         "pl" : {
@@ -1812,6 +2202,12 @@
             "value" : "Monto a envíar:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à envoyer :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1838,6 +2234,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a gastar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à dépenser :"
           }
         },
         "pl" : {
@@ -1869,6 +2271,12 @@
             "value" : "Monto a transferir"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à transférer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1890,6 +2298,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a retirar del banco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à retirer de la banque"
           }
         },
         "pl" : {
@@ -1918,6 +2332,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto a retirar del banco:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à retirer de la banque :"
           }
         },
         "pl" : {
@@ -1949,6 +2369,12 @@
             "value" : "Monto a retirar:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant à retirer :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1975,6 +2401,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto demasiado grande para un solo retiro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant trop élevé pour un seul retrait !"
           }
         },
         "pl" : {
@@ -2005,6 +2437,12 @@
             "value" : "Monto:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2028,6 +2466,12 @@
             "value" : "Ein unbekannter Fehler ist aufgetreten."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur inconnue s'est produite."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2048,6 +2492,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versión de la aplicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version de l'application"
           }
         },
         "pl" : {
@@ -2078,6 +2528,12 @@
             "value" : "¿Seguro que deseas abandonar esta transacción?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir abandonner cette transaction ?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2104,6 +2560,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¿Seguro que deseas cancelar esta transacción?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir abandonner cette transaction ?"
           }
         },
         "pl" : {
@@ -2134,6 +2596,12 @@
             "value" : "¿Seguro que deseas eliminar esta transacción?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir supprimer cette transaction ?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2162,6 +2630,12 @@
             "value" : "¿Seguro que deseas olvidar esta cuenta bancaria?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir oublier ce compte bancaire ?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2176,6 +2650,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sind Sie sicher, dass Sie Ihr Wallet mit diesem Backup überschreiben wollen?\nDas kann nicht rückgängig gemacht werden. Alles Geld, das sich jetzt noch in Ihrem Wallet befindet, geht verloren."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir écraser votre portefeuille avec cette sauvegarde ?\nIl n'est pas possible de revenir en arrière, et tout l'argent qui se trouve encore dans votre portefeuille sera perdu."
           }
         },
         "pl" : {
@@ -2195,6 +2675,12 @@
             "value" : "Authentifizieren Sie sich für den Zugriff auf Ihr Geld"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifiez-vous pour accéder à votre argent"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2212,6 +2698,12 @@
             "value" : "Authentifizierung fehlgeschlagen. Bitte versuchen Sie es erneut."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'authentification. Veuillez réessayer."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2227,6 +2719,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät ist keine Authentifizierung verfügbar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'authentification n'est pas disponible sur cet appareil."
           }
         },
         "pl" : {
@@ -2250,6 +2748,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autorizar en el banco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser à la banque"
           }
         },
         "pl" : {
@@ -2280,6 +2784,12 @@
             "value" : "Autorizar después"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser plus tard"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2308,6 +2818,12 @@
             "value" : "Confirmar ahora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser maintenant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2330,6 +2846,12 @@
             "value" : "Automatisch for P2P transactions"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatiquement pour les transactions de portefeuille à portefeuille"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2344,6 +2866,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verfügbar für Wiederherstellung:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible pour restauration :"
           }
         },
         "pl" : {
@@ -2368,6 +2896,12 @@
             "value" : "Disponible para transferir: %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible pour le transfert : %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2389,6 +2923,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Disponible:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible :"
           }
         },
         "pl" : {
@@ -2420,6 +2960,12 @@
             "value" : "Disponible: %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible : %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2435,6 +2981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zurück"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour"
           }
         },
         "pl" : {
@@ -2460,6 +3012,12 @@
             "value" : "Respaldo restaurado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauvegarde restaurée"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2480,6 +3038,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sicherheitskopie Ihres Geldes…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauvegardez votre argent..."
           }
         },
         "pl" : {
@@ -2503,6 +3067,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saldo:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde :"
           }
         },
         "pl" : {
@@ -2531,6 +3101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Banco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Banque"
           }
         },
         "pl" : {
@@ -2562,6 +3138,12 @@
             "value" : "Autorización bancaria"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation bancaire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2579,6 +3161,12 @@
             "value" : "Die biometrische Authentifizierung ist gesperrt. Geben Sie zum Entsperren Ihren Passcode ein."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'authentification biométrique est verrouillée. Saisissez votre mot de passe pour déverrouiller."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2594,6 +3182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät ist keine biometrische Authentifizierung verfügbar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'authentification biométrique n'est pas disponible sur cet appareil."
           }
         },
         "pl" : {
@@ -2619,6 +3213,12 @@
             "value" : "Cámara activada"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméra active"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2640,6 +3240,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
         "pl" : {
@@ -2668,6 +3274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verificando enlace"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lien de vérification"
           }
         },
         "pl" : {
@@ -2699,6 +3311,12 @@
             "value" : "Selecciona un periodo de expiración"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez la durée d'expiration"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2728,6 +3346,12 @@
             "value" : "Selecciona el servicio de pagos:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez le prestataire de services de paiement :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2748,6 +3372,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto de retiro seleccionado:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant choisi pour le retrait :"
           }
         },
         "pl" : {
@@ -2779,6 +3409,12 @@
             "value" : "Seleccionado:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisi :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2802,6 +3438,12 @@
             "value" : "Stadt"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ville"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2816,6 +3458,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stadt:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ville:"
           }
         },
         "pl" : {
@@ -2838,6 +3486,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cerrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
           }
         },
         "pl" : {
@@ -2869,6 +3523,12 @@
             "value" : "Cerrando cámara"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermeture de la caméra"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2898,6 +3558,12 @@
             "value" : "Confirmar pago"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le paiement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2924,6 +3590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar retiro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le retrait"
           }
         },
         "pl" : {
@@ -2955,6 +3627,12 @@
             "value" : "Confirmación:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmation :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2978,6 +3656,12 @@
             "value" : "Weiter"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2999,6 +3683,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar la cuenta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le compte"
           }
         },
         "pl" : {
@@ -3030,6 +3720,12 @@
             "value" : "Copiar el monto"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le montant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3045,6 +3741,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stadt kopieren"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier la ville"
           }
         },
         "pl" : {
@@ -3068,6 +3770,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el cryptocode"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le cryptocode"
           }
         },
         "pl" : {
@@ -3099,6 +3807,12 @@
             "value" : "Copiar el error"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier l'erreur"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3126,6 +3840,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar el error JSON"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier l'erreur JSON"
           }
         },
         "pl" : {
@@ -3157,6 +3877,12 @@
             "value" : "Copiar el IBAN"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier l'IBAN"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3186,6 +3912,12 @@
             "value" : "Copiar el beneficiario"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le destinataire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3201,6 +3933,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Postleitzahl kopieren"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le code postal"
           }
         },
         "pl" : {
@@ -3231,6 +3969,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copiar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier"
           }
         },
         "pl" : {
@@ -3269,6 +4013,12 @@
             "value" : "Copiar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3292,6 +4042,12 @@
             "value" : "Backup erstellen"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer une sauvegarde"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3310,6 +4066,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cryptocode"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cryptocode"
@@ -3344,6 +4106,12 @@
             "value" : "Monto personalizado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant personnalisé"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3371,6 +4139,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descripción personalizada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommaire personnalisé"
           }
         },
         "pl" : {
@@ -3401,6 +4175,12 @@
             "value" : "Eliminar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3421,6 +4201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pistas de demostración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conseils pour la démonstration"
           }
         },
         "pl" : {
@@ -3445,6 +4231,12 @@
             "value" : "Demo: recibir dinero digital para experimentar cómo pagar con el dinero del futuro."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démonstration : obtenez de l'argent numérique pour découvrir comment payer avec l'argent du futur."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3465,6 +4257,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Überweisung kann - je nach Bank - bis zu zwei Tage dauern. Bitte haben Sie etwas Geduld."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En fonction de votre banque, le transfert peut prendre de quelques minutes à deux jours ouvrables. Veuillez patienter."
           }
         },
         "pl" : {
@@ -3496,6 +4294,12 @@
             "value" : "Depósito"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3523,6 +4327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Depositar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposer :"
           }
         },
         "pl" : {
@@ -3561,6 +4371,12 @@
             "value" : "Depositar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3590,6 +4406,12 @@
             "value" : "Depositando…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépôt en cours..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3610,6 +4432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de deserialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur de désérialisation"
           }
         },
         "pl" : {
@@ -3638,6 +4466,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finalizar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
           }
         },
         "pl" : {
@@ -3669,6 +4503,12 @@
             "value" : "Doble toque para editar la cuenta"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-cliquez pour modifier le compte"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3692,6 +4532,12 @@
             "value" : "Doble toque para seleccionar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-cliquez pour sélectionner"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3713,6 +4559,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Efectivo:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date d’entrée en vigueur :"
           }
         },
         "pl" : {
@@ -3744,6 +4596,12 @@
             "value" : "habilitado cuando el monto no es cero"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "activée lorsque le montant est différent de zéro"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3765,6 +4623,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "habilitado cuando el monto no es cero ni más alto que el monto disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "activé lorsque le montant est différent de zéro, mais ne dépasse pas le montant disponible"
           }
         },
         "pl" : {
@@ -3796,6 +4660,12 @@
             "value" : "habilitado cuando el asunto y la expiración estan completos"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "activé lorsque le sujet et l'expiration sont remplis"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3825,6 +4695,12 @@
             "value" : "Ingresa el asunto:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrez la référence"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3845,6 +4721,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingresa el asunto:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrez la référence :"
           }
         },
         "pl" : {
@@ -3875,6 +4757,12 @@
             "value" : "Ingrese la URL"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez l'URL"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3895,6 +4783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
           }
         },
         "pl" : {
@@ -3926,6 +4820,12 @@
             "value" : "Error al escanear el código QR"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur lors de la lecture du code QR"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3954,6 +4854,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comisión:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frais :"
           }
         },
         "pl" : {
@@ -3992,6 +4898,12 @@
             "value" : "Comisión:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frais :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4022,6 +4934,12 @@
             "value" : "Delete payment service"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le prestataire de services de paiement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4045,6 +4963,12 @@
             "value" : "Are you sure you want to delete this payment service?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir supprimer ce prestataire de services de paiement ?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4066,6 +4990,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This payment service is in use. Delete anyway?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce prestataire de services de paiement est en cours d'utilisation. Supprimer quand même ?"
           }
         },
         "pl" : {
@@ -4092,6 +5022,12 @@
             "value" : "You will lose all %@ of this payment service."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous perdrez tout %@ de ce prestataire de services de paiement."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4112,6 +5048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expira en:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expire dans :"
           }
         },
         "pl" : {
@@ -4143,6 +5085,12 @@
             "value" : "Expira: %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expire : %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4171,6 +5119,12 @@
             "value" : "Explicar el botón de acciones"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expliquer le bouton Actions"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4186,6 +5140,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Authentifizierung konnte nicht initialisiert werden."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l'initialisation du contexte d'authentification."
           }
         },
         "pl" : {
@@ -4215,6 +5175,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La comisión de transferencia de tu banco: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frais de virement de votre banque : %@"
           }
         },
         "pl" : {
@@ -4253,6 +5219,12 @@
             "value" : "La comisión de transferencia de tu banco: %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frais de virement de votre banque : %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4281,6 +5253,12 @@
             "value" : "Finish the wire transfer of %1$@ in your banking app or website to verify your bank account %2$@."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminez le virement de %1$@ dans votre application bancaire ou sur votre site web pour faire la vérification de votre compte bancaire %2$@."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4295,6 +5273,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schließen Sie die Überweisung von %@ in Ihrer Banking-App oder Bank-Webseite ab, dann wird diese Abhebung automatisch durchgeführt."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminez le virement de %@ dans votre application bancaire ou sur votre site web, et ce retrait se fera automatiquement."
           }
         },
         "pl" : {
@@ -4317,6 +5301,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Para los botones Borrar, Fallar & Detener"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour les boutons Supprimer, Abandonner et Interrompre"
           }
         },
         "pl" : {
@@ -4346,6 +5336,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "desde %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "depuis %@"
           }
         },
         "pl" : {
@@ -4378,6 +5374,12 @@
             "value" : "Terminate contract"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre fin au contrat"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4401,6 +5403,12 @@
             "value" : "Are you sure you want to terminate this contract?"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Êtes-vous sûr de vouloir mettre fin à ce contrat ?"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4422,6 +5430,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You still have digital money in your wallet. Terminate anyway?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez toujours de l'argent numérique dans votre portefeuille. Mettre fin quand même ?"
           }
         },
         "pl" : {
@@ -4448,6 +5462,12 @@
             "value" : "You will lose all %@ of this contract."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous perdrez tous les %@ de ce contrat."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4468,6 +5488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto bruto a recibir:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant brut à recevoir :"
           }
         },
         "pl" : {
@@ -4496,6 +5522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Respuesta háptica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptique"
           }
         },
         "pl" : {
@@ -4527,6 +5559,12 @@
             "value" : "IBAN del beneficiario"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN du destinataire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4547,6 +5585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "IBAN:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IBAN :"
           }
         },
         "pl" : {
@@ -4571,6 +5615,12 @@
             "value" : "Wenn diese Wallet einem Kind oder Minderjährigen gehört, sollte das generierte digitale Geld altersbeschränkt sein."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si ce portefeuille appartient à un enfant ou à un adolescent, l'argent numérique généré doit être soumis à une contrainte d'âge :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4585,6 +5635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wenn Sie den Kontoinhaber oder die IBAN ändern, müssen sie evtl. die Legitimierung wiederholen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si vous changez le nom du titulaire du compte ou l'IBAN, il se peut que vous deviez effectuer à nouveau la procédure de légitimation."
           }
         },
         "pl" : {
@@ -4607,6 +5663,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Si tu software bancario corre en otro dispositivo, puedes escanear uno de los siguientes códigos QR:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si votre logiciel bancaire fonctionne sur un autre appareil, vous pouvez scanner l'un de ces codes QR :"
           }
         },
         "pl" : {
@@ -4638,6 +5700,12 @@
             "value" : "En progreso"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En cours"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4664,6 +5732,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de inicialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur d'initialisation"
           }
         },
         "pl" : {
@@ -4694,6 +5768,12 @@
             "value" : "Instrucciones"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4720,6 +5800,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Código de error interno"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur interne"
           }
         },
         "pl" : {
@@ -4750,6 +5836,12 @@
             "value" : "Nota"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étiquette"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4771,6 +5863,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lenguaje:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue :"
           }
         },
         "pl" : {
@@ -4795,6 +5893,12 @@
             "value" : "Legitimierung"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Légitimation"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4810,6 +5914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Legitimierungsverfahren erforderlich"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Procédure de légitimation obligatoire"
           }
         },
         "pl" : {
@@ -4839,6 +5949,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sitio web del banco demostrativo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Site web de la banque de démonstration"
           }
         },
         "pl" : {
@@ -4876,6 +5992,12 @@
             "value" : "Gastar dinero de prueba"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépenser de l'argent de démonstration"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4911,6 +6033,12 @@
             "value" : "Obtener dinero de prueba"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenir de l'argent de démonstration"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4939,6 +6067,12 @@
             "value" : "Estilo de la lista:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style de la liste :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4965,6 +6099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cargando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement…"
           }
         },
         "pl" : {
@@ -4996,6 +6136,12 @@
             "value" : "Perdido:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdu :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5020,6 +6166,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu principal"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu principal"
@@ -5061,6 +6213,12 @@
             "value" : "Cancelado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonné"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5095,6 +6253,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandon en cours"
           }
         },
         "pl" : {
@@ -5133,6 +6297,12 @@
             "value" : "Borrado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimé"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5167,6 +6337,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diálogo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dialogue"
           }
         },
         "pl" : {
@@ -5205,6 +6381,12 @@
             "value" : "Terminado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5239,6 +6421,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expirado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expiré"
           }
         },
         "pl" : {
@@ -5277,6 +6465,12 @@
             "value" : "Abandonado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonné"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5311,6 +6505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finalizando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalisation"
           }
         },
         "pl" : {
@@ -5349,6 +6549,12 @@
             "value" : "Pendiente"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5377,6 +6583,12 @@
             "value" : "Gestionar servicios de pago"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer les prestataires de services de paiement..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5398,6 +6610,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comerciante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commerçant"
           }
         },
         "pl" : {
@@ -5426,6 +6644,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimalista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimaliste"
           }
         },
         "pl" : {
@@ -5464,6 +6688,12 @@
             "value" : "Requiere AML"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AML requis"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5498,6 +6728,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esperando la transferencia bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente du virement bancaire"
           }
         },
         "pl" : {
@@ -5536,6 +6772,12 @@
             "value" : "Requiere KYC"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Légitimation obligatoire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5565,6 +6807,12 @@
             "value" : "Dinero perdido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant perdu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5591,6 +6839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero perdido:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant perdu :"
           }
         },
         "pl" : {
@@ -5622,6 +6876,12 @@
             "value" : "Dinero recibido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant reçu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5643,6 +6903,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dinero solicitado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant demandé"
           }
         },
         "pl" : {
@@ -5668,6 +6934,12 @@
             "value" : "Dinero enviado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant envoyé"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5688,6 +6960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Más información acerca de GNU Taler en general..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus d'informations sur GNU Taler en général..."
           }
         },
         "pl" : {
@@ -5718,6 +6996,12 @@
             "value" : "Más información acerca de esta aplicación..."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus d'infos sur cette application..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5744,6 +7028,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hace más de una semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y a plus d’une semaine"
           }
         },
         "pl" : {
@@ -5782,6 +7072,12 @@
             "value" : "Depositar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5810,6 +7106,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Depositar %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposer %@"
           }
         },
         "pl" : {
@@ -5848,6 +7150,12 @@
             "value" : "Seleccionar cuenta"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionner le compte"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5878,6 +7186,12 @@
             "value" : "Solicitar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5906,6 +7220,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pedir %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande %@"
           }
         },
         "pl" : {
@@ -5944,6 +7264,12 @@
             "value" : "Pedir %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5980,6 +7306,12 @@
             "value" : "Enviar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6008,6 +7340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviar %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer %@"
           }
         },
         "pl" : {
@@ -6046,6 +7384,12 @@
             "value" : "Enviar %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6082,6 +7426,12 @@
             "value" : "Retirar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6112,6 +7462,12 @@
             "value" : "Retirar %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6132,6 +7488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto neto a recibir:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant net à recevoir :"
           }
         },
         "pl" : {
@@ -6163,6 +7525,12 @@
             "value" : "Siguiente"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6189,6 +7557,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay saldos. Parece ser un problema con la base de datos…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun solde. Il semble y avoir un problème avec la base de données..."
           }
         },
         "pl" : {
@@ -6219,6 +7593,12 @@
             "value" : "Sin baseUrl"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas d'URL de base"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6234,6 +7614,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf diesem Gerät wurden bisher keine biometrischen Daten erfasst."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune donnée biométrique n'est enregistrée sur cet appareil."
           }
         },
         "pl" : {
@@ -6257,6 +7643,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin fecha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de date"
           }
         },
         "pl" : {
@@ -6287,6 +7679,12 @@
             "value" : "Sin comisión"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans frais"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6308,6 +7706,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sin servicio de pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun prestataire de services de paiement"
           }
         },
         "pl" : {
@@ -6333,6 +7737,12 @@
             "value" : "Sin servicio de pago…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun prestataire de services de paiement..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6356,6 +7766,12 @@
             "value" : "sin verificación"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pas encore vérifié"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6376,6 +7792,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note: puede tomar algo más de tiempo preparar este monto, favor de tener paciencia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remarque : préparer ce montant prendra un certain temps ! Soyez plus patient..."
           }
         },
         "pl" : {
@@ -6406,6 +7828,12 @@
             "value" : "Nota: puede tomar algo de tiempo preparar este monto, favor de tener paciencia."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remarque : La préparation de ce montant prendra un certain temps. Soyez patient..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6434,6 +7862,12 @@
             "value" : "Ahora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6441,6 +7875,35 @@
           }
         }
       }
+    },
+    "Observe walletCore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WalletCore observieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Observar wallet-core"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obserwuj walletCore"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спостерігати за walletCore"
+          }
+        }
+      },
+      "shouldTranslate" : false
     },
     "Obtain:" : {
       "comment" : "Amount to obtain:",
@@ -6455,6 +7918,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Obtener:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevez :"
           }
         },
         "pl" : {
@@ -6483,6 +7952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto obtenido:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant obtenu :"
           }
         },
         "pl" : {
@@ -6514,6 +7989,12 @@
             "value" : "Obtenido:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenu :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6537,6 +8018,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -6570,6 +8057,12 @@
             "value" : "Omitir texto cuando sea posible"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omettre le texte dans la mesure du possible"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6584,6 +8077,35 @@
         }
       }
     },
+    "on LocalConsole" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "on LocalConsole"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "en LocalConsole"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "w LocalConsole"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "на LocalConsole"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "Onboarding" : {
       "localizations" : {
         "de" : {
@@ -6596,6 +8118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incorporación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape de bienvenue et de formation"
           }
         },
         "pl" : {
@@ -6613,6 +8141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Legitimierungs-Webseite öffnen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir le site de légitimation"
           }
         },
         "pl" : {
@@ -6635,6 +8169,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir sitio web del comerciante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir le site web du commerçant"
           }
         },
         "pl" : {
@@ -6663,6 +8203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abrir Configuración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez les paramètres"
           }
         },
         "pl" : {
@@ -6694,6 +8240,12 @@
             "value" : "Abrir Camara"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouverture de la caméra"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6722,6 +8274,12 @@
             "value" : "ID de orden:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numéro de commande :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6742,6 +8300,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wallet überschreiben"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écraser le portefeuille"
           }
         },
         "pl" : {
@@ -6765,6 +8329,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payée"
           }
         },
         "pl" : {
@@ -6793,6 +8363,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pagado:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant payé :"
           }
         },
         "pl" : {
@@ -6824,6 +8400,12 @@
             "value" : "Pagado:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payé :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6847,6 +8429,12 @@
             "value" : "Auf diesem Gerät ist keine Passcode eingestellt."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mot de passe n'est pas configuré sur cet appareil."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6868,6 +8456,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar %@ ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payer %@ maintenant"
           }
         },
         "pl" : {
@@ -6899,6 +8493,12 @@
             "value" : "Pagar Peer-Pull"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer la demande de paiement d'un autre portefeuille"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6926,6 +8526,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar Peer-Push"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le paiement vers un autre portefeuille"
           }
         },
         "pl" : {
@@ -6957,6 +8563,12 @@
             "value" : "Solicitud de pago"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande de paiement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6984,6 +8596,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pagar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payer :"
           }
         },
         "pl" : {
@@ -7015,6 +8633,12 @@
             "value" : "Pagando…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paiement en cours..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7036,6 +8660,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paiement"
           }
         },
         "pl" : {
@@ -7066,6 +8696,12 @@
             "value" : "El pago se hace en %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le paiement est effectué en %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7092,6 +8728,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servicio de pagos:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prestataire de services de paiement :"
           }
         },
         "pl" : {
@@ -7121,6 +8763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compra imposible debido a la restricción de edad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achat impossible en raison d'une restriction d'âge"
           }
         },
         "pl" : {
@@ -7158,6 +8806,12 @@
             "value" : "Al proveedor le falta la configuración de la tasa global, lo que probablemente significa que está mal configurado."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le prestataire ne dispose pas de la configuration globale des frais, ce qui signifie probablement qu'elle est mal configurée"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7191,6 +8845,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "No hay fondos suficientes para pagar los honorarios del proveedor no cubiertos por el comerciante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous n'avez pas assez de crédit pour payer les frais du prestataire non couverts par le commerçant"
           }
         },
         "pl" : {
@@ -7228,6 +8888,12 @@
             "value" : "El comerciante no acepta dinero de uno o más proveedores en este wallet"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le commerçant n'accepte pas d'argent d'un ou plusieurs prestataires dans ce portefeuille"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7261,6 +8927,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "El comerciante no acepta el método de transferencia del proveedor, lo que probablemente significa que está mal configurado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le commerçant n'accepte pas la méthode de virement du prestataire, cela signifie probablement qu'elle est mal configurée"
           }
         },
         "pl" : {
@@ -7298,6 +8970,12 @@
             "value" : "Algunas de las monedas necesarias para esta compra no están disponibles actualmente"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une partie de l'argent numérique nécessaire à cet achat est actuellement indisponible"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7333,6 +9011,12 @@
             "value" : "¡Saldo insuficiente! No tiene suficiente %@."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde insuffisant ! Vous n'avez pas assez de %@."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7362,6 +9046,12 @@
             "value" : "Pendiente"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7388,6 +9078,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto pendiente a obtener:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant en attente d'obtention :"
           }
         },
         "pl" : {
@@ -7419,6 +9115,12 @@
             "value" : "Pendiente:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7445,6 +9147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reproducir sonidos de pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jouer les sons pour un paiement"
           }
         },
         "pl" : {
@@ -7475,6 +9183,12 @@
             "value" : "Por favor permita el acceso a la cámara desde configuración."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez autoriser l'accès à la caméra dans les paramètres."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7501,6 +9215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Precio (neto):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prix (net) :"
           }
         },
         "pl" : {
@@ -7532,6 +9252,12 @@
             "value" : "Precio:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prix :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7561,6 +9287,12 @@
             "value" : "Indicador de progreso"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indicateurs de progrès"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7583,6 +9315,12 @@
             "value" : "Schützen Sie Ihr Geld"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protégez votre argent"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7600,6 +9338,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR"
@@ -7634,6 +9378,12 @@
             "value" : "Código QR"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code QR"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7660,6 +9410,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El código QR y el link también pueden ser escaneados o copiados / compartidos desde Transacciones después."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le code QR et le lien peuvent également être scannés, copiés ou partagés ultérieurement à partir de la liste des transactions."
           }
         },
         "pl" : {
@@ -7691,6 +9447,12 @@
             "value" : "Se reconoció un código QR"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code QR reconnu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7711,6 +9473,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Listo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prêt"
           }
         },
         "pl" : {
@@ -7736,6 +9504,12 @@
             "value" : "Recibir"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevoir"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7757,6 +9531,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recibir (bruto):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevoir brut :"
           }
         },
         "pl" : {
@@ -7788,6 +9568,12 @@
             "value" : "Recibir Dinero"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevoir de l'argent"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7815,6 +9601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recibir (neto):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevoir net :"
           }
         },
         "pl" : {
@@ -7846,6 +9638,12 @@
             "value" : "Recibido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reçu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7867,6 +9665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transacciones recientes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transaction récente"
           }
         },
         "pl" : {
@@ -7898,6 +9702,12 @@
             "value" : "Transacciones recientes"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transactions récentes"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7927,6 +9737,12 @@
             "value" : "Beneficiario"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destinataire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7947,6 +9763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beneficiario:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destinataire :"
           }
         },
         "pl" : {
@@ -7970,6 +9792,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compensación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recouvrement"
           }
         },
         "pl" : {
@@ -8001,6 +9829,12 @@
             "value" : "Compensación:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recouvrement :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8028,6 +9862,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Actualización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rafraîchir"
           }
         },
         "pl" : {
@@ -8059,6 +9899,12 @@
             "value" : "Devolución"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remboursement"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8085,6 +9931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto devuelto:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant remboursé :"
           }
         },
         "pl" : {
@@ -8116,6 +9968,12 @@
             "value" : "Devuelto:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remboursé :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8143,6 +10001,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recargar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiser"
           }
         },
         "pl" : {
@@ -8174,6 +10038,12 @@
             "value" : "Solicitar %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8203,6 +10073,12 @@
             "value" : "Monto solicitado:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander de l'argent"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8230,6 +10106,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Solicitud pagada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande payée"
           }
         },
         "pl" : {
@@ -8262,6 +10144,12 @@
             "value" : "Solicitar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8290,6 +10178,12 @@
             "value" : "Solicitado con GNU Taler"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demandé avec GNU TALER"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8310,6 +10204,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restaurar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser"
           }
         },
         "pl" : {
@@ -8340,6 +10240,12 @@
             "value" : "Restaurar billetera"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser le portefeuille"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8362,6 +10268,12 @@
             "value" : "Wiederherstellen"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8382,6 +10294,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restricción:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restriction :"
           }
         },
         "pl" : {
@@ -8412,6 +10330,12 @@
             "value" : "Ahora mismo"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En ce moment même"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8440,6 +10364,12 @@
             "value" : "Guardar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauvegarder"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8460,13 +10390,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR-Code scannen"
+            "value" : "QR Code scannen"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escanear código QR"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner le code QR"
           }
         },
         "pl" : {
@@ -8482,13 +10418,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der gescannte QR-Code ist keine talerURI"
+            "value" : "Der gescannte QR Code ist keine talerURI"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "QR escaneado no es talerURI"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le code QR scanné n'est pas un URI Taler"
           }
         },
         "pl" : {
@@ -8513,6 +10455,12 @@
             "value" : "Der gescannte QR-Code enthält keine URL"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le QR scanné n'est pas une URL"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8526,13 +10474,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Um QR-Codes zu scannen wird Zugriff auf die Kamera benötigt"
+            "value" : "Um QR Codes zu scannen wird Zugriff auf die Kamera benötigt"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Escanear códigos QR requiere acceso a la cámara"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La lecture des codes QR nécessite l'accès à l'appareil photo"
           }
         },
         "pl" : {
@@ -8564,6 +10518,12 @@
             "value" : "Escaneando…"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan en cours..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8585,6 +10545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Programado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planifié"
           }
         },
         "pl" : {
@@ -8616,6 +10582,12 @@
             "value" : "Desplazar hacia abajo"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faire défiler vers le bas"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8643,6 +10615,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desplazar hacia arriba"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faire defiler vers le haut"
           }
         },
         "pl" : {
@@ -8673,6 +10651,12 @@
             "value" : "segundos"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "secondes"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8693,6 +10677,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccionar edad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez votre âge"
           }
         },
         "pl" : {
@@ -8724,6 +10714,12 @@
             "value" : "Enviar %@ ahora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer %@ maintenant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8751,6 +10747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Monto del envío"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer Argent"
           }
         },
         "pl" : {
@@ -8789,6 +10791,12 @@
             "value" : "Enviar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8817,6 +10825,12 @@
             "value" : "Enviado con GNU Taler"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyé avec GNU TALER"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8837,6 +10851,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error de serialización"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur de sérialisation"
           }
         },
         "pl" : {
@@ -8865,6 +10885,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compartir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
           }
         },
         "pl" : {
@@ -8896,6 +10922,12 @@
             "value" : "Compartir PayTo"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager PayTo"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8923,6 +10955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compartir el enlace PayTo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager l'URL PayTo"
           }
         },
         "pl" : {
@@ -8954,6 +10992,12 @@
             "value" : "Sheet.ID."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiche.ID."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8981,6 +11025,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atajo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raccourci"
           }
         },
         "pl" : {
@@ -9011,6 +11061,12 @@
             "value" : "Mostrar pistas para dinero de demostración"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montrer les astuces pour l'argent de démonstration"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9019,12 +11075,47 @@
         }
       }
     },
+    "Show logs" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logs anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar logs"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż logi"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати журнали"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "Show QR codes" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "QR-Codes anzeigen"
+            "value" : "QR Codes anzeigen"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les codes QR"
           }
         },
         "pl" : {
@@ -9047,6 +11138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostrar advertencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les avertissements"
           }
         },
         "pl" : {
@@ -9077,6 +11174,12 @@
             "value" : "Ya que el banco demostrativo cuenta con integración Taler, puedes comenzar un retiro directamente desde el"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comme la banque de démonstration prend en charge l'intégration de Taler, vous pouvez effectuer un retrait directement sur le"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9103,6 +11206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algunas transacciones pendientes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelques transactions en cours"
           }
         },
         "pl" : {
@@ -9133,6 +11242,12 @@
             "value" : "Gasta tu %@ en la tienda demostrativa"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépensez vos %@ dans la boutique de démonstration"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9155,6 +11270,12 @@
             "value" : "Monto gastado:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant dépensé :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9175,6 +11296,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fuente iOS estándar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Police iOS standard"
           }
         },
         "pl" : {
@@ -9203,6 +11330,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estado:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statuts :"
           }
         },
         "pl" : {
@@ -9234,6 +11367,12 @@
             "value" : "Paso 3: %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape 3 : %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9260,6 +11399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Asunto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objet"
           }
         },
         "pl" : {
@@ -9291,6 +11436,12 @@
             "value" : "Logo de Taler"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logo Taler"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9313,6 +11464,12 @@
             "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Geldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf den Computer."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur « Créer une sauvegarde » pour faire une copie de votre argent numérique. Connectez votre iPhone à un ordinateur, puis utilisez la boîte de dialogue Fichiers pour copier cette sauvegarde sur l'ordinateur."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9326,13 +11483,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tap %@ oder scannen Sie einen Abhebe-QR-Code Ihrer Bank um ein Bankkonto hinzuzufügen."
+            "value" : "Tap %@ oder scannen Sie einen Abhebe-QR Code Ihrer Bank um ein Bankkonto hinzuzufügen."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toca %@ o escanea un código QR de retiro desde tu banco para añadir una cuenta bancaria."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur %@ ou scannez un code QR de retrait de votre banque pour ajouter un compte bancaire."
           }
         },
         "pl" : {
@@ -9348,13 +11511,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tap %@ oder scannen Sie einen Abhebe-QR-Code Ihrer Bank um einen Zahlungsdienst hinzuzufügen."
+            "value" : "Tap %@ oder scannen Sie einen Abhebe-QR Code Ihrer Bank um einen Zahlungsdienst hinzuzufügen."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toca %@ o escanea un código QR de retiro desde tu banco para añadir un servicio de pagos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur %@ ou scannez un code QR de retrait de votre banque pour ajouter un service de paiement."
           }
         },
         "pl" : {
@@ -9379,6 +11548,12 @@
             "value" : "Toca el botón %@ para añadir un servicio."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur le bouton %@ pour ajouter un service."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9401,6 +11576,12 @@
             "value" : "Toca el botón %@ para añadir una cuenta."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuyez sur le bouton %@ pour ajouter un compte."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9415,6 +11596,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tippen Sie um auf die Legitimierungs-Webseite zu gehen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur le bouton pour accéder au site de légitimation."
           }
         },
         "pl" : {
@@ -9437,6 +11624,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Términos de servicio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conditions générales d'utilisation"
           }
         },
         "pl" : {
@@ -9467,6 +11660,12 @@
             "value" : "El monto será determinado por el Aceptante de Efectivo."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le montant sera déterminé par l'accepteur de fonds."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9487,6 +11686,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "El banco esta esperando tu autorización."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La banque attend votre autorisation."
           }
         },
         "pl" : {
@@ -9517,6 +11722,12 @@
             "value" : "El servicio de pagos está esperando tu transferencia bancaria."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service de paiement attend votre virement."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9539,6 +11750,12 @@
             "value" : "El servicio de pagos te regresará el dinero si no recibe tu pago a tiempo, o si decides cancelar la operación."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service de paiement vous renverra votre argent s'il n'est pas collecté à temps ou si vous abandonnez l'opération."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9554,6 +11771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Das System hat die Authentifizierung abgebrochen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le système a annulé l'authentification."
           }
         },
         "pl" : {
@@ -9578,6 +11801,12 @@
             "value" : "El retiro fue cancelado. Si ya enviaste dinero al servicio de pagos, regresará a tu cuenta bancaria en %@ días."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le retrait a été interrompu.\nSi vous avez déjà envoyé de l'argent au service de paiement, celui-ci vous le renverra dans %@ jours."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9598,6 +11827,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aún no hay cuentas bancarias."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il n'y a pas encore de comptes bancaires."
           }
         },
         "pl" : {
@@ -9622,6 +11857,12 @@
             "value" : "Aún no hay servicios de pago."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il n'y a pas encore de services de paiement."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9642,6 +11883,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No hay transacciones para %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il n'y a pas de transactions pour %@."
           }
         },
         "pl" : {
@@ -9670,6 +11917,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aún no hay dinero digital en tu billetera."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il n'y a pas encore d'argent numérique dans votre portefeuille."
           }
         },
         "pl" : {
@@ -9702,6 +11955,12 @@
             "value" : "%llu días"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu jours"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9716,6 +11975,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dies ist obligatorisch, da sonst die Verifizierung fehlschlägt."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci est obligatoire, sinon la vérification échouera."
           }
         },
         "pl" : {
@@ -9738,6 +12003,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esto es obligatorio, de lo contrario tu dinero no llegará a la billetera."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ceci est obligatoire, sinon votre argent n'arrivera pas dans ce portefeuille."
           }
         },
         "pl" : {
@@ -9768,6 +12039,12 @@
             "value" : "Esta operación no puede ser deshecha"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette opération ne peut pas être annulée"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9796,6 +12073,12 @@
             "value" : "La solicitud se cancelará si no se paga a tiempo, o cuando decidas cancelar la operación."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette demande sera annulée si elle n'est pas payée à temps ou si vous interrompez l'opération."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9816,6 +12099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta transacción no esta lista..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette transaction n'est pas encore prête..."
           }
         },
         "pl" : {
@@ -9844,6 +12133,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Plazo para pagar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délais de paiement :"
           }
         },
         "pl" : {
@@ -9875,6 +12170,12 @@
             "value" : "Acciones"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9896,6 +12197,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Backup / Restore"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauvegarder / Restaurer"
           }
         },
         "pl" : {
@@ -9924,6 +12231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saldos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soldes"
           }
         },
         "pl" : {
@@ -9961,6 +12274,12 @@
             "value" : "Cuentas bancarias"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comptes Bancaires"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9988,6 +12307,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Servicios de pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Services de paiement"
           }
         },
         "pl" : {
@@ -10026,6 +12351,12 @@
             "value" : "Pendiente\tentrante"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attenteg\tentrant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10060,6 +12391,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entrante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrant"
           }
         },
         "pl" : {
@@ -10098,6 +12435,12 @@
             "value" : "Pendiente\tsaliente"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente\tsortant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10132,6 +12475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saliente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sortant"
           }
         },
         "pl" : {
@@ -10169,6 +12518,12 @@
             "value" : "Configuración"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10197,6 +12552,12 @@
             "value" : "a %@"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vers %@"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10211,6 +12572,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Um Ihr digitales Geld wiederherzustellen, schließen Sie Ihr iPhone an Ihren Computer an, verwenden Sie dann den Dialog ‘Dateien’, und kopieren Sie eine zuvor gespeicherte Sicherungskopie von Ihrem Computer in die Taler Wallet."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour restaurer votre monnaie numérique, connectez votre iPhone à votre ordinateur, puis utilisez la boîte de dialogue Fichiers et copiez une sauvegarde précédemment enregistrée sur votre ordinateur dans le Portefeuille Taler."
           }
         },
         "pl" : {
@@ -10234,6 +12601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lista de transacciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste des opérations"
           }
         },
         "pl" : {
@@ -10264,6 +12637,12 @@
             "value" : "Transfer %1$@ from %2$@."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transférer %1$@ de %2$@."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10284,6 +12663,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Transfer %1$@ from account %2$@ to verify having control over it."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transférez %1$@ du compte %2$@ pour vérifier que vous en avez le contrôle."
           }
         },
         "pl" : {
@@ -10308,6 +12693,12 @@
             "value" : "Transferir %@ al servicio de pagos."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transférez %@ au service de paiement."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10328,6 +12719,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferir %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transférer %@."
           }
         },
         "pl" : {
@@ -10358,6 +12755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exécuter l'annulation"
           }
         },
         "pl" : {
@@ -10396,6 +12799,12 @@
             "value" : "Borrar del historial"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer de l'historique"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10430,6 +12839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abandonar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner"
           }
         },
         "pl" : {
@@ -10468,6 +12883,12 @@
             "value" : "Reintentar ahora"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer maintenant"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10502,6 +12923,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelación pendiente..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandon en attente..."
           }
         },
         "pl" : {
@@ -10540,6 +12967,12 @@
             "value" : "Borrado de la lista"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimé de la liste"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10574,6 +13007,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abandonando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandon en cours..."
           }
         },
         "pl" : {
@@ -10612,6 +13051,12 @@
             "value" : "Reintentando..."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle tentative..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10640,6 +13085,12 @@
             "value" : "desconocido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inconnu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10661,6 +13112,12 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "DESCONOCIDO"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "INCONNU"
           }
         },
         "pl" : {
@@ -10686,6 +13143,12 @@
             "value" : "Es ist ein unbekannter Authentifizierungsfehler aufgetreten."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur d'authentification inconnue s'est produite."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10708,6 +13171,12 @@
             "value" : "Comando desconocido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande inconnue"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10728,6 +13197,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Error desconocido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur inconnue"
           }
         },
         "pl" : {
@@ -10756,6 +13231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "método de pago desconocido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mode de paiement inconnu"
           }
         },
         "pl" : {
@@ -10787,6 +13268,12 @@
             "value" : "Servicio de pago desconocido"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prestataire de services de paiement inconnu"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10809,6 +13296,12 @@
             "value" : "sin restricción"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sans restriction"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10829,13 +13322,19 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verwenden Sie «%@ QR-Code scannen» im Aktionen-Menü um eine Abhebung zu starten wenn Ihre Bank schon Taler-Abhebungen unterstützt."
+            "value" : "Verwenden Sie «%@ QR code scannen» im Aktionen-Menü um eine Abhebung zu starten wenn Ihre Bank schon Taler-Abhebungen unterstützt."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Utiliza «%@ Escanear código QR» en el menú de acciones para comenzar un retiro si tu banco soporta pagos con Taler."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez « %@ Scanner le code QR  » dans le menu Actions pour lancer un retrait si votre banque prend déjà en charge les paiements Taler."
           }
         },
         "pl" : {
@@ -10854,6 +13353,12 @@
             "value" : "FaceID / TouchID verwenden"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser FaceID / TouchID"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10869,6 +13374,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Passcode verwenden"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le mot de passe"
           }
         },
         "pl" : {
@@ -10893,6 +13404,12 @@
             "value" : "Utilizando servicio de pagos:"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisation du service de paiement :"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10914,6 +13431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "utilizando:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "en utilisant :"
           }
         },
         "pl" : {
@@ -10945,6 +13468,12 @@
             "value" : "verificado"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vérifié"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10963,6 +13492,12 @@
           }
         },
         "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "via"
+          }
+        },
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "via"
@@ -10989,6 +13524,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "vía %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "via %@"
           }
         },
         "pl" : {
@@ -11019,6 +13560,12 @@
             "value" : "Vibración"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour de vibrations"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11045,6 +13592,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Visitar el sitio web taler.net"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visitez le site taler.net"
           }
         },
         "pl" : {
@@ -11075,6 +13628,12 @@
             "value" : "Versión de wallet-core"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version Wallet-Core"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11095,6 +13654,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cuando una transacción termina"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lorsqu'une transaction est terminée"
           }
         },
         "pl" : {
@@ -11126,6 +13691,12 @@
             "value" : "Irá al sitio web del banco para confirmar este retiro."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va se rendre sur le site web de la banque pour autoriser ce retrait."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11155,6 +13726,12 @@
             "value" : "Irá a ver el detalle."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va passer à l'affichage détaillé."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11178,6 +13755,12 @@
             "value" : "Geht zur Legitimierung-Webseite um diese Abhebung zu erlauben."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va se rendre sur le site de légitimation pour autoriser ce retrait."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11199,6 +13782,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá a la lista principal de transacciones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va aller à la liste principale des transactions."
           }
         },
         "pl" : {
@@ -11230,6 +13819,12 @@
             "value" : "Irá a transacciones pendientes."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va à la rubrique Transactions en attente."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11257,6 +13852,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irá al sitio web de la tienda demostrativa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va se rendre sur le site de la boutique de démonstration."
           }
         },
         "pl" : {
@@ -11288,6 +13889,12 @@
             "value" : "Irá al sitio web del comerciante."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va se rendre sur le site web du commerçant."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11315,6 +13922,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transferencia bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virement bancaire"
           }
         },
         "pl" : {
@@ -11345,6 +13958,12 @@
             "value" : "Transferencia bancaria"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virement Bancaire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11373,6 +13992,12 @@
             "value" : "Instrucciones para transferencia bancaria"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions pour le virement bancaire"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11399,6 +14024,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Códigos QR para transferencia bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codes QR pour le virement bancaire"
           }
         },
         "pl" : {
@@ -11436,6 +14067,12 @@
             "value" : "Confirmar retiro"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le retrait"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11463,6 +14100,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmar retiro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le retrait"
           }
         },
         "pl" : {
@@ -11494,6 +14137,12 @@
             "value" : "Confirmar retiro"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer le retrait"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11515,6 +14164,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retirar:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retraits :"
           }
         },
         "pl" : {
@@ -11544,6 +14199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retiro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retrait"
           }
         },
         "pl" : {
@@ -11582,6 +14243,12 @@
             "value" : "Retirar"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prélever"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11608,6 +14275,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ayer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier"
           }
         },
         "pl" : {
@@ -11638,6 +14311,12 @@
             "value" : "Ya pagaste por este artículo."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez déjà payé pour cet article."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11659,6 +14338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "También puedes añadir un servicio de pagos manualmente desde la pestaña de %@ Ajustes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez également ajouter un service de paiement manuellement dans l'onglet %@ Settings."
           }
         },
         "pl" : {
@@ -11683,6 +14368,12 @@
             "value" : "También puedes escanear un código QR desde tu banco en el menú Acciones para añadir una cuenta bancaria automáticamente."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez également scanner un code QR de retrait de votre banque dans le menu Action pour ajouter automatiquement un compte bancaire."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11703,6 +14394,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "También puedes escanear un código QR desde tu banco en el menú Acciones para añadir un servicio de pagos automáticamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez également scanner un code QR de retrait de votre banque dans le menu Action pour ajouter automatiquement un service de paiement."
           }
         },
         "pl" : {
@@ -11727,6 +14424,12 @@
             "value" : "Solo puedes depositar a una cuenta de banco que controles, de lo contrario no podrás cumplir con los requisitos regulatorios."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous ne pouvez effectuer des dépôts que sur un compte bancaire que vous contrôlez, sinon vous ne pourrez pas satisfaire les exigences réglementaires."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11749,6 +14452,12 @@
             "value" : "Puedes gastar tus %@ en la tienda demostrativa, o enviarlos a otra billetera."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez dépenser vos %@ dans la boutique de démonstration, ou les envoyer vers un autre portefeuille."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11766,6 +14475,12 @@
             "value" : "Sie haben die Authentifizierung abgebrochen."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez annulé l'authentification."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11781,6 +14496,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sie haben sich für die Ausweichoption entschieden."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez choisi d'utiliser l'option de secours."
           }
         },
         "pl" : {
@@ -11803,6 +14524,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No tienes suficiente %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous n'avez pas assez de %@."
           }
         },
         "pl" : {
@@ -11828,6 +14555,12 @@
             "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in ihrer Wallet empfangen können."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez d'abord accepter les conditions générales d'utilisation du prestataire de services de paiement avant de pouvoir recevoir de l'argent numérique dans votre portefeuille."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11842,6 +14575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in Ihr Wallet abheben können."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez d'abord accepter les conditions d'utilisation générales du prestataire de services de paiement avant de pouvoir retirer de l'argent électronique dans votre portefeuille."
           }
         },
         "pl" : {
@@ -11860,6 +14599,12 @@
             "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez d'abord accepter les conditions générales d'utilisation du prestataire de services de paiement."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11875,6 +14620,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sie müssen ein Legitimierungsverfahren durchlaufen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez passer une procédure de légitimation."
           }
         },
         "pl" : {
@@ -11899,6 +14650,12 @@
             "value" : "You need to transfer %1$@ from your regular bank account to the payment service to receive %2$@ as digital cash in this wallet."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez transférer %1$@ de votre compte bancaire habituel vers le prestataire de services de paiement pour recevoir %2$@ sous forme d'argent électronique dans ce portefeuille."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11921,6 +14678,12 @@
             "value" : "You need to transfer %1$@ to the payment service from your bank account %2$@ to verify having control over it. Don't use a different bank account, or the verification will fail."
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez transférer %1$@ vers le service de paiement à partir de votre compte bancaire %2$@ pour vérifier que vous en avez le contrôle. N'utilisez pas un autre compte bancaire, sinon la vérification échouera."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11935,6 +14698,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Für die Einzahlung müssen Sie verifizieren, dass Sie Kontrolle über das Bankkonto haben."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez prouver que vous avez le contrôle sur le compte bancaire pour le dépôt."
           }
         },
         "pl" : {
@@ -11959,6 +14728,12 @@
             "value" : "Tus cuentas de depósito"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos comptes pour faire un dépôt..."
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11976,6 +14751,12 @@
             "value" : "Postleitzahl"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code postal"
+          }
+        },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11990,6 +14771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Postleitzahl:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code postal:"
           }
         },
         "pl" : {
