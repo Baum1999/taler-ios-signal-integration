@@ -4,6 +4,16 @@
       "filename" : "taler-logo-2023-blue.svg",
       "idiom" : "universal"
     },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "taler-logo-2023-light-blue.svg",
+      "idiom" : "universal"
+    }
   ],
   "info" : {
     "author" : "xcode",
