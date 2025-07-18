@@ -3262,40 +3262,6 @@
         }
       }
     },
-    "Checking Link" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Link wird überprüft"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verificando enlace"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lien de vérification"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprawdzanie linku"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Перевірка посилання"
-          }
-        }
-      }
-    },
     "Choose the expiration duration" : {
       "comment" : "a11y",
       "localizations" : {
@@ -7876,35 +7842,6 @@
         }
       }
     },
-    "Observe walletCore" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WalletCore observieren"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Observar wallet-core"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Obserwuj walletCore"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Спостерігати за walletCore"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "Obtain:" : {
       "comment" : "Amount to obtain:",
       "localizations" : {
@@ -8076,35 +8013,6 @@
           }
         }
       }
-    },
-    "on LocalConsole" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "on LocalConsole"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "en LocalConsole"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "w LocalConsole"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "на LocalConsole"
-          }
-        }
-      },
-      "shouldTranslate" : false
     },
     "Onboarding" : {
       "localizations" : {
@@ -11074,35 +10982,6 @@
           }
         }
       }
-    },
-    "Show logs" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Logs anzeigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar logs"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pokaż logi"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показати журнали"
-          }
-        }
-      },
-      "shouldTranslate" : false
     },
     "Show QR codes" : {
       "localizations" : {
