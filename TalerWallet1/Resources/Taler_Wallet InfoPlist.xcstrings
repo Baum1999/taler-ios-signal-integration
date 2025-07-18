@@ -45,7 +45,8 @@
             "value" : "Taler_Wallet"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "NSCameraUsageDescription" : {
       "comment" : "Privacy - Camera Usage Description",
@@ -115,7 +116,8 @@
             "value" : "© Taler-Systems.com"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     }
   },
   "version" : "1.0"
