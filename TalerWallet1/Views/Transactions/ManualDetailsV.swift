@@ -198,7 +198,6 @@ struct ManualDetailsV: View {
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
                                                         reservePub: details.reservePub,
                                                        receiverStr: receiverStr,
-//                                                     receiverAux: payto.receiverAux,
                                                        receiverZip: payto.postalCode,
                                                       receiverTown: payto.town,
                                                               iban: payto.iban,

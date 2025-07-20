@@ -79,7 +79,6 @@ struct ManualDetailsWireV: View {
     let stack: CallStack
     let reservePub: String
     let receiverStr: String
-//    let receiverAux: String?
     let receiverZip: String?
     let receiverTown: String?
     let iban: String?
@@ -103,13 +102,6 @@ struct ManualDetailsWireV: View {
         return minimalistic ? String(localized: "Transfer \(amountNBS).")
                             : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
     }
-
-//    func buildReceiver() -> String {
-//        if let receiverAux {
-//            return receiverStr + ", " + receiverAux
-//        }
-//        return receiverStr
-//    }
 
     @ViewBuilder func payeeZip() -> some View {
         HStack {
@@ -163,11 +155,6 @@ struct ManualDetailsWireV: View {
                     Text(receiverStr)
                         .monospacedDigit()
                         .padding(.leading)
-//                    if let receiverAux {
-//                        Text(receiverAux)
-//                            .monospacedDigit()
-//                            .padding(.leading)
-//                    }
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(Text("Recipient", comment: "a11y"))

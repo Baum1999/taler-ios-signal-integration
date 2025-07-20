@@ -33,7 +33,7 @@ struct QRcodesForPayto: View {
                     Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
                         .accessibilityHidden(true)
                         .foregroundColor(Color.clear)
-                    //                              Spacer()
+//                  Spacer()
                     CopyShare(textToCopy: spec.qrContent)
                         .disabled(false)
                 }.listRowSeparator(.automatic)

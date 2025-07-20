@@ -375,7 +375,6 @@ struct TransactionSummaryV: View {
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
                                                         reservePub: info.accountPub,
                                                        receiverStr: receiverStr,
-//                                                     receiverAux: payto.receiverAux,
                                                        receiverZip: payto.postalCode,
                                                       receiverTown: payto.town,
                                                               iban: payto.iban,
