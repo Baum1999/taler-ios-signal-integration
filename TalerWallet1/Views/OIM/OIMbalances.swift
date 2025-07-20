@@ -8,101 +8,7 @@
 import SwiftUI
 import taler_swift
 
-let OIMbuttonSize = 80.0
-let OIMactionSize = 120.0
 
-let OIMACTION = "OIMaction"
-let OIMACTION2 = "OIMaction2"
-let OIMNUMBER = "OIMnumber"
-let OIMCHEST = "OIMchest"
-let OIMBACK = "OIMback"
-let OIMSIDE = "OIMside"
-
-// MARK: -
-struct OIMnavBack<Content: View>: View {
-    let stack: CallStack
-    let currencyName: String
-    let chest: String
-    let isFinal: Bool                   // bordered action button
-    let isSending: Bool                 // move action button
-    let amount: Amount?
-    let action: (() -> Void)?
-    var content: () -> Content
-
-    @Environment(\.dismiss) var dismiss     // pop back once
-    @EnvironmentObject private var wrapper: NamespaceWrapper
-
-    var body: some View {
-        OIMbackground() {
-            ZStack(alignment: .top) {
-                content()
-                VStack {
-                    HStack {
-                        OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {
-                            var transaction = Transaction()
-                            transaction.disablesAnimations = true
-                            withTransaction(transaction) {
-                                dismiss()
-                            }
-                        }
-                            .frame(width: OIMbuttonSize, height: OIMbuttonSize)
-                        Spacer()
-                        let amountIsZero = amount?.isZero ?? true
-                        OIMactionButton(type: .sendP2P,
-                                     isFinal: isFinal,
-                                      action: amountIsZero ? nil : action)
-                            .frame(width: OIMactionSize, height: OIMbuttonSize)
-                            .matchedGeometryEffect(id: isSending ? OIMACTION : OIMACTION2,
-                                                   in: wrapper.namespace, isSource: false)
-                    }
-                }
-//                .border(.blue)
-            }
-        }
-    }
-}
-// MARK: -
-struct OIMtitleView: View {
-    let cash: OIMcash
-    let amount: Amount?
-    let isSending: Bool
-    let history: Bool
-    let secondAmount: Amount?
-
-    @EnvironmentObject private var wrapper: NamespaceWrapper
-
-    var body: some View {
-        let chest = cash.currency.chest
-        HStack(alignment: .top) {
-            // invisible - only serves as point where the selected balance chest moves to
-            OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {}
-                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
-                .disabled(true)
-                .opacity(0.01)
-                .matchedGeometryEffect(id: OIMNUMBER, in: wrapper.namespace, isSource: true)
-                .accessibilityHidden(true)
-
-            if history {
-                Spacer()
-            }
-            OIMamountV(amount: amount, currencyName: cash.currency.currency)
-            if !history {
-                if isSending {
-                    Spacer()
-                    OIMamountV(amount: secondAmount, currencyName: cash.currency.currency)
-                }
-
-                OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
-                    .frame(width: OIMactionSize, height: OIMbuttonSize)
-                    .disabled(true)
-                    .opacity(0.01)
-                    .matchedGeometryEffect(id: OIMACTION, in: wrapper.namespace, isSource: true)
-                    .accessibilityHidden(true)
-            }
-        }
-    }
-}
-// MARK: -
 enum OIMViewState {
     case chestsClosed
     case chestClosing
@@ -119,9 +25,9 @@ enum OIMViewState {
     case historyShown
     case historyTapped
 }
-
+// MARK: -
 @available(iOS 16.4, *)
-struct OIMView: View {
+struct OIMbalances: View {
     let stack: CallStack
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var selectedBalance: Balance?      // return user's choice

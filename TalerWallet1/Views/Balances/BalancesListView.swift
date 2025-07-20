@@ -73,11 +73,11 @@ struct BalancesListView: View {
 #if OIM
                 .overlay { if #available(iOS 16.4, *) {
                     if controller.oimModeActive {
-                        OIMView(stack: stack.push(),
-                      selectedBalance: $selectedBalance,                    // set to user choice
-                        selectedIndex: $selectedIndex,
-                       qrButtonTapped: $qrButtonTapped)
-                        .environmentObject(NamespaceWrapper(namespace))     // keep OIMviews apart
+                        OIMbalances(stack: stack.push(),
+                          selectedBalance: $selectedBalance,                    // set to user choice
+                            selectedIndex: $selectedIndex,
+                           qrButtonTapped: $qrButtonTapped)
+                        .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
                 } }
 #endif
