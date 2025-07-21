@@ -2565,7 +2565,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir abandonner cette transaction ?"
+            "value" : "Êtes-vous sûr de vouloir effectuer l'annulation cette transaction ?"
           }
         },
         "pl" : {
@@ -4629,7 +4629,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "activé lorsque le sujet et l'expiration sont remplis"
+            "value" : "activé lorsque la référence et la date d'expiration sont remplis"
           }
         },
         "pl" : {
@@ -8717,7 +8717,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le prestataire ne dispose pas de la configuration globale des frais, ce qui signifie probablement qu'elle est mal configurée"
+            "value" : "Le prestataire de services de paiement ne dispose pas de la configuration globale des frais, ce qui signifie probablement qu'elle est mal configurée"
           }
         },
         "pl" : {
@@ -11283,7 +11283,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Objet"
+            "value" : "Référence"
           }
         },
         "pl" : {
@@ -11859,7 +11859,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ceci est obligatoire, sinon la vérification échouera."
+            "value" : "Ceci est impératif, sinon la vérification échouera."
           }
         },
         "pl" : {
@@ -11887,7 +11887,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ceci est obligatoire, sinon votre argent n'arrivera pas dans ce portefeuille."
+            "value" : "Ceci est impératif, sinon votre argent n'arrivera pas dans ce portefeuille."
           }
         },
         "pl" : {
@@ -14459,7 +14459,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous devez d'abord accepter les conditions d'utilisation générales du prestataire de services de paiement avant de pouvoir retirer de l'argent électronique dans votre portefeuille."
+            "value" : "Vous devez d'abord accepter les conditions générales d'utilisation du prestataire de services de paiement avant de pouvoir retirer de l'argent électronique dans votre portefeuille."
           }
         },
         "pl" : {
@@ -14560,7 +14560,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous devez transférer %1$@ vers le service de paiement à partir de votre compte bancaire %2$@ pour vérifier que vous en avez le contrôle. N'utilisez pas un autre compte bancaire, sinon la vérification échouera."
+            "value" : "Vous devez transférer %1$@ vers le prestataire de services de paiement à partir de votre compte bancaire %2$@ pour vérifier que vous en avez le contrôle. N'utilisez pas un autre compte bancaire, sinon la vérification échouera."
           }
         },
         "pl" : {
