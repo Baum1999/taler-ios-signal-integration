@@ -32,7 +32,7 @@ struct SendAmountV: View {
 
     init(stack: CallStack,
          selectedBalance: Balance?,
-         selectedIndex: Int?,
+         selectedChestIndex: Int?,                       // OIM TODO: use balance
          amountLastUsed: Binding<Amount>,
          summary: Binding<String>,
          iconID: Binding<String?>
@@ -45,10 +45,8 @@ struct SendAmountV: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-//#if OIM
-        let oimCash = OIMcash(selectedIndex)
+        let oimCash = OIMcash(selectedChestIndex)
         self._cash = StateObject(wrappedValue: { oimCash }())
-//#endif
     }
 
     @MainActor
@@ -115,7 +113,7 @@ struct SendAmountV: View {
                 SendAmountView(stack: stack.push(),
                                 cash: cash,
                              balance: balance,
-                      buttonSelected: $buttonSelected,
+                      buttonSelected: $buttonSelected,                          // call P2PSubjectV
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,
                      amountAvailable: $amountAvailable,
@@ -147,7 +145,7 @@ struct SendAmountV: View {
                      amountToTransfer: $amountToTransfer,
                             available: available,
                          useAvailable: true,                                    // cannot send more than we have
-                      fwdButtonTapped: $buttonSelected)
+                      fwdButtonTapped: $buttonSelected)                         // call P2PSubjectV
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
                 }
             } }
@@ -188,7 +186,7 @@ fileprivate struct Preview_Content: View {
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
           selectedBalance: noBalance,
-            selectedIndex: nil,
+       selectedChestIndex: nil,                 // preview
            amountLastUsed: $amountToPreview,
                   summary: $summary,
                    iconID: $iconID)

@@ -14,6 +14,7 @@ struct BalancesPendingRowV: View {
     let stack: CallStack
     let balance: Balance
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
+    let selectedChestIndex: Int?
     @Binding var pendingTransactions: [TalerTransaction]
     let reloadPending: (_ stack: CallStack) async -> ()
 
@@ -93,6 +94,7 @@ fileprivate struct BalancesPendingRowV_Previews: PreviewProvider {
                                  stack: CallStack("Preview"),
                                balance: balance,
                        selectedBalance: $selectedPreviewBalance,
+                    selectedChestIndex: nil,            // preview
                    pendingTransactions: $previewTransactions,
                          reloadPending: {stack in })
         }

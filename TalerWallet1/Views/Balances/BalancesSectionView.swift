@@ -20,6 +20,7 @@ struct BalancesSectionView {
     let stack: CallStack
     let balance: Balance                            // this is the currency to be used
     @Binding var selectedBalance: Balance?          // <- return here the balance when we go to Transactions
+    let selectedChestIndex: Int?
     let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
@@ -118,6 +119,7 @@ extension BalancesSectionView: View {
                                      stack: stack.push(),
                                    balance: balance,
                            selectedBalance: $selectedBalance,
+                        selectedChestIndex: selectedChestIndex,
                        pendingTransactions: $pendingTransactions,
                              reloadPending: loadPending)
                     .padding(.leading, ICONLEADING)

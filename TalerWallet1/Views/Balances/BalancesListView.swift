@@ -15,7 +15,7 @@ struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var selectedBalance: Balance?                      // pass down to TransactionsListView
-    @Binding var selectedIndex: Int?
+    @Binding var selectedChestIndex: Int?                       // OIM TODO: use balance
     @Binding var reloadTransactions: Int
     @Binding var qrButtonTapped: Bool
 
@@ -56,6 +56,7 @@ struct BalancesListView: View {
                         BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                           balance: balance,                     // this is the currency to be used
                                   selectedBalance: $selectedBalance,            // set in TransactionsListView
+                               selectedChestIndex: selectedChestIndex,
                                      sectionCount: count,
                                  amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                           summary: $summary,
@@ -75,7 +76,7 @@ struct BalancesListView: View {
                     if controller.oimModeActive {
                         OIMbalances(stack: stack.push(),
                           selectedBalance: $selectedBalance,                    // set to user choice
-                            selectedIndex: $selectedIndex,
+                       selectedChestIndex: $selectedChestIndex,                 // OIM TODO: use balance
                            qrButtonTapped: $qrButtonTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }

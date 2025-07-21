@@ -8,8 +8,7 @@
 import SwiftUI
 import taler_swift
 
-
-enum OIMViewState {
+enum OIMbalancesState {
     case chestsClosed
     case chestClosing
     case chestOpenTapped
@@ -30,8 +29,8 @@ enum OIMViewState {
 struct OIMbalances: View {
     let stack: CallStack
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
-    @Binding var selectedBalance: Balance?      // return user's choice
-    @Binding var selectedIndex: Int?
+    @Binding var selectedBalance: Balance?              // return user's choice
+    @Binding var selectedChestIndex: Int?               // OIM TODO: use balance
     @Binding var qrButtonTapped: Bool
 
     @EnvironmentObject private var controller: Controller
@@ -42,7 +41,7 @@ struct OIMbalances: View {
     @State private var tappedVal: UInt64 = 0
     @State private var available: Amount? = nil
     @State private var chestOpen: Int? = nil
-    @State private var viewState: OIMViewState = .chestsClosed
+    @State private var viewState: OIMbalancesState = .chestsClosed
 //    @State private var showingActions = false               // set true after user opened a chest, set false when choosing an action
 //    @State private var sending = false                      // after user tapped on Send or on the money
     @State private var closing = false                      // after user tapped on the open chest
@@ -86,7 +85,7 @@ struct OIMbalances: View {
                 withAnimation(.basic1) {
                     chestOpen = nil
                     selectedBalance = nil
-                    selectedIndex = nil
+                    selectedChestIndex = nil
                     available = nil
 //                    showingActions = false
                     viewState = .chestsClosed
@@ -112,10 +111,10 @@ struct OIMbalances: View {
         viewState = .chestOpenTapped
         withAnimation(.basic1) {
             chestOpen = index
-            viewState = .chestIsOpen
-            selectedIndex = index
-            cash.setIndex(index)
             selectedBalance = balance
+            selectedChestIndex = index
+            viewState = .chestIsOpen
+            cash.setIndex(index)
             available = balance.available
             availableVal = balance.available.centValue
             cash.update2(availableVal, state: .chestOpening, duration, initial)  // set cash to available
@@ -156,7 +155,7 @@ struct OIMbalances: View {
             !available.isZero
         } else { false }
         let topButtons = HStack(alignment: .top) {
-            if chestOpen == nil {
+            if selectedChestIndex == nil {
                 let showQR = viewState == .chestsClosed
                 QRButton(hideTitle: true) {
                     qrButtonTapped = true
@@ -197,7 +196,7 @@ struct OIMbalances: View {
                               history: viewState == .historyShown,
                          secondAmount: nil)
                     Spacer()
-                    let isOpen = chestOpen != nil
+                    let isOpen = selectedChestIndex != nil
                     ZStack {
                         sidePosition
 //                        let scaleMoney = viewState == .chestIsOpen
@@ -225,17 +224,17 @@ struct OIMbalances: View {
                     // two savings chests (Euro and Sierra Leone)
                     Spacer()
                     HStack(spacing: 30) {
+                        let balance = controller.balances[0]
 //                        ForEach(controller.balances, id: \.self) { balance in
 //                            OIMbalanceButton(isOpen: selectedBalance == balance) {
 
-                        let chests = ["EUR", "SLE", "CdI"]
-                        let balance = controller.balances[0]
-                        ForEach(0...2, id: \.self) { index in
-                            let itsMe = chestOpen == index
-                            let isClosed = chestOpen == nil
+                        ForEach(0..<OIMcurrencies.count, id: \.self) { index in
+                            let oimCurrency = OIMcurrencies[index]
+                            let itsMe = selectedChestIndex == index
+                            let isClosed = selectedChestIndex == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize
                             ZStack {
-                                OIMbalanceButton(isOpen: itsMe, chest: chests[index], isFinal: false) {
+                                OIMbalanceButton(isOpen: itsMe, chest: oimCurrency.chest, isFinal: false) {
                                     if itsMe {
                                         closeChest()
                                     } else {
@@ -276,7 +275,7 @@ struct OIMbalances: View {
         }
         .onAppear {
 //            showingActions = false
-            if (chestOpen != nil) {
+            if (selectedChestIndex != nil) {
                 let balance = controller.balances[0]
                 available = balance.available
                 availableVal = available?.centValue ?? 0
@@ -291,7 +290,7 @@ struct OIMbalances: View {
         .onDisappear {
             cash.moveBack()
 //            sending = false
-            viewState = (chestOpen != nil) ? .chestIsOpen : .chestsClosed
+            viewState = (selectedChestIndex != nil) ? .chestIsOpen : .chestsClosed
         }
     }
 }
