@@ -62,8 +62,8 @@ struct OIMp2pReceiveView: View {
                                   canEdit: false)
                         Spacer()
                     }
-                    .opacity(appeared ? 1.0 : 0.01)
-                    .scaleEffect(appeared ? 1.0 : 0.3)
+                    .opacity(appeared ? 1 : INVISIBLE)
+                    .scaleEffect(appeared ? 1 : 0.3)
                     .task {
                         amount = effective
                         amountVal = effective.centValue

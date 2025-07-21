@@ -100,18 +100,18 @@ struct OIMSubjectView: View {
                      secondAmount: amountToTransfer)
                 Spacer()
                 GoalsHStack(goals: goals1, selectedGoal: $selectedGoal)
-                    .opacity(appeared ? 1.0 : 0.01)
-                    .scaleEffect(appeared ? 1.0 : 0.3)
+                    .opacity(appeared ? 1 : INVISIBLE)
+                    .scaleEffect(appeared ? 1 : 0.3)
                 GoalsHStack(goals: goals2, selectedGoal: $selectedGoal)
-                    .opacity(appeared ? 1.0 : 0.01)
-                    .scaleEffect(appeared ? 1.0 : 0.3)
+                    .opacity(appeared ? 1 : INVISIBLE)
+                    .scaleEffect(appeared ? 1 : 0.3)
                 Spacer()
                 OIMlineView(stack: stack.push(),
                              cash: cash,
                         amountVal: $amountVal,
                         tappedVal: $ignoreTapped,
                           canEdit: false)
-                    .scaleEffect(selectedGoal == nil ? 0.6 : 1.0)
+                    .scaleEffect(selectedGoal == nil ? 0.6 : 1)
                     .onTapGesture {
                         var transaction = Transaction()
                         transaction.disablesAnimations = true

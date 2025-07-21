@@ -90,7 +90,7 @@ struct BarGraph: View {
                         let botHeight = incoming ? barHeight : valueTransparent
                         if topHeight > 0 {
                             Rectangle()
-                                .opacity(0.001)
+                                .opacity(INVISIBLE)
                                 .frame(width: width, height: topHeight)
                         }
                         Rectangle()
@@ -98,7 +98,7 @@ struct BarGraph: View {
                             .frame(width: width, height: valueColored)
                         if botHeight > 0 {
                             Rectangle()
-                                .opacity(0.001)
+                                .opacity(INVISIBLE)
                                 .frame(width: width, height: botHeight)
                         }
                     }

@@ -127,10 +127,10 @@ struct GradientBorder<Content: View>: View {
                     .frame(width: size, height: size).foregroundStyle(background)
                     .shadow(color: background.opacity(0.5), radius: 10, x: 0, y: 10)
                 let gradient = Gradient(colors: [
-                    color.opacity(0.01),
+                    color.opacity(INVISIBLE),
                     color,
                     color,
-                    color.opacity(0.01)]
+                    color.opacity(INVISIBLE)]
                 )
                 let linearGradient = LinearGradient(gradient: gradient, startPoint: .top, endPoint: .bottom)
                 let rotatingRect = Rectangle()

@@ -74,11 +74,11 @@ struct OIMtitleView: View {
     var body: some View {
         let chest = cash.currency.chest
         HStack(alignment: .top) {
-            // invisible - only serves as point where the selected balance chest moves to
+            // invisible - source where the selected balance chest (target) moves to
             OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {}
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .disabled(true)
-                .opacity(0.01)
+                .opacity(INVISIBLE)
                 .matchedGeometryEffect(id: OIMNUMBER, in: wrapper.namespace, isSource: true)
                 .accessibilityHidden(true)
 
@@ -92,10 +92,11 @@ struct OIMtitleView: View {
                     OIMamountV(amount: secondAmount, currencyName: cash.currency.currency)
                 }
 
+                // invisible - source for money (target) flying out of and back in the open chest
                 OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
                     .frame(width: OIMactionSize, height: OIMbuttonSize)
                     .disabled(true)
-                    .opacity(0.01)
+                    .opacity(INVISIBLE)
                     .matchedGeometryEffect(id: OIMACTION, in: wrapper.namespace, isSource: true)
                     .accessibilityHidden(true)
             }

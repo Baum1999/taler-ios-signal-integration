@@ -39,7 +39,7 @@ struct OIMactionButton: View {
                 .foregroundStyle(WalletColors().talerColor)
         }
             .tagStyle(isFinal ? .bordered : .borderless)
-            .opacity(disabled ? 0.01 : 1.0)
+            .opacity(disabled ? INVISIBLE : 1)
             .disabled(disabled)
     }
 }
@@ -58,7 +58,7 @@ struct OIMrequestButton: View {
                 .foregroundStyle(WalletColors().talerColor)
         }
         .tagStyle(.bordered)
-        .opacity(enabled ? 1.0 : 0.01)
+        .opacity(enabled ? 1 : INVISIBLE)
         .disabled(!enabled)
     }
 }

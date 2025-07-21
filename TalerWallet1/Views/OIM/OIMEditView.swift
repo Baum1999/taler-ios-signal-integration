@@ -132,7 +132,7 @@ struct OIMEditView: View {
                         .clipped(antialiased: true)
                         .padding(.horizontal, 5)
                         .ignoresSafeArea(edges: .horizontal)
-                        .opacity(sending ? 0.01 : 1.0)
+                        .opacity(sending ? INVISIBLE : 1)
                 }
 //              .border(.red)
             } // ZStack

@@ -45,7 +45,7 @@ struct ExchangeRowView: View {
                 .talerFont(.table)
                 .foregroundColor(.secondary)
         }.background {           // only needed for .onTapGesture
-            Color.gray.opacity(0.001)
+            Color.gray.opacity(INVISIBLE)
         }
         let showToS = WithdrawTOSView(stack: stack.push(),
                             exchangeBaseUrl: baseURL,

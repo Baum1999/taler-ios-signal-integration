@@ -15,6 +15,7 @@ let TALER_LOGO = "taler-logo-2023-black"
 let TALER_LOGO = "taler-logo-2023-red"
 #endif
 
+public let INVISIBLE = 0.001
 public let MAXEXCHANGES = 1000          // per currency
 public let CHF_4217 = "CHF"             // ISO-4217 Swiss Francs
 public let EUR_4217 = "EUR"             // ISO-4217 Euro

@@ -98,9 +98,9 @@ struct OIMmod: AnimatableModifier {
 
         let shadow = (3 - 8) * pct + 8
         return Button(action: action) {
-                    animatedImage.opacity(invisible ? 0.001
+                    animatedImage.opacity(invisible ? INVISIBLE
                                       : unavailable ? 0.5
-                                                    : 1.0)
+                                                    : 1)
                 }
                 .buttonStyle(OIMbuttonStyle())
                 .disabled(disabled)

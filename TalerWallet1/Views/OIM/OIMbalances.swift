@@ -161,20 +161,20 @@ struct OIMbalances: View {
                 QRButton(hideTitle: true) {
                     qrButtonTapped = true
                 }
-                .opacity(showQR ? 1.0 : 0.01)
+                .opacity(showQR ? 1 : INVISIBLE)
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .matchedGeometryEffect(id: OIMBACK, in: wrapper.namespace, isSource: true)
             } else {
                 let showRequest = viewState == .chestIsOpen
                 OIMactionButton(type: .requestP2P, isFinal: false, action: requestTapped)
                     .frame(width: OIMbuttonSize, height: OIMbuttonSize)
-                    .opacity(showRequest ? 1.0 : 0.01)
+                    .opacity(showRequest ? 1 : INVISIBLE)
             }
             Spacer()
             let showSend = viewState == .chestIsOpen
             OIMactionButton(type: .sendP2P, isFinal: false, action: sendTapped)
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
-                .opacity(showSend ? 1.0 : 0.01)
+                .opacity(showSend ? 1 : INVISIBLE)
         }
 
         let maxAvailable = cash.max(available: available?.centValue ?? 0)
@@ -206,8 +206,8 @@ struct OIMbalances: View {
                                 amountVal: $availableVal,
                                 tappedVal: $tappedVal,
                                   canEdit: false)
-                            .opacity(isOpen ? 1.0 : 0.01)
-//                            .scaleEffect(scaleMoney ? 0.6 : 1.0)
+                            .opacity(isOpen ? 1 : INVISIBLE)
+//                            .scaleEffect(scaleMoney ? 0.6 : 1)
                             .onTapGesture {
                                 if viewState == .historyShown {
                                     closeHistory()
@@ -244,11 +244,10 @@ struct OIMbalances: View {
                                 }
                                 .frame(width: size, height: size)
                                 .zIndex(itsMe ? 3 : 0)
-                                .opacity((isClosed || itsMe) ? 1.0 : 0.01)
+                                .opacity((isClosed || itsMe) ? 1 : INVISIBLE)
                                 .matchedGeometryEffect(id: itsMe ? OIMNUMBER
                                                                  : String(index),
                                                        in: wrapper.namespace, isSource: false)
-                                .frame(width: size, height: size)
                                 Color.clear
                                     .frame(width: 40, height: 40)
                                     .matchedGeometryEffect(id: OIMCHEST + String(index), in: wrapper.namespace, isSource: true)
@@ -271,8 +270,8 @@ struct OIMbalances: View {
                     .padding(.horizontal, 5)
                     .ignoresSafeArea(edges: .horizontal)
                     .scrollDisabled(true)
-                    .opacity(showDrawer ? 1.0 : 0.01)
-                } // for matching positions of money in the drawer
+                    .opacity(showDrawer ? 1 : INVISIBLE)
+                } // source for matching positions of money in the drawer
             }
         }
         .onAppear {
