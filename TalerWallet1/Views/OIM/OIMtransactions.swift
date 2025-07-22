@@ -70,7 +70,6 @@ struct OIMtransactions: View {
                 VStack {
                     OIMtitleView(cash: cash,
                                amount: available,
-                            isSending: false,
                               history: true, //viewState == .historyShown,
                          secondAmount: nil)
                     Spacer()

@@ -65,7 +65,6 @@ struct OIMnavBack<Content: View>: View {
 struct OIMtitleView: View {
     let cash: OIMcash
     let amount: Amount?
-    let isSending: Bool
     let history: Bool
     let secondAmount: Amount?
 
@@ -85,13 +84,14 @@ struct OIMtitleView: View {
             if history {
                 Spacer()
             }
+            // balance
             OIMamountV(amount: amount, currencyName: cash.currency.currency)
             if !history {
-                if isSending {
+                if let secondAmount {
                     Spacer()
+                    // amountToSend
                     OIMamountV(amount: secondAmount, currencyName: cash.currency.currency)
                 }
-
                 // invisible - source for money (target) flying out of and back in the open chest
                 OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
                     .frame(width: OIMactionSize, height: OIMbuttonSize)

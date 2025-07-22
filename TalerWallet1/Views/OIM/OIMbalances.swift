@@ -189,12 +189,11 @@ struct OIMbalances: View {
             ZStack(alignment: .top) {
                 topButtons
                 VStack {
-                    let isSending = viewState == .sending
+                    // balance, amountToSend
                     OIMtitleView(cash: cash,
                                amount: available,
-                            isSending: isSending,
                               history: viewState == .historyShown,
-                         secondAmount: nil)
+                         secondAmount: nil)             // appears in OIMEditView
                     Spacer()
                     let isOpen = selectedChestIndex != nil
                     ZStack {

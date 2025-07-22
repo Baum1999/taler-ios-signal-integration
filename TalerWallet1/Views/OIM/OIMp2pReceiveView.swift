@@ -42,7 +42,6 @@ struct OIMp2pReceiveView: View {
                     VStack {
                         OIMtitleView(cash: cash,
                                    amount: effective,
-                                isSending: false,
                                   history: false,
                              secondAmount: nil)
                         Spacer()

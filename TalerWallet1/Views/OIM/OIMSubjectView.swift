@@ -94,7 +94,6 @@ struct OIMSubjectView: View {
             VStack {
                 OIMtitleView(cash: cash,
                            amount: available,
-                        isSending: true,
                           history: false,
                      secondAmount: amountToTransfer)
                 Spacer()
