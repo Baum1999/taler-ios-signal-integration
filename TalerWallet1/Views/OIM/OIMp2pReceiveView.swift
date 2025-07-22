@@ -22,7 +22,6 @@ struct OIMp2pReceiveView: View {
     @State private var amount: Amount?
     @State private var amountVal: UInt64 = 0
     @State private var appeared = false
-    @State private var ignoreTapped: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -58,7 +57,6 @@ struct OIMp2pReceiveView: View {
                         OIMlineView(stack: stack.push(),
                                      cash: cash,
                                 amountVal: $amountVal,
-                                tappedVal: $ignoreTapped,
                                   canEdit: false)
                         Spacer()
                     }

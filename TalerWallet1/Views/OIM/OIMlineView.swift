@@ -18,7 +18,7 @@ struct OIMlineView: View {
     let stack: CallStack
     let cash: OIMcash
     @Binding var amountVal: UInt64
-    @Binding var tappedVal: UInt64
+//    @Binding var tappedVal: UInt64
     let canEdit: Bool
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -55,20 +55,20 @@ struct OIMlineView: View {
             .padding(1)
             .border(orange)
 #endif
-        .onChange(of: tappedVal) { newVal in
-            if newVal > 0 {
-                symLog.log(">>tapped \(newVal)")
-                tappedVal = 0
-
-                DispatchQueue.main.async {                      // next layout cycle
-                    withAnimation(.move1) {
-                        symLog.log(">>addCash \(newVal)")
-                        cash.addCash(value: newVal)
-                        amountVal += newVal                     // update directly
-                    }
-                }
-            }
-        }
+//        .onChange(of: tappedVal) { newVal in
+//            if newVal > 0 {
+//                symLog.log(">>tapped \(newVal)")
+//                tappedVal = 0
+//
+//                DispatchQueue.main.async {                      // next layout cycle
+//                    withAnimation(.move1) {
+//                        symLog.log(">>addCash \(newVal)")
+//                        cash.addCash(value: newVal)
+//                        amountVal += newVal                     // update directly
+//                    }
+//                }
+//            }
+//        }
     }
 }
 

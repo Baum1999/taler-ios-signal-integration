@@ -19,7 +19,6 @@ struct OIMpayView: View {
 
     @StateObject private var cash = OIMcash()
     @State private var amountVal: UInt64 = 0
-    @State private var tappedVal: UInt64 = 0
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -31,7 +30,6 @@ struct OIMpayView: View {
                 OIMlineView(stack: stack.push(),
                              cash: cash,
                         amountVal: $amountVal,
-                        tappedVal: $tappedVal,
                           canEdit: true)
                 .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
                 Spacer()

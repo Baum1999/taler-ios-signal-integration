@@ -64,7 +64,6 @@ struct OIMSubjectView: View {
     @State private var amountVal: UInt64 = 0
     @State private var sending = false              // user tapped on Send
     @State private var appeared = false
-    @State private var ignoreTapped: UInt64 = 0
 
     func sendAction() {
         withAnimation(.basic1) {
@@ -109,7 +108,6 @@ struct OIMSubjectView: View {
                 OIMlineView(stack: stack.push(),
                              cash: cash,
                         amountVal: $amountVal,
-                        tappedVal: $ignoreTapped,
                           canEdit: false)
                     .scaleEffect(selectedGoal == nil ? 0.6 : 1)
                     .onTapGesture {

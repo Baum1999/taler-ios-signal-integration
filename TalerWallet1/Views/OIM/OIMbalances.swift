@@ -203,7 +203,6 @@ struct OIMbalances: View {
                         OIMlineView(stack: stack.push(),
                                      cash: cash,
                                 amountVal: $availableVal,
-                                tappedVal: $tappedVal,
                                   canEdit: false)
                             .opacity(isOpen ? 1 : INVISIBLE)
 //                            .scaleEffect(scaleMoney ? 0.6 : 1)

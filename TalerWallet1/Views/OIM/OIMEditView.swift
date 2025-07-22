@@ -99,7 +99,6 @@ struct OIMEditView: View {
                     OIMlineView(stack: stack.push(),
                                  cash: cash,
                             amountVal: $amountVal,
-                            tappedVal: $tappedVal,          // <- user tapped a val in the scroller
                               canEdit: true)
                         .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
                         .zIndex(1)  // make notes fly from topZ
@@ -113,6 +112,20 @@ struct OIMEditView: View {
                                 availableVal = isAvailable
                                 availRest = Amount(currency: currencyStr, cent: UInt64(availableVal))
 //                            }
+                        }
+                        .onChange(of: tappedVal) { newVal in
+                            if newVal > 0 {
+//                                symLog.log(">>tapped \(newVal)")
+                                tappedVal = 0
+
+                                DispatchQueue.main.async {                      // next layout cycle
+                                    withAnimation(.move1) {
+//                                        symLog.log(">>addCash \(newVal)")
+                                        cash.addCash(value: newVal)
+                                        amountVal += newVal                     // update directly
+                                    }
+                                }
+                            }
                         }
                     if !sending {       // need space for currency scroller
                         Spacer()
