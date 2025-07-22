@@ -495,11 +495,7 @@ extension MainView {
             } else {
                 let _ = Self._printChanges()
             }
-            let delay: UInt = 0     // set to 5 to test delayed currency information
-#else
-            let delay: UInt = 0     // no delay for release builds
 #endif
-
             // custom tabBar with the Actions button in the middle
             let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $tabBarModel.tabBarHidden) {
                 logger.log("onActionTab")

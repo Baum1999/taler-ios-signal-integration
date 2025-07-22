@@ -17,7 +17,7 @@ struct OIMEditView: View {
     let available: Amount
     let useAvailable : Bool         // if false then we're requesting money and don't use available
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
-    @Binding var fwdButtonTapped: Bool
+    @Binding var fwdButtonTapped: Bool      // user tapped "Send" TODO: "Request"
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
