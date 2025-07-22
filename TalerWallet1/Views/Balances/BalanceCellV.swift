@@ -15,6 +15,7 @@ struct BalanceCellV: View {
     let amount: Amount
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
+    @Binding var historyTapped: Bool
     let balanceDest: TransactionsListView
 
     @Environment(\.colorScheme) private var colorScheme
@@ -28,6 +29,8 @@ struct BalanceCellV: View {
             return String(localized: "Unknown payment service", comment: "exchange url")
         }
     }
+
+    private func buttonAction() { historyTapped = true }
 
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
@@ -75,8 +78,13 @@ struct BalanceCellV: View {
                 } else { vLayout } // view for iOS 15
             }
         }
-        NavigationLink { balanceDest } label: {
+        let actions = Group {
+            NavLink($historyTapped) { balanceDest }
+        }
+
+        Button(action: buttonAction) {
             balanceCell
+                .background(actions)
                 .accessibilityElement(children: .combine)
                 .accessibilityHint(String(localized: "Will go to main transactions list.", comment: "a11y"))
 //            .accessibilityLabel(balanceTitleStr + SPACE + amountStr)    // TODO: CurrencyFormatter!

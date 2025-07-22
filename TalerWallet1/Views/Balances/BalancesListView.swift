@@ -25,6 +25,8 @@ struct BalancesListView: View {
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
+
+    @State private var historyTapped = false
     @Namespace var namespace
 
     private static func className() -> String {"\(self)"}
@@ -40,7 +42,7 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
+//        Group {
             let count = controller.balances.count
             if controller.balances.isEmpty {
                 WalletEmptyView(stack: stack.push("isEmpty"))
@@ -60,6 +62,7 @@ struct BalancesListView: View {
                                      sectionCount: count,
                                  amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                           summary: $summary,
+                                    historyTapped: $historyTapped,
                                reloadTransactions: $reloadTransactions)
                     }
                     .onAppear() {
@@ -77,12 +80,13 @@ struct BalancesListView: View {
                         OIMbalances(stack: stack.push(),
                           selectedBalance: $selectedBalance,                    // set to user choice
                        selectedChestIndex: $selectedChestIndex,                 // OIM TODO: use balance
-                           qrButtonTapped: $qrButtonTapped)
+                           qrButtonTapped: $qrButtonTapped,
+                            historyTapped: $historyTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
                 } }
 #endif
-            }
-        }
+            } // not empty
+//        }
     }
 }

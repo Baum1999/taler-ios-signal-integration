@@ -24,6 +24,7 @@ struct BalancesSectionView {
     let sectionCount: Int
     @Binding var amountToTransfer: Amount           // does still have the wrong currency
     @Binding var summary: String
+    @Binding var historyTapped: Bool
     @Binding var reloadTransactions: Int
 
     @EnvironmentObject private var model: WalletModel
@@ -110,6 +111,7 @@ extension BalancesSectionView: View {
             BalanceCellV(stack: stack.push("BalanceCell"),
                          scope: balance.scopeInfo,
                         amount: balance.available,
+                 historyTapped: $historyTapped,
                    balanceDest: balanceDest)
 //            .listRowSeparator(.hidden)
 //            .border(.red)

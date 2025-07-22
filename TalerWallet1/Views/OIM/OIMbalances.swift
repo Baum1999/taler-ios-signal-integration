@@ -32,6 +32,7 @@ struct OIMbalances: View {
     @Binding var selectedBalance: Balance?              // return user's choice
     @Binding var selectedChestIndex: Int?               // OIM TODO: use balance
     @Binding var qrButtonTapped: Bool
+    @Binding var historyTapped: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -143,6 +144,17 @@ struct OIMbalances: View {
             print("openHistory", delay)
             withAnimation(.basic1) {
                 viewState = .historyShown
+                DispatchQueue.main.asyncAfter(deadline: .now() + Animation.talerDuration2) {
+                    var transaction = Transaction()
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        historyTapped = true          // ==> go to transaction list
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        cash.moveBack()
+                        viewState = .chestIsOpen
+                    }
+                }
             }
         }
     }
