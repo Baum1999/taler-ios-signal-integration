@@ -224,7 +224,7 @@ struct SettingsView: View {
                                 Task { // runs on MainActor
                                     symLog.log("Withdraw TESTKUDOS")
                                     let cent = UInt64.random(in: 110...195) * 100
-                                    let amount = Amount(currency:  DEMOCURRENCY, cent: cent)
+                                    let amount = Amount(currency:  TESTCURRENCY, cent: cent)
                                     try? await model.loadTestKudos(1, amount: amount)
                                 }
                             }
