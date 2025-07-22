@@ -13,7 +13,9 @@ import SymLog
 struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let selectedBalance: Balance?           // coming from transaction list or OIM
+    // when Action is tapped while in currency TransactionList…
+    let selectedBalance: Balance?   // …then use THIS balance, otherwise show picker
+                                    // coming from transaction list or OIM
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
     @Binding var iconID: String?

@@ -13,7 +13,8 @@ import SymLog
 struct RequestPayment: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let selectedBalance: Balance?
+    // when Action is tapped while in currency TransactionList…
+    let selectedBalance: Balance?   // …then use THIS balance, otherwise show picker
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
     @Binding var iconID: String?

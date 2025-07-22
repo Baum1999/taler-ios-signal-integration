@@ -14,7 +14,7 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    @Binding var selectedBalance: Balance?                      // pass down to TransactionsListView
+    @Binding var selectedBalance: Balance?                      // set in TransactionsListView
     @Binding var selectedChestIndex: Int?                       // OIM TODO: use balance
     @Binding var reloadTransactions: Int
     @Binding var qrButtonTapped: Bool
