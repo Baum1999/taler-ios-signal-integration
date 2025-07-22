@@ -471,6 +471,19 @@ final class OIMcash: ObservableObject, Sendable {
         return initial - interval + (fastAnimations ? 0.1 : 0.2)
     }
 
+    func setTarget(_ target: FundState,
+               _ increasing: Bool = false) {
+        var count = funds.count
+        var index = 0
+        while count > 0 {   // for each fund, small to high
+            count -= 1
+            var fund = self.funds[increasing ? index : count]
+            fund.state = target
+            self.updateFund(fund)
+            index += 1
+        }
+    }
+
     func interval(count: Int,
                duration: TimeInterval,
                 initial: TimeInterval = 0
