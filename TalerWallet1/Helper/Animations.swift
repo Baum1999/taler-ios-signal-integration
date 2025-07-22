@@ -37,6 +37,21 @@ extension Animation {
     static var debug: Animation { .easeInOut(duration: 2.0) }
 #endif
 
+    static var talerDelay0: TimeInterval {
+        return fastAnimations ? 0.1 : 0.25
+    }
+
+    static var talerDuration0: TimeInterval {
+#if DEBUG
+        if debugAnimations { return 2.0 }
+#endif
+        return fastAnimations ? FAST : SLOW
+    }
+
+    static var talerDuration2: TimeInterval {
+        return 0.2 + talerDuration0
+    }
+
     static var springFast: Animation {
         .interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: FAST)
     }
