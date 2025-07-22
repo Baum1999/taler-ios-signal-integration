@@ -112,6 +112,8 @@ public struct CurrencyInfo: Sendable {
 //    public static func zero(_ currency: String) -> CurrencyInfo {
     public static func zero(_ currency: String) -> CurrencyInfo {
         let specs = CurrencySpecification(name: currency,
+                                      currency: currency,
+                                 commonAmounts: nil,
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
                   fractionalTrailingZeroDigits: 0,
@@ -122,7 +124,9 @@ public struct CurrencyInfo: Sendable {
 
     public static func euro() -> CurrencyInfo {
         let currency = EUR_4217
-        let specs = CurrencySpecification(name: currency,
+        let specs = CurrencySpecification(name: "Euro",
+                                      currency: currency,
+                                 commonAmounts: nil,
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
                   fractionalTrailingZeroDigits: 2,
@@ -134,7 +138,9 @@ public struct CurrencyInfo: Sendable {
 
     public static func francs() -> CurrencyInfo {
         let currency = CHF_4217
-        let specs = CurrencySpecification(name: currency,
+        let specs = CurrencySpecification(name: "Franken",
+                                      currency: currency,
+                                 commonAmounts: nil,
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
                   fractionalTrailingZeroDigits: 2,
@@ -271,7 +277,8 @@ public struct CurrencyInfo: Sendable {
 // MARK: -
 public struct CurrencySpecification: Codable, Sendable {
     enum CodingKeys: String, CodingKey {
-        case name = "name"
+        case name, currency
+        case commonAmounts = "common_amounts"
         case fractionalInputDigits = "num_fractional_input_digits"
         case fractionalNormalDigits = "num_fractional_normal_digits"
         case fractionalTrailingZeroDigits = "num_fractional_trailing_zero_digits"
@@ -279,6 +286,8 @@ public struct CurrencySpecification: Codable, Sendable {
     }
     /// some name for this CurrencySpecification
     let name: String
+    let currency: String?
+    let commonAmounts: [Amount]?
     /// how much digits the user may enter after the decimal separator
     let fractionalInputDigits: Int
     /// €,$,£: 2;  some arabic currencies: 3,  ¥: 0
@@ -386,6 +395,8 @@ public class CurrencyFormatter: NumberFormatter {
 func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
     let unitName = digits == 0 ? "テ" : "ク"  // do not use real currency symbols like "¥" : "€"
     let specs = CurrencySpecification(name: currency,
+                                  currency: currency,
+                             commonAmounts: nil,
                      fractionalInputDigits: digits,
                     fractionalNormalDigits: digits,
               fractionalTrailingZeroDigits: digits,
