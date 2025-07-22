@@ -406,10 +406,10 @@ final class OIMcash: ObservableObject, Sendable {
 
     func moveBack() {
         for var fund in funds {
-            if fund.state == .drawer {
+//            if fund.state == .drawer {
                 fund.state = .idle
                 self.updateFund(fund)
-            }
+//            }
         }
     }
 
