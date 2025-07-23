@@ -33,6 +33,7 @@ struct PendingRowView: View {
         let pendingColor = WalletColors().pendingColor(incoming)
         let iconBadge = PendingIconBadge(foreColor: pendingColor, done: false, incoming: incoming,
                                      shouldConfirm: shouldConfirm, needsKYC: needsKYC)
+                            .talerFont(.title2)
         let inTitle = minimalistic ? inTitle0 : inTitle1
         let outTitle = minimalistic ? outTitle0 : outTitle1
         let pendingTitle = incoming ? inTitle : outTitle

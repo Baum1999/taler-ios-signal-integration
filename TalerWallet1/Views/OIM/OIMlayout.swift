@@ -56,7 +56,7 @@ extension LayoutSubview {
 // renders a stack of funds (banknotes, coins)
 @available(iOS 16.4, *)
 struct OIMlayoutView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
 //    let logger = Logger(subsystem: "net.taler.gnu", category: "OIMlayoutView")
     let stack: CallStack
     let cash: OIMcash

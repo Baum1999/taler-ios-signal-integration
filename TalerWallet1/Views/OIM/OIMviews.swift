@@ -40,10 +40,13 @@ struct OIMnavBack<Content: View>: View {
                     HStack {
                         OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {
                             var transaction = Transaction()
-                            transaction.disablesAnimations = true
+                            transaction.disablesAnimations = true           // doesn't work with NavigationView
                             withTransaction(transaction) {
                                 dismiss()
                             }
+//                            withAnimation(nil) {  doesn't work either
+//                                dismiss()
+//                            }
                         }
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()

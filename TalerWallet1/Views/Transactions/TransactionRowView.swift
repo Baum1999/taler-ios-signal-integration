@@ -253,7 +253,7 @@ struct TransactionRowView: View {
         }
 
         HStack {
-            iconBadge
+            iconBadge.talerFont(.title2)
 #if DEBUG
                 .border(blue)
 #endif
