@@ -14,7 +14,7 @@ struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     // when Action is tapped while in currency TransactionList…
-    let selectedBalance: Balance?   // …then use THIS balance, otherwise show picker
+    @Binding var selectedBalance: Balance?   // …then use THIS balance, otherwise show picker
                                     // coming from transaction list or OIM
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
@@ -33,7 +33,7 @@ struct SendAmountV: View {
     @Namespace var namespace
 
     init(stack: CallStack,
-         selectedBalance: Balance?,
+         selectedBalance: Binding<Balance?>,
          amountLastUsed: Binding<Amount>,
          summary: Binding<String>,
          iconID: Binding<String?>
@@ -42,11 +42,11 @@ struct SendAmountV: View {
         // closure only once during the lifetime of the view, so
         // later changes to the currency have no effect.
         self.stack = stack
-        self.selectedBalance = selectedBalance
+        self._selectedBalance = selectedBalance
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCurrency = oimCurrency(selectedBalance)      // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue)      // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -86,6 +86,9 @@ struct SendAmountV: View {
                 // TODO: Error
                 amountAvailable = balance.available
             }
+            selectedBalance = balance
+            let oimCurrency = oimCurrency(balance)      // might be nil ==> OIMeuros
+            cash.currency = oimCurrency
         }
     }
 
@@ -187,7 +190,7 @@ fileprivate struct Preview_Content: View {
                         pendingOutgoing: pending,
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
-          selectedBalance: noBalance,
+          selectedBalance: $noBalance,
            amountLastUsed: $amountToPreview,
                   summary: $summary,
                    iconID: $iconID)

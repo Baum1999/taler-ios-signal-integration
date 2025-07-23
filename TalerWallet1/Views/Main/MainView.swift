@@ -407,7 +407,7 @@ extension MainView {
         private var tabContent: some View {
             /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
-                             selectedBalance: selectedBalance,                  // if nil shows currency picker
+                             selectedBalance: $selectedBalance,                 // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary,
                                       iconID: $iconID)
