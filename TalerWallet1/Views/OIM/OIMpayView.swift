@@ -17,7 +17,7 @@ struct OIMpayView: View {
 
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
-    @StateObject private var cash = OIMcash()
+    @StateObject private var cash = OIMcash(OIMeuros)
     @State private var amountVal: UInt64 = 0
 
     var body: some View {

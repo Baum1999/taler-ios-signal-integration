@@ -51,7 +51,8 @@ enum FundState: Int {
 public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     public let id: Int                  // support multiple funds with the same value
     var value: UInt64                   // can be morphed
-    var currencyIndex: Int
+//    var currencyIndex: Int
+    var currencyStr: String
     var state: FundState
     var delay: TimeInterval
     var morphTicker: Int?               // `semaphore´ to reserve a fund - don't morph this twice concurrently
@@ -59,7 +60,7 @@ public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     var outValue: UInt64?               // if this is set it determines the image (used for flipping)
     var targetID: String {              // match sourceID for SwiftUI animations
         let isDrawer = state.shouldFly || state.drawer || state.removing
-        return state.chestOpening ? OIMCHEST + String(currencyIndex)
+        return state.chestOpening ? OIMCHEST + currencyStr // String(currencyIndex)
                    : state.reveal ? OIMNUMBER
                     : state.curve ? OIMACTION
                   : state.history ? OIMSIDE
@@ -69,13 +70,14 @@ public struct OIMfund: Identifiable, Equatable, Hashable, Sendable {
     var shouldFly2: Bool { state.shouldFly || state.chestOpening }
     var isFlying2: Bool { state.isFlying }
 
-    init(id: Int, value: UInt64, currencyIndex: Int,
+    init(id: Int, value: UInt64, currencyStr: String,      // currencyIndex: Int,
          state: FundState = .idle, delay: TimeInterval = 0,
          morphTicker: Int? = nil, flippedVal: UInt64? = nil, outValue: UInt64? = nil
     ) {
         self.id = id
         self.value = value
-        self.currencyIndex = currencyIndex
+//        self.currencyIndex = currencyIndex
+        self.currencyStr = currencyStr
         self.state = state
         self.delay = delay
         self.morphTicker = morphTicker
@@ -87,32 +89,40 @@ public typealias OIMfunds = [OIMfund]
 
 // MARK: -
 final class OIMcash: ObservableObject, Sendable {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     private let logger = Logger(subsystem: "net.taler.gnu", category: "OIMcash")
     private var ticker = 0                  // increment each time a fund is added (or melted from others)
 //    let semaphore = AsyncSemaphore(value: 1)
     var currency: OIMcurrency
-    var currencyIndex: Int
+//    var currencyIndex: Int
     @Published var funds: OIMfunds = []
 
-    init(_ index: Int? = 0) {
-        self.currencyIndex = 0
-        self.currency = OIMeuros
-        setIndex(index)
+//    init(_ index: Int? = 0) {
+//        self.currencyIndex = 0
+//        self.currency = OIMeuros
+//        setIndex(index)
+//    }
+
+    init(_ oimCurrency: OIMcurrency) {
+        self.currency = oimCurrency
     }
 
-    func setIndex(_ index: Int? = 0) {
-        if let index {
-            let count = OIMcurrencies.count
-            if index < count {
-                self.currencyIndex = index
-                self.currency = OIMcurrencies[index]
-                return
-            }
-        }
-        self.currencyIndex = 0
-        self.currency = OIMeuros
+    func setCurrency(_ oimCurrency: OIMcurrency) {
+        self.currency = oimCurrency
     }
+
+//    func setIndex(_ index: Int? = 0) {
+//        if let index {
+//            let count = OIMcurrencies.count
+//            if index < count {
+//                self.currencyIndex = index
+//                self.currency = OIMcurrencies[index]
+//                return
+//            }
+//        }
+//        self.currencyIndex = 0
+//        self.currency = OIMeuros
+//    }
 
     func max(available: UInt64) -> UInt64 {
         for note in currency.bankNotes {
@@ -356,8 +366,11 @@ final class OIMcash: ObservableObject, Sendable {
     @discardableResult
     func addCash(value: UInt64, _ newState: FundState = .shouldFly, _ flippedVal: UInt64? = nil) -> OIMfund {
         let myTicker = ticker; ticker += 1 // TODO: atomic increment!
-        let fund = OIMfund(id: myTicker, value: value, currencyIndex: currencyIndex,
-                           state: newState, flippedVal: flippedVal)
+        let fund = OIMfund(id: myTicker,
+                        value: value,
+                  currencyStr: currency.currencyStr,     // currencyIndex: currencyIndex,
+                        state: newState,
+                   flippedVal: flippedVal)
         symLog.log(">>adding \(value) \(fund.id) \(newState)")
         funds.append(fund)
         return fund
@@ -529,8 +542,10 @@ final class OIMcash: ObservableObject, Sendable {
             }
             while count < wanted {
 //                if interval == 0 {            // add all at once
-                    let fund = OIMfund(id: ticker, value: value,
-                            currencyIndex: currencyIndex, state: state,
+                    let fund = OIMfund(id: ticker,
+                                    value: value,
+                              currencyStr: currency.currencyStr, // currencyIndex: currencyIndex,
+                                    state: state,
                                     delay: accumulatedDelay)
                     ticker += 1
                     symLog.log("update: add \(fund.value), \(fund.id)")

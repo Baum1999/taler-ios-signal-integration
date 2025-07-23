@@ -30,8 +30,10 @@ struct OIMcurrencyDrawer: View {
             HStack(alignment: .bottom, spacing: 10) {
                 ForEach(currency.bankNotes, id: \.self) { value in
                     let sourceID = -Int(value)
-                    let fund = OIMfund(id: sourceID, value: value,
-                            currencyIndex: cash.currencyIndex)
+                    let fund = OIMfund(id: sourceID,
+                                       value: value,
+//                            currencyIndex: cash.currencyIndex
+                                currencyStr: currency.currencyStr)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
@@ -46,8 +48,10 @@ struct OIMcurrencyDrawer: View {
                 }
                 ForEach(currency.bankCoins, id: \.self) { value in
                     let sourceID = -Int(value)
-                    let fund = OIMfund(id: sourceID, value: value,
-                            currencyIndex: cash.currencyIndex)
+                    let fund = OIMfund(id: sourceID,
+                                       value: value,
+//                            currencyIndex: cash.currencyIndex
+                                currencyStr: currency.currencyStr)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,

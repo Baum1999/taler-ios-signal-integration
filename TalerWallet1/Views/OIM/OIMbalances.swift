@@ -36,7 +36,7 @@ struct OIMbalances: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
-    @StateObject private var cash = OIMcash()
+    @StateObject private var cash = OIMcash(OIMeuros)
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0
     @State private var available: Amount? = nil
@@ -114,7 +114,8 @@ struct OIMbalances: View {
             selectedBalance = balance
             balanceIndex = index
             viewState = .chestIsOpen
-            cash.setIndex(index)
+//            cash.setIndex(index)
+            cash.setCurrency(oimCurrency)
             available = balance.available
             availableVal = balance.available.centValue
             cash.update2(availableVal, state: .chestOpening, duration, initial)  // set cash to available
@@ -250,11 +251,13 @@ struct OIMbalances: View {
                                 .zIndex(itsMe ? 3 : 0)
                                 .opacity((isClosed || itsMe) ? 1 : INVISIBLE)
                                 .matchedGeometryEffect(id: itsMe ? OIMNUMBER
-                                                                 : String(index),
+//                                                               : String(index),
+                                                                 : oimCurrency.currencyStr,
                                                        in: wrapper.namespace, isSource: false)
                                 Color.clear
                                     .frame(width: 40, height: 40)
-                                    .matchedGeometryEffect(id: OIMCHEST + String(index), in: wrapper.namespace, isSource: true)
+//                                  .matchedGeometryEffect(id: OIMCHEST + String(index), in: wrapper.namespace, isSource: true)
+                                    .matchedGeometryEffect(id: OIMCHEST + oimCurrency.currencyStr, in: wrapper.namespace, isSource: true)
                             }
                         }
                     }
