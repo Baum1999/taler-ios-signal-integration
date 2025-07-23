@@ -80,7 +80,7 @@ struct OIMEditView: View {
 //        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
         OIMnavBack(stack: stack.push(),
-            currencyName: cash.currency.currency,
+            currencyName: cash.currency.currencyStr,
                    chest: cash.currency.chest,
                  isFinal: false,
                isSending: sending,

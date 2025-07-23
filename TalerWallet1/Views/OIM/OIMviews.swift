@@ -85,12 +85,12 @@ struct OIMtitleView: View {
                 Spacer()
             }
             // balance
-            OIMamountV(amount: amount, currencyName: cash.currency.currency)
+            OIMamountV(amount: amount, currencyName: cash.currency.currencyStr)
             if !history {
                 if let secondAmount {
                     Spacer()
                     // amountToSend
-                    OIMamountV(amount: secondAmount, currencyName: cash.currency.currency)
+                    OIMamountV(amount: secondAmount, currencyName: cash.currency.currencyStr)
                 }
                 // invisible - source for money (target) flying out of and back in the open chest
                 OIMactionButton(type: .sendP2P, isFinal: false, action: nil)

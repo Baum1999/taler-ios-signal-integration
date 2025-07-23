@@ -27,7 +27,7 @@ struct OIMp2pReceiveView: View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
         OIMnavBack(stack: stack.push(),
-            currencyName: currency.currency,
+            currencyName: currency.currencyStr,
                    chest: currency.chest,
                  isFinal: false,
                isSending: false,
