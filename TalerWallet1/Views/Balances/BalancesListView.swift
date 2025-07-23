@@ -26,7 +26,7 @@ struct BalancesListView: View {
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
 
-    @State private var historyTapped = false
+    @State private var historyTapped: Int? = nil
     @Namespace var namespace
 
     private static func className() -> String {"\(self)"}
@@ -54,11 +54,11 @@ struct BalancesListView: View {
                 ///   However, the user can select another balance (with the picker) in each action
                 /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
                 Group {
-                    List(controller.balances, id: \.self) { balance in
+                    List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
                         BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                           balance: balance,                     // this is the currency to be used
                                   selectedBalance: $selectedBalance,            // set in TransactionsListView
-                               selectedChestIndex: selectedChestIndex,
+                                     balanceIndex: index,
                                      sectionCount: count,
                                  amountToTransfer: $amountToTransfer,           // does still have the wrong currency
                                           summary: $summary,

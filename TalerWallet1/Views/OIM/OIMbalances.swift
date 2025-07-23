@@ -32,7 +32,7 @@ struct OIMbalances: View {
     @Binding var selectedBalance: Balance?              // return user's choice
     @Binding var selectedChestIndex: Int?               // OIM TODO: use balance
     @Binding var qrButtonTapped: Bool
-    @Binding var historyTapped: Bool
+    @Binding var historyTapped: Int?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -48,6 +48,7 @@ struct OIMbalances: View {
     @State private var closing = false                      // after user tapped on the open chest
 
     func noAction() { }
+    @State private var balanceIndex: Int? = nil
 
     func requestTapped() {
 
@@ -96,7 +97,7 @@ struct OIMbalances: View {
         }
     }
 
-    func openChest(_ index: Int, _ balance: Balance) {
+    func openChest(_ oimCurrency: OIMcurrency, _ index: Int, _ balance: Balance) {
         cash.clearFunds()
         print("❗️openChest❗️")
         let duration: TimeInterval
@@ -113,7 +114,8 @@ struct OIMbalances: View {
         withAnimation(.basic1) {
             chestOpen = index
             selectedBalance = balance
-            selectedChestIndex = index
+            balanceIndex = index
+//            selectedChestIndex
             viewState = .chestIsOpen
             cash.setIndex(index)
             available = balance.available
@@ -148,7 +150,7 @@ struct OIMbalances: View {
                     var transaction = Transaction()
                     transaction.disablesAnimations = true
                     withTransaction(transaction) {
-                        historyTapped = true          // ==> go to transaction list
+                        historyTapped = balanceIndex          // ==> go to transaction list
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         cash.moveBack()
@@ -248,7 +250,7 @@ struct OIMbalances: View {
                                     if itsMe {
                                         closeChest()
                                     } else {
-                                        openChest(index, balance)
+                                        openChest(oimCurrency, index, balance)
                                     }
                                 }
                                 .frame(width: size, height: size)

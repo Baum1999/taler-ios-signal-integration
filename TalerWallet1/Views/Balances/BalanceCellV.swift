@@ -15,7 +15,8 @@ struct BalanceCellV: View {
     let amount: Amount
 //    let sizeCategory: ContentSizeCategory
 //    let rowAction: () -> Void
-    @Binding var historyTapped: Bool
+    @Binding var historyTapped: Int?
+    let balanceIndex: Int
     let balanceDest: TransactionsListView
 
     @Environment(\.colorScheme) private var colorScheme
@@ -30,7 +31,7 @@ struct BalanceCellV: View {
         }
     }
 
-    private func buttonAction() { historyTapped = true }
+    private func buttonAction() { historyTapped = balanceIndex }
 
     /// Renders the Balance button. "Balance" leading, amountStr trailing. If it doesn't fit in one row then
     /// amount (trailing) goes underneath "Balance" (leading).
@@ -53,8 +54,13 @@ struct BalanceCellV: View {
                       strikethrough: false,
                               large: true)
             .foregroundColor(.primary)
-        let hLayout = amountV
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+        let hLayout = HStack {
+            amountV
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            Text(Image(systemName: "chevron.right"))
+                .talerFont(.table)
+                .foregroundColor(.secondary)
+        }
         let balanceCell = Group {
             if minimalistic {
                 hLayout
@@ -79,7 +85,7 @@ struct BalanceCellV: View {
             }
         }
         let actions = Group {
-            NavLink($historyTapped) { balanceDest }
+            NavLink(balanceIndex, $historyTapped) { balanceDest }
         }
 
         Button(action: buttonAction) {
