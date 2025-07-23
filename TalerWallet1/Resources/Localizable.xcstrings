@@ -398,7 +398,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "**Krok 1:** Skopiuj ten kod i wklej go w polu tematu/celu w aplikacji bankowej lub na stronie internetowej banku:"
+            "value" : "**Krok 1:** Skopiuj ten kod i wklej go w polu tytuł przelewu w aplikacji bankowej lub na stronie internetowej banku:"
           }
         },
         "uk" : {
@@ -432,7 +432,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "**Krok 1:** Kopiuj+Wklej ten temat:"
+            "value" : "**Krok 1:** Kopiuj+Wklej ten tytuł przelewu:"
           }
         },
         "uk" : {
@@ -4635,7 +4635,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "włączone, gdy ustawiono temat i wygaśnięcie"
+            "value" : "włączone, gdy ustawiono tytuł przelewu i wygaśnięcie"
           }
         },
         "uk" : {
@@ -4670,7 +4670,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wpisz temat:"
+            "value" : "Wpisz tytuł przelewu"
           }
         }
       }
@@ -4698,7 +4698,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wpisz temat:"
+            "value" : "Wpisz tytuł przelewu:"
           }
         },
         "uk" : {
@@ -8116,7 +8116,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvrez les paramètres"
+            "value" : "Ouvrez les réglages"
           }
         },
         "pl" : {
@@ -9094,7 +9094,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veuillez autoriser l'accès à la caméra dans les paramètres."
+            "value" : "Veuillez autoriser l'accès à la caméra dans les réglages."
           }
         },
         "pl" : {
@@ -11289,7 +11289,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Temat"
+            "value" : "Tytuł przelewu"
           }
         },
         "uk" : {
@@ -12400,7 +12400,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Paramètres"
+            "value" : "Réglages"
           }
         },
         "pl" : {
@@ -14222,7 +14222,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous pouvez également ajouter un service de paiement manuellement dans l'onglet %@ Settings."
+            "value" : "Vous pouvez également ajouter un service de paiement manuellement dans l'onglet %@ Réglages."
           }
         },
         "pl" : {
