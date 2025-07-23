@@ -127,7 +127,7 @@ struct TransactionRowView: View {
                                          needsKYC: needsKYC && pending)
         let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
                               strikethrough: !doneOrPending)
-                        .foregroundColor(foreColor)
+                        .foregroundColor(for2Color)
         let topA11y = topString(forA11y: true)!
         let topString = topString()
         let strikeColor = doneOrPending ? nil : WalletColors().negative
