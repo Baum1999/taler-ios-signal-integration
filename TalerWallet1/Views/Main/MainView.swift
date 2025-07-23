@@ -34,7 +34,6 @@ struct MainView: View {
 
     @StateObject private var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
-    @State private var selectedChestIndex: Int? = nil       // select in OIMbalances TODO: use balance
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
     @State private var showActionSheet = false
@@ -73,7 +72,6 @@ struct MainView: View {
         let mainContent = ZStack {
             MainContent(logger: logger, stack: stack.push("Content"),
                selectedBalance: $selectedBalance,
-            selectedChestIndex: $selectedChestIndex,                     // OIM TODO: use balance
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
                    showScanner: $showScanner,
@@ -327,7 +325,6 @@ extension MainView {
         let logger: Logger
         let stack: CallStack
         @Binding var selectedBalance: Balance?
-        @Binding var selectedChestIndex: Int?                            // OIM TODO: use balance
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
@@ -411,13 +408,11 @@ extension MainView {
             /// Destinations for the 4 actions
             let sendDest = SendAmountV(stack: stack.push(Self.name),
                              selectedBalance: selectedBalance,                  // if nil shows currency picker
-                          selectedChestIndex: selectedChestIndex,               // OIM TODO: use balance
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary,
                                       iconID: $iconID)
             let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
-                                selectedChestIndex: selectedChestIndex,         // OIM TODO: use balance
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary,
                                             iconID: $iconID)
@@ -458,7 +453,6 @@ extension MainView {
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
                        selectedBalance: $selectedBalance,    // for sheets, pass down to TransactionsListView
-                    selectedChestIndex: $selectedChestIndex,                    // OIM TODO: use balance
 //                   shouldReloadPending: $shouldReloadPending,
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)

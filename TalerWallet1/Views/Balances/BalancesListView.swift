@@ -15,7 +15,6 @@ struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     @Binding var selectedBalance: Balance?                      // set in TransactionsListView
-    @Binding var selectedChestIndex: Int?                       // OIM TODO: use balance
     @Binding var reloadTransactions: Int
     @Binding var qrButtonTapped: Bool
 
@@ -79,7 +78,6 @@ struct BalancesListView: View {
                     if controller.oimModeActive {
                         OIMbalances(stack: stack.push(),
                           selectedBalance: $selectedBalance,                    // set to user choice
-                       selectedChestIndex: $selectedChestIndex,                 // OIM TODO: use balance
                            qrButtonTapped: $qrButtonTapped,
                             historyTapped: $historyTapped)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart

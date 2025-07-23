@@ -34,7 +34,6 @@ struct SendAmountV: View {
 
     init(stack: CallStack,
          selectedBalance: Balance?,
-         selectedChestIndex: Int?,                       // OIM TODO: use balance
          amountLastUsed: Binding<Amount>,
          summary: Binding<String>,
          iconID: Binding<String?>
@@ -47,7 +46,8 @@ struct SendAmountV: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCash = OIMcash(selectedChestIndex)
+        let oimCurrency = oimCurrency(selectedBalance)      // might be nil ==> OIMeuros
+        let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
 
@@ -188,7 +188,6 @@ fileprivate struct Preview_Content: View {
                                   flags: [])
         SendAmountV(stack: CallStack("Preview"),
           selectedBalance: noBalance,
-       selectedChestIndex: nil,                 // preview
            amountLastUsed: $amountToPreview,
                   summary: $summary,
                    iconID: $iconID)
