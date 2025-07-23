@@ -30,7 +30,7 @@ struct TransactionSummaryV: View {
     let stack: CallStack
 //    let scope: ScopeInfo?
     let transactionId: String
-    @Binding var outTransaction: TalerTransaction?
+    @Binding var talerTX: TalerTransaction
     let navTitle: String?
     let hasDone: Bool
     let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
@@ -54,7 +54,6 @@ struct TransactionSummaryV: View {
 
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
-    @State var transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
     @State var jsonTransaction: String = ""
     @State var viewId = UUID()
     @Namespace var topID
@@ -63,10 +62,7 @@ struct TransactionSummaryV: View {
         if let reloadedTransaction = try? await model.getTransactionById(transactionId,
                                                                withTerms: true, viewHandles: false) {
             symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
-            withAnimation { transaction = reloadedTransaction; viewId = UUID() }      // redraw
-            if outTransaction != nil {
-                outTransaction = reloadedTransaction
-            }
+            withAnimation { talerTX = reloadedTransaction; viewId = UUID() }      // redraw
             if developerMode {
                 if let json = try? await model.jsonTransactionById(transactionId,
                                                          withTerms: true, viewHandles: false) {
@@ -76,7 +72,7 @@ struct TransactionSummaryV: View {
                 }
             }
         } else {
-            withAnimation{ transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+            withAnimation{ talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
             jsonTransaction = ""
         }
     }
@@ -86,7 +82,7 @@ struct TransactionSummaryV: View {
     func checkDismiss(_ notification: Notification, _ logStr: String = EMPTYSTRING) -> Bool {
         if hasDone {
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
-                if transition.transactionId == transaction.common.transactionId {       // is the transition for THIS transaction?
+                if transition.transactionId == talerTX.common.transactionId {       // is the transition for THIS transaction?
                     symLog.log(logStr)
                     dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
                     return true
@@ -113,7 +109,7 @@ struct TransactionSummaryV: View {
                 let newMajor = transition.newTxState.major
                 Task { // runs on MainActor
                        // flush the screen first, then reload
-                    withAnimation { transaction = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
+                    withAnimation { talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
                     symLog.log("newState: \(newMajor), reloading transaction")
                     if newMajor != .none {              // don't reload after delete
                         await loadTransaction()
@@ -131,18 +127,18 @@ struct TransactionSummaryV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let common = transaction.common
+        let common = talerTX.common
         if common.type != .dummy {
             let scope = common.scopes.first                                     // might be nil if scopes == []
 //            let pending = transaction.isPending
             let locale = TalerDater.shared.locale
             let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-            let navTitle2 = transaction.isDone ? transaction.localizedTypePast
-                                               : transaction.localizedType
+            let navTitle2 = talerTX.isDone ? talerTX.localizedTypePast
+                                           : talerTX.localizedType
             List {
                 if developerMode {
-                    if transaction.isSuspendable { if let suspendAction {
+                    if talerTX.isSuspendable { if let suspendAction {
                         TransactionButton(transactionId: common.transactionId,
                                                 command: .suspend,
                                                 warning: nil,
@@ -150,7 +146,7 @@ struct TransactionSummaryV: View {
                                                  action: suspendAction)
                         .listRowSeparator(.hidden)
                     } }
-                    if transaction.isResumable { if let resumeAction {
+                    if talerTX.isResumable { if let resumeAction {
                         TransactionButton(transactionId: common.transactionId,
                                                 command: .resume,
                                                 warning: nil,
@@ -167,8 +163,8 @@ struct TransactionSummaryV: View {
                         .id(topID)
                     let majorState = common.txState.major.localizedState
                     let minorState = common.txState.minor?.localizedState ?? nil
-                    let state = developerMode ? transaction.isPending ? minorState ?? majorState
-                                                                      : majorState
+                    let state = developerMode ? talerTX.isPending ? minorState ?? majorState
+                                                                  : majorState
                                               : majorState
                     let statusT = Text(state)
                                     .multilineTextAlignment(.trailing)
@@ -208,29 +204,29 @@ struct TransactionSummaryV: View {
 
                 TypeDetail(stack: stack.push(),
                            scope: scope,
-                     transaction: $transaction,
+                     transaction: $talerTX,
                          hasDone: hasDone)
 
                 // TODO: Retry Countdown, Retry Now button
-//                if transaction.isRetryable, let retryAction {
+//                if talerTX.isRetryable, let retryAction {
 //                    TransactionButton(transactionId: common.transactionId, command: .retry,
 //                                      warning: nil, action: abortAction)
 //                } // Retry button
-                if transaction.isAbortable, let abortAction {
+                if talerTX.isAbortable, let abortAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .abort,
                                             warning: String(localized: "Are you sure you want to abort this transaction?"),
                                          didExecute: $ignoreThis,
                                              action: abortAction)
                 } // Abort button
-                if transaction.isFailable, let failAction {
+                if talerTX.isFailable, let failAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .fail,
                                             warning: String(localized: "Are you sure you want to abandon this transaction?"),
                                          didExecute: $ignoreThis,
                                              action: failAction)
                 } // Fail button
-                if transaction.isDeleteable, let deleteAction {
+                if talerTX.isDeleteable, let deleteAction {
                     TransactionButton(transactionId: common.transactionId,
                                             command: .delete,
                                             warning: String(localized: "Are you sure you want to delete this transaction?"),

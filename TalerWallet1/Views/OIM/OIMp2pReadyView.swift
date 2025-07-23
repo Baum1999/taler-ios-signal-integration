@@ -13,6 +13,7 @@ import taler_swift
 struct OIMp2pReadyView: View {
     let stack: CallStack
     @Binding var transactionId: String?
+    let talerTX: TalerTransaction
     let scope: ScopeInfo
     let action: () -> Void
 
@@ -21,14 +22,30 @@ struct OIMp2pReadyView: View {
     @State private var sending = false              // user tapped on Send
     @State private var appeared = false
 
-
     var body: some View {
 //        let _ = Self._printChanges()
 
         OIMbackground() {
             VStack {
                 if let transactionId {
-                    Text(verbatim: "transaction sent")
+                    if talerTX.isPendingReady {
+                        let details = talerTX.detailsToShow()
+                        let keys = details.keys
+                        if keys.contains(TALERURI) {
+                            if let talerURI = details[TALERURI] {
+                                if talerURI.count > 10 {
+                                    Group {
+                                        Spacer()
+                                        let size = 240.0
+                                        QRGeneratorView(text: talerURI, size: size)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .accessibilityLabel(Text("QR Code", comment: "a11y"))
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
                     LoadingView(stack: stack.push(),
                             scopeInfo: scope,

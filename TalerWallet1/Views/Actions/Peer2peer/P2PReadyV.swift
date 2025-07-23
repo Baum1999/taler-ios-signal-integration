@@ -33,6 +33,7 @@ struct P2PReadyV: View {
     let navTitle = String(localized: "Ready")
     @State private var transactionId: String? = nil
     @State private var noTransaction: TalerTransaction? = nil
+    @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
     @Namespace var namespace
 
     @MainActor
@@ -81,7 +82,7 @@ struct P2PReadyV: View {
                 TransactionSummaryV(stack: stack.push(),
 //                                    scope: scope,
                             transactionId: transactionId,
-                           outTransaction: $noTransaction,
+                                  talerTX: $talerTX,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,
@@ -119,6 +120,7 @@ struct P2PReadyV: View {
                 if controller.oimModeActive {
                     OIMp2pReadyView(stack: stack.push(),
                             transactionId: $transactionId,
+                                  talerTX: talerTX,
                                     scope: scope,
                                    action: doneAction)
                     .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart

@@ -18,7 +18,7 @@ struct PaymentDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var paymentDone: Bool = false
-    @State private var noTransaction: TalerTransaction? = nil
+    @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     @MainActor
     private func viewDidLoad() async {
@@ -41,7 +41,7 @@ struct PaymentDone: View {
                 TransactionSummaryV(stack: stack.push(),
 //                                    scope: scope,
                             transactionId: transactionId,
-                           outTransaction: $noTransaction,
+                                  talerTX: $talerTX,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,

@@ -140,7 +140,7 @@ struct TransactionsArraySliceV: View {
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
     @EnvironmentObject private var model: WalletModel
-    @State private var noTransaction: TalerTransaction? = nil
+    @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     var body: some View {
 #if PRINT_CHANGES
@@ -157,7 +157,7 @@ struct TransactionsArraySliceV: View {
             let destination = TransactionSummaryV(stack: stack.push(),
 //                                                  scope: scope,
                                           transactionId: transaction.id,
-                                         outTransaction: $noTransaction,
+                                                talerTX: $talerTX,
                                                navTitle: nil,
                                                 hasDone: false,
                                             abortAction: abortAction,

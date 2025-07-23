@@ -22,7 +22,7 @@ struct RefundURIView: View {
     @State var refundTransactionId: String? = nil
 //    @State var transaction: Transaction?
 //    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var noTransaction: TalerTransaction? = nil
+    @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     @MainActor
     private func viewDidLoad() async {
@@ -43,7 +43,7 @@ struct RefundURIView: View {
             TransactionSummaryV(stack: stack.push(),
 //                                scope: scope,
                         transactionId: refundTransactionId,
-                       outTransaction: $noTransaction,
+                              talerTX: $talerTX,
                              navTitle: nil,   // navTitle,
                               hasDone: true,
                           abortAction: model.abortTransaction,

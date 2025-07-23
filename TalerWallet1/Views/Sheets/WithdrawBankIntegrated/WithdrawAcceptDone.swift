@@ -21,7 +21,7 @@ struct WithdrawAcceptDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var transactionId: String? = nil
-    @State private var transaction: TalerTransaction? = TalerTransaction(dummyCurrency: DEMOCURRENCY)
+    @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     let navTitle = String(localized: "Authorize at Bank", comment: "Nav title")
 
@@ -54,7 +54,7 @@ struct WithdrawAcceptDone: View {
                 TransactionSummaryV(stack: stack.push(),
 //                                    scope: scope,
                             transactionId: transactionId,
-                           outTransaction: $transaction,
+                                  talerTX: $talerTX,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,
@@ -66,17 +66,16 @@ struct WithdrawAcceptDone: View {
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
                 .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
-                  if let transaction {  // will always succed
-                    if transaction.common.type != .dummy {
-                        Button(transaction.shouldConfirm ? "Authorize later" : "Done") { dismissTop(stack.push()) }
-                            .buttonStyle(TalerButtonStyle(type: transaction.shouldConfirm ? .bordered : .prominent))
+                    let shouldConfirm = talerTX.shouldConfirm
+                    if talerTX.common.type != .dummy {
+                        Button(shouldConfirm ? "Authorize later" : "Done") { dismissTop(stack.push()) }
+                            .buttonStyle(TalerButtonStyle(type: shouldConfirm ? .bordered : .prominent))
                             .padding(.horizontal)
                     } else {
                         Button("Cancel") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: .bordered))
                             .padding(.horizontal)
                     }
-                  }
                 }
                 .onAppear() {
                     symLog.log("onAppear")

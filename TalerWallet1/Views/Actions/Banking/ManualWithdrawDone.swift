@@ -22,7 +22,7 @@ struct ManualWithdrawDone: View {
 
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
     @State private var transactionId: String?
-    @State private var noTransaction: TalerTransaction? = nil
+    @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     let navTitle = String(localized: "Wire Transfer")
 
@@ -46,7 +46,7 @@ struct ManualWithdrawDone: View {
                 TransactionSummaryV(stack: stack.push(),
 //                                    scope: scope,                               // TODO: use data from tx itself
                             transactionId: transactionId,
-                           outTransaction: $noTransaction,
+                                  talerTX: $talerTX,
                                  navTitle: navTitle,
                                   hasDone: true,
                               abortAction: nil,
