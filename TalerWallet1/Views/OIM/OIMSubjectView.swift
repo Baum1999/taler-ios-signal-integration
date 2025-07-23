@@ -76,6 +76,14 @@ struct OIMSubjectView: View {
         }
     }
 
+    func dismissNoTransaction() {
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            dismiss()
+        }
+    }
+
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
@@ -110,11 +118,7 @@ struct OIMSubjectView: View {
                           canEdit: false)
                     .scaleEffect(selectedGoal == nil ? 0.6 : 1)
                     .onTapGesture {
-                        var transaction = Transaction()
-                        transaction.disablesAnimations = true
-                        withTransaction(transaction) {
-                            dismiss()
-                        }
+                        dismissNoTransaction()
                     }
             }
 //              .border(.red)
