@@ -21,12 +21,11 @@ let OIMSIDE = "OIMside"
 // MARK: -
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
-    let currencyName: String
     let chest: String
     let isFinal: Bool                   // bordered action button
     let isSending: Bool                 // move action button
-    let amount: Amount?
     let action: (() -> Void)?
+    let actDisabled: Bool
     var content: () -> Content
 
     @Environment(\.dismiss) var dismiss     // pop back once
@@ -37,7 +36,7 @@ struct OIMnavBack<Content: View>: View {
             ZStack(alignment: .top) {
                 content()
                 VStack {
-                    HStack {
+                    HStack {    // top: chest <-> action
                         OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {
                             var transaction = Transaction()
                             transaction.disablesAnimations = true           // doesn't work with NavigationView
@@ -50,10 +49,9 @@ struct OIMnavBack<Content: View>: View {
                         }
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()
-                        let amountIsZero = amount?.isZero ?? true
                         OIMactionButton(type: .sendP2P,
                                      isFinal: isFinal,
-                                      action: amountIsZero ? nil : action)
+                                      action: actDisabled ? nil : action)
                             .frame(width: OIMactionSize, height: OIMbuttonSize)
                             .matchedGeometryEffect(id: isSending ? OIMACTION : OIMACTION2,
                                                    in: wrapper.namespace, isSource: false)

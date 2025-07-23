@@ -84,12 +84,12 @@ struct OIMSubjectView: View {
 
         let gotAction = (selectedGoal != nil) ? sendAction : nil
         OIMnavBack(stack: stack.push(),
-            currencyName: currency.currencyStr,
                    chest: currency.chest,
                  isFinal: false,
                isSending: sending,
-                  amount: amount2,
-                  action: gotAction
+                  action: gotAction,
+             actDisabled: amount2?.isZero ?? true
+
         ) {
             VStack {
                 OIMtitleView(cash: cash,

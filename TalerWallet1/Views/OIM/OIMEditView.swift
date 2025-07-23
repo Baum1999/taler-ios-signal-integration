@@ -80,13 +80,11 @@ struct OIMEditView: View {
 //        let _ = print(">>> OIMEditView", available, amount, stack.peek()?.file)
 
         OIMnavBack(stack: stack.push(),
-            currencyName: cash.currency.currencyStr,
                    chest: cash.currency.chest,
                  isFinal: false,
                isSending: sending,
-//                  amount: $amount2,
-                  amount: amountToTransfer,
-                  action: sendAction
+                  action: sendAction,
+             actDisabled: amountToTransfer.isZero
         ) {
             ZStack(alignment: .top) {
                 VStack {
