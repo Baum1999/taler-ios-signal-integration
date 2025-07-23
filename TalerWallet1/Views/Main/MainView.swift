@@ -345,7 +345,7 @@ extension MainView {
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
-        @State private var shouldReloadPending = 0
+//        @State private var shouldReloadPending = 0
         @State private var selectedTab: Tab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
@@ -453,7 +453,6 @@ extension MainView {
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
                        selectedBalance: $selectedBalance,    // for sheets, pass down to TransactionsListView
-//                   shouldReloadPending: $shouldReloadPending,
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)
                 .navigationTitle(balancesTitle)
@@ -546,15 +545,15 @@ extension MainView {
             .onNotification(.TransactionExpired) { notification in
                 logger.info(".onNotification(.TransactionExpired) ==> reload balances")
                 shouldReloadTransactions += 1
-                shouldReloadPending += 1
+//                shouldReloadPending += 1
             }
             .onNotification(.TransactionDone) {
                 shouldReloadTransactions += 1
-                shouldReloadPending += 1
+//                shouldReloadPending += 1
 //                selectedTab = .balances       // automatically switch to Balances
             }
             .onNotification(.TransactionError) { notification in
-                shouldReloadPending += 1
+//                shouldReloadPending += 1
             }
             .onNotification(.GeneralError) { notification in
                 if let error = notification.userInfo?[NOTIFICATIONERROR] as? Error {
