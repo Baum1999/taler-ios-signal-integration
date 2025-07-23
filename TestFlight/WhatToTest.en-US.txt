@@ -1,3 +1,8 @@
+Version 1.0.21 (wallet-core 1.0.24)
+
+- OIM improvements
+- Layout and localization (FR, PL)
+
 Version 1.0.20 (wallet-core 1.0.22)
 
 • French localization
