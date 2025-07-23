@@ -30,11 +30,47 @@ struct PendingIconBadge: View {
 // MARK: -
 struct TransactionIconBadge: View {
     var type: TransactionType
-    let foreColor:Color
+    var foreColor: Color
     let done: Bool
     let incoming: Bool
     let shouldConfirm: Bool
     let needsKYC: Bool
+
+    init(type: TransactionType, foreColor: Color, done: Bool, incoming: Bool, shouldConfirm: Bool, needsKYC: Bool) {
+        self.type = type
+        self.foreColor = foreColor
+        self.done = done
+        self.incoming = incoming
+        self.shouldConfirm = shouldConfirm
+        self.needsKYC = needsKYC
+    }
+
+    init(from transaction: TalerTransaction, isDark: Bool, _ increasedContrast: Bool) {
+        let common = transaction.common
+        self.type = common.type
+        let done = transaction.isDone
+        self.done = done
+        let incoming = common.incoming()
+        self.incoming = incoming
+        let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
+        self.needsKYC = needsKYC
+        self.shouldConfirm = transaction.shouldConfirm
+        let pending = transaction.isPending || transaction.common.isFinalizing
+        self.foreColor = .primary
+
+        let doneOrPending = done || pending
+        let isZero = common.amountEffective.isZero
+        let refreshZero = common.type.isRefresh && isZero
+        let textColor = doneOrPending ? .primary
+                             : isDark ? .secondary
+                  : increasedContrast ? Color(.darkGray)
+                                      : .secondary  // Color(.tertiaryLabel)
+        let foreColor = refreshZero ? textColor
+                          : pending ? WalletColors().pendingColor(incoming)
+                             : done ? WalletColors().transactionColor(incoming)
+                                    : WalletColors().uncompletedColor
+        self.foreColor = foreColor
+    }
 
     var body: some View {
         IconBadge(image: type.icon(done),
@@ -81,7 +117,7 @@ struct IconBadge: View {
                     wideIcon.foregroundColor(.clear)
                 }
                 image.foregroundColor(foreColor)
-            }.talerFont(.title2)
+            }
             // ZStack centers the main icon, so the badge will always be at the same position
             let badgeName = needsKYC ? NEEDS_KYC
                                      : CONFIRM_BANK
