@@ -30,69 +30,105 @@ struct TransactionsListView: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var viewId = UUID()
+    @StateObject private var cash: OIMcash
+    @Namespace var namespace
 
+    init(stack: CallStack,
+         scope: ScopeInfo,
+         balance: Balance,
+         selectedBalance: Binding<Balance?>,
+         navTitle: String?,
+         transactions: Binding<[TalerTransaction]>,
+         reloadAllAction: @escaping (_ stack: CallStack) async -> ()
+    ) {
+        // SwiftUI ensures that the initialization uses the
+        // closure only once during the lifetime of the view, so
+        // later changes to the currency have no effect.
+        self.stack = stack
+        self.scope = scope
+        self.balance = balance
+        self.navTitle = navTitle
+        self._transactions = transactions
+        self.reloadAllAction = reloadAllAction
+        self._selectedBalance = selectedBalance
+        let oimCurrency = oimCurrency(balance)
+        let oimCash = OIMcash(oimCurrency)
+        self._cash = StateObject(wrappedValue: { oimCash }())
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let count = transactions.count
-        ScrollViewReader { scrollView in
-            List {
-                Section {
-                    TransactionsArraySliceV(symLog: symLog,
-                                             stack: stack.push(),
-                                             scope: scope,
-                                      transactions: $transactions,
-                                   reloadAllAction: reloadAllAction)
-                        .padding(.leading, ICONLEADING)
-                } header: {
-                    let header = scope.url?.trimURL ?? scope.currency
-                    Text(header)
-                        .talerFont(.title3)
-                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+        if transactions.isEmpty {
+            TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
+        } else {
+            Group {
+                ScrollViewReader { scrollView in
+                    let count = transactions.count
+                    List {
+                        Section {
+                            TransactionsArraySliceV(symLog: symLog,
+                                                     stack: stack.push(),
+                                                     scope: scope,
+                                              transactions: $transactions,
+                                           reloadAllAction: reloadAllAction)
+                                .padding(.leading, ICONLEADING)
+                        } header: {
+                            let header = scope.url?.trimURL ?? scope.currency
+                            Text(header)
+                                .talerFont(.title3)
+                                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                        }
+                    }
+                    .id(viewId)
+                    .listStyle(myListStyle.style).anyView
+                    .refreshable {
+                        controller.hapticNotification(.success)
+                        symLog.log("refreshing")
+                        await reloadAllAction(stack.push())
+                    }
+#if false // SCROLLBUTTONS
+                    .if(count > showUpDown) { view in
+                        view.navigationBarItems(trailing: HStack {
+                            ArrowUpButton {
+//                                print("up")
+                                withAnimation { scrollView.scrollTo(0) }
+                            }
+                            ArrowDownButton {
+//                                print("down")
+                                withAnimation { scrollView.scrollTo(transactions.count - 1) }
+                            }
+                        })
+                    }
+#endif
+                } // ScrollViewReader
+//              .navigationTitle("EURO")           // Fake EUR instead of the real Currency
+//              .navigationTitle("CHF")            // Fake CHF instead of the real Currency
+                .navigationTitle(navTitle ?? scope.currency)
+                .accessibilityHint(String(localized: "Transaction list", comment: "a11y"))
+                .task {
+                    symLog.log("❗️.task List❗️")
+                    await reloadAllAction(stack.push())
+                }
+                .onAppear {
+                    DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST, stack: stack.push())
+                    selectedBalance = balance           // balance fixed for send/request/deposit/withdraw
                 }
             }
-            .id(viewId)
-            .listStyle(myListStyle.style).anyView
-            .refreshable {
-                controller.hapticNotification(.success)
-                symLog.log("refreshing")
-                await reloadAllAction(stack.push())
-            }
-#if false // SCROLLBUTTONS
-            .if(count > showUpDown) { view in
-                view.navigationBarItems(trailing: HStack {
-                    ArrowUpButton {
-//                        print("up")
-                        withAnimation { scrollView.scrollTo(0) }
-                    }
-                    ArrowDownButton {
-//                        print("down")
-                        withAnimation { scrollView.scrollTo(transactions.count - 1) }
-                    }
-                })
-            }
+#if OIM
+            .overlay { if #available(iOS 16.4, *) {
+                if controller.oimModeActive {
+                    OIMtransactions(stack: stack.push(),
+                                  balance: balance,
+                                     cash: cash,
+                                  history: transactions)
+                    .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
+                }
+            } }
 #endif
-        } // ScrollViewReader
-//        .navigationTitle("EURO")           // Fake EUR instead of the real Currency
-//        .navigationTitle("CHF")            // Fake CHF instead of the real Currency
-        .navigationTitle(navTitle ?? scope.currency)
-        .accessibilityHint(String(localized: "Transaction list", comment: "a11y"))
-        .task {
-            symLog.log("❗️.task List❗️")
-            await reloadAllAction(stack.push())
-        }
-        .overlay {
-            if transactions.isEmpty {
-                TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
-            }
-        }
-        .onAppear {
-            DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST, stack: stack.push())
-            selectedBalance = balance           // balance fixed for send/request/deposit/withdraw
-        }
-    }
+        } // not empty
+    } // body
 }
 // MARK: -
 // used by TransactionsListView, and by BalancesSectionView to show the last 3 transactions

@@ -24,6 +24,7 @@ enum OIMbalancesState {
     case historyShown
     case historyTapped
 }
+
 // MARK: -
 @available(iOS 16.4, *)
 struct OIMbalances: View {
@@ -38,15 +39,10 @@ struct OIMbalances: View {
 
     @StateObject private var cash = OIMcash(OIMeuros)
     @State private var availableVal: UInt64 = 0
-    @State private var tappedVal: UInt64 = 0
+    @State private var tappedVal: UInt64 = 0            // unused, canEdit == false
     @State private var available: Amount? = nil
-    @State private var chestOpen: Int? = nil
     @State private var viewState: OIMbalancesState = .chestsClosed
-//    @State private var showingActions = false               // set true after user opened a chest, set false when choosing an action
-//    @State private var sending = false                      // after user tapped on Send or on the money
-    @State private var closing = false                      // after user tapped on the open chest
-
-    func noAction() { }
+    @State private var closing = false                  // debounce tap (on open chest to close it)
     @State private var balanceIndex: Int? = nil
 
     func requestTapped() {
@@ -55,17 +51,12 @@ struct OIMbalances: View {
 
     func sendTapped() {
         withAnimation(.basicFast) {
-//            showingActions = false                           //
             viewState = .sendTapped
         }
-//        let delay = cash.moveDown()                                 // cash animates itself
         cash.flyOneByOne(to: .drawer)
-//        withAnimation(.basic1.delay(delay + 0.5)) {
         withAnimation(.basic1.delay(0.6)) {
-//            sending = true                                  // blends in the missing denominations
-            viewState = .sending
+            viewState = .sending    // go to edit view, blend in missing denominations in drawer
         }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + delay + 1) {       // cash.delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             let actionType = ActionType(animationDisabled: true)
             let userinfo = [NOTIFICATIONANIMATION: actionType]
@@ -84,10 +75,8 @@ struct OIMbalances: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 print("closeChest", delay)
                 withAnimation(.basic1) {
-                    chestOpen = nil
                     selectedBalance = nil
                     available = nil
-//                    showingActions = false
                     viewState = .chestsClosed
                 }
                 closing = false
@@ -110,7 +99,6 @@ struct OIMbalances: View {
 #endif
         viewState = .chestOpenTapped
         withAnimation(.basic1) {
-            chestOpen = index
             selectedBalance = balance
             balanceIndex = index
             viewState = .chestIsOpen
@@ -124,18 +112,18 @@ struct OIMbalances: View {
         }
     }
 
-    func closeHistory() {
-        withAnimation(.basic1) {
-            viewState = .historyTapped
-        }
-        let delay = cash.flyOneByOne(to: .idle)             // back to center
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            print("closeHistory", delay)
-            withAnimation(.basic1) {
-                viewState = .chestIsOpen
-            }
-        }
-    }
+//    func closeHistory() {
+//        withAnimation(.basic1) {
+//            viewState = .historyTapped
+//        }
+//        let delay = cash.flyOneByOne(to: .idle)             // back to center
+//        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+//            print("closeHistory", delay)
+//            withAnimation(.basic1) {
+//                viewState = .chestIsOpen
+//            }
+//        }
+//    }
 
     func openHistory() {
         viewState = .balanceTapped
@@ -157,6 +145,12 @@ struct OIMbalances: View {
                 }
             }
         }
+    }
+
+    func initView() {
+        availableVal = 0
+        cash.update2(availableVal)           // set cash to 0
+        viewState = .chestsClosed
     }
 
     var body: some View {
@@ -218,20 +212,14 @@ struct OIMbalances: View {
                             .opacity(isOpen ? 1 : INVISIBLE)
 //                            .scaleEffect(scaleMoney ? 0.6 : 1)
                             .onTapGesture {
-                                if viewState == .historyShown {
-                                    closeHistory()
-                                } else {
-                                    openHistory()
-                                }
+                                openHistory()
                             }
                     }
                     Spacer()
-//                    botButtons
-//                        .opacity(showingActions ? 1.0 : 0.01)
-                } // title, money, buttons
+                } // title on top, money in the middle
 
                 VStack {
-                    // two savings chests (Euro and Sierra Leone)
+                    // three savings chests (Euro, Sierra Leone, Côte d'Ivoire)
                     Spacer()
                     HStack(spacing: 30) {
                         ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
@@ -262,7 +250,7 @@ struct OIMbalances: View {
                         }
                     }
                     Spacer()
-                } // two chests
+                } // three chests
 
                 VStack {
                     Spacer()
@@ -270,7 +258,7 @@ struct OIMbalances: View {
                     OIMcurrencyDrawer(stack: stack.push(),
                                        cash: cash,
                                availableVal: $availableVal,
-                                  tappedVal: $tappedVal,
+                                  tappedVal: $tappedVal,        // unused, since canEdit == false
                              scrollPosition: maxAvailable,
                                     canEdit: false)
                     .clipped(antialiased: true)
@@ -286,16 +274,23 @@ struct OIMbalances: View {
                 available = selectedBalance.available
                 availableVal = available?.centValue ?? 0
                 cash.update2(availableVal)           // set cash to available
-//                showingActions = true
+                if viewState == .historyTapped {
+                    withAnimation(.basic1) {
+                        viewState = .chestIsOpen
+                    }
+                }
             } else {
-                availableVal = 0
-                cash.update2(availableVal)           // set cash to available
+                initView()
             }
             debugTick += 1
         }
         .onDisappear {
-            cash.moveBack()
-//            sending = false
+            if (selectedBalance != nil) {
+                cash.moveBack()
+                viewState = .chestIsOpen
+            } else {
+                initView()
+            }
         }
     }
 }
