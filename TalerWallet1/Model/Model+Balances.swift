@@ -18,7 +18,14 @@ enum BalanceFlag: String, Codable {
 }
 
 /// A currency balance
-struct Balance: Decodable, Hashable, Sendable {
+struct Balance: Identifiable, Decodable, Hashable, Sendable {
+    var id: String {
+        if let url = scopeInfo.url {
+            return url
+        }
+        return scopeInfo.currency
+    }
+
     var scopeInfo: ScopeInfo
     var available: Amount
     var pendingIncoming: Amount
