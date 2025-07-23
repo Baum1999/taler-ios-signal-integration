@@ -21,7 +21,7 @@ import SwiftUI
 
 
 struct NavLink <Content : View> : View {
-    let tag: Int
+    let tag: Int?
     @Binding var selection: Int?
     @Binding var isActive: Bool
     let content: Content
@@ -41,14 +41,14 @@ struct NavLink <Content : View> : View {
          _ selection: Binding<Int?> = .constant(nil),
          @ViewBuilder contentBuilder: () -> Content
     ) {
-        self.tag = 0
+        self.tag = nil
         self._selection = selection
         self.content = contentBuilder()
         self._isActive = isActive
     }
 
     var body: some View {
-        if tag != 0 {       // actions: $tabBarModel.actionSelected will hide the tabBar
+        if let tag {        // actions: $tabBarModel.actionSelected will hide the tabBar
             NavigationLink(destination: content, tag: tag, selection: $selection)
                 { EmptyView() }.frame(width: 0).opacity(0).hidden()
         } else {            // shortcuts, AddButton
