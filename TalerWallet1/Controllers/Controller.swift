@@ -58,10 +58,8 @@ class Controller: ObservableObject {
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
 
     @Published var isConnected: Bool = true
-#if OIM
     @Published var oimModeActive: Bool = false
     @Published var oimSheetActive: Bool = false
-#endif
     @Published var diagnosticModeEnabled: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
