@@ -25,6 +25,7 @@ func oimCurrency(_ balance: Balance?) -> OIMcurrency {
 public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500],
                                    bankCoins: [200, 100,  50,  20,  10,   5,   2,   1],
                                    coinSizes: [258, 232, 242, 222, 198, 212, 188, 162],
+                                      factor: 1,
                                     noteBase: "EUR", coinBase: "eur",
                                  currencyStr: "EUR", chest: "EUR")
 
@@ -32,12 +33,14 @@ public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 5
 public let OIMxofN   = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000, 500],
                                    bankCoins: [200, 100,  50,  25,  10,   5,   1],
                                    coinSizes: [180, 207, 174, 207, 175, 150, 131],
+                                      factor: 100,
                                     noteBase: "XOFn", coinBase: "xof",
                                  currencyStr: "CFA", chest: "CdI")
 // 4 banknotes, 8 coins (no fractionals)
 public let OIMxofC   = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000],
                                    bankCoins: [500, 200, 100,  50,  25,  10,   5,   1],
                                    coinSizes: [200, 180, 207, 174, 207, 175, 150, 131],
+                                      factor: 100,
                                     noteBase: "XOFn", coinBase: "xof",
                                  currencyStr: "CFA", chest: "CdI")
 // 1 stack, 5 banknotes, 5 coins (all fractionals)
@@ -45,6 +48,7 @@ public let OIMleones = OIMcurrency(bankNotes: [ 10000, 2000, 1000, 500, 200, 100
                                    bankCoins: [ 50,  10,   5,   1],
                                    coinSizes: [270, 240, 228, 208],
                                    // [ 260mm 270px, 240mm 250px, 230mm 240px, 225mm 228px, 200mm 208px]
+                                      factor: 1,
                                     noteBase: "SLE", coinBase: "sle",
                                  currencyStr: "SLE", chest: "SLE")
 
@@ -52,6 +56,7 @@ public let OIMleones = OIMcurrency(bankNotes: [ 10000, 2000, 1000, 500, 200, 100
 public let OIMdollars = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000, 500, 200],          // XXX x 265
                                     bankCoins: [100,  50,  25,  10,   5,   1],
                                     coinSizes: [265, 306, 243, 180, 212, 190],
+                                       factor: 1,
                                      noteBase: "USD", coinBase: "usd",
                                   currencyStr: "USD", chest: "DEU")
 // MARK: -
@@ -59,6 +64,7 @@ public struct OIMcurrency: Sendable {
     let bankNotes: OIMdenominations             // values of each banknote, in cents, descending
     let bankCoins: OIMdenominations             // values of each coin
     let coinSizes: [CGFloat]                    // coin sizes
+    let factor: Int                             // for TestKudos TODO: remove this once we have a proper installation
     let noteBase: String
     let coinBase: String
     let currencyStr: String

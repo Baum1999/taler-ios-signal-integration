@@ -174,7 +174,7 @@ struct OIMtransactions: View {
         }
         .onAppear {
             available = balance.available
-            availableVal = available?.centValue ?? 0
+            availableVal = available?.centValue ?? 0                            // TODO: centValue factor
             cash.update2(availableVal)           // set cash to available
             cash.setTarget(.history)
             debugTick += 1

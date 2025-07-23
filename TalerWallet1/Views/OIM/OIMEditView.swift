@@ -48,8 +48,8 @@ struct OIMEditView: View {
     // available minus amountVal - what's still available from the balance when amount is on the table
     var isAvailable: UInt64 {
         if useAvailable {
-            let have = available.centValue
-            let want = amountToTransfer.centValue
+            let have = available.centValue                                      // TODO: centValue factor
+            let want = amountToTransfer.centValue                               // TODO: centValue factor
             if have > want {
                 return have - want
             }
@@ -131,7 +131,8 @@ struct OIMEditView: View {
                 }
                 VStack {
                     Spacer()
-                    let maxAvailable = useAvailable ? cash.max(available: available.centValue) : 0
+                    let availableCent = available.centValue                     // TODO: centValue factor
+                    let maxAvailable = useAvailable ? cash.max(available: availableCent) : 0
                     OIMcurrencyDrawer(stack: stack.push(),
                                        cash: cash,
                                availableVal: $availableVal,           // ==> available - amount
@@ -149,7 +150,7 @@ struct OIMEditView: View {
         }
         .task {     // re-set cash to amount (once)
 //            amount2 = amountToTransfer
-            amountVal = amountToTransfer.centValue
+            amountVal = amountToTransfer.centValue                              // TODO: centValue factor
             availableVal = isAvailable
 //          print("OIMEditView.task", availableVal, amountVal)
             cash.update2(amountVal, state: .idle)

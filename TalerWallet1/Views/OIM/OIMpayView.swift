@@ -39,7 +39,7 @@ struct OIMpayView: View {
 #endif
         }
         .task {
-            amountVal = amount?.centValue ?? 0
+            amountVal = amount?.centValue ?? 0                                  // TODO: centValue factor
         }
 
     }

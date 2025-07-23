@@ -62,7 +62,7 @@ struct OIMp2pReceiveView: View {
                     .scaleEffect(appeared ? 1 : 0.3)
                     .task {
                         amount = effective
-                        amountVal = effective.centValue
+                        amountVal = effective.centValue                         // TODO: centValue factor
                         withAnimation(.basic1) {
                             appeared = true
                         }

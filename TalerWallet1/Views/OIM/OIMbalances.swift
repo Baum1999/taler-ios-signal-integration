@@ -105,7 +105,7 @@ struct OIMbalances: View {
 //            cash.setIndex(index)
             cash.setCurrency(oimCurrency)
             available = balance.available
-            availableVal = balance.available.centValue
+            availableVal = balance.available.centValue                          // TODO: centValue factor
             cash.update2(availableVal, state: .chestOpening, duration, initial)  // set cash to available
             let maxAvailable = cash.max(available: availableVal)
             print("OIMView.openChest availableVal", availableVal, maxAvailable)
@@ -182,7 +182,7 @@ struct OIMbalances: View {
                 .opacity(showSend ? 1 : INVISIBLE)
         }
 
-        let maxAvailable = cash.max(available: available?.centValue ?? 0)
+        let maxAvailable = cash.max(available: available?.centValue ?? 0)       // TODO: centValue factor
 //        let _ = print("maxAvailable", maxAvailable)
 
         let sidePosition = HStack {
@@ -272,7 +272,7 @@ struct OIMbalances: View {
         .onAppear {
             if let selectedBalance {
                 available = selectedBalance.available
-                availableVal = available?.centValue ?? 0
+                availableVal = available?.centValue ?? 0                        // TODO: centValue factor
                 cash.update2(availableVal)           // set cash to available
                 if viewState == .historyTapped {
                     withAnimation(.basic1) {

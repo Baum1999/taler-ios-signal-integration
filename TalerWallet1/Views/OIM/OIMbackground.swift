@@ -15,6 +15,7 @@ public let OIMBACKLIGHT = "andrey-haimin-VFUTPASjhB8-unsplash"
 struct OIMamountV: View {
     let amount: Amount?
     let currencyName: String
+    let factor: Int             // workaround because TEST has no large denominations, so we multiply with 100
 
     @State private var color = WalletColors().talerColor
 
@@ -29,8 +30,10 @@ struct OIMamountV: View {
 #endif
     }
     var body: some View {
-            if let amount {
-                AmountV(currencyName, amount: amount, isNegative: nil)
+        if let amount {
+            if let amount2 = try? amount * UInt32(factor) {         // workaround for CFA, HUF, JPY
+//                print(amount2.readableDescription)
+                AmountV(currencyName, amount: amount2, isNegative: nil)
                     .ignoresSafeArea(edges: .top)
                     .foregroundColor(color)
                     .task {
@@ -61,6 +64,7 @@ struct OIMamountV: View {
                         updateColor()
                     }
             }
+        }
     }
 }
 // MARK: -

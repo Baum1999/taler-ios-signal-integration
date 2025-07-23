@@ -120,7 +120,7 @@ struct OIMSubjectView: View {
 //              .border(.red)
         }.task {
             amount2 = amountToTransfer
-            amountVal = amountToTransfer.centValue
+            amountVal = amountToTransfer.centValue                              // TODO: centValue factor
             withAnimation(.basic1) {
                 appeared = true
             }
