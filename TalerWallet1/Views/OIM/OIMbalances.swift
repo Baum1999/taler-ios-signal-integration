@@ -75,6 +75,7 @@ struct OIMbalances: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 print("closeChest", delay)
                 withAnimation(.basic1) {
+                    print("🚩OIMbalances.closeChest() reset selectedBalance")
                     selectedBalance = nil
                     available = nil
                     viewState = .chestsClosed
@@ -99,6 +100,7 @@ struct OIMbalances: View {
 #endif
         viewState = .chestOpenTapped
         withAnimation(.basic1) {
+            print("🚩OIMbalances.openChest() set selectedBalance to", balance.scopeInfo.currency)
             selectedBalance = balance
             balanceIndex = index
             viewState = .chestIsOpen
@@ -271,6 +273,7 @@ struct OIMbalances: View {
         }
         .onAppear {
             if let selectedBalance {
+                print("🚩OIMbalances.onAppear() selectedBalance", selectedBalance.scopeInfo.currency)
                 available = selectedBalance.available
                 availableVal = available?.centValue ?? 0                        // TODO: centValue factor
                 cash.update2(availableVal)           // set cash to available
@@ -280,6 +283,7 @@ struct OIMbalances: View {
                     }
                 }
             } else {
+                print("🚩OIMbalances.onAppear() no selectedBalance")
                 initView()
             }
             debugTick += 1

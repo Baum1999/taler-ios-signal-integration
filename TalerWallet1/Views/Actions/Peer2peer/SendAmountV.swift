@@ -86,6 +86,7 @@ struct SendAmountV: View {
                 // TODO: Error
                 amountAvailable = balance.available
             }
+            print("🚩SendAmountV.newBalance() set selectedBalance and cash.currency")
             selectedBalance = balance
             let oimCurrency = oimCurrency(balance)      // might be nil ==> OIMeuros
             cash.currency = oimCurrency

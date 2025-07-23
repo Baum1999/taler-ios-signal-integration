@@ -113,7 +113,8 @@ struct TransactionsListView: View {
                 }
                 .onAppear {
                     DebugViewC.shared.setViewID(VIEW_TRANSACTIONLIST, stack: stack.push())
-                    selectedBalance = balance           // balance fixed for send/request/deposit/withdraw
+                    print("🚩,32TransactionsListView.onAppear() set selectedBalance to", balance.scopeInfo.currency)
+                    selectedBalance = balance           // set this balance (fix) for send/request/deposit/withdraw
                 }
             }
 #if OIM

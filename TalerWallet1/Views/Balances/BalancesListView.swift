@@ -66,11 +66,19 @@ struct BalancesListView: View {
                     }
                     .onAppear() {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
-                        selectedBalance = nil                                   // reset
+                        if !controller.oimModeActive {
+                            print("🚩BalancesListView.onAppear() reset selectedBalance")
+                            selectedBalance = nil                               // reset
+                        }
                     }
                     .listStyle(myListStyle.style).anyView
                     .refreshable {
                         await refresh()
+                    }
+                }.onChange(of: controller.oimModeActive) { oimModeActive in
+                    if !oimModeActive {
+                        print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
+                        selectedBalance = nil                                   // reset
                     }
                 }
 #if OIM
