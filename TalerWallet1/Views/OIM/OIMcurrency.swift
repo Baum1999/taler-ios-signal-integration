@@ -11,6 +11,16 @@ public typealias OIMdenominations = [UInt64]
 public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // number of notes and coins
 
 public let OIMcurrencies = [OIMeuros, OIMleones, OIMxofN]
+func oimCurrency(_ balance: Balance?) -> OIMcurrency {
+    let currency = balance?.scopeInfo.currency
+    if currency == DEMOCURRENCY {
+        return OIMcurrencies[1]
+    } else if currency == TESTCURRENCY {
+        return OIMcurrencies[2]
+    }
+    return OIMcurrencies[0]
+}
+
 // 6 banknotes, 8 coins of which 6 are fractionals < 100
 public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500],
                                    bankCoins: [200, 100,  50,  20,  10,   5,   2,   1],
