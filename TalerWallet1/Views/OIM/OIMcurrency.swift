@@ -29,6 +29,14 @@ public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 5
                                     noteBase: "EUR", coinBase: "eur",
                                  currencyStr: "EUR", chest: "EUR")
 
+// 6 banknotes, 9 coins of which 6 are fractionals < 100
+public let OIMfrancs = OIMcurrency(bankNotes: [100000, 20000, 10000, 5000, 2000, 1000],
+                                   bankCoins: [500, 200, 100,  50,  20,  10,   5,   2,   1],
+                                   coinSizes: [315, 274, 232, 182, 211, 192, 172, 200, 160],
+                                      factor: 1,
+                                    noteBase: "CHF", coinBase: "chf",
+                                 currencyStr: "CHF", chest: "CHF")
+
 // 5 banknotes, 7 coins (no fractionals)
 public let OIMxofN   = OIMcurrency(bankNotes: [10000, 5000, 2000, 1000, 500],
                                    bankCoins: [200, 100,  50,  25,  10,   5,   1],
