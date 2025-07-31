@@ -118,7 +118,7 @@ struct TransactionRowView: View {
                              : done ? WalletColors().transactionColor(incoming)
                                     : WalletColors().uncompletedColor
         let for2Color = refreshZero ? textColor
-                : (pending || done) ? (incoming ? WalletColors().talerColor : textColor)
+                : (pending || done) ? (incoming ? .accentColor : textColor)
                                     : WalletColors().uncompletedColor
 
         let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,

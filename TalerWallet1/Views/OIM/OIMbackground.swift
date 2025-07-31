@@ -17,15 +17,15 @@ struct OIMamountV: View {
     let currencyName: String
     let factor: Int             // workaround because TEST has no large denominations, so we multiply with 100
 
-    @State private var color = WalletColors().talerColor
+    @State private var color = Color.accentColor
 
     func updateColor() {
 #if DEBUG
         color = debugAnimations ? .orange
-                                : fastAnimations ? WalletColors().talerColor
+                                : fastAnimations ? .accentColor
                                                  : .red
 #else
-        color = fastAnimations ? WalletColors().talerColor
+        color = fastAnimations ? .accentColor
                                : WalletColors().confirm
 #endif
     }

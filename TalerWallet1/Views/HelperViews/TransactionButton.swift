@@ -39,7 +39,7 @@ struct WarningButton: View {
             }
             .frame(maxWidth: .infinity)
             .foregroundColor(role == .destructive ? WalletColors().errorColor
-                                                  : WalletColors().talerColor)
+                                                  : .accentColor)
         }
         .talerFont(.title1)
         .buttonStyle(.bordered)

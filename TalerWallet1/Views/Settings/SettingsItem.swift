@@ -34,7 +34,7 @@ struct SettingsItem<Content: View>: View {
         HStack {
             VStack {
                 let isWeb = id1?.hasPrefix("web") ?? false
-                let foreColor = isWeb ? WalletColors().talerColor
+                let foreColor = isWeb ? Color.accentColor
                                       : .primary
                 HStack(spacing: 8.0) {
                     if let imageName {

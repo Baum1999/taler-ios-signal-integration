@@ -118,7 +118,7 @@ struct QRButton : View  {
                 qrImage
                     .resizable()
                     .scaledToFit()
-                    .foregroundStyle(WalletColors().talerColor)
+                    .foregroundStyle(Color.accentColor)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
                 qrText.talerFont(.largeTitle)
@@ -147,7 +147,7 @@ struct PlusButton : View  {
         Button(action: action) {
             Image(systemName: "plus")
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
@@ -160,7 +160,7 @@ struct BackButton : View  {
         Button(action: action) {
             Image(ICONNAME_INCOMING + ICONNAME_FILL)
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.largeTitle)
         .accessibilityLabel(Text("Back", comment: "a11y"))
     }
@@ -181,7 +181,7 @@ struct ForwardButton : View  {
                                     : ICONNAME_OUTGOING
             Image(imageName)
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.largeTitle)
         .accessibilityLabel(Text("Continue", comment: "a11y"))
     }
@@ -194,7 +194,7 @@ struct ArrowUpButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.up.to.line")
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.title2)
         .accessibilityLabel(Text("Scroll up", comment: "a11y"))
     }
@@ -207,7 +207,7 @@ struct ArrowDownButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.down.to.line")
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.title2)
         .accessibilityLabel(Text("Scroll down", comment: "a11y"))
     }
@@ -221,7 +221,7 @@ struct ReloadButton : View  {
         Button(action: action) {
             Image(systemName: "arrow.clockwise")
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.title)
         .accessibilityLabel(Text("Reload", comment: "a11y"))
         .disabled(disabled)

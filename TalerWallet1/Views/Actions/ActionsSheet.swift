@@ -65,8 +65,7 @@ struct ActionsSheet: View {
                 }
                 Button(action: shopAction) {
                     HStack {
-                        let talerColor = WalletColors().talerColor
-                        ButtonIconBadge(type: .payment, foreColor: talerColor, done: false)
+                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
                             .talerFont(.title2)
                         Spacer()
                         Text(buttonTitle)

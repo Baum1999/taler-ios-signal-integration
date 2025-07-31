@@ -93,7 +93,7 @@ struct TabBarView: View {
                 }
             }
         }.id(tab)
-        .foregroundColor(selection == tab ? WalletColors().talerColor : .secondary)
+        .foregroundColor(selection == tab ? .accentColor : .secondary)
         .padding(.vertical, 8)
         .accessibilityElement(children: .combine)
         .accessibility(label: Text(tab.title))

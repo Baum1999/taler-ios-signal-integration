@@ -55,7 +55,7 @@ struct CopyButton: View {
                 }
             }
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.body)
         .disabled(!isEnabled)
     }
@@ -93,7 +93,7 @@ struct ShareButton: View {
                 Text(title)
             }
         }
-        .tint(WalletColors().talerColor)
+        .tint(.accentColor)
         .talerFont(.body)
         .disabled(!isEnabled)
     }
