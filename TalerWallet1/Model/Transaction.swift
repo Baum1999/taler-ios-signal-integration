@@ -493,6 +493,8 @@ struct PaymentTransactionDetails: Decodable {
     var refunds: [RefundInfo]?           // array of refund txIDs for this payment
     var refundQueryActive: Bool?
     var posConfirmation: String?
+    var posConfirmationDeadline: Timestamp?
+    var posConfirmationViaNfc: Bool?
 }
 struct PaymentTransaction : Sendable {
     var common: TransactionCommon

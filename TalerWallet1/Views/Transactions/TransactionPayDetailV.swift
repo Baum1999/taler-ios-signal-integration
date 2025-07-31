@@ -21,8 +21,16 @@ struct TransactionPayDetailV: View {
                 Text("Confirmation:", comment: "purchase may have a pos validation / confirmation")
                     .talerFont(.title3)
                     .listRowSeparator(.hidden)
-                Text(posConfirmation)
-                    .talerFont(.body)
+                let totp = Text(posConfirmation)
+                    .talerFont(.title1)
+                if #available(iOS 17.7, *) {
+                    let talerURI = posConfirmation
+                    BorderWithNFC(talerURI: talerURI, nfcHint: true, size: 250, scanHints: nil) {
+                        totp
+                    }
+                } else {
+                    totp
+                }
             }
 //            Text(info.summary)
             Text("Order-ID:")
