@@ -10,13 +10,15 @@ import Foundation
 public typealias OIMdenominations = [UInt64]
 public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // number of notes and coins
 
-public let OIMcurrencies = [OIMeuros, OIMleones, OIMxofN]
+public let OIMcurrencies = [OIMeuros, OIMleones, OIMxofN, OIMfrancs]
 func oimCurrency(_ balance: Balance?) -> OIMcurrency {
     let currency = balance?.scopeInfo.currency
     if currency == DEMOCURRENCY {
         return OIMcurrencies[1]
     } else if currency == TESTCURRENCY {
         return OIMcurrencies[2]
+    } else if currency == "CHF" {
+        return OIMcurrencies[3]
     }
     return OIMcurrencies[0]
 }
