@@ -273,6 +273,7 @@ enum PreparePayResultType: String, Codable {
     case paymentPossible = "payment-possible"
     case alreadyConfirmed = "already-confirmed"
     case insufficientBalance = "insufficient-balance"
+    case choiceSelection = "choice-selection"
 }
 
 struct PayMerchantInsufficientBalanceDetails: Codable {
