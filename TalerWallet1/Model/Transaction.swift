@@ -151,6 +151,13 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
     var amountStr: String?
     var messageStr: String?
 
+    func param(key: String, from params: [String:String]) -> String? {
+        if let param = params[key] {
+            return param.replacingOccurrences(of: "+", with: SPACE)
+        }
+        return nil
+    }
+
     init(_ string: String) {
         let payURL = URL(string: string)
         if let queryParameters = payURL?.queryParameters {
@@ -158,14 +165,10 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
             xTaler = payURL?.xTaler ??
 //                   payURL?.host() ??
                      String(localized: "unknown payment method")
-            sender = queryParameters["sender-name"] ?? EMPTYSTRING
-                        .replacingOccurrences(of: "+", with: SPACE)
-            receiver = (queryParameters["receiver-name"] ?? EMPTYSTRING)
-                        .replacingOccurrences(of: "+", with: SPACE)
-            postalCode = (queryParameters["receiver-postal-code"] ?? EMPTYSTRING)
-                        .replacingOccurrences(of: "+", with: SPACE)
-            town = (queryParameters["receiver-town"] ?? EMPTYSTRING)
-                        .replacingOccurrences(of: "+", with: SPACE)
+            sender = param(key: "sender-name", from: queryParameters)
+            receiver = param(key: "receiver-name", from: queryParameters)
+            postalCode = param(key: "receiver-postal-code", from: queryParameters)
+            town = param(key: "receiver-town", from: queryParameters)
             amountStr = queryParameters["amount"] ?? EMPTYSTRING
             messageStr = queryParameters["message"] ?? EMPTYSTRING
         }

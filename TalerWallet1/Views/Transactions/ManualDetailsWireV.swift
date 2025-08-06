@@ -249,10 +249,14 @@ struct ManualDetailsWireV: View {
                     step2i
                     payeeCode
                     if let receiverZip {
-                        payeeZip()
+                        if !receiverZip.isEmpty {
+                            payeeZip()
+                        }
                     }
                     if let receiverTown {
-                        payeeTown()
+                        if !receiverTown.isEmpty {
+                            payeeTown()
+                        }
                     }
                     ibanCode
                 } else {
