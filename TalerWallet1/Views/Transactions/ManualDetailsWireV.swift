@@ -139,12 +139,13 @@ struct ManualDetailsWireV: View {
 
     var body: some View {
         List {
+            let cryptoString = debitIBAN == nil ? reservePub : "kyc" + reservePub
             let cryptocode = HStack {
-                Text(reservePub)
+                Text(cryptoString)
                     .monospacedDigit()
                     .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                CopyButton(textToCopy: reservePub, vertical: true)
+                CopyButton(textToCopy: cryptoString, vertical: true)
                     .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
                     .disabled(false)
             }   .padding(.leading)
