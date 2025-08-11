@@ -61,7 +61,7 @@ struct TransactionSummaryV: View {
     func loadTransaction() async {
         if let reloadedTransaction = try? await model.getTransactionById(transactionId,
                                                                withTerms: true, viewHandles: false) {
-            symLog.log("reloaded transaction: \(reloadedTransaction.common.txState.major)")
+            symLog.log("reloaded \(reloadedTransaction.localizedType): \(reloadedTransaction.common.txState.major)")
             withAnimation { talerTX = reloadedTransaction; viewId = UUID() }      // redraw
             if developerMode {
                 if let json = try? await model.jsonTransactionById(transactionId,
@@ -128,7 +128,7 @@ struct TransactionSummaryV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let common = talerTX.common
-        if common.type != .dummy {
+        if common.type != .dummy && transactionId == common.transactionId {
             let scope = common.scopes.first                                     // might be nil if scopes == []
 //            let pending = transaction.isPending
             let locale = TalerDater.shared.locale
