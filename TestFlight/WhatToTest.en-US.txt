@@ -1,3 +1,8 @@
+Version 1.0.23 (wallet-core 1.0.28.1)
+
+- fix tx not reloaded in history
+
+
 Version 1.0.22 (wallet-core 1.0.28)
 
 • OIM for CHF
