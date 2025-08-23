@@ -91,12 +91,13 @@ struct PaymentView: View, Sendable {
 
     @MainActor
     func checkCurrencyInfo(for result: PreparePayResult) async {
-        let scopes = result.scopes
-        if scopes.count > 0 {
-            for scope in scopes {
-                controller.checkInfo(for: scope, model: model)
+        if let scopes = result.scopes {
+            if scopes.count > 0 {
+                for scope in scopes {
+                    controller.checkInfo(for: scope, model: model)
+                }
+                return
             }
-            return
         }
         // else fallback to contractTerms.exchanges
         let exchanges = result.contractTerms.exchanges
@@ -148,11 +149,19 @@ struct PaymentView: View, Sendable {
         return 0
     }
 
+    func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
+        if let raw, let eff {
+            return try! Amount.diff(raw, eff)      // TODO: different currencies
+        }
+        return nil
+    }
+
     var body: some View {
       Group {
         if let preparePayResult {
             let status = preparePayResult.status
-            let firstScope = preparePayResult.scopes.first
+            let scopes = preparePayResult.scopes            // TODO: might be nil
+            let firstScope = scopes?.first
             let raw = preparePayResult.amountRaw
             let currency = raw.currencyStr
             let effective = preparePayResult.amountEffective
@@ -185,7 +194,7 @@ struct PaymentView: View, Sendable {
                 let bottomTitle = paid ? String(localized: "Spent amount:")
                                        : String(localized: "Amount to spend:")
                 if let effective {
-                    let fee = try! Amount.diff(raw, effective)      // TODO: different currencies
+                    let fee = computeFee(raw: raw, eff: effective)
                     ThreeAmountsSection(stack: stack.push(),
                                         scope: firstScope,
                                      topTitle: topTitle,
@@ -291,7 +300,8 @@ struct PaymentView: View, Sendable {
             .navigationTitle(navTitle)
             .task(id: controller.currencyTicker) {
                 let currency = amountToTransfer.currencyStr
-                if let resultScope = preparePayResult.scopes.first {            // TODO: let user choose which currency
+                let scopes = preparePayResult.scopes            // TODO: might be nil
+                if let resultScope = scopes?.first {            // TODO: let user choose which currency
                     currencyInfo = controller.info(for: resultScope, controller.currencyTicker)
                 } else {
                     currencyInfo = controller.info2(for: currency, controller.currencyTicker)

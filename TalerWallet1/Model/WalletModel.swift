@@ -195,10 +195,10 @@ extension WalletModel {
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = TalerTransaction
     func operation() -> String { "getTransactionById" }
-    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: withTerms) }
+    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: includeContractTerms) }
 
     var transactionId: String
-    var withTerms: Bool?
+    var includeContractTerms: Bool?
 
     struct Args: Encodable {
         var transactionId: String
@@ -209,10 +209,10 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
     typealias Response = String
     func operation() -> String { "getTransactionById" }
-    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: withTerms) }
+    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: includeContractTerms) }
 
     var transactionId: String
-    var withTerms: Bool?
+    var includeContractTerms: Bool?
 
     struct Args: Encodable {
         var transactionId: String
@@ -222,14 +222,14 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// get the specified transaction from Wallet-Core. No networking involved
-    nonisolated func getTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
+    nonisolated func getTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
-        let request = GetTransactionById(transactionId: transactionId, withTerms: withTerms)
+        let request = GetTransactionById(transactionId: transactionId, includeContractTerms: includeContractTerms)
         return try await sendRequest(request, viewHandles: viewHandles)
     }
-    nonisolated func jsonTransactionById(_ transactionId: String, withTerms: Bool? = nil, viewHandles: Bool = false)
+    nonisolated func jsonTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> String {
-        let request = JSONTransactionById(transactionId: transactionId, withTerms: withTerms)
+        let request = JSONTransactionById(transactionId: transactionId, includeContractTerms: includeContractTerms)
         return try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
     }
 }

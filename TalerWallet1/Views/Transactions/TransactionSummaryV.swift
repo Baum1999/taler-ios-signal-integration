@@ -60,12 +60,12 @@ struct TransactionSummaryV: View {
 
     func loadTransaction() async {
         if let reloadedTransaction = try? await model.getTransactionById(transactionId,
-                                                               withTerms: true, viewHandles: false) {
+                                                    includeContractTerms: true, viewHandles: false) {
             symLog.log("reloaded \(reloadedTransaction.localizedType): \(reloadedTransaction.common.txState.major)")
             withAnimation { talerTX = reloadedTransaction; viewId = UUID() }      // redraw
             if developerMode {
                 if let json = try? await model.jsonTransactionById(transactionId,
-                                                         withTerms: true, viewHandles: false) {
+                                              includeContractTerms: true, viewHandles: false) {
                     jsonTransaction = json
                 } else {
                     jsonTransaction = ""

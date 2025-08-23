@@ -151,7 +151,8 @@ struct ContractChoice: Codable {
     let outputs: [ContractOutput]
 
     enum CodingKeys: String, CodingKey {
-        case amount, maxFee, description
+        case amount, description
+        case maxFee = "max_fee"
         case descriptionI18n = "description_i18n"
         case inputs, outputs
     }
@@ -302,12 +303,13 @@ struct PerScopeDetails: Codable {
 }
 /// The result from PreparePayForUri
 struct PreparePayResult: Codable {
-    let status: PreparePayResultType
+    let status: PreparePayResultType                            // InsufficientBalance, AlreadyConfirmed, PaymentPossible, ChoiceSelection
     let transactionId: String
     let contractTerms: MerchantContractTerms
-    let scopes: [ScopeInfo]
+    let contractTermsHash: String?                              // not for InsufficientBalance
+    let scopes: [ScopeInfo]?                                    // not for ChoiceSelection
 //  let detailsPerScope: [ScopeInfo : PreparePayDetails]
-    let amountRaw: Amount
+    let amountRaw: Amount                                       // TODO: not for ChoiceSelection
 
     let amountEffective: Amount?                                // only if status != insufficientBalance
     let paid: Bool?                                             // only if status == alreadyConfirmed
