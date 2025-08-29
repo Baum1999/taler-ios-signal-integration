@@ -10,7 +10,7 @@ import taler_swift
 
 enum OIMtransactionsState {
     case chestIsOpen
-    case chestOpenTapped        // <- move mon
+    case chestOpenTapped        // <- move money
 
     case balanceTapped
     case historyShown
@@ -18,6 +18,7 @@ enum OIMtransactionsState {
 
 }
 
+// MARK: -
 struct OIMhistoryItem: View {
     let talerTX: TalerTransaction
 
@@ -61,7 +62,6 @@ struct OIMtransactions: View {
     @State private var availableVal: UInt64 = 0
     @State private var available: Amount? = nil
     @State private var viewState: OIMtransactionsState = .chestIsOpen
-//    @State private var sending = false                      // after user tapped on Send or on the money
     @State private var closing = false                      // after user tapped on the open chest
     @State private var talerTXs: [TalerTransaction] = []
 

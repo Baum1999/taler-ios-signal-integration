@@ -253,11 +253,11 @@ struct MainView: View {
         }   }   }
         .onChange(of: controller.isConnected) { isConnected in
             if isConnected {
-                withAnimation(Animation.easeIn(duration: 1.0)) {
+                withAnimation(.easeIn(duration: 1.0)) {
                     networkUnavailable = false
                 }
             } else {
-                withAnimation(Animation.easeOut(duration: 1.0)) {
+                withAnimation(.easeOut(duration: 1.0)) {
                     networkUnavailable = true
                 }
             }
@@ -314,7 +314,7 @@ extension Label where Title == Text, Icon == Image {
         self.init(EMPTYSTRING, systemImage: tab.a11y)
     }
 }
-// MARK: - Content
+// MARK: -
 struct ActionType: Hashable {
     let animationDisabled: Bool
 }

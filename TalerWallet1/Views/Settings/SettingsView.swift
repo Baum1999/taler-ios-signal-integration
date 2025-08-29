@@ -252,7 +252,7 @@ struct SettingsView: View {
                                 description: hideDescriptions ? nil : String("After each wallet-core action"))
                             .id("delay")
 #if DEBUG
-                        SettingsItem(name: String("Run Dev Experiment"), id1: "applyDevExperiment",
+                        SettingsItem(name: String("Run Dev Experiment Refresh"), id1: "applyDevExperiment",
                               description: hideDescriptions ? nil : "dev-experiment/insert-pending-refresh") {
                             let title = "Refresh"
                             Button(title) {

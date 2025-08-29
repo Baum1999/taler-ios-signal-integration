@@ -94,7 +94,7 @@ struct TransactionRowView: View {
 
     var body: some View {
 #if DEBUG
-        let _ = Self._printChanges()
+//        let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let pending = transaction.isPending || transaction.common.isFinalizing

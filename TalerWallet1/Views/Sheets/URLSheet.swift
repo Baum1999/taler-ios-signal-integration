@@ -66,7 +66,7 @@ struct URLSheet: View {
                     DevExperimentView(stack: stack.push(), url: passedURL)
 #endif
                 default:        // TODO: Error view
-                    let unknown = String(localized: "Unknown command")
+                    let unknown = String(localized: "Unknown command: \(passedURL.absoluteString)")
                     VStack {
                         let _ = symLog.log("Unknown command❗️ \(passedURL.absoluteString)")
                         Text(controller.messageForSheet ?? unknown)

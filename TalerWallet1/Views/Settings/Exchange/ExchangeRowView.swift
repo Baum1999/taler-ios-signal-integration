@@ -62,9 +62,6 @@ struct ExchangeRowView: View {
                 .onTapGesture {
                     tabBarModel.tosView = index
                 }
-//                .task {
-//                    tabBarModel.tosView = false
-//                }
         }.listRowSeparator(.hidden)
     }
 }

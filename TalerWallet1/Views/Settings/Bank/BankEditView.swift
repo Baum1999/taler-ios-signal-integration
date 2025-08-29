@@ -20,7 +20,7 @@ struct BankEditView: View {
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
-    @AppStorage("fakeNoFees") var fakeNoFees: Bool = true
+//    @AppStorage("fakeNoFees") var fakeNoFees: Bool = true     TODO: use this flag!
     @AppStorage("ownerName") var ownerName: String = EMPTYSTRING
 
     @State private var shouldReloadBalances: Int = 0
