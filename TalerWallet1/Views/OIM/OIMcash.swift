@@ -138,18 +138,6 @@ final class OIMcash: ObservableObject, Sendable {
         return 0
     }
 
-    var flyDelay: Double {     // time
-#if DEBUG
-        if debugAnimations { return 5.0 }
-//        return fastAnimations ? 5 : 1.0
-#endif
-        return fastAnimations ? 0.4 : 0.8
-    }
-
-    var curveDelay: Double {
-        flyDelay * 2 / 3
-    }
-
     func sortByValue() -> OIMfunds {
         /// sorts ASCENDING but keeps the order of the IDs for identical values
         funds.sorted(by: {
@@ -261,7 +249,7 @@ final class OIMcash: ObservableObject, Sendable {
             self.symLog.log(">>flipped \(morphFund.id) \(morphFund.value) \(morphFund.state.rawValue)")
 
             /// Stage 4: move inValues to final position, delete outValues from funds array
-            DispatchQueue.main.asyncAfter(deadline: .now() + self.flyDelay) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + flyDelay) {
                 morphFund.state = .arriving
                 morphFund.value = inValue                       // stack position
                 morphFund.morphTicker = nil                     // release `semaphore´
@@ -284,7 +272,7 @@ final class OIMcash: ObservableObject, Sendable {
                 }
 
                 /// Stage 5: transmute morphFund
-                DispatchQueue.main.asyncAfter(deadline: .now() + self.flyDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + flyDelay) {
                     morphFund.state = .mutating
 //                    morphFund.state = .idle
                     morphFund.outValue = nil

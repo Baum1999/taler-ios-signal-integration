@@ -27,6 +27,18 @@ var fastAnimations = true
 var debugAnimations = false
 #endif
 
+var flyDelay: Double {     // time
+#if DEBUG
+    if debugAnimations { return 5.0 }
+    //        return fastAnimations ? 5 : 1.0
+#endif
+    return fastAnimations ? 0.4 : 0.8
+}
+
+var curveDelay: Double {
+    flyDelay * 2 / 3
+}
+
 fileprivate
 let FAST: TimeInterval = 0.25
 fileprivate

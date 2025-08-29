@@ -92,10 +92,10 @@ struct OIMlayoutView: View {
                         fund.state = .curve
                         cash.updateFund(fund)
                     }
-                    endFlying(index, after: cash.flyDelay / 3)
+                    endFlying(index, after: flyDelay / 3)
                 }
             } else {
-                endFlying(index, after: cash.flyDelay)
+                endFlying(index, after: flyDelay)
             }
             withAnimation(.move1) {
                 fund.state = fromChest ? .reveal : .isFlying               // switch off matching
@@ -112,7 +112,7 @@ struct OIMlayoutView: View {
                 fund.state = .removing
                 cash.updateFund(fund)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + cash.flyDelay) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + flyDelay) {
                 symLog.log("*** remove:\(fund.value) \(fundID)")
                 withAnimation(.move1) {
                     cash.removeCash(id: fundID, value: fund.value)
