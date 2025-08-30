@@ -99,6 +99,11 @@ public let SYSTEM_RECOUP1 = "exclamationmark.circle"                // 􀁞 􀁟
 public let ICONNAME_DENOMLOSS = "taler.denomloss"                   // 􀇾 􀇿
 public let SYSTEM_DENOMLOSS1 = "exclamationmark.triangle"           // 􀇾 􀇿    1.0 (iOS 13)
 
+public let ICONNAME_ZOOM_IN = "taler.left.and.right.fill"           // 􀟦       3.0 (iOS 15)
+public let ICONNAME_ZOOM_OUT = "taler.right.and.left.fill"          // 􀟧       3.0 (iOS 15)
+public let SYSTEM_ZOOM_IN = "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"   // 􀟦   3.0 (iOS 15)
+public let SYSTEM_ZOOM_OUT = "arrowtriangle.right.and.line.vertical.and.arrowtriangle.left.fill"  // 􀟧   3.0 (iOS 15)
+
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
 //public let DEMOEXCHANGE = HTTPS + "eXcHaNgE.dEmO.tAlEr.nEt"

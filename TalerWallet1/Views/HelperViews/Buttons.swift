@@ -153,12 +153,59 @@ struct PlusButton : View  {
     }
 }
 
+struct ZoomInButton : View  {
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            let name = ICONNAME_ZOOM_IN
+            if UIImage(named: name) != nil {
+                Image(name)
+            } else {
+                Image(systemName: SYSTEM_ZOOM_IN)
+            }
+        }
+        .tint(.accentColor)
+        .talerFont(.title)
+        .accessibilityLabel(accessibilityLabelStr)
+    }
+}
+
+struct ZoomOutButton : View  {
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            let name = ICONNAME_ZOOM_OUT
+            if UIImage(named: name) != nil {
+                Image(name)
+            } else {
+                Image(systemName: SYSTEM_ZOOM_OUT)
+            }
+        }
+        .tint(.accentColor)
+        .talerFont(.title)
+        .accessibilityLabel(accessibilityLabelStr)
+    }
+}
+
 struct BackButton : View  {
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Image(ICONNAME_INCOMING + ICONNAME_FILL)
+            let name = ICONNAME_INCOMING + ICONNAME_FILL
+            let sysName = SYSTEM_INCOMING4 + ICONNAME_FILL
+            if UIImage(named: name) != nil {
+                Image(name)
+            } else if UIImage(systemName: sysName) != nil {
+                Image(systemName: sysName)
+            } else {
+                // TODO: ultralight vs black
+                Image(systemName: FALLBACK_INCOMING)
+            }
         }
         .tint(.accentColor)
         .talerFont(.largeTitle)
@@ -179,7 +226,16 @@ struct ForwardButton : View  {
         Button(action: myAction) {
             let imageName = enabled ? ICONNAME_OUTGOING + ICONNAME_FILL
                                     : ICONNAME_OUTGOING
-            Image(imageName)
+            let sysName   = enabled ? SYSTEM_OUTGOING4 + ICONNAME_FILL
+                                    : SYSTEM_OUTGOING4
+            if UIImage(named: imageName) != nil {
+                Image(imageName)
+            } else if UIImage(systemName: sysName) != nil {
+                Image(systemName: sysName)
+            } else {
+                // TODO: ultralight vs black
+                Image(systemName: FALLBACK_OUTGOING)
+            }
         }
         .tint(.accentColor)
         .talerFont(.largeTitle)
