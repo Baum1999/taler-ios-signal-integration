@@ -27,6 +27,7 @@ struct P2pReceiveURIView: View {
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
+    @State private var accept: Bool = false
     @State private var exchange: Exchange? = nil
 
     let navTitle = String(localized: "Receive", comment: "Nav Title")
@@ -100,9 +101,13 @@ struct P2pReceiveURIView: View {
                         let destination = P2pAcceptDone(stack: stack.push(),
                                                 transactionId: peerPushCreditResponse.transactionId,
                                                      incoming: true)
-                        NavigationLink(destination: destination) {
-                            Text("Accept and receive")      // SHEET_RCV_P2P_ACCEPT
+                        let actions = Group {
+                            NavLink($accept) { destination }
                         }
+                        Button("Accept and receive") {      // SHEET_RCV_P2P_ACCEPT
+                            accept = true
+                        }
+                        .background(actions)
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                     }
