@@ -107,7 +107,7 @@ struct TransactionRowView: View {
         let keys = details.keys
         let common = transaction.common
         let isZero = common.amountEffective.isZero
-        let incoming = common.incoming()
+        let incoming = common.isIncoming
         let textColor = doneOrPending ? .primary
                : colorScheme == .dark ? .secondary
                   : increasedContrast ? Color(.darkGray)

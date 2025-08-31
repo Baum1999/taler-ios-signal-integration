@@ -50,7 +50,7 @@ struct TransactionIconBadge: View {
         self.type = common.type
         let done = transaction.isDone
         self.done = done
-        let incoming = common.incoming()
+        let incoming = common.isIncoming
         self.incoming = incoming
         let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
         self.needsKYC = needsKYC

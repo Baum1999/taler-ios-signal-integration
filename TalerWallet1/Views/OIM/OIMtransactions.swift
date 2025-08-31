@@ -227,7 +227,7 @@ extension OIMtransactions {
         func lineMark(for talerTransaction: TalerTransaction) -> LineMarkData {
             let common = talerTransaction.common
             let amount = common.amountEffective
-            let incoming = common.incoming()
+            let incoming = common.isIncoming
             let timestamp = common.timestamp
             let date = try! Date(milliseconds: timestamp.milliseconds())
             let components = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: date)

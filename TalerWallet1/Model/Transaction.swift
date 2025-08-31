@@ -353,6 +353,11 @@ struct TransactionCommon: Decodable, Sendable {
     var kycUrl: String?
     var kycAuthTransferInfo: KycAuthTransferInfo?
 
+    var isIncoming      : Bool { type == .withdrawal
+                              || type == .refund
+                              || type == .peerPullCredit
+                              || type == .scanPushCredit }
+
     var isPending       : Bool { txState.major == .pending }
     var isPendingReady  : Bool { isPending && txState.isReady }
     var isPendingKYC    : Bool { isPending && txState.isKYC }
@@ -423,13 +428,6 @@ struct TransactionCommon: Decodable, Sendable {
             return try Amount.diff(amountEffective, amountRaw)
         } catch {}
         return Amount.zero(currency: amountRaw.currencyStr)
-    }
-
-    func incoming() -> Bool {
-        return type == .withdrawal
-            || type == .refund
-            || type == .peerPullCredit
-            || type == .scanPushCredit
     }
 }
 // MARK: - Withdrawal

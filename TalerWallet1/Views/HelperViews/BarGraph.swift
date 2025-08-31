@@ -79,7 +79,7 @@ struct BarGraph: View {
             if count > 0 {
                 ForEach(tenTransactions, id: \.self) {transaction in
                     let common = transaction.common
-                    let incoming = common.incoming()
+                    let incoming = common.isIncoming
                     let netto = common.amountEffective.value
                     let valueColored = barHeight * netto / maxValue
                     let valueTransparent = barHeight - valueColored

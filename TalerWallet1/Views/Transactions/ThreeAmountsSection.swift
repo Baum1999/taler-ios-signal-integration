@@ -33,7 +33,7 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
         let raw = common.amountRaw
         let effective = common.amountEffective
         let fee = common.fee()
-        let incoming = common.incoming()
+        let incoming = common.isIncoming
         let pending = common.isPending || common.isFinalizing
         let isDone = common.isDone
         let incomplete = !(isDone || pending)
