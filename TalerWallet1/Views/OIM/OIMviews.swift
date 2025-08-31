@@ -76,7 +76,7 @@ struct OIMtitleView: View {
         HStack(alignment: .top) {
             // invisible - source where the selected balance chest (target) moves to
             OIMbalanceButton(isOpen: true, chest: chest, isFinal: false) {}
-                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+                .frame(width: OIMbuttonSize, height: history ? OIMbuttonSize / 2 : OIMbuttonSize)
                 .disabled(true)
                 .opacity(INVISIBLE)
                 .matchedGeometryEffect(id: OIMNUMBER, in: wrapper.namespace, isSource: true)
