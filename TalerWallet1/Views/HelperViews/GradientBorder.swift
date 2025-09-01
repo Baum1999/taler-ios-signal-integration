@@ -25,7 +25,7 @@
 import SwiftUI
 
 @available(iOS 17.7, *)
-struct BorderWithNFC<Content: View>: View {
+struct BorderWithHCE<Content: View>: View {
     let talerURI: String
     let nfcHint: Bool
     let size: CGFloat
@@ -103,6 +103,87 @@ struct BorderWithNFC<Content: View>: View {
                 hint
             } else {
                 qrButton.buttonStyle(TalerButtonStyle(type: .prominent))
+            }
+        }
+    }
+}
+// MARK: -
+struct BorderWithNFC<Content: View>: View {
+    let talerURI: String                    // might be a TOTP code
+    let nfcHint: Bool
+    let size: CGFloat
+    let scanHints: (String, String)?
+    var content: () -> Content
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @State private var showTOTP = false
+    @ObservedObject var nfcWriter = NFCWriter()
+
+    var body: some View {
+//        let _ = Self._printChanges()
+        let totpCode = Image(systemName: LOCKCLOCK)                             // 􂆉 "lock.badge.clock"
+        let totpButton = Button(minimalistic ? "\(totpCode)" : "\(totpCode) Show TOTP code") {
+            withAnimation { showTOTP = true }
+        }
+
+        let hint = Group {
+            if let scanHints {
+                Text(scanHints.0)
+                    .accessibilityLabel(scanHints.1)
+                    .multilineTextAlignment(.leading)
+                    .talerFont(.title3)
+            }
+        }
+
+        if true {   // check for write capabilities
+            let nfcLogo = Image(systemName: NFCLOGO)                            // 􀭹 "wave.3.right.circle"
+            let nfcButton = Button(minimalistic ? "\(nfcLogo)"
+                                                : "\(nfcLogo) Write NFC") {
+                    nfcWriter.write(talerURI)
+            }.buttonStyle(TalerButtonStyle(type: .prominent))
+
+            VStack {
+                if nfcHint {    // QRCodeDetailView
+                    if showTOTP {
+                        if !minimalistic {
+                            Text("\(nfcLogo) Tap for NFC")
+                                .talerFont(.subheadline)
+                                .padding(.vertical, -4)
+                        }
+                        let screenWidth = UIScreen.screenWidth
+                        GradientBorder(size: size + 20.0,
+                                       color: .accentColor,
+                                       background: WalletColors().backgroundColor)
+                        {
+                            content()
+                                .onTapGesture(count: 1) { nfcWriter.write(talerURI) }
+                        }
+                        hint
+                    } else {
+                        nfcButton
+                        totpButton.buttonStyle(TalerButtonStyle(type: .bordered))
+                    }
+                }
+            }.listRowSeparator(.hidden)
+                .onDisappear() {
+
+                }.task {
+                    withAnimation {
+                        if #available(iOS 17.7, *) {
+                            showTOTP = showQRauto17
+                        } else {
+                            showTOTP = showQRauto16
+                        }
+                    }
+                }
+        } else {
+            if showTOTP {
+                content()
+                hint
+            } else {
+                totpButton.buttonStyle(TalerButtonStyle(type: .prominent))
             }
         }
     }

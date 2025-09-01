@@ -71,7 +71,7 @@ struct QRCodeDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .accessibilityLabel(Text("QR Code", comment: "a11y"))
                 if #available(iOS 17.7, *) {
-                    BorderWithNFC(talerURI: talerURI, nfcHint: true, size: size, scanHints: scanLong) {
+                    BorderWithHCE(talerURI: talerURI, nfcHint: true, size: size, scanHints: scanLong) {
                         qrView
                     }
                 } else if showQRcode {

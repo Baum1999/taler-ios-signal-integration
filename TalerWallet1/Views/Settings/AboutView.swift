@@ -47,7 +47,7 @@ struct AboutView: View {
             List {
                 if #available(iOS 17.7, *) {
                     let talerURI = TALER_NET
-                    BorderWithNFC(talerURI: talerURI, nfcHint: false, size: size, scanHints: nil) {
+                    BorderWithHCE(talerURI: talerURI, nfcHint: false, size: size, scanHints: nil) {
                         rotatingTaler
                     }
                 } else {

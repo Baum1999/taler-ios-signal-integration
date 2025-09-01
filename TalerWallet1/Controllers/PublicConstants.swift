@@ -50,6 +50,7 @@ public let SETTINGS = "gear"                        // 􀍟                     
 public let QRBUTTON = "qrcode.viewfinder"           // 􀎻                       1.0 (iOS 13)
 public let QRCODE = "qrcode"                        // 􀖂                       1.0 (iOS 13)
 public let NFCLOGO = "wave.3.right.circle"          // 􀭹                       2.0 (iOS 14)
+public let LOCKCLOCK = "lock.badge.clock"           // 􂆉                       5.0 (iOS 17)
 
 public let CONFIRM_BANK = "circle.fill"             // 􀀁 badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // 􀋃 badge in PendingRow, TransactionRow and TransactionSummary
