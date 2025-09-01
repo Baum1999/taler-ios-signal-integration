@@ -8,6 +8,10 @@
 import SwiftUI
 import taler_swift
 
+let DATAPOINTWIDTH = 60.0
+let DATAPOINTWIDTH_MIN = 25.0
+let DATAPOINTWIDTH_MAX = 200.0
+
 enum OIMtransactionsState {
     case chestIsOpen
     case chestOpenTapped        // <- move money
@@ -20,7 +24,12 @@ enum OIMtransactionsState {
 
 // MARK: -
 struct LineMarkData: Identifiable {
-    var id: String
+    var id: String {
+        if let talerTX {
+            return talerTX.id
+        }
+        return UUID().uuidString
+    }
     let distance: Int
     let balance: Double
     let talerTX: TalerTransaction?
@@ -42,17 +51,14 @@ struct OIMtransactions: View {
     @State private var availableVal: UInt64 = 0
     @State private var available: Amount? = nil
     @State private var viewState: OIMtransactionsState = .chestIsOpen
-    @State private var showChart = false
     @State private var closing = false                      // after user tapped on the open chest
-    @State private var talerTXs: [TalerTransaction] = []
+    @State private var lineMarks: [LineMarkData] = []
     @State private var chartData: [LineMarkData] = []
     @State private var chartMaxY: Double = 200              // max balance
-    @State private var chartMaxX: Int = 1                // count of transactions plus spacers
-    @State private var dataPointWidth: CGFloat = 100
+    @State private var dataPointWidth: CGFloat = DATAPOINTWIDTH
     // when we start fetching transactions in chunks, MinX will get negative (going back in time)
 
     func closeHistory() {
-        showChart = false
         withAnimation(.basic1) {
             viewState = .historyTapped
         }
@@ -60,7 +66,7 @@ struct OIMtransactions: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay0) {
             let delay = cash.flyOneByOne(to: .idle)             // back to center
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                print("closeHistory", delay)
+//                print("closeHistory", delay)
                 withAnimation(.basic1) {
                     viewState = .chestIsOpen
                 }
@@ -77,39 +83,40 @@ struct OIMtransactions: View {
 
     @discardableResult
     func hideHistoryItems(_ interval: TimeInterval = 0) -> TimeInterval {
-        var delay = 0.0
-        var count = talerTXs.count
-        while count > 0 {
-            if interval > 0 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    if talerTXs.count > 0 {
-                        withAnimation {
-                            talerTXs.removeLast()
-                        }
+        if interval > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                let count = lineMarks.count
+                if count > 0 {
+                    withAnimation {
+                        lineMarks.removeLast()
+                    }
+                    if count > 1 {
+                        hideHistoryItems(interval)
                     }
                 }
-                delay += interval
-            } else {
-                talerTXs.removeLast()
             }
-            count -= 1
+            return Double(lineMarks.count) * interval
         }
-        return delay
+        lineMarks = []
+        return 0
     }
 
     @discardableResult
     func showHistoryItems(_ interval: TimeInterval = 0) -> TimeInterval {
         var delay = 0.0
-        for talerTX in history {
+        let count = chartData.count
+        let reduce = interval / Double(count + 2)
+        var index = 0
+        for lineMark in chartData {
             if interval > 0 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     withAnimation {
-                        talerTXs.append(talerTX)
+                        lineMarks.append(lineMark)
                     }
                 }
-                delay += interval
+                delay += (interval - Double(index) * reduce)
             } else {
-                talerTXs.append(talerTX)
+                lineMarks.append(lineMark)
             }
         }
         return delay
@@ -125,9 +132,10 @@ struct OIMtransactions: View {
         let chartButtons = HStack {
             let a11yZoomOutStr = String(localized: "Zoom out", comment: "a11y for the zoom button")
             ZoomOutButton(accessibilityLabelStr: a11yZoomOutStr) {
-                if dataPointWidth > 25 {
+                let width = dataPointWidth - 10
+                if dataPointWidth > DATAPOINTWIDTH_MIN {
                     withAnimation(.easeInOut(duration: 0.6)) {
-                        dataPointWidth -= 10
+                        dataPointWidth = width > DATAPOINTWIDTH_MIN ? width : DATAPOINTWIDTH_MIN
                     }
                 }
             }//.buttonStyle(.borderedProminent)
@@ -135,9 +143,10 @@ struct OIMtransactions: View {
             Text("width: \(dataPointWidth.pTwo)")
             let a11yZoomInStr = String(localized: "Zoom in", comment: "a11y for the zoom button")
             ZoomInButton(accessibilityLabelStr: a11yZoomInStr) {
-                if dataPointWidth < 185 {
+                let width = dataPointWidth + 15
+                if dataPointWidth < DATAPOINTWIDTH_MAX {
                     withAnimation(.easeInOut(duration: 0.6)) {
-                        dataPointWidth += 15
+                        dataPointWidth = width < DATAPOINTWIDTH_MAX ? width : DATAPOINTWIDTH_MAX
                     }
                 }
             }//.buttonStyle(.borderedProminent)
@@ -150,22 +159,29 @@ struct OIMtransactions: View {
                                amount: available,
                               history: true, //viewState == .historyShown,
                          secondAmount: nil)
-                    chartButtons.padding(.top, 4)
+
+                    if #unavailable(iOS 17.0) {
+                        chartButtons.padding(.top, 4)
 //                        .border(.red)
+                    }
                 }
                 Spacer(minLength: 0)
                 ZStack {
                     HStack {
-                        if chartMaxX > 1 && showChart {
-        let _ = print(chartMaxX, chartMaxY)
-                            ChartHistoryView(currency: cash.currency,
-                                            chartData: $chartData,
-                                       dataPointWidth: $dataPointWidth,
-                                             showData: $showChart,
-                                             maxIndex: chartMaxX,
-                                             maxValue: chartMaxY)
-                        } else {
-                            Spacer()
+                        Spacer(minLength: 0)
+                        let count = lineMarks.count
+                        if count > 1 {
+                            let last = lineMarks.last
+                            let maxIndex = last?.distance ?? 20    // should never happen
+                            let scrollBack = count == chartData.count
+//        let _ = print("calling ChartHistoryView", count, maxIndex, scrollBack)
+                            ChartHistoryView(stack: stack.push(),
+                                          currency: cash.currency,
+                                         chartData: $lineMarks,
+                                    dataPointWidth: $dataPointWidth,
+                                        scrollBack: scrollBack,
+                                          maxIndex: maxIndex,
+                                          maxValue: chartMaxY)
                         }
                         sidePosition
                             .padding(.leading, 20)
@@ -183,25 +199,20 @@ struct OIMtransactions: View {
                 Spacer(minLength: 0)
             } // title, HStack
         }
-        .task {
-            computeData(from: history, balance: balance.available.value)
-            // set chartData, chartMaxX, chartMaxY
-        }
         .onAppear {
             available = balance.available
             availableVal = available?.centValue ?? 0                            // TODO: centValue factor
             cash.update2(availableVal)           // set cash to available
             cash.setTarget(.history)
             debugTick += 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + flyDelay) {
-                showChart = true
+            if chartData.count == 0 {
+                chartData(from: history, balance: balance.available.value)        // set chartMaxY, chartData
             }
             showHistoryItems(Animation.talerDelay0)
         }
         .onDisappear {
 //            cash.moveBack()
             viewState = .chestIsOpen
-            showChart = false
         }
     }
 }
@@ -209,7 +220,7 @@ struct OIMtransactions: View {
 @available(iOS 16.4, *)
 extension OIMtransactions {
 
-    func computeData(from history: [TalerTransaction], balance: Double) {
+    func chartData(from history: [TalerTransaction], balance: Double) {
         /// Algorithm for the X value of the river of time
         ///  Endpoint (now) is 0
         ///  same day transactions have no space between them
@@ -217,29 +228,31 @@ extension OIMtransactions {
         ///  week differs: add another spacer
         ///  month differs: add one more spacer
         ///  year differs: add yet another spacer
-        var lineMarks: [LineMarkData] = [ LineMarkData(id: "Start", distance: 0, balance: balance, talerTX: nil) ]
+        var lineMarks: [LineMarkData] = [ LineMarkData(distance: 0, balance: balance, talerTX: nil) ]
         var balance = balance
         var maxBalance = balance
         let calendar = Calendar.current         // or do we need (identifier: .gregorian) ?
         var lastTx = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: Date.now)
         var xIndex = 0
 
-        func lineMark(for talerTransaction: TalerTransaction) -> LineMarkData {
+        func lineMark(for talerTransaction: TalerTransaction) -> LineMarkData? {
             let common = talerTransaction.common
             let amount = common.amountEffective
             let incoming = common.isIncoming
+            let pending = common.isPending
             let timestamp = common.timestamp
             let date = try! Date(milliseconds: timestamp.milliseconds())
             let components = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: date)
             // add spacers
+            let isFirst = xIndex == 0
             if lastTx.year != components.year {
-                xIndex += 4
+                xIndex += isFirst ? 1 : 4
             } else if lastTx.month != components.month {
-                xIndex += 3
+                xIndex += isFirst ? 1 : 3
             } else if lastTx.weekOfMonth != components.weekOfMonth {
-                xIndex += 2
-                //          } else if lastItem.weekday != components.weekday {
-                //              index += 2
+                xIndex += isFirst ? 1 : 2
+//          } else if lastItem.weekday != components.weekday {
+//              index += 2
             } else if lastTx.day != components.day {
                 xIndex += 1
             }
@@ -255,16 +268,18 @@ extension OIMtransactions {
             if balance > maxBalance {
                 maxBalance = balance
             }
-            return LineMarkData(id: common.transactionId, distance: xIndex, balance: balance, talerTX: talerTransaction)
+            return LineMarkData(distance: xIndex, balance: balance, talerTX: talerTransaction)
         }
 
         for talerTransaction in history {
-            lineMarks.append(lineMark(for: talerTransaction))
+            if let mark = lineMark(for: talerTransaction) {
+                lineMarks.append(mark)
+            }
         }
 
         chartData = lineMarks
-        chartMaxY = maxBalance * 1.26    // 10 % plus, log2()
-        chartMaxX = xIndex
+        chartMaxY = maxBalance * yTransform(1.1)    // 10 % plus, log2()
+//        print("computeData:", history.count, xIndex)
     }
 }
 // MARK: -
