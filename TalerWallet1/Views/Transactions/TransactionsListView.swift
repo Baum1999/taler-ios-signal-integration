@@ -64,7 +64,7 @@ struct TransactionsListView: View {
             TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
         } else {
             Group {
-                ScrollViewReader { scrollView in
+                ScrollViewReader { scrollProxy in
                     let count = transactions.count
                     List {
                         Section {
@@ -93,11 +93,11 @@ struct TransactionsListView: View {
                         view.navigationBarItems(trailing: HStack {
                             ArrowUpButton {
 //                                print("up")
-                                withAnimation { scrollView.scrollTo(0) }
+                                withAnimation { scrollProxy.scrollTo(0) }
                             }
                             ArrowDownButton {
 //                                print("down")
-                                withAnimation { scrollView.scrollTo(transactions.count - 1) }
+                                withAnimation { scrollProxy.scrollTo(transactions.count - 1) }
                             }
                         })
                     }
