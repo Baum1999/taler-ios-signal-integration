@@ -201,9 +201,44 @@ extension Date {
 }
 // MARK: -
 /// A duration of time, measured in milliseconds.
-public enum Duration: Equatable {
-    case milliseconds(UInt64)
+public enum Duration: Codable, Hashable, Equatable {
+    case microseconds(UInt64)
     case forever
+
+    enum CodingKeys: String, CodingKey {
+        case d_us = "d_us"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            self = Duration.microseconds(try container.decode(UInt64.self, forKey: .d_us))
+        } catch {       // rethrows or never
+            let stringValue = try container.decode(String.self, forKey: .d_us)
+            if stringValue == "forever" {
+                self = Duration.forever
+            } else {
+                throw TimestampError.invalidStringRepresentation
+            }
+        }
+    }
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+            case .microseconds(let d_us):
+                hasher.combine(d_us)
+            case .forever:
+                hasher.combine("forever")
+        }
+    }
+    public func encode(to encoder: Encoder) throws {
+        var value = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+            case .microseconds(let d_us):
+                try value.encode(d_us, forKey: .d_us)
+            case .forever:
+                try value.encode("forever", forKey: .d_us)
+        }
+    }
 }
 
 /// Addition of a timestamp and a duration.
@@ -211,8 +246,8 @@ public func +(lhs: Timestamp, rhs: Duration) -> Timestamp {
     switch lhs {
     case .milliseconds(let lhs_ms):
         switch rhs {
-        case .milliseconds(let rhs_ms):
-            let result = lhs_ms.addingReportingOverflow(rhs_ms)
+        case .microseconds(let rhs_us):
+            let result = lhs_ms.addingReportingOverflow(rhs_us * 1000)
             if result.overflow {
                 return Timestamp.never
             } else {
@@ -231,8 +266,8 @@ public func -(lhs: Timestamp, rhs: Duration) -> Timestamp {
     switch lhs {
     case .milliseconds(let lhs_ms):
         switch rhs {
-        case .milliseconds(let rhs_ms):
-            let result = lhs_ms.subtractingReportingOverflow(rhs_ms)
+        case .microseconds(let rhs_us):
+            let result = lhs_ms.subtractingReportingOverflow(rhs_us * 1000)
             if result.overflow {
                 return Timestamp.milliseconds(0)
             } else {
@@ -253,9 +288,9 @@ public func -(lhs: Timestamp, rhs: Timestamp) throws -> Duration {
         switch rhs {
         case .milliseconds(let rhs_ms):
             if lhs_ms < rhs_ms {
-                return Duration.milliseconds(0)
+                return Duration.microseconds(0)
             } else {
-                return Duration.milliseconds(lhs_ms - rhs_ms)
+                return Duration.microseconds((lhs_ms - rhs_ms) * 1000)
             }
         case .never:
             throw TimestampError.invalidArithmeticArguments
