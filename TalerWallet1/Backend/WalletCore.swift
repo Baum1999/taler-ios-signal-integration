@@ -8,7 +8,6 @@
  */
 import SwiftUI              // FOUNDATION has no AppStorage
 import AnyCodable
-import FTalerWalletcore
 import SymLog
 import os
 import LocalConsole
