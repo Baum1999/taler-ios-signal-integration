@@ -50,7 +50,6 @@ public let SETTINGS = "gear"                        // 􀍟                     
 public let QRBUTTON = "qrcode.viewfinder"           // 􀎻                       1.0 (iOS 13)
 public let QRCODE = "qrcode"                        // 􀖂                       1.0 (iOS 13)
 public let NFCLOGO = "wave.3.right.circle"          // 􀭹                       2.0 (iOS 14)
-public let LOCKCLOCK = "lock.badge.clock"           // 􂆉                       5.0 (iOS 17)
 
 public let CONFIRM_BANK = "circle.fill"             // 􀀁 badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // 􀋃 badge in PendingRow, TransactionRow and TransactionSummary
@@ -104,6 +103,10 @@ public let ICONNAME_ZOOM_IN = "taler.left.and.right.fill"           // 􀟦     
 public let ICONNAME_ZOOM_OUT = "taler.right.and.left.fill"          // 􀟧       3.0 (iOS 15)
 public let SYSTEM_ZOOM_IN = "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"   // 􀟦   3.0 (iOS 15)
 public let SYSTEM_ZOOM_OUT = "arrowtriangle.right.and.line.vertical.and.arrowtriangle.left.fill"  // 􀟧   3.0 (iOS 15)
+
+public let ICONNAME_LOCKCLOCK = "taler.lock.clock"                  // 􂆉
+public let SYSTEM_LOCKCLOCK = "lock.badge.clock"                    // 􂆉       5.0 (iOS 17)
+public let FALLBACK_LOCK = "lock"                                   // 􀎠       1.0 (iOS 13)
 
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work

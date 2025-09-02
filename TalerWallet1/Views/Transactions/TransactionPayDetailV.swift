@@ -24,8 +24,7 @@ struct TransactionPayDetailV: View {
                 let totp = Text(posConfirmation)
                     .talerFont(.title1)
                 if #available(iOS 17.7, *) {
-                    let talerURI = posConfirmation
-                    BorderWithNFC(talerURI: talerURI, nfcHint: true, size: 250, scanHints: nil) {
+                    BorderWithNFC(totpString: posConfirmation, nfcHint: true, size: 250, scanHints: nil) {
                         totp
                     }
                 } else {

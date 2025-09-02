@@ -77,15 +77,16 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
     public var endAlert = ""
     public var msg = ""
     public var type = "T"   // T=TAG - U=URL
-    
+    public var data: Data? = nil
+
     public var session: NFCNDEFReaderSession?
     
-    public func write(_ data: String) {
+    public func write(_ data: Data? = nil) {
         guard NFCNDEFReaderSession.readingAvailable else {
             print("Error readingAvailable")
             return
         }
-        msg = data
+        self.data = data
         session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
         if let session {
             session.alertMessage = self.startAlert
@@ -138,7 +139,7 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
                             format: .nfcWellKnown,
                             type: Data("\(self.type)".utf8),
                             identifier: Data(),
-                            payload: Data("\(self.msg)".utf8)
+                            payload: self.data ?? Data("\(self.msg)".utf8)
                         )
                     } else {
                         payload = NFCNDEFPayload.wellKnownTypeURIPayload(string: "\(self.msg)")

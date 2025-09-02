@@ -108,8 +108,15 @@ struct BorderWithHCE<Content: View>: View {
     }
 }
 // MARK: -
+extension FixedWidthInteger {
+    var data: Data {
+        let data = withUnsafeBytes(of: self) { Data($0) }
+        return data
+    }
+}
+
 struct BorderWithNFC<Content: View>: View {
-    let talerURI: String                    // might be a TOTP code
+    let totpString: String                    // might be a TOTP code
     let nfcHint: Bool
     let size: CGFloat
     let scanHints: (String, String)?
@@ -121,9 +128,41 @@ struct BorderWithNFC<Content: View>: View {
     @State private var showTOTP = false
     @ObservedObject var nfcWriter = NFCWriter()
 
+    var lockImage: Image {
+        let name = ICONNAME_LOCKCLOCK
+        let sysName = SYSTEM_LOCKCLOCK                                          // 􂆉 "lock.badge.clock"
+        if UIImage(named: name) != nil {
+            return Image(name)
+        } else if UIImage(systemName: sysName) != nil {
+            return Image(systemName: sysName)
+        } else {
+            return Image(systemName: FALLBACK_LOCK)
+        }
+    }
+
+    private var MAGIC_HEADER: Data {
+        Data(fromUInt8Array: [
+            0x42,   //  totp magic header
+        ])
+    } // 42
+
+    var totpData: Data {
+        var data = MAGIC_HEADER                     // 0x42 = "B"
+        let totpArray = totpString.components(separatedBy: "\n")
+        for totpCode in totpArray {
+            if let totpInt = UInt32(totpCode) {
+                let intData = totpInt.data
+//                print(data, totpInt, intData)
+                data.append(intData)
+            }
+        }
+//        print(data)
+        return data
+    }
+
     var body: some View {
 //        let _ = Self._printChanges()
-        let totpCode = Image(systemName: LOCKCLOCK)                             // 􂆉 "lock.badge.clock"
+        let totpCode = lockImage
         let totpButton = Button(minimalistic ? "\(totpCode)" : "\(totpCode) Show TOTP code") {
             withAnimation { showTOTP = true }
         }
@@ -141,7 +180,7 @@ struct BorderWithNFC<Content: View>: View {
             let nfcLogo = Image(systemName: NFCLOGO)                            // 􀭹 "wave.3.right.circle"
             let nfcButton = Button(minimalistic ? "\(nfcLogo)"
                                                 : "\(nfcLogo) Write NFC") {
-                    nfcWriter.write(talerURI)
+                    nfcWriter.write(totpData)
             }.buttonStyle(TalerButtonStyle(type: .prominent))
 
             VStack {
@@ -158,7 +197,7 @@ struct BorderWithNFC<Content: View>: View {
                                        background: WalletColors().backgroundColor)
                         {
                             content()
-                                .onTapGesture(count: 1) { nfcWriter.write(talerURI) }
+                                .onTapGesture(count: 1) { nfcWriter.write(totpData) }
                         }
                         hint
                     } else {
