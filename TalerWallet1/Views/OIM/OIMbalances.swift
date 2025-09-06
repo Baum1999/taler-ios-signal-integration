@@ -37,13 +37,28 @@ struct OIMbalances: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
 
-    @StateObject private var cash = OIMcash(OIMeuros)
+    @StateObject private var cash: OIMcash
     @State private var availableVal: UInt64 = 0
     @State private var tappedVal: UInt64 = 0            // unused, canEdit == false
     @State private var available: Amount? = nil
     @State private var viewState: OIMbalancesState = .chestsClosed
     @State private var closing = false                  // debounce tap (on open chest to close it)
     @State private var balanceIndex: Int? = nil
+
+    init(stack: CallStack,
+          selectedBalance: Binding<Balance?>,
+           qrButtonTapped: Binding<Bool>,
+            historyTapped: Binding<Int?>
+    ) {
+        self.stack = stack
+        self._selectedBalance = selectedBalance
+        self._qrButtonTapped = qrButtonTapped
+        self._historyTapped = historyTapped
+
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue)      // might be nil ==> OIMeuros
+        let oimCash = OIMcash(oimCurrency)
+        self._cash = StateObject(wrappedValue: { oimCash }())
+    }
 
     func requestTapped() {
 
@@ -104,7 +119,6 @@ struct OIMbalances: View {
             selectedBalance = balance
             balanceIndex = index
             viewState = .chestIsOpen
-//            cash.setIndex(index)
             cash.setCurrency(oimCurrency)
             available = balance.available
             availableVal = balance.available.centValue                          // TODO: centValue factor
