@@ -46,7 +46,7 @@ struct SendAmountV: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCurrency = oimCurrency(selectedBalance.wrappedValue)      // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -86,9 +86,9 @@ struct SendAmountV: View {
                 // TODO: Error
                 amountAvailable = balance.available
             }
-            print("🚩SendAmountV.newBalance() set selectedBalance and cash.currency")
+    print("🚩SendAmountV.newBalance() set selectedBalance and cash.currency")
+            let oimCurrency = oimCurrency(balance.scopeInfo)                    // might be nil ==> OIMeuros
             selectedBalance = balance
-            let oimCurrency = oimCurrency(balance)      // might be nil ==> OIMeuros
             cash.currency = oimCurrency
         }
     }
@@ -136,7 +136,7 @@ struct SendAmountV: View {
             .task(id: taskID) {
                 let avail = amountAvailable
                 await newBalance()
-//                print(">>> SendAmountV.task", taskID, avail, amountAvailable, stack.peek()?.file)
+//        print(">>> SendAmountV.task", taskID, avail, amountAvailable, stack.peek()?.file)
             }
 #if OIM
             .overlay { if #available(iOS 16.4, *) {

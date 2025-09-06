@@ -11,17 +11,20 @@ public typealias OIMdenominations = [UInt64]
 public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // number of notes and coins
 
 public let OIMcurrencies = [OIMeuros, OIMleones, OIMxofN, OIMfrancs]
-func oimCurrency(_ balance: Balance?) -> OIMcurrency {
-    let currency = balance?.scopeInfo.currency
-    if currency == DEMOCURRENCY {
+
+func oimCurrency(_ scopeInfo: ScopeInfo?) -> OIMcurrency {
+    let currency = scopeInfo?.currency
+    if currency == DEMOCURRENCY {           // map KUDOS to Leones
         return OIMcurrencies[1]
-    } else if currency == TESTCURRENCY {
+    } else if currency == TESTCURRENCY {    // map TESTKUDOS to CFA
         return OIMcurrencies[2]
     } else if currency == "CHF" {
         return OIMcurrencies[3]
     }
-    return OIMcurrencies[0]
+    return OIMcurrencies[0]                 // fall back to Euros
 }
+
+
 
 // 6 banknotes, 8 coins of which 6 are fractionals < 100
 public let OIMeuros  = OIMcurrency(bankNotes: [20000, 10000, 5000, 2000, 1000, 500],

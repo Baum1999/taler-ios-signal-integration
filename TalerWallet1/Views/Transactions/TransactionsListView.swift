@@ -51,7 +51,7 @@ struct TransactionsListView: View {
         self._transactions = transactions
         self.reloadAllAction = reloadAllAction
         self._selectedBalance = selectedBalance
-        let oimCurrency = oimCurrency(balance)
+        let oimCurrency = oimCurrency(balance.scopeInfo)
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }

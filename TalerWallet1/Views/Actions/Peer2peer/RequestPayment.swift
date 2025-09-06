@@ -43,7 +43,7 @@ struct RequestPayment: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCurrency = oimCurrency(selectedBalance)      // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(selectedBalance?.scopeInfo)      // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }

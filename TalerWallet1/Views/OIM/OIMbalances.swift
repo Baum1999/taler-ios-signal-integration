@@ -55,7 +55,7 @@ struct OIMbalances: View {
         self._qrButtonTapped = qrButtonTapped
         self._historyTapped = historyTapped
 
-        let oimCurrency = oimCurrency(selectedBalance.wrappedValue)      // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -239,7 +239,7 @@ struct OIMbalances: View {
                     Spacer()
                     HStack(spacing: 30) {
                         ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
-                            let oimCurrency = oimCurrency(balance)
+                            let oimCurrency = oimCurrency(balance.scopeInfo)
                             let itsMe = selectedBalance == balance
                             let isClosed = selectedBalance == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize
