@@ -44,6 +44,7 @@ struct MainView: View {
     @State private var innerHeight: CGFloat = .zero
     @State private var userAction = 0
     @State private var networkUnavailable = false
+    @State private var backgrounded: Date?
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -64,6 +65,11 @@ struct MainView: View {
         userAction += 1
     }
 
+    func hintApplicationResumed() {
+        Task.detached {
+            await model.hintApplicationResumedT()
+        }
+    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -259,9 +265,31 @@ struct MainView: View {
             } else {
                 withAnimation(.easeOut(duration: 1.0)) {
                     networkUnavailable = true
+        }   }   }
+
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
+            logger.log("❗️App Will Resign")
+            backgrounded = Date.now
+            showScanner = false
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
+            logger.log("❗️App Will Enter Foreground")
+            if let backgrounded {
+                let interval = Date.now - backgrounded
+                if interval.seconds > 60 {
+                    biometricService.isAuthenticated = false
+                    if interval.seconds > 300 {     // 5 minutes
+                        logger.log("More than 5 minutes in background - tell wallet-core")
+                        hintApplicationResumed()
+                    }
                 }
             }
+            backgrounded = nil
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
+            logger.log("❗️App Did Become Active")
+        }
+
     } // body
 }
 // MARK: - TabBar
