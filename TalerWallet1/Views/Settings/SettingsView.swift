@@ -137,7 +137,8 @@ struct SettingsView: View {
                         description: minimalistic ? nil : String(localized: "Protect your money")) {
                     biometricService.isAuthenticated = false
                 }
-#if TALER_NIGHTLY || DEBUG
+
+                /// Backup
                 let backupTitle = String(localized: "TitleBackup", defaultValue: "Backup / Restore")
                 let backupDest = BackupView(stack: stack.push(backupTitle),
                                          navTitle: backupTitle)
@@ -147,7 +148,6 @@ struct SettingsView: View {
                     SettingsItem(name: backupTitle, id1: "backup",
                           description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
                 }
-#endif
 
 #if OIM
                 SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro, id1: "oimEuro",
