@@ -81,6 +81,7 @@ struct OIMEditView: View {
 
         OIMnavBack(stack: stack.push(),
                    chest: cash.currency.chest,
+                    type: .sendP2P,
                  isFinal: false,
                isSending: sending,
                   action: sendAction,

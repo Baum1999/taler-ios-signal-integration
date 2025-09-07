@@ -11,8 +11,8 @@ import taler_swift
 let OIMbuttonSize = 80.0
 let OIMactionSize = 120.0
 
-let OIMACTION = "OIMaction"
-let OIMACTION2 = "OIMaction2"
+let OIMACTION = "OIMaction"         // Position: trailing edge of the title row
+let OIMACTION2 = "OIMaction2"       // currently unused
 let OIMNUMBER = "OIMnumber"
 let OIMCHEST = "OIMchest"
 let OIMBACK = "OIMback"
@@ -22,6 +22,7 @@ let OIMSIDE = "OIMside"
 struct OIMnavBack<Content: View>: View {
     let stack: CallStack
     let chest: String
+    let type: OIMactions
     let isFinal: Bool                   // bordered action button
     let isSending: Bool                 // move action button
     let action: (() -> Void)?
@@ -49,7 +50,7 @@ struct OIMnavBack<Content: View>: View {
                         }
                             .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                         Spacer()
-                        OIMactionButton(type: .sendP2P,
+                        OIMactionButton(type: type,
                                      isFinal: isFinal,
                                       action: actDisabled ? nil : action)
                             .frame(width: OIMactionSize, height: OIMbuttonSize)
@@ -81,7 +82,7 @@ struct OIMtitleView: View {
                 .opacity(INVISIBLE)
                 .matchedGeometryEffect(id: OIMNUMBER, in: wrapper.namespace, isSource: true)
                 .accessibilityHidden(true)
-
+//                .border(.red)
             if history {
                 Spacer()
             }
@@ -94,6 +95,7 @@ struct OIMtitleView: View {
                     OIMamountV(amount: secondAmount, currencyName: cash.currency.currencyStr, factor: cash.currency.factor)
                 }
                 // invisible - source for money (target) flying out of and back in the open chest
+                // Position: trailing edge of the title row
                 OIMactionButton(type: .sendP2P, isFinal: false, action: nil)
                     .frame(width: OIMactionSize, height: OIMbuttonSize)
                     .disabled(true)

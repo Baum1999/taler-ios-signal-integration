@@ -93,11 +93,11 @@ struct OIMSubjectView: View {
         let gotAction = (selectedGoal != nil) ? sendAction : nil
         OIMnavBack(stack: stack.push(),
                    chest: currency.chest,
+                    type: .sendP2P,
                  isFinal: false,
                isSending: sending,
                   action: gotAction,
              actDisabled: amount2?.isZero ?? true
-
         ) {
             VStack {
                 OIMtitleView(cash: cash,

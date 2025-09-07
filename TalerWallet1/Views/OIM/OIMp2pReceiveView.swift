@@ -28,6 +28,7 @@ struct OIMp2pReceiveView: View {
         let currency = cash.currency
         OIMnavBack(stack: stack.push(),
                    chest: currency.chest,
+                    type: .requestP2P,          // TODO: define receive
                  isFinal: false,
                isSending: false,
                   action: { },
@@ -63,6 +64,7 @@ struct OIMp2pReceiveView: View {
                     .task {
                         amount = effective
                         amountVal = effective.centValue                         // TODO: centValue factor
+                        cash.update2(amountVal)
                         withAnimation(.basic1) {
                             appeared = true
                         }
