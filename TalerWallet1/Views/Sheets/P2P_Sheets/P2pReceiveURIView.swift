@@ -25,12 +25,25 @@ struct P2pReceiveURIView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
+    @StateObject private var cash: OIMcash
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var peerPushCreditResponse: PreparePeerPushCreditResponse? = nil
     @State private var accept: Bool = false
     @State private var exchange: Exchange? = nil
+    @Namespace var namespace
 
     let navTitle = String(localized: "Receive", comment: "Nav Title")
+
+    // Since there is no selectedBalance, we cannot know which currency we'll need to render at this time
+    init(stack: CallStack, url: URL) {
+        self.stack = stack
+        self.url = url
+        self.oimEuro = oimEuro
+//        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(nil)                                      // nil ==> OIMeuros
+        let oimCash = OIMcash(oimCurrency)
+        self._cash = StateObject(wrappedValue: { oimCash }())
+    }
 
     @MainActor
     private func viewDidLoad() async {
@@ -39,6 +52,8 @@ struct P2pReceiveURIView: View {
             let baseUrl = ppResponse.exchangeBaseUrl
             exchange = try? await model.getExchangeByUrl(url: baseUrl)
             await controller.checkCurrencyInfo(for: baseUrl, model: model)
+            let oimCurrency = oimCurrency(ppResponse.scopeInfo)
+            cash.setCurrency(oimCurrency)
             peerPushCreditResponse = ppResponse
         } else {
             peerPushCreditResponse = nil
