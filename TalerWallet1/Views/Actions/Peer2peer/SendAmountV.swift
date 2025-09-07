@@ -19,6 +19,7 @@ struct SendAmountV: View {
     @Binding var amountLastUsed: Amount
     @Binding var summary: String
     @Binding var iconID: String?
+    let oimEuro: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -36,7 +37,8 @@ struct SendAmountV: View {
          selectedBalance: Binding<Balance?>,
          amountLastUsed: Binding<Amount>,
          summary: Binding<String>,
-         iconID: Binding<String?>
+         iconID: Binding<String?>,
+         oimEuro: Bool
     ) {
         // SwiftUI ensures that the initialization uses the
         // closure only once during the lifetime of the view, so
@@ -46,7 +48,8 @@ struct SendAmountV: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
+        self.oimEuro = oimEuro
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo, oimEuro: oimEuro)  // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -87,7 +90,7 @@ struct SendAmountV: View {
                 amountAvailable = balance.available
             }
     print("🚩SendAmountV.newBalance() set selectedBalance and cash.currency")
-            let oimCurrency = oimCurrency(balance.scopeInfo)                    // might be nil ==> OIMeuros
+            let oimCurrency = oimCurrency(balance.scopeInfo, oimEuro: oimEuro)  // might be nil ==> OIMeuros
             selectedBalance = balance
             cash.currency = oimCurrency
         }
@@ -194,7 +197,8 @@ fileprivate struct Preview_Content: View {
           selectedBalance: $noBalance,
            amountLastUsed: $amountToPreview,
                   summary: $summary,
-                   iconID: $iconID)
+                   iconID: $iconID,
+                  oimEuro: false)
     }
 }
 

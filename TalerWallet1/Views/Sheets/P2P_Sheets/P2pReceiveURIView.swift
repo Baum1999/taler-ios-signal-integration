@@ -14,10 +14,9 @@ import SymLog
 struct P2pReceiveURIView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let url: URL                        // the scanned URL
+    let oimEuro: Bool
 
-    // the scanned URL
-    let url: URL
-    
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
@@ -35,12 +34,12 @@ struct P2pReceiveURIView: View {
     let navTitle = String(localized: "Receive", comment: "Nav Title")
 
     // Since there is no selectedBalance, we cannot know which currency we'll need to render at this time
-    init(stack: CallStack, url: URL) {
+    init(stack: CallStack, url: URL, oimEuro: Bool) {
         self.stack = stack
         self.url = url
         self.oimEuro = oimEuro
 //        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
-        let oimCurrency = oimCurrency(nil)                                      // nil ==> OIMeuros
+        let oimCurrency = oimCurrency(nil, oimEuro: oimEuro)                    // nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -52,7 +51,7 @@ struct P2pReceiveURIView: View {
             let baseUrl = ppResponse.exchangeBaseUrl
             exchange = try? await model.getExchangeByUrl(url: baseUrl)
             await controller.checkCurrencyInfo(for: baseUrl, model: model)
-            let oimCurrency = oimCurrency(ppResponse.scopeInfo)
+            let oimCurrency = oimCurrency(ppResponse.scopeInfo, oimEuro: oimEuro)
             cash.setCurrency(oimCurrency)
             peerPushCreditResponse = ppResponse
         } else {

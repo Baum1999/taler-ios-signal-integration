@@ -38,6 +38,7 @@ struct TransactionsListView: View {
          balance: Balance,
          selectedBalance: Binding<Balance?>,
          navTitle: String?,
+         oimEuro: Bool,
          transactions: Binding<[TalerTransaction]>,
          reloadAllAction: @escaping (_ stack: CallStack) async -> ()
     ) {
@@ -51,7 +52,7 @@ struct TransactionsListView: View {
         self._transactions = transactions
         self.reloadAllAction = reloadAllAction
         self._selectedBalance = selectedBalance
-        let oimCurrency = oimCurrency(balance.scopeInfo)
+        let oimCurrency = oimCurrency(balance.scopeInfo, oimEuro: oimEuro)
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }

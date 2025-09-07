@@ -21,6 +21,7 @@ struct BalancesListView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("oimEuro") var oimEuro: Bool = false
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
@@ -91,7 +92,8 @@ struct BalancesListView: View {
                         OIMbalances(stack: stack.push(),
                           selectedBalance: $selectedBalance,                    // set to user choice
                            qrButtonTapped: $qrButtonTapped,
-                            historyTapped: $historyTapped)
+                            historyTapped: $historyTapped,
+                                  oimEuro: oimEuro)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
                     }
                 } }

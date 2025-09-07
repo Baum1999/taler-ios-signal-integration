@@ -12,9 +12,10 @@ public typealias OIMnotesCoins = (OIMdenominations, OIMdenominations)       // n
 
 public let OIMcurrencies = [OIMeuros, OIMleones, OIMxofN, OIMfrancs]
 
-func oimCurrency(_ scopeInfo: ScopeInfo?) -> OIMcurrency {
+func oimCurrency(_ scopeInfo: ScopeInfo?, oimEuro: Bool) -> OIMcurrency {
     let currency = scopeInfo?.currency
     if currency == DEMOCURRENCY {           // map KUDOS to Leones
+        if oimEuro { return OIMcurrencies[0] }
         return OIMcurrencies[1]
     } else if currency == TESTCURRENCY {    // map TESTKUDOS to CFA
         return OIMcurrencies[2]

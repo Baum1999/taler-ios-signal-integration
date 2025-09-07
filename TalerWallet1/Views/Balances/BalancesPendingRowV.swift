@@ -17,6 +17,8 @@ struct BalancesPendingRowV: View {
     @Binding var pendingTransactions: [TalerTransaction]
     let reloadPending: (_ stack: CallStack) async -> ()
 
+    @AppStorage("oimEuro") var oimEuro: Bool = false
+
     @ViewBuilder func pendingRowLabel() -> some View {
         let pendingIncoming = balance.pendingIncoming
         let hasIncoming = !pendingIncoming.isZero
@@ -65,6 +67,7 @@ struct BalancesPendingRowV: View {
                                                  balance: balance,
                                          selectedBalance: $selectedBalance,     // set in there
                                                 navTitle: String(localized: "Pending", comment: "ViewTitle of TransactionList"),
+                                                 oimEuro: oimEuro,
                                             transactions: $pendingTransactions,
                                          reloadAllAction: reloadPending)
             NavigationLink(destination: destination) { pendingRowLabel() }

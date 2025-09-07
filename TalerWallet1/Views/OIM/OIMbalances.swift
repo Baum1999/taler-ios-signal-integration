@@ -33,6 +33,7 @@ struct OIMbalances: View {
     @Binding var selectedBalance: Balance?              // return user's choice
     @Binding var qrButtonTapped: Bool
     @Binding var historyTapped: Int?
+    let oimEuro: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
@@ -48,14 +49,15 @@ struct OIMbalances: View {
     init(stack: CallStack,
           selectedBalance: Binding<Balance?>,
            qrButtonTapped: Binding<Bool>,
-            historyTapped: Binding<Int?>
+            historyTapped: Binding<Int?>,
+                  oimEuro: Bool
     ) {
         self.stack = stack
         self._selectedBalance = selectedBalance
         self._qrButtonTapped = qrButtonTapped
         self._historyTapped = historyTapped
-
-        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo)  // might be nil ==> OIMeuros
+        self.oimEuro = oimEuro
+        let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo, oimEuro: oimEuro)  // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
@@ -239,7 +241,7 @@ struct OIMbalances: View {
                     Spacer()
                     HStack(spacing: 30) {
                         ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
-                            let oimCurrency = oimCurrency(balance.scopeInfo)
+                            let oimCurrency = oimCurrency(balance.scopeInfo, oimEuro: oimEuro)
                             let itsMe = selectedBalance == balance
                             let isClosed = selectedBalance == nil
                             let size = isClosed ? 160.0 : OIMbuttonSize

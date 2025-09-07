@@ -37,6 +37,7 @@ struct BalancesSectionView {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("oimEuro") var oimEuro: Bool = false
 
     @State private var showSpendingHint = true
     @State private var isShowingDetailView = false
@@ -98,6 +99,7 @@ extension BalancesSectionView: View {
                                                  balance: balance,
                                          selectedBalance: $selectedBalance,
                                                 navTitle: balance.available.readableDescription,    // TODO: format with currency sign
+                                                 oimEuro: oimEuro,
                                             transactions: $completedTransactions,
                                          reloadAllAction: loadCompleted)
           Section {

@@ -342,6 +342,7 @@ extension MainView {
         @AppStorage("developerMode") var developerMode: Bool = false
 #endif
         @AppStorage("minimalistic") var minimalistic: Bool = false
+        @AppStorage("oimEuro") var oimEuro: Bool = false
 
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
@@ -410,12 +411,14 @@ extension MainView {
                              selectedBalance: $selectedBalance,                 // if nil shows currency picker
                               amountLastUsed: $amountLastUsed,                  // currency needs to be updated!
                                      summary: $summary,
-                                      iconID: $iconID)
+                                      iconID: $iconID,
+                                     oimEuro: oimEuro)
             let requestDest = RequestPayment(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed,            // currency needs to be updated!
                                            summary: $summary,
-                                            iconID: $iconID)
+                                            iconID: $iconID,
+                                           oimEuro: oimEuro)
             let depositDest = DepositSelectV(stack: stack.push(Self.name),
                                    selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed)

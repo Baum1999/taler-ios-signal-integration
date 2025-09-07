@@ -18,6 +18,7 @@ struct URLSheet: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
+    @AppStorage("oimEuro") var oimEuro: Bool = false
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)
     @State private var summary = EMPTYSTRING
@@ -56,7 +57,7 @@ struct URLSheet: View {
                 case .payPull:
                     P2pPayURIView(stack: stack.push(), url: passedURL)
                 case .payPush:
-                    P2pReceiveURIView(stack: stack.push(), url: passedURL)
+                    P2pReceiveURIView(stack: stack.push(), url: passedURL, oimEuro: oimEuro)
                 case .payTemplate:
                     PayTemplateV(stack: stack.push(), url: passedURL)
                 case .refund:

@@ -33,7 +33,8 @@ struct RequestPayment: View {
          selectedBalance: Balance?,
          amountLastUsed: Binding<Amount>,
          summary: Binding<String>,
-         iconID: Binding<String?>
+         iconID: Binding<String?>,
+         oimEuro: Bool
     ) {
         // SwiftUI ensures that the initialization uses the
         // closure only once during the lifetime of the view, so
@@ -43,7 +44,7 @@ struct RequestPayment: View {
         self._amountLastUsed = amountLastUsed
         self._summary = summary
         self._iconID = iconID
-        let oimCurrency = oimCurrency(selectedBalance?.scopeInfo)      // might be nil ==> OIMeuros
+        let oimCurrency = oimCurrency(selectedBalance?.scopeInfo, oimEuro: oimEuro)      // might be nil ==> OIMeuros
         let oimCash = OIMcash(oimCurrency)
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
