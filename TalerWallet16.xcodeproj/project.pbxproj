@@ -528,7 +528,6 @@
 				};
 			};
 			buildConfigurationList = D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWallet16" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

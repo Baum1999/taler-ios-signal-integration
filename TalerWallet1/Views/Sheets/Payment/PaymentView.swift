@@ -20,8 +20,9 @@ func templateFee(ppCheck: PreparePayResult?) -> Amount? {
     do {
         if let ppCheck {
             // Outgoing: fee = effective - raw
-            if let effective = ppCheck.amountEffective {
-                let fee = try effective - ppCheck.amountRaw
+            if let effective = ppCheck.amountEffective { // , let raw = ppCheck.amountRaw {
+                let raw = ppCheck.amountRaw
+                let fee = try effective - raw
                 return fee
             }
         }
@@ -125,7 +126,8 @@ struct PaymentView: View, Sendable {
             }
         } else {
             if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
-                amountToTransfer = payResponse.amountRaw
+                let raw = payResponse.amountRaw
+                    amountToTransfer = raw
                 await checkCurrencyInfo(for: payResponse)
                 preparePayResult = payResponse
             }

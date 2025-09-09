@@ -483,7 +483,7 @@ extension MainView {
             /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
-                       selectedBalance: $selectedBalance,    // for sheets, pass down to TransactionsListView
+                       selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)
                 .navigationTitle(balancesTitle)
