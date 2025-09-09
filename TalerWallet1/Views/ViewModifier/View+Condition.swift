@@ -40,6 +40,12 @@ extension Bool {
         }
         return false            // iOS 16+
     }
+    static var iOS16: Bool {
+        guard #available(iOS 16, *) else {
+            return false        // iOS 15
+        }
+        return true             // iOS 16+
+    }
 }
 
 // Use like this:
