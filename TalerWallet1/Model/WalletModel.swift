@@ -364,44 +364,45 @@ extension WalletModel {
         }
     }
 
-    private func migrate(from documents: URL, to appSupport: URL) {
+    private func migrate(from source: URL, to target: URL) {
         let fileManager = FileManager.default
-        let docUrl = dbUrl(documents)
-        let docPath = docUrl.path
-        let appUrl = dbUrl(appSupport)
-        let appPath = appUrl.path
+        let sourceUrl = dbUrl(source)
+        let sourcePath = sourceUrl.path
+        let targetUrl = dbUrl(target)
+        let targetPath = targetUrl.path
 
-        checkAppSupport(appSupport)
-        if fileManager.fileExists(atPath: docPath) {
+        checkAppSupport(target)
+        if fileManager.fileExists(atPath: sourcePath) {
             do {
-                try fileManager.moveItem(at: docUrl, to: appUrl)
-                logger.debug("moved to \(appSupport.path)")
+                try fileManager.moveItem(at: sourceUrl, to: targetUrl)
+                logger.debug("moved to \(target.path)")
             } catch {
                 logger.error("move failed \(error.localizedDescription)")
             }
         } else {
-//            logger.debug("no db at \(docPath)")
+            logger.debug("no db at \(sourcePath)")
         }
 
-        if fileManager.fileExists(atPath: appPath) {
-//            logger.debug("found db at \(appPath)")
+        if fileManager.fileExists(atPath: targetPath) {
+//            logger.debug("found db at \(targetPath)")
         } else {
-            logger.debug("no db at \(appPath)")
+            logger.debug("no db at \(targetPath)")
         }
     }
 
     private func dbPath() throws -> String {
         if let docDirUrl = URL.docDirUrl {
-#if DEBUG || GNU_TALER
-            return docDirUrl.path(withSlash: true)
-#else // TALER_WALLET or TALER_NIGHTLY
             if let appSupport = URL.appSuppUrl {
+#if DEBUG || GNU_TALER
+                migrate(from: appSupport, to: docDirUrl)
+                return docDirUrl.path(withSlash: true)
+#else // TALER_WALLET or TALER_NIGHTLY
                 migrate(from: docDirUrl, to: appSupport)
                 return appSupport.path(withSlash: true)
+#endif
             } else { // should never happen
                 logger.error("No applicationSupportDirectory")
             }
-#endif
         } else { // should never happen
             logger.error("No documentDirectory")
         }
