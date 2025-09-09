@@ -66,6 +66,8 @@ struct P2pReceiveURIView: View {
 #endif
         VStack {
             if let peerPushCreditResponse {
+                let scope = peerPushCreditResponse.scopeInfo
+                let balance = controller.balance(for: scope)
                 let tosAccepted = exchange?.tosStatus == .accepted
                 if !tosAccepted {
                     ToSButtonView(stack: stack.push(),
@@ -126,6 +128,18 @@ struct P2pReceiveURIView: View {
                         .padding(.horizontal)
                     }
                 }
+#if OIM && DEBUG
+                .overlay { if #available(iOS 16.4, *) {
+                    if controller.oimSheetActive {
+                        OIMp2pReceiveView(stack: stack.push(),
+                                           cash: cash,
+                                      available: balance?.available,
+                         peerPushCreditResponse: $peerPushCreditResponse,
+                                fwdButtonTapped: $accept)
+                        .environmentObject(NamespaceWrapper(namespace))             // keep OIMviews apart
+                    }
+                } }
+#endif
             } else {
 #if DEBUG
                 let message = url.host
