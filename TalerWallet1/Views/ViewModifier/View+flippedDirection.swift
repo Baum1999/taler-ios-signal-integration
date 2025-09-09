@@ -50,3 +50,14 @@ extension View {
         modifier(FlippedUpsideDown())
     }
 }
+
+
+// Used to reverse the direction of a ScrollView
+// need to flip both the ScrollView and each list item
+// inspired by https://stackoverflow.com/questions/61520970/swiftui-reverse-scrollview-from-bottom-to-top
+//
+//Apple has an API when using iOS 17+
+//    ScrollView() {
+//        // content
+//    }
+//        .defaultScrollAnchor(.bottom)
