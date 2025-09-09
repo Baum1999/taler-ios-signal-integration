@@ -100,7 +100,7 @@ class Controller: ObservableObject {
                 default: "unknown"
             }
             self.logger.log("Internet connection is \(status)")
-#if false
+#if DEBUG   // TODO: checkInternetConnection hintNetworkAvailabilityT
             DispatchQueue.main.async {
                 if path.status == .unsatisfied {
                     self.isConnected = false
@@ -353,10 +353,10 @@ extension Controller {
 //    }
     
     func talerScheme(_ url:URL,_ uncrypted: Bool = false) -> UrlCommand {
-        guard let command = url.host else {return UrlCommand.unknown}
+      if let command = url.host {
         if uncrypted {
             self.logger.trace("uncrypted http: taler://\(command)")
-            // TODO: uncrypted
+            // TODO: uncrypted taler+http
         }
         switch command.lowercased() {
             case "withdraw":            return .withdraw
@@ -374,6 +374,9 @@ extension Controller {
                 self.logger.error("❗️unknown command taler://\(command)")
         }
         messageForSheet = command.lowercased()
-        return .unknown
+      } else {
+          self.logger.error("❗️No taler command")
+      }
+      return .unknown
     }
 }
