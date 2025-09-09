@@ -23,14 +23,20 @@ import SymLog
 
 public class ShareSheet: ObservableObject {
 
-    @MainActor static func shareSheet(textToShare: String) {
+    @MainActor
+    static func shareSheet(textToShare: String, image: UIImage?) {
         let plainString: String?
         if #available(iOS 18.3, *) {
             plainString = textToShare.removingPercentEncoding
         } else {
             plainString = textToShare
         }
-        let activityView = UIActivityViewController(activityItems: [plainString as Any], applicationActivities: nil)
+//        var strings
+        var items: [Any] =  [plainString as Any]
+        if let image {
+            items.append(image as Any)
+        }
+        let activityView = UIActivityViewController(activityItems: items, applicationActivities: nil)
 
         let allScenes = UIApplication.shared.connectedScenes
         let scene = allScenes.first { $0.activationState == .foregroundActive }

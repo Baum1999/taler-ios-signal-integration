@@ -24,11 +24,12 @@ import SwiftUI
 struct QRGeneratorView: View {
     let text: String
     let size: CGFloat
+    @Binding var image: UIImage?
 
     var body: some View {
-        if let data = getQRCodeData(text: text) {
-            if let uiImage = UIImage(data: data)  {
-                Image(uiImage: uiImage)
+        VStack {
+            if let image {
+                Image(uiImage: image)
                     .interpolation(.none)
                     .resizable()
                     .scaledToFit()
@@ -36,11 +37,17 @@ struct QRGeneratorView: View {
             } else {
                 EmptyView()
             }
-        } else {
-            EmptyView()
+        }.onAppear {
+//          if let uiImage = getQRCode(text: text) {
+            if let data = getQRCodeData(text: text) {
+                if let uiImage = UIImage(data: data)  {
+                    image = uiImage
+                }
+            }
         }
     }
 
+//    func getQRCode(text: String) -> UIImage? {
     func getQRCodeData(text: String) -> Data? {
         guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
         let data = text.data(using: .ascii, allowLossyConversion: false)
@@ -53,12 +60,11 @@ struct QRGeneratorView: View {
     }
 }
 
-struct QRGeneratorView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            QRGeneratorView(text: "Hello World!", size: 200)
-            QRGeneratorView(text: "taler://pay-pull/exchange.demo.taler.net/7J7SNHYMCCAZ1ARY9YCB5Z9FTY0YZP8F2KDRXV94KZCQ6WAVMTX0",
-                            size: 200)
-        }
-    }
-}
+//#Preview {      // 'Previewable()' is only available in iOS 17.0 or newer
+//    @Previewable @State var image: UIImage?
+//    VStack {
+//        QRGeneratorView(text: "Hello World!", size: 200, image: $image)
+//        QRGeneratorView(text: "taler://pay-pull/exchange.demo.taler.net/7J7SNHYMCCAZ1ARY9YCB5Z9FTY0YZP8F2KDRXV94KZCQ6WAVMTX0",
+//                        size: 200, image: $image)
+//    }
+//}

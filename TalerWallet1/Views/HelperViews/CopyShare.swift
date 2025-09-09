@@ -12,20 +12,23 @@ import SymLog
 struct CopyButton: View {
     private let symLog = SymLogV(0)
     let textToCopy: String
+    let image: UIImage?
     let vertical: Bool
     let title: String?
 
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
 
-    init(textToCopy: String, vertical: Bool) {
+    init(textToCopy: String, vertical: Bool, image: UIImage? = nil) {
         self.textToCopy = textToCopy
+        self.image = image
         self.vertical = vertical
         self.title = nil
     }
 
-    init(textToCopy: String, title: String) {
+    init(textToCopy: String, title: String, image: UIImage? = nil) {
         self.textToCopy = textToCopy
+        self.image = image
         self.vertical = false
         self.title = title
     }
@@ -33,8 +36,13 @@ struct CopyButton: View {
     func copyAction() -> Void {
         symLog.log(textToCopy)
         controller.hapticFeedback(.medium)
-        UIPasteboard.general.setValue(textToCopy,
-                                      forPasteboardType: UTType.plainText.identifier)
+        let strings = [UTType.plainText.identifier : textToCopy]
+        var items: [[String : Any]] = [strings]
+        if let image {
+            let images = [UTType.image.identifier : image]
+            items.append(images)
+        }
+        UIPasteboard.general.setItems(items)
     }
 
     var body: some View {
@@ -65,14 +73,17 @@ struct CopyButton: View {
 struct ShareButton: View {
     private let symLog = SymLogV(0)
     let textToShare: String
+    let image: UIImage?
     let title: String
 
-    init(textToShare: String) {
+    init(textToShare: String, image: UIImage? = nil) {
         self.textToShare = textToShare
+        self.image = image
         self.title = String(localized: "Share")
     }
-    init(textToShare: String, title: String) {
+    init(textToShare: String, title: String, image: UIImage? = nil) {
         self.textToShare = textToShare
+        self.image = image
         self.title = title
     }
 
@@ -82,7 +93,7 @@ struct ShareButton: View {
     func shareAction() -> Void {
         symLog.log(textToShare)
         controller.hapticFeedback(.soft)
-        ShareSheet.shareSheet(textToShare: textToShare)
+        ShareSheet.shareSheet(textToShare: textToShare, image: image)
     }
 
     var body: some View {
@@ -103,12 +114,13 @@ struct CopyShare: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
 
     let textToCopy: String
+    let image: UIImage?
 
     var body: some View {
         HStack {
-            CopyButton(textToCopy: textToCopy, vertical: false)
+            CopyButton(textToCopy: textToCopy, vertical: false, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
-            ShareButton(textToShare: textToCopy)
+            ShareButton(textToShare: textToCopy, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
         } // two buttons
     }
@@ -116,6 +128,6 @@ struct CopyShare: View {
 // MARK: -
 struct CopyShare_Previews: PreviewProvider {
     static var previews: some View {
-        CopyShare(textToCopy: "Hallö")
+        CopyShare(textToCopy: "Hallö", image: nil)
     }
 }

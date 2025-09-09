@@ -21,6 +21,7 @@ struct OIMp2pReadyView: View {
 
     @State private var sending = false              // user tapped on Send
     @State private var appeared = false
+    @State private var qrImage: UIImage? = nil
 
     var body: some View {
 //        let _ = Self._printChanges()
@@ -37,7 +38,7 @@ struct OIMp2pReadyView: View {
                                     Group {
                                         Spacer()
                                         let size = 240.0
-                                        QRGeneratorView(text: talerURI, size: size)
+                                        QRGeneratorView(text: talerURI, size: size, image: $qrImage)
                                             .frame(maxWidth: .infinity, alignment: .center)
                                             .accessibilityLabel(Text("QR Code", comment: "a11y"))
                                         Spacer()

@@ -9,6 +9,29 @@ import SwiftUI
 import OrderedCollections
 import taler_swift
 
+struct QRcodeCopyShare: View {
+    let spec: QrCodeSpec
+
+    @State private var qrImage: UIImage? = nil
+
+    var body: some View {
+        Text(spec.type)
+        let size = 200.0
+        QRGeneratorView(text: spec.qrContent, size: size, image: $qrImage)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .accessibilityLabel(Text("QR Code", comment: "a11y"))
+            .listRowSeparator(.hidden)
+        HStack {
+            Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+                .accessibilityHidden(true)
+                .foregroundColor(Color.clear)
+            //                  Spacer()
+            CopyShare(textToCopy: spec.qrContent, image: qrImage)
+                .disabled(false)
+        }.listRowSeparator(.automatic)
+    }
+}
+
 struct QRcodesForPayto: View {
     let stack: CallStack
     @Binding var qrCodeSpecs: [QrCodeSpec]
@@ -23,20 +46,7 @@ struct QRcodesForPayto: View {
                     .listRowSeparator(.hidden)
             }
             ForEach(qrCodeSpecs, id: \.self) { spec in
-                let size = 200.0
-                Text(spec.type)
-                QRGeneratorView(text: spec.qrContent, size: size)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .accessibilityLabel(Text("QR Code", comment: "a11y"))
-                    .listRowSeparator(.hidden)
-                HStack {
-                    Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-                        .accessibilityHidden(true)
-                        .foregroundColor(Color.clear)
-//                  Spacer()
-                    CopyShare(textToCopy: spec.qrContent)
-                        .disabled(false)
-                }.listRowSeparator(.automatic)
+                QRcodeCopyShare(spec: spec)
             }
         }
         .navigationTitle(navTitle)

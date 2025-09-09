@@ -23,6 +23,7 @@ struct QRCodeDetailView: View {
 
     @State private var showQRcode = false
     @State private var currencyInfo: CurrencyInfo?
+    @State private var qrImage: UIImage? = nil
 
     private func currencyTickerChanged() async {
         if let scope {
@@ -67,7 +68,7 @@ struct QRCodeDetailView: View {
                 let scanLong = incoming ? (requesting(amountStr.0), requesting(amountStr.1))
                                         : (sending(amountStr.0), sending(amountStr.1))
                 let size = 240.0
-                let qrView = QRGeneratorView(text: talerURI, size: size)
+                let qrView = QRGeneratorView(text: talerURI, size: size, image: $qrImage)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .accessibilityLabel(Text("QR Code", comment: "a11y"))
                 if #available(iOS 17.7, *) {
@@ -82,7 +83,7 @@ struct QRCodeDetailView: View {
                         withAnimation { showQRcode = true }
                     }.buttonStyle(TalerButtonStyle(type: .prominent))
                 }
-                CopyShare(textToCopy: talerCopyShare)
+                CopyShare(textToCopy: talerCopyShare, image: qrImage)
                     .disabled(false)
 //                  .padding(.bottom)
                     .listRowSeparator(.hidden)
