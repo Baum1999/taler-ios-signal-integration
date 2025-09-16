@@ -357,6 +357,12 @@ struct TransactionCommon: Decodable, Sendable {
                               || type == .refund
                               || type == .peerPullCredit
                               || type == .scanPushCredit }
+    var isOutgoing      : Bool { type == .deposit
+                              || type == .payment
+                              || type == .peerPushDebit
+                              || type == .scanPullDebit
+                              || type == .recoup
+                              || type == .denomLoss }
 
     var isPending       : Bool { txState.major == .pending }
     var isPendingReady  : Bool { isPending && txState.isReady }
