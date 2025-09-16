@@ -240,6 +240,11 @@ struct MainView: View {
             controller.setOIMmode(for: newOrientation, isSheetActive)
             tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
+        .onChange(of: showScanner) { newShowScan in
+            let isSheetActive = showActionSheet || showScanner || showUrlSheet
+            controller.setOIMmode(for: UIDevice.current.orientation, isSheetActive)
+            tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
+        }
 #endif
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
