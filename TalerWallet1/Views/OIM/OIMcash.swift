@@ -432,7 +432,7 @@ final class OIMcash: ObservableObject, Sendable {
                 fund.state = target
                 self.updateFund(fund)
             }
-            print("flyToTarget", target, fund.id, fund.value, delay)
+//            print("flyToTarget", target, fund.id, fund.value, delay)
             if target == .curve {
                 DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
                     withAnimation(.move1) {
