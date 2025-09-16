@@ -159,11 +159,12 @@ fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
     func operation() -> String { "addExchange" }     // addExchangeEntry
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, allowCompletion: true) }
 
     var exchangeBaseUrl: String
     struct Args: Encodable {
         var exchangeBaseUrl: String
+        var allowCompletion: Bool
     }
     struct Response: Decodable {}   // no result - getting no error back means success
 }
