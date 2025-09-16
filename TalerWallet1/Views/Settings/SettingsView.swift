@@ -48,6 +48,7 @@ struct SettingsView: View {
     @AppStorage("showQRauto16") var showQRauto16: Bool = true
     @AppStorage("showQRauto17") var showQRauto17: Bool = false
     @AppStorage("oimEuro") var oimEuro: Bool = false
+    @AppStorage("oimChart") var oimChart: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -152,6 +153,10 @@ struct SettingsView: View {
 #if OIM
                 SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro, id1: "oimEuro",
                         description: minimalistic ? nil : String(localized: "OIM currency for KUDOS"))
+#endif
+#if OIM
+                SettingsToggle(name: String(localized: "OIM: Chart"), value: $oimChart, id1: "oimChart",
+                        description: minimalistic ? nil : String(localized: "OIM history as chart"))
 #endif
 
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",

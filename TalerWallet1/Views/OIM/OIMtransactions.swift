@@ -47,6 +47,7 @@ struct OIMtransactions: View {
     @Environment(\.dismiss) var dismiss     // pop back once
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @AppStorage("oimChart") var oimChart: Bool = false                          // false = river
 
     @State private var availableVal: UInt64 = 0
     @State private var available: Amount? = nil
