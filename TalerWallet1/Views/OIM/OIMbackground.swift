@@ -16,8 +16,16 @@ struct OIMamountV: View {
     let amount: Amount?
     let currencyName: String
     let factor: Int             // workaround because TEST has no large denominations, so we multiply with 100
+    let mayChangeSpeed: Bool
 
     @State private var color = Color.accentColor
+
+    init(amount: Amount?, currencyName: String, factor: Int, mayChangeSpeed: Bool = true) {
+        self.amount = amount
+        self.currencyName = currencyName
+        self.factor = factor
+        self.mayChangeSpeed = mayChangeSpeed
+    }
 
     func updateColor() {
 #if DEBUG
@@ -29,6 +37,7 @@ struct OIMamountV: View {
                                : WalletColors().confirm
 #endif
     }
+
     var body: some View {
         if let amount {
             if let amount2 = try? amount * UInt32(factor) {         // workaround for CFA, HUF, JPY
@@ -41,27 +50,31 @@ struct OIMamountV: View {
                     }
 #if DEBUG
                     .onTapGesture(count: 2) {
-                        if debugAnimations {
-                            debugAnimations = false
-                            fastAnimations = true
-                        } else {
-                            debugAnimations = true
+                        if mayChangeSpeed {
+                            if debugAnimations {
+                                debugAnimations = false
+                                fastAnimations = true
+                            } else {
+                                debugAnimations = true
+                            }
+                            updateColor()
                         }
-                        updateColor()
                     }
 #endif
                     .onTapGesture(count: 1) {
+                        if mayChangeSpeed {
 #if DEBUG
-                        if debugAnimations {
-                            debugAnimations = false
-                            fastAnimations = false
-                        } else {
-                            fastAnimations.toggle()
-                        }
+                            if debugAnimations {
+                                debugAnimations = false
+                                fastAnimations = false
+                            } else {
+                                fastAnimations.toggle()
+                            }
 #else
-                        fastAnimations.toggle()
+                            fastAnimations.toggle()
 #endif
-                        updateColor()
+                            updateColor()
+                        }
                     }
             }
         }
