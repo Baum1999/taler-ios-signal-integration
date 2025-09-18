@@ -23,7 +23,7 @@ enum OIMtransactionsState {
 }
 
 // MARK: -
-struct LineMarkData: Identifiable {
+struct HistoryItem: Identifiable {
     var id: String {
         if let talerTX {
             return talerTX.id
@@ -53,8 +53,8 @@ struct OIMtransactions: View {
     @State private var available: Amount? = nil
     @State private var viewState: OIMtransactionsState = .chestIsOpen
     @State private var closing = false                      // after user tapped on the open chest
-    @State private var lineMarks: [LineMarkData] = []
-    @State private var chartData: [LineMarkData] = []
+    @State private var shownItems: [HistoryItem] = []
+    @State private var computedItems: [HistoryItem] = []
     @State private var chartMaxY: Double = 200              // max balance
     @State private var dataPointWidth: CGFloat = DATAPOINTWIDTH
     // when we start fetching transactions in chunks, MinX will get negative (going back in time)
@@ -86,38 +86,38 @@ struct OIMtransactions: View {
     func hideHistoryItems(_ interval: TimeInterval = 0) -> TimeInterval {
         if interval > 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-                let count = lineMarks.count
+                let count = shownItems.count
                 if count > 0 {
                     withAnimation {
-                        lineMarks.removeLast()
+                        shownItems.removeLast()
                     }
                     if count > 1 {
                         hideHistoryItems(interval)
                     }
                 }
             }
-            return Double(lineMarks.count) * interval
+            return Double(shownItems.count) * interval
         }
-        lineMarks = []
+        shownItems = []
         return 0
     }
 
     @discardableResult
     func showHistoryItems(_ interval: TimeInterval = 0) -> TimeInterval {
         var delay = 0.0
-        let count = chartData.count
+        let count = computedItems.count
         let reduce = interval / Double(count + 2)
         var index = 0
-        for lineMark in chartData {
+        for item in computedItems {
             if interval > 0 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     withAnimation {
-                        lineMarks.append(lineMark)
+                        shownItems.append(item)
                     }
                 }
                 delay += (interval - Double(index) * reduce)
             } else {
-                lineMarks.append(lineMark)
+                shownItems.append(item)
             }
         }
         return delay
@@ -170,15 +170,15 @@ struct OIMtransactions: View {
                 ZStack {
                     HStack {
                         Spacer(minLength: 0)
-                        let count = lineMarks.count
+                        let count = shownItems.count
                         if count > 1 {
-                            let last = lineMarks.last
+                            let last = shownItems.last
                             let maxIndex = last?.distance ?? 20    // should never happen
-                            let scrollBack = count == chartData.count
+                            let scrollBack = count == computedItems.count
 //        let _ = print("calling ChartHistoryView", count, maxIndex, scrollBack)
                             ChartHistoryView(stack: stack.push(),
                                           currency: cash.currency,
-                                         chartData: $lineMarks,
+                                        shownItems: $shownItems,
                                     dataPointWidth: $dataPointWidth,
                                         scrollBack: scrollBack,
                                           maxIndex: maxIndex,
@@ -206,8 +206,8 @@ struct OIMtransactions: View {
             cash.update2(availableVal)           // set cash to available
             cash.setTarget(.history)
             debugTick += 1
-            if chartData.count == 0 {
-                chartData(from: history, balance: balance.available.value)        // set chartMaxY, chartData
+            if computedItems.count == 0 {
+                computeData(from: history, balance: balance.available.value)        // set chartMaxY, computedData
             }
             showHistoryItems(Animation.talerDelay0)
         }
@@ -221,7 +221,7 @@ struct OIMtransactions: View {
 @available(iOS 16.4, *)
 extension OIMtransactions {
 
-    func chartData(from history: [TalerTransaction], balance: Double) {
+    func computeData(from history: [TalerTransaction], balance: Double) {
         /// Algorithm for the X value of the river of time
         ///  Endpoint (now) is 0
         ///  same day transactions have no space between them
@@ -229,14 +229,14 @@ extension OIMtransactions {
         ///  week differs: add another spacer
         ///  month differs: add one more spacer
         ///  year differs: add yet another spacer
-        var lineMarks: [LineMarkData] = [ LineMarkData(distance: 0, balance: balance, talerTX: nil) ]
+        var historyItems: [HistoryItem] = [ HistoryItem(distance: 0, balance: balance, talerTX: nil) ]
         var balance = balance
         var maxBalance = balance
         let calendar = Calendar.current         // or do we need (identifier: .gregorian) ?
         var lastTx = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: Date.now)
         var xIndex = 0
 
-        func lineMark(for talerTransaction: TalerTransaction) -> LineMarkData? {
+        func historyItem(for talerTransaction: TalerTransaction) -> HistoryItem? {
             let common = talerTransaction.common
             let amount = common.amountEffective
             let incoming = common.isIncoming
@@ -269,16 +269,16 @@ extension OIMtransactions {
             if balance > maxBalance {
                 maxBalance = balance
             }
-            return LineMarkData(distance: xIndex, balance: balance, talerTX: talerTransaction)
+            return HistoryItem(distance: xIndex, balance: balance, talerTX: talerTransaction)
         }
 
         for talerTransaction in history {
-            if let mark = lineMark(for: talerTransaction) {
-                lineMarks.append(mark)
+            if let item = historyItem(for: talerTransaction) {
+                historyItems.append(item)
             }
         }
 
-        chartData = lineMarks
+        computedItems = historyItems
         chartMaxY = maxBalance * yTransform(1.1)    // 10 % plus, log2()
 //        print("computeData:", history.count, xIndex)
     }

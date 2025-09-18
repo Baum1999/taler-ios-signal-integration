@@ -44,7 +44,7 @@ struct ChartHistoryView: View {
     let stack: CallStack
     private let logger = Logger(subsystem: "net.taler.gnu", category: "Chart")
     let currency: OIMcurrency
-    @Binding var chartData: [LineMarkData]
+    @Binding var shownItems: [HistoryItem]
     @Binding var dataPointWidth: CGFloat
     let scrollBack: Bool
 
@@ -59,23 +59,23 @@ struct ChartHistoryView: View {
     @State private var lastDelta: Double?
 
     init(stack: CallStack,
-      currency: OIMcurrency, chartData: Binding<[LineMarkData]>, dataPointWidth: Binding<CGFloat>,
+      currency: OIMcurrency, shownItems: Binding<[HistoryItem]>, dataPointWidth: Binding<CGFloat>,
          scrollBack: Bool, maxIndex: Int = 1, maxValue: Double = 200
     ) {
         self.stack = stack
         self.currency = currency
         self.scrollBack = scrollBack
-        self._chartData = chartData
+        self._shownItems = shownItems
         self._dataPointWidth = dataPointWidth
         self.maxYValue = maxValue
         self.maxXValue = maxIndex
     }
 
-    var lineMarkforSelection: LineMarkData? {
+    var itemForSelection: HistoryItem? {
         if let selectedTX {
-            for lineMark in chartData {
-                if lineMark.distance == -selectedTX {
-                    return lineMark
+            for item in shownItems {
+                if item.distance == -selectedTX {
+                    return item
                 }
             }
         }
@@ -89,30 +89,36 @@ struct ChartHistoryView: View {
         return false
     }
 
-    func magnify(_ newDelta: Double) {
+    func magnify(_ newDelta: Double) -> Bool {
         if let lastDelta {
             let delta = newDelta - lastDelta
             let absDelta = abs(delta)
+    print(absDelta.pTwo)
             var width = dataPointWidth
-            if delta > 0 {              // zoom in
+            if delta > 0.1 {              // zoom in
+//                width += 10
                 width += absDelta * 10
                 dataPointWidth = width < DATAPOINTWIDTH_MAX ? width : DATAPOINTWIDTH_MAX
-            } else if delta < 0 {       // zoom out
+            } else if delta < -0.1 {       // zoom out
+//                width -= 10
                 width -= absDelta * 10
                 dataPointWidth = width > DATAPOINTWIDTH_MIN ? width : DATAPOINTWIDTH_MIN
+            } else {
+                return false
             }
         }
+        return true
     }
 
     var body: some View {
-        let count = chartData.count
+        let count = shownItems.count
         let width = dataPointWidth * CGFloat(maxXValue)
 //    let _ = logger.log("ChartHistoryView \(width.pTwo)")
         let chart = Chart {
             ForEach(0..<count, id: \.self) { index in
-                let data = chartData[index]
-                let xVal = -data.distance
-                let yVal = yTransform(data.balance)
+                let item = shownItems[index]
+                let xVal = -item.distance
+                let yVal = yTransform(item.balance)
                 LineMark(x: .value("x", xVal),
                          y: .value("y", yVal))
                 .foregroundStyle(WalletColors().talerColor)
@@ -123,7 +129,7 @@ struct ChartHistoryView: View {
                 .interpolationMethod(.monotone)
 //                .interpolationMethod(.stepCenter) // stepStart
 
-                if let talerTX = data.talerTX {
+                if let talerTX = item.talerTX {
                     PointMark(x: .value("x", xVal),
                               y: .value("y", yVal))
 
@@ -167,8 +173,9 @@ struct ChartHistoryView: View {
             if let newRange {               // pinch started - or changed
                 let newDelta = newRange.upperBound - newRange.lowerBound
 //                logger.log("selectedRange \(newDelta)")
-                magnify(newDelta)
-                lastDelta = newDelta
+                if magnify(newDelta) {
+                    lastDelta = newDelta
+                }
             } else {                        // pinch ended
                 lastDelta = nil
             }
@@ -210,11 +217,11 @@ struct ChartHistoryView: View {
 //                Button("Top") { withAnimation { proxy.scrollTo(topID) } }
             } // ScrollViewReader
             if let selectedTX {
-                if let lineMark = lineMarkforSelection {
-                    if let talerTX = lineMark.talerTX {
+                if let item = itemForSelection {
+                    if let talerTX = item.talerTX {
                         ChartOverlayV(stack: stack.push(),
                                    currency: currency,
-                                    balance: lineMark.balance,
+                                    balance: item.balance,
                                     talerTX: talerTX)
                     }
                 }
@@ -259,10 +266,12 @@ struct ChartOverlayV: View {
         VStack {
             Spacer()
             let balance2 =  balance * Double(currency.factor)
+            let incoming = talerTX.common.isIncoming
             VStack {
                 Text("Balance: \(balance2.pTwo)")
                     .foregroundStyle(WalletColors().gray2)
-                OIMamountV(amount: effective, currencyName: currency.currencyStr, factor: currency.factor)
+                OIMamountV(amount: effective, currencyName: currency.currencyStr,
+                           factor: currency.factor, mayChangeSpeed: false)
                 OIMlineView(stack: stack.push(),
                              cash: cash,
                         amountVal: $amountVal,
