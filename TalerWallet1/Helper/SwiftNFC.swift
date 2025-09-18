@@ -76,7 +76,7 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
     public var startAlert = String(localized: "Hold your iPhone near the tag.")
     public var endAlert = ""
     public var msg = ""
-    public var type = "T"   // T=TAG - U=URL
+    public var type = "T"   // T=Text - U=URL
     public var data: Data? = nil
 
     public var session: NFCNDEFReaderSession?

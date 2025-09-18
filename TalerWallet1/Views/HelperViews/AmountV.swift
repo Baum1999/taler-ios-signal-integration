@@ -81,26 +81,10 @@ struct AmountV: View {
 }
 extension AmountV {
     init(_ scope: ScopeInfo?, _ amount: Amount) {
-        self.stack = nil
-        self.scope = scope
-        self.amount = amount
-        self.isNegative = false
-        self.useISO = false
-        self.strikethrough = false
-        self.large = false
-        self.xLarge = false
-        self.a11yDecSep = nil
+        self.init(scope, amount, isNegative: false)
     }
     init(_ scope: ScopeInfo?, _ amount: Amount, isNegative: Bool?) {
-        self.stack = nil
-        self.scope = scope
-        self.amount = amount
-        self.isNegative = isNegative
-        self.useISO = false
-        self.strikethrough = false
-        self.large = false
-        self.xLarge = false
-        self.a11yDecSep = nil
+        self.init(scope, amount, isNegative: isNegative, strikethrough: false)
     }
     init(_ currency: String, cent: UInt64, isNegative: Bool?) {
         self.stack = nil

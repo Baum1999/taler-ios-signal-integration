@@ -50,7 +50,7 @@ struct OIMp2pReceiveView: View {
                                 .resizable()
                                 .background(Color.white)
                                 .scaledToFit()
-                                .matchedGeometryEffect(id: goal, in:     wrapper.namespace)
+                                .matchedGeometryEffect(id: goal, in: wrapper.namespace)
                         }
 
                         OIMlineView(stack: stack.push(),
