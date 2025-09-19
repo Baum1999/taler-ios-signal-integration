@@ -31,7 +31,7 @@ struct OIMp2pReceiveView: View {
                     type: .requestP2P,          // TODO: define receive
                  isFinal: false,
                isSending: false,
-                  action: { },
+                  action: { fwdButtonTapped = true },
              actDisabled: amount?.isZero ?? true
         ) {
             Group {
