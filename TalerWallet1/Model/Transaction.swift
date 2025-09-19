@@ -586,6 +586,7 @@ struct RefreshTransaction : Sendable {
 struct P2pShortInfo: Codable, Sendable {
     var summary: String
     var expiration: Timestamp
+    var iconId: String?
 }
 struct P2PTransactionDetails: Codable, Sendable {
     var exchangeBaseUrl: String
