@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Tree with shadow.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
