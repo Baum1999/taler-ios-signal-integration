@@ -63,7 +63,7 @@ struct OIMtransactions: View {
         withAnimation(.basic1) {
             viewState = .historyTapped
         }
-        let delay0 = hideHistoryItems(Animation.talerDelay0)
+        let delay0 = hideHistoryItems(oimChart ? Animation.talerDelay0 : 0.0)
         DispatchQueue.main.asyncAfter(deadline: .now() + delay0) {
             let delay = cash.flyOneByOne(to: .idle)             // back to center
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
@@ -140,8 +140,8 @@ struct OIMtransactions: View {
                     }
                 }
             }//.buttonStyle(.borderedProminent)
-             //            Text("scroll: \(scrollPosition.pTwo)  width: \(dataPointWidth.pTwo)  maxX: \(maxXValue.pTwo)")
-            Text("width: \(dataPointWidth.pTwo)")
+//            Text("scroll: \(scrollPosition.pTwo)  width: \(dataPointWidth.pTwo)  maxX: \(maxXValue.pTwo)")
+//            Text("width: \(dataPointWidth.pTwo)")
             let a11yZoomInStr = String(localized: "Zoom in", comment: "a11y for the zoom button")
             ZoomInButton(accessibilityLabelStr: a11yZoomInStr) {
                 let width = dataPointWidth + 15
@@ -162,8 +162,10 @@ struct OIMtransactions: View {
                          secondAmount: nil)
 
                     if #unavailable(iOS 17.0) {
-                        chartButtons.padding(.top, 4)
-//                        .border(.red)
+                        if oimChart {
+                            chartButtons.padding(.top, 4)
+   //                        .border(.red)
+                        }
                     }
                 }
                 Spacer(minLength: 0)
@@ -175,14 +177,24 @@ struct OIMtransactions: View {
                             let last = shownItems.last
                             let maxIndex = last?.distance ?? 20    // should never happen
                             let scrollBack = count == computedItems.count
-//        let _ = print("calling ChartHistoryView", count, maxIndex, scrollBack)
-                            ChartHistoryView(stack: stack.push(),
-                                          currency: cash.currency,
-                                        shownItems: $shownItems,
-                                    dataPointWidth: $dataPointWidth,
-                                        scrollBack: scrollBack,
-                                          maxIndex: maxIndex,
-                                          maxValue: chartMaxY)
+//        let _ = print("calling HistoryView", count, maxIndex, scrollBack)
+                            if oimChart {
+                                ChartHistoryView(stack: stack.push(),
+                                              currency: cash.currency,
+                                            shownItems: $shownItems,
+                                        dataPointWidth: $dataPointWidth,
+                                            scrollBack: scrollBack,
+                                              maxIndex: maxIndex,
+                                              maxValue: chartMaxY)
+                            } else {
+                                RiverHistoryView(stack: stack.push(),
+                                              currency: cash.currency,
+                                            shownItems: $shownItems,
+                                        dataPointWidth: $dataPointWidth,
+                                            scrollBack: scrollBack,
+                                              maxIndex: maxIndex,
+                                              maxValue: chartMaxY)
+                            }
                         }
                         sidePosition
                             .padding(.leading, 20)
@@ -209,7 +221,7 @@ struct OIMtransactions: View {
             if computedItems.count == 0 {
                 computeData(from: history, balance: balance.available.value)        // set chartMaxY, computedData
             }
-            showHistoryItems(Animation.talerDelay0)
+            showHistoryItems(oimChart ? Animation.talerDelay0 : 0.0)
         }
         .onDisappear {
 //            cash.moveBack()
