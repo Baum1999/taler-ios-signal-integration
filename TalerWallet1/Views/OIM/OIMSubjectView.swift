@@ -87,8 +87,8 @@ struct OIMSubjectView: View {
     var body: some View {
 //        let _ = Self._printChanges()
         let currency = cash.currency
-        let goals1 = ["blank", "Phone", "Electricity", "gas pump", "Hammer", "Water"]
-        let goals2 = ["shopping", "Rent", "Schooling", "Repay loan", "Medical"].shuffled()
+        let goals1 = ["blank", "Phone", "Electricity", "gasPump", "Hammer", "Water", "Kitchenware", "Cloth", "Medication"].shuffled()
+        let goals2 = ["shopping", "Rent", "Schooling", "RepayLoan", "Medical", "Farming", "Bottle", "Paint", "GasCooker"].shuffled()
 
         let gotAction = (selectedGoal != nil) ? sendAction : nil
         OIMnavBack(stack: stack.push(),
