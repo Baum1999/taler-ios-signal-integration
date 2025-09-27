@@ -23,6 +23,14 @@ enum OIMtransactionsState {
 }
 
 // MARK: -
+enum HistoryMarker: Int {
+    case none
+    case day
+    case week
+    case month
+    case year
+}
+
 struct HistoryItem: Identifiable {
     var id: String {
         if let talerTX {
@@ -31,6 +39,7 @@ struct HistoryItem: Identifiable {
         return UUID().uuidString
     }
     let distance: Int
+    let marker: HistoryMarker
     let balance: Double
     let talerTX: TalerTransaction?
 }
@@ -179,6 +188,7 @@ struct OIMtransactions: View {
                             let scrollBack = count == computedItems.count
 //        let _ = print("calling HistoryView", count, maxIndex, scrollBack)
                             if oimChart {
+#if TALER_WALLET
                                 ChartHistoryView(stack: stack.push(),
                                               currency: cash.currency,
                                             shownItems: $shownItems,
@@ -186,6 +196,15 @@ struct OIMtransactions: View {
                                             scrollBack: scrollBack,
                                               maxIndex: maxIndex,
                                               maxValue: chartMaxY)
+#else
+                                ArrowHistoryView(stack: stack.push(),
+                                              currency: cash.currency,
+                                            shownItems: $shownItems,
+                                        dataPointWidth: $dataPointWidth,
+                                            scrollBack: scrollBack,
+                                              maxIndex: maxIndex,
+                                              maxValue: chartMaxY)
+#endif
                             } else {
                                 RiverHistoryView(stack: stack.push(),
                                               currency: cash.currency,
@@ -241,7 +260,7 @@ extension OIMtransactions {
         ///  week differs: add another spacer
         ///  month differs: add one more spacer
         ///  year differs: add yet another spacer
-        var historyItems: [HistoryItem] = [ HistoryItem(distance: 0, balance: balance, talerTX: nil) ]
+        var historyItems: [HistoryItem] = [ HistoryItem(distance: 0, marker: .none, balance: balance, talerTX: nil) ]
         var balance = balance
         var maxBalance = balance
         let calendar = Calendar.current         // or do we need (identifier: .gregorian) ?
@@ -257,17 +276,22 @@ extension OIMtransactions {
             let date = try! Date(milliseconds: timestamp.milliseconds())
             let components = calendar.dateComponents([.year, .month, .day, .weekOfMonth], from: date)
             // add spacers
+            var marker: HistoryMarker = .none
             let isFirst = xIndex == 0
             if lastTx.year != components.year {
                 xIndex += isFirst ? 1 : 4
+                marker = .year
             } else if lastTx.month != components.month {
                 xIndex += isFirst ? 1 : 3
+                marker = .month
             } else if lastTx.weekOfMonth != components.weekOfMonth {
                 xIndex += isFirst ? 1 : 2
+                marker = .week
 //          } else if lastItem.weekday != components.weekday {
 //              index += 2
             } else if lastTx.day != components.day {
                 xIndex += 1
+                marker = .day
             }
             // advance to next index
             xIndex += 1
@@ -281,7 +305,7 @@ extension OIMtransactions {
             if balance > maxBalance {
                 maxBalance = balance
             }
-            return HistoryItem(distance: xIndex, balance: balance, talerTX: talerTransaction)
+            return HistoryItem(distance: xIndex, marker: marker, balance: balance, talerTX: talerTransaction)
         }
 
         for talerTransaction in history {

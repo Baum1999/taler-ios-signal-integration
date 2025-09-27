@@ -67,40 +67,54 @@ struct RiverHistoryView: View {
 //    let _ = logger.log("RiverHistoryView \(width.pTwo)")
 
         ZStack(alignment: .top) {
-            ScrollViewReader { scrollProxy in
-                OptimalSize(.horizontal) {      // keep it small if we have only a few tx
-                    ScrollView(.horizontal) {
-                        if count > 0 {
-                            HStack(spacing: 0) {
-                                ForEach(-maxXValue...0, id: \.self) { xVal in
-                                    RiverTileView(historyItem: historyItem(for: xVal)) {
-                                        selectTX(xVal)
+            HStack(spacing: 0) {
+                VStack {
+                    Image("Request")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+                        .padding(.bottom, 30)
+                    Image("SendMoney")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+                        .padding(.vertical, 30)
+                }
+                ScrollViewReader { scrollProxy in
+                    OptimalSize(.horizontal) {      // keep it small if we have only a few tx
+                        ScrollView(.horizontal) {
+                            if count > 0 {
+                                HStack(spacing: 0) {
+                                    ForEach(-maxXValue...0, id: \.self) { xVal in
+                                        RiverTileView(historyItem: historyItem(for: xVal)) {
+                                            selectTX(xVal)
+                                        }
                                     }
-                                }
-                            }.id(riverID)
+                                }.id(riverID)
+                            }
                         }
-                    }
-                    //.border(.blue)
-                    .scrollBounceBehavior(.basedOnSize, axes: .horizontal)      // don't bounce if it's small
-                    .task(id: scrollBack) {
-                        logger.log("Task \(scrollBack)")
-                        if scrollBack {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                logger.log("Scrolling")
-                                withAnimation() {       // .easeOut(duration: 3.0)  doesn't work, always uses standard timing
-                                    scrollProxy.scrollTo(riverID, anchor: .bottomTrailing)
+                        //.border(.blue)
+                        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)      // don't bounce if it's small
+                        .task(id: scrollBack) {
+                            logger.log("Task \(scrollBack)")
+                            if scrollBack {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    logger.log("Scrolling")
+                                    withAnimation() {       // .easeOut(duration: 3.0)  doesn't work, always uses standard timing
+                                        scrollProxy.scrollTo(riverID, anchor: .bottomTrailing)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .onTapGesture(count: 2) {
-                        withAnimation(.easeOut(duration: 0.6)) {
-                            dataPointWidth = 100        // reset the scale first
-                            scrollProxy.scrollTo(riverID, anchor: .bottomTrailing)
+                        .onTapGesture(count: 2) {
+                            withAnimation(.easeOut(duration: 0.6)) {
+                                dataPointWidth = 100        // reset the scale first
+                                scrollProxy.scrollTo(riverID, anchor: .bottomTrailing)
+                            }
                         }
                     }
-                }
-            } // ScrollViewReader
+                } // ScrollViewReader
+            }
             if let selectedTX {
                 if let item = historyItem(for: selectedTX) {
                     if let talerTX = item.talerTX {
@@ -136,6 +150,14 @@ struct RiverTileView: View {
         else { return 4 }
     }
 
+    func getDate(_ date: Date?) -> (Int, Int) {
+        if let date {
+            let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
+            return (components.day ?? 1, components.month ?? 1)
+        }
+        return(1, 1)
+    }
+
     var body: some View {
         let txValue = historyItem?.talerTX?.common.amountEffective.value ?? 0
 //        let width = width(for: txValue)
@@ -144,7 +166,7 @@ struct RiverTileView: View {
 
         let treeSpace = 15.0
         let background = VStack(spacing: 0) {
-            Color.brown     // TODO: add some random trees
+            Color.brown     // add some random trees
                 .overlay(alignment: .topLeading) {
                     GeometryReader { geo in
                         let height = geo.size.height
@@ -162,28 +184,59 @@ struct RiverTileView: View {
                 }
             Color.yellow
         }
+        let background2 = VStack(spacing: 0) {
+            Color.brown
+            Color.yellow
+        }
 
         // transactions
         if let historyItem {
             if let talerTX = historyItem.talerTX {
                 let common = talerTX.common
                 let amount = common.amountEffective
+                let (dateString, date) = TalerDater.dateString(common.timestamp, true)
+                let (day, month) = getDate(date)
+                let sunImage = Image(systemName: "sun.max.fill")
+                let moonImage = Image(systemName: "moon.fill")
+                let sunText = Text("\(sunImage) \(day)")
+                let moonText = Text("\(moonImage) \(month)")
                 if common.isIncoming {
                     let sizeIndex = sizeIn(for: amount.value)
-                    Image("River-Lake-" + String(sizeIndex))
-                        .resizable()
-                        .scaledToFit()
-//                        .border(.red)
-                        .onTapGesture { selectTX() }
-                        .background { background }
+                    VStack {
+                        sunText
+                        moonText
+                        Image("River-Lake-" + String(sizeIndex))
+                            .resizable()
+                            .scaledToFit()
+                            .onTapGesture { selectTX() }
+                            .background { background }
+                    }
                 } else if common.isOutgoing {
                     let sizeIndex = sizeOut(for: amount.value)
-                    Image("River-Pond-" + String(sizeIndex))
-                        .resizable()
-                        .scaledToFit()
-//                        .border(.red)
-                        .onTapGesture { selectTX() }
-                        .background { background }
+                    VStack {
+                        sunText
+                        moonText
+                        Image("River-Pond-" + String(sizeIndex))
+                            .resizable()
+                            .scaledToFit()
+                            .onTapGesture { selectTX() }
+                            .background { background }
+                    }
+                }
+                if historyItem.marker != .none {
+                    let markerIndex = historyItem.marker.rawValue
+                    VStack {
+                        Text(" ")
+                        Text(" ")
+                        Image("River-Mark-" + String(markerIndex))
+                            .resizable()
+                            .scaledToFit()
+                            .background { background2 }
+                            .overlay {
+                                LinearGradient(colors: [.clear, .black, .clear], startPoint: .leading, endPoint: .trailing)
+                                    .opacity(0.5)
+                            }
+                    }
                 }
             } else {
                 let _ = print("no talerTX")
