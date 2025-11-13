@@ -26,7 +26,7 @@ struct OIMactionButton: View {
 
     var body: some View {
         let imageName = switch type {
-            case .sendP2P :     "SendMoney"    // "SendTaler"
+            case .sendP2P :     "SendMoney"
             case .withdrawal:   "Withdraw"
             case .deposit:      "Deposit"
             case .requestP2P:   "Request"
@@ -41,25 +41,6 @@ struct OIMactionButton: View {
             .tagStyle(isFinal ? .bordered : .borderless)
             .opacity(disabled ? INVISIBLE : 1)
             .disabled(disabled)
-    }
-}
-
-struct OIMrequestButton: View {
-    let enabled: Bool
-    let action: () -> Void
-
-    var body: some View {
-        let imageName = "Request.png"    // "SendTaler"
-        Button(action: action) {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-//                .tint(WalletColors().talerColor)
-                .foregroundStyle(Color.accentColor)
-        }
-        .tagStyle(.bordered)
-        .opacity(enabled ? 1 : INVISIBLE)
-        .disabled(!enabled)
     }
 }
 

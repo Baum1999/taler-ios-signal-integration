@@ -16,7 +16,7 @@ struct WithdrawTOSView: View {
     let viewID: Int         // either VIEW_WITHDRAW_TOS or SHEET_WITHDRAW_TOS
     let acceptAction: (() async -> Void)?
 
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss     // pop back once
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
@@ -45,7 +45,7 @@ struct WithdrawTOSView: View {
             if acceptAction != nil {
                 await acceptAction!()
             } else { // just go back - caller will reload
-                self.presentationMode.wrappedValue.dismiss()
+                dismiss()
             }
         } else {
             // TODO: error

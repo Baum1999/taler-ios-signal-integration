@@ -81,6 +81,7 @@ struct OIMamountV: View {
     }
 }
 // MARK: -
+// shows a ZStack with backImage, and content on top
 struct OIMbackground<Content: View>: View {
     var content: () -> Content
 

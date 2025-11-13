@@ -31,16 +31,16 @@ struct OIMcurrencyDrawer: View {
                 ForEach(currency.bankNotes, id: \.self) { value in
                     let sourceID = -Int(value)
                     let fund = OIMfund(id: sourceID,
-                                       value: value,
-//                            currencyIndex: cash.currencyIndex
-                                currencyStr: currency.currencyStr)
+                                    value: value,
+//                          currencyIndex: cash.currencyIndex
+                              currencyStr: currency.currencyStr)
                     OIMcurrencyButton(stack: stack.push(),
                                        fund: fund,
                                    currency: currency,
                                availableVal: availableVal,
                                     canEdit: canEdit,
                                    isDrawer: true,
-                                        pct: 0.9,                       // hover a bit above the desk
+                                        pct: 0.8,                       // hover a bit above the desk
                                      action: { tappedVal = value }
                     )
                     .id(currency.noteBase + String(sourceID))
@@ -49,7 +49,7 @@ struct OIMcurrencyDrawer: View {
                 ForEach(currency.bankCoins, id: \.self) { value in
                     let sourceID = -Int(value)
                     let fund = OIMfund(id: sourceID,
-                                       value: value,
+                                    value: value,
 //                            currencyIndex: cash.currencyIndex
                                 currencyStr: currency.currencyStr)
                     OIMcurrencyButton(stack: stack.push(),
@@ -58,7 +58,7 @@ struct OIMcurrencyDrawer: View {
                                availableVal: availableVal,
                                     canEdit: canEdit,
                                    isDrawer: true,
-                                        pct: 0.9,
+                                        pct: 0.8,
                                      action: { tappedVal = value }
                     )
                     .id(currency.noteBase + String(sourceID))

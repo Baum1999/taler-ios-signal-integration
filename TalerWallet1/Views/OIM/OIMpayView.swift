@@ -31,7 +31,7 @@ struct OIMpayView: View {
                              cash: cash,
                         amountVal: $amountVal,
                           canEdit: true)
-                .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
+                .matchedGeometryEffect(id: OIMLINE, in: wrapper.namespace, isSource: true)
                 Spacer()
             }
 #if DEBUG

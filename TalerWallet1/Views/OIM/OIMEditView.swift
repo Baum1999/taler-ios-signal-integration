@@ -9,6 +9,7 @@ import SwiftUI
 import taler_swift
 
 // MARK: -
+// called by SendAmountV
 @available(iOS 16.4, *)
 struct OIMEditView: View {
     let stack: CallStack
@@ -98,7 +99,7 @@ struct OIMEditView: View {
                                  cash: cash,
                             amountVal: $amountVal,
                               canEdit: true)
-                        .matchedGeometryEffect(id: "OIMline", in: wrapper.namespace, isSource: true)
+                        .matchedGeometryEffect(id: OIMLINE, in: wrapper.namespace, isSource: true)
                         .zIndex(1)  // make notes fly from topZ
                         .scaleEffect(sending ? 0.6 : 1.0)
                         .onChange(of: amountVal) { newVal in

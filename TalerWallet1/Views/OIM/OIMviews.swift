@@ -13,10 +13,11 @@ let OIMactionSize = 120.0
 
 let OIMACTION = "OIMaction"         // Position: trailing edge of the title row
 let OIMACTION2 = "OIMaction2"       // currently unused
-let OIMNUMBER = "OIMnumber"
-let OIMCHEST = "OIMchest"
-let OIMBACK = "OIMback"
-let OIMSIDE = "OIMside"
+let OIMNUMBER = "OIMnumber"         // center-top
+let OIMCHEST = "OIMchest"           // middle
+let OIMBACK = "OIMback"             // Back Button, QR
+let OIMLINE = "OIMline"             // unused, middle, OIMlineView
+let OIMSIDE = "OIMside"             // trailing-center, money (history)
 
 // MARK: -
 struct OIMnavBack<Content: View>: View {
