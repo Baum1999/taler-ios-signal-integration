@@ -60,6 +60,12 @@ func request_cancel(userdata: Optional<UnsafeMutableRawPointer>,
     return quickjs.reqCancel(requestID)
 }
 // MARK: -
+extension Error {
+    var errorCode:Int? {
+        return (self as NSError).code
+    }
+}
+// MARK: -
 class QuickDataTask: NSObject {
     let urlSession: URLSession
     let request: URLRequest
@@ -86,6 +92,7 @@ class QuickDataTask: NSObject {
         self.responseCb = responseCb
         self.responseCbCls = responseCbCls
     }
+
     func run() {
         if let responseCb, let responseCbCls {
             let method = self.request.httpMethod ?? "Unknown"
@@ -136,11 +143,11 @@ class QuickDataTask: NSObject {
                     }
                 } else {    // pass error to walletCore
                     Task.detached {
-                        var errmsg = "No http response from \(url)"
-                        logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public) \(error, privacy: .public) \(errmsg, privacy: .public)")
-//                        await WalletModel.shared.hintNetworkAvailabilityT(false)
-                        Controller.shared.checkInternetConnection()    // TODO: pass error to walletCore
-                        var errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
+                        self.logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
+                        Controller.shared.checkInternetConnection()
+                        let errmsg = error?.localizedDescription
+                        let errmsg_p0 = if let errmsg { UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8)) }
+                                        else { UnsafeMutablePointer<CChar>(nil) }
                         var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
                                                                   status: 0,
                                                                   errmsg: errmsg_p0,
