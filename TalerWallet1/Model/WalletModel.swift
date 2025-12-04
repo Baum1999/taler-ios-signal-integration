@@ -375,18 +375,18 @@ extension WalletModel {
         if fileManager.fileExists(atPath: sourcePath) {
             do {
                 try fileManager.moveItem(at: sourceUrl, to: targetUrl)
-                logger.debug("moved to \(target.path)")
+                logger.debug("migrate: moved to \(target.path)")
             } catch {
-                logger.error("move failed \(error.localizedDescription)")
+                logger.error("migrate: move failed \(error.localizedDescription)")
             }
         } else {
-            logger.debug("no db at \(sourcePath)")
+            logger.debug("migrate: nothing to do, no db at \(sourcePath)")
         }
 
         if fileManager.fileExists(atPath: targetPath) {
 //            logger.debug("found db at \(targetPath)")
         } else {
-            logger.debug("no db at \(targetPath)")
+            logger.debug("migrate: nothing to do, no db at \(targetPath)")
         }
     }
 
@@ -401,10 +401,10 @@ extension WalletModel {
                 return appSupport.path(withSlash: true)
 #endif
             } else { // should never happen
-                logger.error("No applicationSupportDirectory")
+                logger.error("dbPath: No applicationSupportDirectory")
             }
         } else { // should never happen
-            logger.error("No documentDirectory")
+            logger.error("dbPath: No documentDirectory")
         }
         throw WalletBackendError.initializationError
     }
@@ -426,7 +426,7 @@ extension WalletModel {
 
             return cachePath
         } else {    // should never happen
-            logger.error("No cachesDirectory")
+            logger.error("cachePath: No cachesDirectory")
             throw WalletBackendError.initializationError
         }
     }

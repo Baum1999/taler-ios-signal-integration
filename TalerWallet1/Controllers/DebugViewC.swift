@@ -32,6 +32,7 @@ public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 13 AboutV
 public let VIEW_PAYMENT_SERVICES = VIEW_ABOUT + 1                   // 14 ExchangeListView
 public let VIEW_BANK_ACCOUNTS = VIEW_PAYMENT_SERVICES + 1           // 15 BankListView
 public let VIEW_BACKUP = VIEW_BANK_ACCOUNTS + 1                     // 16 BackupView
+public let VIEW_CAROUSEL = VIEW_BACKUP + 1                          // 17 CarouselView
 
 // MARK: Transactions
 public let VIEW_EMPTY_HISTORY = VIEW_EMPTY_WALLET + 10              // 20 TransactionsEmptyView

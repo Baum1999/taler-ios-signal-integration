@@ -97,13 +97,12 @@ struct DepositSelectV: View {
             await viewDidLoad()
         }
         .navigationTitle(subjectTitle)
-//        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT_ACCEPT, stack: stack.push())
-//            print("❗️ DepositSelectV onAppear")
+//            symLog.log("❗️ DepositSelectV onAppear")
         }
         .onDisappear {
-//            print("❗️ DepositSelectV onDisappear")
+//            symLog.log("❗️ DepositSelectV onDisappear")
         }
 //        .task(id: depositIBAN) { await validateIban() }
     }

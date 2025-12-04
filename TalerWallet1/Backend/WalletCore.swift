@@ -204,7 +204,7 @@ extension WalletCore {
                 postNotification(.TransactionError, userInfo: [NOTIFICATIONERROR: WalletBackendError.walletCoreError(errorInfo)])
             }
             guard decoded.newTxState != decoded.oldTxState else {
-                logger.info("No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                logger.info("handleStateTransition: No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
                 return
             }
 
@@ -217,7 +217,7 @@ extension WalletCore {
                     let oldMinor = decoded.oldTxState?.minor
                     switch newMajor {
                         case .done:
-                            logger.info("Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.info("handleStateTransition: Done: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if type.isWithdrawal {
                                 Controller.shared.playSound(2)  // play payment_received only for withdrawals
                             } else if !type.isIncoming {
@@ -225,14 +225,14 @@ extension WalletCore {
                                     Controller.shared.playSound(1)  // play payment_sent for all outgoing tx
                                 }
                             } else {    // incoming but not withdrawal
-                                logger.info("incoming payment done - NO sound - \(type.rawValue)")
+                                logger.info("    incoming payment done - NO sound - \(type.rawValue)")
                             }
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .aborting:
                             if let newMinor {
                                 if newMinor == .refreshExpired {
-                                    logger.warning("RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    logger.warning("handleStateTransition: RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     if let index = expired.firstIndex(of: components[2]) {
                                         expired.remove(at: index)               // don't beep twice
                                     } else {
@@ -243,10 +243,10 @@ extension WalletCore {
                                     return
                                 }
                             }
-                            logger.warning("Unknown aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.log("handleStateTransition: Aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         case .expired:
-                            logger.warning("Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                            logger.warning("handleStateTransition: Expired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             if let index = expired.firstIndex(of: components[2]) {
                                 expired.remove(at: index)                       // don't beep twice
                             } else {
@@ -257,7 +257,7 @@ extension WalletCore {
                         case .pending:
                             if let newMinor {
                                 if newMinor == .ready {
-                                    logger.log("PendingReady: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    logger.log("handleStateTransition: PendingReady: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     postNotification(.PendingReady, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 } else if newMinor == .exchangeWaitReserve      // user did confirm on bank website
@@ -266,20 +266,20 @@ extension WalletCore {
                                     postNotification(.DismissSheet, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 } else if newMinor == .kyc {       // user did confirm on bank website, but KYC is needed
-                                    logger.log("KYCrequired: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                    logger.log("handleStateTransition: KYCrequired: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     postNotification(.KYCrequired, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 }
-                                logger.trace("Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.trace("handleStateTransition: Pending:\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
                             } else {
-                                logger.trace("Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.trace("handleStateTransition: Pending: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         default:
                             if let newMinor {
-                                logger.log("\(newMajor.rawValue, privacy: .public):\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.log("handleStateTransition: \(newMajor.rawValue, privacy: .public):\(newMinor.rawValue, privacy: .public) \(decoded.transactionId, privacy: .private(mask: .hash))")
                             } else {
-                                logger.warning("\(newMajor.rawValue, privacy: .public): \(decoded.transactionId, privacy: .private(mask: .hash))")
+                                logger.warning("handleStateTransition: \(newMajor.rawValue, privacy: .public): \(decoded.transactionId, privacy: .private(mask: .hash))")
                             }
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                     } // switch
@@ -287,18 +287,18 @@ extension WalletCore {
             } // 3 components
             return
         } catch DecodingError.dataCorrupted(let context) {
-            logger.error("\(context.debugDescription)")
+            logger.error("handleStateTransition: \(context.debugDescription)")
         } catch DecodingError.keyNotFound(let key, let context) {
-            logger.error("Key '\(key.stringValue)' not found:\(context.debugDescription)")
+            logger.error("handleStateTransition: Key '\(key.stringValue)' not found:\(context.debugDescription)")
             logger.error("\(context.codingPath)")
         } catch DecodingError.valueNotFound(let value, let context) {
-            logger.error("Value '\(value)' not found:\(context.debugDescription)")
+            logger.error("handleStateTransition: Value '\(value)' not found:\(context.debugDescription)")
             logger.error("\(context.codingPath)")
         } catch DecodingError.typeMismatch(let type, let context) {
-            logger.error("Type '\(type)' mismatch:\(context.debugDescription)")
+            logger.error("handleStateTransition: Type '\(type)' mismatch:\(context.debugDescription)")
             logger.error("\(context.codingPath)")
         } catch let error {       // rethrows
-            logger.error("\(error.localizedDescription)")
+            logger.error("handleStateTransition: \(error.localizedDescription)")
         }
         throw WalletBackendError.walletCoreError(nil)       // TODO: error?
     }
