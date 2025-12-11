@@ -55,12 +55,9 @@ extension Balance {
         }
     }
     static func firstNonZero(_ balances: [Balance]) -> Balance? {
-        for balance in balances {
-            if !balance.available.isZero {
-                return balance
-            }
+        balances.first { balance in
+            !balance.available.isZero
         }
-        return nil
     }
 }
 // MARK: -
