@@ -14,6 +14,7 @@ import AVFoundation
 struct BalancesListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let title: String
     @Binding var selectedBalance: Balance?                      // set in TransactionsListView
     @Binding var reloadTransactions: Int
     @Binding var qrButtonTapped: Bool
@@ -46,6 +47,7 @@ struct BalancesListView: View {
             let count = controller.balances.count
             if controller.balances.isEmpty {
                 WalletEmptyView(stack: stack.push("isEmpty"))
+                    .navigationTitle("Empty Wallet")
                     .refreshable {
                         await refresh()
                     }
@@ -78,7 +80,8 @@ struct BalancesListView: View {
                     .refreshable {
                         await refresh()
                     }
-                }.onChange(of: controller.oimModeActive) { oimModeActive in
+                }.navigationTitle(title)
+                .onChange(of: controller.oimModeActive) { oimModeActive in
                     if !oimModeActive {
                         print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
 //                        if controller.balances.count > 1 {

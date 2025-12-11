@@ -488,10 +488,10 @@ extension MainView {
             /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
+                                 title: balancesTitle,
                        selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
                     reloadTransactions: $shouldReloadTransactions,
                         qrButtonTapped: $qrButtonTapped)
-                .navigationTitle(balancesTitle)
                 .background(balanceActions)
             }.navigationViewStyle(.stack)
             let settingsStack = NavigationView {
