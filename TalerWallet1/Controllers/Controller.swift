@@ -14,6 +14,7 @@ import SymLog
 import os.log
 import CoreHaptics
 import Network
+import taler_swift
 
 enum BackendState {
     case none
@@ -87,12 +88,25 @@ enum UrlCommand: String, Codable {
     }
 }
 
+struct ScannedURL: Identifiable {
+    var id: String {
+        return url.absoluteString
+    }
+    var url: URL
+    var command: UrlCommand
+    var amount: Amount?
+    var baseURL: String?
+    var scope: ScopeInfo?
+    var time: Date
+}
+
 // MARK: -
 class Controller: ObservableObject {
     public static let shared = Controller()
     private let symLog = SymLogC()
 
     @Published var balances: [Balance] = []
+    @Published var scannedURLs: [ScannedURL] = []
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
@@ -122,8 +136,70 @@ class Controller: ObservableObject {
         oimSheetActive = sheetActive && isLandscapeRight
          oimModeActive = sheetActive ? false
                                      : isLandscapeRight
+//        print("😱 oimSheetActive = \(oimSheetActive)")
     }
 #endif
+
+    @discardableResult
+    func saveURL(_ passedURL: URL, urlCommand: UrlCommand) -> Bool {
+        let savedURL = scannedURLs.first { scannedURL in
+            scannedURL.url == passedURL
+        }
+        if savedURL == nil {        // doesn't exist yet
+            var save = false
+            switch urlCommand {
+                case .addExchange:      save = true
+                case .withdraw:         save = true
+                case .withdrawExchange: save = true
+                case .pay:              save = true
+                case .payPull:          save = true
+                case .payPush:          save = true
+                case .payTemplate:      save = true
+
+                default:    break
+            }
+            if save {
+                let scannedURL = ScannedURL(url: passedURL, command: urlCommand, time: .now)
+                if scannedURLs.count > 5 {
+                    self.logger.trace("removing: \(self.scannedURLs.first?.command.rawValue ?? "")")
+                    scannedURLs.remove(at: 0)
+                }
+                scannedURLs.append(scannedURL)
+                self.logger.trace("saveURL: \(urlCommand.rawValue)")
+                return true
+            }
+        }
+        return false
+    }
+
+    func removeURL(_ passedURL: URL) {
+        scannedURLs.removeAll { scannedURL in
+            scannedURL.url == passedURL
+        }
+    }
+    func removeURLs(after: TimeInterval) {
+        let now = Date.now
+        scannedURLs.removeAll { scannedURL in
+            let timeInterval = now.timeIntervalSince(scannedURL.time)
+            self.logger.trace("timeInterval: \(timeInterval)")
+            return timeInterval > after
+        }
+    }
+    func updateAmount(_ amount: Amount, forSaved url: URL) {
+        if let index = scannedURLs.firstIndex(where: { $0.url == url }) {
+            var savedURL = scannedURLs[index]
+            savedURL.amount = amount
+            scannedURLs[index] = savedURL
+        }
+    }
+    func updateBase(_ baseURL: String, forSaved url: URL) {
+        if let index = scannedURLs.firstIndex(where: { $0.url == url }) {
+            var savedURL = scannedURLs[index]
+            savedURL.baseURL = baseURL
+            scannedURLs[index] = savedURL
+        }
+    }
+
 
     func startObserving() {
         let defaults = UserDefaults.standard
@@ -368,19 +444,21 @@ extension Controller {
         self.logger.trace("openURL(\(scheme)\(host)")
 #endif
         var uncrypted = false
+        var urlCommand = UrlCommand.unknown
         switch scheme.lowercased() {
             case "taler+http":
                 uncrypted = true
                 fallthrough
             case "taler", "ext+taler", "web+taler":
-                return talerScheme(url, uncrypted)
+                urlCommand = talerScheme(url, uncrypted)
 //            case "payto":
 //                messageForSheet = url.absoluteString
 //                return paytoScheme(url)
             default:
                 self.logger.error("unknown scheme: <\(scheme)>")       // should never happen
         }
-        return UrlCommand.unknown
+        saveURL(url, urlCommand: urlCommand)
+        return urlCommand
     }
 }
 // MARK: -
