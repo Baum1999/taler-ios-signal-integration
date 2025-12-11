@@ -63,6 +63,10 @@ public struct WalletColors {
                 : Color(.systemBackground)
     }
 
+    var secondaryBackground: Color {
+        Color(.secondarySystemGroupedBackground)
+    }
+
     var sideBackground: Color {
         gray6
     }
