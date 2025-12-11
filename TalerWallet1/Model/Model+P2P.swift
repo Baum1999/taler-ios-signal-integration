@@ -178,6 +178,7 @@ struct PreparePeerPushCreditResponse: Codable {
     let amountEffective: Amount
     // TODO: the dialog transaction is already created in the local DB - must either accept or delete
     let transactionId: String
+    let txState: TransactionState
     let exchangeBaseUrl: String         // need (exchange.tosStatus == .accepted) for incoming coins
     let scopeInfo: ScopeInfo
 }
@@ -229,6 +230,7 @@ struct PreparePeerPullDebitResponse: Codable {
     let amountEffective: Amount
     // TODO: the dialog transaction is already created in the local DB - must either accept or delete
     let transactionId: String
+    let txState: TransactionState
 //    let exchangeBaseUrl: String       use scope instead
     let scopeInfo: ScopeInfo
 }
