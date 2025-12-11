@@ -16,16 +16,20 @@ struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var withDrawStarted = false
 
     var body: some View {
         let list = List {
+#if false // EMPTY
             Section {
                 Text("There is no digital cash in your wallet yet.")
                     .talerFont(.title3)
             }
+#endif
             Section {
                 let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
                 let settings = Image(systemName: SETTINGS)                      // 􀍟 "gear"
@@ -34,9 +38,14 @@ struct WalletEmptyView: View {
                     .listRowSeparator(.hidden)
                 Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
                     .talerFont(.body)
+            } header: {
+                let firstHeader = String(localized: "Withdraw digital cash", comment: "section header")
+                Text(firstHeader)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
             Section {
-                Text("Demo: get digital cash to experience how to pay with the money of the future.")
+                Text("Get digital cash to experience how to pay with the money of the future.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
                 let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo money")
@@ -50,6 +59,11 @@ struct WalletEmptyView: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
                 .disabled(withDrawStarted)
+            } header: {
+                let secondHeader = String(localized: "Demo", comment: "section header")
+                Text(secondHeader)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
         }
             .listStyle(myListStyle.style).anyView
