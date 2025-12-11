@@ -14,6 +14,7 @@ struct ManualWithdrawDone: View {
     let stack: CallStack
 //    let scope: ScopeInfo                                                        // TODO: use data from tx itself
 
+    let url: URL?
     let baseURL: String
     let amountToTransfer: Amount
 //    let restrictAge: Int?
@@ -93,6 +94,7 @@ fileprivate struct ManualWithdrawDone_Previews: PreviewProvider {
                            exchangeUpdateStatus: .initial,
                           ageRestrictionOptions: [])
         ManualWithdrawDone(stack: CallStack("Preview"),
+                             url: URL("taler://withdraw"),
 //                           scope: scopeInfo,
                          baseURL: DEMOEXCHANGE,
                 amountToTransfer: amountToTransfer)

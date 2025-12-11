@@ -14,6 +14,7 @@ import SymLog
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let url: URL?
     // when Action is tapped while in currency TransactionList…
     let selectedBalance: Balance?   // …then use THIS balance, otherwise show picker
     @Binding var amountLastUsed: Amount
@@ -83,6 +84,7 @@ struct ManualWithdraw: View {
             if let scope = balance?.scopeInfo ?? exchange?.scopeInfo {
                 let _ = symLog.log("exchange = \(exchange?.exchangeBaseUrl), scope = \(scope.url), amountToTransfer = \(amountToTransfer.currencyStr)")
                 ManualWithdrawContent(stack: stack.push(),
+                                        url: url,
                                       scope: scope,
                              amountLastUsed: $amountLastUsed,
                            amountToTransfer: $amountToTransfer,
@@ -132,6 +134,7 @@ struct ManualWithdraw: View {
 struct ManualWithdrawContent: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let url: URL?
     let scope: ScopeInfo
     @Binding var amountLastUsed: Amount
     @Binding var amountToTransfer: Amount
@@ -230,6 +233,7 @@ struct ManualWithdrawContent: View {
 //  let _ = print(selectedAge, restrictAge)
                 let destination = ManualWithdrawDone(stack: stack.push(),
 //                                                     scope: detailsForAmount.scopeInfo,
+                                                       url: url,
                                                    baseURL: baseURL,
                                           amountToTransfer: amountToTransfer)
 //                                             restrictAge: restrictAge)

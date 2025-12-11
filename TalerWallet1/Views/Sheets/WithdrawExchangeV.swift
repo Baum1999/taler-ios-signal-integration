@@ -59,6 +59,7 @@ struct WithdrawExchangeV: View {
             let scopeInfo = exchange.scopeInfo
             Group {
                 ManualWithdraw(stack: stack.push(),
+                                 url: url,
                      selectedBalance: selectedBalance,
                       amountLastUsed: $amountLastUsed,
                     amountToTransfer: $amountToTransfer,

@@ -456,6 +456,7 @@ extension MainView {
                                    selectedBalance: selectedBalance,
                                     amountLastUsed: $amountLastUsed)
             let manualWithdrawDest = ManualWithdraw(stack: stack.push(Self.name),
+                                                      url: nil,
                                           selectedBalance: selectedBalance,
                                            amountLastUsed: $amountLastUsed,     // currency needs to be updated!
                                          amountToTransfer: $amountToTransfer,
