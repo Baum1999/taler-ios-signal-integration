@@ -6,6 +6,7 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import os.log
 import taler_swift
 import SymLog
 
@@ -30,6 +31,7 @@ struct TransactionTimeline: View {
 @MainActor
 struct TransactionRowView: View {
     private let symLog = SymLogV(0)
+    let logger: Logger?
     let scope: ScopeInfo
     let transaction : TalerTransaction
 
@@ -272,11 +274,13 @@ struct TransactionRowView: View {
                     .opacity(isLayoutSelected(3) ? 1 : 0)
             }
                 .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
+//                    logger?.log("LayoutTruncationStatus0")
                     DispatchQueue.main.async {
                         self.layoutStati0 = stati
                     }
                 }
                 .onPreferenceChange(LayoutTruncationStatus1.self) { stati in    // Timeline
+//                    logger?.log("LayoutTruncationStatus1")
                     DispatchQueue.main.async {
                         self.layoutStati1 = stati
                     }
@@ -313,8 +317,8 @@ struct TransactionRow_Previews: PreviewProvider {
         var body: some View {
             let scope = ScopeInfo.zero(DEMOCURRENCY)
             List {
-                TransactionRowView(scope: scope, transaction: withdrawal)
-                TransactionRowView(scope: scope, transaction: payment)
+                TransactionRowView(logger: nil, scope: scope, transaction: withdrawal)
+                TransactionRowView(logger: nil, scope: scope, transaction: payment)
             }
         }
     }

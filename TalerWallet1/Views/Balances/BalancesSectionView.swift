@@ -6,6 +6,7 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import os.log
 import taler_swift
 import SymLog
 
@@ -27,6 +28,7 @@ struct BalancesSectionView {
     @Binding var historyTapped: Int?
     @Binding var reloadTransactions: Int
 
+    let logger = Logger(subsystem: "net.taler.gnu", category: "RecentList")
     @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -145,6 +147,7 @@ extension BalancesSectionView: View {
             Section {
                 let _ = symLog.log("recent transactions")
                 TransactionsArraySliceV(symLog: symLog,
+                                        logger: logger,
                                          stack: stack.push(),
                                          scope: scopeInfo,
                                   transactions: $recentTransactions,

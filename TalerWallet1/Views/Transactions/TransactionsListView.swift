@@ -6,6 +6,7 @@
  * @author Marc Stibane
  */
 import SwiftUI
+import os.log
 import SymLog
 
 #if DEBUG
@@ -25,6 +26,7 @@ struct TransactionsListView: View {
 
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
+    let logger = Logger(subsystem: "net.taler.gnu", category: "TransactionsList")
     @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -70,6 +72,7 @@ struct TransactionsListView: View {
                     List {
                         Section {
                             TransactionsArraySliceV(symLog: symLog,
+                                                    logger: logger,
                                                      stack: stack.push(),
                                                      scope: scope,
                                               transactions: $transactions,
@@ -136,6 +139,7 @@ struct TransactionsListView: View {
 // used by TransactionsListView, and by BalancesSectionView to show the last 3 transactions
 struct TransactionsArraySliceV: View {
     let symLog: SymLogV?
+    let logger: Logger?
     let stack: CallStack
     let scope: ScopeInfo
     @Binding var transactions: [TalerTransaction]
@@ -168,7 +172,7 @@ struct TransactionsArraySliceV: View {
                                           suspendAction: suspendAction,
                                            resumeAction: resumeAction)
             let row = NavigationLink { destination } label: {
-                TransactionRowView(scope: scope, transaction: transaction)
+                TransactionRowView(logger: logger, scope: scope, transaction: transaction)
             }.id(transaction.id)
             if transaction.isDeleteable {
                 row.swipeActions(edge: .trailing) {
