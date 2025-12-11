@@ -23,7 +23,7 @@ enum BackendState {
     case error
 }
 
-enum UrlCommand {
+enum UrlCommand: String, Codable {
     case unknown
     case withdraw
     case withdrawExchange
@@ -43,6 +43,30 @@ enum UrlCommand {
                 true
             default:
                 false
+        }
+    }
+
+    var localizedCommand: String {
+        switch self {
+            case .unknown:          String(EMPTYSTRING)
+            case .withdraw,
+                 .withdrawExchange: String(localized: "Withdraw",
+                                             comment: "UrlCommand")
+            case .addExchange:      String(localized: "Add Exchange",
+                                             comment: "UrlCommand")
+            case .pay:              String(localized: "Pay merchant",
+                                             comment: "UrlCommand")
+            case .payPull:          String(localized: "Pay others",
+                                             comment: "UrlCommand")
+            case .payPush:          String(localized: "Receive",
+                                             comment: "UrlCommand")
+            case .payTemplate:      String(localized: "Pay ...",
+                                             comment: "UrlCommand")
+            case .refund:           String(localized: "Refund",
+                                             comment: "UrlCommand")
+#if GNU_TALER
+            case .devExperiment:    String("DevExperiment")
+#endif
         }
     }
 }
