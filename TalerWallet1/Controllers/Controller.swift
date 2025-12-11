@@ -69,6 +69,22 @@ enum UrlCommand: String, Codable {
 #endif
         }
     }
+    var transactionType: TransactionType {
+        switch self {
+            case .unknown:          .dummy
+            case .withdraw:         .withdrawal
+            case .withdrawExchange: .withdrawal
+            case .addExchange:      .withdrawal
+            case .pay:              .payment
+            case .payPull:          .scanPullDebit
+            case .payPush:          .scanPushCredit
+            case .payTemplate:      .payment
+            case .refund:           .refund
+#if GNU_TALER
+            case .devExperiment:    .dummy
+#endif
+        }
+    }
 }
 
 // MARK: -
