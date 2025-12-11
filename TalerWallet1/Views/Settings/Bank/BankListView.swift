@@ -28,7 +28,7 @@ struct BankListView: View {
     func addExchange(_ exchange: String) -> Void {
         Task { // runs on MainActor
             symLog.log("adding: \(exchange)")
-            if let _ = try? await model.addExchange(url: exchange) {
+            if let _ = try? await model.addExchange(uri: exchange) {
                 symLog.log("added: \(exchange)")
                 announce("added: \(exchange)")
                 NotificationCenter.default.post(name: .ExchangeAdded, object: nil, userInfo: nil)

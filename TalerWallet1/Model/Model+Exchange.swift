@@ -173,12 +173,12 @@ fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
 
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
-    func operation() -> String { "addExchange" }     // addExchangeEntry
-    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, allowCompletion: true) }
+    func operation() -> String { "addExchange" }
+    func args() -> Args { Args(uri: uri, allowCompletion: true) }
 
-    var exchangeBaseUrl: String
+    var uri: String
     struct Args: Encodable {
-        var exchangeBaseUrl: String
+        var uri: String
         var allowCompletion: Bool
     }
     struct Response: Decodable {}   // no result - getting no error back means success
@@ -266,10 +266,10 @@ extension WalletModel {
     }
 
     /// add a new exchange with URL to the wallet's list of known exchanges
-    nonisolated func addExchange(url: String, viewHandles: Bool = false)
+    nonisolated func addExchange(uri: String, viewHandles: Bool = false)
       async throws {
-        let request = AddExchange(exchangeBaseUrl: url)
-        logger.info("adding exchange: \(url, privacy: .public)")
+        let request = AddExchange(uri: uri)
+        logger.info("adding exchange: \(uri, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 
