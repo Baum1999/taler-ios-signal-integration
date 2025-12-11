@@ -161,6 +161,9 @@ struct TransactionRowView: View {
                         .accessibilityLabel(a11yLabel)
                     }
                     TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
+#if DEBUG
+                        .border(green)
+#endif
                 }
 //                .border(orange)
                 Spacer(minLength: 0)
@@ -186,6 +189,9 @@ struct TransactionRowView: View {
             }
             HStack(spacing: 6) {
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1, maxLines: 1)
+#if DEBUG
+                    .border(green)
+#endif
                 Spacer(minLength: 0)
                 amountV
 #if DEBUG
@@ -215,9 +221,15 @@ struct TransactionRowView: View {
 #endif
                 }
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
+#if DEBUG
+                    .border(green)
+#endif
             } else {        // no top, bottom & amount
                 HStack(spacing: 6) {
                     TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
+#if DEBUG
+                        .border(green)
+#endif
                     Spacer(minLength: 2)
                     amountV
 #if DEBUG
@@ -252,6 +264,9 @@ struct TransactionRowView: View {
 #endif
             }
             TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3, maxLines: 10)
+#if DEBUG
+                .border(green)
+#endif
         }
 
         HStack {
