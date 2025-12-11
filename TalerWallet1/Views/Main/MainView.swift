@@ -58,7 +58,7 @@ struct MainView: View {
 //            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
 //        }
     }
-    private func dismissScanner() {
+    private func dismissSheet() {
         showActionSheet = false
         qrButtonTapped = false
         qrButton2Tapped = false
@@ -184,7 +184,7 @@ struct MainView: View {
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
                 }
                 .sheet(isPresented: $showScanner,
-                         onDismiss: dismissScanner
+                         onDismiss: dismissSheet
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                         selectedBalance: selectedBalance))
@@ -200,10 +200,7 @@ struct MainView: View {
                     }
                 }
                 .sheet(isPresented: $showActionSheet,
-                       onDismiss: { showScanner = false
-                                    qrButtonTapped = false
-                                    qrButton2Tapped = false
-                                    userAction += 1 }
+                       onDismiss: dismissSheet
                 ) {
                     if #available(iOS 16.4, *) {
 //                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
@@ -211,12 +208,12 @@ struct MainView: View {
                             DualHeightSheet(stack: stack.push(),
                                   selectedBalance: selectedBalance,
                                    qrButtonTapped: $qrButton2Tapped,
-                                   dismissScanner: dismissScanner)
+                                   dismissScanner: dismissSheet)        // needs to explicitely dismiss 2nd sheet
                         } else {
                             DualHeightSheet(stack: stack.push(),
                                   selectedBalance: selectedBalance,
                                    qrButtonTapped: $qrButtonTapped,
-                                   dismissScanner: dismissScanner)
+                                   dismissScanner: {})//dismissSheet)
                         }
                     } else {
                         Group {
