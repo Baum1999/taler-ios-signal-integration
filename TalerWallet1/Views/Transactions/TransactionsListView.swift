@@ -65,6 +65,11 @@ struct TransactionsListView: View {
 #endif
         if transactions.isEmpty {
             TransactionsEmptyView(stack: stack.push(), currency: scope.currency)
+                .refreshable {
+                    controller.hapticNotification(.success)
+                    symLog.log("refreshing")
+                    await reloadAllAction(stack.push())
+                }
         } else {
             Group {
                 ScrollViewReader { scrollProxy in
