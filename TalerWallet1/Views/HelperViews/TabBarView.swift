@@ -11,7 +11,7 @@ import SymLog
 struct TabBarView: View {
     private let symLog = SymLogV(0)
     @Binding var selection: Tab
-    @Binding var userAction: Int
+    @Binding var userAction: Int // must be held in main view; used to make Action button jump to indicate it can be dragged
     @Binding var hidden: Int
     let onActionTab: () -> Void
     let onActionDrag: () -> Void

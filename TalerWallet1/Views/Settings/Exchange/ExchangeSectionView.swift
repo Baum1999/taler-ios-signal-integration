@@ -15,7 +15,7 @@ struct ExchangeSectionView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let balance: Balance
-    let thousand: Int
+    let thousand: Int           // index of balance times 1000 (MAXEXCHANGES per currency)
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -156,10 +156,9 @@ struct ExchangeSectionView: View {
                     showAlert = false
                 }
                 Button("Deposit") {
-                    // TODO: Go to "Deposit" view
                     showAlert = false
-                    dismissTop(stack.push())
-                    NotificationCenter.default.post(name: .DepositAction, object: nil)                // will trigger NavigationLink
+//                    dismissTop(stack.push())              don't do this - will dismiss the Deposit view
+                    NotificationCenter.default.post(name: .DepositAction, object: nil)  // will trigger NavigationLink
                 }
                 Button(buttonTitle) {
                     deleteExchange()

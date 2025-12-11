@@ -160,11 +160,11 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
-                if newValue == scanDetent {
+                if newValue == scanDetent {    // user swiped the sheet up to full height
                     logger.trace("onChange❗️selectedDetent = \(SCANDETENT)")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
-                } else {
+                } else {    // SwiftUI "innerHeight" determined how big the half sheet should be
                     logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
                     detents = [scanDetent, .height(sheetHeight)]
                 }

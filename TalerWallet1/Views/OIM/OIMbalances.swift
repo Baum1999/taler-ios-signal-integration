@@ -26,6 +26,8 @@ enum OIMbalancesState {
 }
 
 // MARK: -
+// called by BalancesListView
+// shows one savings box per currency
 @available(iOS 16.4, *)
 struct OIMbalances: View {
     let stack: CallStack
@@ -237,7 +239,7 @@ struct OIMbalances: View {
                 } // title on top, money in the middle
 
                 VStack {
-                    // three savings chests (Euro, Sierra Leone, Côte d'Ivoire)
+                    // multiple savings chests (Euro, Sierra Leone, Côte d'Ivoire)
                     Spacer()
                     HStack(spacing: 30) {
                         ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in

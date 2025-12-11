@@ -79,12 +79,11 @@ struct QRSheet: View {
             }
         }
     }
-
 }
 // MARK: -
 //struct PaySheet_Previews: PreviewProvider {
 //    static var previews: some View {
-            // needs BackendManager
+//            // needs BackendManager
 //        URLSheet(urlToOpen: URL(string: "ftp://this.URL.is.invalid")!)
 //    }
 //}

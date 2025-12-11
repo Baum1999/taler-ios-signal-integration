@@ -36,15 +36,15 @@ struct MainView: View {
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
     @State private var showUrlSheet = false
-    @State private var showActionSheet = false
+    @State private var showActionSheet = false              // Action button tapped
     @State private var showScanner = false
 //    @State private var showCameraAlert: Bool = false
     @State private var qrButtonTapped = false
     @State private var qrButton2Tapped = false
     @State private var innerHeight: CGFloat = .zero
-    @State private var userAction = 0
+    @State private var userAction = 0                       // make Action button jump, hold here
     @State private var networkUnavailable = false
-    @State private var backgrounded: Date?
+    @State private var backgrounded: Date?                  // time we go into background
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
