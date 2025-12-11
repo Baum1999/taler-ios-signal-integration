@@ -165,6 +165,7 @@ extension Notification.Name {
     static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
     static let TransactionDone = Notification.Name("transaction-done")
     static let TransactionExpired = Notification.Name("transaction-expired")
+    static let TransactionScanned = Notification.Name("transaction-scanned")
     static let PendingReady = Notification.Name("pending-ready")
     static let WaitReserve = Notification.Name("wait-reserve")
     static let WithdrawCoins = Notification.Name("withdraw-coins")
