@@ -29,7 +29,22 @@ enum ExchangeUpdateStatus: String, Codable {
     case outdatedUpdate = "outdated-update"
     case ready
     case readyUpdate = "ready-update"
+    case unavailable
     case unavailableUpdate = "unavailable-update"
+
+    var localized: String {
+        switch self {
+            case .initial:           String(localized: "Initial")
+            case .initialUpdate:     String(localized: "Initial update")
+            case .suspended:         String(localized: "Suspended")
+            case .failed:            String(localized: "Failed")
+            case .outdatedUpdate:    String(localized: "Outdated update")
+            case .ready:             String(localized: "Ready")
+            case .readyUpdate:       String(localized: "Ready update")
+            case .unavailable:       String(localized: "Unavailable")
+            case .unavailableUpdate: String(localized: "Unavailable update")
+        }
+    }
 }
 
 struct ExchangeState: Codable, Hashable {
