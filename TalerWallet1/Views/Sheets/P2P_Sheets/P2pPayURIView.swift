@@ -20,9 +20,6 @@ struct P2pPayURIView: View {
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var peerPullDebitResponse: PreparePeerPullDebitResponse?
@@ -33,7 +30,8 @@ struct P2pPayURIView: View {
     private func viewDidLoad() async {
         do {
             symLog.log(".task")
-            peerPullDebitResponse = try? await model.preparePeerPullDebit(url.absoluteString)
+            let response = try? await model.preparePeerPullDebit(url.absoluteString)
+            peerPullDebitResponse = response
         }
     }
 
@@ -41,35 +39,13 @@ struct P2pPayURIView: View {
         VStack {
             if let peerPullDebitResponse {
                 List {
-                    let raw = peerPullDebitResponse.amountRaw
-                    let effective = peerPullDebitResponse.amountEffective
-                    let scope = peerPullDebitResponse.scopeInfo
-                    let currency = raw.currencyStr
-                    let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsSection(stack: stack.push(),
-                                        scope: scope,
-                                     topTitle: String(localized: "Amount to pay:"),
-                                    topAbbrev: String(localized: "Pay:", comment: "mini"),
-                                    topAmount: raw,
-                                       noFees: nil,        // TODO: check baseURL for fees
-                                          fee: fee,
-                                  bottomTitle: String(localized: "Amount to be spent:"),
-                                 bottomAbbrev: String(localized: "Effective:", comment: "mini"),
-                                 bottomAmount: effective,
-                                        large: false, pending: false, incoming: false,
-                                      baseURL: nil,
-                                   txStateLcl: nil,
-                                      summary: peerPullDebitResponse.contractTerms.summary,
-                                     merchant: nil,
-                                     products: nil)
+                    PeerPullDebitView(stack: stack.push(),
+                                        raw: peerPullDebitResponse.amountRaw,
+                                  effective: peerPullDebitResponse.amountEffective,
+                                      scope: peerPullDebitResponse.scopeInfo,
+                                    summary: peerPullDebitResponse.contractTerms.summary)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration
-                    let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
-                    let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-                    let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
-                    Text("Expires: \(dateString)")
-                        .talerFont(.body)
-                        .accessibilityLabel(a11yLabel)
-                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    ExpiresView(expiration: expiration)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
@@ -78,14 +54,14 @@ struct P2pPayURIView: View {
 //                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
 //                }
                 .safeAreaInset(edge: .bottom) {
-                    let destination = P2pAcceptDone(stack: stack.push(),
-                                            transactionId: peerPullDebitResponse.transactionId,
-                                                 incoming: false)
-                    NavigationLink(destination: destination) {
-                        Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
+                    if peerPullDebitResponse.txState.isConfirmed {
+                        Button("Done") { dismissTop(stack.push()) }
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                    } else {
+                        PeerPullDebitConfirm(stack: stack.push(), url: url,
+                                     transactionId: peerPullDebitResponse.transactionId)
                     }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
                 }
             } else {
 #if DEBUG
@@ -107,3 +83,57 @@ struct P2pPayURIView: View {
 //#Preview {
 //    P2pPayURIView(url: <#T##URL#>, model: <#T##WalletModel#>)
 //}
+// MARK: -
+struct PeerPullDebitConfirm: View  {
+    let stack: CallStack
+    let url: URL?
+    let transactionId: String
+
+    var body: some View {
+        let destination = P2pAcceptDone(stack: stack.push(),
+                                          url: url,
+                                transactionId: transactionId,
+                                     incoming: false)
+        NavigationLink(destination: destination) {
+            Text("Confirm Payment", comment:"pay P2P request/invoice")      // SHEET_PAY_P2P
+        }
+        .buttonStyle(TalerButtonStyle(type: .prominent))
+        .padding(.horizontal)
+    }
+}
+// MARK: -
+struct PeerPullDebitView: View  {
+    let stack: CallStack
+//    let peerPullDebitResponse: PreparePeerPullDebitResponse
+    let raw: Amount
+    let effective: Amount
+    let scope: ScopeInfo?
+    let summary: String
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    var body: some View {
+//        let raw = peerPullDebitResponse.amountRaw
+//        let effective = peerPullDebitResponse.amountEffective
+//        let scope = peerPullDebitResponse.scopeInfo
+        let currency = raw.currencyStr
+        let fee = try! Amount.diff(raw, effective)
+        ThreeAmountsSection(stack: stack.push(),
+                            scope: scope,
+                         topTitle: String(localized: "Amount to pay:"),
+                        topAbbrev: String(localized: "Pay:", comment: "mini"),
+                        topAmount: raw,
+                           noFees: nil,        // TODO: check baseURL for fees
+                              fee: fee,
+                      bottomTitle: String(localized: "Amount to be spent:"),
+                     bottomAbbrev: String(localized: "Effective:", comment: "mini"),
+                     bottomAmount: effective,
+                            large: false, pending: false, incoming: false,
+                          baseURL: nil,
+                       txStateLcl: nil,
+                          summary: summary,
+                         merchant: nil,
+                         products: nil)
+    }
+}

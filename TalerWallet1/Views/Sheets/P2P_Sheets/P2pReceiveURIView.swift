@@ -77,34 +77,12 @@ struct P2pReceiveURIView: View {
                            acceptAction: nil)
                 }
                 List {
-                    let raw = peerPushCreditResponse.amountRaw
-                    let effective = peerPushCreditResponse.amountEffective
-                    let currency = raw.currencyStr
-                    let fee = try! Amount.diff(raw, effective)
-                    ThreeAmountsSection(stack: stack.push(),
-                                        scope: peerPushCreditResponse.scopeInfo,
-                                     topTitle: String(localized: "Gross Amount to receive:"),
-                                    topAbbrev: String(localized: "Receive gross:", comment: "mini"),
-                                    topAmount: raw,
-                                       noFees: nil,        // TODO: check baseURL for fees
-                                          fee: fee,
-                                  bottomTitle: String(localized: "Net Amount to receive:"),
-                                 bottomAbbrev: String(localized: "Receive net:", comment: "mini"),
-                                 bottomAmount: effective,
-                                        large: false, pending: false, incoming: true,
-                                      baseURL: nil,
-                                   txStateLcl: nil,
-                                      summary: peerPushCreditResponse.contractTerms.summary,
-                                     merchant: nil,
-                                     products: nil)
-                    let expiration = peerPushCreditResponse.contractTerms.purse_expiration
-                    let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
-                    let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-                    let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
-                    Text("Expires: \(dateString)")
-                        .talerFont(.body)
-                        .accessibilityLabel(a11yLabel)
-                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    PeerPushCreditView(stack: stack.push(),
+                                         raw: peerPushCreditResponse.amountRaw,
+                                   effective: peerPushCreditResponse.amountEffective,
+                                       scope: peerPushCreditResponse.scopeInfo,
+                                     summary: peerPushCreditResponse.contractTerms.summary)
+                    ExpiresView(expiration: peerPushCreditResponse.contractTerms.purse_expiration)
                 }
                 .listStyle(myListStyle.style).anyView
                 .navigationTitle(navTitle)
@@ -113,19 +91,16 @@ struct P2pReceiveURIView: View {
                     currencyInfo = controller.info2(for: currency, controller.currencyTicker)
                 }
                 .safeAreaInset(edge: .bottom) {
-                    if tosAccepted {
-                        let destination = P2pAcceptDone(stack: stack.push(),
-                                                transactionId: peerPushCreditResponse.transactionId,
-                                                     incoming: true)
-                        let actions = Group {
-                            NavLink($accept) { destination }
+                    if peerPushCreditResponse.txState.isConfirmed {
+                        Button("Done") { dismissTop(stack.push()) }
+                            .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .padding(.horizontal)
+                    } else {
+                        if tosAccepted {
+                            PeerPushCreditAccept(stack: stack.push(), url: url,
+                                         transactionId: peerPushCreditResponse.transactionId,
+                                                accept: $accept)
                         }
-                        Button("Accept and receive") {      // SHEET_RCV_P2P_ACCEPT
-                            accept = true
-                        }
-                        .background(actions)
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
                     }
                 }
 #if OIM && DEBUG
@@ -155,5 +130,74 @@ struct P2pReceiveURIView: View {
             symLog.log("onAppear")
             DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
         }
+    }
+}
+// MARK: -
+struct PeerPushCreditAccept: View  {
+    let stack: CallStack
+    let url: URL?
+    let transactionId: String
+    @Binding var accept: Bool           // triggers 'destination' when set true
+
+    var body: some View {
+        let destination = P2pAcceptDone(stack: stack.push(),
+                                          url: url,
+                                transactionId: transactionId,
+                                     incoming: true)
+        let actions = Group {
+            NavLink($accept) { destination }
+        }
+        Button("Accept and receive") {      // SHEET_RCV_P2P_ACCEPT
+            accept = true
+        }
+        .background(actions)
+        .buttonStyle(TalerButtonStyle(type: .prominent))
+        .padding(.horizontal)
+    }
+}
+// MARK: -
+struct PeerPushCreditView: View  {
+    let stack: CallStack
+    let raw: Amount
+    let effective: Amount
+    let scope: ScopeInfo?
+    let summary: String
+
+    var body: some View {
+        let currency = raw.currencyStr
+        let fee = try! Amount.diff(raw, effective)
+        ThreeAmountsSection(stack: stack.push(),
+                            scope: scope,
+                         topTitle: String(localized: "Gross Amount to receive:"),
+                        topAbbrev: String(localized: "Receive gross:", comment: "mini"),
+                        topAmount: raw,
+                           noFees: nil,        // TODO: check baseURL for fees
+                              fee: fee,
+                      bottomTitle: String(localized: "Net Amount to receive:"),
+                     bottomAbbrev: String(localized: "Receive net:", comment: "mini"),
+                     bottomAmount: effective,
+                            large: false, pending: false, incoming: true,
+                          baseURL: nil,
+                       txStateLcl: nil,
+                          summary: summary,
+                         merchant: nil,
+                         products: nil)
+    }
+}
+// MARK: -
+struct ExpiresView: View  {
+    let expiration: Timestamp
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    var body: some View {
+        let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
+        let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+        let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
+        Text("Expires: \(dateString)")
+            .talerFont(.body)
+            .accessibilityLabel(a11yLabel)
+            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
     }
 }

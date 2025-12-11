@@ -14,6 +14,7 @@ struct P2pAcceptDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
+    let url: URL?
     let transactionId: String
     let incoming: Bool
 
@@ -57,6 +58,7 @@ struct P2pAcceptDone: View {
 struct P2pAcceptDone_Previews: PreviewProvider {
     static var previews: some View {
         P2pAcceptDone(stack: CallStack("Preview"),
+                        url: URL("taler://nothing"),
               transactionId: "some ID",
                    incoming: true)
     }
