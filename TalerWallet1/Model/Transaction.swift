@@ -179,6 +179,9 @@ struct TransactionState: Codable, Hashable {
     var major: TransactionMajorState
     var minor: TransactionMinorState?
 
+    var isConfirmed: Bool { major == .done
+                         || major == .pending
+                         || major == .finalizing }
     var isReady: Bool { minor == .ready }
     var isKYC: Bool { minor == .kyc
                    || minor == .kycInit
