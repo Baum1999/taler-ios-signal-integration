@@ -49,8 +49,10 @@ fileprivate struct GetTransactions: WalletBackendFormattedRequest {
 }
 enum TransactionStateFilter: String, Codable {
     case done
-    case final          // done, aborted, expired, ...
-    case nonfinal       // pending, dialog, suspended, aborting
+    case final              // done, aborted, expired, ...
+    case nonfinal           // pending, dialog, suspended, aborting
+    case nonfinalApproved = "nonfinal-approved"
+    case nonfinalDialog = "nonfinal-dialog"
 }
 struct TransactionOffset: Codable {
     var txID: String
