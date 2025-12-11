@@ -11,7 +11,7 @@ import Foundation
 import taler_swift
 import SymLog
 
-struct ExchangeError: Codable, Hashable {
+struct OperationErrorInfo: Codable, Hashable {
     var error: TalerErrorDetail
 }
 
@@ -105,7 +105,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     var ageRestrictionOptions: [Int]
     var bankComplianceLanguage: BankDialect?
     var lastUpdateTimestamp: Timestamp?
-    var lastUpdateErrorInfo: ExchangeError?
+    var lastUpdateErrorInfo: OperationErrorInfo?
 
 //    walletKycStatus?: ExchangeWalletKycStatus;
 //    walletKycReservePub?: string;
