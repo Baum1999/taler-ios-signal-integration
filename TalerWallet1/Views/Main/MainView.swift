@@ -515,6 +515,17 @@ extension MainView {
             } // TabView
         }
 
+        func onActionTab() {
+            logger.log("onActionTab: showActionSheet = true")
+            controller.removeURLs(after: 60*60)         // TODO: specify time after which scanned URLs are deleted
+            showActionSheet = true
+        }
+
+        func onActionDrag() {
+            logger.log("onActionDrag: showScanner = true")
+            showScanner = true
+        }
+
         var body: some View {
 #if PRINT_CHANGES
             // "@self" marks that the view value itself has changed, and "@identity" marks that the
@@ -528,14 +539,11 @@ extension MainView {
             }
 #endif
             // custom tabBar with the Actions button in the middle
-            let tabBarView = TabBarView(selection: tabSelection(), userAction: $userAction, hidden: $tabBarModel.tabBarHidden) {
-                logger.log("onActionTab")
-                showActionSheet = true
-            } onActionDrag: {
-                logger.log("onActionDrag: showScanner = true")
-                showScanner = true
-            }
-
+            let tabBarView = TabBarView(selection: tabSelection(),
+                                       userAction: $userAction,
+                                           hidden: $tabBarModel.tabBarHidden,
+                                      onActionTab: onActionTab,
+                                     onActionDrag: onActionDrag)
             ZStack(alignment: .bottom) {
                 tabContent              // incl. the (transparent) SwiftUI tabBar
                 tabBarView              // custom tabBar is rendered on top of the TabView, and overlaps its tabBar
