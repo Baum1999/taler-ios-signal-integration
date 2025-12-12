@@ -162,21 +162,22 @@ struct MainView: View {
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
 
         VStack {
-#if DEBUG
             if networkUnavailable {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.red)
-                    .frame(
-                        width: UIScreen.screenWidth * 0.9,
-                        height: 100
-                    )
+                Text("Network unavailable!")
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color.red)
+                    }
+                    .padding(.horizontal)
                     .transition(.asymmetric(
                         insertion: .move(edge: .top),
                         removal: .move(edge: .top)
                     ))
-
             }
-#endif
+
             mainGroup
                 .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
