@@ -46,6 +46,7 @@ struct BalancesSectionView {
     @State private var completedTransactions: [TalerTransaction] = []
     @State private var recentTransactions: [TalerTransaction] = []
     @State private var pendingTransactions: [TalerTransaction] = []
+    @State private var scannedTransactions: [TalerTransaction] = []
 
     private static func className() -> String {"\(self)"}
 
@@ -80,9 +81,18 @@ struct BalancesSectionView {
     func loadPending(_ stack: CallStack) async -> () {
         if let transactions = try? await model.getTransactionsV2(stack.push("loadPending - \(balance.scopeInfo.url?.trimURL)"),
                                                           scope: balance.scopeInfo,
-                                                  filterByState: .nonfinal,
+                                                  filterByState: .nonfinalApproved,
                                                includeRefreshes: developerMode) {
             withAnimation { pendingTransactions = transactions }
+        }
+    }
+    @MainActor
+    func loadScanned(_ stack: CallStack) async -> () {
+        if let transactions = try? await model.getTransactionsV2(stack.push("loadScanned - \(balance.scopeInfo.url?.trimURL)"),
+                                                          scope: balance.scopeInfo,
+                                                  filterByState: .nonfinalDialog,
+                                               includeRefreshes: developerMode) {
+            withAnimation { scannedTransactions = transactions }
         }
     }
 }
@@ -95,7 +105,7 @@ extension BalancesSectionView: View {
 #endif
         let scopeInfo = balance.scopeInfo
 
-      Group {
+        Group {
             let balanceDest = TransactionsListView(stack: stack.push("\(Self.className())()"),
                                                    scope: scopeInfo,
                                                  balance: balance,
@@ -104,67 +114,76 @@ extension BalancesSectionView: View {
                                                  oimEuro: oimEuro,
                                             transactions: $completedTransactions,
                                          reloadAllAction: loadCompleted)
-          Section {
-            if scopeInfo.type == .exchange {
-                let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment service", comment: "exchange url")
-                Text(baseURL)
-                    .talerFont(.subheadline)
-                    .foregroundColor(.secondary)
-            //      .listRowSeparator(.hidden)
-            }
-            BalanceCellV(stack: stack.push("BalanceCell"),
-                         scope: balance.scopeInfo,
-                        amount: balance.available,
-                 historyTapped: $historyTapped,
-                  balanceIndex: balanceIndex,
-                   balanceDest: balanceDest)
-//            .listRowSeparator(.hidden)
-//            .border(.red)
-
-            if pendingTransactions.count > 0 {
-                BalancesPendingRowV(//symLog: symLog,
-                                     stack: stack.push(),
-                                   balance: balance,
-                           selectedBalance: $selectedBalance,
-                       pendingTransactions: $pendingTransactions,
-                             reloadPending: loadPending)
-                    .padding(.leading, ICONLEADING)
-            }
-        } header: {
-            BarGraphHeader(stack: stack.push(),
-                           scope: scopeInfo,
-              reloadTransactions: $reloadTransactions)
-        }.id(sectionID)
-        .listRowSeparator(.hidden)
-        .task(id: reloadTransactions + 1_000_000) {
-            symLog.log(".task for BalancesSectionView - load recent+completed+pending")
-            await loadRecent(stack.push(".task - load recent"))
-            await loadCompleted(stack.push(".task - load completed"))
-            await loadPending(stack.push(".task - load pending"))
-        }
-        /// if there is only one currency, then show MAXRECENT recent transactions
-        if sectionCount == 1 && recentTransactions.count > 0 {
             Section {
-                let _ = symLog.log("recent transactions")
-                TransactionsArraySliceV(symLog: symLog,
-                                        logger: logger,
-                                         stack: stack.push(),
-                                         scope: scopeInfo,
-                                  transactions: $recentTransactions,
-                               reloadAllAction: loadRecent)
-                    .padding(.leading, ICONLEADING)
-            } header: {
-                if !minimalistic {
-                    let recentHeader = recentTransactions.count > 1
-                        ? String(localized: "Recent transactions", comment: "section header plural")
-                        : String(localized: "Recent transaction", comment: "section header singular")
-                    Text(recentHeader)
-                        .talerFont(.title3)
-                        .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                if scopeInfo.type == .exchange {
+                    let baseURL = scopeInfo.url?.trimURL ?? String(localized: "Unknown payment service", comment: "exchange url")
+                    Text(baseURL)
+                        .talerFont(.subheadline)
+                        .foregroundColor(.secondary)
+                //      .listRowSeparator(.hidden)
                 }
+                BalanceCellV(stack: stack.push("BalanceCell"),
+                             scope: balance.scopeInfo,
+                            amount: balance.available,
+                     historyTapped: $historyTapped,
+                      balanceIndex: balanceIndex,
+                       balanceDest: balanceDest)
+//                .listRowSeparator(.hidden)
+//                .border(.red)
+
+                if pendingTransactions.count > 0 {
+                    BalancesPendingRowV(//symLog: symLog,
+                                         stack: stack.push(),
+                                       balance: balance,
+                               selectedBalance: $selectedBalance,
+                           pendingTransactions: $pendingTransactions,
+                                 reloadPending: loadPending)
+                        .padding(.leading, ICONLEADING)
+                }
+                if scannedTransactions.count > 0 {
+                    BalancesDialogRowV(stack: stack.push(),
+                                     balance: balance,
+                             selectedBalance: $selectedBalance,
+                         scannedTransactions: $scannedTransactions,
+                               reloadScanned: loadScanned)
+                      .padding(.leading, ICONLEADING)
+                  }
+            } header: {
+                BarGraphHeader(stack: stack.push(),
+                               scope: scopeInfo,
+                  reloadTransactions: $reloadTransactions)
+            }.id(sectionID)
+            .listRowSeparator(.hidden)
+            .task(id: reloadTransactions + 1_000_000) {
+                symLog.log(".task for BalancesSectionView - load recent+completed+pending")
+                await loadRecent(stack.push(".task - load recent"))
+                await loadCompleted(stack.push(".task - load completed"))       // TODO: only in TX list view
+                await loadPending(stack.push(".task - load pending"))
+                await loadScanned(stack.push(".task - load scanned"))
             }
-        } // recent transactions
-      }
+            /// if there is only one currency, then show MAXRECENT recent transactions
+            if sectionCount == 1 && recentTransactions.count > 0 {
+                Section {
+                    let _ = symLog.log("recent transactions")
+                    TransactionsArraySliceV(symLog: symLog,
+                                            logger: logger,
+                                             stack: stack.push(),
+                                             scope: scopeInfo,
+                                            transactions: $recentTransactions,
+                                            reloadAllAction: loadRecent)
+                        .padding(.leading, ICONLEADING)
+                } header: {
+                    if !minimalistic {
+                        let recentHeader = recentTransactions.count > 1
+                            ? String(localized: "Recent transactions", comment: "section header plural")
+                            : String(localized: "Recent transaction", comment: "section header singular")
+                        Text(recentHeader)
+                            .talerFont(.title3)
+                            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    }
+                }
+            } // recent transactions
+        }
     } // body
 } // BalancesSectionView
 // MARK: -
