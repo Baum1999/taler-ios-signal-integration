@@ -59,10 +59,13 @@ struct MainView: View {
 //        }
     }
     private func dismissSheet() {
+        showScanner = false
         showActionSheet = false
         qrButtonTapped = false
         qrButton2Tapped = false
         userAction += 1
+        // TODO: wallet-core could notify us when it creates a dialog tx
+        NotificationCenter.default.post(name: .TransactionScanned, object: nil, userInfo: nil)
     }
 
     func hintApplicationResumed() {
