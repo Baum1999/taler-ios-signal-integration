@@ -101,16 +101,21 @@ struct PaymentView: View, Sendable {
             }
         }
         // else fallback to contractTerms.exchanges
-        let exchanges = result.contractTerms.exchanges
-        for exchange in exchanges {
-            let baseUrl = exchange.url
-            if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
-                symLog.log("\(baseUrl.trimURL) loaded")
-                await controller.checkCurrencyInfo(for: baseUrl, model: model)
-                symLog.log("Info(for: \(baseUrl.trimURL) loaded")
-                return
-            }
-        }
+        // TODO: wallet-core should return status==UnknownCurrency. When we get that,
+        //      we should let the user decide whether they want info about that 
+//        let exchanges = result.contractTerms.exchanges
+//        for exchange in exchanges {
+//            let baseUrl = exchange.url
+                        // Yikes - getExchangeByUrl does NOT query the exchange via network,
+                        // but returns "exchange entry not found in wallet database"
+                        // so it doesn't make sense to call it here
+//            if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
+//                symLog.log("\(baseUrl.trimURL) loaded")
+//                await controller.checkCurrencyInfo(for: baseUrl, model: model)
+//                symLog.log("Info(for: \(baseUrl.trimURL) loaded")
+//                return
+//            }
+//        }
         symLog.log("Couldn't load Info(for: \(result.amountRaw.currencyStr))")
     }
 
