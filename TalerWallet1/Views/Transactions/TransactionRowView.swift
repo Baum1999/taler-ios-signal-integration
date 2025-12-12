@@ -103,7 +103,9 @@ struct TransactionRowView: View {
         let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
         let shouldConfirm = transaction.shouldConfirm
         let done = transaction.isDone
+        let isDialog = transaction.isDialog
         let doneOrPending = done || pending
+        let donePendingDialog = doneOrPending || isDialog
         let increasedContrast = colorSchemeContrast == .increased
         let details = transaction.detailsToShow()
         let keys = details.keys
@@ -128,13 +130,13 @@ struct TransactionRowView: View {
                                     shouldConfirm: shouldConfirm && pending,
                                          needsKYC: needsKYC && pending)
         let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
-                              strikethrough: !doneOrPending)
+                              strikethrough: !donePendingDialog)
                         .foregroundColor(for2Color)
         let topA11y = topString(forA11y: true)!
         let topString = topString()
-        let strikeColor = doneOrPending ? nil : WalletColors().negative
-        let a11yLabel = doneOrPending ? topA11y
-                                      : topA11y +  String(localized: ", canceled", comment: "a11y")
+        let strikeColor = donePendingDialog ? nil : WalletColors().negative
+        let a11yLabel = donePendingDialog ? topA11y
+                                          : topA11y +  String(localized: ", canceled", comment: "a11y")
 
 #if DEBUG
         let debug = 1==0
@@ -246,7 +248,7 @@ struct TransactionRowView: View {
                                  layout: 3,
                             strikeColor: strikeColor)
                 .foregroundColor(textColor)
-  //            .strikethrough(!doneOrPending, color: WalletColors().negative)
+  //            .strikethrough(!donePendingDialog, color: WalletColors().negative)
                 .talerFont(.headline)
   //            .fontWeight(.medium)      iOS 16 only
                 .padding(.bottom, -2.0)
@@ -302,10 +304,10 @@ struct TransactionRowView: View {
                 }
         }
             .accessibilityElement(children: .combine)
-            .accessibilityValue(!doneOrPending ? EMPTYSTRING
-                                    : needsKYC ? String(localized: ". Legitimization required", comment: "a11y")
-                               : shouldConfirm ? String(localized: ". Needs bank authorization", comment: "a11y")
-                                               : EMPTYSTRING)
+            .accessibilityValue(!donePendingDialog ? EMPTYSTRING
+                                        : needsKYC ? String(localized: ". Legitimization required", comment: "a11y")
+                                   : shouldConfirm ? String(localized: ". Needs bank authorization", comment: "a11y")
+                                                   : EMPTYSTRING)
             .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
     }
 }
