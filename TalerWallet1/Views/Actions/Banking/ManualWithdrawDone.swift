@@ -19,6 +19,7 @@ struct ManualWithdrawDone: View {
     let amountToTransfer: Amount
 //    let restrictAge: Int?
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
 
     @State private var acceptManualWithdrawalResult: AcceptManualWithdrawalResult?
@@ -33,7 +34,12 @@ struct ManualWithdrawDone: View {
             if let result = try? await model.acceptManualWithdrawal(amountToTransfer,
                                                            baseUrl: baseURL,
                                                        restrictAge: 0)
-            { transactionId = result.transactionId }
+            {
+                if let url {
+                    controller.removeURL(url)
+                }
+                transactionId = result.transactionId
+            }
         }
     }
 

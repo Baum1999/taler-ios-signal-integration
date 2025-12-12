@@ -34,6 +34,7 @@ struct WithdrawAcceptDone: View {
                                                               amount: amountToTransfer,
                                                          restrictAge: nil
             ) {
+                controller.removeURL(url)
                 let confirmTransferUrl = result.confirmTransferUrl
                 symLog.log(confirmTransferUrl)
                 if amountToTransfer == nil {
