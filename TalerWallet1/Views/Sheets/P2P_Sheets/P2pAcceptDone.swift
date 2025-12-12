@@ -25,10 +25,16 @@ struct P2pAcceptDone: View {
     private func viewDidLoad() async {
         if incoming {
             if let _ = try? await model.acceptPeerPushCredit(transactionId) {
+                if let url {
+                    controller.removeURL(url)
+                }
                 dismissTop(stack.push())
             }
         } else {
             if let _ = try? await model.confirmPeerPullDebit(transactionId) {
+                if let url {
+                    controller.removeURL(url)
+                }
                 dismissTop(stack.push())
             }
         }
