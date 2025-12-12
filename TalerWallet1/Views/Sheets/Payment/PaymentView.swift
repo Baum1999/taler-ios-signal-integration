@@ -142,30 +142,6 @@ struct PaymentView: View, Sendable {
         }
     }
 
-    func timeToPay(_ terms: MerchantContractTerms) -> Int {
-        if let milliseconds = try? terms.payDeadline.milliseconds() {
-            let date = Date(milliseconds: milliseconds)
-            let now = Date.now
-            let timeInterval = now.timeIntervalSince(date)
-            if timeInterval < 0 {
-                symLog.log("\(timeInterval) seconds left to pay")
-                return Int(-timeInterval)
-            } else {
-                symLog.log("\(date) - \(now) = \(timeInterval)")
-            }
-        } else {
-            symLog.log("no milliseconds")
-        }
-        return 0
-    }
-
-    func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
-        if let raw, let eff {
-            return try! Amount.diff(raw, eff)      // TODO: different currencies
-        }
-        return nil
-    }
-
     var body: some View {
       Group {
         if let preparePayResult {
@@ -173,6 +149,7 @@ struct PaymentView: View, Sendable {
             let scopes = preparePayResult.scopes            // TODO: might be nil
             let firstScope = scopes?.first
             let raw = preparePayResult.amountRaw
+//            let currency = raw?.currencyStr ?? UNKNOWN      // TODO: v1 has currencies buried in choices
             let currency = raw.currencyStr
             let effective = preparePayResult.amountEffective
             let terms = preparePayResult.contractTerms
@@ -181,8 +158,6 @@ struct PaymentView: View, Sendable {
             let paid = status == .alreadyConfirmed
             let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
                                 : String(localized: "Confirm Payment", comment:"pay merchant navTitle")
-            let timeToPay = timeToPay(terms)
-
             List {
                 if paid {
                     Text("You already paid for this article.")
@@ -196,6 +171,91 @@ struct PaymentView: View, Sendable {
                         }
                     }
                 }
+
+                PaymentView2(stack: stack.push(),
+                              paid: paid,
+                               raw: raw,
+                         effective: effective,
+                        firstScope: firstScope,
+                           baseURL: baseURL,
+//                             terms: terms,
+                           summary: terms.summary,
+                          merchant: terms.merchant.name,
+                          products: terms.products,
+                    balanceDetails: preparePayResult.balanceDetails)
+
+            }
+            .listStyle(myListStyle.style).anyView
+            .safeAreaInset(edge: .bottom) {
+                if !paid {
+                    if let effective {
+                        PaySafeArea(symLog: symLog,
+                                    stack: stack.push(),
+                                    terms: terms,
+                                      url: url,
+                                effective: effective,
+                            transactionId: preparePayResult.transactionId,
+                             currencyInfo: $currencyInfo)
+                    } else {
+                        Button("Cancel") {
+                            dismissTop(stack.push())
+                        }
+                        .buttonStyle(TalerButtonStyle(type: .bordered))
+                        .padding(.horizontal)
+                    } // Cancel
+                }
+            }
+            .navigationTitle(navTitle)
+            .task(id: controller.currencyTicker) {
+                let currency = amountToTransfer.currencyStr
+                let scopes = preparePayResult.scopes            // TODO: might be nil
+                if let resultScope = scopes?.first {            // TODO: let user choose which currency
+                    currencyInfo = controller.info(for: resultScope, controller.currencyTicker)
+                } else {
+                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+                }
+                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
+            }
+#if OIM
+            .overlay { if #available(iOS 16.4, *) {
+                if controller.oimSheetActive {
+                    OIMpayView(stack: stack.push(),
+                               amount: effective)
+                }
+            } }
+#endif
+        } else {
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
+                .task { await viewDidLoad() }
+        }
+      }.onAppear() {
+          symLog.log("onAppear")
+          DebugViewC.shared.setSheetID(SHEET_PAYMENT)
+      }
+    }
+}
+// MARK: -
+struct PaymentView2: View, Sendable {
+    let stack: CallStack
+    let paid: Bool
+    let raw: Amount
+    let effective: Amount?
+    let firstScope: ScopeInfo?
+    let baseURL: String?
+//    let terms: MerchantContractTerms
+    let summary: String?
+    let merchant: String?
+    let products: [Product]?
+    let balanceDetails: PayMerchantInsufficientBalanceDetails?
+
+    func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
+        if let raw, let eff {
+            return try! Amount.diff(raw, eff)      // TODO: different currencies
+        }
+        return nil
+    }
+
+    var body: some View {
                 // TODO: show balanceDetails.balanceAvailable
                 let topTitle = paid ? String(localized: "Paid amount:")
                                     : String(localized: "Amount to pay:")
@@ -221,12 +281,12 @@ struct PaymentView: View, Sendable {
                                      incoming: false,
                                       baseURL: baseURL,
                                    txStateLcl: nil,
-                                      summary: terms.summary,
-                                     merchant: terms.merchant.name,
-                                     products: terms.products)
+                                      summary: summary,
+                                     merchant: merchant,
+                                     products: products)
                     // TODO: payment: popup with all possible exchanges, check fees
-                } else if let balanceDetails = preparePayResult.balanceDetails {    // Insufficient
-                    let localizedCause = balanceDetails.causeHint.localizedCause(currency)
+                } else if let balanceDetails {    // Insufficient
+                    let localizedCause = balanceDetails.causeHint.localizedCause(raw.currencyStr)
                     Text(localizedCause)
                         .talerFont(.headline)
                     ThreeAmountsSection(stack: stack.push(),
@@ -245,96 +305,88 @@ struct PaymentView: View, Sendable {
                                      incoming: false,
                                       baseURL: baseURL,
                                    txStateLcl: nil,
-                                      summary: terms.summary,
-                                     merchant: terms.merchant.name,
-                                     products: terms.products)
+                                      summary: summary,
+                                     merchant: merchant,
+                                     products: products)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")
                         .talerFont(.body)
                 }
+
+    }
+}
+// MARK: -
+struct PaySafeArea: View, Sendable {
+    let symLog: SymLogV?
+    let stack: CallStack
+    let terms: MerchantContractTerms
+    // the scanned URL
+    let url: URL
+    let effective: Amount
+    let transactionId: String
+    @Binding var currencyInfo: CurrencyInfo
+
+    func timeToPay(_ terms: MerchantContractTerms) -> Int {
+        if let milliseconds = try? terms.payDeadline.milliseconds() {
+            let date = Date(milliseconds: milliseconds)
+            let now = Date.now
+            let timeInterval = now.timeIntervalSince(date)
+            if timeInterval < 0 {
+                symLog?.log("\(timeInterval) seconds left to pay")
+                return Int(-timeInterval)
+            } else {
+                symLog?.log("\(date) - \(now) = \(timeInterval)")
             }
-            .listStyle(myListStyle.style).anyView
-            .safeAreaInset(edge: .bottom) {
-                if !paid {
-                    if let effective {
-                        VStack {
-                            if timeToPay > 0 && timeToPay < 300 {
-                                let startDate = Date()
-                                HStack {
-                                    Text("Time to pay:")
-                                    TimelineView(.animation) { context in
-                                        let elapsed = Int(context.date.timeIntervalSince(startDate))
-                                        let seconds = timeToPay - elapsed
-                                        let text = Text(verbatim: "\(seconds)")
-                                        if #available(iOS 17.0, *) {
-                                            text
-                                                .contentTransition(.numericText(countsDown: true))
-                                                .animation(.default, value: elapsed)
-                                        } else if #available(iOS 16.4, *) {
-                                            text
-                                                .animation(.default, value: elapsed)
-                                        } else {
-                                            text
-                                        }
-                                    }.monospacedDigit()
-                                    Text("seconds")
-                                }.accessibilityElement(children: .combine)
-                            } else {
-                                let _ = symLog.log("\(timeToPay) not shown")
-                            }
-                            let destination = PaymentDone(stack: stack.push(),
-                                                            url: url,
-//                                                          scope: firstScope,    // TODO: let user choose which currency
-                                                  transactionId: preparePayResult.transactionId)
-                            NavigationLink(destination: destination) {
-                                let formatted = effective.formatted(currencyInfo, isNegative: false)
-                                Text("Pay \(formatted.0) now")
-                                    .accessibilityLabel(Text("Pay \(formatted.1) now", comment: "a11y"))
-                            }
-                                .buttonStyle(TalerButtonStyle(type: .prominent))
-                                .padding(.horizontal)
-                            let currency = currencyInfo.currency
-//                            let currency = amountToTransfer.currencyStr
-                            Text("Payment is made in \(currency)")
-                                .talerFont(.callout)
-                        }
-                    } else {
-                        Button("Cancel") {
-                            dismissTop(stack.push())
-                        }
-                            .buttonStyle(TalerButtonStyle(type: .bordered))
-                            .padding(.horizontal)
-                    } // Cancel
-                }
-            }
-            .navigationTitle(navTitle)
-            .task(id: controller.currencyTicker) {
-                let currency = amountToTransfer.currencyStr
-                let scopes = preparePayResult.scopes            // TODO: might be nil
-                if let resultScope = scopes?.first {            // TODO: let user choose which currency
-                    currencyInfo = controller.info(for: resultScope, controller.currencyTicker)
-                } else {
-                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-                }
-                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
-            }
-#if OIM
-            .overlay { if #available(iOS 16.4, *) {
-                if controller.oimSheetActive {
-                    OIMpayView(stack: stack.push(),
-                              amount: effective)
-                }
-            } }
-#endif
         } else {
-            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
-                .task { await viewDidLoad() }
+            symLog?.log("no milliseconds")
         }
-      }.onAppear() {
-          symLog.log("onAppear")
-          DebugViewC.shared.setSheetID(SHEET_PAYMENT)
-      }
+        return 0
+    }
+
+    var body: some View {
+        let timeToPay = timeToPay(terms)
+        VStack {
+            if timeToPay > 0 && timeToPay < 300 {
+                let startDate = Date()
+                HStack {
+                    Text("Time to pay:")
+                    TimelineView(.animation) { context in
+                        let elapsed = Int(context.date.timeIntervalSince(startDate))
+                        let seconds = timeToPay - elapsed
+                        let text = Text(verbatim: "\(seconds)")
+                        if #available(iOS 17.0, *) {
+                            text
+                                .contentTransition(.numericText(countsDown: true))
+                                .animation(.default, value: elapsed)
+                        } else if #available(iOS 16.4, *) {
+                            text
+                                .animation(.default, value: elapsed)
+                        } else {
+                            text
+                        }
+                    }.monospacedDigit()
+                    Text("seconds")
+                }.accessibilityElement(children: .combine)
+            } else {
+                let _ = symLog?.log("\(timeToPay) not shown")
+            }
+            let destination = PaymentDone(stack: stack.push(),
+                                            url: url,
+//                                        scope: firstScope,    // TODO: let user choose which currency
+                                  transactionId: transactionId)
+            NavigationLink(destination: destination) {
+                let formatted = effective.formatted(currencyInfo, isNegative: false)
+                Text("Pay \(formatted.0) now")
+                    .accessibilityLabel(Text("Pay \(formatted.1) now", comment: "a11y"))
+            }
+            .buttonStyle(TalerButtonStyle(type: .prominent))
+            .padding(.horizontal)
+            let currency = currencyInfo.currency
+//          let currency = amountToTransfer.currencyStr
+            Text("Payment is made in \(currency)")
+                .talerFont(.callout)
+        }
     }
 }
 // MARK: -

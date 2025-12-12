@@ -441,6 +441,7 @@ struct TransactionSummaryV: View {
         @Environment(\.colorSchemeContrast) private var colorSchemeContrast
         @AppStorage("minimalistic") var minimalistic: Bool = false
         @State private var rotationEnabled = true
+        @State private var ignoreAccept: Bool = false         // accept could be set by OIM to trigger accept
 
         func refreshFee(input: Amount, output: Amount) -> Amount? {
             do {
@@ -468,6 +469,7 @@ struct TransactionSummaryV: View {
         var body: some View {
             let common = transaction.common
             let pending = transaction.isPending
+            let dialog = transaction.isDialog
             Group {
                 switch transaction {
                     case .dummy(_):
@@ -522,8 +524,22 @@ struct TransactionSummaryV: View {
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-                        TransactionPayDetailV(paymentTx: paymentTransaction)
-                        ThreeAmountsSheet(stack: stack.push(),
+                        if common.isDialog {
+                            let firstScope = common.scopes.first
+                            PaymentView2(stack: stack.push(),
+                                          paid: false,
+                                           raw: common.amountRaw,
+                                     effective: common.amountEffective,
+                                    firstScope: firstScope,
+                                       baseURL: nil,
+                                       summary: details.info.summary,
+                                      merchant: details.info.merchant.name,
+                                      products: details.info.products,
+                                balanceDetails: nil)
+
+                        } else {
+                            TransactionPayDetailV(paymentTx: paymentTransaction)
+                            ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Price:", comment: "mini"),
@@ -534,6 +550,7 @@ struct TransactionSummaryV: View {
                                           large: true,
                                         summary: details.info.summary,
                                        merchant: details.info.merchant.name)
+                        }
                     }
                     case .refund(let refundTransaction): Group {
                         let details = refundTransaction.details                 // TODO: more details
@@ -603,15 +620,26 @@ struct TransactionSummaryV: View {
                             KYCbutton(kycUrl: common.kycUrl)
                         }
                         if !transaction.isDone {
-                            let expiration = details.info.expiration
-                            let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
-                            let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-                            let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
-                            Text("Expires: \(dateString)")
-                                .talerFont(.body)
-                                .accessibilityLabel(a11yLabel)
-                                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                            ExpiresView(expiration: details.info.expiration)
                         }
+                        if transaction.isRcvCoins && common.isDialog {
+                            PeerPushCreditView(stack: stack.push(),
+                                                 raw: common.amountRaw,
+                                           effective: common.amountEffective,
+                                               scope: scope,
+                                             summary: details.info.summary)
+                            PeerPushCreditAccept(stack: stack.push(), url: nil,
+                                         transactionId: common.transactionId,
+                                                accept: $ignoreAccept)
+                        } else if transaction.isPayInvoice && common.isDialog {
+                            PeerPullDebitView(stack: stack.push(),
+                                                raw: common.amountRaw,
+                                          effective: common.amountEffective,
+                                              scope: scope,
+                                            summary: details.info.summary)
+                            PeerPullDebitConfirm(stack: stack.push(), url: nil,
+                                         transactionId: common.transactionId)
+                        } else {
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
                         if pending {
                             if transaction.isPendingReady {
@@ -642,6 +670,7 @@ struct TransactionSummaryV: View {
                                           large: false,
                                         summary: details.info.summary,
                                        merchant: nil)
+                        } // else
                     } // p2p
 
                     case .recoup(let recoupTransaction): Group {
