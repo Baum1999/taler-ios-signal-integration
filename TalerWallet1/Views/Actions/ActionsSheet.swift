@@ -18,6 +18,7 @@ struct ActionsSheet: View {
     let stack: CallStack
     @Binding var qrButtonTapped: Bool
 
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
@@ -76,6 +77,53 @@ struct ActionsSheet: View {
                 .accessibilityHint(String(localized: "Will go to the demo shop website.", comment: "a11y"))
                 .accessibilityAddTraits(.isLink)
                 .padding(.bottom, 20)
+            }
+            if !controller.scannedURLs.isEmpty {
+                Text("Scanned Taler codes:")
+                    .talerFont(.body)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.bottom, -2)
+                VStack {
+                    ForEach(controller.scannedURLs) { scannedURL in
+                        let action = {
+                            dismissTop(stack.push())
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                // need to wait before opening the next sheet, otherwise SwiftUI doesn't update!
+                                openURL(scannedURL.url)
+                            }
+                        }
+                        Button(action: action) {
+                            HStack {
+                                Text(scannedURL.command.localizedCommand)
+                                ButtonIconBadge(type: scannedURL.command.transactionType,
+                                           foreColor: .accentColor, done: false)
+                                    .talerFont(.title2)
+
+                                Spacer()
+                                if let amount = scannedURL.amount {
+                                    AmountV(scannedURL.scope, amount, isNegative: nil)
+                                } else if let baseURL = scannedURL.baseURL {
+                                    Text(baseURL.trimURL)
+                                }
+                            }
+                            .padding(.horizontal, 8)
+                        }
+                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+                        .swipeActions(edge: .trailing) {
+                            Button {
+//                                symLog?.log("deleteAction")
+                                Task { // runs on MainActor
+                                    controller.removeURL(scannedURL.url)
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            .tint(WalletColors().negative)
+                        }
+
+                    }
+                }.padding(.bottom, 20)
             }
 
             let sendDisabled = !canSend
