@@ -93,6 +93,9 @@ struct PayTemplateV: View {
 
             /// checkPayForTemplate does not provide fees (yet)
             let contract = details.templateContract     // specifies fixed amount/summary
+            if let amount = contract.amount {
+                controller.updateAmount(amount, forSaved: url)
+            }
             amountIsEditable = contract.amount == nil
             summaryIsEditable = contract.summary == nil
 

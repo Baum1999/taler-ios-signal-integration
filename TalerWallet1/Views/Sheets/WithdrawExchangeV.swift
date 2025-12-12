@@ -30,6 +30,7 @@ struct WithdrawExchangeV: View {
             symLog.log(".task")
             if let withdrawExchange = try? await model.prepareWithdrawExchange(url.absoluteString) {
                 let baseUrl = withdrawExchange.exchangeBaseUrl
+                controller.updateBase(baseUrl, forSaved: url)
                 symLog.log("getExchangeByUrl(\(baseUrl))")
                 if let exc = try? await model.getExchangeByUrl(url: baseUrl) {
                     // let the controller collect CurrencyInfo from this formerly unknown exchange

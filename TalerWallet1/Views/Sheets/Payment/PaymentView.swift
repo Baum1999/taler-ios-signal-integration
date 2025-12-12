@@ -123,13 +123,16 @@ struct PaymentView: View, Sendable {
                                                  summary: summaryIsEditable ? summary : nil) {
                 await checkCurrencyInfo(for: templateResponse)
                 preparePayResult = templateResponse
+                let raw = templateResponse.amountRaw
+                controller.updateAmount(raw, forSaved: url)
             }
         } else {
             if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
                 let raw = payResponse.amountRaw
-                    amountToTransfer = raw
+                amountToTransfer = raw
                 await checkCurrencyInfo(for: payResponse)
                 preparePayResult = payResponse
+                controller.updateAmount(raw, forSaved: url)
             }
         }
     }
