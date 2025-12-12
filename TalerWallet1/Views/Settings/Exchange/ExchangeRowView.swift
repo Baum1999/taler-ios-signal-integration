@@ -19,7 +19,6 @@ struct ExchangeRowView: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var tabBarModel: TabBarModel
-    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
 #if PRINT_CHANGES
@@ -30,39 +29,74 @@ struct ExchangeRowView: View {
         let delay: UInt = 0
 #endif
         let baseURL = exchange.exchangeBaseUrl
+        let chevron = Text(Image(systemName: "chevron.right"))
+                        .talerFont(.table)
+                        .foregroundColor(.secondary)
+
+        let termsLine = HStack {
+            Text("Terms of Service")  // VIEW_WITHDRAW_TOS
+            Spacer()
+            chevron
+        }
+
         let rowView = VStack(alignment: .leading) {
             Text(baseURL.trimURL)
                 .talerFont(.headline)
-            if !minimalistic {
-                Text("Terms of Service")  // VIEW_WITHDRAW_TOS
-                    .talerFont(.body)
-            }
-        }
-        let cellView = HStack {
-            rowView
-            Spacer()
-            Text(Image(systemName: "chevron.right"))
-                .talerFont(.table)
-                .foregroundColor(.secondary)
-        }.background {           // only needed for .onTapGesture
-            Color.gray.opacity(INVISIBLE)
+            ExchangeStatus(exchange: exchange)
+            termsLine
+                .talerFont(.body)
+                .background {           // only needed for .onTapGesture
+                    Color.gray.opacity(INVISIBLE)
+                }
+                .onTapGesture {
+                    tabBarModel.tosView = index
+                }
         }
         let showToS = WithdrawTOSView(stack: stack.push(),
                             exchangeBaseUrl: baseURL,
                                      viewID: VIEW_WITHDRAW_TOS,
                                acceptAction: nil)         // pop back to here
+        let details = ExchangeDetailView(stack: stack.push(),
+                                      exchange: exchange)
         let actions = Group {
             NavLink(index, $tabBarModel.tosView) { showToS }
         }
 
         Group {
-//          NavigationLink(destination: showToS) { rowView }
-            cellView
+            rowView
                 .background(actions)
-                .onTapGesture {
-                    tabBarModel.tosView = index
-                }
         }.listRowSeparator(.hidden)
+    }
+}
+// MARK: -
+struct  ExchangeStatus: View {
+    let exchange: Exchange
+
+    @EnvironmentObject private var controller: Controller
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        let status = controller.isConnected ? exchange.exchangeUpdateStatus.localized
+                                            : ExchangeUpdateStatus.unavailable.localized
+        VStack(alignment: .leading) {
+            HStack {
+                if !minimalistic {
+                    Text("Status:")
+                }
+                Text(status)
+            }
+            if let lastUpdateErrorInfo = exchange.lastUpdateErrorInfo {
+                Text("Last Error: \(lastUpdateErrorInfo.error.code)")
+                if let hint = lastUpdateErrorInfo.error.hint {
+                    Text(hint)                                                  // TODO: L10N
+                }
+                if let detail = lastUpdateErrorInfo.error.detail {
+                    Text(detail)                                                // TODO: L10N
+                }
+            }
+        }
+        .padding(.bottom, 4)
+        .talerFont(.body)
     }
 }
 // MARK: -
