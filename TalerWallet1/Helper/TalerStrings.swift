@@ -13,7 +13,7 @@ extension StringProtocol {
     var trimURL: String {
         if let url = URL(string: String(self)) {
             if let host = url.host {
-                return host
+                return host.deletingPrefix("exchange.")
             }
         }
         return String(self)
