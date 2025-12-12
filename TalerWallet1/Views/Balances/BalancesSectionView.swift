@@ -60,9 +60,6 @@ struct BalancesSectionView {
                                                   filterByState: .final,
                                                           limit: MAXRECENT,
                                                includeRefreshes: false) {
-//            let recent = WalletModel.completedTransactions(transactions)
-//            let slice = recent.prefix(MAXRECENT)         // already sorted
-//            withAnimation { recentTransactions = Array(slice) }
             withAnimation { recentTransactions = transactions }
         }
     }
@@ -72,8 +69,6 @@ struct BalancesSectionView {
                                                           scope: balance.scopeInfo,
                                                   filterByState: .final,
                                                includeRefreshes: developerMode) {
-//            let completed = WalletModel.completedTransactions(transactions)
-//            withAnimation { completedTransactions = completed }
             withAnimation { completedTransactions = transactions }
         }
     }

@@ -67,7 +67,7 @@ struct ManualWithdrawDone: View {
                 .safeAreaInset(edge: .bottom) {
                     Button("Done") { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: .prominent))
-                            .padding(.horizontal)
+                        .padding(.horizontal)
                 }
             } else {
                 LoadingView(stack: stack.push(), scopeInfo: nil, message: baseURL.trimURL)

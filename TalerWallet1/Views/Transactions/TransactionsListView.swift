@@ -71,7 +71,7 @@ struct TransactionsListView: View {
                     await reloadAllAction(stack.push())
                 }
         } else {
-            Group {
+//            Group {
                 ScrollViewReader { scrollProxy in
                     let count = transactions.count
                     List {
@@ -125,7 +125,7 @@ struct TransactionsListView: View {
                     print("🚩,32TransactionsListView.onAppear() set selectedBalance to", balance.scopeInfo.currency)
                     selectedBalance = balance           // set this balance (fix) for send/request/deposit/withdraw
                 }
-            }
+//            }
 #if OIM
             .overlay { if #available(iOS 16.4, *) {
                 if controller.oimModeActive {

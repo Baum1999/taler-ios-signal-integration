@@ -73,6 +73,7 @@ struct MainView: View {
             await model.hintApplicationResumedT()
         }
     }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
