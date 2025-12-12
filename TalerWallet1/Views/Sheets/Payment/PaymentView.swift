@@ -276,6 +276,7 @@ struct PaymentView: View, Sendable {
                                 let _ = symLog.log("\(timeToPay) not shown")
                             }
                             let destination = PaymentDone(stack: stack.push(),
+                                                            url: url,
 //                                                          scope: firstScope,    // TODO: let user choose which currency
                                                   transactionId: preparePayResult.transactionId)
                             NavigationLink(destination: destination) {

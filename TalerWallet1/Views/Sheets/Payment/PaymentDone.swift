@@ -11,6 +11,7 @@ import SymLog
 struct PaymentDone: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let url: URL
 //    let scope: ScopeInfo?
     let transactionId: String
 
@@ -25,6 +26,7 @@ struct PaymentDone: View {
         if let confirmPayResult = try? await model.confirmPay(transactionId) {
 //          symLog.log(confirmPayResult as Any)
             if confirmPayResult.type == "done" {
+                controller.removeURL(url)
                 paymentDone = true
             }
         }
