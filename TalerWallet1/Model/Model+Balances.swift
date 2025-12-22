@@ -31,6 +31,9 @@ struct Balance: Identifiable, Decodable, Hashable, Sendable {
     var pendingIncoming: Amount
     var pendingOutgoing: Amount
     var flags: [BalanceFlag]
+    var shoppingUrls: [String]?
+    var disablePeerPayments: Bool?
+    var disableDirectDeposits: Bool?                // TODO: en/disable actions based on this
 
     public static func == (lhs: Balance, rhs: Balance) -> Bool {
         lhs.scopeInfo == rhs.scopeInfo
@@ -38,6 +41,8 @@ struct Balance: Identifiable, Decodable, Hashable, Sendable {
         && lhs.pendingIncoming == rhs.pendingIncoming
         && lhs.pendingOutgoing == rhs.pendingOutgoing
         && lhs.flags == rhs.flags
+        && lhs.disablePeerPayments == rhs.disablePeerPayments
+        && lhs.disableDirectDeposits == rhs.disableDirectDeposits
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -46,6 +51,8 @@ struct Balance: Identifiable, Decodable, Hashable, Sendable {
         hasher.combine(pendingIncoming)
         hasher.combine(pendingOutgoing)
         hasher.combine(flags)
+        hasher.combine(disablePeerPayments)
+        hasher.combine(disableDirectDeposits)
     }
 }
 extension Balance {

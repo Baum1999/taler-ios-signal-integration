@@ -101,6 +101,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     var exchangeEntryStatus: ExchangeEntryStatus
     var exchangeUpdateStatus: ExchangeUpdateStatus
     var peerPaymentsDisabled: Bool?
+    var directDepositsDisabled: Bool?
     var noFees: Bool?
     var ageRestrictionOptions: [Int]
     var bankComplianceLanguage: BankDialect?
