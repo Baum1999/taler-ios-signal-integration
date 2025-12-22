@@ -109,7 +109,8 @@ struct SendAmountV: View {
         let taskID = balanceIndex + (1000 * controller.currencyTicker)
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex,
+                ScopePicker(stack: stack.push(),
+                            value: $balanceIndex,
                       onlyNonZero: true)                                        // can only send what exists
                 { index in
                     balanceIndex = index

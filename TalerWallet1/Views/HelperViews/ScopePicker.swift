@@ -26,6 +26,7 @@ fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> 
 
 struct ScopePicker: View {
 //    private let symLog = SymLogV(0)
+    let stack: CallStack
     @Binding var value: Int
     let onlyNonZero: Bool
     let action: (Int) -> Void

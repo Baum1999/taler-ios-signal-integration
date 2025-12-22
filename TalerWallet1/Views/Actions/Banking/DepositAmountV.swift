@@ -80,7 +80,8 @@ struct DepositAmountV: View {
                     .padding(.horizontal)
             }
             if count > 0 {
-                ScopePicker(value: $balanceIndex,
+                ScopePicker(stack: stack.push(),
+                            value: $balanceIndex,
                       onlyNonZero: true)                                        // can only send what exists
                 { index in
                     balanceIndex = index

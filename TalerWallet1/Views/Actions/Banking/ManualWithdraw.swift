@@ -71,7 +71,10 @@ struct ManualWithdraw: View {
         let count = controller.balances.count
         let scrollView = ScrollView {
             if maySwitchCurrencies && count > 0 {
-                ScopePicker(value: $balanceIndex, onlyNonZero: false) { index in
+                ScopePicker(stack: stack.push(),
+                            value: $balanceIndex,
+                      onlyNonZero: false)
+                { index in
                     balanceIndex = index
                     balance = controller.balances[index]
                     if let balance {

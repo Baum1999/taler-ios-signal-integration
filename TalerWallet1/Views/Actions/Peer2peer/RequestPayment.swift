@@ -91,7 +91,9 @@ struct RequestPayment: View {
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
             if count > 0 {
-                ScopePicker(value: $balanceIndex, onlyNonZero: false)
+                ScopePicker(stack: stack.push(),
+                            value: $balanceIndex,
+                      onlyNonZero: false)
                 { index in
                         balanceIndex = index
                         balance = controller.balances[index]
