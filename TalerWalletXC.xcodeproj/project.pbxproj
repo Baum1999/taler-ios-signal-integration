@@ -1,0 +1,1313 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+        4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE162A990778009F1BE8 /* AnyCodable */; };
+		4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1853992BDAE6D40034F3BA /* LocalConsole */; };
+		4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2D8DD22B3F513800234039 /* MarkdownUI */; };
+		4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
+		4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
+		4E363CC02A24754200D7E98C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
+		4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE182A990778009F1BE8 /* SymLog */; };
+		4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE152A990778009F1BE8 /* taler-swift */; };
+		4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE1A2A990778009F1BE8 /* CodeScanner */; };
+		4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
+		4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEE2DC3C52C008FA91D /* OrderedCollections */; };
+		4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
+		4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
+		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
+		4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */; };
+		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
+		4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DA29896D030043A8A1 /* TalerUITests.swift */; };
+		4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D14AFD3424D232B500C51073 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D14AFD1524D232B300C51073 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D14AFD1C24D232B300C51073;
+			remoteInfo = Taler;
+		};
+		D14AFD3F24D232B500C51073 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D14AFD1524D232B300C51073 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D14AFD1C24D232B300C51073;
+			remoteInfo = Taler;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4E3EAE7C2A990778009F1BE8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E563E002DC3C52C008FA91D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E5BF9392E591C7F005A33A5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E5BF93D2E591CB9005A33A5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E5BF9412E591CBE005A33A5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D11250FA26B12D4400D02E00 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4E363CBF2A24754200D7E98C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		4E3EAE892A990778009F1BE8 /* GNU_Taler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GNU_Taler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Nightly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E753A042A08E720002D9328 /* transactions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transactions.json; sourceTree = "<group>"; };
+		4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
+		4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletTests.swift; sourceTree = "<group>"; };
+		4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBackendTests.swift; sourceTree = "<group>"; };
+		4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4EB094DA29896D030043A8A1 /* TalerUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerUITests.swift; sourceTree = "<group>"; };
+		4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalerWalletUITests.swift; sourceTree = "<group>"; };
+		4EB094F329897A510043A8A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D14AFD1D24D232B300C51073 /* Taler_Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taler_Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14AFD3324D232B500C51073 /* TalerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D14AFD3E24D232B500C51073 /* TalerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Taler_Nightly InfoPlist.xcstrings",
+				"Taler_Wallet InfoPlist.xcstrings",
+			);
+			target = 4E3EAE142A990778009F1BE8 /* GNU_Taler */;
+		};
+		4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GNU_Taler InfoPlist.xcstrings",
+				"Taler_Wallet InfoPlist.xcstrings",
+			);
+			target = 4E563DE42DC3C52C008FA91D /* Taler_Nightly */;
+		};
+		4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GNU_Taler InfoPlist.xcstrings",
+				"Taler_Nightly InfoPlist.xcstrings",
+			);
+			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4E13EE9E2DB0408B0081F9DF /* OIM */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OIM; sourceTree = "<group>"; };
+		4E4A3F102CD5708100CA6A90 /* Main */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Main; sourceTree = "<group>"; };
+		4E4A3F472CD570F000CA6A90 /* Actions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Actions; sourceTree = "<group>"; };
+		4E4A3F692CD5712900CA6A90 /* Balances */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Balances; sourceTree = "<group>"; };
+		4E4A3F7D2CD5715000CA6A90 /* Transactions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Transactions; sourceTree = "<group>"; };
+		4E4A3FA12CD5717F00CA6A90 /* Settings */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Settings; sourceTree = "<group>"; };
+		4E4A3FE82CD5720900CA6A90 /* Sheets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sheets; sourceTree = "<group>"; };
+		4E4A40262CD5725A00CA6A90 /* HelperViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HelperViews; sourceTree = "<group>"; };
+		4E4A40692CD572FE00CA6A90 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
+		4E4A40852CD5731A00CA6A90 /* Backend */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Backend; sourceTree = "<group>"; };
+		4E4A40A62CD5735600CA6A90 /* Helper */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Helper; sourceTree = "<group>"; };
+		4E4A40DD2CD5737100CA6A90 /* Quickjs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Quickjs; sourceTree = "<group>"; };
+		4E4A40E42CD573D500CA6A90 /* Sounds */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sounds; sourceTree = "<group>"; };
+		4E4A41252CD5769900CA6A90 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
+		4E77D0ED2D7C3A12009756A5 /* ViewModifier */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModifier; sourceTree = "<group>"; };
+		4E9C5A922E58ADB3002E2709 /* Frameworks */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Frameworks; sourceTree = "<group>"; };
+		4EB66D772E18238000BE0651 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+		4EF888112DF094A700382858 /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4E3EAE762A990778009F1BE8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
+				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
+				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
+				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
+				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
+				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
+				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E563DF72DC3C52C008FA91D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
+				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
+				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
+				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
+				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
+				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
+				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD1A24D232B300C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
+				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
+				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
+				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
+				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
+				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
+				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3024D232B500C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3B24D232B500C51073 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E7CFD362A532C7A00CBAFF3 /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				4E7CFD372A532CE100CBAFF3 /* WhatToTest.en-US.txt */,
+			);
+			path = TestFlight;
+			sourceTree = "<group>";
+		};
+		4EB094EE298979840043A8A1 /* TalerWallet1 */ = {
+			isa = PBXGroup;
+			children = (
+				4EF888112DF094A700382858 /* Controllers */,
+				4EB095232989CBFE0043A8A1 /* Views */,
+				4E4A40692CD572FE00CA6A90 /* Model */,
+				4E4A40852CD5731A00CA6A90 /* Backend */,
+				4E4A40A62CD5735600CA6A90 /* Helper */,
+				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
+				4EB66D772E18238000BE0651 /* Resources */,
+				4E4A40E42CD573D500CA6A90 /* Sounds */,
+				4E4A41252CD5769900CA6A90 /* Fonts */,
+				4E363CBF2A24754200D7E98C /* Settings.bundle */,
+				4EB094F529897A9A0043A8A1 /* Preview Content */,
+				4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */,
+			);
+			path = TalerWallet1;
+			sourceTree = "<group>";
+		};
+		4EB094F529897A9A0043A8A1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094F329897A510043A8A1 /* Preview Assets.xcassets */,
+				4E753A042A08E720002D9328 /* transactions.json */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4EB095232989CBFE0043A8A1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4E4A3F102CD5708100CA6A90 /* Main */,
+				4E4A3F472CD570F000CA6A90 /* Actions */,
+				4E4A3F692CD5712900CA6A90 /* Balances */,
+				4E13EE9E2DB0408B0081F9DF /* OIM */,
+				4E4A3F7D2CD5715000CA6A90 /* Transactions */,
+				4E4A3FA12CD5717F00CA6A90 /* Settings */,
+				4E4A3FE82CD5720900CA6A90 /* Sheets */,
+				4E4A40262CD5725A00CA6A90 /* HelperViews */,
+				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D14AFD1424D232B300C51073 = {
+			isa = PBXGroup;
+			children = (
+				4E7CFD362A532C7A00CBAFF3 /* TestFlight */,
+				4EB094EE298979840043A8A1 /* TalerWallet1 */,
+				4E9C5A922E58ADB3002E2709 /* Frameworks */,
+				D14AFD3624D232B500C51073 /* TalerTests */,
+				D14AFD4124D232B500C51073 /* TalerUITests */,
+				D14AFD1E24D232B300C51073 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D14AFD1E24D232B300C51073 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E3EAE892A990778009F1BE8 /* GNU_Taler.app */,
+				D14AFD1D24D232B300C51073 /* Taler_Wallet.app */,
+				D14AFD3324D232B500C51073 /* TalerTests.xctest */,
+				D14AFD3E24D232B500C51073 /* TalerUITests.xctest */,
+				4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D14AFD3624D232B500C51073 /* TalerTests */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */,
+				4EB094D529896CD20043A8A1 /* WalletBackendTests.swift */,
+			);
+			path = TalerTests;
+			sourceTree = "<group>";
+		};
+		D14AFD4124D232B500C51073 /* TalerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4EB094DA29896D030043A8A1 /* TalerUITests.swift */,
+				4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */,
+				4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */,
+			);
+			path = TalerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4E3EAE142A990778009F1BE8 /* GNU_Taler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E3EAE862A990778009F1BE8 /* Build configuration list for PBXNativeTarget "GNU_Taler" */;
+			buildPhases = (
+				4E3EAE1C2A990778009F1BE8 /* Sources */,
+				4E3EAE762A990778009F1BE8 /* Frameworks */,
+				4E3EAE7C2A990778009F1BE8 /* CopyFiles */,
+				4E3EAE7D2A990778009F1BE8 /* Resources */,
+				4E5BF9392E591C7F005A33A5 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E13EE9E2DB0408B0081F9DF /* OIM */,
+				4E4A3F102CD5708100CA6A90 /* Main */,
+				4E4A3F472CD570F000CA6A90 /* Actions */,
+				4E4A3F692CD5712900CA6A90 /* Balances */,
+				4E4A3F7D2CD5715000CA6A90 /* Transactions */,
+				4E4A3FA12CD5717F00CA6A90 /* Settings */,
+				4E4A3FE82CD5720900CA6A90 /* Sheets */,
+				4E4A40262CD5725A00CA6A90 /* HelperViews */,
+				4E4A40692CD572FE00CA6A90 /* Model */,
+				4E4A40852CD5731A00CA6A90 /* Backend */,
+				4E4A40A62CD5735600CA6A90 /* Helper */,
+				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
+				4E4A40E42CD573D500CA6A90 /* Sounds */,
+				4E4A41252CD5769900CA6A90 /* Fonts */,
+				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4E9C5A922E58ADB3002E2709 /* Frameworks */,
+				4EB66D772E18238000BE0651 /* Resources */,
+				4EF888112DF094A700382858 /* Controllers */,
+			);
+			name = GNU_Taler;
+			packageProductDependencies = (
+				4E3EAE152A990778009F1BE8 /* taler-swift */,
+				4E3EAE162A990778009F1BE8 /* AnyCodable */,
+				4E3EAE182A990778009F1BE8 /* SymLog */,
+				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
+				4E2D8DD22B3F513800234039 /* MarkdownUI */,
+				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
+				4E1853992BDAE6D40034F3BA /* LocalConsole */,
+			);
+			productName = Taler;
+			productReference = 4E3EAE892A990778009F1BE8 /* GNU_Taler.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4E563DE42DC3C52C008FA91D /* Taler_Nightly */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E563E072DC3C52C008FA91D /* Build configuration list for PBXNativeTarget "Taler_Nightly" */;
+			buildPhases = (
+				4E563DF22DC3C52C008FA91D /* Sources */,
+				4E563DF72DC3C52C008FA91D /* Frameworks */,
+				4E563E002DC3C52C008FA91D /* CopyFiles */,
+				4E563E012DC3C52C008FA91D /* Resources */,
+				4E5BF93D2E591CB9005A33A5 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E13EE9E2DB0408B0081F9DF /* OIM */,
+				4E4A3F102CD5708100CA6A90 /* Main */,
+				4E4A3F472CD570F000CA6A90 /* Actions */,
+				4E4A3F692CD5712900CA6A90 /* Balances */,
+				4E4A3F7D2CD5715000CA6A90 /* Transactions */,
+				4E4A3FA12CD5717F00CA6A90 /* Settings */,
+				4E4A3FE82CD5720900CA6A90 /* Sheets */,
+				4E4A40262CD5725A00CA6A90 /* HelperViews */,
+				4E4A40692CD572FE00CA6A90 /* Model */,
+				4E4A40852CD5731A00CA6A90 /* Backend */,
+				4E4A40A62CD5735600CA6A90 /* Helper */,
+				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
+				4E4A40E42CD573D500CA6A90 /* Sounds */,
+				4E4A41252CD5769900CA6A90 /* Fonts */,
+				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4E9C5A922E58ADB3002E2709 /* Frameworks */,
+				4EB66D772E18238000BE0651 /* Resources */,
+				4EF888112DF094A700382858 /* Controllers */,
+			);
+			name = Taler_Nightly;
+			packageProductDependencies = (
+				4E3EAE152A990778009F1BE8 /* taler-swift */,
+				4E3EAE162A990778009F1BE8 /* AnyCodable */,
+				4E3EAE182A990778009F1BE8 /* SymLog */,
+				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
+				4E2D8DD22B3F513800234039 /* MarkdownUI */,
+				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
+				4E1853992BDAE6D40034F3BA /* LocalConsole */,
+			);
+			productName = Taler;
+			productReference = 4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D14AFD1C24D232B300C51073 /* Taler_Wallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4724D232B500C51073 /* Build configuration list for PBXNativeTarget "Taler_Wallet" */;
+			buildPhases = (
+				D14AFD1924D232B300C51073 /* Sources */,
+				D14AFD1A24D232B300C51073 /* Frameworks */,
+				D11250FA26B12D4400D02E00 /* CopyFiles */,
+				D14AFD1B24D232B300C51073 /* Resources */,
+				4E5BF9412E591CBE005A33A5 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E13EE9E2DB0408B0081F9DF /* OIM */,
+				4E4A3F102CD5708100CA6A90 /* Main */,
+				4E4A3F472CD570F000CA6A90 /* Actions */,
+				4E4A3F692CD5712900CA6A90 /* Balances */,
+				4E4A3F7D2CD5715000CA6A90 /* Transactions */,
+				4E4A3FA12CD5717F00CA6A90 /* Settings */,
+				4E4A3FE82CD5720900CA6A90 /* Sheets */,
+				4E4A40262CD5725A00CA6A90 /* HelperViews */,
+				4E4A40692CD572FE00CA6A90 /* Model */,
+				4E4A40852CD5731A00CA6A90 /* Backend */,
+				4E4A40A62CD5735600CA6A90 /* Helper */,
+				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
+				4E4A40E42CD573D500CA6A90 /* Sounds */,
+				4E4A41252CD5769900CA6A90 /* Fonts */,
+				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
+				4E9C5A922E58ADB3002E2709 /* Frameworks */,
+				4EB66D772E18238000BE0651 /* Resources */,
+				4EF888112DF094A700382858 /* Controllers */,
+			);
+			name = Taler_Wallet;
+			packageProductDependencies = (
+				4E3EAE152A990778009F1BE8 /* taler-swift */,
+				4E3EAE162A990778009F1BE8 /* AnyCodable */,
+				4E3EAE182A990778009F1BE8 /* SymLog */,
+				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
+				4E2D8DD22B3F513800234039 /* MarkdownUI */,
+				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
+				4E1853992BDAE6D40034F3BA /* LocalConsole */,
+			);
+			productName = Taler;
+			productReference = D14AFD1D24D232B300C51073 /* Taler_Wallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D14AFD3224D232B500C51073 /* TalerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4A24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerTests" */;
+			buildPhases = (
+				D14AFD2F24D232B500C51073 /* Sources */,
+				D14AFD3024D232B500C51073 /* Frameworks */,
+				D14AFD3124D232B500C51073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D14AFD3524D232B500C51073 /* PBXTargetDependency */,
+			);
+			name = TalerTests;
+			productName = TalerTests;
+			productReference = D14AFD3324D232B500C51073 /* TalerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D14AFD3D24D232B500C51073 /* TalerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D14AFD4D24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerUITests" */;
+			buildPhases = (
+				D14AFD3A24D232B500C51073 /* Sources */,
+				D14AFD3B24D232B500C51073 /* Frameworks */,
+				D14AFD3C24D232B500C51073 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D14AFD4024D232B500C51073 /* PBXTargetDependency */,
+			);
+			name = TalerUITests;
+			productName = TalerUITests;
+			productReference = D14AFD3E24D232B500C51073 /* TalerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D14AFD1524D232B300C51073 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1160;
+				LastUpgradeCheck = 1540;
+				ORGANIZATIONNAME = Taler;
+				TargetAttributes = {
+					D14AFD1C24D232B300C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+					};
+					D14AFD3224D232B500C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+						TestTargetID = D14AFD1C24D232B300C51073;
+					};
+					D14AFD3D24D232B500C51073 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1420;
+						TestTargetID = D14AFD1C24D232B300C51073;
+					};
+				};
+			};
+			buildConfigurationList = D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWalletXC" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				de,
+				es,
+				fr,
+				pl,
+				uk,
+			);
+			mainGroup = D14AFD1424D232B300C51073;
+			packageReferences = (
+				4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */,
+				4E3EAE192A990778009F1BE8 /* XCRemoteSwiftPackageReference "SymLog" */,
+				4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */,
+				4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */,
+				4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */,
+				4E3624F22CD8E2C600D9079D /* XCLocalSwiftPackageReference "taler-swift" */,
+			);
+			productRefGroup = D14AFD1E24D232B300C51073 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4E3EAE142A990778009F1BE8 /* GNU_Taler */,
+				4E563DE42DC3C52C008FA91D /* Taler_Nightly */,
+				D14AFD1C24D232B300C51073 /* Taler_Wallet */,
+				D14AFD3224D232B500C51073 /* TalerTests */,
+				D14AFD3D24D232B500C51073 /* TalerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E3EAE7D2A990778009F1BE8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */,
+				4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E563E012DC3C52C008FA91D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */,
+				4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD1B24D232B300C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E363CC02A24754200D7E98C /* Settings.bundle in Resources */,
+				4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3124D232B500C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3C24D232B500C51073 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4E3EAE1C2A990778009F1BE8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E563DF22DC3C52C008FA91D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD1924D232B300C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD2F24D232B500C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */,
+				4EB094D729896CD20043A8A1 /* WalletBackendTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D14AFD3A24D232B500C51073 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */,
+				4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */,
+				4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D14AFD3524D232B500C51073 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
+			targetProxy = D14AFD3424D232B500C51073 /* PBXContainerItemProxy */;
+		};
+		D14AFD4024D232B500C51073 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D14AFD1C24D232B300C51073 /* Taler_Wallet */;
+			targetProxy = D14AFD3F24D232B500C51073 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4E3EAE872A990778009F1BE8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon2;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "GNU Taler";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "GNU_TALER OIM DEBUG xxxPRINT_CHANGES xxx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Debug;
+		};
+		4E3EAE882A990778009F1BE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon2;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "GNU Taler";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "GNU_TALER OIM";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Release;
+		};
+		4E563E082DC3C52C008FA91D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon3;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Taler_Nightly Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Nightly";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-3";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = " TALER_NIGHTLY OIM DEBUG xxxPRINT_CHANGES xxx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Debug;
+		};
+		4E563E092DC3C52C008FA91D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon3;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Taler_Nightly Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Nightly";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-3";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TALER_NIGHTLY;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Release;
+		};
+		D14AFD4524D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lc++";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D14AFD4624D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-lc++";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D14AFD4824D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "TALER_WALLET DEBUG xxxPRINT_CHANGES EMPTY";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Debug;
+		};
+		D14AFD4924D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Taler;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.3.0;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Protect your money";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Taler-Systems.com";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "TALER_WALLET EMPTY";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_WORKSPACE = YES;
+			};
+			name = Release;
+		};
+		D14AFD4B24D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerTests/TalerTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerWallet.app/TalerWallet";
+			};
+			name = Debug;
+		};
+		D14AFD4C24D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.9.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerTests/TalerTests-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerWallet.app/TalerWallet";
+			};
+			name = Release;
+		};
+		D14AFD4E24D232B500C51073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.9.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerUITests/TalerUITests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Taler;
+			};
+			name = Debug;
+		};
+		D14AFD4F24D232B500C51073 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.9.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.taler.TalerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TalerUITests/TalerUITests-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Taler;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E3EAE862A990778009F1BE8 /* Build configuration list for PBXNativeTarget "GNU_Taler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E3EAE872A990778009F1BE8 /* Debug */,
+				4E3EAE882A990778009F1BE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E563E072DC3C52C008FA91D /* Build configuration list for PBXNativeTarget "Taler_Nightly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E563E082DC3C52C008FA91D /* Debug */,
+				4E563E092DC3C52C008FA91D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWalletXC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4524D232B500C51073 /* Debug */,
+				D14AFD4624D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4724D232B500C51073 /* Build configuration list for PBXNativeTarget "Taler_Wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4824D232B500C51073 /* Debug */,
+				D14AFD4924D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4A24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4B24D232B500C51073 /* Debug */,
+				D14AFD4C24D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D14AFD4D24D232B500C51073 /* Build configuration list for PBXNativeTarget "TalerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D14AFD4E24D232B500C51073 /* Debug */,
+				D14AFD4F24D232B500C51073 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4E3624F22CD8E2C600D9079D /* XCLocalSwiftPackageReference "taler-swift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "taler-swift";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/LocalConsole";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-markdown-ui-standalone";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flight-School/AnyCodable";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.5;
+			};
+		};
+		4E3EAE192A990778009F1BE8 /* XCRemoteSwiftPackageReference "SymLog" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/SymLog";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+		4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-collections";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E1853992BDAE6D40034F3BA /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
+		4E2D8DD22B3F513800234039 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
+			productName = MarkdownUI;
+		};
+		4E3EAE152A990778009F1BE8 /* taler-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "taler-swift";
+		};
+		4E3EAE162A990778009F1BE8 /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
+		};
+		4E3EAE182A990778009F1BE8 /* SymLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E3EAE192A990778009F1BE8 /* XCRemoteSwiftPackageReference "SymLog" */;
+			productName = SymLog;
+		};
+		4E3EAE1A2A990778009F1BE8 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+		4E563DEE2DC3C52C008FA91D /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D14AFD1524D232B300C51073 /* Project object */;
+}
