@@ -1,3 +1,9 @@
+Version 1.2.1 (wallet-core 1.2.4)
+
+• allow retrying after scanning QR code
+• show status of exchange entries
+
+
 Version 1.2.0 (wallet-core 1.2.0)
 
 • support for Exchange 1.2
