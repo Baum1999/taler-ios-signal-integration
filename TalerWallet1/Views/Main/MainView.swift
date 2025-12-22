@@ -594,6 +594,9 @@ extension MainView {
                 shouldReloadTransactions += 1
 //                shouldReloadPending += 1
             }
+            .onNotification(.TransactionScanned) {
+                shouldReloadTransactions += 1
+            }
             .onNotification(.TransactionDone) {
                 shouldReloadTransactions += 1
 //                shouldReloadPending += 1
