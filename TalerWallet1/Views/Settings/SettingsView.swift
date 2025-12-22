@@ -33,6 +33,7 @@ struct SettingsView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("logTransactions") var logTransactions: Bool = false
     @AppStorage("useHaptics") var useHaptics: Bool = true
     @AppStorage("playSoundsI") var playSoundsI: Int = 1
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -91,6 +92,13 @@ struct SettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
+#if DEBUG
+                if showDevelopItems {
+                    SettingsToggle(name: String("Log Transactions"), value: $logTransactions.onChange({ isLogging in
+                        walletCore.logTransactions = isLogging}), id1: "logTransactions",
+                            description: hideDescriptions ? nil : String("full log with all tx")) {}
+                }
+#endif
 #if TALER_WALLET
                 let appName = "Taler Wallet"
 #elseif TALER_NIGHTLY

@@ -36,6 +36,7 @@ class WalletCore: QuickjsMessageHandler {
     var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
     var isObserving: Int
     var isLogging: Bool
+    var logTransactions: Bool
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletCore")
 
     private var expired: [String] = []      // save txID of expired items to not beep twice
@@ -89,6 +90,7 @@ class WalletCore: QuickjsMessageHandler {
     init() throws {
         isObserving = 0
         isLogging = false
+        logTransactions = false
 //        logger.trace("init Quickjs")
         requestsMade = 0
         queue = DispatchQueue(label: "net.taler.myQueue", attributes: .concurrent)
@@ -129,7 +131,7 @@ extension WalletCore {
         }
     }
 
-    private func handleResponse(_ decoded: ResponseOrNotification, _ message: String?) throws {
+    private func handleResponse(_ decoded: ResponseOrNotification, _ message: String) throws {
         guard let requestId = decoded.id else {
             logger.error("didn't find requestId in response")
             symLog.log(decoded)                 // TODO: .error
@@ -146,7 +148,15 @@ extension WalletCore {
         }
         do {
             let jsonData = try JSONEncoder().encode(result)
-//            symLog.log("\"id\":\(requestId)  \(result)")
+            if let operation = decoded.operation {
+                if operation == "getTransactionsV2" {
+                    if logTransactions {
+                        symLog.log(message)
+                    }
+                } else {
+                    symLog.log(message)
+                }
+            }
 //            logger.info(result)   TODO: log result
             completion(requestId, timeSent, message, jsonData, nil)
         } catch {        // JSON encoding of response.result failed / should never happen
@@ -431,7 +441,7 @@ extension WalletCore {
                     symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
                     try handleError(decoded, message)
                 case "response":
-                    symLog.log(message)
+//                    symLog.log(message)
                     try handleResponse(decoded, message)
                 case "notification":
 //                    symLog.log(message)
@@ -477,7 +487,13 @@ extension WalletCore {
                 self.semaphore.signal()         // free requestsMade
                     let args = try JSONEncoder().encode(request.args)
                     if let jsonArgs = String(data: args, encoding: .utf8) {
-                        self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
+                        if request.operation == "getTransactionsV2" {
+                            if self.logTransactions {
+                                self.logger.trace("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
+                            }
+                        } else {
+                            self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public)\(jsonArgs, privacy: .auto)")
+                        }
                     } else {    // should NEVER happen since the whole request was already successfully encoded and stringified
                         self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public) 🔴 Error: jsonArgs")
                     }
