@@ -1,3 +1,8 @@
+Version 1.2.2 (wallet-core 1.3.0)
+
+• handling for disabled P2P (#10678)
+
+
 Version 1.2.1 (wallet-core 1.2.4)
 
 • allow retrying after scanning QR code
