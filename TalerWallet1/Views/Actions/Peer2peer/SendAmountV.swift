@@ -54,18 +54,24 @@ struct SendAmountV: View {
         self._cash = StateObject(wrappedValue: { oimCash }())
     }
 
+    private func firstWithP2P(_ balances : inout [Balance]) {
+        let first = Balance.firstWithP2P(balances)
+        symLog.log(first?.scopeInfo.currency)
+        balance = first
+    }
     @MainActor
     private func viewDidLoad() async {
-        let balances = controller.balances
+        var balances = controller.balances
         if let selectedBalance {
-            if selectedBalance.available.isZero {
+            let disablePeerPayments = selectedBalance.disablePeerPayments ?? false
+            if disablePeerPayments {
                 // find another balance
-                balance = Balance.firstNonZero(controller.balances)
+                firstWithP2P(&balances)
             } else {
                 balance = selectedBalance
             }
         } else {
-            balance = Balance.firstNonZero(controller.balances)
+            firstWithP2P(&balances)
         }
         if let balance {
             balanceIndex = balances.firstIndex(of: balance) ?? 0

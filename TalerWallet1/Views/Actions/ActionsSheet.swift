@@ -33,9 +33,17 @@ struct ActionsSheet: View {
         }
         return false
     }
-    private var canSend: Bool {     // canDeposit
+    private var mayDeposit: Bool { // returns true if at least 1 balance didn't disable deposits
         for balance in controller.balances {
-            if !balance.available.isZero {
+            if !(balance.disableDirectDeposits == true) {       // false or nil
+                return true
+            }
+        }
+        return false
+    }
+    private var mayP2P: Bool { // returns true if at least 1 balance didn't disable P2P
+        for balance in controller.balances {
+            if !(balance.disablePeerPayments == true) {         // false or nil
                 return true
             }
         }
@@ -126,10 +134,13 @@ struct ActionsSheet: View {
                 }.padding(.bottom, 20)
             }
 
-            let sendDisabled = !canSend
-            let recvDisabled = controller.balances.count == 0
+            let noBalances = controller.balances.count == 0
+            let noP2P = !self.mayP2P
+            let sendDisabled = noP2P
+            let recvDisabled = noBalances || noP2P
+            let depoDisabled = !mayDeposit
             SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
-            DepositWithdrawV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
+            DepositWithdrawV(stack: stack.push(), sendDisabled: depoDisabled, recvDisabled: noBalances)
             QRButton(hideTitle: false) {
                 qrButtonTapped = true
             }

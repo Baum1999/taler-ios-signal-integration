@@ -155,17 +155,18 @@ struct  ScopeDropDown: View {
             let otherBalances = controller.balances.filter { $0 != controller.balances[selection] }
             let theList = LazyVStack(spacing: 0) {
                 ForEach(0..<otherBalances.count, id: \.self) { index in
-                    let item = otherBalances[index]
-                    let rowDisabled = onlyNonZero ? item.available.isZero : false
+                    let balance = otherBalances[index]
+                    let disablePeerPayments = balance.disablePeerPayments ?? false
+                    let rowDisabled = disablePeerPayments || (onlyNonZero ? balance.available.isZero : false)
                     Button(action: {
                         withAnimation {
                             showDropdown.toggle()
-                            selection = controller.balances.firstIndex(of: item) ?? selection
+                            selection = controller.balances.firstIndex(of: balance) ?? selection
                         }
                     }, label: {
-                        let currencyInfo = controller.info(for: item.scopeInfo, controller.currencyTicker)
+                        let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
                         HStack(alignment: .top) {
-                            dropDownRow(item, currencyInfo)   // .border(.random)
+                            dropDownRow(balance, currencyInfo)   // .border(.random)
                                 .foregroundColor(rowDisabled ? .secondary : .primary)
                             Spacer()
                             chevron.foregroundColor(.clear)

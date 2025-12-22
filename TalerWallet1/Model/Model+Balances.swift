@@ -56,14 +56,14 @@ struct Balance: Identifiable, Decodable, Hashable, Sendable {
     }
 }
 extension Balance {
-    static func nonZeroBalances(_ balances: [Balance]) -> [Balance] {
-        balances.filter { balance in
-            !balance.available.isZero
+    static func firstwithDeposit(_ balances: [Balance]) -> Balance? {
+        balances.first { balance in
+            balance.disableDirectDeposits != true
         }
     }
-    static func firstNonZero(_ balances: [Balance]) -> Balance? {
+    static func firstWithP2P(_ balances: [Balance]) -> Balance? {
         balances.first { balance in
-            !balance.available.isZero
+            balance.disablePeerPayments != true
         }
     }
 }

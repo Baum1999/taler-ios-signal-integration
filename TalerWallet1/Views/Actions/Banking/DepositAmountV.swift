@@ -31,14 +31,15 @@ struct DepositAmountV: View {
     private func viewDidLoad() async {
         let balances = controller.balances
         if let selectedBalance {
-            if selectedBalance.available.isZero {
+            let disableDeposits = selectedBalance.disableDirectDeposits ?? false
+            if disableDeposits {
                 // find another balance
-                balance = Balance.firstNonZero(balances)
+                balance = Balance.firstwithDeposit(balances)
             } else {
                 balance = selectedBalance
             }
         } else {
-            balance = Balance.firstNonZero(balances)
+            balance = Balance.firstwithDeposit(balances)
         }
         if let balance {
             balanceIndex = balances.firstIndex(of: balance) ?? 0
