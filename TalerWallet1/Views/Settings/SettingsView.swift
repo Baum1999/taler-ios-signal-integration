@@ -117,7 +117,8 @@ struct SettingsView: View {
 
                 let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
                 let exchangesDest = ExchangeListView(stack: stack.push(exchangesTitle),
-                                                  navTitle: exchangesTitle)
+                                                  navTitle: exchangesTitle,
+                                          showDevelopItems: showDevelopItems)
                 NavigationLink {        // whole row like in a tableView
                     exchangesDest
                 } label: {
@@ -212,7 +213,7 @@ struct SettingsView: View {
                     }
 #if DEBUG
                     if showDevelopItems {
-                        let banks = ["glstest.taler.net", "glsint.fdold.eu", "taler.fdold.eu", "regio-taler.fdold.eu",
+                        let banks = ["glstest.taler.net", "taler.fdold.eu", "regio-taler.fdold.eu",
                                      "taler.grothoff.org", "taler.ar",
                                      "head.taler.net", "test.taler.net", "demo.taler.net", "kyctest.taler.net"]
                         ForEach(banks, id: \.self) { bank in
