@@ -19,6 +19,8 @@ struct CopyButton: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
 
+    @State private var scale: CGFloat = 1.0
+
     init(textToCopy: String, vertical: Bool, image: UIImage? = nil) {
         self.textToCopy = textToCopy
         self.image = image
@@ -35,6 +37,7 @@ struct CopyButton: View {
 
     func copyAction() -> Void {
         symLog.log(textToCopy)
+        triggerPulse()
         controller.hapticFeedback(.medium)
         let strings = [UTType.plainText.identifier : textToCopy]
         var items: [[String : Any]] = [strings]
@@ -45,26 +48,47 @@ struct CopyButton: View {
         UIPasteboard.general.setItems(items)
     }
 
+    private func triggerPulse() {
+        // First scale down quickly
+        withAnimation(.easeIn(duration: 0.1)) {
+            scale = 0.8
+        }
+        // Then bounce back bigger
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation(.easeOut(duration: 0.25)) {
+                scale = 1.15
+            }
+        }
+        // Finally settle to normal
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                scale = 1.0
+            }
+        }
+    }
+
     var body: some View {
         Button(action: copyAction) {
+            let image = Image(systemName: "doc.on.doc")
+                .accessibility(hidden: true)
+
             if vertical {
                 VStack {
                     let shortCopy = String(localized: "Copy.short", defaultValue: "Copy", comment: "5 letters max, else abbreviate")
-                    Image(systemName: "doc.on.doc")
-                        .accessibility(hidden: true)
+                    image
                     Text(shortCopy)
                 }
             } else {
                 let longCopy = String(localized: "Copy.long", defaultValue: "Copy", comment: "may be a bit longer")
                 HStack {
-                    Image(systemName: "doc.on.doc")
-                        .accessibility(hidden: true)
+                    image
                     Text(title ?? longCopy)
                 }
             }
         }
         .tint(.accentColor)
         .talerFont(.body)
+        .scaleEffect(scale)
         .disabled(!isEnabled)
     }
 }
