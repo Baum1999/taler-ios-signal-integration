@@ -86,6 +86,7 @@ struct ManualDetailsV: View {
                                                        receiverZip: payto.postalCode,
                                                       receiverTown: payto.town,
                                                               iban: payto.iban,
+                                                            cyclos: payto.cyclos ?? EMPTYSTRING,
                                                             xTaler: payto.xTaler ?? EMPTYSTRING,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,

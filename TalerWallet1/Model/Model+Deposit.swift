@@ -47,6 +47,7 @@ enum PaytoType: String, Codable {
     case unknown
     case iban
     case bitcoin
+    case cyclos
     case xTalerBank = "x-taler-bank"
 }
 
@@ -184,6 +185,17 @@ struct BankAccountsInfo: Decodable, Hashable {
     var paytoUri: String
     var kycCompleted: Bool
     var label: String?
+    var payToWorkAround: String {
+        let payto = PayTo(paytoUri)
+        
+        if let cyclos = payto.cyclos {
+            if cyclos.count > 1 {
+                let receiver = payto.receiver?.replacingOccurrences(of: SPACE, with: "+") ?? DEMO
+                return String("payto://cyclos/\(cyclos)?receiver-name=\(receiver)")
+            }
+        }
+        return paytoUri
+    }
 }
 struct BankAccounts: Decodable, Hashable {
     var accounts: [BankAccountsInfo]

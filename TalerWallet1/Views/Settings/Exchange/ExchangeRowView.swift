@@ -14,6 +14,7 @@ struct ExchangeRowView: View {
     let stack: CallStack
     let exchange: Exchange
     let index: Int
+    let showDevelopItems: Bool
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -130,7 +131,8 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
                                ageRestrictionOptions: [])
             ExchangeRowView(stack: CallStack("Preview"),
                          exchange: exchange1,
-                            index: 1)
+                            index: 1,
+                 showDevelopItems: true)
         }
     }
 

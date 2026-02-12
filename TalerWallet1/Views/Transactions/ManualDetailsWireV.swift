@@ -81,7 +81,8 @@ struct ManualDetailsWireV: View {
     let receiverStr: String
     let receiverZip: String?
     let receiverTown: String?
-    let iban: String?
+    let iban: String?                   // TODO: BBAN
+    let cyclos: String
     let xTaler: String
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
     let amountStr: (String, String)
@@ -260,6 +261,9 @@ struct ManualDetailsWireV: View {
                         }
                     }
                     ibanCode
+                } else if cyclos.count > 0 {
+                    step2x
+                    payeeCode
                 } else {
                     step2x
                     payeeCode

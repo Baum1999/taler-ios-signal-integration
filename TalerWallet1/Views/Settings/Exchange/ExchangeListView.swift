@@ -90,24 +90,33 @@ struct ExchangeListCommonV: View {
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+#if DEBUG
+        let excSection = Section {
+            let cyclos = "https://guava.box.fdold.eu"
+            Button(cyclos) {
+                addExchange(cyclos, model: model)
+            }
+
+            let exchanges = ["glsint.fdold.eu", "taler.magnetbank.hu", "stage.taler-ops.ch"]
+            ForEach(exchanges, id: \.self) { exchange in
+                let urlStr = "https://exchange." + exchange
+                Button(urlStr) {
+                    addExchange(urlStr, model: model)
+                }
+                //                    Link(exchange, destination: URL(string: urlStr)!)
+            }
+        }
+#endif
         let balanceList = List {
             ForEach(Array(controller.balances.enumerated()), id: \.1.id) { index, balance in
                 ExchangeSectionView(stack: stack.push(),
                                   balance: balance,
-                                 thousand: index * MAXEXCHANGES)        // unique ID
+                                 thousand: index * MAXEXCHANGES,        // unique ID
+                         showDevelopItems: showDevelopItems)
             }
 #if DEBUG
             if showDevelopItems {
-                Section {
-                    let exchanges = ["glsint.fdold.eu", "taler.magnetbank.hu", "stage.taler-ops.ch"]
-                    ForEach(exchanges, id: \.self) { exchange in
-                        let urlStr = "https://exchange." + exchange
-                        Button(urlStr) {
-                            addExchange(urlStr, model: model)
-                        }
-                        //                    Link(exchange, destination: URL(string: urlStr)!)
-                    }
-                }
+                excSection
             }
 #endif
         }
@@ -128,6 +137,11 @@ struct ExchangeListCommonV: View {
                 }
             }
                 .talerFont(.body)
+#if DEBUG
+            if showDevelopItems {
+                excSection
+            }
+#endif
         }
 
         Group {

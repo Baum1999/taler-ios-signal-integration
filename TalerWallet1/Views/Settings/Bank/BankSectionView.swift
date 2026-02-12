@@ -29,9 +29,9 @@ struct BankSectionView: View {
     @State private var label: String = EMPTYSTRING
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
+    @State private var cyclos: String = EMPTYSTRING
     @State private var xTaler: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
-    @State private var selected = 0
 
 //    @MainActor
 //    private func validateIban() async {
@@ -47,9 +47,17 @@ struct BankSectionView: View {
     private func viewDidLoad() async {
         let payTo = PayTo(account.paytoUri)
         iban = payTo.iban ?? EMPTYSTRING
+        cyclos = payTo.cyclos ?? EMPTYSTRING
+        
         xTaler = payTo.xTaler ?? EMPTYSTRING
-        if iban.count < 1 && xTaler.count > 1 {
-            paytoType = .xTalerBank
+        if iban.count < 1 {
+            if cyclos.count > 1 {
+                paytoType = .cyclos
+            } else if xTaler.count > 1 {
+                paytoType = .xTalerBank
+            } else {
+                paytoType = .unknown
+            }
         }
         label = account.label ?? EMPTYSTRING
         accountHolder = payTo.receiver ?? ownerName
@@ -62,9 +70,9 @@ struct BankSectionView: View {
 #endif
         let kyc = account.kycCompleted ? String(localized: "verified")
                                        : String(localized: "not yet verified")
-        let methods = [PaytoType.iban, PaytoType.xTalerBank]
-        let methodType = methods[selected].rawValue.uppercased()
+        let methodType = paytoType.rawValue.uppercased()
         let methodStr = (paytoType == .iban) ? iban
+                    : (paytoType == .cyclos) ? cyclos
                 : (paytoType == .xTalerBank) ? xTaler
                                              : "unknown payment method"
         let editHint = String(localized: "Double tap to edit the account", comment: "a11y")
@@ -80,16 +88,21 @@ struct BankSectionView: View {
                     DepositAmountV(stack: stack.push(),
                          selectedBalance: selectedBalance,
                           amountLastUsed: $amountLastUsed,
-                                paytoUri: account.paytoUri,
+                                paytoUri: account.payToWorkAround,  // TODO:  paytoUri,
                                    label: account.label)
                     .navigationTitle(navTitle)
                 }
             } label: {
                 VStack(alignment: .leading) {
-                    BankSectionRow(title: String(localized: "Account holder:"),
-                                   value: accountHolder)
-                    BankSectionRow(title: String(localized: "\(methodType):", comment: "methodType:"),
-                                   value: methodStr)
+                    if paytoType == .cyclos {
+                        BankSectionRow(title: String(localized: "Cyclos user:"),
+                                           value: accountHolder)
+                    } else {
+                        BankSectionRow(title: String(localized: "Account holder:"),
+                                       value: accountHolder)
+                        BankSectionRow(title: String(localized: "\(methodType):", comment: "methodType:"),
+                                       value: methodStr)
+                    }
                     BankSectionRow(title: String(localized: "Status:"),
                                    value: kyc)
                 }   .talerFont(.body)

@@ -16,6 +16,7 @@ struct ExchangeSectionView: View {
     let stack: CallStack
     let balance: Balance
     let thousand: Int           // index of balance times 1000 (MAXEXCHANGES per currency)
+    let showDevelopItems: Bool
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -107,7 +108,8 @@ struct ExchangeSectionView: View {
                 let _ = symLog.log("Index: \(thousand + index)")
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
-                                index: thousand + index + 1)
+                                index: thousand + index + 1,
+                     showDevelopItems: showDevelopItems)
                 .listRowSeparator(.hidden)
             }
             if developerMode && (DEMOCURRENCY == currency || TESTCURRENCY == currency) {

@@ -16,6 +16,23 @@ extension URL {
         self.init(string: "\(string)")!
     }
 
+    var cyclos: String? {
+        /// "payto://cyclos/" host ["/" fpath] "/" account-id [ "?" opts ]
+        if scheme == "payto", let host = host {
+            let path = path.dropFirst(1)
+            if host == "cyclos" {
+                return String(path)
+            } else if host.hasPrefix("cyclos") {
+                let cyclos = host.dropFirst(6)
+                if path.hasPrefix("/") {
+                    return String(cyclos + path)
+                }
+                return String(cyclos + "/" + path)
+            }
+        }
+        return nil
+    }
+
     var iban: String? {
         /// https://datatracker.ietf.org/doc/rfc8905/
         /// payto://iban/DE75512108001245126199?amount=EUR:200.0&message=hello

@@ -143,6 +143,7 @@ enum TransactionMajorState: String, Codable {
 
 struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-code=2502&receiver-town=Biel-Bienne"
     var iban: String?
+    var cyclos: String?
     var xTaler: String?
     var sender: String?
     var receiver: String?
@@ -150,6 +151,8 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
     var town: String?
     var amountStr: String?
     var messageStr: String?
+    //   payto-cyclos-URI = "payto://cyclos/" host ["/" fpath] "/" account-id [ "?" opts ]
+    var host: String?       //
 
     func param(key: String, from params: [String:String]) -> String? {
         if let param = params[key] {
@@ -160,8 +163,12 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
 
     init(_ string: String) {
         let payURL = URL(string: string)
+        if let host = payURL?.host {
+            self.host = host
+        }
         if let queryParameters = payURL?.queryParameters {
             iban = payURL?.iban
+            cyclos = payURL?.cyclos
             xTaler = payURL?.xTaler ??
 //                   payURL?.host() ??
                      String(localized: "unknown payment method")
