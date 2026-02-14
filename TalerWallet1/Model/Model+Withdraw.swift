@@ -26,13 +26,6 @@ extension AccountRestriction: Identifiable {
     var id: AccountRestriction {self}
 }
 
-//struct TalerErrorDetail: Decodable {
-//    var code: TalerErrorCode
-//    var when: AbsoluteTime?
-//    var hint: String?
-////    [x: string]: unknown;
-//}
-
 struct ExchangeAccountDetails: Decodable {
     var status: String                                          // "OK" or "error" - then conversionError
     var paytoUri: String
