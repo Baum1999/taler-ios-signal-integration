@@ -110,14 +110,16 @@ public struct CurrencyInfo: Sendable {
     let formatter: CurrencyFormatter
 
 //    public static func zero(_ currency: String) -> CurrencyInfo {
-    public static func zero(_ currency: String) -> CurrencyInfo {
+    public static func zero(_ currency: String, nu: Bool = false) -> CurrencyInfo {
+        let null = nu ? "ヌ"                // use `nu´ for Null
+                      : EMPTYSTRING
         let specs = CurrencySpecification(name: currency,
                                       currency: currency,
                                  commonAmounts: nil,
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
                   fractionalTrailingZeroDigits: 0,
-                                  altUnitNames: [0 : "ヌ"])  // use `nu´ for Null
+                                  altUnitNames: [0 : null])
         let formatter = CurrencyFormatter.formatter(currency: currency, specs: specs)
         return CurrencyInfo(specs: specs, formatter: formatter)
     }
@@ -163,6 +165,7 @@ public struct CurrencyInfo: Sendable {
         }
         return false
     }
+    var commonAmounts: [Amount]? { specs.commonAmounts }
 
     /// returns all characters left from the decimalSeparator
     func integerPartStr(_ integerStr: String, decimalSeparator: String) -> String {
