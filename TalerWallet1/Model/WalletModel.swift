@@ -113,7 +113,6 @@ struct TalerErrorDetail: Codable, Hashable {
 class WalletModel: ObservableObject {
     public static let shared = WalletModel()
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletModel")
-    let semaphore = AsyncSemaphore(value: 1)
 
     @Published var error2: ErrorData? = nil
 
@@ -476,8 +475,15 @@ fileprivate struct ImportDbFromFile: WalletBackendFormattedRequest {
     struct Response: Decodable {}
 }
 
+fileprivate struct GetDiagnostics: WalletBackendFormattedRequest {
+    func operation() -> String { "getDiagnostics" }
+    func args() -> Args { Args() }
+    struct Args: Encodable {}                           // no arguments needed
+    typealias Response = String
+}
+
 extension WalletModel {
-    /// export DB
+    /// export, import DB, get diagnostics
     nonisolated func exportDbToFile(stem: String, viewHandles: Bool = false)
       async throws -> String? {
         if let docDirUrl = URL.docDirUrl {
@@ -494,6 +500,12 @@ extension WalletModel {
       async throws {
         let request = ImportDbFromFile(path: path)
         _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+    nonisolated func getDiagnostics(viewHandles: Bool = false)
+      async throws -> String {
+        let request = GetDiagnostics()
+        let response = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        return response
     }
 }
 // MARK: -
