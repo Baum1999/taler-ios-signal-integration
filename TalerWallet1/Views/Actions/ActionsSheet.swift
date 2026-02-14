@@ -11,8 +11,8 @@ import taler_swift
 
 /// This view shows the action sheet
 /// optional:   [􀰟Spend KUDOS]
-///    [􁉇Send]  [􁉅Request]
-/// [􁾭Withdraw]  [􁾩Deposit]
+///   [􁉇 Send   ] [􁉅 Request]
+///   [􁾩Deposit] [􁾭 Withdraw]
 ///        [􀎻  Scan QR ]
 struct ActionsSheet: View {
     let stack: CallStack

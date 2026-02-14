@@ -7,7 +7,7 @@
  */
 import SwiftUI
 
-///    [􁉇Send]  [􁉅Request]
+///   [􁉇 Send   ] [􁉅 Request]
 struct SendRequestV: View {
     let stack: CallStack
     let sendDisabled: Bool   // can't send/deposit if wallet has no coins at all
