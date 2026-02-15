@@ -22,7 +22,8 @@ import SwiftUI
 /// A presented sheet (SwiftUI view) doesn't always close when calling "dismiss()" provided by @Environment(\.dismiss),
 /// so we are walking the view stack to find the top presentedViewController (UIKit) and dismiss it.
 extension View {
-    @MainActor func dismissTop(_ stack: CallStack, animated: Bool = true) -> Bool {
+    @MainActor    @discardableResult
+    func dismissTop(_ stack: CallStack, animated: Bool = true) -> Bool {
         let windows = UIApplication.shared.connectedScenes.compactMap {
             ($0 as? UIWindowScene)?.keyWindow       // TODO: iPad might have more than 1 window
         }
