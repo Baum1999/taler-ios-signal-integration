@@ -159,6 +159,17 @@ struct SettingsView: View {
                           description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
                 }
 
+                /// Report
+                let reportTitle = String(localized: "TitleReport", defaultValue: "Report diagnostics")
+                let reportDest = ReportView(stack: stack.push(reportTitle),
+                                         navTitle: reportTitle)
+                NavigationLink {        // whole row like in a tableView
+                    reportDest
+                } label: {
+                    SettingsItem(name: reportTitle, id1: "report",
+                          description: hideDescriptions ? nil : String(localized: "Help improve this app...")) {}
+                }
+
 #if OIM
                 SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro, id1: "oimEuro",
                         description: minimalistic ? nil : String(localized: "OIM currency for KUDOS"))
