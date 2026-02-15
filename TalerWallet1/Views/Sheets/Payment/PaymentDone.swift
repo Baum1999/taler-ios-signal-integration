@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -44,7 +44,7 @@ struct PaymentDone: View {
 //                                    scope: scope,
                             transactionId: transactionId,
                                   talerTX: $talerTX,
-                                 navTitle: navTitle,
+                                 navTitle: navTitle,        // TODO: nil so navTitle2 is used
                                   hasDone: true,
                               abortAction: nil,
                              deleteAction: nil,

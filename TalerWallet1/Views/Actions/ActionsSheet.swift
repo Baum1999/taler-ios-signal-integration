@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -164,8 +164,7 @@ struct DualHeightSheet: View {
     let scanDetent: PresentationDetent = .fraction(SCANDETENT)
 //    @State private var selectedDetent: PresentationDetent = scanDetent        // Cannot use instance member 'scanDetent' within property initializer
     @State private var selectedDetent: PresentationDetent = .fraction(0.1)      // workaround - update in .task
-//    @State private var detents: Set<PresentationDetent> = [scanDetent]
-    @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]
+    @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]      //   "
     @State private var qrButtonTapped2: Bool = false
     @State private var innerHeight: CGFloat = .zero
     @State private var sheetHeight: CGFloat = .zero
@@ -176,6 +175,7 @@ struct DualHeightSheet: View {
             try? await Task.sleep(nanoseconds: 80_000_000)
             guard selectedDetent == scanDetent else { return }
             detents = [scanDetent]
+            logger.trace("❗️detents = [scanDetent]")    // 0.999 %
         }
     }
 

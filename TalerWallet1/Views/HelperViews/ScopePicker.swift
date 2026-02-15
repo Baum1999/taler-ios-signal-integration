@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -84,6 +84,7 @@ struct ScopePicker: View {
 //            .accessibilityLabel(a11yLabel)
             .accessibilityHint(disabled ? EMPTYSTRING : chooseHint)
             .task() {
+                // FIXME: check balance for non-zero and disable-peer-payments
                 withAnimation { selected = value }
             }
             .onChange(of: selected) { newValue in

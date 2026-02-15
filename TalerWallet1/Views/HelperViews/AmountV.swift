@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -12,7 +12,7 @@ struct AmountV: View {
     let stack: CallStack?
     let scope: ScopeInfo?
     let amount: Amount
-    let isNegative: Bool?       // if true, show a "-" before the amount
+    let isNegative: Bool?       // show a "-" or "+" before the amount, nothing for nil
     let useISO: Bool
     let strikethrough: Bool
     let large: Bool             // set to false for QR or IBAN

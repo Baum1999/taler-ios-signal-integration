@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -30,7 +30,7 @@ struct ExchangeRowView: View {
         let delay: UInt = 0
 #endif
         let baseURL = exchange.exchangeBaseUrl
-        let chevron = Text(Image(systemName: "chevron.right"))
+        let chevron = Text(Image(systemName: "chevron.forward"))
                         .talerFont(.table)
                         .foregroundColor(.secondary)
 
@@ -39,7 +39,6 @@ struct ExchangeRowView: View {
             Spacer()
             chevron
         }
-
         let rowView = VStack(alignment: .leading) {
             Text(baseURL.trimURL)
                 .talerFont(.headline)

@@ -60,8 +60,8 @@ struct AnyViewDemo: View {
     @State private var selectedStyle = MyListStyle.automatic
 
     let sections  = ["Breakfast" : ["pancakes", "bacon", "orange juice"],
-                                    "Lunch"     : ["sandwich", "chips", "lemonade"],
-                                    "Dinner"    : ["spaghetti", "bread", "water"]]
+                     "Lunch"     : ["sandwich", "chips", "lemonade"],
+                     "Dinner"    : ["spaghetti", "bread", "water"]]
 
 
     var body: some View {

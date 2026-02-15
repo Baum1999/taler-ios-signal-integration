@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -53,11 +53,6 @@ struct MainView: View {
         ViewState.shared.popToRootView(nil)
     }
 
-    private func dismissingSheet() {
-//        if #available(iOS 17.0, *) {
-//            AccessibilityNotification.Announcement(ClosingAnnouncement).post()
-//        }
-    }
     private func dismissSheet() {
         showScanner = false
         showActionSheet = false

@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping [􁉇Send]
+// Called by SendAmountV when tapping [􁉇Send]
 struct SendAmountView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

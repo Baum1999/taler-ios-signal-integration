@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -9,7 +9,7 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called when tapping [􁉇Send]
+// Called by MainContent when tapping [􁉇Send]
 struct SendAmountV: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -108,7 +108,7 @@ struct SendAmountV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currencySymbol = currencyInfo.symbol
-        let navA11y = SendAmountView.navTitle(currencyInfo.name)                // always include currency for a11y
+        let navA11y = SendAmountView.navTitle(currencyInfo.name, true)          // always include currency for a11y
         let navTitle = SendAmountView.navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")

@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -57,7 +57,7 @@ struct BalanceCellV: View {
         let hLayout = HStack {
             amountV
                 .frame(maxWidth: .infinity, alignment: .trailing)
-            Text(Image(systemName: "chevron.right"))
+            Text(Image(systemName: "chevron.forward"))
                 .talerFont(.table)
                 .foregroundColor(.secondary)
         }
