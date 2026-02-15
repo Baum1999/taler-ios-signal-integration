@@ -20,6 +20,8 @@ struct ExchangeRowView: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var tabBarModel: TabBarModel
+    
+    @State private var isUpdated: Bool = false
 
     var body: some View {
 #if PRINT_CHANGES
@@ -65,6 +67,24 @@ struct ExchangeRowView: View {
         Group {
             rowView
                 .background(actions)
+
+            if showDevelopItems {
+                HStack {
+                    Text("Update Exchange")  // VIEW_WITHDRAW_TOS
+                        .foregroundStyle(isUpdated ? .gray : .primary)
+                }
+                .background {           // only needed for .onTapGesture
+                    Color.gray.opacity(INVISIBLE)
+                }
+                .onTapGesture {
+                    if !isUpdated {
+                        isUpdated = true
+                        Task {
+                            try await model.updateExchange(exchangeBaseUrl: baseURL, force: true)
+                        }
+                    }
+                }
+            }
         }.listRowSeparator(.hidden)
     }
 }
