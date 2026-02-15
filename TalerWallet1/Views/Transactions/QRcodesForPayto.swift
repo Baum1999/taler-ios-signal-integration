@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -11,6 +11,7 @@ import taler_swift
 
 struct QRcodeCopyShare: View {
     let spec: QrCodeSpec
+    let textToShare: String
 
     @State private var qrImage: UIImage? = nil
 
@@ -26,7 +27,7 @@ struct QRcodeCopyShare: View {
                 .accessibilityHidden(true)
                 .foregroundColor(Color.clear)
             //                  Spacer()
-            CopyShare(textToCopy: spec.qrContent, image: qrImage)
+            CopyShare(textToCopy: textToShare, image: qrImage)
                 .disabled(false)
         }.listRowSeparator(.automatic)
     }
@@ -35,18 +36,24 @@ struct QRcodeCopyShare: View {
 struct QRcodesForPayto: View {
     let stack: CallStack
     @Binding var qrCodeSpecs: [QrCodeSpec]
+    let receiverStr: String
+    let amountStr: String
+    let messageStr: String?
+
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer QR codes")
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
+        let message = messageStr ?? EMPTYSTRING
+        let textToShare = String(receiverStr + "\n" + amountStr + "\n" + message)
         List {
             if !minimalistic {
                 Text("If your banking software runs on another device, you can scan one of these QR codes:")
                     .listRowSeparator(.hidden)
             }
             ForEach(qrCodeSpecs, id: \.self) { spec in
-                QRcodeCopyShare(spec: spec)
+                QRcodeCopyShare(spec: spec, textToShare: textToShare)
             }
         }
         .navigationTitle(navTitle)

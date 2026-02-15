@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -101,7 +101,12 @@ struct ManualDetailsV: View {
                             }
 
                             if qrCodeSpecs.count > 0 {
-                                let qrCodesForPayto = QRcodesForPayto(stack: stack.push(), qrCodeSpecs: $qrCodeSpecs)
+                                let qrCodesForPayto = QRcodesForPayto(stack: stack.push(),
+                                                                qrCodeSpecs: $qrCodeSpecs,
+                                                                receiverStr: receiverStr,
+                                                                  amountStr: amountStr.0,
+                                                                 messageStr: payto.messageStr
+                                )
                                 NavigationLink(destination: qrCodesForPayto) {
                                     Text(minimalistic ? "QR"
                                                       : "Wire transfer QR codes")
