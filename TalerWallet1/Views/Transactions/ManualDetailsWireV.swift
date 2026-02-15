@@ -57,7 +57,8 @@ struct TransferRestrictionsV: View {
             }
             if let restrictions {
                 ForEach(restrictions) { restriction in
-                    if let hintsI18n = restriction.human_hint_i18n {
+                    let hintsI18n = restriction.human_hint_i18n
+                    if let hintsI18n, !hintsI18n.isEmpty {
 //                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18n.keys, values: hintsI18n.values)
 //                        var sorted: OrderedDictionary<String:String>
                         let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18n.sorted { $0.key < $1.key })
@@ -66,8 +67,11 @@ struct TransferRestrictionsV: View {
                                 Text(sortedDict[$0] ?? "missing hint")
                             }
                         }
+                        .padding(.top)
                     } else if let hint = restriction.human_hint {
-                        Text(hint)
+                        let mark = Image(systemName: "exclamationmark.circle")
+                        Text("\(mark) \(hint)")
+                            .padding(.top)
                     }
                 }
             }
