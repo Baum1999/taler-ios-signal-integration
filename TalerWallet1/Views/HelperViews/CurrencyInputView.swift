@@ -118,13 +118,13 @@ struct CurrencyInputView: View {
         availableString(available?.readableDescription ?? String(localized: "unknown"))
     }
 
-    func heading() -> String? {
+    func heading() -> (String, String)? {
         if let title {
-            return title
+            return (title, title)
         }
         if let available {
             let formatted = available.formatted(scope, isNegative: false)
-            return availableString(formatted.0)
+            return (availableString(formatted.0), availableString(formatted.1))
         }
         return nil
     }
@@ -146,12 +146,12 @@ struct CurrencyInputView: View {
         let currencyField = CurrencyField(currencyInfo, amount: $amount)
         VStack (alignment: .center) {   // center shortcut buttons
             if let heading = heading() {
-                Text(heading)
+                Text(heading.0)
                     .padding(.horizontal, 4)
                     .padding(.top)
                     .frame(maxWidth: .infinity, alignment: title != nil ? .leading : .trailing)
                     .talerFont(.title2)
-                    .accessibilityHidden(true)
+                    .accessibilityLabel(heading.1)
                     .padding(.bottom, -6)
             }
             currencyField
