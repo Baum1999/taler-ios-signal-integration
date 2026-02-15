@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -171,16 +171,16 @@ struct ManualDetailsWireV: View {
             }   .padding(.top, -8)
             let ibanCode = HStack {
                 VStack(alignment: .leading) {
-                    Text("IBAN:")
+                    Text("IBAN:")                   // TODO: BBAN
                         .talerFont(.subheadline)
                     Text(iban ?? EMPTYSTRING)
                         .monospacedDigit()
                         .padding(.leading)
                 }   .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y"))
+                    .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y")) // TODO: BBAN
                 CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
-                    .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))
+                    .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))         // TODO: BBAN
                     .disabled(false)
             } //  .padding(.top, -8)
             let amountCode = HStack {
@@ -224,7 +224,7 @@ struct ManualDetailsWireV: View {
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
             let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste recipient and IBAN:"
-                              : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste recipient and IBAN into the recipient/IBAN fields in your banking app or website (and save it as favorite for the next time):")
+                              : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste recipient and IBAN into the recipient/IBAN fields in your banking app or website (and save it as favorite for the next time):")       // TODO: BBAN
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)

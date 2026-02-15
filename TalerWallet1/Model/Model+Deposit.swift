@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -45,12 +45,65 @@ extension WalletModel {
 // MARK: - Deposit
 enum PaytoType: String, Codable {
     case unknown
-    case iban
+    case iban       // or BBAN for HUF (and CHF when taler://dev-experiment/fake-chf-bban was called)
     case bitcoin
     case cyclos
     case xTalerBank = "x-taler-bank"
 }
 
+struct IbanAccountFieldToPaytoResponse: Codable {
+    let ok: Bool
+    let type: String?       // either "iban" or "bban", only if ok==true
+    let paytoUri: String?   // only if ok==true
+}
+
+/// A request to convert an IBAN/BBAN to PayTo.
+fileprivate struct IbanAccountFieldToPayto: WalletBackendFormattedRequest {
+    typealias Response = IbanAccountFieldToPaytoResponse
+    func operation() -> String { "convertIbanAccountFieldToPayto" }
+    func args() -> Args { Args(value: value, currency: currency) }
+
+    var value: String
+    var currency: String
+    struct Args: Encodable {
+        var value: String
+        var currency: String
+    }
+}
+
+struct IbanPaytoToAccountFieldResponse: Codable {
+    let type: String
+    let value: String
+}
+
+/// A request to convert PayTo to IBAN/BBAN.
+fileprivate struct IbanPaytoToAccountField: WalletBackendFormattedRequest {
+    typealias Response = IbanPaytoToAccountFieldResponse
+    func operation() -> String { "convertIbanPaytoToAccountField" }
+    func args() -> Args { Args(paytoUri: paytoUri) }
+
+    var paytoUri: String
+    struct Args: Encodable {
+        var paytoUri: String
+    }
+}
+
+extension WalletModel {
+    /// convert an IBAN/BBAN to PayTo
+    nonisolated func convertIbanAccountFieldToPayto(_ value: String, currency: String, viewHandles: Bool = false)
+      async throws -> IbanAccountFieldToPaytoResponse {
+        let request = IbanAccountFieldToPayto(value: value, currency: currency)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response
+    }
+    nonisolated func convertIbanPaytoToAccountField(_ paytoUri: String, viewHandles: Bool = false)
+      async throws -> IbanPaytoToAccountFieldResponse {
+        let request = IbanPaytoToAccountField(paytoUri: paytoUri)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response
+    }
+}
+// MARK: - Deposit
 struct WireTypeDetails: Codable {
     let paymentTargetType: PaytoType
     let talerBankHostnames: [String]

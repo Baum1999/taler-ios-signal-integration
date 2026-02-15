@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -75,7 +75,7 @@ struct BankEditView: View {
 
     @MainActor
     private func updateAccount() async {
-        let payto = "payto://iban/\(iban)?receiver-name=\(accountHolder)"
+        let payto = "payto://iban/\(iban)?receiver-name=\(accountHolder)"       // TODO: convert BBAN to IBAN
         let paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
         symLog.log(paytoUri)
@@ -118,7 +118,7 @@ struct BankEditView: View {
         List {
             if kycCompleted // || true
             {   Section {
-                    Text("If you change the account holder name or the IBAN, you may have to perform the legitimization procedure again.")
+                    Text("If you change the account holder name or the IBAN, you may have to perform the legitimization procedure again.")          // TODO: BBAN
                         .talerFont(.body)
                 }
             }
@@ -180,7 +180,7 @@ struct BankEditView: View {
                 }
             }
                 if paytoType == .iban {
-                    TextField(paytoStr, text: $iban)
+                    TextField(paytoStr, text: $iban)            // TODO: BBAN
                         .accessibilityLabel(paytoColon)
                         .focused($focus, equals: .iban)
                         .talerFont(.title3)
