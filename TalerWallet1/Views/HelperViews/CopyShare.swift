@@ -100,6 +100,8 @@ struct ShareButton: View {
     let image: UIImage?
     let title: String
 
+    @State private var scale: CGFloat = 1.0
+
     init(textToShare: String, image: UIImage? = nil) {
         self.textToShare = textToShare
         self.image = image
@@ -117,7 +119,25 @@ struct ShareButton: View {
     func shareAction() -> Void {
         symLog.log(textToShare)
         controller.hapticFeedback(.soft)
-        ShareSheet.shareSheet(textToShare: textToShare, image: image)
+        Task {
+            // First scale down quickly
+            withAnimation(.easeIn(duration: 0.1)) {
+                scale = 0.8
+            }
+            // Then bounce back bigger
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeOut(duration: 0.25)) {
+                    scale = 1.15
+                }
+                ShareSheet.shareSheet(textToShare: textToShare, image: image)
+            }
+            // Finally settle to normal
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    scale = 1.0
+                }
+            }
+        }
     }
 
     var body: some View {
@@ -130,6 +150,7 @@ struct ShareButton: View {
         }
         .tint(.accentColor)
         .talerFont(.body)
+        .scaleEffect(scale)
         .disabled(!isEnabled)
     }
 }
