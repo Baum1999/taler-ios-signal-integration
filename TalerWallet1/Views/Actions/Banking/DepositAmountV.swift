@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -24,6 +24,7 @@ struct DepositAmountV: View {
 
     @State private var balanceIndex = 0
     @State private var balance: Balance? = nil      // nil only when balances == []
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var amountAvailable = Amount.zero(currency: EMPTYSTRING)     // GetMaxPeerPushAmount
 
@@ -56,6 +57,7 @@ struct DepositAmountV: View {
         if let balance {
             let scope = balance.scopeInfo
             amountToTransfer.setCurrency(scope.currency)
+            currencyInfo = controller.info(for: scope, controller.currencyTicker)
             do {
                 amountAvailable = try await model.getMaxDepositAmount(scope)
             } catch {
@@ -71,8 +73,9 @@ struct DepositAmountV: View {
 #endif
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
-//        let navTitle = String(localized: "NavTitle_Deposit",    // _Currency",
-//                           defaultValue: "Deposit")             // \(currencySymbol)"
+        let currencySymbol = currencyInfo.symbol
+        let navA11y = DepositAmountView.navTitle(currencyInfo.name, true)          // always include currency for a11y
+        let navTitle = DepositAmountView.navTitle(currencySymbol, currencyInfo.hasSymbol)
         let scrollView = ScrollView {
             if let label {
                 Text("to \(label)")
@@ -99,7 +102,7 @@ struct DepositAmountV: View {
                     amountAvailable: amountAvailable,
                            paytoUri: paytoUri)
         } // ScrollView
-//            .navigationTitle(navTitle)
+            .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task {
