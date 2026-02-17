@@ -20,89 +20,55 @@ enum TransactionDecodingError: Error {
 }
 
 enum TransactionMinorState: String, Codable {
+    case abortingBank = "aborting-bank"                         // failed
+    case acceptRefund = "accept-refund"
+    case autoRefund = "auto-refund"                             // TODO: finalizing
+    case balanceKyc = "balance-kyc"                             // pending - exceeds balance limit
+    case bank                                                   // aborting in withdrawal
+    case bankConfirmTransfer = "bank-confirm-transfer"
+    case bankRegisterReserve = "bank-register-reserve"
+    case checkRefund = "check-refund"
+    case claimProposal = "claim-proposal"
+    case completedByOtherWallet = "completed-by-other-wallet"   // aborted
+    case createPurse = "create-purse"
+    case deletePurse = "delete-purse"                           // aborting
+    case deposit                                                // exchange wire-transfers to bank
+    case exchange                                               // aborted
+    case exchangeWaitReserve = "exchange-wait-reserve"
+    case kyc                // KycRequired
+    case kycAuthRequired = "kyc-auth"
+    case kycInit = "kyc-init"
+    case merge                                                  // peerPushCredit
+    case paidByOther = "paid-by-other"                          // failed webEx -> mobile
+    case proposed                                               // dialog
+    case ready                                                  // P2P
+    case rebindSession = "rebind-session"
+    case refresh                                                // aborting
+    case refused                                                // aborted
+    case repurchase                                             // failed
+    case submitPayment = "submit-payment"
+    case track                                                  // finalizing deposit - late KYC / failure
+    case withdraw
     // Placeholder until D37 is fully implemented
     case unknown
-    case deposit
-    case aml        // AmlRequired
-    case kyc        // KycRequired
-    case kycInit = "kyc-init"
-    case kycAuthRequired = "kyc-auth"
-    case balanceKyc = "balance-kyc"             // show kycUrl
-    case balanceKycInit = "balance-kyc-init"    // kycUrl not yet ready
-    case mergeKycRequired = "merge-kyc"         // same as KYC but for P2P
-    case track
-    case submitPayment = "submit-payment"
-    case rebindSession = "rebind-session"
-    case refresh
-    case refreshExpired = "refresh-expired"
-    case pickup
-    case autoRefund = "auto-refund"
-    case user
-    case bank
-    case exchange
-    case claimProposal = "claim-proposal"
-    case checkRefund = "check-refund"
-    case createPurse = "create-purse"
-    case deletePurse = "delete-purse"
-    case ready
-    case merge
-    case repurchase
-    case bankRegisterReserve = "bank-register-reserve"
-    case bankConfirmTransfer = "bank-confirm-transfer"
-    case withdrawCoins = "withdraw-coins"
-    case exchangeWaitReserve = "exchange-wait-reserve"
-    case abortingBank = "aborting-bank"
-    case aborting
-    case refused
-    case withdraw
-    case merchantOrderProposed = "merchant-order-proposed"
-    case proposed
-    case refundAvailable = "refund-available"
-    case acceptRefund = "accept-refund"
-    case paidByOther = "paid-by-other"
-    case completedByOtherWallet = "completed-by-other-wallet"
 
     var localizedDbgState: String { self.rawValue }
     var localizedState: String? {
         switch self {
-            case .unknown:                  return self.rawValue
-            case .deposit:                  return self.rawValue
-            case .aml:                      return String(localized: "MinorState.aml", defaultValue: "AML required", comment: "TxMinorState heading")
-            case .balanceKyc, .balanceKycInit,
-                    .kycAuthRequired, .kycInit,
-                 .kyc, .mergeKycRequired:   return String(localized: "MinorState.kyc", defaultValue: "Legitimization required", comment: "TxMinorState heading")
-            case .track:                    return self.rawValue
-            case .submitPayment:            return self.rawValue
-            case .rebindSession:            return self.rawValue
-            case .refresh:                  return self.rawValue
-            case .refreshExpired:           return self.rawValue
-            case .pickup:                   return self.rawValue
-            case .autoRefund:               return self.rawValue
-            case .user:                     return self.rawValue
-            case .bank:                     return self.rawValue
-            case .exchange:                 return self.rawValue    // in aborted
-            case .claimProposal:            return self.rawValue
-            case .checkRefund:              return self.rawValue
-            case .createPurse:              return self.rawValue
-            case .deletePurse:              return self.rawValue
-            case .ready:                    return self.rawValue
-            case .merge:                    return self.rawValue
-            case .repurchase:               return self.rawValue
-            case .bankRegisterReserve:      return self.rawValue
-            case .bankConfirmTransfer:      return String(localized: "MinorState.bankConfirmTransfer", defaultValue: "Waiting for bank transfer", comment: "TxMinorState heading")
-            case .withdrawCoins:            return self.rawValue
-            case .exchangeWaitReserve:      return self.rawValue
-            case .abortingBank:             return self.rawValue
-            case .aborting:                 return self.rawValue
-            case .refused:                  return self.rawValue
-            case .withdraw:                 return self.rawValue
-            case .merchantOrderProposed:    return self.rawValue
-            case .proposed:                 return self.rawValue
-            case .refundAvailable:          return self.rawValue
-            case .acceptRefund:             return self.rawValue
-            case .paidByOther:              return self.rawValue
-            case .completedByOtherWallet:   return self.rawValue
-//            default: return nil
+            case .kycInit:            return String(localized: "MinorState.kycInit", defaultValue: "Preparing Legitimization", comment: "TxMinorState heading")
+            case .kycAuthRequired:    return String(localized: "MinorState.kycAuth", defaultValue: "Verify bank account", comment: "TxMinorState heading")
+            case .balanceKyc,
+                 .kyc:                return String(localized: "MinorState.kyc", defaultValue: "Legitimization required", comment: "TxMinorState heading")
+            case .acceptRefund,
+                 .checkRefund:        return String(localized: "MinorState.acceptRefund", defaultValue: "Checking for refund", comment: "TxMinorState heading")
+            case .bankConfirmTransfer:return String(localized: "MinorState.bankConfirmTransfer", defaultValue: "Waiting for bank transfer", comment: "TxMinorState heading")
+            case .completedByOtherWallet:return String(localized: "MinorState.completedByOther", defaultValue: "Completed by other wallet", comment: "TxMinorState heading")
+//            case .exchange:                 return self.rawValue  // TODO: mention that money will come back
+            case .proposed:           return self.rawValue   // TODO: discuss
+            case .ready:              return String(localized: "MinorState.ready", defaultValue: "Ready", comment: "TxMinorState heading")
+            case .rebindSession:        return String(localized: "MinorState.rebindSession", defaultValue: "Restoring access", comment: "TxMinorState heading")
+//            case .track:                    return self.rawValue
+            default: return nil
         }
     }
 }
@@ -192,9 +158,8 @@ struct TransactionState: Codable, Hashable {
                          || major == .finalizing }
     var isReady: Bool { minor == .ready }
     var isKYC: Bool { minor == .kyc
-                   || minor == .kycInit
-                   || minor == .balanceKyc
-                   || minor == .mergeKycRequired }
+//                   || minor == .kycInit
+                   || minor == .balanceKyc }
     var isKYCauth: Bool { minor == .kycAuthRequired }
 }
 
