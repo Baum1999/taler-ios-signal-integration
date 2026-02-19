@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -18,6 +18,13 @@ class BiometricService: ObservableObject {
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
     private var context: LAContext?
+
+    func biometryType() -> LABiometryType {
+        if context == nil {
+            resetContext()
+        }
+        return context?.biometryType ?? .none
+    }
 
     func authenticateUser() {
         let reason = resetContext()
