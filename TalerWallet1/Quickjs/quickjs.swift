@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -69,12 +69,8 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
         TALER_WALLET_set_log_handler(talerWalletInstance,
                                      logging_callback,
                                      Unmanaged.passUnretained(self).toOpaque())
-#if USE_HTTP_CLIENT_CURL
-        let http_impl = js_curl_http_client_create()
-#else
         let http_impl = TALER_pack_http_client_implementation(request_create, request_cancel,
                                                               Unmanaged.passUnretained(self).toOpaque())
-#endif
         // http_impl got malloc'd, and could possibly be free'd when the app terminates
         TALER_set_http_client_implementation(talerWalletInstance, http_impl)
         // - but we never free anything on termination, thus we don't save http_impl here
