@@ -139,8 +139,11 @@ struct ActionsSheet: View {
             let sendDisabled = noP2P
             let recvDisabled = noBalances || noP2P
             let depoDisabled = !mayDeposit
+            ///   [􁉇 Send   ] [􁉅 Request]
             SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
+            ///   [􁾩Deposit] [􁾭 Withdraw]
             DepositWithdrawV(stack: stack.push(), sendDisabled: depoDisabled, recvDisabled: noBalances)
+            ///        [􀎻  Scan QR ]
             QRButton(hideTitle: false) {
                 qrButtonTapped = true
             }

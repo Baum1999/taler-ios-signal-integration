@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -30,7 +30,6 @@ struct P2PReadyV: View {
 #endif
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    let navTitle = String(localized: "Ready")
     @State private var transactionId: String? = nil
     @State private var noTransaction: TalerTransaction? = nil
     @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
@@ -77,6 +76,7 @@ struct P2PReadyV: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let navTitle = String(localized: "Ready")
         Group {
             if let transactionId {
                 TransactionSummaryV(stack: stack.push(),
