@@ -240,19 +240,6 @@ extension WalletCore {
                             postNotification(.TransactionDone, userInfo: [TRANSACTIONTRANSITION: decoded])
                             return
                         case .aborting:
-                            if let newMinor {
-                                if newMinor == .refreshExpired {
-                                    logger.warning("handleStateTransition: RefreshExpired: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                                    if let index = expired.firstIndex(of: components[2]) {
-                                        expired.remove(at: index)               // don't beep twice
-                                    } else {
-                                        expired.append(components[2])
-                                        Controller.shared.playSound(0)          // beep at first sight
-                                    }
-                                    postNotification(.TransactionExpired, userInfo: [TRANSACTIONTRANSITION: decoded])
-                                    return
-                                }
-                            }
                             logger.log("handleStateTransition: Aborting: \(decoded.transactionId, privacy: .private(mask: .hash))")
                             postNotification(.TransactionStateTransition, userInfo: [TRANSACTIONTRANSITION: decoded])
                         case .expired:
