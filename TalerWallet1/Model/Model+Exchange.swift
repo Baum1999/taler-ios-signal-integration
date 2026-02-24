@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -34,15 +34,15 @@ enum ExchangeUpdateStatus: String, Codable {
 
     var localized: String {
         switch self {
-            case .initial:           String(localized: "Initial")
-            case .initialUpdate:     String(localized: "Initial update")
-            case .suspended:         String(localized: "Suspended")
-            case .failed:            String(localized: "Failed")
-            case .outdatedUpdate:    String(localized: "Outdated update")
-            case .ready:             String(localized: "Ready")
-            case .readyUpdate:       String(localized: "Ready update")
-            case .unavailable:       String(localized: "Unavailable")
-            case .unavailableUpdate: String(localized: "Unavailable update")
+            case .initial:           String(localized: "Initial", comment: "Exchange status")
+            case .initialUpdate:     String(localized: "Initial update", comment: "Exchange status")
+            case .suspended:         String(localized: "Suspended", comment: "Exchange status")
+            case .failed:            String(localized: "Failed", comment: "Exchange status")
+            case .outdatedUpdate:    String(localized: "Outdated update", comment: "Exchange status")
+            case .ready:             String(localized: "Ready", comment: "Exchange status")
+            case .readyUpdate:       String(localized: "Ready update", comment: "Exchange status")
+            case .unavailable:       String(localized: "Unavailable", comment: "Exchange status")
+            case .unavailableUpdate: String(localized: "Unavailable update", comment: "Exchange status")
         }
     }
 }
