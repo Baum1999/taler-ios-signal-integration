@@ -779,6 +779,18 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
         }
     }
 
+    func amount() -> Amount {
+        switch self {
+            case .refresh(let refreshTransaction):
+                let details = refreshTransaction.details
+                return details.refreshInputAmount
+            default:
+                let eff = common.amountEffective
+                if !eff.isZero { return eff }
+                return common.amountRaw
+        }
+    }
+
     func detailsToShow() -> Dictionary<String, String> {
         var result: [String:String] = [:]
         switch self {

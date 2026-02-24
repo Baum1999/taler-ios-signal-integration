@@ -81,19 +81,6 @@ struct TransactionRowView: View {
         }
     }
 
-    func amount() -> Amount {
-        switch transaction {
-            case .refresh(let refreshTransaction):
-                let details = refreshTransaction.details
-                return details.refreshInputAmount
-            default:
-                let common = transaction.common
-                let eff = common.amountEffective
-                if !eff.isZero { return eff }
-                return common.amountRaw
-        }
-    }
-
     var body: some View {
 #if DEBUG
 //        let _ = Self._printChanges()
@@ -129,9 +116,10 @@ struct TransactionRowView: View {
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm && pending,
                                          needsKYC: needsKYC && pending)
-        let amountV = AmountV(scope, amount(), isNegative: isZero ? nil : !incoming,
-                              strikethrough: !donePendingDialog)
-                        .foregroundColor(for2Color)
+        let amountV = AmountV(scope, transaction.amount(),
+                   isNegative: isZero ? nil : !incoming,
+                strikethrough: !donePendingDialog)
+            .foregroundColor(for2Color)
         let topA11y = topString(forA11y: true)!
         let topString = topString()
         let strikeColor = donePendingDialog ? nil : WalletColors().negative
