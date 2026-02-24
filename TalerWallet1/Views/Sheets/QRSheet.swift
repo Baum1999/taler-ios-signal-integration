@@ -18,6 +18,7 @@ struct QRSheet: View {
     @EnvironmentObject private var model: WalletModel
     @State private var scannedCode: String?
     @State private var urlToOpen: URL?
+    @State private var isTorchOn: Bool = false
 
     func codeToURL(_ code: String) -> URL? {
         if let scannedURL = URL(string: code) {
@@ -61,7 +62,9 @@ struct QRSheet: View {
                     }
                 }
             } else {
-                CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr], showViewfinder: true) { response in
+                CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr],
+                           showViewfinder: true,
+                                isTorchOn: isTorchOn) { response in
                     let closingAnnouncement: String
                     switch response {
                         case .success(let result):
@@ -76,6 +79,7 @@ struct QRSheet: View {
                     }
                         announce(closingAnnouncement)
                 }
+                    .onTapGesture { isTorchOn.toggle() }
             }
         }
     }
