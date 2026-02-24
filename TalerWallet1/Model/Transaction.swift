@@ -129,7 +129,7 @@ enum TransactionMajorState: String, Codable {
             case .none:      return                   "none"
             case .pending:   return String(localized: "MajorState.Pending", defaultValue: "Pending", comment: "TxMajorState heading")
             case .finalizing:return String(localized: "MajorState.Finalizing", defaultValue: "Finalizing", comment: "TxMajorState heading")
-            case .done:      return String(localized: "MajorState.Done", defaultValue: "Done", comment: "TxMajorState heading")
+            case .done:      return String(localized: "MajorState.Done", defaultValue: "Completed successfully", comment: "TxMajorState heading")
             case .aborting:  return String(localized: "MajorState.Aborting", defaultValue: "Aborting", comment: "TxMajorState heading")
             case .aborted:   return String(localized: "MajorState.Aborted", defaultValue: "Aborted", comment: "TxMajorState heading")
             case .suspended: return                   "Suspended"
