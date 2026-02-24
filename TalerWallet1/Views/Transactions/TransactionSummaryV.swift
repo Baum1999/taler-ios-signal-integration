@@ -122,6 +122,17 @@ struct TransactionSummaryV: View {
         }
     }
 
+    func localizedState() -> String {
+        let txState = talerTX.common.txState
+        if talerTX.isPending {
+            if let minorState = txState.minor {
+                return developerMode ? minorState.localizedDbgState
+                                     : minorState.localizedState ?? txState.major.localizedState
+            }
+        }
+        return txState.major.localizedState
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -161,35 +172,16 @@ struct TransactionSummaryV: View {
                         .accessibilityLabel(a11yDate)
                         .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
                         .id(topID)
-                    let majorState = common.txState.major.localizedState
-                    let minorState = common.txState.minor?.localizedState ?? nil
-                    let state = developerMode ? talerTX.isPending ? minorState ?? majorState
-                                                                  : majorState
-                                              : majorState
+                    let state = localizedState()
                     let statusT = Text(state)
                                     .multilineTextAlignment(.trailing)
                     let imageT = Text(common.type.icon())
                                     .accessibilityHidden(true)
-                    let prefixT = Text("Status:")
-                    let vLayout = VStack(alignment: .leading, spacing: 0) {
-                        HStack {
-                            imageT
-                            prefixT
-                        } // Icon + State
+                    HStack(alignment: .center, spacing: HSPACING) {
+                        imageT
+                        Spacer(minLength: 0)
                         statusT
-                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    if #available(iOS 16.4, *) {
-                        ViewThatFits(in: .horizontal) {
-                            HStack(spacing: HSPACING) {
-                                imageT
-                                Spacer()
-                                prefixT
-                                statusT
-                            }
-                            vLayout
-                        }
-                    } else { vLayout } // view for iOS 15
                     if developerMode {
                         if !jsonTransaction.isEmpty {
                             CopyButton(textToCopy: jsonTransaction, title: "Copy JSON")
@@ -338,7 +330,7 @@ struct TransactionSummaryV: View {
                     let countPaytos = creditPaytoUris.count
                     let account = validDetails[accountID]
 
-                    Text("You need to verify having control over the bank account for the deposit.")
+                    Text("You need to prove having control over the bank account for the deposit.")
                         .bold()
                         .fixedSize(horizontal: false, vertical: true)       // wrap in scrollview
                         .multilineTextAlignment(.leading)                   // otherwise

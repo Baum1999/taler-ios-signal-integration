@@ -62,6 +62,7 @@ enum TransactionMinorState: String, Codable {
     case paidByOther = "paid-by-other"
     case completedByOtherWallet = "completed-by-other-wallet"
 
+    var localizedDbgState: String { self.rawValue }
     var localizedState: String? {
         switch self {
             case .unknown:                  return self.rawValue
