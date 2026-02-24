@@ -258,7 +258,7 @@ extension WalletCore {
                                     postNotification(.PendingReady, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
                                 } else if newMinor == .exchangeWaitReserve      // user did confirm on bank website
-                                       || newMinor == .withdrawCoins {          // coin-withdrawal has started
+                                       || newMinor == .withdraw {               // coin-withdrawal has started
 //                                    logger.log("DismissSheet: \(decoded.transactionId, privacy: .private(mask: .hash))")
                                     postNotification(.DismissSheet, userInfo: [TRANSACTIONTRANSITION: decoded])
                                     return
