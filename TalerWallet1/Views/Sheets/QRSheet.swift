@@ -14,10 +14,11 @@ struct QRSheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let selectedBalance: Balance?
+    @Binding var scannedSomething: Bool
 
     @EnvironmentObject private var model: WalletModel
     @State private var scannedCode: String?
-    @State private var urlToOpen: URL?
+    @State private var urlToOpen: URL? = nil
     @State private var isTorchOn: Bool = false
 
     func codeToURL(_ code: String) -> URL? {
@@ -40,17 +41,19 @@ struct QRSheet: View {
         Group {
             let errorAnnouncement = String(localized: "Error while scanning QR code", comment: "a11y")
             if scannedCode != nil {
+                // we need to evaluate the scanned code again, because urlToOpen will be set to nil
                 if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack: stack.push(),
                        selectedBalance: selectedBalance,
-                             urlToOpen: $urlToOpen)
+                             urlToOpen: $urlToOpen)         // !!! will set @Binding to nil
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
                         ErrorView(title: String(localized: "Scanned QR is no talerURI"),
                                 message: scannedURL.absoluteString,
                                copyable: true) {
+                            scannedSomething = false
                             dismissTop(stack.push())
                         }
                     }
@@ -58,6 +61,7 @@ struct QRSheet: View {
                     ErrorView(title: String(localized: "Scanned QR is no URL"),
                             message: scannedCode,
                            copyable: true) {
+                        scannedSomething = false
                         dismissTop(stack.push())
                     }
                 }
@@ -69,11 +73,13 @@ struct QRSheet: View {
                     switch response {
                         case .success(let result):
                             symLog.log("Found code: \(result.string)")
-                            scannedCode = result.string
+                            scannedSomething = true
                             urlToOpen = codeToURL(result.string)
+                            scannedCode = result.string
                             closingAnnouncement = String(localized: "QR code recognized", comment: "a11y")
                         case .failure(let error):
                             // TODO: errorAlert
+                            scannedSomething = false
                             model.setError(error)
                             closingAnnouncement = errorAnnouncement
                     }

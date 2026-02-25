@@ -41,6 +41,7 @@ struct MainView: View {
 //    @State private var showCameraAlert: Bool = false
     @State private var qrButtonTapped = false
     @State private var qrButton2Tapped = false
+    @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
     @State private var userAction = 0                       // make Action button jump, hold here
     @State private var networkUnavailable = false
@@ -58,6 +59,7 @@ struct MainView: View {
         showActionSheet = false
         qrButtonTapped = false
         qrButton2Tapped = false
+        scannedCode = false
         userAction += 1
         // TODO: wallet-core could notify us when it creates a dialog tx
         NotificationCenter.default.post(name: .TransactionScanned, object: nil, userInfo: nil)
@@ -187,12 +189,13 @@ struct MainView: View {
                          onDismiss: dismissSheet
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                        selectedBalance: selectedBalance))
+                                        selectedBalance: selectedBalance,
+                                       scannedSomething: $scannedCode))
 //                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
                     if #available(iOS 16.4, *) {
-                        let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+                        let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT : SCANDETENT)
                         Sheet(stack: stack.push(), sheetView: qrSheet)
-                            .presentationDetents([scanDetent])
+                            .presentationDetents([detent])
                             .transition(.opacity)
                     } else {
                         Sheet(stack: stack.push(), sheetView: qrSheet)

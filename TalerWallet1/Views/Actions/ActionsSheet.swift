@@ -164,13 +164,15 @@ struct DualHeightSheet: View {
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
 //    @State private var selectedDetent: PresentationDetent = scanDetent        // Cannot use instance member 'scanDetent' within property initializer
     @State private var selectedDetent: PresentationDetent = .fraction(0.1)      // workaround - update in .task
     @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]      //   "
     @State private var qrButtonTapped2: Bool = false
+    @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
     @State private var sheetHeight: CGFloat = .zero
+
+    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
 
     func updateDetentsWithDelay() {
         Task {
@@ -222,7 +224,7 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
-                if newValue == scanDetent {    // user swiped the sheet up to full height
+                if newValue == scanDetent {    // user swiped the sheet up to activate QR scanner
                     logger.trace("onChange❗️selectedDetent = \(SCANDETENT)")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
@@ -246,10 +248,11 @@ struct DualHeightSheet: View {
                          onDismiss: dismissScanner
                 ) {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                        selectedBalance: selectedBalance))
-                    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+                                        selectedBalance: selectedBalance,
+                                       scannedSomething: $scannedCode))
+                    let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT : SCANDETENT)
                     Sheet(stack: stack.push(), sheetView: qrSheet)
-                        .presentationDetents([scanDetent])
+                        .presentationDetents([detent])
                         .transition(.opacity)
 
                 }
