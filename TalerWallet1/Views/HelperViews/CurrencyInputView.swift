@@ -102,11 +102,18 @@ struct CurrencyInputView: View {
     }
 
     @MainActor
-    func shortcuts(_ currencyField: CurrencyField) -> [ShortcutButton] {
-        var buttons = shortcutValues.map { value in
-            shortcut(for: value, currencyField)
+    func shortcuts(_ currencyField: CurrencyField, _ currencyInfo: CurrencyInfo) -> [ShortcutButton] {
+        var buttons: [ShortcutButton] = []
+        if let commonAmounts = currencyInfo.commonAmounts {
+            buttons = commonAmounts.prefix(4).map { amount in
+                shortcut(for: Int(amount.centValue), currencyField)
+            }
+        } else {
+            buttons = shortcutValues.map { value in
+                shortcut(for: value, currencyField)
+            }
+            buttons.append(shortcut(for: replaceable, currencyField))
         }
-        buttons.append(shortcut(for: replaceable, currencyField))
         return buttons
     }
 
@@ -168,7 +175,7 @@ struct CurrencyInputView: View {
                     }
                 }
             if #available(iOS 16.4, *) {
-                let shortcuts = shortcuts(currencyField)
+                let shortcuts = shortcuts(currencyField, currencyInfo)
                 ViewThatFits(in: .horizontal) {
                     HStack {
                         ForEach(shortcuts, id: \.shortcut) {
