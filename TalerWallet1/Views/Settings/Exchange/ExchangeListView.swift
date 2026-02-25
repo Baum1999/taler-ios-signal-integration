@@ -30,9 +30,13 @@ struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let navTitle: String
-    let showDevelopItems: Bool
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State var showAlert: Bool = false
     @State var newExchange: String = TESTEXCHANGE
@@ -46,7 +50,7 @@ struct ExchangeListView: View {
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         let enterURL = String(localized: "Enter the URL")
         if #available(iOS 16.4, *) {
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), showDevelopItems: showDevelopItems)
+            ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .alert(addTitleStr, isPresented: $showAlert) {
@@ -62,7 +66,7 @@ struct ExchangeListView: View {
                         .accessibilityHidden(true)
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), showDevelopItems: showDevelopItems)
+            ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
                 .navigationTitle(navTitle)
                 .navigationBarItems(trailing: plusButton)
                 .textFieldAlert(isPresented: $showAlert,
@@ -78,7 +82,7 @@ struct ExchangeListView: View {
 struct ExchangeListCommonV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let showDevelopItems: Bool
+    let developerMode: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -97,13 +101,13 @@ struct ExchangeListCommonV: View {
                 addExchange(cyclos, model: model)
             }
 
-            let exchanges = ["glsint.fdold.eu", "taler.magnetbank.hu", "stage.taler-ops.ch"]
+            let exchanges = ["glsint.fdold.eu", "taler.magnetbank.hu", "stage.taler-ops.ch", "e.netzbon-basel.ch"]
             ForEach(exchanges, id: \.self) { exchange in
                 let urlStr = "https://exchange." + exchange
                 Button(urlStr) {
                     addExchange(urlStr, model: model)
                 }
-                //                    Link(exchange, destination: URL(string: urlStr)!)
+//                Link(exchange, destination: URL(string: urlStr)!)
             }
         }
 #endif
@@ -112,10 +116,10 @@ struct ExchangeListCommonV: View {
                 ExchangeSectionView(stack: stack.push(),
                                   balance: balance,
                                  thousand: index * MAXEXCHANGES,        // unique ID
-                         showDevelopItems: showDevelopItems)
+                            developerMode: developerMode)
             }
 #if DEBUG
-            if showDevelopItems {
+            if developerMode {
                 excSection
             }
 #endif
@@ -138,7 +142,7 @@ struct ExchangeListCommonV: View {
             }
                 .talerFont(.body)
 #if DEBUG
-            if showDevelopItems {
+            if developerMode {
                 excSection
             }
 #endif

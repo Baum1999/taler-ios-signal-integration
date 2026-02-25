@@ -16,18 +16,13 @@ struct ExchangeSectionView: View {
     let stack: CallStack
     let balance: Balance
     let thousand: Int           // index of balance times 1000 (MAXEXCHANGES per currency)
-    let showDevelopItems: Bool
+    let developerMode: Bool
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
     @AppStorage("fakeNoFees") var fakeNoFees: Bool = true
-#if DEBUG
-    @AppStorage("developerMode") var developerMode: Bool = true
-#else
-    @AppStorage("developerMode") var developerMode: Bool = false
-#endif
 
     @State private var exchanges: [Exchange] = []
     @State private var reloadTransactions: Int = 0
@@ -109,7 +104,7 @@ struct ExchangeSectionView: View {
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,
                                 index: thousand + index + 1,
-                     showDevelopItems: showDevelopItems)
+                        developerMode: developerMode)
                 .listRowSeparator(.hidden)
             }
             if developerMode && (DEMOCURRENCY == currency || TESTCURRENCY == currency) {

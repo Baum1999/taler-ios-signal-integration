@@ -14,7 +14,7 @@ struct ExchangeRowView: View {
     let stack: CallStack
     let exchange: Exchange
     let index: Int
-    let showDevelopItems: Bool
+    let developerMode: Bool
 
     @Environment(\.sizeCategory) var sizeCategory
     @EnvironmentObject private var controller: Controller
@@ -68,7 +68,7 @@ struct ExchangeRowView: View {
             rowView
                 .background(actions)
 
-            if showDevelopItems {
+            if developerMode {
                 HStack {
                     Text("Update Exchange")  // VIEW_WITHDRAW_TOS
                         .foregroundStyle(isUpdated ? .gray : .primary)
@@ -151,7 +151,7 @@ fileprivate struct ExchangeRow_Previews: PreviewProvider {
             ExchangeRowView(stack: CallStack("Preview"),
                          exchange: exchange1,
                             index: 1,
-                 showDevelopItems: true)
+                    developerMode: true)
         }
     }
 
