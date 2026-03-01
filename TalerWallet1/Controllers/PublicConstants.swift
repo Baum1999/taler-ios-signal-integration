@@ -14,6 +14,9 @@ let TALER_LOGO = "taler-logo-2023-black"
 #else   // GNU_TALER
 let TALER_LOGO = "taler-logo-2023-red"
 #endif
+let SWISS_QR = "swiss_qr"
+let TALER_LOGO_QR = "taler-logo-qr"
+let EXCHANGE_LOGO = "Exchange-logo-blue"
 
 public let INVISIBLE = 0.001
 public let MAXEXCHANGES = 1000          // per currency
