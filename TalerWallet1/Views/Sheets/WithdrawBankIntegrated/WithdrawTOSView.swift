@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -56,8 +56,11 @@ struct WithdrawTOSView: View {
         let languageCode = Locale.preferredLanguageCode
 //        let languageName = Locale.current.localizedString(forLanguageCode: languageCode)
         if let exchangeTOS, let exchangeBaseUrl {
-            Content(symLog: symLog, tos: exchangeTOS, myListStyle: $myListStyle,
-                  language: languageCode, languageAction: loadToS) {
+            Content(symLog: symLog,
+                       tos: exchangeTOS,
+               myListStyle: $myListStyle,
+                  language: languageCode,
+            languageAction: loadToS) {
                 Task { await viewDidLoad() }
             }
             .navigationTitle(navTitle)
@@ -121,29 +124,49 @@ extension WithdrawTOSView {
         var languageAction: (String) async -> ()
         var acceptAction: () -> ()
 
+        @Environment(\.colorScheme) private var colorScheme
+        @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+#if DEBUG
+        @AppStorage("developerMode") var developerMode: Bool = true
+#else
+        @AppStorage("developerMode") var developerMode: Bool = false
+#endif
         @State private var selectedLanguage = Locale.preferredLanguageCode
+
+        var showButton: Bool {
+            if tos.tosStatus == .missingTos {
+                // TODO: wallet-core should accept receiving money when there are no ToS
+                return developerMode        // no devMode ==> false (don't show button)
+            }
+            if let acceptedEtag = tos.acceptedEtag {
+                if acceptedEtag == tos.currentEtag {
+                    return false            // user already accepted current ToS
+                }
+            }
+            return true
+        }
 
         var body: some View {
             let title = String(localized: "Language:", comment: "title of ToS language selection")
-            let list = List {
-              if tos.tosAvailableLanguages.count > 1 {
-                Picker(title, selection: $selectedLanguage) {
+            List {
+                if tos.tosAvailableLanguages.count > 1 {
+                    Picker(title, selection: $selectedLanguage) {
                         ForEach(tos.tosAvailableLanguages, id: \.self) { code in
                             let languageName = Locale.current.localizedString(forLanguageCode: code)
                             Text(languageName ?? code)
+                        }
+                    }
+                    .talerFont(.title3)
+                    .pickerStyle(.menu)
+                    .onAppear() {
+                        withAnimation { selectedLanguage = language }
+                    }
+                    .onChange(of: selectedLanguage) { selected in
+                        Task {
+                            await languageAction(selected)
+                        }
                     }
                 }
-                .talerFont(.title3)
-                .pickerStyle(.menu)
-                .onAppear() {
-                    withAnimation { selectedLanguage = language }
-                }
-                .onChange(of: selectedLanguage) { selected in
-                    Task {
-                        await languageAction(selected)
-                    }
-                }
-              }
                 if tos.contentType == MARKDOWN {
                     Section {
                         let content = MarkdownContent(tos.content)
@@ -159,21 +182,18 @@ extension WithdrawTOSView {
                         }
                     } // for
                 } // plain text
-            }.listStyle(myListStyle.style).anyView
-
-            let currentEtag = tos.currentEtag
-            let showButton = tos.acceptedEtag == nil ? true
-                           : tos.acceptedEtag! == tos.currentEtag ? false
-                                                                  : true
-            let button = Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
+                if showButton {
+                    Section {
+                        Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
                             .buttonStyle(TalerButtonStyle(type: .prominent))
                             .padding(.horizontal)
-            list.safeAreaInset(edge: .bottom) {
-                if showButton {
-                    button
-//                        .padding(.bottom, 40)
+                    } header: {
+                        Text("Accept", comment: "Heading for Accept ToS button")
+                            .talerFont(.title3)
+                            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+                    }
                 }
-            }
+            }.listStyle(myListStyle.style).anyView
         }
     }
 }
