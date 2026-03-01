@@ -1271,10 +1271,10 @@
 		};
 		4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			repositoryURL = "https://github.com/Fesh-com/CodeScanner";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
