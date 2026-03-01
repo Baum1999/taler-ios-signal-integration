@@ -114,6 +114,12 @@ struct BankEditView: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let titleStr = String(localized: "Done", comment: "Done button")
+        let a11yLabelStr = String(localized: "Done", comment: "a11y for the Done button")
+        let doneButton = DoneButton(titleStr: titleStr, accessibilityLabelStr: a11yLabelStr) {
+            dismissTop(stack.push())
+        }
+
         let methods = [PaytoType.iban, PaytoType.xTalerBank]
         List {
             if kycCompleted // || true
@@ -214,6 +220,7 @@ struct BankEditView: View {
             .padding(.top)
           }.listRowSeparator(.hidden)
         } // List
+        .navigationBarItems(trailing: doneButton)
         .onChange(of: focus) { [focus] newState in
             switch focus {
                 case .none:

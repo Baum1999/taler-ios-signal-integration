@@ -139,6 +139,26 @@ struct QRButton : View  {
     }
 }
 
+struct DoneButton : View  {
+    let titleStr: String?
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            if let titleStr {
+                Text(titleStr)
+                    .tint(.accentColor)
+            } else {
+                Image(systemName: "checkmark")
+            }
+        }
+        .tint(.accentColor)
+        .talerFont(.title)
+        .accessibilityLabel(accessibilityLabelStr)
+    }
+}
+
 struct PlusButton : View  {
     let accessibilityLabelStr: String
     let action: () -> Void
