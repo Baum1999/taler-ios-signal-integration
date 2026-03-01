@@ -1255,10 +1255,10 @@
 		};
 		4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Flight-School/AnyCodable";
+			repositoryURL = "https://github.com/Fesh-com/AnyCodable";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.5;
+				branch = master;
+				kind = branch;
 			};
 		};
 		4E3EAE192A990778009F1BE8 /* XCRemoteSwiftPackageReference "SymLog" */ = {
