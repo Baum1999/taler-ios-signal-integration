@@ -17,6 +17,8 @@ struct QRSheet: View {
     @Binding var scannedSomething: Bool
 
     @EnvironmentObject private var model: WalletModel
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
     @State private var scannedCode: String?
     @State private var urlToOpen: URL? = nil
     @State private var isTorchOn: Bool = false
@@ -69,9 +71,10 @@ struct QRSheet: View {
                     }
                 }
             } else {
-                CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr],
-                           showViewfinder: true,
-                                isTorchOn: isTorchOn) { response in
+                let codeScannerView = CodeScannerView(codeTypes: [AVMetadataObject.ObjectType.qr],
+                                                 showViewfinder: true,
+                                                      isTorchOn: isTorchOn
+                ) { response in
                     let closingAnnouncement: String
                     switch response {
                         case .success(let result):
@@ -88,7 +91,40 @@ struct QRSheet: View {
                     }
                         announce(closingAnnouncement)
                 }
-                    .onTapGesture { isTorchOn.toggle() }
+
+                if minimalistic {
+                    codeScannerView
+                        .onTapGesture { isTorchOn.toggle() }
+                } else if #available(iOS 16.4, *) {
+                    codeScannerView
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button {
+                                    dismissTop(stack.push())
+                                } label: {
+                                    Image(systemName: "xmark")
+                                }
+                                .accessibilityHidden(true)      // VoiceOver has its own "Dismiss Popup" button
+                            }
+                            ToolbarItem(placement: .topBarTrailing) {
+                                let a11yValue = isTorchOn ? String(localized: "on", comment: "a11y")
+                                                          : String(localized: "off", comment: "a11y")
+                                Button {
+                                    isTorchOn.toggle()
+                                } label: {
+                                    Image(systemName: isTorchOn ? "lightbulb.fill" : "lightbulb")
+                                }
+                                .accessibilityLabel(Text("Torch for QR code scanning", comment: "a11y"))
+                                .accessibilityValue(Text(a11yValue))
+                            }
+                        }
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbarBackground(.gray)
+                        .toolbarBackground(.visible)
+                } else {
+                    codeScannerView
+                        .onTapGesture { isTorchOn.toggle() }
+                }
             }
         }
     }

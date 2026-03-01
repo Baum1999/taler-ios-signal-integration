@@ -141,16 +141,20 @@ struct ActionsSheet: View {
             let depoDisabled = !mayDeposit
             ///   [􁉇 Send   ] [􁉅 Request]
             SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
+                .accessibility(sortPriority: 1)     // read this after maps
             ///   [􁾩Deposit] [􁾭 Withdraw]
             DepositWithdrawV(stack: stack.push(), sendDisabled: depoDisabled, recvDisabled: noBalances)
+                .accessibility(sortPriority: 0)     // read this last
             ///        [􀎻  Scan QR ]
             QRButton(hideTitle: false) {
                 qrButtonTapped = true
             }
                 .lineLimit(5)
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
+                .accessibility(sortPriority: 3)     // read this first
         }
         .padding()
+        .accessibilityElement(children: .contain)
     }
 }
 // MARK: -
@@ -164,6 +168,8 @@ struct DualHeightSheet: View {
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 //    @State private var selectedDetent: PresentationDetent = scanDetent        // Cannot use instance member 'scanDetent' within property initializer
     @State private var selectedDetent: PresentationDetent = .fraction(0.1)      // workaround - update in .task
     @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]      //   "
@@ -173,13 +179,15 @@ struct DualHeightSheet: View {
     @State private var sheetHeight: CGFloat = .zero
 
     let scanDetent: PresentationDetent = .fraction(SCANDETENT)
+    let actionDetent: PresentationDetent = .fraction(ACTIONDETENT)
 
     func updateDetentsWithDelay() {
         Task {
             //(1 second = 1_000_000_000 nanoseconds)
             try? await Task.sleep(nanoseconds: 80_000_000)
-            guard selectedDetent == scanDetent else { return }
-            detents = [scanDetent]
+            let detent = minimalistic ? scanDetent : actionDetent
+            guard selectedDetent == detent else { return }
+            detents = [detent]
             logger.trace("❗️detents = [scanDetent]")    // 0.999 %
         }
     }
@@ -204,7 +212,8 @@ struct DualHeightSheet: View {
                     qrButtonTapped = true           // tell our caller
                     withAnimation(Animation.easeIn(duration: 0.6)) {
                         // animate this sheet to full height
-                        selectedDetent = scanDetent
+                        let detent = minimalistic ? scanDetent : actionDetent
+                        selectedDetent = detent
                     }
                 }
             }
@@ -224,13 +233,14 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
-                if newValue == scanDetent {    // user swiped the sheet up to activate QR scanner
+                let detent = minimalistic ? scanDetent : actionDetent
+                if newValue == detent {    // user swiped the sheet up to activate QR scanner
                     logger.trace("onChange❗️selectedDetent = \(SCANDETENT)")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
                 } else {    // SwiftUI "innerHeight" determined how big the half sheet should be
                     logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
-                    detents = [scanDetent, .height(sheetHeight)]
+                    detents = [detent, .height(sheetHeight)]
                 }
             }
             .task {
@@ -250,11 +260,11 @@ struct DualHeightSheet: View {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                         selectedBalance: selectedBalance,
                                        scannedSomething: $scannedCode))
-                    let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT : SCANDETENT)
+                    let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT
+                                                            : minimalistic ? SCANDETENT : ACTIONDETENT)
                     Sheet(stack: stack.push(), sheetView: qrSheet)
                         .presentationDetents([detent])
                         .transition(.opacity)
-
                 }
         } else {
             scrollView

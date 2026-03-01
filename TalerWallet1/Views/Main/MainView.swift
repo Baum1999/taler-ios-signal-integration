@@ -27,6 +27,7 @@ struct MainView: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var biometricService: BiometricService
+    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
@@ -194,7 +195,8 @@ struct MainView: View {
                                        scannedSomething: $scannedCode))
 //                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
                     if #available(iOS 16.4, *) {
-                        let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT : SCANDETENT)
+                        let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT
+                                                                : minimalistic ? SCANDETENT : ACTIONDETENT)
                         Sheet(stack: stack.push(), sheetView: qrSheet)
                             .presentationDetents([detent])
                             .transition(.opacity)
