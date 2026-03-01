@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -50,7 +50,8 @@ struct QRSheet: View {
                              urlToOpen: $urlToOpen)         // !!! will set @Binding to nil
                     } else {
 //                        let _ = print(scannedURL)       // TODO: error logging
-                        ErrorView(title: String(localized: "Scanned QR is no talerURI"),
+                        ErrorView(stack.push(),
+                                  title: String(localized: "Scanned QR is no talerURI"),
                                 message: scannedURL.absoluteString,
                                copyable: true) {
                             scannedSomething = false
@@ -58,9 +59,11 @@ struct QRSheet: View {
                         }
                     }
                 } else {
-                    ErrorView(title: String(localized: "Scanned QR is no URL"),
+                    ErrorView(stack.push(),
+                              title: String(localized: "Scanned QR is no URL"),
                             message: scannedCode,
-                           copyable: true) {
+                           copyable: true
+                    ) {
                         scannedSomething = false
                         dismissTop(stack.push())
                     }

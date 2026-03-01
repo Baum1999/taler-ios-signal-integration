@@ -99,7 +99,7 @@ struct MainView: View {
 
             if (!showScanner && urlToOpen == nil) {
                 if let error2 = model.error2 {
-                    ErrorView(data: error2, devMode: developerMode) {
+                    ErrorView(stack.push("Main"), data: error2, devMode: developerMode) {
                         model.setError(nil)
                     }.interactiveDismissDisabled()
                     .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
@@ -152,7 +152,8 @@ struct MainView: View {
             // show launch animation until either ready or error
             switch controller.backendState {
                 case .ready: mainContent
-                case .error: ErrorView(title: "",   // TODO: String(localized: ""),
+                case .error: ErrorView(stack.push("mainGroup"),
+                                       title: "",   // TODO: String(localized: ""),
                                     copyable: true) {}
                 default:     LaunchAnimationView()
             }

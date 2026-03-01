@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -94,7 +94,7 @@ struct ManualWithdraw: View {
                                    exchange: exchange)
             } else {  // should never happen, we either have an exchange or a balance
                 let title = "ManualWithdrawContent: Cannot determine scope"        // should not happen, so no L10N
-                ErrorView(title: title, message: nil, copyable: true) {
+                ErrorView(stack.push("ManualWithdraw"), title: title, message: nil, copyable: true) {
                     dismissTop(stack.push())
                 }
             }
