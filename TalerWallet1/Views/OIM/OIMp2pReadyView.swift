@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -38,7 +38,7 @@ struct OIMp2pReadyView: View {
                                     Group {
                                         Spacer()
                                         let size = 240.0
-                                        QRGeneratorView(text: talerURI, size: size, image: $qrImage)
+                                        QRGeneratorView(text: talerURI, size: size, logo: nil, logoSize: size / 4, image: $qrImage)
                                             .frame(maxWidth: .infinity, alignment: .center)
                                             .accessibilityLabel(Text("QR Code", comment: "a11y"))
                                         Spacer()

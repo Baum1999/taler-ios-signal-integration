@@ -24,20 +24,31 @@ import SwiftUI
 struct QRGeneratorView: View {
     let text: String
     let size: CGFloat
+    let logo: Image?
+    let logoSize: CGFloat
     @Binding var image: UIImage?
 
     var body: some View {
-        VStack {
+        ZStack {
             if let image {
                 Image(uiImage: image)
                     .interpolation(.none)
                     .resizable()
                     .scaledToFit()
                     .frame(width: size, height: size)
+                if let logo {
+                    logo
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: logoSize, height: logoSize)
+                }
             } else {
                 EmptyView()
             }
-        }.onAppear {
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("QR Code", comment: "a11y"))
+        .onAppear {
 //          if let uiImage = getQRCode(text: text) {
             if let data = getQRCodeData(text: text) {
                 if let uiImage = UIImage(data: data)  {

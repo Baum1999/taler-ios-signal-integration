@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -67,10 +67,11 @@ struct QRCodeDetailView: View {
                 let amountStr = amountStr(currencyInfo)
                 let scanLong = incoming ? (requesting(amountStr.0), requesting(amountStr.1))
                                         : (sending(amountStr.0), sending(amountStr.1))
+                let logo = Image(TALER_LOGO_QR)
                 let size = 240.0
-                let qrView = QRGeneratorView(text: talerURI, size: size, image: $qrImage)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .accessibilityLabel(Text("QR Code", comment: "a11y"))
+                let logoSize = 88.0
+                let qrView = QRGeneratorView(text: talerURI, size: size, logo: logo, logoSize: logoSize, image: $qrImage)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 if #available(iOS 17.7, *) {
                     BorderWithHCE(talerURI: talerURI, nfcHint: true, size: size, scanHints: scanLong) {
                         qrView

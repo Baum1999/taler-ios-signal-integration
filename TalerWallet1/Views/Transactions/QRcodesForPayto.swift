@@ -12,15 +12,14 @@ import taler_swift
 struct QRcodeCopyShare: View {
     let spec: QrCodeSpec
     let textToShare: String
-
     @State private var qrImage: UIImage? = nil
 
     var body: some View {
-        Text(spec.type)
-        let size = 200.0
-        QRGeneratorView(text: spec.qrContent, size: size, image: $qrImage)
+//        Text(spec.type)
+        let logo = spec.type == "spc" ? Image(SWISS_QR) : nil
+        let size = 240.0
+        QRGeneratorView(text: spec.qrContent, size: size, logo: logo, logoSize: size / 4, image: $qrImage)
             .frame(maxWidth: .infinity, alignment: .center)
-            .accessibilityLabel(Text("QR Code", comment: "a11y"))
             .listRowSeparator(.hidden)
         HStack {
             Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
@@ -29,7 +28,7 @@ struct QRcodeCopyShare: View {
             //                  Spacer()
             CopyShare(textToCopy: textToShare, image: qrImage)
                 .disabled(false)
-        }.listRowSeparator(.automatic)
+        }
     }
 }
 
@@ -47,6 +46,7 @@ struct QRcodesForPayto: View {
     var body: some View {
         let message = messageStr ?? EMPTYSTRING
         let textToShare = String(receiverStr + "\n" + amountStr + "\n" + message)
+        let count = qrCodeSpecs.count
         List {
             if !minimalistic {
                 Text("If your banking software runs on another device, you can scan one of these QR codes:")
@@ -54,6 +54,7 @@ struct QRcodesForPayto: View {
             }
             ForEach(qrCodeSpecs, id: \.self) { spec in
                 QRcodeCopyShare(spec: spec, textToShare: textToShare)
+                    .listRowSeparator(.automatic)
             }
         }
         .navigationTitle(navTitle)
