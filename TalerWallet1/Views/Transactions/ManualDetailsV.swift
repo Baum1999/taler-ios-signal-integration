@@ -15,6 +15,11 @@ struct ManualDetailsV: View {
     let details: WithdrawalDetails
 
     @EnvironmentObject private var model: WalletModel
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var accountID = 0
     @State private var listID = UUID()
@@ -100,7 +105,8 @@ struct ManualDetailsV: View {
                                 .talerFont(.title3)
                             }
 
-                            if qrCodeSpecs.count > 0 {
+                            let count = qrCodeSpecs.count
+                            if count > 1 {
                                 let qrCodesForPayto = QRcodesForPayto(stack: stack.push(),
                                                                 qrCodeSpecs: $qrCodeSpecs,
                                                                 receiverStr: receiverStr,
@@ -112,9 +118,14 @@ struct ManualDetailsV: View {
                                                       : "Wire transfer QR codes")
                                     .talerFont(.title3)
                                 }
-                                .listRowSeparator(.automatic)
+                            } else if count > 0 {
+                                let message = payto.messageStr ?? EMPTYSTRING
+                                let textToShare = String(receiverStr + "\n" + amountStr.0 + "\n" + message)
+                                QRcodeCopyShare(spec: qrCodeSpecs.first!, textToShare: textToShare)
+                                    .listRowSeparator(.automatic)
                             }
 #if DEBUG
+                          if developerMode {
                             if let iban = payto.iban {
                                 Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
                                     : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
@@ -131,6 +142,7 @@ struct ManualDetailsV: View {
                                     .disabled(false)
                                     .listRowSeparator(.hidden)
                             }
+                          }
 #endif
                         }.id(listID)
                             .talerFont(.body)
