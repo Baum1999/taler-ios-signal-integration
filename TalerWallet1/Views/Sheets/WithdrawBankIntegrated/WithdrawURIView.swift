@@ -39,6 +39,7 @@ struct WithdrawURIView: View {
 
     @State private var selectedExchange = EMPTYSTRING
     @State private var exchange: Exchange? = nil
+    @State private var exchangeError: Bool = false
     @State private var possibleExchanges: [Exchange] = []
     @State private var defaultExchangeBaseUrl: String?     // if nil then use possibleExchanges
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -112,17 +113,20 @@ struct WithdrawURIView: View {
                 amountZero = available
             }
             wireFee = uriInfoResponse.wireFee               // may be nil
-            let baseUrl = uriInfoResponse.defaultExchangeBaseUrl
-                       ?? uriInfoResponse.possibleExchanges[0].exchangeBaseUrl
             defaultExchangeBaseUrl = uriInfoResponse.defaultExchangeBaseUrl
             possibleExchanges = uriInfoResponse.possibleExchanges
+            let baseUrl = defaultExchangeBaseUrl
+                       ?? possibleExchanges.first?.exchangeBaseUrl
+                       ?? nil
 
 //            await loadExchange(baseUrl)       <- checkCurrencyInfo now returns the exchange
 //            symLog.log("\(baseUrl.trimURL) loaded")
 
-            if let someExchange = try? await controller.checkCurrencyInfo(for: baseUrl, model: model) {
+            if let baseUrl, let someExchange = try? await controller.checkCurrencyInfo(for: baseUrl, model: model) {
                 symLog.log("Info(for: \(baseUrl.trimURL) loaded")
                 exchange = someExchange
+            } else {
+                exchangeError = true
             }
         } catch {
             // TODO: error, dismiss
@@ -203,8 +207,17 @@ struct WithdrawURIView: View {
                 }
 //              agePicker.setAges(ages: details?.ageRestrictionOptions)
             }
-
-
+        } else if exchangeError {
+            let message = defaultExchangeBaseUrl != nil ? "defaultExchangeBaseUrl: \(defaultExchangeBaseUrl)"
+                       : possibleExchanges.first != nil ? "No default - first possible exchange: \(possibleExchanges.first?.exchangeBaseUrl)"
+                                                        : "No default, no possible exchanges"
+            ErrorView(stack.push(),
+                      title: "Error loading exchange details:",
+                    message: message,
+                    copyable: true
+            ) {
+                dismissTop(stack.push())
+            }
         } else {        // no details or no exchange
 #if DEBUG
             let message = url.host
