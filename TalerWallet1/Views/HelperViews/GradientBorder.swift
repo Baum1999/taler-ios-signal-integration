@@ -270,8 +270,8 @@ struct GradientBorder<Content: View>: View {
             Spacer()
         }
         .onAppear {
-            withAnimation(.linear(duration: 4).repeatForever(autoreverses: false)) {
-                rotation = 360
+            withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
+                rotation = 720
             }
         }
     }
