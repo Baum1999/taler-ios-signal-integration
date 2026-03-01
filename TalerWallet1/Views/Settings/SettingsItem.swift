@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -7,14 +7,96 @@
  */
 import SwiftUI
 
+struct SettingsImage: View {
+    let imageName: String?
+
+    var hasImage: Bool {
+        if let imageName {
+            return UIImage(named: imageName) != nil
+        }
+        return false
+    }
+
+    var hasSysImage: Bool {
+        if let imageName {
+            return UIImage(systemName: imageName) != nil
+        }
+        return false
+    }
+
+    var body: some View {
+        if hasImage {
+            Image(imageName!)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 44, height: 44)
+        } else if hasSysImage {
+            Image(systemName: imageName!)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 36)
+                .padding(.horizontal, 2)
+        } else {
+            EmptyView()
+        }
+    }
+}
+
+struct SettingsDescription: View {
+    let id1: String?
+    let description: String?
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        if !minimalistic {
+            if let desc = description {
+                Text(desc)
+                    .id(id1 == nil ? nil : id1! + "_T")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .talerFont(.caption)
+            }
+        }
+    }
+}
+// MARK: -
+struct SettingsBase<Content: View>: View {
+    let id1: String?
+    let description: String?
+    let content: () -> Content
+
+    init(id1: String?, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+        self.id1 = id1
+        self.description = description
+        self.content = content
+    }
+
+    var body: some View {
+        let isWeb = id1?.hasPrefix("web") ?? false
+        let foreColor = isWeb ? Color.accentColor
+                              : .primary
+        VStack {
+            content()
+                .id(id1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(foreColor)
+                .talerFont(.title2)
+                .padding([.bottom], 0.01)
+            SettingsDescription(id1: id1, description: description)
+        }.id(id1 == nil ? nil : id1! + "_V")
+    }
+}
+// MARK: -
 struct SettingsItem<Content: View>: View {
-    var name: String
-    var id1: String?
-    var imageName: String?
-    var description: String?
-    var content: () -> Content
-    
-    init(name: String, id1: String, imageName: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    let name: String
+    let id1: String?
+    let imageName: String?
+    let description: String?
+    let content: () -> Content
+
+    init(name: String, id1: String, imageName: String? = nil, description: String? = nil,
+         @ViewBuilder content: @escaping () -> Content
+    ) {
         self.name = name
         self.id1 = id1
         self.imageName = imageName
@@ -22,38 +104,13 @@ struct SettingsItem<Content: View>: View {
         self.content = content
     }
     
-    init(name: String, id1: String, description: String? = nil, @ViewBuilder content: @escaping () -> Content) {
-        self.name = name
-        self.id1 = id1
-        self.imageName = nil
-        self.description = description
-        self.content = content
-    }
-
     var body: some View {
         HStack {
-            VStack {
-                let isWeb = id1?.hasPrefix("web") ?? false
-                let foreColor = isWeb ? Color.accentColor
-                                      : .primary
-                HStack(spacing: 8.0) {
-                    if let imageName {
-                        Image(systemName: imageName)
-                    }
-                    Text(name)
-                        .id(id1)
-                }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(foreColor)
-                    .talerFont(.title2)
-                    .padding([.bottom], 0.01)
-                if let desc = description {
-                    Text(desc)
-                        .id(id1 == nil ? nil : id1! + "_T")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .talerFont(.caption)
-                }
-            }.id(id1 == nil ? nil : id1! + "_V")
+            SettingsImage(imageName: imageName)
+
+            SettingsBase(id1: id1, description: description) {
+                Text(name)
+            }
             content()
                 .talerFont(.body)
         }.id(id1 == nil ? nil : id1! + "_H")
@@ -63,11 +120,25 @@ struct SettingsItem<Content: View>: View {
 }
 // MARK: -
 struct SettingsToggle: View {
-    var name: String
+    let name: String
     @Binding var value: Bool
-    var id1: String? = nil
-    var description: String?
-    var action: () -> Void = {}
+    let id1: String?
+    let imageName: String?
+    let description: String?
+    let action: (_ newValue: Bool) -> Void
+
+    init(name: String, value: Binding<Bool>, id1: String? = nil,
+         imageName: String? = nil,
+         description: String? = nil,
+         action: @escaping (_ newValue: Bool) -> Void = {_ in}
+    ) {
+        self.name = name
+        self._value = value
+        self.id1 = id1
+        self.imageName = imageName
+        self.description = description
+        self.action = action
+    }
 
     var body: some View {
         let accLabel: String = if let description {
@@ -75,28 +146,20 @@ struct SettingsToggle: View {
         } else {
             name
         }
-        VStack {
-            Toggle(name, isOn: $value.animation())
-                .id(id1)
-//                .accessibilityLabel(name)
-                .accessibility(sortPriority: 1)
-                .talerFont(.title2)
-                .onChange(of: value) { value in
-                    action()
-                }
+        HStack {
+            SettingsImage(imageName: imageName)
 
-            if let desc = description {
-                Text(desc)
-                    .id(id1 == nil ? nil : id1! + "_T")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibility(sortPriority: 0)
-                    .talerFont(.caption)
+            SettingsBase(id1: id1, description: description) {
+                Toggle(name, isOn: $value.animation())
+                    .accessibility(sortPriority: 1)
+                    .onChange(of: value) { value in
+                        action(value)
+                    }
             }
-        }
+        }.id(id1 == nil ? nil : id1! + "_H")
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accLabel)
         .padding([.bottom], 4)
-        .id(id1 == nil ? nil : id1! + "_V")
     }
 }
 // MARK: -
@@ -151,6 +214,7 @@ struct SettingsStyle: View {
 struct SettingsTriState: View {
     var name: String
     @Binding var value: Int
+    let id1: String?
     var description: String?
     var action: (_ value: Int) -> Void = {value in }
 
@@ -185,11 +249,7 @@ struct SettingsTriState: View {
                 }
             }
 
-            if let desc = description {
-                Text(desc)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .talerFont(.caption)
-            }
+            SettingsDescription(id1: id1, description: description)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(name)
@@ -209,8 +269,8 @@ struct SettingsItemPreview : View {
             SettingsToggle(name: "Developer Preview", value: $developerMode, id1: "dev1",
                     description: "More information intended for debugging")
             SettingsTriState(name: "Observe walletCore", value: $observe,
-                     description: "on LocalConsole")
-
+                              id1: "observe",
+                      description: "on LocalConsole")
         }
     }
 }
@@ -218,13 +278,14 @@ struct SettingsItemPreview : View {
 struct SettingsItem_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            SettingsItem (name: "Exchanges", id1: "list", description: "Manage list of exchanges known to this wallet") {}
+            SettingsItem(name: "Exchanges", id1: "list",
+                  description: "Manage list of exchanges known to this wallet") {}
             SettingsItemPreview()
-            SettingsItem(name: "Save Logfile", id1: "save", description: "Help debugging wallet-core") {
-                Button("Save") {
-                }
-                .buttonStyle(.bordered)
-                .disabled(true)
+            SettingsItem(name: "Save Logfile", id1: "save",
+                  description: "Help debugging wallet-core") {
+                Button("Save") { }
+                    .buttonStyle(.bordered)
+                    .disabled(true)
             }
         }
     }

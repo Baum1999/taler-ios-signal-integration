@@ -62,29 +62,33 @@ struct DebugSettingsView: View {
         let walletCore = WalletCore.shared
         Group {
             List {
-                SettingsToggle(name: String("Developer Mode"), value: $developerMode, id1: "devMode",
-                        description: minimalistic ? nil : String("More information intended for debugging")) {
+                SettingsToggle(name: String("Developer Mode"), value: $developerMode,
+                                id1: "devMode",
+                        description: String("More information intended for debugging")) { newVal in
                     withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
                 }
                 if showDevelopItems {
 #if DEBUG
                     SettingsToggle(name: String("Log Transactions"), value: $logTransactions.onChange({ isLogging in
-                        walletCore.logTransactions = isLogging}), id1: "logTransactions",
-                            description: minimalistic ? nil : String("full log with all tx")) {}
+                        walletCore.logTransactions = isLogging}),
+                                    id1: "logTransactions",
+                            description: String("full log with all tx"))
 #endif
                     let localConsStr = String("on LocalConsole")
                     let observability = String("Observe walletCore")
                     SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
                         walletCore.isObserving = isObserving}),
-                              description: minimalistic ? nil : localConsStr) { isObserving in
+                                      id1: "observe",
+                              description: localConsStr) { isObserving in
                         let consoleManager = LCManager.shared
                         consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                         consoleManager.clear()
                     }
                     let showLogs = String("Show logs")
                     SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
-                        walletCore.isLogging = isLogging}), id1: "localConsoleL",
-                            description: minimalistic ? nil : localConsStr) {
+                        walletCore.isLogging = isLogging}),
+                                    id1: "localConsoleL",
+                            description: localConsStr) { _ in
                         let consoleManager = LCManager.shared
                         consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                         consoleManager.clear()
@@ -100,7 +104,7 @@ struct DebugSettingsView: View {
 #endif
                 } // showDevelopItems
                     SettingsItem(name: String("DEMO"), id1: "demo1with",
-                          description: minimalistic ? nil : String("Get money for testing")) {
+                          description: String("Get money for testing")) {
                         let title = "Withdraw"
                         Button(title) {
                             withDrawDisabled = true    // don't run twice
@@ -114,7 +118,7 @@ struct DebugSettingsView: View {
                         .disabled(withDrawDisabled)
                     }.id("demo1withdraw")
                     SettingsItem(name: String("TEST"), id1: "test1with",
-                          description: minimalistic ? nil : String("Get money for testing")) {
+                          description: String("Get money for testing")) {
                         let title = "Withdraw"
                         Button(title) {
                             withDrawDisabled = true    // don't run twice
@@ -130,7 +134,7 @@ struct DebugSettingsView: View {
                     }.id("test1withdraw")
                 if showDevelopItems {
                     SettingsItem(name: String("HEAD"), id1: "head1with",
-                          description: minimalistic ? nil : String("Get money for testing")) {
+                          description: String("Get money for testing")) {
                         let title = "Withdraw"
                         Button(title) {
                             withDrawDisabled = true    // don't run twice
@@ -147,11 +151,12 @@ struct DebugSettingsView: View {
                                   value: $developDelay.onChange({ delay in
                                             walletCore.developDelay = delay}),
                                     id1: "delay",
-                            description: minimalistic ? nil : String("After each wallet-core action"))
+                            description: String("After each wallet-core action"))
                         .id("delay")
 #if DEBUG
-                    SettingsItem(name: String("Run Dev Experiment Refresh"), id1: "applyDevExperiment",
-                          description: minimalistic ? nil : "dev-experiment/insert-pending-refresh") {
+                    SettingsItem(name: String("Run Dev Experiment Refresh"),
+                                  id1: "applyDevExperiment",
+                          description: "dev-experiment/insert-pending-refresh") {
                         let title = "Refresh"
                         Button(title) {
                             Task { // runs on MainActor
@@ -164,8 +169,9 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                     }.id("Refresh")
 #endif
-                    SettingsItem(name: String("Run Integration Test"), id1: "demo1test",
-                          description: minimalistic ? nil : String("Perform basic test transactions")) {
+                    SettingsItem(name: String("Run Integration Test"),
+                                  id1: "demo1test",
+                          description: String("Perform basic test transactions")) {
                         let title = "Demo 1"
                         Button(title) {
                             checkDisabled = true    // don't run twice
@@ -177,8 +183,9 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
                     }.id("demo1runTest")
-                    SettingsItem(name: String("Run Integration Test"), id1: "test1test",
-                          description: minimalistic ? nil : "Perform basic test transactions") {
+                    SettingsItem(name: String("Run Integration Test"),
+                                  id1: "test1test",
+                          description: "Perform basic test transactions") {
                         let title = "Test 1"
                         Button(title) {
                             checkDisabled = true    // don't run twice
@@ -190,8 +197,9 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
                     }.id("test1runTest")
-                    SettingsItem(name: String("Run Integration Test V2"), id1: "demo2test",
-                          description: minimalistic ? nil : String("Perform more test transactions")) {
+                    SettingsItem(name: String("Run Integration Test V2"),
+                                  id1: "demo2test",
+                          description: String("Perform more test transactions")) {
                         let title = "Demo 2"
                         Button(title) {
                             checkDisabled = true    // don't run twice
@@ -203,8 +211,9 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
                     }.id("demo2runTest")
-                    SettingsItem(name: String("Run Integration Test V2"), id1: "test2test",
-                          description: minimalistic ? nil : String("Perform more test transactions")) {
+                    SettingsItem(name: String("Run Integration Test V2"),
+                                  id1: "test2test",
+                          description: String("Perform more test transactions")) {
                         let title = "Test 2"
                         Button(title) {
                             checkDisabled = true    // don't run twice
@@ -216,8 +225,9 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
                     }.id("test2runTest")
-                    SettingsItem(name: String("Run Infinite Transaction Loop"), id1: "runInfinite",
-                          description: minimalistic ? nil : String("Check DB in background")) {
+                    SettingsItem(name: String("Run Infinite Transaction Loop"),
+                                  id1: "runInfinite",
+                          description: String("Check DB in background")) {
                         let title = "Loop"
                         Button(title) {
                             checkDisabled = true    // don't run twice
@@ -230,7 +240,7 @@ struct DebugSettingsView: View {
                         .disabled(checkDisabled)
                     }.id("runInfiniteLoop")
                     SettingsItem(name: String("Save Logfile"), id1: "save",
-                          description: minimalistic ? nil : String("Help debugging wallet-core")) {
+                          description: String("Help debugging wallet-core")) {
                         Button("Save") {
                             symLog.log("Saving Log")
                             // FIXME: Save Logfile
@@ -239,7 +249,7 @@ struct DebugSettingsView: View {
                         .disabled(true)
                     }.id("saveLog")
                     SettingsItem(name: String("Reset Wallet"), id1: "reset",
-                          description: minimalistic ? nil : String("Throw away all your money")) {
+                          description: String("Throw away all your money")) {
                         Button("Reset") {
                             showResetAlert = true
                         }
@@ -248,6 +258,7 @@ struct DebugSettingsView: View {
                     }.id("resetWallet")
                 }
             }
+            .padding(.bottom)
             .id(listID)
             .listStyle(myListStyle.style).anyView
         }

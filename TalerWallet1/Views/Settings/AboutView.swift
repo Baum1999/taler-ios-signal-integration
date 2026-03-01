@@ -56,7 +56,7 @@ struct AboutView: View {
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",
                         imageName: "link",
-                      description: minimalistic ? nil : String(localized: "More info about GNU Taler in general...")) { }
+                      description: String(localized: "More info about GNU Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {
@@ -93,7 +93,7 @@ struct AboutView: View {
                                     }
                                 }),
                                 id1: "onboarding",
-                        description: minimalistic ? nil : String(localized: "Explain the Actions button"))
+                        description: String(localized: "Explain the Actions button"))
 #if DEBUG
                 Text(verbatim: "Tapped: \(tapped), dragged: \(dragged)")
 #endif

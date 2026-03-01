@@ -8,7 +8,6 @@
 import SwiftUI
 import taler_swift
 import SymLog
-import LocalConsole
 
 struct SettingsView: View {
     private let symLog = SymLogV(0)
@@ -24,29 +23,13 @@ struct SettingsView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-    @AppStorage("useHaptics") var useHaptics: Bool = true
-    @AppStorage("playSoundsI") var playSoundsI: Int = 1
-    @AppStorage("playSoundsB") var playSoundsB: Bool = false
     @AppStorage("shouldShowWarning") var shouldShowWarning: Bool = true
-//    @AppStorage("increaseContrast") var increaseContrast: Bool = false
-    @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
-    @AppStorage("showQRauto16") var showQRauto16: Bool = true
-    @AppStorage("showQRauto17") var showQRauto17: Bool = false
-    @AppStorage("oimEuro") var oimEuro: Bool = false
-    @AppStorage("oimChart") var oimChart: Bool = false
 
-    @State private var hideDescriptions = false
     @State private var listID = UUID()
 
-    func redraw(_ newFont: Int) -> Void {
-        if newFont != talerFontIndex {
-            talerFontIndex = newFont
-            withAnimation { listID = UUID() }
-        }
-    }
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -67,8 +50,7 @@ struct SettingsView: View {
                 NavigationLink {        // whole row like in a tableView
                     AboutView(stack: stack.push(), navTitle: aboutStr)
                 } label: {
-                    SettingsItem(name: aboutStr, id1: "about",
-                          description: hideDescriptions ? nil : String(localized: "More info about this app...")) {}
+                    SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
                 }
 
                 let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
@@ -77,8 +59,8 @@ struct SettingsView: View {
                 NavigationLink {        // whole row like in a tableView
                     exchangesDest
                 } label: {
-                    SettingsItem(name: exchangesTitle, id1: "exchanges",
-                          description: hideDescriptions ? nil : String(localized: "Manage payment services...")) {}
+                    SettingsItem(name: exchangesTitle, id1: "exchanges", imageName: EXCHANGE_LOGO,
+                          description: String(localized: "Manage payment services")) {}
                 }
                 let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
                 let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
@@ -87,76 +69,48 @@ struct SettingsView: View {
                     bankAccountsDest
                 } label: {
                     SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
-                                 description: hideDescriptions ? nil : String(localized: "Your accounts for deposit...")) {}
+                            imageName: "building.columns",
+                          description: String(localized: "Your accounts for deposit")) {}
                 }
 
-                let showQRstring = String(localized: "Show QR codes")
-                let showQRhint = String(localized: "Automatically for P2P transactions")
-                if #available(iOS 17.7, *) {
-                    SettingsToggle(name: showQRstring, value: $showQRauto17, id1: "showQRautomatic",
-                            description: minimalistic ? nil : showQRhint) {}
-                } else {
-                    SettingsToggle(name: showQRstring, value: $showQRauto16, id1: "showQRautomatic",
-                            description: minimalistic ? nil : showQRhint) {}
-                }
                 let biometryType = biometricService.biometryType()
-                let biometryString = biometryType == .faceID ? String(localized: "Use FaceID")
-                                   : biometryType == .touchID ? String(localized: "Use TouchID")
+                let hasFaceID = biometryType == .faceID
+                let hasTouchID = biometryType == .touchID
+                let biometryString = hasFaceID ? String(localized: "Use FaceID")
+                                   : hasTouchID ? String(localized: "Use TouchID")
                                    : EMPTYSTRING
                 if !biometryString.isEmpty {
-                    SettingsToggle(name: biometryString, value: $useAuthentication, id1: "useFaceID",
-                            description: minimalistic ? nil : String(localized: "Protect your money")) {
+                    SettingsToggle(name: biometryString,
+                                  value: $useAuthentication,
+                                    id1: "useFaceID",
+                              imageName: hasFaceID ? "faceid" : "touchid", // 􀎽  􀟒
+                            description: String(localized: "Protect your money")) { _ in
                         biometricService.isAuthenticated = false
                     }
 //                } else {
 //                    biometricService.isAuthenticated = false
                 }
 
-                /// Backup
-                let backupTitle = String(localized: "TitleBackup", defaultValue: "Backup / Restore")
-                let backupDest = BackupView(stack: stack.push(backupTitle),
-                                         navTitle: backupTitle)
-                NavigationLink {        // whole row like in a tableView
-                    backupDest
-                } label: {
-                    SettingsItem(name: backupTitle, id1: "backup",
-                          description: hideDescriptions ? nil : String(localized: "Backup your money...")) {}
-                }
+                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
+                          imageName: "heart",                   // 􀊴
+                        description: String(localized: "Omit text where possible"))
 
-                /// Report
+                SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning,
+                                id1: "warnings",
+                          imageName: "exclamationmark.triangle", // 􀇾
+                        description: String(localized: "For Delete, Abandon & Abort buttons"))
+
+              /// Report
                 let reportTitle = String(localized: "TitleReport", defaultValue: "Report diagnostics")
                 let reportDest = ReportView(stack: stack.push(reportTitle),
                                          navTitle: reportTitle)
-                NavigationLink {        // whole row like in a tableView
+                NavigationLink {
                     reportDest
                 } label: {
                     SettingsItem(name: reportTitle, id1: "report",
-                          description: hideDescriptions ? nil : String(localized: "Help improve this app...")) {}
+                            imageName: "arrow.up.message",    // 􀜃
+                          description: String(localized: "Help improve \(localizedAppName)")) {}
                 }
-
-#if OIM
-                SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro, id1: "oimEuro",
-                        description: minimalistic ? nil : String(localized: "OIM currency for KUDOS"))
-#endif
-#if OIM
-                SettingsToggle(name: String(localized: "OIM: Chart"), value: $oimChart, id1: "oimChart",
-                        description: minimalistic ? nil : String(localized: "OIM history as chart"))
-#endif
-
-                SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
-                        description: hideDescriptions ? nil : String(localized: "Omit text where possible")) {
-                    hideDescriptions = minimalistic //withAnimation { hideDescriptions = minimalistic }
-                }
-                if controller.hapticCapability.supportsHaptics {
-                    SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics, id1: "haptics",
-                            description: hideDescriptions ? nil : String(localized: "Vibration Feedback"))
-                }
-                SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB, id1: "playSounds",
-                        description: hideDescriptions ? nil : String(localized: "When a transaction finished"))
-                SettingsToggle(name: String(localized: "Show Warnings"), value: $shouldShowWarning, id1: "warnings",
-                        description: hideDescriptions ? nil : String(localized: "For Delete, Abandon & Abort buttons"))
-//                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
-//                    .id("font")
 
 #if DEBUG
                 let showDiagnostic = true
@@ -167,20 +121,33 @@ struct SettingsView: View {
                     let devTitle = String(localized: "TitleDeveloper", defaultValue: "Developer")
                     let devDest = DebugSettingsView(stack: stack.push(devTitle),
                                                  navTitle: devTitle)
-                    NavigationLink {        // whole row like in a tableView
+                    NavigationLink {
                         devDest
                     } label: {
                         SettingsItem(name: devTitle, id1: "developer",
-                                     description: hideDescriptions ? nil : String(localized: "Help debug this app...")) {}
+                                imageName: "hammer",        // 􀙄
+                              description: String(localized: "Help debug \(localizedAppName)")) {}
                     }
                 }
+
+                let moreItem = String(localized: "TitleMore", defaultValue: "More")
+                let moreTitle = String(localized: "TitleMoreSettings", defaultValue: "More Settings")
+                let moreDest = MoreSettingsView(stack: stack.push(moreTitle),
+                                             navTitle: moreTitle)
+                NavigationLink {
+                    moreDest
+                } label: {
+                    SettingsItem(name: moreItem, id1: "more",
+                            imageName: "ellipsis",          // 􀍠
+                          description: nil) {}
+                }
             }
+            .padding(.bottom)
             .id(listID)
             .listStyle(myListStyle.style).anyView
         }
         .navigationTitle(navTitle)
         .onAppear() {
-            hideDescriptions = minimalistic
             DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
         }
     } // body

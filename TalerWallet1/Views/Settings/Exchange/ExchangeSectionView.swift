@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -111,14 +111,16 @@ struct ExchangeSectionView: View {
                 SettingsToggle(name: String("Global"), value: $global.onChange({ isGlobal in
                     setGlobal()
                 }),             id1: "global",
-                        description: minimalistic ? nil : String("Treat this as a global exchange"))
+                        description: String("Treat this as a global exchange"))
                 .listRowSeparator(.hidden)
-                SettingsToggle(name: String("Fake no fees"), value: $fakeNoFees, id1: "fakeNoFees",
-                               description: minimalistic ? nil : String("Remove fee and gros from details"))
+                SettingsToggle(name: String("Fake no fees"), value: $fakeNoFees,
+                                id1: "fakeNoFees",
+                        description: String("Remove fee and gros from details"))
             }
             if DEMOCURRENCY == currency {
-                SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints, id1: "demoHints",
-                        description: minimalistic ? nil : String(localized: "Show hints for demo money"))
+                SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints,
+                                id1: "demoHints",
+                        description: String(localized: "Show hints for demo money"))
                 .listRowSeparator(.hidden)
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
