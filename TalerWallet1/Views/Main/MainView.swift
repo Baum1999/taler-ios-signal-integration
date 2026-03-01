@@ -18,15 +18,15 @@ struct MainView: View {
     let stack: CallStack
     @Binding var soundPlayed: Bool
 
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var biometricService: BiometricService
+
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
-
-    @EnvironmentObject private var controller: Controller
-    @EnvironmentObject private var model: WalletModel
-    @EnvironmentObject private var biometricService: BiometricService
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
@@ -365,7 +365,7 @@ extension MainView {
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
         @Binding var qrButtonTapped: Bool
-        @Binding var userAction: Int
+        @Binding var userAction: Int            // make Action button jump
 
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel

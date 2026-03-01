@@ -52,8 +52,6 @@ struct BankListView: View {
         let plusButton = PlusButton(accessibilityLabelStr: a11yLabelStr) {
             showAddDialog = true
         }
-        let addTitleStr = String(localized: "Add bank account", comment: "title of the addExchange alert")
-        let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
 
         let depositHint = Text("You can only deposit to a bank account that you control, otherwise you will not be able to fulfill the regulatory requirements.")
 
