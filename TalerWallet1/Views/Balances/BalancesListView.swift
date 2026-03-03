@@ -46,8 +46,16 @@ struct BalancesListView: View {
 //        Group {
             let count = controller.balances.count
             if controller.balances.isEmpty {
+                let talerLogo = Image(TALER_LOGO_FULL)
+
                 WalletEmptyView(stack: stack.push("isEmpty"))
-                    .navigationTitle("Taler Wallet")
+//                    .navigationTitle("Taler Wallet")
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            talerLogo
+                                .padding(.top, 10)
+                        }
+                    }
                     .refreshable {
                         await refresh()
                     }

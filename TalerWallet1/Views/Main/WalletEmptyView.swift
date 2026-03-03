@@ -80,11 +80,11 @@ struct WalletEmptyView: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
                 .disabled(withDrawStarted)
-//            } header: {
-//                let secondHeader = String(localized: "Demo", comment: "section header")
-//                Text(secondHeader)
-//                    .talerFont(.title3)
-//                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            } header: {
+                let secondHeader = String(localized: "Demo", comment: "section header")
+                Text(secondHeader)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
         }
             .listStyle(myListStyle.style).anyView
