@@ -24,53 +24,6 @@ import SwiftUI
 import CoreNFC
 
 @available(iOS 15.0, *)
-public class NFCReader: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
-
-    public var startAlert = String(localized: "Hold your iPhone near the tag.")
-    public var endAlert = ""
-    public var msg = String(localized: "Scan to read or Edit here to write...")
-    public var raw = String(localized: "Raw Data available after scan.")
-
-    public var session: NFCNDEFReaderSession?
-    
-    public func read() {
-        guard NFCNDEFReaderSession.readingAvailable else {
-            print("Error")
-            return
-        }
-        session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: true)
-        session?.alertMessage = self.startAlert
-        session?.begin()
-    }
-    
-    public func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
-        DispatchQueue.main.async {
-            self.msg = messages.map {
-                $0.records.map {
-                    String(decoding: $0.payload, as: UTF8.self)
-                }.joined(separator: "\n")
-            }.joined(separator: " ")
-            
-            self.raw = messages.map {
-                $0.records.map {
-                    "\($0.typeNameFormat) \(String(decoding:$0.type, as: UTF8.self)) \(String(decoding:$0.identifier, as: UTF8.self)) \(String(decoding: $0.payload, as: UTF8.self))"
-                }.joined(separator: "\n")
-            }.joined(separator: " ")
-
-
-            session.alertMessage = self.endAlert != "" ? self.endAlert : "Read \(messages.count) NDEF Messages, and \(messages[0].records.count) Records."
-        }
-    }
-    
-    public func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
-    }
-    
-    public func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        print("Session did invalidate with error: \(error)")
-        self.session = nil
-    }
-}
-
 public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
     
     public var startAlert = String(localized: "Hold your iPhone near the tag.")
