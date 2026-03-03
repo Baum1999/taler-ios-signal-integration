@@ -208,11 +208,12 @@ struct WithdrawURIView: View {
 //              agePicker.setAges(ages: details?.ageRestrictionOptions)
             }
         } else if exchangeError {
+            let possibleExchangeBaseUrl: String? = possibleExchanges.first?.exchangeBaseUrl
             let message = defaultExchangeBaseUrl != nil ? "defaultExchangeBaseUrl: \(defaultExchangeBaseUrl)"
-                       : possibleExchanges.first != nil ? "No default - first possible exchange: \(possibleExchanges.first?.exchangeBaseUrl)"
-                                                        : "No default, no possible exchanges"
+                       : possibleExchanges.first != nil ? String(localized: "No default - first possible payment service: \(possibleExchangeBaseUrl ?? EMPTYSTRING)")
+                                                        : String(localized: "No default, no possible payment services")
             ErrorView(stack.push(),
-                      title: "Error loading exchange details:",
+                      title: String(localized: "Error loading payment service details:"),
                     message: message,
                     copyable: true
             ) {

@@ -72,7 +72,7 @@ struct DepositSelectV: View {
                         bankAccountsDest
                     } label: {
                         SettingsItem(name: bankAccountsTitle, id1: "bankAccounts",
-                              description: String(localized: "Your accounts for deposit...")) {}
+                              description: String(localized: "Your accounts for deposit")) {}
                     }
                 }
             } else {

@@ -43,7 +43,7 @@ struct WalletEmptyView: View {
                 Text("To make your first payment please withdraw some digital cash.", comment: "")
                     .talerFont(.body)
 
-                let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw CHF")
+                let title = String(localized: "LinkTitle_Withdraw_CHF", defaultValue: "Withdraw CHF")
                 Button(title) {
                         // TODO: go to withdraw view
                 }

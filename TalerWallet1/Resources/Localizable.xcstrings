@@ -592,32 +592,7 @@
     },
     "%@" : {
       "comment" : "QR Image",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "%@ fee" : {
       "localizations" : {
@@ -675,6 +650,40 @@
         }
       }
     },
+    "%@ Show TOTP code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ TOTP-Code anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ Mostrar código TOTP"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ Afficher le code TOTP"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ Pokaż kod TOTP"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ Показати код TOTP"
+          }
+        }
+      }
+    },
     "%@ Start NFC" : {
       "localizations" : {
         "de" : {
@@ -715,6 +724,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Stuknij dla NFC"
+          }
+        }
+      }
+    },
+    "%@ Write NFC" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ NFC schreiben"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Escribir NFC"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Écrire NFC"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Zapisz NFC"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Написати NFC"
           }
         }
       }
@@ -875,6 +918,12 @@
             "state" : "translated",
             "value" : "%lld min temu"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%lld хвилин тому"
+          }
         }
       }
     },
@@ -972,26 +1021,7 @@
     },
     "%llu" : {
       "comment" : "A11y",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%llu"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%llu"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%llu"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "%llu Day" : {
       "comment" : "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer",
@@ -1577,6 +1607,41 @@
         }
       }
     },
+    "Accept" : {
+      "comment" : "Heading for Accept ToS button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akzeptieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Aceptar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accepter"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Akceptowanie"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прийняти"
+          }
+        }
+      }
+    },
     "Accept and receive" : {
       "localizations" : {
         "de" : {
@@ -1601,6 +1666,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Akceptuj i odbieraj"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прийняти та отримати"
           }
         }
       }
@@ -1895,7 +1966,7 @@
       }
     },
     "Add payment service" : {
-      "comment" : "a11y for the + button\ntitle of the addExchange alert",
+      "comment" : "UrlCommand\na11y for the + button\ntitle of the addExchange alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2649,7 +2720,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sind Sie sicher, dass Sie Ihr Wallet mit diesem Backup überschreiben wollen?\nDas kann nicht rückgängig gemacht werden. Alles Geld, das sich jetzt noch in Ihrem Wallet befindet, geht verloren."
+            "value" : "Sind Sie sicher, dass Sie Ihre Wallet mit diesem Backup überschreiben wollen?\nDas kann nicht rückgängig gemacht werden. Alles Geld, das sich jetzt noch in Ihrer Wallet befindet, geht verloren."
           }
         },
         "fr" : {
@@ -3032,24 +3103,24 @@
         }
       }
     },
-    "Backup your money..." : {
+    "Backup your money" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sicherheitskopie Ihres Geldes…"
+            "value" : "Sicherheitskopie Ihres Geldes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sauvegardez votre argent..."
+            "value" : "Sauvegardez votre argent"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopia zapasowa pieniędzy..."
+            "value" : "Kopia zapasowa pieniędzy"
           }
         }
       }
@@ -3085,6 +3156,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Баланс:"
+          }
+        }
+      }
+    },
+    "Balance: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldo: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solde : %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilans: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Баланс: %@"
           }
         }
       }
@@ -4022,6 +4127,41 @@
         }
       }
     },
+    "Create Report" : {
+      "comment" : "button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bericht erstellen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Crear informe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer un rapport"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Utwórz raport"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Створити звіт"
+          }
+        }
+      }
+    },
     "Cryptocode" : {
       "comment" : "a11y",
       "localizations" : {
@@ -4127,6 +4267,13 @@
         }
       }
     },
+    "Cyclos user:" : {
+      "comment" : "Label for the cyclos user in the bank section view.",
+      "isCommentAutoGenerated" : true
+    },
+    "defaultExchangeBaseUrl: %@" : {
+      "shouldTranslate" : false
+    },
     "Delete" : {
       "localizations" : {
         "de" : {
@@ -4155,6 +4302,41 @@
         }
       }
     },
+    "Demo" : {
+      "comment" : "section header",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Demo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démo"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Демо"
+          }
+        }
+      }
+    },
     "Demo Hints" : {
       "localizations" : {
         "de" : {
@@ -4179,40 +4361,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wskazówki demo"
-          }
-        }
-      }
-    },
-    "Demo: get digital cash to experience how to pay with the money of the future." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demo: Mit Digitalem Bargeld ausprobieren wie Sie mit dem Geld der Zukunft bezahlen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demo: recibir dinero digital para experimentar cómo pagar con el dinero del futuro."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Démonstration : obtenez de l'argent numérique pour découvrir comment payer avec l'argent du futur."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demo: pobierz cyfrową gotówkę, aby przekonać się, jak płacić pieniędzmi przyszłości."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Демонстрація: отримайте цифрові гроші, щоб дізнатися, як платити грошима майбутнього."
           }
         }
       }
@@ -4421,6 +4569,7 @@
       }
     },
     "Done" : {
+      "comment" : "Done button\na11y for the Done button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4546,6 +4695,9 @@
           }
         }
       }
+    },
+    "Either deposit or send your money to a friend before you delete the app, or it will be lost." : {
+
     },
     "enabled when amount is non-zero" : {
       "comment" : "a11y",
@@ -4771,6 +4923,42 @@
         }
       }
     },
+    "Error loading payment service details:" : {
+      "comment" : "Title of an error view that appears when there are no payment service details available.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler beim Laden der Zahlungsdienstdaten:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al cargar los datos del servicio de pago:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur lors du chargement des informations relatives au service de paiement :"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Błąd podczas ładowania szczegółów usługi płatności:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка під час завантаження даних про платіжну послугу:"
+          }
+        }
+      }
+    },
     "Error while scanning QR code" : {
       "comment" : "a11y",
       "localizations" : {
@@ -4880,6 +5068,363 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Комісія:"
+          }
+        }
+      }
+    },
+    "Exchange_status_failed" : {
+      "comment" : "Localized string for the \"Failed\" exchange status.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Failed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fallido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Nie powiodło się - Niepowodzenie"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Невдача"
+          }
+        }
+      }
+    },
+    "Exchange_status_initial" : {
+      "comment" : "Description of an exchange's status when it is in its initial state.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Initial"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Początkowy"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Початковий"
+          }
+        }
+      }
+    },
+    "Exchange_status_initial_update" : {
+      "comment" : "Description of an exchange update status when the update is the initial update.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial (… wird aktualisiert …)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Initial (… updating …)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicial (... actualizando ...)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial (… mise à jour …)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Początkowe (… aktualizacja …)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Початковий (… оновлення …)"
+          }
+        }
+      }
+    },
+    "Exchange_status_outdated_update" : {
+      "comment" : "Localized string for \"Outdated update\" exchange update status.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veraltet (… wird aktualisiert …)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Outdated (… updating …)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsoleto (... actualizando...)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obsolète (... mise à jour ...)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Nieaktualne (… aktualizacja …)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Застаріле (… оновлення …)"
+          }
+        }
+      }
+    },
+    "Exchange_status_ready" : {
+      "comment" : "Description of an exchange's status when it is ready.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ready"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Prêt"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowe"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        }
+      }
+    },
+    "Exchange_status_ready_update" : {
+      "comment" : "Description of an exchange's update status when the exchange is ready for an update.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit (… wird aktualisiert …)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ready (… updating …)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo (... actualizando ...)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prêt (... mise à jour...)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Gotowe (… aktualizacja …)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Готово (... оновлення ...)"
+          }
+        }
+      }
+    },
+    "Exchange_status_suspended" : {
+      "comment" : "Localized string for \"Suspended\" exchange status.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgesetzt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Suspended"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspendido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suspendu"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zawieszony"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Призупинено"
+          }
+        }
+      }
+    },
+    "Exchange_status_unavailable" : {
+      "comment" : "Description of an exchange when it is unavailable.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unavailable"
+          }
+        }
+      }
+    },
+    "Exchange_status_unavailable_update" : {
+      "comment" : "Text displayed in a notification when an exchange is unavailable for an update.",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verfügbar (… wird aktualisiert …)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unavailable (… updating …)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No disponible (... actualizando ...)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indisponible (... mise à jour ...)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Niedostępne (… aktualizacja …)"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Недоступно (… оновлення …)"
           }
         }
       }
@@ -5324,6 +5869,40 @@
         }
       }
     },
+    "Get digital cash to experience how to pay with the money of the future." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Digitalem Bargeld ausprobieren wie Sie mit dem Geld der Zukunft bezahlen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recibir dinero digital para experimentar cómo pagar con el dinero del futuro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtenez de l'argent numérique pour découvrir comment payer avec l'argent du futur."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pobierz cyfrową gotówkę, aby przekonać się, jak płacić pieniędzmi przyszłości."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "отримайте цифрові гроші, щоб дізнатися, як платити грошима майбутнього."
+          }
+        }
+      }
+    },
     "GLS.Exchange.Delete.Button" : {
       "comment" : "button title",
       "extractionState" : "extracted_with_value",
@@ -5389,7 +5968,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie haben noch digitales Geld in Ihrem Wallet. Trotzdem kündigen?"
+            "value" : "Sie haben noch digitales Bargeld in Ihrer Wallet. Trotzdem kündigen?"
           }
         },
         "en" : {
@@ -5510,6 +6089,114 @@
         }
       }
     },
+    "Help debug %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helfen Sie mit, %@ zu debuggen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Ayuda para depurar %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Aidez-nous au débogage %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pomoc w debugowaniu %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Допомога з налагодженням %@"
+          }
+        }
+      }
+    },
+    "Help improve %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helfen Sie mit, %@ zu verbessern"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Ayuda a mejorar %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Aidez-nous à améliorer %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pomóż poprawić %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Допоможіть поліпшити %@"
+          }
+        }
+      }
+    },
+    "Hold your iPhone near the tag." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Halten Sie Ihr iPhone in die Nähe des NFC-Tags."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold your iPhone near the NFC tag."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Mantén tu iPhone cerca de la etiqueta NFC."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Placez votre iPhone près de l'étiquette NFC."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Przyłóż iPhone'a do tagu NFC."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Тримайте iPhone біля NFC-мітки."
+          }
+        }
+      }
+    },
     "IBAN of the recipient" : {
       "comment" : "a11y",
       "localizations" : {
@@ -5578,7 +6265,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wenn diese Wallet einem Kind oder Minderjährigen gehört, sollte das generierte digitale Geld altersbeschränkt sein."
+            "value" : "Wenn diese Wallet einem Kind oder Minderjährigen gehört, sollte das generierte digitale Bargeld altersbeschränkt sein."
           }
         },
         "fr" : {
@@ -5851,6 +6538,40 @@
         }
       }
     },
+    "Last Error: %lld" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Letzter Fehler: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Último error: %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Dernière erreur: %lld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatni błąd: %lld"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Остання помилка: %lld"
+          }
+        }
+      }
+    },
     "Legitimization" : {
       "localizations" : {
         "de" : {
@@ -5983,38 +6704,81 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Demogeld erhalten"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Get demo money"
+            "value" : "Get demo cash"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Obtener dinero de prueba"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Obtenir de l'argent de démonstration"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Zdobądź pieniądze demo"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Отримати демонстраційні гроші"
+          }
+        }
+      }
+    },
+    "LinkTitle_Withdraw_CHF" : {
+      "comment" : "\"Withdraw CHF\"",
+      "extractionState" : "extracted_with_value",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CHF abheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Withdraw CHF"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirar CHF"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer CHF"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłać CHF"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вивести CHF"
           }
         }
       }
@@ -6332,37 +7096,37 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fertig"
+            "value" : "Erfolgreich abgeschlossen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Done"
+            "value" : "Completed successfully"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Terminado"
+            "value" : "Completado con éxito"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Terminé"
+            "value" : "Réussi avec succès"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wykonane"
+            "value" : "Zakończono pomyślnie"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Виконано"
+            "value" : "Успішно завершено"
           }
         }
       }
@@ -6535,7 +7299,7 @@
         }
       }
     },
-    "Manage payment services..." : {
+    "Manage payment services" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6552,13 +7316,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gérer les prestataires de services de paiement..."
+            "value" : "Gérer les prestataires de services de paiement"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zarządzaj usługami płatniczymi..."
+            "value" : "Zarządzaj usługami płatniczymi"
           }
         }
       }
@@ -6632,44 +7396,44 @@
         }
       }
     },
-    "MinorState.aml" : {
+    "MinorState.acceptRefund" : {
       "comment" : "TxMinorState heading",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AML benötigt"
+            "value" : "Überprüfung auf Rückerstattung"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AML required"
+            "value" : "Checking for refund"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Requiere AML"
+            "state" : "needs_review",
+            "value" : "Comprobación del reembolso"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AML requis"
+            "value" : "Vérification du remboursement"
           }
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wymagany AML"
+            "state" : "needs_review",
+            "value" : "Sprawdzanie zwrotu kosztów"
           }
         },
         "uk" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Потрібна перевірка AML"
+            "state" : "needs_review",
+            "value" : "Перевірка повернення коштів"
           }
         }
       }
@@ -6716,6 +7480,48 @@
         }
       }
     },
+    "MinorState.completedByOther" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Von anderer Wallet ausgeführt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Completed by other wallet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Completado por otra cartera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Complété par un autre portefeuille"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Uzupełnione przez inny portfel"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Завершено іншим гаманцем"
+          }
+        }
+      }
+    },
     "MinorState.kyc" : {
       "comment" : "TxMinorState heading",
       "extractionState" : "extracted_with_value",
@@ -6754,6 +7560,174 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Потрібна перевірка KYC"
+          }
+        }
+      }
+    },
+    "MinorState.kycAuth" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bankkonto verifizieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Verify bank account"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificar cuenta bancaria"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier le compte bancaire"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zweryfikuj konto bankowe"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Підтвердити банківський рахунок"
+          }
+        }
+      }
+    },
+    "MinorState.kycInit" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legitimierung vorbereiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Preparing legitimization"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Preparación de la legitimación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Préparation de la légitimation"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Przygotowanie legitymizacji"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Підготовка до легітимізації"
+          }
+        }
+      }
+    },
+    "MinorState.ready" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ready"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Prêt"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowe"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        }
+      }
+    },
+    "MinorState.rebindSession" : {
+      "comment" : "TxMinorState heading",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zugang wiederherstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Restoring access"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Restablecimiento del acceso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Rétablir l'accès"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Przywracanie dostępu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Відновлення доступу"
           }
         }
       }
@@ -6944,40 +7918,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Більше інформації про GNU Taler загалом..."
-          }
-        }
-      }
-    },
-    "More info about this app..." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mehr Info über diese App..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Más información acerca de esta aplicación..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plus d'infos sur cette application..."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Więcej informacji o tej aplikacji..."
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Більше інформації про цей додаток..."
           }
         }
       }
@@ -7403,6 +8343,12 @@
             "state" : "translated",
             "value" : "Wypłać"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вивести"
+          }
         }
       }
     },
@@ -7439,6 +8385,12 @@
             "state" : "translated",
             "value" : "Wypłać %@"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вивести %@"
+          }
         }
       }
     },
@@ -7472,6 +8424,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Чиста сума до отримання:"
+          }
+        }
+      }
+    },
+    "Network problem" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netzwerkproblem"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problema de red"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Problème réseau"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problem z siecią"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проблема з мережею"
+          }
+        }
+      }
+    },
+    "Network unavailable!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netzwerk nicht verfügbar!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Red no disponible!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réseau indisponible !"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sieć niedostępna!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мережа недоступна!"
           }
         }
       }
@@ -7627,6 +8647,78 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Немає дати"
+          }
+        }
+      }
+    },
+    "No default - first possible payment service: %@" : {
+      "comment" : "Error message in the \"Error loading payment service details:\" view.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Standardeinstellung – erster verfügbarer Zahlungsdienst: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sin valor predeterminado: primer servicio de pago posible: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pas de défaut - premier service de paiement possible : %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Brak domyślnej opcji – pierwsza możliwa usługa płatnicza: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Немає за замовчуванням - перша можлива послуга оплати: %@"
+          }
+        }
+      }
+    },
+    "No default, no possible payment services" : {
+      "comment" : "Error message when there are no default or possible payment services.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Standarddienst, keine alternativen Zahlungsdienste"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sin valor predeterminado, no hay servicios de pago posibles."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de défaut, pas de services de paiement possibles"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Brak wartości domyślnej, brak możliwości świadczenia usług płatniczych"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Немає значення за замовчуванням, неможливі платіжні послуги"
           }
         }
       }
@@ -7946,6 +9038,53 @@
         }
       }
     },
+    "off" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aus"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "apagado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "arrêt"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "wyłączony"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "відключений"
+          }
+        }
+      }
+    },
+    "OIM currency for KUDOS" : {
+
+    },
+    "OIM history as chart" : {
+
+    },
+    "OIM: Chart" : {
+
+    },
+    "OIM: Euro" : {
+
+    },
     "OK" : {
       "localizations" : {
         "de" : {
@@ -8010,6 +9149,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Виключіть текст, де це можливо"
+          }
+        }
+      }
+    },
+    "on" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "an"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "sobre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "marche"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "na"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "на"
           }
         }
       }
@@ -8351,6 +9525,41 @@
         }
       }
     },
+    "Pay ..." : {
+      "comment" : "UrlCommand",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezahlen..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagar…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payer …"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zapłać…"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Сплатити…"
+          }
+        }
+      }
+    },
     "Pay %@ now" : {
       "comment" : "a11y",
       "localizations" : {
@@ -8382,6 +9591,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сплатити %@ зараз"
+          }
+        }
+      }
+    },
+    "Pay merchant" : {
+      "comment" : "UrlCommand",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Händler bezahlen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pagar al comerciante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payer le commerçant"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zapłać sprzedawcy"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Оплатити продавцю"
+          }
+        }
+      }
+    },
+    "Pay others" : {
+      "comment" : "UrlCommand",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere bezahlen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pagar a otros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payer les autres"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Płać innym"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Платити іншим"
           }
         }
       }
@@ -8863,7 +10142,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Teil des für diesen Kauf benötigten digitalen Geldes ist derzeit nicht verfügbar"
+            "value" : "Ein Teil des für diesen Kauf benötigten digitalen Bargeldes ist derzeit nicht verfügbar"
           }
         },
         "en" : {
@@ -9107,6 +10386,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Будь ласка, дозвольте доступ до камери в налаштуваннях."
+          }
+        }
+      }
+    },
+    "Please check your internet connection and try again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba tu conexión a Internet e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez vérifier votre connexion Internet et réessayer."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Sprawdź połączenie internetowe i spróbuj ponownie."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевірте підключення до Інтернету та спробуйте ще раз."
           }
         }
       }
@@ -9370,6 +10683,7 @@
       }
     },
     "Ready" : {
+      "comment" : "Exchange status",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9394,11 +10708,17 @@
             "state" : "translated",
             "value" : "Gotowe"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
         }
       }
     },
     "Receive" : {
-      "comment" : "Nav Title",
+      "comment" : "Nav Title\nUrlCommand",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9793,12 +11113,12 @@
       }
     },
     "Refund" : {
-      "comment" : "RefreshReason\nTransactionType",
+      "comment" : "RefreshReason\nTransactionType\nUrlCommand",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erstattung"
+            "value" : "Rückerstattung"
           }
         },
         "es" : {
@@ -10321,6 +11641,41 @@
         }
       }
     },
+    "Scanned" : {
+      "comment" : "ViewTitle of TransactionList",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescannt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Escaneado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Scanné"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zeskanowane"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Відскановано"
+          }
+        }
+      }
+    },
     "Scanned QR is no talerURI" : {
       "localizations" : {
         "de" : {
@@ -10373,6 +11728,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeskanowany QR nie jest adresem URL"
+          }
+        }
+      }
+    },
+    "Scanned Taler codes:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescannte Taler-Codes:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Códigos Taler escaneados:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codes Taler scannés :"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zeskanowane kody Taler:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відскановані коди Taler:"
+          }
+        }
+      }
+    },
+    "Scanned transactions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gescannte Transaktionen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transacciones escaneadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transactions scannées"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Zeskanowane transakcje"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Відскановані транзакції"
           }
         }
       }
@@ -11335,12 +12758,24 @@
         }
       }
     },
+    "Taler Wallet" : {
+      "comment" : "The title of the main view in the Taler app.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taler Wallet"
+          }
+        }
+      }
+    },
     "Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to the computer." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Geldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf den Computer."
+            "value" : "Tippen Sie ‘Backup erstellen’ um eine Kopie Ihres digitalen Bargeldes zu machen. Schließen Sie Ihr iPhone an einen Computer an, verwenden Sie dann den Dialog ‘Dateien’ und kopieren Sie diese Sicherung auf den Computer."
           }
         },
         "fr" : {
@@ -11353,6 +12788,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stuknij ‘Utwórz kopię zapasową’, aby utworzyć kopię swoich cyfrowych pieniędzy. Podłącz iPhone'a do komputera, a następnie użyj okna dialogowego Pliki i skopiuj kopię zapasową na komputer."
+          }
+        }
+      }
+    },
+    "Tap 'Create Report' to build a report of your wallet's state, to help improve Taler...\nThis report will not enable the receiver to access your money." : {
+      "comment" : "A hint displayed below the button to create a report.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Tippen Sie auf „Bericht erstellen“, um einen Bericht über den Status Ihrer Wallet zu erstellen und damit zur Verbesserung von Taler beizutragen...\nDieser Bericht ermöglicht dem Empfänger keinen Zugriff auf Ihr Geld."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Pulsa «Crear informe» para generar un informe sobre el estado de tu monedero, con el fin de ayudar a mejorar Taler...\nEste informe no permitirá al destinatario acceder a tu dinero."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Appuyez sur « Créer un rapport » pour générer un rapport sur l'état de votre portefeuille, afin d'aider à améliorer Taler...\nCe rapport ne permettra pas au destinataire d'accéder à votre argent."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Naciśnij „Utwórz raport”, aby utworzyć raport dotyczący stanu Twojego portfela, który pomoże ulepszyć Taler...\nRaport ten nie umożliwi odbiorcy dostępu do Twoich pieniędzy."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Натисніть «Створити звіт», щоб створити звіт про стан вашого гаманця, що допоможе поліпшити Taler...\nЦей звіт не дозволить одержувачу отримати доступ до ваших грошей."
           }
         }
       }
@@ -11784,34 +13255,6 @@
         }
       }
     },
-    "There is no digital cash in your wallet yet." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Es gibt noch kein digitales Geld in Ihrer Wallet."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aún no hay dinero digital en tu billetera."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Il n'y a pas encore d'argent numérique dans votre portefeuille."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nie ma jeszcze cyfrowej gotówki w wallet."
-          }
-        }
-      }
-    },
     "thirtyDays" : {
       "comment" : "30 Days, always plural (10..30), 4 letters max., abbreviate if longer",
       "extractionState" : "extracted_with_value",
@@ -11844,6 +13287,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%llu dni"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%llu Дн."
           }
         }
       }
@@ -12167,6 +13616,47 @@
         }
       }
     },
+    "TitleDeveloper" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwickler"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Developer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Desarrollador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Développeur"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Programista"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Розробник"
+          }
+        }
+      }
+    },
     "TitleExchanges" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -12292,6 +13782,88 @@
         }
       }
     },
+    "TitleMore" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "More"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Plus"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Więcej"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Більше"
+          }
+        }
+      }
+    },
+    "TitleMoreSettings" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "More Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Más ajustes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Plus de réglages"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Więcej ustawień"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Додаткові налаштування"
+          }
+        }
+      }
+    },
     "TitleOutgoing_Full" : {
       "comment" : "`Pending outgoing´ in Balances - set exactly 1 \\t for line break",
       "extractionState" : "extracted_with_value",
@@ -12376,6 +13948,47 @@
         }
       }
     },
+    "TitleReport" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnosen melden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report diagnostics"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Informar de diagnósticos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaler diagnostics"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Raport diagnostyczny"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Повідомте про діагностику"
+          }
+        }
+      }
+    },
     "TitleSettings" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -12445,24 +14058,81 @@
         }
       }
     },
-    "To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet." : {
+    "To make your first payment please withdraw some digital cash." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Um Ihr digitales Geld wiederherzustellen, schließen Sie Ihr iPhone an Ihren Computer an, verwenden Sie dann den Dialog ‘Dateien’, und kopieren Sie eine zuvor gespeicherte Sicherungskopie von Ihrem Computer in die Taler Wallet."
+            "value" : "Um Ihre erste Zahlung zu tätigen, heben Sie bitte etwas digitales Bargeld ab."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para realizar tu primer pago, retira algo de dinero digital."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pour restaurer votre monnaie numérique, connectez votre iPhone à votre ordinateur, puis utilisez la boîte de dialogue Fichiers et copiez une sauvegarde précédemment enregistrée sur votre ordinateur dans le Portefeuille Taler."
+            "value" : "Pour effectuer votre premier paiement, veuillez retirer de l'argent numérique."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby dokonać pierwszej płatności, proszę wypłacić trochę cyfrowej gotówki."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щоб здійснити перший платіж, будь ласка, зніміть трохи цифрової готівки."
+          }
+        }
+      }
+    },
+    "To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um Ihr digitales Bargeld wiederherzustellen, schließen Sie Ihr iPhone an Ihren Computer an, verwenden Sie dann den Dialog ‘Dateien’, und kopieren Sie eine zuvor gespeicherte Sicherungskopie von Ihrem Computer in die Taler Wallet."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour restaurer votre argent numérique, connectez votre iPhone à votre ordinateur, puis utilisez la boîte de dialogue Fichiers et copiez une sauvegarde précédemment enregistrée sur votre ordinateur dans le Portefeuille Taler."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aby przywrócić cyfrowe pieniądze, podłącz iPhone'a do komputera, a następnie użyj okna dialogowego Pliki i skopiuj wcześniej zapisaną kopię zapasową z komputera do Taler Wallet."
+          }
+        }
+      }
+    },
+    "Torch for QR code scanning" : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotolicht zum Scannen von QR-Codes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Lampe torche pour la capture de QR code"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Ліхтарик для сканування QR-кодів"
           }
         }
       }
@@ -13036,30 +14706,36 @@
         }
       }
     },
-    "Unknown command" : {
+    "Unknown command: %@" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unbekanntes Kommando"
+            "value" : "Unbekanntes Kommando: %@"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comando desconocido"
+            "value" : "Comando desconocido: %@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Commande inconnue"
+            "value" : "Commande inconnue: %@"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nieznane polecenie"
+            "value" : "Nieznane polecenie: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown command: %@"
           }
         }
       }
@@ -13133,7 +14809,7 @@
       }
     },
     "Unknown payment service" : {
-      "comment" : "exchange url",
+      "comment" : "exchange     url\nexchange url",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -13224,24 +14900,36 @@
         }
       }
     },
-    "Use FaceID / TouchID" : {
+    "Use FaceID" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FaceID / TouchID verwenden"
+            "value" : "FaceID verwenden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizar FaceID"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utiliser FaceID / TouchID"
+            "value" : "Utiliser FaceID"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Użyj FaceID / TouchID"
+            "value" : "Użyj FaceID"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовуйте FaceID"
           }
         }
       }
@@ -13255,6 +14943,12 @@
             "value" : "Passcode verwenden"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar código de acceso"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13265,6 +14959,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Użyj kodu dostępu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовувати пароль"
+          }
+        }
+      }
+    },
+    "Use TouchID" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TouchID verwenden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilizar TouchID"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser TouchID"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj TouchID"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовуйте TouchID"
           }
         }
       }
@@ -13518,6 +15252,46 @@
             "state" : "translated",
             "value" : "Wersja Wallet-Core"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія Wallet-Core"
+          }
+        }
+      }
+    },
+    "Welcome to Taler Wallet!" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen bei Taler Wallet!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Bienvenido a Taler Wallet!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans Taler Wallet !"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Witamy w Taler Wallet!"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ласкаво просимо до Taler Wallet!"
+          }
         }
       }
     },
@@ -13634,6 +15408,12 @@
             "value" : "Geht zur Legitimierung-Webseite um diese Abhebung zu erlauben."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irá al sitio web de legitimación para autorizar este retiro."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13644,6 +15424,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Przejdź do strony legitymizacji, aby zezwolić na tę wypłatę."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перейде на вебсайт легітимізації, щоб дозволити це зняття коштів."
           }
         }
       }
@@ -13714,6 +15500,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Перейде до очікуваних транзакцій."
+          }
+        }
+      }
+    },
+    "Will go to Scanned transactions." : {
+      "comment" : "a11y",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geht zu „Gescannte Transaktionen“."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Irá a Transacciones escaneadas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Va aller à Transactions scannées."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Przejdź do zeskanowanych transakcji."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Перейде до сканованих транзакцій."
           }
         }
       }
@@ -13921,6 +15742,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "QR-коди для банківського переказу"
+          }
+        }
+      }
+    },
+    "Withdraw" : {
+      "comment" : "UrlCommand",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CHF abheben"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypłacenia"
           }
         }
       }
@@ -14141,6 +15991,12 @@
           }
         }
       }
+    },
+    "x" : {
+
+    },
+    "y" : {
+
     },
     "Yesterday" : {
       "localizations" : {
@@ -14431,7 +16287,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in ihrer Wallet empfangen können."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor Sie digitales Bargeld in Ihre Wallet empfangen können."
           }
         },
         "fr" : {
@@ -14453,13 +16309,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor sie digitales Geld in Ihr Wallet abheben können."
+            "value" : "Sie müssen zuerst die Allgemeinen Geschäftsbedingungen des Zahlungsdienstes akzeptieren, bevor Sie digitales Bargeld in Ihre Wallet abheben können."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous devez d'abord accepter les conditions générales d'utilisation du prestataire de services de paiement avant de pouvoir retirer de l'argent électronique dans votre portefeuille."
+            "value" : "Vous devez d'abord accepter les conditions générales d'utilisation du prestataire de services de paiement avant de pouvoir retirer de l'argent numérique dans votre portefeuille."
           }
         },
         "pl" : {
@@ -14515,12 +16371,48 @@
         }
       }
     },
+    "You need to prove having control over the bank account for the deposit." : {
+      "comment" : "A message explaining the need to prove control over a bank account for a deposit.",
+      "isCommentAutoGenerated" : true,
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für die Einzahlung müssen Sie nachweisen, dass Sie Kontrolle über das Bankkonto haben."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debe demostrar que tiene control sobre la cuenta bancaria para el depósito."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez prouver que vous avez le contrôle sur le compte bancaire pour le dépôt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musisz udowodnić, że masz kontrolę nad kontem bankowym, na które wpłacasz pieniądze."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ви повинні підтвердити, що маєте контроль над банківським рахунком для депозиту."
+          }
+        }
+      }
+    },
     "You need to transfer %@ from your regular bank account to the payment service to receive %@ as digital cash in this wallet." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sie müssen %1$@ von Ihrem regulären Bankkonto an den Zahlungsdienst überweisen, um %2$@ als digitales Geld in diese Wallet zu erhalten."
+            "value" : "Sie müssen %1$@ von Ihrem regulären Bankkonto an den Zahlungsdienst überweisen, um %2$@ als digitales Bargeld in diese Wallet zu erhalten."
           }
         },
         "en" : {
@@ -14532,7 +16424,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous devez transférer %1$@ de votre compte bancaire habituel vers le prestataire de services de paiement pour recevoir %2$@ sous forme d'argent électronique dans ce portefeuille."
+            "value" : "Vous devez transférer %1$@ de votre compte bancaire habituel vers le prestataire de services de paiement pour recevoir %2$@ sous forme d'argent numérique dans ce portefeuille."
           }
         },
         "pl" : {
@@ -14572,6 +16464,7 @@
       }
     },
     "You need to verify having control over the bank account for the deposit." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -14593,7 +16486,7 @@
         }
       }
     },
-    "Your accounts for deposit..." : {
+    "Your accounts for deposit" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -14610,13 +16503,19 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vos comptes pour faire un dépôt..."
+            "value" : "Vos comptes pour faire un dépôt"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Twoje konta do wpłaty..."
+            "value" : "Twoje konta do wpłaty"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваші рахунки для депозиту"
           }
         }
       }
@@ -14665,7 +16564,13 @@
           }
         }
       }
+    },
+    "Zoom in" : {
+      "comment" : "a11y for the zoom button"
+    },
+    "Zoom out" : {
+      "comment" : "a11y for the zoom button"
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

@@ -70,7 +70,7 @@ struct ExchangeRowView: View {
 
             if developerMode {
                 HStack {
-                    Text("Update Exchange")  // VIEW_WITHDRAW_TOS
+                    Text(verbatim: "Update exchange")  // VIEW_WITHDRAW_TOS
                         .foregroundStyle(isUpdated ? .gray : .primary)
                 }
                 .background {           // only needed for .onTapGesture

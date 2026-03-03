@@ -198,8 +198,8 @@ struct RiverTileView: View {
                 let (day, month) = getDate(date)
                 let sunImage = Image(systemName: "sun.max.fill")
                 let moonImage = Image(systemName: "moon.fill")
-                let sunText = Text("\(sunImage) \(day)")
-                let moonText = Text("\(moonImage) \(month)")
+                let sunText = Text("\(sunImage) \(day)")        // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
+                let moonText = Text("\(moonImage) \(month)")    //   "
                 if common.isIncoming {
                     let sizeIndex = sizeIn(for: amount.value)
                     VStack {
@@ -226,8 +226,8 @@ struct RiverTileView: View {
                 if historyItem.marker != .none {
                     let markerIndex = historyItem.marker.rawValue
                     VStack {
-                        Text(" ")
-                        Text(" ")
+                        Text(verbatim: " ")
+                        Text(verbatim: " ")
                         Image("River-Mark-" + String(markerIndex))
                             .resizable()
                             .scaledToFit()

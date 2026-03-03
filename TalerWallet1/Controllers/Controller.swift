@@ -53,7 +53,7 @@ enum UrlCommand: String, Codable {
             case .withdraw,
                  .withdrawExchange: String(localized: "Withdraw",
                                              comment: "UrlCommand")
-            case .addExchange:      String(localized: "Add Exchange",
+            case .addExchange:      String(localized: "Add payment service",
                                              comment: "UrlCommand")
             case .pay:              String(localized: "Pay merchant",
                                              comment: "UrlCommand")

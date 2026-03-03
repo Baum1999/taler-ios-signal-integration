@@ -34,15 +34,15 @@ enum ExchangeUpdateStatus: String, Codable {
 
     var localized: String {
         switch self {
-            case .initial:           String(localized: "Initial", comment: "Exchange status")
-            case .initialUpdate:     String(localized: "Initial update", comment: "Exchange status")
-            case .suspended:         String(localized: "Suspended", comment: "Exchange status")
-            case .failed:            String(localized: "Failed", comment: "Exchange status")
-            case .outdatedUpdate:    String(localized: "Outdated update", comment: "Exchange status")
-            case .ready:             String(localized: "Ready", comment: "Exchange status")
-            case .readyUpdate:       String(localized: "Ready update", comment: "Exchange status")
-            case .unavailable:       String(localized: "Unavailable", comment: "Exchange status")
-            case .unavailableUpdate: String(localized: "Unavailable update", comment: "Exchange status")
+            case .initial:           String(localized: "Exchange_status_initial", defaultValue: "Initial")
+            case .initialUpdate:     String(localized: "Exchange_status_initial_update", defaultValue: "Initial (… updating …)")
+            case .suspended:         String(localized: "Exchange_status_suspended", defaultValue: "Suspended")
+            case .failed:            String(localized: "Exchange_status_failed", defaultValue: "Failed")
+            case .outdatedUpdate:    String(localized: "Exchange_status_outdated_update", defaultValue: "Outdated (… updating …)")
+            case .ready:             String(localized: "Exchange_status_ready", defaultValue: "Ready")
+            case .readyUpdate:       String(localized: "Exchange_status_ready_update", defaultValue: "Ready (… updating …)")
+            case .unavailable:       String(localized: "Exchange_status_unavailable", defaultValue: "Unavailable")
+            case .unavailableUpdate: String(localized: "Exchange_status_unavailable_update", defaultValue: "Unavailable (… updating …)")
         }
     }
 }

@@ -112,7 +112,7 @@ struct QRButton : View  {
         }
         let scanText = String(localized: "Scan QR code", comment: "Button title, a11y")
         let qrImage = Image(systemName: QRBUTTON)
-        let qrText = Text("\(qrImage)", comment: "QR Image")
+        let qrText = Text(qrImage)
         Button(action: checkCameraAvailable) {
             if hideTitle {
                 qrImage

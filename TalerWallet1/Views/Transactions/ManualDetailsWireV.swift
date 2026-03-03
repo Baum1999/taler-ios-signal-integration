@@ -70,7 +70,7 @@ struct TransferRestrictionsV: View {
                         .padding(.top)
                     } else if let hint = restriction.human_hint {
                         let mark = Image(systemName: "exclamationmark.circle")
-                        Text("\(mark) \(hint)")
+                        Text("\(mark) \(hint)")     // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
                             .padding(.top)
                     }
                 }

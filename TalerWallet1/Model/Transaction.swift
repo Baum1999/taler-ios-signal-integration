@@ -55,7 +55,7 @@ enum TransactionMinorState: String, Codable {
     var localizedDbgState: String { self.rawValue }
     var localizedState: String? {
         switch self {
-            case .kycInit:            return String(localized: "MinorState.kycInit", defaultValue: "Preparing Legitimization", comment: "TxMinorState heading")
+            case .kycInit:            return String(localized: "MinorState.kycInit", defaultValue: "Preparing legitimization", comment: "TxMinorState heading")
             case .kycAuthRequired:    return String(localized: "MinorState.kycAuth", defaultValue: "Verify bank account", comment: "TxMinorState heading")
             case .balanceKyc,
                  .kyc:                return String(localized: "MinorState.kyc", defaultValue: "Legitimization required", comment: "TxMinorState heading")
