@@ -119,6 +119,11 @@ class Controller: ObservableObject {
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0         // extension mustn't define this, so it must be here
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
@@ -421,6 +426,14 @@ class Controller: ObservableObject {
             do {
                 let versionInfo = try await model.initWalletCore(setTesting: setTesting)
                 WalletCore.shared.versionInfo = versionInfo
+#if !TALER_WALLET
+                if developerMode {
+                    try? await model.setConfig(setTesting: true)
+                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
+                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
+                    try? await model.setConfig(setTesting: false)
+                }
+#endif
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
