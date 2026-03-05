@@ -114,7 +114,6 @@ public struct CurrencyInfo: Sendable {
         let null = nu ? "ヌ"                // use `nu´ for Null
                       : EMPTYSTRING
         let specs = CurrencySpecification(name: currency,
-                                      currency: currency,
                                  commonAmounts: nil,
                          fractionalInputDigits: 0,
                         fractionalNormalDigits: 0,
@@ -127,7 +126,6 @@ public struct CurrencyInfo: Sendable {
     public static func euro() -> CurrencyInfo {
         let currency = EUR_4217
         let specs = CurrencySpecification(name: "Euro",
-                                      currency: currency,
                                  commonAmounts: nil,
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
@@ -141,7 +139,6 @@ public struct CurrencyInfo: Sendable {
     public static func francs() -> CurrencyInfo {
         let currency = CHF_4217
         let specs = CurrencySpecification(name: "Franken",
-                                      currency: currency,
                                  commonAmounts: nil,
                          fractionalInputDigits: 2,
                         fractionalNormalDigits: 2,
@@ -278,9 +275,9 @@ public struct CurrencyInfo: Sendable {
     }
 }
 // MARK: -
-public struct CurrencySpecification: Codable, Sendable {
+public struct CurrencySpecification: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
-        case name, currency
+        case name
         case commonAmounts = "common_amounts"
         case fractionalInputDigits = "num_fractional_input_digits"
         case fractionalNormalDigits = "num_fractional_normal_digits"
@@ -289,7 +286,6 @@ public struct CurrencySpecification: Codable, Sendable {
     }
     /// some name for this CurrencySpecification
     let name: String
-    let currency: String?
     let commonAmounts: [Amount]?
     /// how much digits the user may enter after the decimal separator
     let fractionalInputDigits: Int
@@ -398,7 +394,6 @@ public class CurrencyFormatter: NumberFormatter {
 func PreviewCurrencyInfo(_ currency: String, digits: Int) -> CurrencyInfo {
     let unitName = digits == 0 ? "テ" : "ク"  // do not use real currency symbols like "¥" : "€"
     let specs = CurrencySpecification(name: currency,
-                                  currency: currency,
                              commonAmounts: nil,
                      fractionalInputDigits: digits,
                     fractionalNormalDigits: digits,
