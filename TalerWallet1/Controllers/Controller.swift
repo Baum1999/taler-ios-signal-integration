@@ -115,6 +115,7 @@ class Controller: ObservableObject {
     @Published var oimModeActive: Bool = false
     @Published var oimSheetActive: Bool = false
     @Published var diagnosticModeEnabled: Bool = false
+    @Published var talerURI: URL? = nil
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSoundsI") var playSoundsI: Int = 1     // extension mustn't define this, so it must be here
     @AppStorage("playSoundsB") var playSoundsB: Bool = false

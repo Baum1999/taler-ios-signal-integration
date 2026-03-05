@@ -259,6 +259,14 @@ struct MainView: View {
                 showUrlSheet = true     // raise sheet
             }
         }
+        .onChange(of: controller.talerURI) { url in
+            if url != nil {
+                urlToOpen = url
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    controller.talerURI = nil
+                    showUrlSheet = true     // raise sheet
+        }   }   }
+
         .onChange(of: qrButtonTapped) { tapped in
             if tapped {
                 let delay = if #available(iOS 16.4, *) { 0.5 } else { 0.01 }
