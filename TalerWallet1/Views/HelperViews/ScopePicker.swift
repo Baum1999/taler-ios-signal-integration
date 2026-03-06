@@ -24,6 +24,39 @@ fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> 
             String("\(urlOrCurrency): \(formatted.1)"))
 }
 
+struct CurrencyPicker: View {
+    let stack: CallStack
+    @Binding var value: Int
+    let exchanges: [DefaultExchange]
+    let action: (Int) -> Void
+
+    @State private var selected = 0
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+#endif
+        let count = exchanges.count
+        if (count > 0) {
+            Picker(EMPTYSTRING, selection: $selected) {
+                ForEach(0..<count, id: \.self) { index in
+                    let exchange = exchanges[index]
+                    Text(exchange.currencySpec.name)
+                        .tag(index)
+                }
+            }
+            .talerFont(.title3)
+            .task() {
+                // FIXME: check balance for non-zero and disable-peer-payments
+                withAnimation { selected = value }
+            }
+            .onChange(of: selected) { newValue in
+                action(newValue)
+            }
+
+        }
+    }
+}
 struct ScopePicker: View {
 //    private let symLog = SymLogV(0)
     let stack: CallStack
@@ -62,7 +95,7 @@ struct ScopePicker: View {
                                    disabled: disabled)
                 } else {
                     Picker(EMPTYSTRING, selection: $selected) {
-                        ForEach(0..<controller.balances.count, id: \.self) { index in
+                        ForEach(0..<count, id: \.self) { index in
                             let balance = controller.balances[index]
                             let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
                             let pickerRow = pickerRow(balance, currencyInfo)
