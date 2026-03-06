@@ -33,9 +33,12 @@ public struct WalletColors {
 
     func buttonForeColor(pressed: Bool,
                         disabled: Bool,
+                          scheme: ColorScheme,
+                        contrast: ColorSchemeContrast,
                        prominent: Bool = false) -> Color {
             disabled ? gray2
         : !prominent ? talerColor
+        : scheme == .dark ? primary(contrast)
            : pressed ? gray6 : Color.white
     }
 
@@ -47,7 +50,12 @@ public struct WalletColors {
            : pressed ? gray4 : gray5
     }
 
-    func secondary(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast) -> Color {
+    func primary(_ contrast: ColorSchemeContrast = .standard) -> Color {
+        return contrast == .increased ? .primary
+                                      : Color("Primary")
+    }
+
+    func secondary(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast = .standard) -> Color {
         return contrast == .increased ? .primary            // WCAG AAA for any scheme
                        : minimalistic ? .secondary          // not enough contrast
                     : scheme == .dark ? .secondary          // WCAG AA for dark scheme

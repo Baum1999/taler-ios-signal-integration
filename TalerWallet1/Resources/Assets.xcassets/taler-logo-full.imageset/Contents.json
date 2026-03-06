@@ -3,6 +3,16 @@
     {
       "filename" : "taler-logo-full.svg",
       "idiom" : "universal"
+    },
+    {
+        "appearances" : [
+            {
+                "appearance" : "luminosity",
+                "value" : "dark"
+            }
+        ],
+        "filename" : "taler-logo-full-dark.svg",
+        "idiom" : "universal"
     }
   ],
   "info" : {

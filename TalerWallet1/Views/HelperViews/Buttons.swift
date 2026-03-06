@@ -317,24 +317,36 @@ struct TalerButtonStyle: ButtonStyle {
     var aligned: TextAlignment = .center
     var badge: String = EMPTYSTRING
 
-    public func makeBody(configuration: ButtonStyle.Configuration) -> some View {
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    public func makeBody(configuration: ButtonStyleConfiguration) -> some View {
         //        configuration.role = type == .prominent ? .primary : .normal          Only on macOS
-        MyBigButton(foreColor: foreColor(type: type, pressed: configuration.isPressed, disabled: disabled),
+        MyBigButton(foreColor: foreColor(type: type, pressed: configuration.isPressed,
+                                       scheme: colorScheme, contrast: colorSchemeContrast, disabled: disabled),
                     backColor: backColor(type: type, pressed: configuration.isPressed, disabled: disabled),
                        dimmed: dimmed,
                 configuration: configuration,
                      disabled: disabled,
                        narrow: narrow,
                       aligned: aligned,
-                        badge: badge)
+                        badge: badge,
+                       scheme: colorScheme,
+                     contrast: colorSchemeContrast)
     }
 
-    func foreColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
+    func foreColor(type: TalerButtonStyleType,
+                pressed: Bool,
+                 scheme: ColorScheme,
+               contrast: ColorSchemeContrast,
+               disabled: Bool) -> Color {
         if type == .plain {
             return WalletColors().fieldForeground      // primary text color
         }
         return WalletColors().buttonForeColor(pressed: pressed,
                                              disabled: disabled,
+                                               scheme: scheme,
+                                             contrast: contrast,
                                             prominent: type == .prominent)
     }
     func backColor(type: TalerButtonStyleType, pressed: Bool, disabled: Bool) -> Color {
@@ -369,6 +381,8 @@ struct TalerButtonStyle: ButtonStyle {
         let narrow: Bool
         let aligned: TextAlignment
         var badge: String
+        var scheme: ColorScheme
+        var contrast: ColorSchemeContrast
 
         var body: some View {
             let aligned2: Alignment = (aligned == .center) ? Alignment.center
