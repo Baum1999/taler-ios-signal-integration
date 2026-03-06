@@ -7,17 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-        4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE162A990778009F1BE8 /* AnyCodable */; };
 		4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1853992BDAE6D40034F3BA /* LocalConsole */; };
+		4E18539C2BDAE6E50034F3BA /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E18539B2BDAE6E50034F3BA /* LocalConsole */; };
 		4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2D8DD22B3F513800234039 /* MarkdownUI */; };
 		4E3208572BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
 		4E3208582BB550CA00211E9E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
 		4E363CC02A24754200D7E98C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
+		4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE162A990778009F1BE8 /* AnyCodable */; };
 		4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE182A990778009F1BE8 /* SymLog */; };
 		4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE152A990778009F1BE8 /* taler-swift */; };
 		4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E3EAE1A2A990778009F1BE8 /* CodeScanner */; };
 		4E3EAE7E2A990778009F1BE8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
+		4E563DF82DC3C52C008FA91D /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE62DC3C52C008FA91D /* AnyCodable */; };
+		4E563DF92DC3C52C008FA91D /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE82DC3C52C008FA91D /* SymLog */; };
+		4E563DFA2DC3C52C008FA91D /* LocalConsole in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DF02DC3C52C008FA91D /* LocalConsole */; };
+		4E563DFC2DC3C52C008FA91D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEC2DC3C52C008FA91D /* MarkdownUI */; };
+		4E563DFD2DC3C52C008FA91D /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DE52DC3C52C008FA91D /* taler-swift */; };
 		4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEE2DC3C52C008FA91D /* OrderedCollections */; };
+		4E563DFF2DC3C52C008FA91D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4E563DEA2DC3C52C008FA91D /* CodeScanner */; };
 		4E563E022DC3C52C008FA91D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4E363CBF2A24754200D7E98C /* Settings.bundle */; };
 		4E563E062DC3C52C008FA91D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E3208562BB550CA00211E9E /* PrivacyInfo.xcprivacy */; };
 		4EB094D629896CD20043A8A1 /* TalerWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D429896CD20043A8A1 /* TalerWalletTests.swift */; };
@@ -25,6 +32,13 @@
 		4EB094DC29896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094D929896D030043A8A1 /* TalerWalletUITestsLaunchTests.swift */; };
 		4EB094DD29896D030043A8A1 /* TalerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DA29896D030043A8A1 /* TalerUITests.swift */; };
 		4EB094DE29896D030043A8A1 /* TalerWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB094DB29896D030043A8A1 /* TalerWalletUITests.swift */; };
+		4EB094FD29897D280043A8A1 /* SymLog in Frameworks */ = {isa = PBXBuildFile; productRef = 4EB094FC29897D280043A8A1 /* SymLog */; };
+		4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171872B49635800BF9FF5 /* MarkdownUI */; };
+		4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */; };
+		4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE171912B49FE4E00BF9FF5 /* OrderedCollections */; };
+		4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEC157529F8ECBF00D46A03 /* CodeScanner */; };
+		ABC13AA32859962800D23185 /* taler-swift in Frameworks */ = {isa = PBXBuildFile; productRef = ABC13AA22859962800D23185 /* taler-swift */; };
+		ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */ = {isa = PBXBuildFile; productRef = ABE97B1C286D82BF00580772 /* AnyCodable */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,10 +191,10 @@
 			files = (
 				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
 				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
-				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
-				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
+				4E18539C2BDAE6E50034F3BA /* LocalConsole in Frameworks */,
+				4EE171882B49635800BF9FF5 /* MarkdownUI in Frameworks */,
 				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
-				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
+				4EE171922B49FE4E00BF9FF5 /* OrderedCollections in Frameworks */,
 				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,13 +203,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
-				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
-				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
-				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
-				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
+				4E563DF82DC3C52C008FA91D /* AnyCodable in Frameworks */,
+				4E563DF92DC3C52C008FA91D /* SymLog in Frameworks */,
+				4E563DFA2DC3C52C008FA91D /* LocalConsole in Frameworks */,
+				4E563DFC2DC3C52C008FA91D /* MarkdownUI in Frameworks */,
+				4E563DFD2DC3C52C008FA91D /* taler-swift in Frameworks */,
 				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
-				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
+				4E563DFF2DC3C52C008FA91D /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,13 +217,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E3EAE772A990778009F1BE8 /* AnyCodable in Frameworks */,
-				4E3EAE782A990778009F1BE8 /* SymLog in Frameworks */,
+				ABE97B1D286D82BF00580772 /* AnyCodable in Frameworks */,
+				4EB094FD29897D280043A8A1 /* SymLog in Frameworks */,
 				4E18539A2BDAE6D40034F3BA /* LocalConsole in Frameworks */,
 				4E2D8DD32B3F513800234039 /* MarkdownUI in Frameworks */,
-				4E3EAE7A2A990778009F1BE8 /* taler-swift in Frameworks */,
-				4E563DFE2DC3C52C008FA91D /* OrderedCollections in Frameworks */,
-				4E3EAE7B2A990778009F1BE8 /* CodeScanner in Frameworks */,
+				ABC13AA32859962800D23185 /* taler-swift in Frameworks */,
+				4EE171902B49FE2B00BF9FF5 /* OrderedCollections in Frameworks */,
+				4EEC157629F8ECBF00D46A03 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,9 +382,9 @@
 				4E3EAE162A990778009F1BE8 /* AnyCodable */,
 				4E3EAE182A990778009F1BE8 /* SymLog */,
 				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
-				4E2D8DD22B3F513800234039 /* MarkdownUI */,
-				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
-				4E1853992BDAE6D40034F3BA /* LocalConsole */,
+				4EE171872B49635800BF9FF5 /* MarkdownUI */,
+				4EE171912B49FE4E00BF9FF5 /* OrderedCollections */,
+				4E18539B2BDAE6E50034F3BA /* LocalConsole */,
 			);
 			productName = Taler;
 			productReference = 4E3EAE892A990778009F1BE8 /* GNU_Taler.app */;
@@ -412,13 +426,13 @@
 			);
 			name = Taler_Nightly;
 			packageProductDependencies = (
-				4E3EAE152A990778009F1BE8 /* taler-swift */,
-				4E3EAE162A990778009F1BE8 /* AnyCodable */,
-				4E3EAE182A990778009F1BE8 /* SymLog */,
-				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
-				4E2D8DD22B3F513800234039 /* MarkdownUI */,
+				4E563DE52DC3C52C008FA91D /* taler-swift */,
+				4E563DE62DC3C52C008FA91D /* AnyCodable */,
+				4E563DE82DC3C52C008FA91D /* SymLog */,
+				4E563DEA2DC3C52C008FA91D /* CodeScanner */,
+				4E563DEC2DC3C52C008FA91D /* MarkdownUI */,
 				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
-				4E1853992BDAE6D40034F3BA /* LocalConsole */,
+				4E563DF02DC3C52C008FA91D /* LocalConsole */,
 			);
 			productName = Taler;
 			productReference = 4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */;
@@ -460,12 +474,12 @@
 			);
 			name = Taler_Wallet;
 			packageProductDependencies = (
-				4E3EAE152A990778009F1BE8 /* taler-swift */,
-				4E3EAE162A990778009F1BE8 /* AnyCodable */,
-				4E3EAE182A990778009F1BE8 /* SymLog */,
-				4E3EAE1A2A990778009F1BE8 /* CodeScanner */,
+				ABC13AA22859962800D23185 /* taler-swift */,
+				ABE97B1C286D82BF00580772 /* AnyCodable */,
+				4EB094FC29897D280043A8A1 /* SymLog */,
+				4EEC157529F8ECBF00D46A03 /* CodeScanner */,
 				4E2D8DD22B3F513800234039 /* MarkdownUI */,
-				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
+				4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */,
 				4E1853992BDAE6D40034F3BA /* LocalConsole */,
 			);
 			productName = Taler;
@@ -536,7 +550,6 @@
 				};
 			};
 			buildConfigurationList = D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWalletXC" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -550,11 +563,11 @@
 			);
 			mainGroup = D14AFD1424D232B300C51073;
 			packageReferences = (
-				4E3EAE172A990778009F1BE8 /* XCRemoteSwiftPackageReference "AnyCodable" */,
-				4E3EAE192A990778009F1BE8 /* XCRemoteSwiftPackageReference "SymLog" */,
-				4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */,
+				4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */,
+				4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */,
-				4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */,
+				4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */,
 				4E3624F22CD8E2C600D9079D /* XCLocalSwiftPackageReference "taler-swift" */,
 			);
@@ -1277,6 +1290,38 @@
 				kind = branch;
 			};
 		};
+		4E563DE72DC3C52C008FA91D /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/AnyCodable";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		4E563DE92DC3C52C008FA91D /* XCRemoteSwiftPackageReference "SymLog" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/SymLog";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4E563DEB2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/CodeScanner";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4E563DED2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-markdown-ui-standalone";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Fesh-com/swift-collections";
@@ -1285,10 +1330,55 @@
 				kind = branch;
 			};
 		};
+		4E563DF12DC3C52C008FA91D /* XCRemoteSwiftPackageReference "LocalConsole" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/LocalConsole";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/SymLog";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/swift-collections";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/CodeScanner";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fesh-com/AnyCodable";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		4E1853992BDAE6D40034F3BA /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
+		4E18539B2BDAE6E50034F3BA /* LocalConsole */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4E1853982BDAE6390034F3BA /* XCRemoteSwiftPackageReference "LocalConsole" */;
 			productName = LocalConsole;
@@ -1317,10 +1407,73 @@
 			package = 4E3EAE1B2A990778009F1BE8 /* XCRemoteSwiftPackageReference "CodeScanner" */;
 			productName = CodeScanner;
 		};
+		4E563DE52DC3C52C008FA91D /* taler-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "taler-swift";
+		};
+		4E563DE62DC3C52C008FA91D /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DE72DC3C52C008FA91D /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
+		};
+		4E563DE82DC3C52C008FA91D /* SymLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DE92DC3C52C008FA91D /* XCRemoteSwiftPackageReference "SymLog" */;
+			productName = SymLog;
+		};
+		4E563DEA2DC3C52C008FA91D /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DEB2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+		4E563DEC2DC3C52C008FA91D /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DED2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
+			productName = MarkdownUI;
+		};
 		4E563DEE2DC3C52C008FA91D /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4E563DEF2DC3C52C008FA91D /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
+		};
+		4E563DF02DC3C52C008FA91D /* LocalConsole */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E563DF12DC3C52C008FA91D /* XCRemoteSwiftPackageReference "LocalConsole" */;
+			productName = LocalConsole;
+		};
+		4EB094FC29897D280043A8A1 /* SymLog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EB094FB29897D280043A8A1 /* XCRemoteSwiftPackageReference "SymLog" */;
+			productName = SymLog;
+		};
+		4EE171872B49635800BF9FF5 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E2D8DD12B3F513800234039 /* XCRemoteSwiftPackageReference "swift-markdown-ui-standalone" */;
+			productName = MarkdownUI;
+		};
+		4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		4EE171912B49FE4E00BF9FF5 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE1718C2B49EB7200BF9FF5 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		4EEC157529F8ECBF00D46A03 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EEC157429F8ECBF00D46A03 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+		ABC13AA22859962800D23185 /* taler-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "taler-swift";
+		};
+		ABE97B1C286D82BF00580772 /* AnyCodable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABE97B1B286D82BF00580772 /* XCRemoteSwiftPackageReference "AnyCodable" */;
+			productName = AnyCodable;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
