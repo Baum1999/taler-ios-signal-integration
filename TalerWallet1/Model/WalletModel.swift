@@ -258,7 +258,7 @@ fileprivate struct Testing: Encodable {
         self.insecureTrustExchange = false
         self.preventThrottling = false
         self.skipDefaults = false
-        self.emitObservabilityEvents = true
+        self.emitObservabilityEvents = devModeActive
     }
 }
 
@@ -482,6 +482,13 @@ fileprivate struct GetDiagnostics: WalletBackendFormattedRequest {
     typealias Response = String
 }
 
+fileprivate struct GetPerformanceStats: WalletBackendFormattedRequest {
+    func operation() -> String { "testingGetPerformanceStats" }
+    func args() -> Args { Args() }
+    struct Args: Encodable {}                           // no arguments needed
+    typealias Response = String
+}
+
 extension WalletModel {
     /// export, import DB, get diagnostics
     nonisolated func exportDbToFile(stem: String, viewHandles: Bool = false)
@@ -504,6 +511,12 @@ extension WalletModel {
     nonisolated func getDiagnostics(viewHandles: Bool = false)
       async throws -> String {
         let request = GetDiagnostics()
+        let response = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
+        return response
+    }
+    nonisolated func getPerformanceStats(viewHandles: Bool = false)
+    async throws -> String {
+        let request = GetPerformanceStats()
         let response = try await sendRequest(request, viewHandles: viewHandles, asJSON: true)
         return response
     }

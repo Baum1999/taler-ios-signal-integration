@@ -48,7 +48,12 @@ struct TalerWallet1App: App {
                     /// we handle them in .onOpenURL in MainView.swift
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                 .task {
-                    try! await controller.initWalletCore(model, setTesting: false)     // will (and should) crash on failure
+#if DEBUG
+                    let testing = true
+#else
+                    let testing = false
+#endif
+                    try! await controller.initWalletCore(model, setTesting: testing)     // will (and should) crash on failure
                 }
         }
         .onChange(of: phase) { newPhase in
