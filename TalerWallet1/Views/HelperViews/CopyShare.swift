@@ -69,7 +69,7 @@ struct CopyButton: View {
 
     var body: some View {
         Button(action: copyAction) {
-            let image = Image(systemName: "doc.on.doc")
+            let image = Image(systemName: COPY1)    // 􀉁
                 .accessibility(hidden: true)
 
             if vertical {
@@ -143,7 +143,7 @@ struct ShareButton: View {
     var body: some View {
         Button(action: shareAction) {
             HStack {
-                Image(systemName: "square.and.arrow.up")
+                Image(systemName: SHARE)        // 􀈂
                     .accessibility(hidden: true)
                 Text(title)
             }

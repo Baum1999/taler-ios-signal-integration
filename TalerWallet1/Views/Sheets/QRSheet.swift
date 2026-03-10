@@ -102,7 +102,7 @@ struct QRSheet: View {
                                 Button {
                                     dismissTop(stack.push())
                                 } label: {
-                                    Image(systemName: "xmark")
+                                    Image(systemName: XMARK)
                                 }
                                 .accessibilityHidden(true)      // VoiceOver has its own "Dismiss Popup" button
                             }
@@ -112,7 +112,7 @@ struct QRSheet: View {
                                 Button {
                                     isTorchOn.toggle()
                                 } label: {
-                                    Image(systemName: isTorchOn ? "lightbulb.fill" : "lightbulb")
+                                    Image(systemName: isTorchOn ? LIGHT_ON : LIGHT_OFF)
                                 }
                                 .accessibilityLabel(Text("Torch for QR code scanning", comment: "a11y"))
                                 .accessibilityValue(Text(a11yValue))

@@ -81,7 +81,7 @@ struct ErrorView: View {
     var body: some View {
         ScrollView {
             VStack {
-                Image(systemName: "exclamationmark.circle")
+                Image(systemName: EXCLAMATION)
                     .resizable()
                     .frame(width: 50, height: 50)
                     .aspectRatio(contentMode: .fit)

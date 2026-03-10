@@ -35,7 +35,7 @@ struct OIMcurrencyImage {
             self.oHeight = uiImage.size.height
             self.image = Image(uiImage: uiImage)
         } else {
-            self.image = Image(systemName: "exclamationmark.triangle")
+            self.image = Image(systemName: WARNING)
             self.oWidth = 300
             self.oHeight = 300
         }

@@ -149,7 +149,7 @@ struct ChartHistoryView: View {
                     PointMark(x: .value("x", xVal),
                               y: .value("y", yVal))
                     .symbol(symbol: {
-                        Image(systemName: "banknote.fill")      // wallet.bifold.fill
+                        Image(systemName: BANKNOTE)      // wallet.bifold.fill
                             .resizable()
                             .scaledToFit()
                             .frame(width: 25)

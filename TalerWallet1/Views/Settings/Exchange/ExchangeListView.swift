@@ -131,7 +131,7 @@ struct ExchangeListCommonV: View {
                     .talerFont(.title3)
             }
             Section {
-                let plus = Image(systemName: "plus")
+                let plus = Image(systemName: PLUS)
                 if !minimalistic {
                     Text("Tap the \(plus) button to add a service.")
                         .listRowSeparator(.hidden)

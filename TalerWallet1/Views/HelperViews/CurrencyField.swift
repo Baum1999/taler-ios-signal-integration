@@ -126,7 +126,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
     }
 
     func toolBar() -> UIToolbar {
-        let image = UIImage(systemName: "return")
+        let image = UIImage(systemName: RETURN)   // 􀅇
         let button = UIBarButtonItem(image: image, style: .done, target: textField,
                                     action: #selector(UITextField.resignFirstResponder))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace,

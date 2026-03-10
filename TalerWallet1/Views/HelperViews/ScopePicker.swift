@@ -183,7 +183,7 @@ struct  ScopeDropDown: View {
     var body: some  View {
         let radius = 8.0
         VStack {
-            let chevron = Image(systemName: "chevron.up")
+            let chevron = Image(systemName: CHEVRON_UP)     // 􀆇
             let foreColor = disabled ? Color.secondary : Color.primary
             let backColor = disabled ? WalletColors().backgroundColor : WalletColors().gray4
             let otherBalances = controller.balances.filter { $0 != controller.balances[selection] }

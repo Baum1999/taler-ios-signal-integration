@@ -32,7 +32,7 @@ struct ExchangeRowView: View {
         let delay: UInt = 0
 #endif
         let baseURL = exchange.exchangeBaseUrl
-        let chevron = Text(Image(systemName: "chevron.forward"))
+        let chevron = Text(Image(systemName: CHEVRON))
                         .talerFont(.table)
                         .foregroundColor(.secondary)
 

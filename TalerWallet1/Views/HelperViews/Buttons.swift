@@ -24,8 +24,8 @@ struct HamburgerButton : View  {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "line.3.horizontal")
-//            Image(systemName: "sidebar.squares.leading")
+            Image(systemName: HAMBURGER)
+//            Image(systemName: "sidebar.squares.leading")      // 􀱦
         }
         .talerFont(.title)
         .accessibilityLabel(Text("Main Menu", comment: "a11y"))
@@ -51,7 +51,7 @@ struct LinkButton: View {
             }
             Link(destination: destination) {
                 HStack(spacing: 8.0) {
-                    Image(systemName: "link")
+                    Image(systemName: LINK)
                     Text(buttonTitle)
                 }
             }
@@ -150,7 +150,7 @@ struct DoneButton : View  {
                 Text(titleStr)
                     .tint(.accentColor)
             } else {
-                Image(systemName: "checkmark")
+                Image(systemName: CHECKMARK)    // 􀆅
             }
         }
         .tint(.accentColor)
@@ -165,7 +165,7 @@ struct PlusButton : View  {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "plus")
+            Image(systemName: PLUS)
         }
         .tint(.accentColor)
         .talerFont(.title)
@@ -268,7 +268,7 @@ struct ArrowUpButton : View  {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "arrow.up.to.line")
+            Image(systemName: ARROW_TOP)       // 􀄿
         }
         .tint(.accentColor)
         .talerFont(.title2)
@@ -281,7 +281,7 @@ struct ArrowDownButton : View  {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "arrow.down.to.line")
+            Image(systemName: ARROW_BOT)        // 􀅀
         }
         .tint(.accentColor)
         .talerFont(.title2)
@@ -295,7 +295,7 @@ struct ReloadButton : View  {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "arrow.clockwise")
+            Image(systemName: RELOAD)           // 􀅈
         }
         .tint(.accentColor)
         .talerFont(.title)

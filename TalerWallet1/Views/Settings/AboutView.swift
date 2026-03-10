@@ -55,7 +55,7 @@ struct AboutView: View {
                 }
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
                               id1: "web",
-                        imageName: "link",
+                        imageName: LINK,
                       description: String(localized: "More info about GNU Taler in general...")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)

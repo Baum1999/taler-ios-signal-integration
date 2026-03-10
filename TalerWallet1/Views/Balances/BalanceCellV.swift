@@ -57,7 +57,7 @@ struct BalanceCellV: View {
         let hLayout = HStack {
             amountV
                 .frame(maxWidth: .infinity, alignment: .trailing)
-            Text(Image(systemName: "chevron.forward"))
+            Text(Image(systemName: CHEVRON))
                 .talerFont(.table)
                 .foregroundColor(.secondary)
         }

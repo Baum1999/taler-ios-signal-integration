@@ -196,8 +196,8 @@ struct RiverTileView: View {
                 let amount = common.amountEffective
                 let (dateString, date) = TalerDater.dateString(common.timestamp, true)
                 let (day, month) = getDate(date)
-                let sunImage = Image(systemName: "sun.max.fill")
-                let moonImage = Image(systemName: "moon.fill")
+                let sunImage = Image(systemName: SUNFILL)
+                let moonImage = Image(systemName: MOONFILL)
                 let sunText = Text("\(sunImage) \(day)")        // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
                 let moonText = Text("\(moonImage) \(month)")    //   "
                 if common.isIncoming {

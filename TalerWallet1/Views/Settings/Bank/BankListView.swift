@@ -62,7 +62,7 @@ struct BankListView: View {
             }
             Section {
                 depositHint
-                let plus = Image(systemName: "plus")
+                let plus = Image(systemName: PLUS)
                 if !minimalistic {
                     Text("Tap the \(plus) button to add an account.")
                         .listRowSeparator(.hidden)

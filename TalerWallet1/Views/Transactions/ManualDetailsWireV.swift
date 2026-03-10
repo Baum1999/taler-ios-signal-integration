@@ -69,7 +69,7 @@ struct TransferRestrictionsV: View {
                         }
                         .padding(.top)
                     } else if let hint = restriction.human_hint {
-                        let mark = Image(systemName: "exclamationmark.circle")
+                        let mark = Image(systemName: EXCLAMATION)
                         Text("\(mark) \(hint)")     // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
                             .padding(.top)
                     }
@@ -216,9 +216,10 @@ struct ManualDetailsWireV: View {
                              : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
+            let warningIcon = Image(systemName: WARNING)
             let manda1 = String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
             let manda2 = String(localized: "This is mandatory, otherwise the verification will fail.")
-            let mandatory = Text(debitIBAN == nil ? manda1 : manda2)
+            let mandatory = Text("\(warningIcon) " + (debitIBAN == nil ? manda1 : manda2))
                 .bold()
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
