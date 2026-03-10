@@ -1,7 +1,10 @@
-Version 1.3.3 (wallet-core 1.3.13)
+Version 1.3.3 (wallet-core 1.3.13.1)
 
 - update localization
-• Logo in Empty Wallet
+- treat missing-tos like accepted
+• Logo in Empty Wallet (DD 87)
+• Shop discovery (DD 81)
+• Show first shopping URL
 
 
 Version 1.3.2 (wallet-core 1.3.12)
