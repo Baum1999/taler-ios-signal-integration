@@ -46,7 +46,17 @@ struct BalancesListView: View {
 //        Group {
             let count = controller.balances.count
             if controller.balances.isEmpty {
-                let talerLogo = Image(TALER_LOGO_FULL)
+                let talerLogo = HStack(spacing: 2) {
+                    Image(TALER_LOGO_FULL)
+//                        .border(Color.gray, width: 1)
+//                    Text("TALER Wallet")
+                    Text("Wallet")
+                        .font(.logo(27, weight: .medium))
+                        .kerning(1.0)
+                }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityLabel(Text("Taler Wallet", comment: "a11y"))
 
                 WalletEmptyView(stack: stack.push("isEmpty"))
 //                    .navigationTitle("Taler Wallet")
