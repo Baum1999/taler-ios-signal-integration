@@ -152,18 +152,16 @@ struct ManualWithdrawContent: View {
 //    @State var selectedAge = 0
     @State private var tosAccepted = false
 
-//    private func exchangeVia(_ baseURL: String?) -> String? {
-//        if let baseURL {
-//            return String(localized: "via \(baseURL.trimURL)", comment: "currency/exchange chooser")
-//        }
-//        return nil
-//    }
-//
     @MainActor
     private func reloadExchange(_ baseURL: String) async {
         symLog.log("getExchangeByUrl(\(baseURL))")
         let exchange = try? await model.getExchangeByUrl(url: baseURL)
-        tosAccepted = (exchange?.tosStatus == .accepted) ?? false
+        if let tosStatus = exchange?.tosStatus {
+            tosAccepted = (tosStatus == .accepted)
+                       || (tosStatus == .missingTos)
+        } else {
+            tosAccepted = false
+        }
     }
 
     @MainActor
