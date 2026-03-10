@@ -18,6 +18,7 @@ struct WalletEmptyView: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 #if DEBUG
@@ -26,47 +27,87 @@ struct WalletEmptyView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @State private var withDrawStarted = false
+    @State private var defaultExchanges: [DefaultExchange] = []
+    @State private var urlToOpen: URL? = nil
+    @State private var selectedCurrency: Int = 0
+
+    @MainActor
+    private func viewDidLoad() async {
+        if let exchanges = try? await model.getDefaultExchanges() {
+            withAnimation { defaultExchanges = exchanges }
+        }
+    }
 
     var body: some View {
         let list = List {
             Section {
                 Text("Welcome to Taler Wallet!", comment: "")
+                    .talerFont(.headline)
+                Text("To make your first payment, withdraw digital cash.", comment: "")
                     .talerFont(.body)
-#if TALER_WALLET
+#if false
                 let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
                 let settings = Image(systemName: SETTINGS)                      // 􀍟 "gear"
                 Text("Use «\(qrButton) Scan QR code» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
                     .talerFont(.body)
                 Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
                     .talerFont(.body)
-#else//if TALER_NIGHTLY
-                Text("To make your first payment please withdraw some digital cash.", comment: "")
-                    .talerFont(.body)
-
-                let title = String(localized: "LinkTitle_Withdraw_CHF", defaultValue: "Withdraw CHF")
-                Button(title) {
-                        // TODO: go to withdraw view
-                }
-                    .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
-                    .padding(.bottom)
 #endif
-#if DEBUG
-              if developerMode {
-                Text("Either deposit or send your money to a friend before you delete the app, or it will be lost.", comment: "")
+
+                if !defaultExchanges.isEmpty {
+#if !TALER_WALLET
+                    if developerMode {
+                        if defaultExchanges.count > 1 {
+                            CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
+                                           exchanges: defaultExchanges) { index in
+                                selectedCurrency = index
+                            }
+                        }
+                    }
+#endif
+                    let defaultExchange = defaultExchanges[selectedCurrency]
+                    let currency = defaultExchange.currency
+                    let currencySpec = defaultExchange.currencySpec
+                    let name = currencySpec.name
+                    let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
+                    Button(title) {
+                        if let talerUri = URL(string: defaultExchange.talerUri) {
+                            controller.talerURI = talerUri
+                        }
+                    }
+                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
+                        .padding(.bottom)
+                }
+#if !TALER_WALLET
+                Text("If you don't have a Swiss bank account, you can simply try out the demo…", comment: "")
                     .talerFont(.body)
-              }
+#endif
+
+#if DEBUG
+//              if developerMode {
+//                Text("Either deposit or send your money to a friend before you delete the app, or it will be lost.", comment: "")
+//                    .talerFont(.body)
+//              }
 #endif
             } header: {
                 let firstHeader = EMPTYSTRING
+//                Text("Welcome to Taler Wallet!", comment: "")
+//                    .talerFont(.title2)
                 Text(firstHeader)
                     .talerFont(.badge)
+                    .foregroundColor(.primary)
                 /// YIKES! when not specifying this color, the Text in the BarGraphHeader vanishes!!!
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                    .listRowInsets(EdgeInsets())  // << here !!
+//                    .listRowInsets(EdgeInsets())  // << here !!
             }
             .listRowSeparator(.hidden)
+//            .listSectionSpacing(.compact) iOS 17
             Section {
-                Text("Get digital cash to experience how to pay with the money of the future.")
+//                Text("Demo")
+//                    .talerFont(.headline)
+//                Text("Get digital cash to experience how easy you can pay online, and send money to friends & family.")
+                Text("Get demo cash to experience how to pay with digital cash.")
+//                Text("Get digital cash to experience how to pay with the money of the future.")
                     .talerFont(.body)
                     .listRowSeparator(.hidden)
                 let title = String(localized: "LinkTitle_Test_Money", defaultValue: "Get demo cash")
@@ -80,11 +121,11 @@ struct WalletEmptyView: View {
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
                 .disabled(withDrawStarted)
-            } header: {
-                let secondHeader = String(localized: "Demo", comment: "section header")
-                Text(secondHeader)
-                    .talerFont(.title3)
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+//            } header: {
+//                let secondHeader = String(localized: "Demo", comment: "section header")
+//                Text(secondHeader)
+//                    .talerFont(.title3)
+//                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
         }
             .listStyle(myListStyle.style).anyView
@@ -95,6 +136,10 @@ struct WalletEmptyView: View {
             if withDrawStarted {
                 RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawStarted)
             }
+        }
+        .task {
+            setVoice(to: nil)
+            await viewDidLoad()
         }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY_WALLET, stack: stack.push("onAppear"))     // 10
