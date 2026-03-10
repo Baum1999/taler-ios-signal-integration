@@ -14,6 +14,7 @@ struct ToSButtonView: View {
     let p2p: Bool
     let acceptAction: (() async -> Void)?
 
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
@@ -32,6 +33,14 @@ struct ToSButtonView: View {
             Text("Terms of Service")  // VIEW_WITHDRAW_TOS
         }.buttonStyle(TalerButtonStyle(type: .prominent))
             .padding(.horizontal)
+#if false
+        let title = "getPerformanceStats"
+        Button(title) {
+            Task {
+                try? await model.getPerformanceStats()
+            }
+        }
+#endif
     }
 }
 
