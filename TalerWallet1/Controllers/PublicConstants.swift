@@ -49,6 +49,28 @@ public let SPACECHAR: Character = " "
 public let NONBREAKING: Character = "\u{00A0}"
 public let LINEFEED = "\n"
 public let UNKNOWN = String(localized: "UNKNOWN", comment: "merchant didn't specify the currency, use ALL CAPS")
+public let LINK = "link"                            // 􀉣                       1.0 (iOS 13)
+public let MAPPIN = "mappin.and.ellipse"            // 􀎫                       1.0 (iOS 13)
+public let HAMBURGER = "line.3.horizontal"          // 􀌇                       3.0 (iOS 15)
+public let EXCLAMATION = "exclamationmark.circle"   // 􀁞                       1.0 (iOS 13)
+public let WARNING = "exclamationmark.triangle"     // 􀇾                       1.0 (iOS 13)
+public let CHEVRON = "chevron.forward"              // 􀯻  􀯶                     2.0 (iOS 14)   reverses for RTL
+public let CHEVRON_UP = "chevron.up"                // 􀆇                       1.0 (iOS 13)
+
+public let BANKNOTE = "banknote.fill"               // 􀮀                       2.0 (iOS 14)
+public let PLUS = "plus"                            // 􀅼                       1.0 (iOS 13)
+public let XMARK = "xmark"                          // 􀆄                       1.0 (iOS 13)
+public let LIGHT_OFF = "lightbulb"                  // 􀛭                       1.0 (iOS 13)
+public let LIGHT_ON = "lightbulb.fill"              // 􀛮                       1.0 (iOS 13)
+public let CHECKMARK = "checkmark"                  // 􀆅                       1.0 (iOS 13)
+public let ARROW_TOP = "arrow.up.to.line"           // 􀄿                       1.0 (iOS 13)
+public let ARROW_BOT = "arrow.down.to.line"         // 􀅀                       1.0 (iOS 13)
+public let RELOAD = "arrow.clockwise"               // 􀅈                       1.0 (iOS 13)
+public let COPY1 = "doc.on.doc"                     // 􀉁                       1.0 (iOS 13)
+public let COPY6 = "doc.on.clipboard"               // 􀉃                       6.0 (iOS 18)
+public let SHARE = "square.and.arrow.up"            // 􀈂                       1.0 (iOS 13)
+public let RETURN = "return"                        // 􀅇 􁂇                    1.0 (iOS 13)   reverses for RTL
+
 
 public let BALANCES = "chart.bar.xaxis"             // 􀣉                       2.0 (iOS 14)
 public let SETTINGS = "gear"                        // 􀍟                       1.0 (iOS 13)
@@ -112,6 +134,9 @@ public let SYSTEM_ZOOM_OUT = "arrowtriangle.right.and.line.vertical.and.arrowtri
 public let ICONNAME_LOCKCLOCK = "taler.lock.clock"                  // 􂆉
 public let SYSTEM_LOCKCLOCK = "lock.badge.clock"                    // 􂆉       5.0 (iOS 17)
 public let FALLBACK_LOCK = "lock"                                   // 􀎠       1.0 (iOS 13)
+
+public let SUNFILL = "sun.max.fill"                                 // 􀆮       1.0 (iOS 13)
+public let MOONFILL = "moon.fill"                                   // 􀆺       1.0 (iOS 13)
 
 public let HTTPS = "https://"
 //public let DEMOBANK = HTTPS + "bAnK.dEmO.tAlEr.nEt"             // should be weird to read, but still work
