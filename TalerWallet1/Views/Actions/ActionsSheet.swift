@@ -20,7 +20,6 @@ struct ActionsSheet: View {
 
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
-    @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("demoHints") var demoHints: Bool = true
 
     private var hasKudos: Bool {
@@ -59,32 +58,22 @@ struct ActionsSheet: View {
                 .padding(.top, 5)
                 .padding(.bottom, 10)
 
-            if hasKudos && demoHints {
-                Text(minimalistic ? "Spend your \(DEMOCURRENCY) in the Demo shop"
-                                  : "You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
-                    .talerFont(.body)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight won't work
-
-                let buttonTitle = String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money")
-                let shopAction = {
-//                    demoHints += 1
-                    UIApplication.shared.open(URL(string:DEMOSHOP)!, options: [:])
-                    dismissTop(stack.push())
-                }
-                Button(action: shopAction) {
-                    HStack {
-                        ButtonIconBadge(type: .payment, foreColor: .accentColor, done: false)
-                            .talerFont(.title2)
-                        Spacer()
-                        Text(buttonTitle)
-                        Spacer()
-                    }
-                }
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-                .accessibilityHint(String(localized: "Will go to the demo shop website.", comment: "a11y"))
-                .accessibilityAddTraits(.isLink)
-                .padding(.bottom, 20)
+            if let balance = controller.balances.first,
+               let shoppingUrls = balance.shoppingUrls,
+               shoppingUrls.count > 0
+            {
+                let currency = balance.scopeInfo.currency
+                ShoppingView(stack: stack.push(),
+                          currency: currency,
+                       buttonTitle: String(localized: "LinkTitle_SHOPS", defaultValue: "Where to pay with \(currency)"),
+                    buttonA11yHint: String(localized: "Will go to the map of shops.", comment: "a11y"),
+                        buttonLink: shoppingUrls.first!)
+            } else if hasKudos && demoHints {
+                ShoppingView(stack: stack.push(),
+                          currency: nil,
+                       buttonTitle: String(localized: "LinkTitle_DEMOSHOP", defaultValue: "Spend demo money"),
+                    buttonA11yHint: String(localized: "Will go to the demo shop website.", comment: "a11y"),
+                        buttonLink: DEMOSHOP)
             }
             if !controller.scannedURLs.isEmpty {
                 Text("Scanned Taler codes:")
@@ -155,6 +144,42 @@ struct ActionsSheet: View {
         }
         .padding()
         .accessibilityElement(children: .contain)
+    }
+}
+// MARK: -
+struct ShoppingView: View {
+    let stack: CallStack
+    let currency: String?
+    let buttonTitle: String
+    let buttonA11yHint: String
+    let buttonLink: String
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+
+    var body: some View {
+        Group {
+            if let currency {
+                Text(minimalistic ? "Spend your \(currency) in these shops:"
+                                  : "You can spend your \(currency) in these shops, or send them to another wallet.")
+            } else {
+                Text(minimalistic ? "Spend your \(DEMOCURRENCY) in the Demo shop"
+                                  : "You can spend your \(DEMOCURRENCY) in the Demo shop, or send them to another wallet.")
+            }
+        }
+            .talerFont(.body)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)           // must set this otherwise fixedInnerHeight won't work
+
+        let image = Image(systemName: currency == nil ? LINK : MAPPIN)          // 􀉣 or 􀎫
+        Button("\(image) \(buttonTitle)") {
+            UIApplication.shared.open(URL(string: buttonLink)!, options: [:])
+            dismissTop(stack.push())
+        }
+            .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+            .accessibilityLabel(buttonTitle)
+            .accessibilityAddTraits(.isLink)
+            .accessibilityHint(buttonA11yHint)
+            .padding(.bottom, 20)
     }
 }
 // MARK: -
