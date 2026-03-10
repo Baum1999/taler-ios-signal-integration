@@ -41,9 +41,9 @@ struct WalletEmptyView: View {
     var body: some View {
         let list = List {
             Section {
-                Text("Welcome to Taler Wallet!", comment: "")
+                Text("Welcome to Taler Wallet!")
                     .talerFont(.headline)
-                Text("To make your first payment, withdraw digital cash.", comment: "")
+                Text("To make your first payment, withdraw digital cash.")
                     .talerFont(.body)
 #if false
                 let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
@@ -79,23 +79,21 @@ struct WalletEmptyView: View {
                         .padding(.bottom)
                 }
 #if !TALER_WALLET
-                Text("If you don't have a Swiss bank account, you can simply try out the demo…", comment: "")
+                Text("If you don't have a Swiss bank account, you can simply try out the demo…")
                     .talerFont(.body)
 #endif
 
 #if DEBUG
 //              if developerMode {
-//                Text("Either deposit or send your money to a friend before you delete the app, or it will be lost.", comment: "")
+//                Text("Either deposit or send your money to a friend before you delete the app, or it will be lost.")
 //                    .talerFont(.body)
 //              }
 #endif
             } header: {
                 let firstHeader = EMPTYSTRING
-//                Text("Welcome to Taler Wallet!", comment: "")
-//                    .talerFont(.title2)
                 Text(firstHeader)
                     .talerFont(.badge)
-                    .foregroundColor(.primary)
+//                    .foregroundColor(.primary)
                 /// YIKES! when not specifying this color, the Text in the BarGraphHeader vanishes!!!
                     .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
 //                    .listRowInsets(EdgeInsets())  // << here !!

@@ -24,7 +24,7 @@ struct ReportView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var creating: Bool = false
-    @State private var report: String = ""
+    @State private var report: String = EMPTYSTRING
     @State private var expanded: Bool = false
 
     private func createReport() {

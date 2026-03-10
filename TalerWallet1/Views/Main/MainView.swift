@@ -154,7 +154,7 @@ struct MainView: View {
             switch controller.backendState {
                 case .ready: mainContent
                 case .error: ErrorView(stack.push("mainGroup"),
-                                       title: "",   // TODO: String(localized: ""),
+                                       title: EMPTYSTRING,   // TODO: String(localized: ""),
                                     copyable: true) {}
                 default:     LaunchAnimationView()
             }

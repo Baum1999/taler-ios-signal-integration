@@ -54,7 +54,7 @@ struct TransactionSummaryV: View {
 
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
-    @State var jsonTransaction: String = ""
+    @State var jsonTransaction: String = EMPTYSTRING
     @State var viewId = UUID()
     @Namespace var topID
 
@@ -68,12 +68,12 @@ struct TransactionSummaryV: View {
                                               includeContractTerms: true, viewHandles: false) {
                     jsonTransaction = json
                 } else {
-                    jsonTransaction = ""
+                    jsonTransaction = EMPTYSTRING
                 }
             }
         } else {
             withAnimation{ talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
-            jsonTransaction = ""
+            jsonTransaction = EMPTYSTRING
         }
     }
 

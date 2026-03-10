@@ -27,7 +27,7 @@ struct BackupView: View {
     @State private var created: Bool = false
     @State private var restored: Bool = false
     @State private var files: [String] = []
-    @State private var filename: String = ""
+    @State private var filename: String = EMPTYSTRING
     @State private var selectedBackup: String? = nil
     @State private var showRestoreAlert: Bool = false
 

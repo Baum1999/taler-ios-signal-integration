@@ -27,8 +27,8 @@ import CoreNFC
 public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate {
     
     public var startAlert = String(localized: "Hold your iPhone near the tag.")
-    public var endAlert = ""
-    public var msg = ""
+    public var endAlert = EMPTYSTRING
+    public var msg = EMPTYSTRING
     public var type = "T"   // T=Text - U=URL
     public var data: Data? = nil
 
@@ -102,7 +102,8 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
                         if nil != error {
                             session.alertMessage = "Write to tag failed: \(error!)"
                         } else {
-                            session.alertMessage = self.endAlert != "" ? self.endAlert : "Write \(self.msg) to tag successful."
+                            session.alertMessage = self.endAlert != EMPTYSTRING ? self.endAlert
+                                                 : "Write \(self.msg) to tag successful."
                         }
                         session.invalidate()
                     })

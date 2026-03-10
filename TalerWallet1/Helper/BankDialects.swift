@@ -14,7 +14,7 @@ enum BankDialectString {
     case warningText3       // consequence for 2nd, with currency name
 }
 
-func localizedString(_ key: BankDialectString, forDialect: BankDialect?, _ option: String = "") -> String {
+func localizedString(_ key: BankDialectString, forDialect: BankDialect?, _ option: String = EMPTYSTRING) -> String {
     if forDialect == .gls {
         switch key {
             case .deleteExchange:

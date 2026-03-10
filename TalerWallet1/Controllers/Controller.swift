@@ -167,7 +167,7 @@ class Controller: ObservableObject {
             if save {
                 let scannedURL = ScannedURL(url: passedURL, command: urlCommand, time: .now)
                 if scannedURLs.count > 5 {
-                    self.logger.trace("removing: \(self.scannedURLs.first?.command.rawValue ?? "")")
+                    self.logger.trace("removing: \(self.scannedURLs.first?.command.rawValue ?? EMPTYSTRING)")
                     scannedURLs.remove(at: 0)
                 }
                 scannedURLs.append(scannedURL)

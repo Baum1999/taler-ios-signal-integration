@@ -104,7 +104,7 @@ struct OIMbackground<Content: View>: View {
                 .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         } else {        // Fallback on earlier versions
             zStack
-//                .navigationBarTitle("")       // must set the title...
+//                .navigationBarTitle(EMPTYSTRING)       // must set the title...
                 .navigationBarHidden(true)      // before you can hide the navigation bar
 //                .tabBarHidden(true)           // unfortunately this call doesn't exist
         }
