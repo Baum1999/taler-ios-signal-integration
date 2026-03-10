@@ -25,10 +25,20 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Atkinson-Hyperlegible-Regular-102.otf</string>
-		<string>Atkinson-Hyperlegible-Bold-102.otf</string>
-		<string>Atkinson-Hyperlegible-BoldItalic-102.otf</string>
-		<string>Atkinson-Hyperlegible-Italic-102.otf</string>
+		<string>AtkinsonHyperlegibleNext-Bold.otf</string>
+		<string>AtkinsonHyperlegibleNext-ExtraBold.otf</string>
+		<string>AtkinsonHyperlegibleNext-ExtraLight.otf</string>
+		<string>AtkinsonHyperlegibleNext-Light.otf</string>
+		<string>AtkinsonHyperlegibleNext-Medium.otf</string>
+		<string>AtkinsonHyperlegibleNext-Regular.otf</string>
+		<string>AtkinsonHyperlegibleNext-SemiBold.otf</string>
+		<string>AtkinsonHyperlegibleNext-BoldItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-ExtraBoldItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-ExtraLightItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-LightItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-MediumItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-RegularItalic.otf</string>
+		<string>AtkinsonHyperlegibleNext-SemiBoldItalic.otf</string>
 		<string>Nunito-Regular.ttf</string>
 		<string>Nunito-Bold.ttf</string>
 		<string>Nunito-Black.ttf</string>
