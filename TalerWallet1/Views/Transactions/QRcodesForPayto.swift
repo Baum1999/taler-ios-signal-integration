@@ -17,8 +17,8 @@ struct QRcodeCopyShare: View {
     var body: some View {
 //        Text(spec.type)
         let logo = spec.type == "spc" ? Image(SWISS_QR) : nil
-        let size = 240.0
-        QRGeneratorView(text: spec.qrContent, size: size, logo: logo, logoSize: size / 4, image: $qrImage)
+        let size = 276.0    // 46x46mm, swiss flag = 7x7mm plus border
+        QRGeneratorView(text: spec.qrContent, size: size, logo: logo, logoSize: size * 9 / 46, image: $qrImage)
             .frame(maxWidth: .infinity, alignment: .center)
             .listRowSeparator(.hidden)
         HStack {
