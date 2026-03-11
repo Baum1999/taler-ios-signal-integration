@@ -51,7 +51,8 @@ struct BalancesListView: View {
 //                        .border(Color.gray, width: 1)
 //                    Text("TALER Wallet")
                     Text("Wallet")
-                        .font(.logo(27, weight: .medium))
+//                        .font(.logo(27, weight: .medium))
+                        .font(.logo("Atkinson Hyperlegible Next", size: 27, weight: .medium))
                         .kerning(1.0)
                 }
                     .accessibilityElement(children: .combine)

@@ -20,11 +20,11 @@ fileprivate let BLACK       = "Black"
 fileprivate let BLACKITALIC = "BlackItalic"
 
 public extension Font {
-    static func logo(_ size: CGFloat, weight: UIFont.Weight) -> Font {
+    static func logo(_ name: String, size: CGFloat, weight: UIFont.Weight) -> Font {
         let traits = [UIFontDescriptor.TraitKey.weight: weight] // regular, medium, semibold, bold
-        let fontDescriptor = UIFontDescriptor(fontAttributes: [UIFontDescriptor.AttributeName.family: "Atkinson Hyperlegible Next"])
-        let fontDescriptor2 = fontDescriptor.addingAttributes([UIFontDescriptor.AttributeName.traits: traits])
-        return Font(UIFont(descriptor: fontDescriptor2, size: size))
+        let fontDescriptor = UIFontDescriptor().withFamily(name)
+            .addingAttributes([UIFontDescriptor.AttributeName.traits: traits])
+        return Font(UIFont(descriptor: fontDescriptor, size: size))
     }
 }
 
