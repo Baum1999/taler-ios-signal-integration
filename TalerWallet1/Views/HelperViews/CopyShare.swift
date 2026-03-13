@@ -9,6 +9,58 @@ import UniformTypeIdentifiers
 import SwiftUI
 import SymLog
 
+@MainActor
+struct FeedbackButton: View {
+    private let symLog = SymLogV(0)
+    let title: String?
+    let image: UIImage?
+    let isDisabled: Bool
+    let action: () -> Void
+
+    @EnvironmentObject private var controller: Controller
+    @State private var scale: CGFloat = 1.0
+
+    public init(_ title: String? = nil,
+                  image: UIImage? = nil,
+               disabled: Bool = false,
+                 action: @escaping @MainActor () -> Void) {
+        self.title = title
+        self.image = image
+        self.isDisabled = disabled
+        self.action = action
+    }
+
+    private func triggerPulse() {
+        // First scale down quickly
+        withAnimation(.easeIn(duration: 0.1)) {
+            scale = 0.8
+        }
+        // Then bounce back bigger
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation(.easeOut(duration: 0.25)) {
+                scale = 1.15
+            }
+        }
+        // Finally settle to normal
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                scale = 1.0
+            }
+        }
+    }
+
+    var body: some View {
+        Button(title ?? EMPTYSTRING) {
+            symLog.log(title ?? EMPTYSTRING)
+            controller.hapticFeedback(.medium)
+            action()
+            triggerPulse()
+        }
+            .buttonStyle(TalerButtonStyle(type: .bordered, disabled: isDisabled))
+    }
+}
+// MARK: -
+@MainActor
 struct CopyButton: View {
     private let symLog = SymLogV(0)
     let textToCopy: String
