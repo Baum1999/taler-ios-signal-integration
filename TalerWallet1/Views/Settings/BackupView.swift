@@ -46,6 +46,7 @@ struct BackupView: View {
             let stem = String(BACKUP + dateString)
             if let backupFile = try? await model.exportDbToFile(stem: stem) {
                 filename = backupFile
+                await viewDidLoad()
             }
         }
     }
@@ -108,11 +109,9 @@ struct BackupView: View {
             Section {
                 backupHint
                     .listRowSeparator(.hidden)
-                Button(buttonTitle) { createBackup() }
-                    .buttonStyle(TalerButtonStyle(type: .bordered))
+                FeedbackButton(buttonTitle, disabled: created) { createBackup() }
                     .padding()
                     .listRowSeparator(.hidden)
-                    .disabled(created)
                 restoreHint
             }
             if hasBackups {
