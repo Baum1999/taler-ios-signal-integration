@@ -25,7 +25,7 @@ public let CHF_4217 = "CHF"             // ISO-4217 Swiss Francs
 public let EUR_4217 = "EUR"             // ISO-4217 Euro
 public let HUF_4217 = "HUF"             // ISO-4217 Hungarian Forint
 
-public let TAPPED = 4                   // how often you need to tap on the Actions button before it loses its label
+public let TAPPED = 3                   // how often you need to tap on the Actions button before it loses its label
 public let DRAGGED = 2                  // #times to drag to stop the auto-dragging
 public let DRAGDELAY = 0.5
 public let DRAGDURATION = 0.45
