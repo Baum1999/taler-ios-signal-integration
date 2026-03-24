@@ -252,7 +252,10 @@ struct RequestPaymentContent: View {
             peerPullCheck = ppCheck
             var baseURL = ppCheck.scopeInfo?.url ?? ppCheck.exchangeBaseUrl
             if let baseURL {
-                if exchange == nil || exchange?.tosStatus != .accepted {
+                if exchange == nil ||
+                    exchange?.exchangeBaseUrl != baseURL ||
+                    exchange?.tosStatus != .accepted
+                {
                     symLog.log("getExchangeByUrl(\(ppCheck.exchangeBaseUrl))")
                     exchange = try? await model.getExchangeByUrl(url: baseURL)
                 }
