@@ -148,7 +148,7 @@ extension WithdrawTOSView {
 
         var body: some View {
             let title = String(localized: "Language:", comment: "title of ToS language selection")
-            List {
+            let list = List {
                 if tos.tosAvailableLanguages.count > 1 {
                     Picker(title, selection: $selectedLanguage) {
                         ForEach(tos.tosAvailableLanguages, id: \.self) { code in
@@ -172,6 +172,7 @@ extension WithdrawTOSView {
                         let content = MarkdownContent(tos.content)
                         Markdown(content)
                     }
+                    .accessibility(sortPriority: 1)     // read this last
                 } else {
                     let components = tos.content.components(separatedBy: "\n\n")
                     ForEach (components, id: \.self) { term0 in
@@ -180,20 +181,18 @@ extension WithdrawTOSView {
                                 .talerFont(.footnote)
                                 .foregroundColor(Color(UIColor.label))
                         }
+                        .accessibility(sortPriority: 1)     // read this last
                     } // for
                 } // plain text
+            }.listStyle(myListStyle.style).anyView
+            list.safeAreaInset(edge: .bottom) {
                 if showButton {
-                    Section {
                         Button(String(localized: "Accept Terms of Service", comment: "Button"), action: acceptAction)
                             .buttonStyle(TalerButtonStyle(type: .prominent))
+                            .accessibility(sortPriority: 2)     // read this second
                             .padding(.horizontal)
-                    } header: {
-                        Text("Accept", comment: "Heading for Accept ToS button")
-                            .talerFont(.title3)
-                            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                    }
                 }
-            }.listStyle(myListStyle.style).anyView
+            }
         }
     }
 }
