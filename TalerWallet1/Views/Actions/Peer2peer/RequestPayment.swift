@@ -88,11 +88,9 @@ struct RequestPayment: View {
     @MainActor
     private func newBalance() async {
         // runs whenever the user changes the exchange via ScopePicker, or on new currencyInfo
-        symLog.log("❗️ task \(balanceIndex)")
         if let balance {
-            let scopeInfo = balance.scopeInfo
-            amountToTransfer.setCurrency(scopeInfo.currency)
-            currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
+            // needed to update navTitle
+            currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
         }
     }
 
@@ -244,22 +242,34 @@ struct RequestPaymentContent: View {
         return nil
     } // computeFee
 
+    func updateExchange(_ baseURL: String) async {
+        if exchange == nil ||
+            exchange?.exchangeBaseUrl != baseURL ||
+            exchange?.tosStatus != .accepted
+        {
+            symLog.log("getExchangeByUrl(\(baseURL))")
+            exchange = try? await model.getExchangeByUrl(url: baseURL)
+        }
+    }
+
     @MainActor
     private func newBalance() async {
         let scope = balance.scopeInfo
-        symLog.log("❗️ task \(scope.currency)")
-        let ppCheck = try? await model.checkPeerPullCredit(amountToTransfer, scope: scope, viewHandles: false)
-        if let ppCheck {
-            peerPullCheck = ppCheck
-            var baseURL = ppCheck.scopeInfo?.url ?? ppCheck.exchangeBaseUrl
-            if let baseURL {
-                if exchange == nil ||
-                    exchange?.exchangeBaseUrl != baseURL ||
-                    exchange?.tosStatus != .accepted
-                {
-                    symLog.log("getExchangeByUrl(\(ppCheck.exchangeBaseUrl))")
-                    exchange = try? await model.getExchangeByUrl(url: baseURL)
+        symLog.log("❗️ newBalance( \(scope.currency) )")
+        amountToTransfer.setCurrency(scope.currency)
+        if amountToTransfer.isZero {
+            if let baseURL = scope.url {
+                await self.updateExchange(baseURL)
+            } else {
+                // TODO: get tosStatus for global currency
+            }
+        } else {
+            let ppCheck = try? await model.checkPeerPullCredit(amountToTransfer, scope: scope, viewHandles: false)
+            if let ppCheck {
+                if let baseURL = ppCheck.scopeInfo?.url ?? ppCheck.exchangeBaseUrl {
+                    await self.updateExchange(baseURL)
                 }
+                peerPullCheck = ppCheck
             }
         }
     }
@@ -322,17 +332,15 @@ struct RequestPaymentContent: View {
                             computeFee: computeFee)
                     .background(actions)
                 } else {
-                    if let peerPullCheck {
-                        var baseURL = peerPullCheck.scopeInfo?.url ?? peerPullCheck.exchangeBaseUrl
-                        ToSButtonView(stack: stack.push(),
-                            exchangeBaseUrl: baseURL,
-                                     viewID: VIEW_P2P_TOS,   // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
-                                        p2p: false,
-                                      acceptAction: nil)
+                    let baseURL = peerPullCheck?.scopeInfo?.url ??
+                                  peerPullCheck?.exchangeBaseUrl ??
+                                  balance.scopeInfo.url
+                    ToSButtonView(stack: stack.push(),
+                        exchangeBaseUrl: baseURL,
+                                 viewID: VIEW_P2P_TOS,   // 31 WithdrawTOSView   TODO: YIKES might be withdraw-exchange
+                                    p2p: false,
+                           acceptAction: nil)
                         .padding(.top)
-                    } else {
-                        Text("No baseURL")      // need $some view otherwise task will not run
-                    }
                 }
         }
         .task(id: balance) { await newBalance() }
