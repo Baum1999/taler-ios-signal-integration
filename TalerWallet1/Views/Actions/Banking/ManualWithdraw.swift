@@ -277,6 +277,7 @@ struct ManualWithdrawContent: View {
                 }
             } // Group
                 .padding(.horizontal)
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                 .task(id: amountToTransfer.currencyStr) {
                     await getWithdrawalDetailsForAmount(amountToTransfer, true)
                 }

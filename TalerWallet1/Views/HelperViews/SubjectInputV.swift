@@ -105,6 +105,7 @@ struct SubjectInputV<TargetView: View>: View {
 //                .accessibility(sortPriority: 0)
         }.padding(.horizontal) } // ScrollVStack
         .navigationTitle(navTitle)
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {

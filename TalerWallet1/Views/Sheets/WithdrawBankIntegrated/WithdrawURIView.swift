@@ -193,6 +193,7 @@ struct WithdrawURIView: View {
                                     computeFee: computeFeeWithdraw)
                             .background(actions)
                         } // ScrollView
+                        .ignoresSafeArea(.keyboard, edges: .bottom)
                     } else {
                         acceptDestination
                     } // directly show the accept view

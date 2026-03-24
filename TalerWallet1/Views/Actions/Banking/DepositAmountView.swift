@@ -131,7 +131,7 @@ struct DepositAmountView: View {
                         .buttonStyle(TalerButtonStyle(type: .prominent))
                         .padding(.horizontal)
                 }
-        } else { Group {
+        } else { ScrollView {
             if let balance {
                 let scopeInfo = balance.scopeInfo
                 let availableStr = amountAvailable.formatted(scopeInfo, isNegative: false)
@@ -179,6 +179,7 @@ struct DepositAmountView: View {
                 Text("No balance. There seems to be a problem with the database...")
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT, stack: stack.push())
             symLog.log("❗️ onAppear")

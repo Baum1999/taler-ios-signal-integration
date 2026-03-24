@@ -219,6 +219,7 @@ struct PayTemplateV: View {
                 summaryIsEditable: summaryIsEditable)
             }
           } .navigationTitle(navTitle)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .onAppear() {

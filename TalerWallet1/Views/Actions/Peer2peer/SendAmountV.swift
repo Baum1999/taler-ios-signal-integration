@@ -140,6 +140,7 @@ struct SendAmountV: View {
             }
         } // ScrollView
             .navigationTitle(navTitle)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .task { await viewDidLoad() }

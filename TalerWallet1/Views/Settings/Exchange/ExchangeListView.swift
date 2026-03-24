@@ -156,6 +156,7 @@ struct ExchangeListCommonV: View {
             }
         }
         .listStyle(myListStyle.style).anyView
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .refreshable {
             controller.hapticNotification(.success)
             symLog?.log("refreshing")
