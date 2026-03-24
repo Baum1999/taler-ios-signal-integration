@@ -173,6 +173,26 @@ struct PlusButton : View  {
     }
 }
 
+struct SettingsButton : View  {
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        let button = Button(action: action) {
+            Image(systemName: SETTINGS)
+        }
+        .tint(.accentColor)
+        .talerFont(.title)
+        .accessibilityLabel(accessibilityLabelStr)
+#if compiler(>=6.2) // XCODE26
+        if #available(iOS 26.0, *) {
+            return button.buttonStyle(.glass)
+        }
+#endif
+        return button
+    }
+}
+
 struct ZoomInButton : View  {
     let accessibilityLabelStr: String
     let action: () -> Void
