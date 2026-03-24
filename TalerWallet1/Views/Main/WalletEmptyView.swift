@@ -78,7 +78,7 @@ struct WalletEmptyView: View {
                         .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
                         .padding(.bottom)
                 }
-#if !TALER_WALLET
+#if GNU_TALER
                 Text("If you don't have a Swiss bank account, you can simply try out the demo…")
                     .talerFont(.body)
 #endif

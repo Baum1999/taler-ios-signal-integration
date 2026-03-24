@@ -213,7 +213,7 @@ struct ManualDetailsWireV: View {
                     .disabled(false)
             }   .padding(.top, -8)
             let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
-                             : "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:")
+                             : "**Step 1:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
             let warningIcon = Image(systemName: WARNING)
