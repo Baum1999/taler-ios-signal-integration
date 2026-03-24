@@ -375,7 +375,42 @@
         }
       }
     },
+    "**Step 1:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Schritt 1:** Kopieren Sie diesen Code und setzen ihn als Verwendungszweck (oder „Nachricht an den Empfänger“) in ihrer Banking-App oder Bank-Webseite ein:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "**Paso 1:** Copia este código y pégalo en el campo asunto (o «Mensaje para el destinatario») de tu aplicación bancaria:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "**Étape 1 :** Copiez ce code et collez-le dans le champ Référence (ou « Message au destinataire ») de votre application bancaire ou du site web de votre banque :"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "**Krok 1:** Skopiuj ten kod i wklej go w polu tytuł przelewu (lub „Wiadomość do odbiorcy”) w aplikacji bankowej lub na stronie internetowej banku:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "**Крок 1:** Скопіюйте цей код і вставте його в поле призначення/цілі (або «Повідомлення для одержувача») в вашому банківському додатку або на вебсайті банку:"
+          }
+        }
+      }
+    },
     "**Step 1:** Copy this code and paste it into the subject/purpose field in your banking app or bank website:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1615,6 +1650,7 @@
     },
     "Accept" : {
       "comment" : "Heading for Accept ToS button",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8714,6 +8750,7 @@
       }
     },
     "No baseURL" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
