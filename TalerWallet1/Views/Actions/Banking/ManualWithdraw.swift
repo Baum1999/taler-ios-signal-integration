@@ -224,7 +224,7 @@ struct ManualWithdrawContent: View {
 #endif
 
         if let detailsForAmount {
-            Group {
+            ScrollView {
                 let coinData = CoinData(details: detailsForAmount)
                 let currency = detailsForAmount.scopeInfo.currency
                 let baseURL = detailsForAmount.exchangeBaseUrl
