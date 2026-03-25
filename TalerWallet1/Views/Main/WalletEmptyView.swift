@@ -115,6 +115,9 @@ struct WalletEmptyView: View {
                         let amount = Amount(currency:  DEMOCURRENCY, cent: 2500)
                         symLog.log("Withdraw KUDOS")
                         try? await model.loadTestKudos(0, amount: amount)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withDrawStarted = false
+                        }
                     }
                 }
                 .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))

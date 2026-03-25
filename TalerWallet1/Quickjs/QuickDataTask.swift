@@ -144,18 +144,32 @@ class QuickDataTask: NSObject {
                     Task.detached {
                         self.logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
                         Controller.shared.checkInternetConnection()
-                        let errmsg = error?.localizedDescription
-                        let errmsg_p0 = if let errmsg { UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8)) }
-                                        else { UnsafeMutablePointer<CChar>(nil) }
-                        var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                                  status: 0,
-                                                                  errmsg: errmsg_p0,
-                                                        response_headers: nil,
-                                                    num_response_headers: 0,
-                                                                    body: nil,
-                                                                body_len: 0)
-                        let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
-                        responseCb(responseCbCls, responseInfoPtr)
+                        if let errmsg = error?.localizedDescription,
+                           let errmsgC = errmsg.cString(using: .utf8)
+                        {
+                            let errmsg_p1 = UnsafeMutablePointer<CChar>(mutating: errmsgC)
+                            var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
+                                                                      status: 0,
+                                                                      errmsg: errmsg_p1,
+                                                            response_headers: nil,
+                                                        num_response_headers: 0,
+                                                                        body: nil,
+                                                                    body_len: 0)
+                            let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
+                            responseCb(responseCbCls, responseInfoPtr)
+                        } else {
+                            // should never happen
+                            let errmsg_p1 = UnsafeMutablePointer<CChar>(nil)
+                            var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
+                                                                      status: 0,
+                                                                      errmsg: errmsg_p1,
+                                                            response_headers: nil,
+                                                        num_response_headers: 0,
+                                                                        body: nil,
+                                                                    body_len: 0)
+                            let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
+                            responseCb(responseCbCls, responseInfoPtr)
+                        }
                     }
                 }
                 requests[requestID] = nil
