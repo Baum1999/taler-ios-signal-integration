@@ -99,13 +99,12 @@ class QuickDataTask: NSObject {
             let url = self.request.url?.absoluteString ?? EMPTYSTRING
             logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
             dataTask = urlSession.dataTask(with: request) { [self] data, response, error in
-                let err: Error
                 if let response = response as? HTTPURLResponse {
                     var headerArray: [String] = []
                     var numHeaders: Int32 = 0
-                    var status = Int32(response.statusCode)
-                    var errmsg = HTTPURLResponse.localizedString(forStatusCode: Int(status))
-                    var errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
+                    let status = Int32(response.statusCode)
+                    let errmsg = HTTPURLResponse.localizedString(forStatusCode: Int(status))
+                    let errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
               // Initialization of 'UnsafeMutablePointer<CChar>' (aka 'UnsafeMutablePointer<Int8>') results in a dangling pointer
                     let headers = response.allHeaderFields
                     for (key,value) in headers {
@@ -115,8 +114,8 @@ class QuickDataTask: NSObject {
                     let cHeaders = CStringArray(headerArray)
 
                     if let data {
-                        var ndata:NSData = data as NSData
-                        var bodyPtr = UnsafeMutableRawPointer(mutating: ndata.bytes)
+                        let ndata:NSData = data as NSData
+                        let bodyPtr = UnsafeMutableRawPointer(mutating: ndata.bytes)
                         var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
                                                               status: status,
                                                               errmsg: errmsg_p0,
