@@ -73,7 +73,6 @@ struct TransactionsListView: View {
         } else {
 //            Group {
                 ScrollViewReader { scrollProxy in
-                    let count = transactions.count
                     List {
                         Section {
                             TransactionsArraySliceV(symLog: symLog,

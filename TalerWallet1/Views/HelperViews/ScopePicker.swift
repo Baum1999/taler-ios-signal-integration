@@ -238,16 +238,17 @@ struct  ScopeDropDown: View {
 //                  .border(.red)
                 if (showDropdown) {
                     if #available(iOS 17.0, *) {
-//                      let toomany = controller.balances.count > maxItemDisplayed
+                        let count = controller.balances.count
+//                      let toomany = count > maxItemDisplayed
 //                      let scrollViewHeight = buttonHeight * CGFloat(toomany ? maxItemDisplayed
-//                                                                            : controller.balances.count)
+//                                                                            : count)
                         ScrollView {
                             theList
                                 .scrollTargetLayout()
                         }
 //                      .border(.red)
                         .scrollPosition(id: $scrollPosition)
-                        .scrollDisabled(controller.balances.count <= 3)
+                        .scrollDisabled(count <= 3)
 //                      .frame(height: scrollViewHeight)
                         .onAppear {
                             scrollPosition = selection

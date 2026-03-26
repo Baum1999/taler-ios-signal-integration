@@ -203,14 +203,14 @@ struct DualHeightSheet: View {
     @State private var innerHeight: CGFloat = .zero
     @State private var sheetHeight: CGFloat = .zero
 
-    let scanDetent: PresentationDetent = .fraction(SCANDETENT)
-    let actionDetent: PresentationDetent = .fraction(ACTIONDETENT)
+    let halfDetent: PresentationDetent = .fraction(HALFDETENT)
+    let fullDetent: PresentationDetent = .fraction(FULLDETENT)
 
     func updateDetentsWithDelay() {
         Task {
             //(1 second = 1_000_000_000 nanoseconds)
             try? await Task.sleep(nanoseconds: 80_000_000)
-            let detent = minimalistic ? scanDetent : actionDetent
+            let detent = minimalistic ? halfDetent : fullDetent
             guard selectedDetent == detent else { return }
             detents = [detent]
             logger.trace("❗️detents = [scanDetent]")    // 0.999 %
@@ -237,7 +237,7 @@ struct DualHeightSheet: View {
                     qrButtonTapped = true           // tell our caller
                     withAnimation(Animation.easeIn(duration: 0.6)) {
                         // animate this sheet to full height
-                        let detent = minimalistic ? scanDetent : actionDetent
+                        let detent = minimalistic ? halfDetent : fullDetent
                         selectedDetent = detent
                     }
                 }
@@ -258,9 +258,9 @@ struct DualHeightSheet: View {
             }
             .presentationDetents(detents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
-                let detent = minimalistic ? scanDetent : actionDetent
+                let detent = minimalistic ? halfDetent : fullDetent
                 if newValue == detent {    // user swiped the sheet up to activate QR scanner
-                    logger.trace("onChange❗️selectedDetent = \(SCANDETENT)")
+                    logger.trace("onChange❗️selectedDetent == (detent) ==> updateDetentsWithDelay()")
                     updateDetentsWithDelay()
                     qrButtonTapped = true           // tell our caller
                 } else {    // SwiftUI "innerHeight" determined how big the half sheet should be
@@ -285,8 +285,8 @@ struct DualHeightSheet: View {
                     let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
                                         selectedBalance: selectedBalance,
                                        scannedSomething: $scannedCode))
-                    let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT
-                                                            : minimalistic ? SCANDETENT : ACTIONDETENT)
+                    let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
+                                                            : minimalistic ? HALFDETENT : FULLDETENT)
                     Sheet(stack: stack.push(), sheetView: qrSheet)
                         .presentationDetents([detent])
                         .transition(.opacity)

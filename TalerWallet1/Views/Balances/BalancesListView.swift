@@ -44,7 +44,6 @@ struct BalancesListView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
 //        Group {
-            let count = controller.balances.count
             if controller.balances.isEmpty {
                 let talerLogo = HStack(spacing: 2) {
                     Image(TALER_LOGO_FULL)
@@ -74,6 +73,7 @@ struct BalancesListView: View {
                 /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
                 ///   However, the user can select another balance (with the picker) in each action
                 /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
+                let count = controller.balances.count
                 Group {
                     List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
                         BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
@@ -90,7 +90,7 @@ struct BalancesListView: View {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
                         if !controller.oimModeActive {
                             print("🚩BalancesListView.onAppear() reset selectedBalance")
-//                            if controller.balances.count > 1 {
+//                            if count > 1 {
                                 selectedBalance = nil                           // reset
 //                            }
                         }
@@ -103,7 +103,7 @@ struct BalancesListView: View {
                 .onChange(of: controller.oimModeActive) { oimModeActive in
                     if !oimModeActive {
                         print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
-//                        if controller.balances.count > 1 {
+//                        if count > 1 {
                             selectedBalance = nil                               // reset
 //                        }
                     }

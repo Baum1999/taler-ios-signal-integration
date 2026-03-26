@@ -195,8 +195,8 @@ struct MainView: View {
                                        scannedSomething: $scannedCode))
 //                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
                     if #available(iOS 16.4, *) {
-                        let detent: PresentationDetent = .fraction(scannedCode ? ACTIONDETENT
-                                                                : minimalistic ? SCANDETENT : ACTIONDETENT)
+                        let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
+                                                                : minimalistic ? HALFDETENT : FULLDETENT)
                         Sheet(stack: stack.push(), sheetView: qrSheet)
                             .presentationDetents([detent])
                             .transition(.opacity)

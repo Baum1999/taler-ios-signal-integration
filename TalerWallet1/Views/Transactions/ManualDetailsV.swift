@@ -49,7 +49,8 @@ struct ManualDetailsV: View {
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             let validDetails = validDetails(accountDetails)
-            if validDetails.count > 0 {
+            let validCount = validDetails.count
+            if validCount > 0 {
                 let account = validDetails[accountID]
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
@@ -63,8 +64,8 @@ struct ManualDetailsV: View {
                             .multilineTextAlignment(.leading)
                             .listRowSeparator(.hidden)
                     }
-                    if validDetails.count > 1 {
-                        if validDetails.count > 3 { // too many for SegmentControl
+                    if validCount > 1 {
+                        if validCount > 3 { // too many for SegmentControl
                             AccountPicker(title: String(localized: "Bank"),
                                           value: $accountID,
                                  accountDetails: validDetails,

@@ -31,8 +31,8 @@ public let DRAGDELAY = 0.5
 public let DRAGDURATION = 0.45
 public let DRAGSPEED = 0.1
 public let MAXRECENT = 4                // # of rows in Recent Transactions
-public let SCANDETENT = 0.666            // 2/3 height - in the rest is a (invisible) dismiss button, also for VoiceOver
-public let ACTIONDETENT = 0.999
+public let HALFDETENT = 0.666           // 2/3 height - in the rest is a (invisible) dismiss button, also for VoiceOver
+public let FULLDETENT = 0.999           // leave 0.001 space for dismiss
 
 public let ICONLEADING = CGFloat(-8)
 public let HSPACING = CGFloat(10)                  // space between items in HStack

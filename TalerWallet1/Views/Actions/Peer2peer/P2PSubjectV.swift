@@ -132,21 +132,22 @@ struct P2PSubjectV: View {
                 .foregroundColor(WalletColors().fieldForeground)     // text color
                 .background(WalletColors().fieldBackground)
                 .textFieldStyle(.roundedBorder)
-            Text(verbatim: "\(summary.count)/100")                          // maximum 100 characters
+            let numChars = summary.count
+            Text(verbatim: "\(numChars)/100")                          // maximum 100 characters
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .talerFont(.body)
                 .accessibilityLabel(EMPTYSTRING)
-                .accessibilityValue(String(localized: "\(summary.count) characters of 100"))
+                .accessibilityValue(String(localized: "\(numChars) characters of 100"))
 
-                // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
-                SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: outgoing)
-                    .disabled(false)
-                    .padding(.bottom)
+            // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
+            SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: outgoing)
+                .disabled(false)
+                .padding(.bottom)
 
-                let disabled = (expireDays == 0)    // || (summary.count < 1)    // TODO: check amountAvailable
+            let disabled = (expireDays == 0)    // || (numChars < 1)    // TODO: check amountAvailable
             let destination = P2PReadyV(stack: stack.push(),
                                         scope: scope,
-                                      summary: summary.count > 0 ? summary : placeHolder,
+                                      summary: numChars > 0 ? summary : placeHolder,
                                        iconID: iconID,
                                    expireDays: expireDays,
                                      outgoing: outgoing,
