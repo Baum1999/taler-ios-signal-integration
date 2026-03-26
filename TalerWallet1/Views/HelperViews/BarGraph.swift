@@ -71,12 +71,11 @@ struct BarGraph: View {
 
     var body: some View {
         let slice = transactions.prefix(maxBars)
-        let count = slice.count
         let tenTransactions: [TalerTransaction] = Array(slice)
         let maxValue = maxValue(tenTransactions)
 
         HStack(alignment: .center, spacing: 1) {
-            if count > 0 {
+            if !slice.isEmpty {
                 ForEach(tenTransactions, id: \.self) {transaction in
                     let common = transaction.common
                     let incoming = common.isIncoming

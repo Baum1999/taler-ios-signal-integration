@@ -44,8 +44,7 @@ struct DepositAmountView: View {
     }
 
     private func feeLabel(_ feeString: String) -> String {
-        feeString.count > 0 ? String(localized: "+ \(feeString) fee")
-                            : EMPTYSTRING
+        feeString.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeString) fee")
     }
 
     private func feeIsNotZero() -> Bool? {

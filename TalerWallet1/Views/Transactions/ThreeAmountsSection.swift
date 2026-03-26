@@ -164,7 +164,7 @@ struct ThreeAmountsSection: View {
         }
         Section {
             if let summary {
-                if productImages.count == 0 {
+                if productImages.isEmpty {
                     Text(summary)
                         .talerFont(.title3)
                         .lineLimit(4)

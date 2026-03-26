@@ -39,7 +39,7 @@ struct ManualWithdraw: View {
             balanceIndex = controller.balances.firstIndex(of: selectedBalance) ?? 0
         } else {
             balanceIndex = 0
-            balance = (controller.balances.count > 0) ? controller.balances[0] : nil
+            balance = controller.balances.isEmpty ? nil : controller.balances[0]
         }
         if let balance {
             currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)

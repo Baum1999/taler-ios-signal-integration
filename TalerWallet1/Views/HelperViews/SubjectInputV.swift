@@ -43,8 +43,8 @@ struct SubjectInputV<TargetView: View>: View {
 //        let feeLabel = insufficient ? insufficientLabel
 //                                    : feeLabel(feeStr)
 //        let available = amountAvailable?.formatted(scope, isNegative: false) ?? nil
-//        let disabled = insufficient || summary.count == 0
-        let disabled = summary.count == 0
+//        let disabled = insufficient || summary.isEmpty
+        let disabled = summary.isEmpty
         ScrollView { VStack(alignment: .leading) {
 //            if let available {
 //                Text("Available:\t\(available)")

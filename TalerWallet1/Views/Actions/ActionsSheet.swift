@@ -60,7 +60,7 @@ struct ActionsSheet: View {
 
             if let balance = controller.balances.first,
                let shoppingUrls = balance.shoppingUrls,
-               shoppingUrls.count > 0
+               !shoppingUrls.isEmpty
             {
                 let currency = balance.scopeInfo.currency
                 ShoppingView(stack: stack.push(),
@@ -123,7 +123,7 @@ struct ActionsSheet: View {
                 }.padding(.bottom, 20)
             }
 
-            let noBalances = controller.balances.count == 0
+            let noBalances = controller.balances.isEmpty
             let noP2P = !self.mayP2P
             let sendDisabled = noP2P
             let recvDisabled = noBalances || noP2P

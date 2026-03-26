@@ -14,7 +14,7 @@ struct AgePicker: View {
     func setAges(ages: [Int]?) {
         if let ages {
             var zero: [Int] = []
-            if ages.count > 0 {        // need at least 1 value from exchange which is not 0
+            if !ages.isEmpty {                  // need at least 1 value from exchange which is not 0
                 if ages[0] != 0 {               // ensure that the first age is "0"
                     zero.insert(0, at: 0)       // if not, insert "0" at position 0
                 }

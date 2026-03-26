@@ -326,7 +326,7 @@ struct TransactionSummaryV: View {
                 let amountValue = amount.valueStr
                 let creditPaytoUris = info.creditPaytoUris
                 let validDetails = validDetails(creditPaytoUris)
-                if validDetails.count > 0 {
+                if !validDetails.isEmpty {
                     let countPaytos = creditPaytoUris.count
                     let account = validDetails[accountID]
 

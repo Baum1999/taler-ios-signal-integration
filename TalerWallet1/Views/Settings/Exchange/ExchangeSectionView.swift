@@ -36,8 +36,7 @@ struct ExchangeSectionView: View {
     @MainActor
     private func viewDidLoad() async {
         if let exc = try? await model.listExchanges(scope: balance.scopeInfo) {
-            if exc.count > 0 {
-                let exchange = exc[0]
+            if let exchange = exc.first {
                 global = exchange.scopeInfo.type == .global
             }
             withAnimation { exchanges = exc }
@@ -54,29 +53,27 @@ struct ExchangeSectionView: View {
     private func deleteExchange() {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
-          if exchanges.count > 0 {
-            let exchange = exchanges[0]
-            let baseUrl = exchange.exchangeBaseUrl
-            if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
-                purge = false
-                symLog.log("deleted \(baseUrl.trimURL)")
-                didDelete = true             // change button text
-                NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
-                NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
-                demoHints = true
-            } else {
-                purge = true
-                showAlert = true
-                disabled = false
+            if let exchange = exchanges.first {
+                let baseUrl = exchange.exchangeBaseUrl
+                if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
+                    purge = false
+                    symLog.log("deleted \(baseUrl.trimURL)")
+                    didDelete = true             // change button text
+                    NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
+                    NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
+                    demoHints = true
+                } else {
+                    purge = true
+                    showAlert = true
+                    disabled = false
+                }
             }
-          }
         }
     }
 
     @MainActor
     private func setGlobal() {
-        if exchanges.count > 0 {
-            let exchange = exchanges[0]
+        if let exchange = exchanges.first {
             let scope = exchange.scopeInfo
             Task {
                 if scope.type != .global {

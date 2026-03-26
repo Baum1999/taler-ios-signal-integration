@@ -99,9 +99,7 @@ struct PayTemplateV: View {
             amountIsEditable = contract.amount == nil
             summaryIsEditable = contract.summary == nil
 
-            let prepCurrency = contract.currency ?? defaults?.currency ??
-                             (supportedCurrencies.count > 0 ? supportedCurrencies[0]
-                                                            : UNKNOWN)
+            let prepCurrency = contract.currency ?? defaults?.currency ?? supportedCurrencies.first ?? UNKNOWN
             let zeroAmount = Amount(currency: prepCurrency, cent: 0)
             let prepAmount = contract.amount ?? defaults?.amount        // might be nil
             let prepSummary = contract.summary ?? defaults?.summary     // might be nil

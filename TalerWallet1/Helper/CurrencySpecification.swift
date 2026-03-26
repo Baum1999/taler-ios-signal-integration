@@ -197,7 +197,7 @@ public struct CurrencyInfo: Sendable {
             }
         }
         let currency = formatter.currency
-        if currency.count > 0 {
+        if !currency.isEmpty {
             let spacedName = formatter.leadingCurrencySymbol ? currency + SPACE
                                                              : SPACE + currency
             let spacedString1 = aString.replacingOccurrences(of: formatter.currencySymbol, with: spacedName)

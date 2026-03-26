@@ -50,7 +50,7 @@ struct BankSectionView: View {
         cyclos = payTo.cyclos ?? EMPTYSTRING
         
         xTaler = payTo.xTaler ?? EMPTYSTRING
-        if iban.count < 1 {
+        if iban.isEmpty {
             if cyclos.count > 1 {
                 paytoType = .cyclos
             } else if xTaler.count > 1 {

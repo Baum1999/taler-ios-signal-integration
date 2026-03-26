@@ -63,7 +63,6 @@ struct ArrowHistoryView: View {
     }
 
     var body: some View {
-        let count = shownItems.count
 //    let _ = logger.log("ArrowHistoryView \(width.pTwo)")
 
         ZStack(alignment: .top) {
@@ -83,7 +82,7 @@ struct ArrowHistoryView: View {
                 ScrollViewReader { scrollProxy in
                     OptimalSize(.horizontal) {      // keep it small if we have only a few tx
                         ScrollView(.horizontal) {
-                            if count > 0 {
+                            if !shownItems.isEmpty {
                                 HStack(spacing: 0) {
                                     ForEach(-maxXValue...0, id: \.self) { xVal in
                                         ArrowTileView(historyItem: historyItem(for: xVal)) {

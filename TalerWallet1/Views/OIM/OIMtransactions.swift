@@ -237,7 +237,7 @@ struct OIMtransactions: View {
             cash.update2(availableVal)           // set cash to available
             cash.setTarget(.history)
             debugTick += 1
-            if computedItems.count == 0 {
+            if computedItems.isEmpty {
                 computeData(from: history, balance: balance.available.value)        // set chartMaxY, computedData
             }
             showHistoryItems(oimChart ? Animation.talerDelay0 : 0.0)

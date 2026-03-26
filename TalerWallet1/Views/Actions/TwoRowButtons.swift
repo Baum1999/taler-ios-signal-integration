@@ -52,7 +52,8 @@ struct TypeButton: View {
 
         let vLayout = VStack {
             let fragments = title.components(separatedBy: "\n")
-            if fragments.count > 1 {
+            let fragCount = fragments.count
+            if fragCount > 1 {
                 Text(fragments[0])
                 HStack {
                     badge
@@ -64,7 +65,7 @@ struct TypeButton: View {
 #if DEBUG
                 .border(orange)
 #endif
-                if fragments.count > 2 {
+                if fragCount > 2 {
                     Text(fragments[2])
 //                        .fixedSize(horizontal: true, vertical: false)
 #if DEBUG

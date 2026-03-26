@@ -408,7 +408,7 @@ struct TalerButtonStyle: ButtonStyle {
             let aligned2: Alignment = (aligned == .center) ? Alignment.center
                                     : (aligned == .leading) ? Alignment.leading
                                     : Alignment.trailing
-            let hasBadge = badge.count > 0
+            let hasBadge = !badge.isEmpty
             let buttonLabel = configuration.label
                                 .multilineTextAlignment(aligned)
                                 .talerFont(.title3)         //   narrow ? .title3 : .title2

@@ -72,7 +72,7 @@ struct RequestPayment: View {
             balanceIndex = balances.firstIndex(of: balance) ?? 0
         } else {
             balanceIndex = 0
-            balance = (balances.count > 0) ? balances[0] : nil
+            balance = balances.isEmpty ? nil : balances[0]
         }
     }
 
@@ -174,8 +174,7 @@ struct RequestPaymentContent: View {
     private func buttonAction() { buttonSelected = true }
 
     private func feeLabel(_ feeStr: String) -> String {
-        feeStr.count > 0 ? String(localized: "- \(feeStr) fee")
-                         : EMPTYSTRING
+        feeStr.isEmpty ? EMPTYSTRING : String(localized: "- \(feeStr) fee")
     }
 
     private func fee(raw: Amount, effective: Amount) -> Amount? {

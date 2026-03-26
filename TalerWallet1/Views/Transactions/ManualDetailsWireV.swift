@@ -266,7 +266,7 @@ struct ManualDetailsWireV: View {
                         }
                     }
                     ibanCode
-                } else if cyclos.count > 0 {
+                } else if !cyclos.isEmpty {
                     step2x
                     payeeCode
                 } else {

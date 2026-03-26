@@ -98,7 +98,7 @@ struct P2PSubjectV: View {
         let scrollView = ScrollView { VStack (alignment: .leading, spacing: 6) {
             if let feeIsNotZero {       // don't show fee if nil
                 let label = feeLabel ?? myFeeLabel
-                if label.0.count > 0 {
+                if !label.0.isEmpty {
                     Text(label.0)
                         .accessibilityLabel(label.1)
                         .frame(maxWidth: .infinity, alignment: .trailing)

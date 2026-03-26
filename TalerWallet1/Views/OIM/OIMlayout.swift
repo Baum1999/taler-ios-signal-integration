@@ -308,7 +308,7 @@ struct OIMlayout: Layout {
     }
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        guard subviews.count > 0 else { return CGSize.zero }
+        guard !subviews.isEmpty else { return CGSize.zero }
         let (spacing, offset) = spacing(for: proposal)
         let sorted = sortByValue(subviews)
         let viewSizes = sorted.map { $0.sizeThatFits(proposal) }        // <- THIS takes time...

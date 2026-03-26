@@ -61,7 +61,7 @@ struct BankEditView: View {
                 let payTo = PayTo(account.paytoUri)
                 iban = payTo.iban ?? EMPTYSTRING
                 xTaler = payTo.xTaler ?? EMPTYSTRING
-                if iban.count < 1 && xTaler.count > 1 {
+                if iban.isEmpty && xTaler.count > 1 {
                     paytoType = .xTalerBank
                 }
                 accountLabel = account.label ?? EMPTYSTRING

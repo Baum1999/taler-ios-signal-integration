@@ -126,7 +126,7 @@ extension BalancesSectionView: View {
 //                .listRowSeparator(.hidden)
 //                .border(.red)
 
-                if pendingTransactions.count > 0 {
+                if !pendingTransactions.isEmpty {
                     BalancesPendingRowV(//symLog: symLog,
                                          stack: stack.push(),
                                        balance: balance,
@@ -135,7 +135,7 @@ extension BalancesSectionView: View {
                                  reloadPending: loadPending)
                         .padding(.leading, ICONLEADING)
                 }
-                if scannedTransactions.count > 0 {
+                if !scannedTransactions.isEmpty {
                     BalancesDialogRowV(stack: stack.push(),
                                      balance: balance,
                              selectedBalance: $selectedBalance,
@@ -157,7 +157,8 @@ extension BalancesSectionView: View {
                 await loadScanned(stack.push(".task - load scanned"))
             }
             /// if there is only one currency, then show MAXRECENT recent transactions
-            if sectionCount == 1 && recentTransactions.count > 0 {
+            let recentCount = recentTransactions.count
+            if sectionCount == 1 && recentCount > 0 {
                 Section {
                     let _ = symLog.log("recent transactions")
                     TransactionsArraySliceV(symLog: symLog,
@@ -169,7 +170,7 @@ extension BalancesSectionView: View {
                         .padding(.leading, ICONLEADING)
                 } header: {
                     if !minimalistic {
-                        let recentHeader = recentTransactions.count > 1
+                        let recentHeader = recentCount > 1
                             ? String(localized: "Recent transactions", comment: "section header plural")
                             : String(localized: "Recent transaction", comment: "section header singular")
                         Text(recentHeader)

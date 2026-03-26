@@ -12,8 +12,7 @@ import SymLog
 typealias Announce = (_ this: String) -> ()
 
 fileprivate func feeLabel(_ feeString: String) -> String {
-    feeString.count > 0 ? String(localized: "+ \(feeString) fee")
-    : EMPTYSTRING
+    feeString.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeString) fee")
 }
 
 func templateFee(ppCheck: PreparePayResult?) -> Amount? {
@@ -93,7 +92,7 @@ struct PaymentView: View, Sendable {
     @MainActor
     func checkCurrencyInfo(for result: PreparePayResult) async {
         if let scopes = result.scopes {
-            if scopes.count > 0 {
+            if !scopes.isEmpty {
                 for scope in scopes {
                     controller.checkInfo(for: scope, model: model)
                 }

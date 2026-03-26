@@ -51,8 +51,7 @@ struct SendAmountView: View {
     }
 
     private func feeLabel(_ feeStr: String) -> String {
-        feeStr.count > 0 ? String(localized: "+ \(feeStr) fee")
-                         : EMPTYSTRING
+        feeStr.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeStr) fee")
     }
 
     private func fee(raw: Amount, effective: Amount) -> Amount? {

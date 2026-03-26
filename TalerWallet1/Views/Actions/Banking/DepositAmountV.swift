@@ -46,7 +46,7 @@ struct DepositAmountV: View {
             balanceIndex = balances.firstIndex(of: balance) ?? 0
         } else {
             balanceIndex = 0
-            balance = (balances.count > 0) ? balances[0] : nil
+            balance = balances.isEmpty ? nil : balances[0]
         }
     }
 

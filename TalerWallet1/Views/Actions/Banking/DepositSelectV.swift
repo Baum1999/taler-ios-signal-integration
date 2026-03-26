@@ -77,7 +77,7 @@ struct DepositSelectV: View {
                 }
             } else {
                 ForEach(bankAccounts, id: \.self) { account in
-//                  let disabled = (accountHolder.count < 1) || paytoUri == nil    // TODO: check amountAvailable
+//                  let disabled = accountHolder.isEmpty || paytoUri == nil    // TODO: check amountAvailable
                     BankSectionView(stack: stack.push(),
                                   account: account,
                           selectedBalance: selectedBalance,
