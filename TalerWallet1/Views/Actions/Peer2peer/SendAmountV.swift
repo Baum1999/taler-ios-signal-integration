@@ -114,7 +114,7 @@ struct SendAmountV: View {
         let _ = symLog.log("count = \(count)")
         let taskID = balanceIndex + (1000 * controller.currencyTicker)
         let scrollView = ScrollView {
-            if count > 0 {
+            if count > 1 {
                 ScopePicker(stack: stack.push(),
                             value: $balanceIndex,
                       onlyNonZero: true)                                        // can only send what exists
@@ -124,7 +124,7 @@ struct SendAmountV: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
-            }
+            }   // TODO: else show static text?
             if let balance {
                 SendAmountView(stack: stack.push(),
                                 cash: cash,

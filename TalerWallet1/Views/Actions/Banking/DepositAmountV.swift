@@ -83,7 +83,7 @@ struct DepositAmountV: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
             }
-            if count > 0 {
+            if count > 1 {
                 ScopePicker(stack: stack.push(),
                             value: $balanceIndex,
                       onlyNonZero: true)                                        // can only send what exists
@@ -93,7 +93,7 @@ struct DepositAmountV: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
-            }
+            }   // TODO: else show static text?
             DepositAmountView(stack: stack.push(),
                             balance: $balance,
                        balanceIndex: $balanceIndex,

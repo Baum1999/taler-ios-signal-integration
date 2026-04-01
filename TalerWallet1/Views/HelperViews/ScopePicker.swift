@@ -37,7 +37,7 @@ struct CurrencyPicker: View {
         let _ = Self._printChanges()
 #endif
         let count = exchanges.count
-        if (count > 0) {
+        if (count > 0) {        // TODO: 1?
             Picker(EMPTYSTRING, selection: $selected) {
                 ForEach(0..<count, id: \.self) { index in
                     let exchange = exchanges[index]
@@ -54,7 +54,7 @@ struct CurrencyPicker: View {
                 action(newValue)
             }
 
-        }
+        }   // TODO: else show static text?
     }
 }
 struct ScopePicker: View {

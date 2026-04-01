@@ -104,7 +104,7 @@ struct RequestPayment: View {
         let count = controller.balances.count
         let _ = symLog.log("count = \(count)")
         let scrollView = ScrollView {
-            if count > 0 {
+            if count > 1 {
                 ScopePicker(stack: stack.push(),
                             value: $balanceIndex,
                       onlyNonZero: false)
@@ -114,7 +114,7 @@ struct RequestPayment: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
-            }
+            }   // TODO: else show static text?
             if let balance {
                 RequestPaymentContent(stack: stack.push(),
                                        cash: cash,

@@ -70,7 +70,7 @@ struct ManualWithdraw: View {
         let navTitle = navTitle(currencySymbol, currencyInfo.hasSymbol)
         let count = controller.balances.count
         let scrollView = ScrollView {
-            if maySwitchCurrencies && count > 0 {
+            if maySwitchCurrencies && count > 1 {
                 ScopePicker(stack: stack.push(),
                             value: $balanceIndex,
                       onlyNonZero: false)
@@ -83,7 +83,7 @@ struct ManualWithdraw: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 4)
-            }
+            }   // TODO: else show static text?
             if let scope = balance?.scopeInfo ?? exchange?.scopeInfo {
                 let _ = symLog.log("exchange = \(exchange?.exchangeBaseUrl), scope = \(scope.url), amountToTransfer = \(amountToTransfer.currencyStr)")
                 ManualWithdrawContent(stack: stack.push(),
