@@ -49,8 +49,13 @@ struct QRcodesForPayto: View {
         let count = qrCodeSpecs.count
         List {
             if !minimalistic {
-                Text("If your banking software runs on another device, you can scan one of these QR codes:")
-                    .listRowSeparator(.hidden)
+                if count > 1 {
+                    Text("If your banking software runs on another device, you can scan one of these QR codes:")
+                        .listRowSeparator(.hidden)
+                } else {
+                    Text("If your banking software runs on another device, you can scan this QR code:")
+                        .listRowSeparator(.hidden)
+                }
             }
             ForEach(qrCodeSpecs, id: \.self) { spec in
                 QRcodeCopyShare(spec: spec, textToShare: textToShare)
