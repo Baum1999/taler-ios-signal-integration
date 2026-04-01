@@ -104,7 +104,8 @@ struct QRSheet: View {
                                 } label: {
                                     Image(systemName: XMARK)
                                 }
-                                .accessibilityHidden(true)      // VoiceOver has its own "Dismiss Popup" button
+                                .accessibilityLabel(Text("Dismiss QR scanner", comment: "a11y"))
+//                                .accessibilityHidden(true)      // VoiceOver has its own "Dismiss Popup" button
                             }
                             ToolbarItem(placement: .topBarTrailing) {
                                 let a11yValue = isTorchOn ? String(localized: "on", comment: "a11y")
