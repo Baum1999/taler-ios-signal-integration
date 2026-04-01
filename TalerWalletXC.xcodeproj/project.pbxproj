@@ -550,6 +550,7 @@
 				};
 			};
 			buildConfigurationList = D14AFD1824D232B300C51073 /* Build configuration list for PBXProject "TalerWalletXC" */;
+			compatibilityVersion = "Xcode 16.0.Superseded.1";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -695,7 +696,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -741,7 +742,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -786,7 +787,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0.1;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -832,7 +833,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0.1;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -1008,7 +1009,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1053,7 +1054,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.0;
+				CURRENT_PROJECT_VERSION = 1.5.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
