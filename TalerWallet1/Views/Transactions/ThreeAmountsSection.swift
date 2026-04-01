@@ -167,7 +167,7 @@ struct ThreeAmountsSection: View {
                 if productImages.isEmpty {
                     Text(summary)
                         .talerFont(.title3)
-                        .lineLimit(4)
+//                        .lineLimit(9)       // TODO: remove completely?
                         .padding(.bottom)
                 }
             }

@@ -58,11 +58,11 @@ struct SubjectInputV<TargetView: View>: View {
                     .focused($isFocused)
                     .lineLimit(2...)
             } else {
-                TextField("Subject", text: $summary)
+                TextField(minimalistic ? "Subject" : EMPTYSTRING, text: $summary)
                     .focused($isFocused)
 //                  .lineLimit(2...5)   // lineLimit' is only available in iOS 16.0 or newer
             } } // Group for iOS16+ & iOS15
-            .talerFont(.title2)
+            .talerFont(.title3)
             .foregroundColor(WalletColors().fieldForeground)     // text color
             .background(WalletColors().fieldBackground)
             .textFieldStyle(.roundedBorder)
@@ -96,6 +96,7 @@ struct SubjectInputV<TargetView: View>: View {
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
                 .disabled(disabled)
 //                .accessibility(sortPriority: 0)
+                .padding(.bottom, 333)
         }.padding(.horizontal) } // ScrollVStack
         .navigationTitle(navTitle)
 //        .ignoresSafeArea(.keyboard, edges: .bottom)
