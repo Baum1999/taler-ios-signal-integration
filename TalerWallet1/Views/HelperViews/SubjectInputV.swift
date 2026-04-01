@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -46,13 +46,6 @@ struct SubjectInputV<TargetView: View>: View {
 //        let disabled = insufficient || summary.isEmpty
         let disabled = summary.isEmpty
         ScrollView { VStack(alignment: .leading) {
-//            if let available {
-//                Text("Available:\t\(available)")
-//                    .talerFont(.title3)
-//                    .padding(.bottom, 2)
-////                    .accessibility(sortPriority: 3)
-//            }
-
             if !minimalistic {
                 Text("Enter subject:")    // Purpose
                     .talerFont(.title3)
@@ -105,7 +98,7 @@ struct SubjectInputV<TargetView: View>: View {
 //                .accessibility(sortPriority: 0)
         }.padding(.horizontal) } // ScrollVStack
         .navigationTitle(navTitle)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .onAppear() {

@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -29,8 +29,8 @@ struct TalerWallet1App: App {
     private let biometricService = BiometricService.shared
 
     func scheduleAppRefresh() {
-        let request = BGAppRefreshTaskRequest(identifier: "net.taler.gnu.refresh")
-        request.earliestBeginDate = .now.addingTimeInterval(24 * 3600)
+        let request = BGAppRefreshTaskRequest(identifier: "net.taler.refresh")
+        request.earliestBeginDate = .now.addingTimeInterval(4 * 3600)
         try? BGTaskScheduler.shared.submit(request)
     }
 

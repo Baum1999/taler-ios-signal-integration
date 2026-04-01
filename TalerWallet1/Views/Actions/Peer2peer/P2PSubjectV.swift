@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -169,7 +169,7 @@ struct P2PSubjectV: View {
                                             : EMPTYSTRING)
         }.padding(.horizontal) } // ScrollVStack
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
         .navigationTitle(subjectTitle(amountToTransfer))
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .task(id: amountToTransfer.value) { await checkPeerPushDebit() }

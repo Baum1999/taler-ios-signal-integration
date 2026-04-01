@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -87,7 +87,7 @@ struct AmountInputV: View {
 
     var body: some View {
         let currency = amountToTransfer.currencyStr
-        VStack(alignment: .trailing) {
+        ScrollView { VStack(alignment: .trailing) {
             CurrencyInputView(scope: scope,
                              amount: $amountToTransfer,
                      amountLastUsed: amountLastUsed,
@@ -108,7 +108,8 @@ struct AmountInputV: View {
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: flags.disabled))
                 .disabled(flags.disabled)
                 .accessibilityHint(flags.disabled ? hint : EMPTYSTRING)
-        }.padding(.horizontal)
+                .padding(.bottom, 333)
+        }.padding(.horizontal) } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
         .task(id: amountToTransfer.value) {

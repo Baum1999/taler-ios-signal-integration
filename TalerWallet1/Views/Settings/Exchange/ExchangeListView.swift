@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -156,7 +156,7 @@ struct ExchangeListCommonV: View {
             }
         }
         .listStyle(myListStyle.style).anyView
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
         .refreshable {
             controller.hapticNotification(.success)
             symLog?.log("refreshing")

@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -217,7 +217,7 @@ struct PayTemplateV: View {
                 summaryIsEditable: summaryIsEditable)
             }
           } .navigationTitle(navTitle)
-            .ignoresSafeArea(.keyboard, edges: .bottom)
+//            .ignoresSafeArea(.keyboard, edges: .bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
             .onAppear() {

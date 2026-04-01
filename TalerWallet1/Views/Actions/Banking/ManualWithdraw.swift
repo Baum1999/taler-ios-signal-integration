@@ -275,9 +275,9 @@ struct ManualWithdrawContent: View {
                            acceptAction: nil)
                     .padding(.top)
                 }
-            } // Group
+            } // ScrollView
                 .padding(.horizontal)
-                .ignoresSafeArea(.keyboard, edges: .bottom)
+//                .ignoresSafeArea(.keyboard, edges: .bottom)
                 .task(id: amountToTransfer.currencyStr) {
                     await getWithdrawalDetailsForAmount(amountToTransfer, true)
                 }

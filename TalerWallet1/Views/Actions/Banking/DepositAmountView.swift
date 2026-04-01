@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -178,7 +178,7 @@ struct DepositAmountView: View {
                 Text("No balance. There seems to be a problem with the database...")
             }
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_DEPOSIT, stack: stack.push())
             symLog.log("❗️ onAppear")

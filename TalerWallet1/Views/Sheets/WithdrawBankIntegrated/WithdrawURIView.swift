@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -192,7 +192,7 @@ struct WithdrawURIView: View {
                                     computeFee: computeFeeWithdraw)
                             .background(actions)
                         } // ScrollView
-                        .ignoresSafeArea(.keyboard, edges: .bottom)
+//                        .ignoresSafeArea(.keyboard, edges: .bottom)
                     } else {
                         acceptDestination
                     } // directly show the accept view

@@ -221,7 +221,7 @@ struct BankEditView: View {
           }.listRowSeparator(.hidden)
         } // List
         .navigationBarItems(trailing: doneButton)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+//        .ignoresSafeArea(.keyboard, edges: .bottom)
         .onChange(of: focus) { [focus] newState in
             switch focus {
                 case .none:
