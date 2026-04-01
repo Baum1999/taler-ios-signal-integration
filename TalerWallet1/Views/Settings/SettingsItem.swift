@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingsImage: View {
     let imageName: String?
 
+    @ScaledMetric var imgSize: CGFloat = 32         // sys image relative to fontSize
+
     var hasImage: Bool {
         if let imageName {
             return UIImage(named: imageName) != nil
@@ -26,15 +28,16 @@ struct SettingsImage: View {
 
     var body: some View {
         if hasImage {
+            let imageSize = imgSize * 5 / 4         // Logos have space around them, thus need to be bigger
             Image(imageName!)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 44, height: 44)
+                .frame(width: imageSize, height: imageSize)
         } else if hasSysImage {
             Image(systemName: imageName!)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 36, height: 36)
+                .frame(width: imgSize, height: imgSize)
                 .padding(.horizontal, 2)
         } else {
             EmptyView()
@@ -80,7 +83,7 @@ struct SettingsBase<Content: View>: View {
                 .id(id1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(foreColor)
-                .talerFont(.title2)
+                .talerFont(.title3)
                 .padding([.bottom], 0.01)
             SettingsDescription(id1: id1, description: description)
         }.id(id1 == nil ? nil : id1! + "_V")
