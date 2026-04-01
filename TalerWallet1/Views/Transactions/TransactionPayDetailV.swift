@@ -12,6 +12,12 @@ import SwiftUI
 struct TransactionPayDetailV: View {
     let paymentTx: PaymentTransaction
 
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
     var body: some View {
         let common = paymentTx.common
         let details = paymentTx.details
@@ -57,6 +63,19 @@ struct TransactionPayDetailV: View {
                             Text(product_id)
                                 .talerFont(.body)
                         }
+                    }
+                }
+            }
+            if let abortReason = details.abortReason {
+                if let exchangeResponse = abortReason.exchangeResponse,
+                   let hint2 = exchangeResponse.hint {
+                    Text(hint2)
+                        .talerFont(.body)
+                }
+                if developerMode {
+                    if let hint = abortReason.hint {
+                        Text(hint)
+                            .talerFont(.body)
                     }
                 }
             }

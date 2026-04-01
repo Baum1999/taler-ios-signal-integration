@@ -478,6 +478,8 @@ struct PaymentTransactionDetails: Decodable {
     var posConfirmation: String?
     var posConfirmationDeadline: Timestamp?
     var posConfirmationViaNfc: Bool?
+    let contractTerms: MerchantContractTerms?       // TODO: show data in tx details
+    let abortReason: WalletBackendAbortReason?
 }
 struct PaymentTransaction : Sendable {
     var common: TransactionCommon

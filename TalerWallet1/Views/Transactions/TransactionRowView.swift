@@ -369,7 +369,9 @@ extension TalerTransaction {             // for PreViews
                                            totalRefundRaw: Amount(currency: LONGCURRENCY, cent: 300),
                                      totalRefundEffective: Amount(currency: LONGCURRENCY, cent: 280),
                                                   refunds: [],
-                                        refundQueryActive: false)
+                                        refundQueryActive: false,
+                                            contractTerms: nil,
+                                              abortReason: nil)
             self = .payment(PaymentTransaction(common: common, details: pDetails))
         }
     }

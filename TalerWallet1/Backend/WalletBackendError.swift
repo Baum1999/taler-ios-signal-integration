@@ -38,6 +38,19 @@ struct WalletBackendResponseError: Codable {
     var insufficientBalanceDetails: PaymentInsufficientBalanceDetails? = nil
 }
 
+struct WalletBackendAbortReason: Codable {
+    /// Numeric error code defined below (-1..-4)
+    var code: Int
+    // all other fields are optional:
+    var when: Timestamp?
+    /// English description of the error code.
+    var hint: String?
+    /// English diagnostic message that can give details for the instance of the error.
+    var message: String?
+
+    var exchangeResponse: TalerErrorDetail?
+}
+
 extension WalletCore {
     static func serializeRequestError() -> WalletBackendResponseError {
         return WalletBackendResponseError(code: -1, when: Timestamp.now(),
