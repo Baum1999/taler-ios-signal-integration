@@ -837,6 +837,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Taler_Nightly Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler Nightly";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NFCReaderUsageDescription = "Scan talerURIs";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
@@ -1011,6 +1012,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NFCReaderUsageDescription = "Scan talerURIs";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
@@ -1055,6 +1057,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME) Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler Wallet";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NFCReaderUsageDescription = "Scan talerURIs";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR Codes";
