@@ -77,6 +77,8 @@ public let SETTINGS = "gear"                        // 􀍟                     
 public let QRBUTTON = "qrcode.viewfinder"           // 􀎻                       1.0 (iOS 13)
 public let QRCODE = "qrcode"                        // 􀖂                       1.0 (iOS 13)
 public let NFCLOGO = "wave.3.right.circle"          // 􀭹                       2.0 (iOS 14)
+public let NOTIFICATION1 = "bell"                   // 􀋙 􀋚                    1.0 (iOS 13)
+public let NOTIFICATION2 = "bell.badge"             // 􀝖 􀝗                    2.0 (iOS 14)   reverses for RTL
 
 public let CONFIRM_BANK = "circle.fill"             // 􀀁 badge in PendingRow, TransactionRow and TransactionSummary
 public let NEEDS_KYC = "star.fill"                  // 􀋃 badge in PendingRow, TransactionRow and TransactionSummary

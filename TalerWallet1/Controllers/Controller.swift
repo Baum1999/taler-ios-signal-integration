@@ -125,6 +125,7 @@ class Controller: ObservableObject {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("deviceTokenAPNs") var deviceTokenAPNs: String?
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()

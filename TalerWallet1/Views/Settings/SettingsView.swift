@@ -27,6 +27,7 @@ struct SettingsView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
+    @AppStorage("pushNotifications") var pushNotifications: Bool = false
 
     @State private var listID = UUID()
 

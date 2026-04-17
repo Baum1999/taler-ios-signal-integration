@@ -15,6 +15,9 @@ import SymLog
 
 @main
 struct TalerWallet1App: App {
+#if TALER_NIGHTLY
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+#endif
     private let symLog = SymLogV()
     @Environment(\.scenePhase) private var phase
     @StateObject private var viewState = ViewState.shared           // popToRootView()
@@ -35,8 +38,7 @@ struct TalerWallet1App: App {
     }
 
     var body: some Scene {
-        WindowGroup {
-            MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
+        let mainView = MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(viewState2)      // popToRoot
@@ -55,19 +57,21 @@ struct TalerWallet1App: App {
 #endif
                     try! await controller.initWalletCore(model, setTesting: testing)     // will (and should) crash on failure
                 }
-        }
-        .onChange(of: phase) { newPhase in
-            switch newPhase {
-                case .active:
-                    logger.log("❗️.onChange() ==> Active")
-                case .background:
-                    logger.log("❗️.onChange() ==> Background)")
-//                    scheduleAppRefresh()
-                default: break
+        if #available(iOS 16.4, *) {
+            return WindowGroup {
+                mainView
             }
-        }
-//        if #available(iOS 16.4, *) {
-//            .backgroundTask(.appRefresh("net.taler.refresh")) {
+            .onChange(of: phase) { newPhase in
+                switch newPhase {
+                    case .active:
+                        logger.log("❗️.onChange() ==> Active")
+                    case .background:
+                        logger.log("❗️.onChange() ==> Background)")
+//                      scheduleAppRefresh()
+                    default: break
+                }
+            }
+            .backgroundTask(.appRefresh("net.taler.refresh")) {
 //                symLog.log("backgroundTask running")
 //#if 0
 //                let request = URLRequest(url: URL(string: "your_backend")!)
@@ -84,10 +88,13 @@ struct TalerWallet1App: App {
 //                    await notifyUser(for: products)
 //                }
 //#endif
-//            }
-//        } else {
-//            // Fallback on earlier versions
-//        }
+            }
+        } else {
+            // Fallback on earlier versions
+            return WindowGroup {
+                mainView
+            }
+        }
 
     }
 }
