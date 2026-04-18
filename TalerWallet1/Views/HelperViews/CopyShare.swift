@@ -145,6 +145,11 @@ struct CopyButton: View {
     }
 }
 // MARK: -
+struct ShareType: Hashable {
+    let textToShare: String
+    let image: UIImage?
+}
+// MARK: -
 @MainActor
 struct ShareButton: View {
     private let symLog = SymLogV(0)
@@ -168,6 +173,14 @@ struct ShareButton: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
     @EnvironmentObject private var controller: Controller
 
+    @MainActor
+    func dismissAndPost() {
+        dismissTop()
+        let shareType = ShareType(textToShare: textToShare, image: image)
+        let userInfo = [NOTIFICATIONSHARE: shareType]
+        NotificationCenter.default.post(name: .ShareAction, object: nil, userInfo: userInfo)                // will trigger NavigationLink
+    }
+
     func shareAction() -> Void {
         symLog.log(textToShare)
         controller.hapticFeedback(.soft)
@@ -181,7 +194,8 @@ struct ShareButton: View {
                 withAnimation(.easeOut(duration: 0.25)) {
                     scale = 1.15
                 }
-                ShareSheet.shareSheet(textToShare: textToShare, image: image)
+//              ShareSheet.shareSheet(textToShare: textToShare, image: image)
+                dismissAndPost()
             }
             // Finally settle to normal
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {

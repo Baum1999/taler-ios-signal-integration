@@ -589,6 +589,13 @@ extension MainView {
                     }
                 }
             }
+            .onNotification(.ShareAction){ notification in
+                if let actionData = notification.userInfo?[NOTIFICATIONSHARE] as? ShareType {
+                    let textToShare = actionData.textToShare
+                    let image = actionData.image
+                    ShareSheet.shareSheet(textToShare: textToShare, image: image)
+                }
+            }
             .alert("You need to pass a legitimization procedure.",
                  isPresented: $showKycAlert,
                  actions: {   openKycButton

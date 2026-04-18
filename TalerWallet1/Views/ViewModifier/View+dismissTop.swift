@@ -23,7 +23,7 @@ import SwiftUI
 /// so we are walking the view stack to find the top presentedViewController (UIKit) and dismiss it.
 extension View {
     @MainActor    @discardableResult
-    func dismissTop(_ stack: CallStack, animated: Bool = true) -> Bool {
+    func dismissTop(_ stack: CallStack? = nil, animated: Bool = true) -> Bool {
         let windows = UIApplication.shared.connectedScenes.compactMap {
             ($0 as? UIWindowScene)?.keyWindow       // TODO: iPad might have more than 1 window
         }
