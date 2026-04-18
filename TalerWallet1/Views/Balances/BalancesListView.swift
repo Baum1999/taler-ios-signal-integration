@@ -75,16 +75,24 @@ struct BalancesListView: View {
                 /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
                 let count = controller.balances.count
                 Group {
-                    List(Array(controller.balances.enumerated()), id: \.element) { index, balance in
-                        BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
-                                          balance: balance,                     // this is the currency to be used
-                                  selectedBalance: $selectedBalance,            // set in TransactionsListView
-                                     balanceIndex: index,
-                                     sectionCount: count,
-                                 amountToTransfer: $amountToTransfer,           // does still have the wrong currency
-                                          summary: $summary,
-                                    historyTapped: $historyTapped,
-                               reloadTransactions: $reloadTransactions)
+                    List {
+                        if !controller.haveProdBalance {
+                            Section {
+                                ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
+                            }
+                            .listRowSeparator(.hidden)
+                        }
+                        ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
+                            BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
+                                              balance: balance,                     // this is the currency to be used
+                                      selectedBalance: $selectedBalance,            // set in TransactionsListView
+                                         balanceIndex: index,
+                                         sectionCount: count,
+                                     amountToTransfer: $amountToTransfer,           // does still have the wrong currency
+                                              summary: $summary,
+                                        historyTapped: $historyTapped,
+                                   reloadTransactions: $reloadTransactions)
+                        }
                     }
                     .onAppear() {
                         DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))

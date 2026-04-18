@@ -9,6 +9,96 @@ import SwiftUI
 import SymLog
 import taler_swift
 
+struct ProdSectionView: View {
+    let stack: CallStack
+    let isEmpty: Bool
+    let disabled: Bool
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
+
+    @State private var defaultExchanges: [DefaultExchange] = []
+    @State private var selectedCurrency: Int = 0
+
+    @MainActor
+    private func viewDidLoad() async {
+//        print("ProdSectionView.viewDidLoad")
+        if let exchanges = try? await model.getDefaultExchanges() {
+            withAnimation { defaultExchanges = exchanges }
+        }
+    }
+
+    var body: some View {
+        Section {
+            if isEmpty {
+                Text("Welcome to Taler Wallet!")
+                    .talerFont(.headline)
+                Text("To make your first payment, withdraw digital cash.")
+                    .talerFont(.body)
+            } else {
+                Text("Currently you have only demo cash. Withdraw real digital cash:")
+                    .talerFont(.body)
+            }
+#if false
+            let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
+            let settings = Image(systemName: SETTINGS)                      // 􀍟 "gear"
+            Text("Use «\(qrButton) Scan QR code» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
+                .talerFont(.body)
+            Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
+                .talerFont(.body)
+#endif
+
+            if !defaultExchanges.isEmpty {
+#if !TALER_WALLET
+                if developerMode {
+                    if defaultExchanges.count > 1 {
+                        CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
+                                       exchanges: defaultExchanges) { index in
+                            selectedCurrency = index
+                        }
+                    }
+                }
+#endif
+                let defaultExchange = defaultExchanges[selectedCurrency]
+                let currency = defaultExchange.currency
+                let currencySpec = defaultExchange.currencySpec
+                let name = currencySpec.name
+                let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
+                Button(title) {
+                    if let talerUri = URL(string: defaultExchange.talerUri) {
+                        controller.talerURI = talerUri
+                    }
+                }
+                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: disabled, aligned: .center))
+                .padding(.bottom)
+            }
+        } header: {
+            if isEmpty {
+                let firstHeader = EMPTYSTRING
+                Text(firstHeader)
+                    .talerFont(.badge)
+//                    .foregroundColor(.primary)
+                /// YIKES! when not specifying this color, the Text in the BarGraphHeader vanishes!!!
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+//                    .listRowInsets(EdgeInsets())  // << here !!
+            }
+        }
+        .listRowSeparator(.hidden)
+//        .listSectionSpacing(.compact) iOS 17
+        .task {
+            setVoice(to: nil)
+            await viewDidLoad()
+        }
+    }
+}
+
 /// This view shows hints if a wallet is empty
 /// It is the very first thing the user sees after installing the app
 
@@ -16,68 +106,14 @@ struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
-#if DEBUG
-    @AppStorage("developerMode") var developerMode: Bool = true
-#else
-    @AppStorage("developerMode") var developerMode: Bool = false
-#endif
     @State private var withDrawStarted = false
-    @State private var defaultExchanges: [DefaultExchange] = []
     @State private var urlToOpen: URL? = nil
-    @State private var selectedCurrency: Int = 0
-
-    @MainActor
-    private func viewDidLoad() async {
-        if let exchanges = try? await model.getDefaultExchanges() {
-            withAnimation { defaultExchanges = exchanges }
-        }
-    }
 
     var body: some View {
         let list = List {
-            Section {
-                Text("Welcome to Taler Wallet!")
-                    .talerFont(.headline)
-                Text("To make your first payment, withdraw digital cash.")
-                    .talerFont(.body)
-#if false
-                let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
-                let settings = Image(systemName: SETTINGS)                      // 􀍟 "gear"
-                Text("Use «\(qrButton) Scan QR code» in the Actions menu to start a withdrawal if your bank already supports Taler payments.", comment: "« 􀎻 » 'qrcode.viewfinder'")
-                    .talerFont(.body)
-                Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
-                    .talerFont(.body)
-#endif
-
-                if !defaultExchanges.isEmpty {
-#if !TALER_WALLET
-                    if developerMode {
-                        if defaultExchanges.count > 1 {
-                            CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
-                                           exchanges: defaultExchanges) { index in
-                                selectedCurrency = index
-                            }
-                        }
-                    }
-#endif
-                    let defaultExchange = defaultExchanges[selectedCurrency]
-                    let currency = defaultExchange.currency
-                    let currencySpec = defaultExchange.currencySpec
-                    let name = currencySpec.name
-                    let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
-                    Button(title) {
-                        if let talerUri = URL(string: defaultExchange.talerUri) {
-                            controller.talerURI = talerUri
-                        }
-                    }
-                        .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: withDrawStarted, aligned: .center))
-                        .padding(.bottom)
-                }
+            ProdSectionView(stack: stack.push(), isEmpty: true, disabled: withDrawStarted)
 #if GNU_TALER
                 Text("If you don't have a Swiss bank account, you can simply try out the demo…")
                     .talerFont(.body)
@@ -89,17 +125,6 @@ struct WalletEmptyView: View {
 //                    .talerFont(.body)
 //              }
 #endif
-            } header: {
-                let firstHeader = EMPTYSTRING
-                Text(firstHeader)
-                    .talerFont(.badge)
-//                    .foregroundColor(.primary)
-                /// YIKES! when not specifying this color, the Text in the BarGraphHeader vanishes!!!
-                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-//                    .listRowInsets(EdgeInsets())  // << here !!
-            }
-            .listRowSeparator(.hidden)
-//            .listSectionSpacing(.compact) iOS 17
             Section {
 //                Text("Demo")
 //                    .talerFont(.headline)
@@ -137,10 +162,6 @@ struct WalletEmptyView: View {
             if withDrawStarted {
                 RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawStarted)
             }
-        }
-        .task {
-            setVoice(to: nil)
-            await viewDidLoad()
         }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY_WALLET, stack: stack.push("onAppear"))     // 10
