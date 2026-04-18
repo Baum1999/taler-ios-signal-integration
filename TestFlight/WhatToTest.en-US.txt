@@ -1,3 +1,10 @@
+Version 1.5.1 (wallet-core 1.5.10)
+
+• Hint to withdraw real money
+- better error correction for QR codes
+- Share button works now
+
+
 Version 1.5.0 (wallet-core 1.5.3)
 
 • Show abort reason
@@ -17,7 +24,7 @@ Version 1.5.0 (wallet-core 1.5.0.1)
 • improvements for iOS 26
 • support for Exchange 1.5
 - fix Action button flicker
-- fix TabBar for iOS < 26
+- fix TabBar for iOS 15..18
 - fix currency selection for Request
 
 
