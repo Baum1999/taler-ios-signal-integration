@@ -76,11 +76,8 @@ struct BalancesListView: View {
                 let count = controller.balances.count
                 Group {
                     List {
-                        if !controller.haveProdBalance {
-                            Section {
-                                ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
-                            }
-                            .listRowSeparator(.hidden)
+                        if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
+                            ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
                         }
                         ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
                             BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),

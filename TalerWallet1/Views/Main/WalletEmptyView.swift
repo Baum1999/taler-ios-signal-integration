@@ -24,18 +24,11 @@ struct ProdSectionView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
 
-    @State private var defaultExchanges: [DefaultExchange] = []
     @State private var selectedCurrency: Int = 0
 
-    @MainActor
-    private func viewDidLoad() async {
-//        print("ProdSectionView.viewDidLoad")
-        if let exchanges = try? await model.getDefaultExchanges() {
-            withAnimation { defaultExchanges = exchanges }
-        }
-    }
-
     var body: some View {
+        let defaultExchanges = controller.defaultExchanges
+        let count = defaultExchanges.count
         Section {
             if isEmpty {
                 Text("Welcome to Taler Wallet!")
@@ -55,30 +48,31 @@ struct ProdSectionView: View {
                 .talerFont(.body)
 #endif
 
-            if !defaultExchanges.isEmpty {
 #if !TALER_WALLET
-                if developerMode {
-                    if defaultExchanges.count > 1 {
-                        CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
-                                       exchanges: defaultExchanges) { index in
-                            selectedCurrency = index
-                        }
+            if developerMode {
+                if defaultExchanges.count > 1 {
+                    CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
+                               exchanges: defaultExchanges) { index in
+                        selectedCurrency = index
                     }
                 }
-#endif
-                let defaultExchange = defaultExchanges[selectedCurrency]
-                let currency = defaultExchange.currency
-                let currencySpec = defaultExchange.currencySpec
-                let name = currencySpec.name
-                let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
-                Button(title) {
-                    if let talerUri = URL(string: defaultExchange.talerUri) {
-                        controller.talerURI = talerUri
-                    }
-                }
-                .buttonStyle(TalerButtonStyle(type: .prominent, narrow: false, disabled: disabled, aligned: .center))
-                .padding(.bottom)
             }
+#endif
+            let defaultExchange = defaultExchanges[selectedCurrency < count ? selectedCurrency : 0]
+            let currency = defaultExchange.currency
+            let currencySpec = defaultExchange.currencySpec
+            let name = currencySpec.name
+            let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
+            Button(title) {
+                if let talerUri = URL(string: defaultExchange.talerUri) {
+                    controller.talerURI = talerUri
+                }
+            }
+                .buttonStyle(TalerButtonStyle(type: isEmpty ? .prominent : .bordered,
+                                            narrow: false,
+                                          disabled: disabled,
+                                           aligned: .center))
+                .padding(.bottom)
         } header: {
             if isEmpty {
                 let firstHeader = EMPTYSTRING
@@ -92,10 +86,6 @@ struct ProdSectionView: View {
         }
         .listRowSeparator(.hidden)
 //        .listSectionSpacing(.compact) iOS 17
-        .task {
-            setVoice(to: nil)
-            await viewDidLoad()
-        }
     }
 }
 
@@ -106,6 +96,7 @@ struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @State private var withDrawStarted = false
@@ -113,7 +104,9 @@ struct WalletEmptyView: View {
 
     var body: some View {
         let list = List {
-            ProdSectionView(stack: stack.push(), isEmpty: true, disabled: withDrawStarted)
+            if !controller.defaultExchanges.isEmpty {
+                ProdSectionView(stack: stack.push(), isEmpty: true, disabled: withDrawStarted)
+            }
 #if GNU_TALER
                 Text("If you don't have a Swiss bank account, you can simply try out the demo…")
                     .talerFont(.body)
