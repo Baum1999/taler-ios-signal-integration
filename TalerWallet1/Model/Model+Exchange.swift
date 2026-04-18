@@ -15,6 +15,11 @@ struct OperationErrorInfo: Codable, Hashable {
     var error: TalerErrorDetail
 }
 
+enum ExchangeType: String, Codable {
+    case demo
+    case prod
+}
+
 enum ExchangeEntryStatus: String, Codable {
     case preset
     case ephemeral
@@ -141,12 +146,14 @@ extension DefaultExchange: Identifiable {
 /// A request to list exchanges names for a currency
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
     func operation() -> String { "listExchanges" }
-    func args() -> Args { Args(filterByScope: scope, filterByExchangeEntryStatus: filterByStatus) }
+    func args() -> Args { Args(filterByScope: scope, filterByType: filterByType, filterByExchangeEntryStatus: filterByStatus) }
 
     var scope: ScopeInfo?
+    var filterByType: ExchangeType?
     var filterByStatus: ExchangeEntryStatus?
     struct Args: Encodable {
         var filterByScope: ScopeInfo?
+        var filterByType: ExchangeType?
         var filterByExchangeEntryStatus: ExchangeEntryStatus?
     }
     struct Response: Decodable {        // list of known exchanges
@@ -268,10 +275,13 @@ fileprivate struct RmvGlobalCurrency: WalletBackendFormattedRequest {
 // MARK: -
 extension WalletModel {
     /// ask wallet-core for its list of known exchanges
-    nonisolated func listExchanges(scope: ScopeInfo?, filterByStatus: ExchangeEntryStatus? = nil, viewHandles: Bool = false)
+    nonisolated func listExchanges(scope: ScopeInfo?, filterByType: ExchangeType? = nil,
+                          filterByStatus: ExchangeEntryStatus? = nil, viewHandles: Bool = false)
       async -> [Exchange] {   // M for MainActor
         do {
-            let request = ListExchanges(scope: scope, filterByStatus: filterByStatus)    // .used, .preset
+            let request = ListExchanges(scope: scope,
+                                 filterByType: filterByType,        // .demo, .prod
+                               filterByStatus: filterByStatus)      // .used, .preset
             let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.exchanges
         } catch {

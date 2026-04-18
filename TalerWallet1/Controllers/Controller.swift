@@ -105,6 +105,7 @@ class Controller: ObservableObject {
     public static let shared = Controller()
     private let symLog = SymLogC()
 
+    @Published var haveProdBalance: Bool = false
     @Published var balances: [Balance] = []
     @Published var scannedURLs: [ScannedURL] = []
 
@@ -272,7 +273,8 @@ class Controller: ObservableObject {
     @MainActor
     @discardableResult
     func loadBalances(_ stack: CallStack,_ model: WalletModel) async -> Int? {
-        if let reloaded = try? await model.getBalances(stack.push()) {
+        if let response = try? await model.getBalances(stack.push()) {
+            let reloaded = response.balances
             if reloaded != balances {
                 for balance in reloaded {
                     let scope = balance.scopeInfo
@@ -283,6 +285,7 @@ class Controller: ObservableObject {
             } else {
                 self.logger.log("••Same balances, no redraw")
             }
+            haveProdBalance = response.haveProdBalance
             return reloaded.count
         }
         return nil
@@ -431,7 +434,7 @@ class Controller: ObservableObject {
 #if !TALER_WALLET
                 if developerMode {
                     try? await model.setConfig(setTesting: true)
-                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
+//                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                     try? await model.setConfig(setTesting: false)
                 }

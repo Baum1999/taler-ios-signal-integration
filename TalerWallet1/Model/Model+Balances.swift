@@ -68,6 +68,11 @@ extension Balance {
     }
 }
 // MARK: -
+struct BalancesResponse: Decodable, Hashable, Sendable {
+    let haveProdBalance: Bool                           // if false, show DefaultExchange hint
+    let balances: [Balance]
+}
+
 /// A request to get the balances held in the wallet.
 fileprivate struct Balances: WalletBackendFormattedRequest {
     func operation() -> String { "getBalances" }
@@ -75,16 +80,14 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
 
     struct Args: Encodable {}                           // no arguments needed
 
-    struct Response: Decodable, Sendable {              // list of balances
-        var balances: [Balance]
-    }
+    typealias Response = BalancesResponse
 }
 // MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
-    nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> [Balance] {
+    nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> BalancesResponse {
         let request = Balances()
         let response = try await sendRequest(request, viewHandles: viewHandles)
-        return response.balances
+        return response
     }
 }
