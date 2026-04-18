@@ -107,6 +107,7 @@ class Controller: ObservableObject {
 
     @Published var haveProdBalance: Bool = false
     @Published var balances: [Balance] = []
+    @Published var defaultExchanges: [DefaultExchange] = []
     @Published var scannedURLs: [ScannedURL] = []
 
     @Published var backendState: BackendState = .none       // only used for launch animation
@@ -265,6 +266,7 @@ class Controller: ObservableObject {
         currencyInfos = [:]
         exchanges = []
         balances = []
+        defaultExchanges = []
 //        printFonts()
 //        checkInternetConnection()
         startObserving()
@@ -439,6 +441,7 @@ class Controller: ObservableObject {
                     try? await model.setConfig(setTesting: false)
                 }
 #endif
+                defaultExchanges = await model.getDefaultExchanges()
                 backendState = .ready                       // dismiss the launch animation
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
