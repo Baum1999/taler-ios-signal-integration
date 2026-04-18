@@ -30,23 +30,88 @@ struct SettingsView: View {
     @AppStorage("pushNotifications") var pushNotifications: Bool = false
 
     @State private var listID = UUID()
+    @State private var mayNotUsePush: Bool = false
+    @State private var registerState: Bool = false
+
+    var isRegistered: Bool {
+        UIApplication.shared.isRegisteredForRemoteNotifications
+    }
+
+    func checkRegisterState(delaySeconds: Double) {
+        // update isRegistered ==> icon shown
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
+            registerState = isRegistered
+        }
+    }
+
+    private var dismissAlertButton: some View {
+        Button("Cancel", role: .cancel) {
+            pushNotifications = false
+            mayNotUsePush = false
+        }
+    }
+
+    func checkPushNotifications(_ shouldUsePush: Bool) {
+#if TALER_NIGHTLY
+        // 1. Request authorisation for remote (push) notifications.
+        //    For background-only (silent) pushes the alert/badge/sound
+        //    entitlements are not strictly required, but requesting them
+        //    avoids surprises when you later add user-visible notifications.
+        DispatchQueue.main.async {
+            if isRegistered {
+                registerState = true
+                if shouldUsePush {
+                    self.symLog.log("already registered for remote notifications")
+                } else {
+                    self.symLog.log("unregisterForRemoteNotifications")
+                    UIApplication.shared.unregisterForRemoteNotifications()
+                    controller.deviceTokenAPNs = nil                            // TODO: tell walletCore
+                    checkRegisterState(delaySeconds: 0.5)
+                }
+            } else {
+                registerState = false
+                if !shouldUsePush {
+                    self.symLog.log("remote notifications are disabled")
+                } else {
+                    UNUserNotificationCenter.current().requestAuthorization(
+                        options: [.alert, .badge, .sound]
+                    ) { granted, error in
+                        DispatchQueue.main.async {
+                            if granted {
+                                self.symLog.log("registerForRemoteNotifications")
+                                /// result in didRegisterForRemoteNotificationsWithDeviceToken
+                                UIApplication.shared.registerForRemoteNotifications()
+                                checkRegisterState(delaySeconds: 0.5)
+                            } else {
+                                self.symLog.log("Error requesting notification permissions: \(error?.localizedDescription ?? "unknown")")
+                                mayNotUsePush = true
+                                registerState = false
+                                pushNotifications = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+#endif
+
+    }
+
 
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let walletCore = WalletCore.shared
-        Group {
-            List {
 #if TALER_WALLET
-                let appName = "Taler Wallet"
+        let appName = "Taler Wallet"
 #elseif TALER_NIGHTLY
-                let appName = "Taler Nightly"
+        let appName = "Taler Nightly"
 #else
-                let appName = "GNU Taler"
+        let appName = "GNU Taler"
 #endif
-                let localizedAppName = Bundle.main.bundleName ?? appName
+        let localizedAppName = Bundle.main.bundleName ?? appName
+        let list = List {
                 let aboutStr = String(localized: "About \(localizedAppName)")
                 NavigationLink {        // whole row like in a tableView
                     AboutView(stack: stack.push(), navTitle: aboutStr)
@@ -92,6 +157,15 @@ struct SettingsView: View {
 //                    biometricService.isAuthenticated = false
                 }
 
+#if TALER_NIGHTLY
+                SettingsToggle(name: String(localized: "Push Notifications"), value: $pushNotifications,
+                                id1: "pushNotifications",
+                          imageName: registerState ? NOTIFICATION2 : NOTIFICATION1,  // 􀝖 or 􀋙
+                        description: String(localized: "Check pending payments in the background")
+                ) { newVal in
+                    checkPushNotifications(newVal)
+                }
+#endif
                 SettingsToggle(name: String(localized: "Minimalistic"), value: $minimalistic, id1: "minimal",
                           imageName: "heart",                   // 􀊴
                         description: String(localized: "Omit text where possible"))
@@ -142,15 +216,22 @@ struct SettingsView: View {
                             imageName: "ellipsis",          // 􀍠
                           description: nil) {}
                 }
-            }
+        }
             .padding(.bottom)
             .id(listID)
             .listStyle(myListStyle.style).anyView
-        }
-        .navigationTitle(navTitle)
-        .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
-        }
+
+        list
+            .navigationTitle(navTitle)
+            .onAppear() {
+                DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
+                registerState = isRegistered
+            }
+            .alert("Push Notifications are disabled",
+                   isPresented: $mayNotUsePush,
+                   actions: { dismissAlertButton },
+                   message: { Text("Please go to Settings > \(localizedAppName) > Notifications and turn them on.") }
+            )
     } // body
 }
 // MARK: -
