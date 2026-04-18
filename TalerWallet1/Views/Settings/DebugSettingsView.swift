@@ -49,6 +49,7 @@ struct DebugSettingsView: View {
             Task { // runs on MainActor
                 symLog.log("❗️Reset wallet-core❗️")
                 try? await model.resetWalletCore()
+                controller.balances.removeAll()
             }
         }
     }
