@@ -111,6 +111,7 @@ public class TalerDater: DateFormatter {
 //        self.dateFormat = "z yyyy-MM-dd HH:mm"                // "GMT 2022-11-09 18:00"
     }
 
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

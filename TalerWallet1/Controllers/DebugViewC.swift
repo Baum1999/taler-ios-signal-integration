@@ -135,7 +135,7 @@ struct DebugViewV: View {
             Spacer()
         }
         .accessibilityHidden(true)
-        .edgesIgnoringSafeArea(.top)
+        .ignoresSafeArea(edges: .top)
     }
 }
 // MARK: -
