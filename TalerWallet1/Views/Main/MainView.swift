@@ -147,7 +147,7 @@ struct MainView: View {
                             }
                     }
                 }
-            }
+            }   // biometrics
 
         let mainGroup = Group {
             // show launch animation until either ready or error
@@ -186,7 +186,7 @@ struct MainView: View {
                                      urlToOpen: $urlToOpen)
                         .id("onOpenURL")
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
-                }
+                }   // UrlSheet
                 .sheet(isPresented: $showScanner,
                          onDismiss: dismissSheet
                 ) {
@@ -203,8 +203,8 @@ struct MainView: View {
                     } else {
                         Sheet(stack: stack.push(), sheetView: qrSheet)
                             .transition(.opacity)
-                    }
-                }
+                    } // iOS 15
+                }   // QR Scanner
                 .sheet(isPresented: $showActionSheet,
                        onDismiss: dismissSheet
                 ) {
@@ -220,7 +220,7 @@ struct MainView: View {
                                   selectedBalance: selectedBalance,
                                    qrButtonTapped: $qrButtonTapped,
                                    dismissScanner: {})//dismissSheet)
-                        }
+                        } // iOS 16 + 17
                     } else {
                         Group {
                             Spacer(minLength: 1)
@@ -231,12 +231,12 @@ struct MainView: View {
 //                              .padding()
                             }
                             .frame(maxHeight: innerHeight)
-                            .edgesIgnoringSafeArea(.all)
+                            .ignoresSafeArea()
                         }
                         .background(WalletColors().gray2)
                     } // iOS 15
-                }
-        }
+                }   // ActionSheet
+        }   // VStack { networkUnavailable + mainGroup }
 #if OIM
         .onRotate { newOrientation in
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
@@ -287,7 +287,7 @@ struct MainView: View {
             logger.log("❗️App Will Resign")
             backgrounded = Date.now
             showScanner = false
-        }
+        }   // App Will Resign
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification, object: nil)) { _ in
             logger.log("❗️App Will Enter Foreground")
             if let backgrounded {
@@ -301,10 +301,10 @@ struct MainView: View {
                 }
             }
             backgrounded = nil
-        }
+        }   // App Will Enter Foreground
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
             logger.log("❗️App Did Become Active")
-        }
+        }   // App Did Become Active
 
     } // body
 }
