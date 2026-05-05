@@ -298,54 +298,12 @@ struct MainView: View {
 
     } // body
 }
-// MARK: - TabBar
-enum TalerTab: Int, Hashable, CaseIterable {
-    case balances = 0
-    case actions
-    case settings
-
-//    var index: Int { self.rawValue }
-
-    var title: String {
-        switch self {
-            case .balances: String(localized: "TitleBalances", defaultValue: "Balances")
-            case .actions:  String(localized: "TitleActions", defaultValue: "Actions")
-            case .settings: String(localized: "TitleSettings", defaultValue: "Settings")
-        }
-    }
-
-    var image: Image {
-        switch self {
-            case .balances: return Image(systemName: BALANCES)                  // 􀣉  "chart.bar.xaxis"
-            case .actions:  return Image(TALER_LOGO)
-            case .settings: return Image(systemName: SETTINGS)                  // 􀍟 "gear"
-        }
-    }
-
-    var a11y: String {
-        switch self {
-            case .balances: BALANCES                                            // 􀣉  "chart.bar.xaxis"
-            case .actions:  "bolt"
-            case .settings: SETTINGS                                            // 􀍟 "gear"
-        }
-    }
-
-    var label: Label<Text, Image> {
-        Label(self)
-    }
-}
 // MARK: -
 class NamespaceWrapper: ObservableObject {
     var namespace: Namespace.ID
 
     init(_ namespace: Namespace.ID) {
         self.namespace = namespace
-    }
-}
-// MARK: -
-extension Label where Title == Text, Icon == Image {
-    init(_ tab: TalerTab) {
-        self.init(EMPTYSTRING, systemImage: tab.a11y)
     }
 }
 // MARK: -
