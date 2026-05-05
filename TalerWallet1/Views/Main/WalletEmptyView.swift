@@ -92,6 +92,66 @@ struct ProdSectionView: View {
 /// This view shows hints if a wallet is empty
 /// It is the very first thing the user sees after installing the app
 
+struct WalletEmptyHeader: View {
+    let stack: CallStack
+
+    @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
+
+    func refresh() async {
+        controller.hapticNotification(.success)
+//        symLog.log("refreshing balances")
+        await controller.loadBalances(stack.push("refreshing balances"), model)
+    }
+
+    var body: some View {
+        let talerLogo = HStack(spacing: 2) {
+            Image(TALER_LOGO_FULL)
+            //                        .border(Color.gray, width: 1)
+            //                    Text("TALER Wallet")
+            Text("Wallet")
+            //                        .font(.logo(27, weight: .medium))
+                .font(.logo("Atkinson Hyperlegible Next", size: 27, weight: .medium))
+                .kerning(1.0)
+        }
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityLabel(Text("Taler Wallet", comment: "a11y"))
+
+        let emptyView =  WalletEmptyView(stack: stack.push("isEmpty"))
+        //                  .navigationTitle("Taler Wallet")
+            .refreshable {
+                await refresh()
+            }
+
+        let logoItem = ToolbarItem(placement: .principal) {
+            talerLogo
+                .padding(.top, 10)
+        }
+        if #available(iOS 26.0, *) {
+            emptyView
+                .toolbar {
+                    logoItem
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
+                        } label: {
+                            Label(TalerTab.settings.title, systemImage: TalerTab.settings.sysImg)
+                                .labelStyle(.iconOnly)
+                        }
+                        //                                  .padding()
+                        .buttonStyle(.glass)
+                        .accessibilitySortPriority(0)
+
+                    }
+                }
+        } else { // iOS 15..18 Settings is the 3rd tab
+            emptyView
+                .toolbar { logoItem }
+        }
+    }
+}
+
 struct WalletEmptyView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

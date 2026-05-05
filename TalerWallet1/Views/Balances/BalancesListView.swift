@@ -42,33 +42,6 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-//        Group {
-            if controller.balances.isEmpty {
-                let talerLogo = HStack(spacing: 2) {
-                    Image(TALER_LOGO_FULL)
-//                        .border(Color.gray, width: 1)
-//                    Text("TALER Wallet")
-                    Text("Wallet")
-//                        .font(.logo(27, weight: .medium))
-                        .font(.logo("Atkinson Hyperlegible Next", size: 27, weight: .medium))
-                        .kerning(1.0)
-                }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityLabel(Text("Taler Wallet", comment: "a11y"))
-
-                WalletEmptyView(stack: stack.push("isEmpty"))
-//                    .navigationTitle("Taler Wallet")
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            talerLogo
-                                .padding(.top, 10)
-                        }
-                    }
-                    .refreshable {
-                        await refresh()
-                    }
-            } else {
                 /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
                 ///   However, the user can select another balance (with the picker) in each action
                 /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
@@ -123,7 +96,6 @@ struct BalancesListView: View {
                     }
                 } }
 #endif
-            } // not empty
 //        }
     }
 }
