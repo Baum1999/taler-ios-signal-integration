@@ -40,7 +40,7 @@ struct Sheet: View {
             NavigationView {
                 sheetView
                     .navigationBarTitleDisplayMode(.automatic)
-                    .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+                    .background(FullBackground())
             }
             .navigationViewStyle(.stack)
             .talerNavBar(talerFontIndex: talerFontIndex)
@@ -50,7 +50,7 @@ struct Sheet: View {
                     .foregroundColor(.purple)
                     .font(.system(size: 11))        // no talerFont
                     .monospacedDigit()
-                    .edgesIgnoringSafeArea(.top)
+                    .ignoresSafeArea(edges: .top)
                     .id("sheetID")
                     .accessibilityLabel(Text("Sheet.ID.", comment: "a11y"))
                     .accessibilityValue(idString)
@@ -61,7 +61,7 @@ struct Sheet: View {
                     logger.log("ErrorSheet dismissTop")
                     dismissTop(stack.push())
                 }
-                .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+                .background(FullBackground())
             }
         }
         .onDisappear {

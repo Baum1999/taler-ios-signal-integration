@@ -130,7 +130,7 @@ struct RequestPayment: View {
             .navigationTitle(navTitle)
 //            .ignoresSafeArea(.keyboard, edges: .bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .background(FullBackground())
             .task { await viewDidLoad() }
             .task(id: balanceIndex + (1000 * controller.currencyTicker)) { await newBalance() }
 

@@ -47,7 +47,7 @@ struct LoadingView: View {
         .frame(maxWidth: .infinity)
         .talerFont(.title)
         .navigationTitle("Loading…")
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .background(FullBackground())
     }
 }
 // MARK: -

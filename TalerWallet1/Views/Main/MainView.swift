@@ -96,7 +96,7 @@ struct MainView: View {
                     ErrorView(stack.push("Main"), data: error2, devMode: developerMode) {
                         model.setError(nil)
                     }.interactiveDismissDisabled()
-                    .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+                    .background(FullBackground())
 //                   .transition(.move(edge: .top))
 //                } else {
 //                    Color.clear

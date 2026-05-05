@@ -111,7 +111,7 @@ struct AmountInputV: View {
                 .padding(.bottom, 333)
         }.padding(.horizontal) } // ScrollVStack
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .background(FullBackground())
         .task(id: amountToTransfer.value) {
             // re-compute the fees on every tapped digit or backspace
             if let computeFee {

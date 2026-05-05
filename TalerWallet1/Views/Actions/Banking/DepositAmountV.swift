@@ -104,7 +104,7 @@ struct DepositAmountV: View {
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .background(FullBackground())
             .task {
                 setVoice(to: nil)
                 await viewDidLoad()

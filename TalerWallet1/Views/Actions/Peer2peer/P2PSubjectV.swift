@@ -171,7 +171,7 @@ struct P2PSubjectV: View {
 //        .scrollBounceBehavior(.basedOnSize)  needs iOS 16.4
 //        .ignoresSafeArea(.keyboard, edges: .bottom)
         .navigationTitle(subjectTitle(amountToTransfer))
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .background(FullBackground())
         .task(id: amountToTransfer.value) { await checkPeerPushDebit() }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_SUBJECT, stack: stack.push())

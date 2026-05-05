@@ -9,8 +9,49 @@ import SwiftUI
 
 fileprivate let grouped = true
 
+struct FullBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("liquidBack") var liquidBack: Bool = false
+
+    var isDark: Bool { colorScheme == .dark }
+
+    @available(iOS 17.0, *)
+    @MainActor
+    var liquidView : some View {
+        // Ensure we always start with a different view
+        let startDate = Date() - Double.random(in: 1...999)
+        let size = UIScreen.screenSize
+        let view = TimelineView(.animation) { timeline in
+            let elapsed = timeline.date.timeIntervalSince(startDate)
+            Rectangle()
+                .colorEffect(
+                    ShaderLibrary.liquidBack(
+                        .float2(size.width, size.height),
+                        .float(Float(elapsed))
+                    )
+                )
+        }
+        return view.ignoresSafeArea()
+    }
+
+    var backgroundView: some View {
+        WalletColors().backgroundColor.ignoresSafeArea()
+    }
+
+    var body: some View {
+#if TALER_NIGHTLY
+        if isDark, liquidBack, #available(iOS 17.0, *) {
+            liquidView
+        } else {
+            backgroundView
+        }
+#else
+        backgroundView
+#endif
+    }
+}
 public struct WalletColors {
-    @AppStorage("minimalistic") var minimalistic: Bool = false
+    @AppStorage("minimalistic") private var minimalistic: Bool = false
 
 //    let tint = Color(.tintColor)
     let gray1 = Color(.systemGray)          // uncompleted
@@ -75,7 +116,7 @@ public struct WalletColors {
         Color(.secondarySystemGroupedBackground)
     }
 
-    var sideBackground: Color {
+    var sideBackgroundColor: Color {
         gray6
     }
 

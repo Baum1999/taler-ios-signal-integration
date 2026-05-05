@@ -27,7 +27,7 @@ struct TransactionsEmptyView: View {
         }
         .listStyle(myListStyle.style).anyView
 //        .padding(.vertical)
-        .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+        .background(FullBackground())
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_EMPTY_HISTORY, stack: stack.push())     // 20
         }

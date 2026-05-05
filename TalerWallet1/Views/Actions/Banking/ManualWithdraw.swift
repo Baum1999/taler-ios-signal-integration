@@ -101,7 +101,7 @@ struct ManualWithdraw: View {
         } // ScrollView
             .navigationTitle(navTitle)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .background(FullBackground())
             .onAppear {
                 if isSheet {
                     DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)         // 132 WithdrawAcceptView

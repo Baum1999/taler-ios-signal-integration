@@ -149,7 +149,7 @@ struct WalletEmptyView: View {
         }
             .listStyle(myListStyle.style).anyView
             .talerFont(.title2)
-            .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.all))
+            .background(FullBackground())
         ZStack {
             list
             if withDrawStarted {

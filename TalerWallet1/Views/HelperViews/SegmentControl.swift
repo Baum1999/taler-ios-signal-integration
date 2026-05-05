@@ -77,7 +77,7 @@ struct SegmentControl: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 6.0)
-                .fill(WalletColors().sideBackground)
+                .fill(WalletColors().sideBackgroundColor)
         )
     }
 }
