@@ -42,60 +42,62 @@ struct BalancesListView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-                /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
-                ///   However, the user can select another balance (with the picker) in each action
-                /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
-                let count = controller.balances.count
-                Group {
-                    List {
-                        if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
-                            ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
-                        }
-                        ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
-                            BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
-                                              balance: balance,                     // this is the currency to be used
-                                      selectedBalance: $selectedBalance,            // set in TransactionsListView
-                                         balanceIndex: index,
-                                         sectionCount: count,
-                                     amountToTransfer: $amountToTransfer,           // does still have the wrong currency
-                                              summary: $summary,
-                                        historyTapped: $historyTapped,
-                                   reloadTransactions: $reloadTransactions)
-                        }
-                    }
-                    .onAppear() {
-                        DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
-                        if !controller.oimModeActive {
-                            print("🚩BalancesListView.onAppear() reset selectedBalance")
-//                            if count > 1 {
-                                selectedBalance = nil                           // reset
-//                            }
-                        }
-                    }
-                    .listStyle(myListStyle.style).anyView
-                    .refreshable {
-                        await refresh()
-                    }
-                }.navigationTitle(title)
-                .onChange(of: controller.oimModeActive) { oimModeActive in
-                    if !oimModeActive {
-                        print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
-//                        if count > 1 {
-                            selectedBalance = nil                               // reset
-//                        }
-                    }
-                }
-#if OIM
-                .overlay { if #available(iOS 16.4, *) {
-                    if controller.oimModeActive {
-                        OIMbalances(stack: stack.push(),
-                          selectedBalance: $selectedBalance,                    // set to user choice
+        /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
+        ///   However, the user can select another balance (with the picker) in each action
+        /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
+        let count = controller.balances.count
+        List {
+            if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
+                ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
+            }
+            ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
+                BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
+                                  balance: balance,                     // this is the currency to be used
+                          selectedBalance: $selectedBalance,            // set in TransactionsListView
+                             balanceIndex: index,
+                             sectionCount: count,
+                         amountToTransfer: $amountToTransfer,           // does still have the wrong currency
+                                  summary: $summary,
                             historyTapped: $historyTapped,
-                                  oimEuro: oimEuro)
+                       reloadTransactions: $reloadTransactions)
+            }
+        }
+            .listStyle(myListStyle.style).anyView
+            .background(FullBackground())
+            .onAppear() {
+                DebugViewC.shared.setViewID(VIEW_BALANCES, stack: stack.push("onAppear"))
+                if !controller.oimModeActive {
+                    print("🚩BalancesListView.onAppear() reset selectedBalance")
+//                  if count > 1 {
+                        selectedBalance = nil                           // reset
+//                  }
+                }
+            }
+            .refreshable {
+                await refresh()
+            }
+            .navigationTitle(title)
+            .onChange(of: controller.oimModeActive) { oimModeActive in
+                if !oimModeActive {
+                    print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
+//                    if count > 1 {
+                        selectedBalance = nil                               // reset
+//                    }
+                 }
+            }
+            .overlay { if #available(iOS 16.4, *) {
+                if controller.oimModeActive {
+#if OIM
+                    OIMbalances(stack: stack.push(),
+                      selectedBalance: $selectedBalance,                    // set to user choice
+                        historyTapped: $historyTapped,
+                              oimEuro: oimEuro)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
-                    }
+#endif // OIM
+                } else { if #available(iOS 26.0, *) {
+                    // TODO: Action button + view in Balances
+                    ActionsOverlay(stack: stack.push())
                 } }
-#endif
-//        }
+            } }
     }
 }
