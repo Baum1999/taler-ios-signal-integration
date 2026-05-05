@@ -9,6 +9,60 @@ import SwiftUI
 import os.log
 import taler_swift
 
+struct ScannedURLs: View {
+    let stack: CallStack
+    @Environment(\.openURL) private var openURL
+    @EnvironmentObject private var controller: Controller
+
+    var body: some View {
+        VStack {
+            Text("Scanned Taler codes:")
+                .talerFont(.body)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.bottom, -2)
+            ForEach(controller.scannedURLs) { scannedURL in
+                let action = {
+                    dismissTop(stack.push())
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        // need to wait before opening the next sheet, otherwise SwiftUI doesn't update!
+                        openURL(scannedURL.url)
+                    }
+                }
+                Button(action: action) {
+                    HStack {
+                        Text(scannedURL.command.localizedCommand)
+                        ButtonIconBadge(type: scannedURL.command.transactionType,
+                                        foreColor: .accentColor, done: false)
+                        .talerFont(.title2)
+
+                        Spacer()
+                        if let amount = scannedURL.amount {
+                            AmountV(scannedURL.scope, amount, isNegative: nil)
+                        } else if let baseURL = scannedURL.baseURL {
+                            Text(baseURL.trimURL)
+                        }
+                    }
+                    .padding(.horizontal, 8)
+                }
+                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
+                .swipeActions(edge: .trailing) {
+                    Button {
+                        //                                symLog?.log("deleteAction")
+                        Task { // runs on MainActor
+                            controller.removeURL(scannedURL.url)
+                        }
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    .tint(WalletColors().negative)
+                }
+
+            }
+        }.padding(.bottom, 20)
+    }
+}
+// MARK: -
 /// This view shows the action sheet
 /// optional:   [􀰟Spend KUDOS]
 ///   [􁉇 Send   ] [􁉅 Request]
@@ -80,51 +134,7 @@ struct ActionsSheet: View {
                         buttonLink: DEMOSHOP)
             }
             if !controller.scannedURLs.isEmpty {
-                Text("Scanned Taler codes:")
-                    .talerFont(.body)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.bottom, -2)
-                VStack {
-                    ForEach(controller.scannedURLs) { scannedURL in
-                        let action = {
-                            dismissTop(stack.push())
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                                // need to wait before opening the next sheet, otherwise SwiftUI doesn't update!
-                                openURL(scannedURL.url)
-                            }
-                        }
-                        Button(action: action) {
-                            HStack {
-                                Text(scannedURL.command.localizedCommand)
-                                ButtonIconBadge(type: scannedURL.command.transactionType,
-                                           foreColor: .accentColor, done: false)
-                                    .talerFont(.title2)
-
-                                Spacer()
-                                if let amount = scannedURL.amount {
-                                    AmountV(scannedURL.scope, amount, isNegative: nil)
-                                } else if let baseURL = scannedURL.baseURL {
-                                    Text(baseURL.trimURL)
-                                }
-                            }
-                            .padding(.horizontal, 8)
-                        }
-                        .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, aligned: .center))
-                        .swipeActions(edge: .trailing) {
-                            Button {
-//                                symLog?.log("deleteAction")
-                                Task { // runs on MainActor
-                                    controller.removeURL(scannedURL.url)
-                                }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            .tint(WalletColors().negative)
-                        }
-
-                    }
-                }.padding(.bottom, 20)
+                ScannedURLs(stack: stack.push())
             }
 
             let noBalances = controller.balances.isEmpty
