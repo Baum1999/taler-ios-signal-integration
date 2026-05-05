@@ -17,8 +17,6 @@ struct TransferRestrictionsV: View {
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
-    @State private var selectedLanguage = Locale.preferredLanguageCode
-
     private func transferMini(_ amountS: String) -> String {
         let amountNBS = amountS.nbs
         return String(localized: "Transfer \(amountNBS) to the payment service.")
@@ -57,25 +55,197 @@ struct TransferRestrictionsV: View {
             }
             if let restrictions {
                 ForEach(restrictions) { restriction in
-                    let hintsI18n = restriction.human_hint_i18n
-                    if let hintsI18n, !hintsI18n.isEmpty {
-//                        let sortedDict = OrderedDictionary(uniqueKeys: hintsI18n.keys, values: hintsI18n.values)
-//                        var sorted: OrderedDictionary<String:String>
-                        let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18n.sorted { $0.key < $1.key })
-                        Picker("Restriction:", selection: $selectedLanguage) {
-                            ForEach(sortedDict.keys, id: \.self) {
-                                Text(sortedDict[$0] ?? "missing hint")
-                            }
-                        }
-                        .padding(.top)
-                    } else if let hint = restriction.human_hint {
-                        let mark = Image(systemName: EXCLAMATION)
-                        Text("\(mark) \(hint)")     // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
-                            .padding(.top)
+                    if let hintsI18n = restriction.human_hint_i18n {
+                        RestrictionsV(hintsI18n: hintsI18n,
+                                     human_hint: restriction.human_hint)
                     }
                 }
             }
         }
+    }
+}
+// MARK: -
+struct RestrictionsV: View {
+    let hintsI18n: HintDict
+    var human_hint: String?
+
+    @State private var selectedLanguage = Locale.preferredLanguageCode
+
+    var body: some View {
+        if !hintsI18n.isEmpty {
+//            let sortedDict = OrderedDictionary(uniqueKeys: hintsI18n.keys, values: hintsI18n.values)
+//            var sorted: OrderedDictionary<String:String>
+            let sortedDict = OrderedDictionary(uncheckedUniqueKeysWithValues: hintsI18n.sorted { $0.key < $1.key })
+            Picker("Restriction:", selection: $selectedLanguage) {
+                ForEach(sortedDict.keys, id: \.self) {
+                    Text(sortedDict[$0] ?? "missing hint")
+                }
+            }
+            .accentColor(.primary)
+            .pickerStyle(.menu)
+            .padding(.top)
+            .task {
+                if !sortedDict.keys.contains(selectedLanguage) {
+                    selectedLanguage = sortedDict.keys.first!
+                }
+            }
+        } else if let hint = human_hint {
+            let mark = Image(systemName: EXCLAMATION)
+            Text("\(mark) \(hint)")     // verbatim: doesn't work here, will not show the image. Thus we must set this to "Don't translate"
+                .padding(.top)
+        }
+    }
+}
+// MARK: -
+struct PayeeZip: View {
+    let receiverZip: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Zip code:")
+                    .talerFont(.subheadline)
+                Text(receiverZip)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Zip code", comment: "a11y"))
+            CopyButton(textToCopy: receiverZip, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the zip code", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+}
+// MARK: -
+struct PayeeReceiver: View {
+    let receiverStr: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Recipient:")
+                    .talerFont(.subheadline)
+                Text(receiverStr)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Recipient", comment: "a11y"))
+            CopyButton(textToCopy: receiverStr, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the recipient", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+}
+// MARK: -
+struct PayeeTown: View {
+    let receiverTown: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("City:")
+                    .talerFont(.subheadline)
+                Text(receiverTown)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("City", comment: "a11y"))
+            CopyButton(textToCopy: receiverTown, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the city", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+}
+// MARK: -
+struct Cryptocode: View {
+    let cryptoString: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            Text(cryptoString)
+                .foregroundStyle(isCopied ? Color.secondary : .primary)
+                .monospacedDigit()
+                .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            CopyButton(textToCopy: cryptoString, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.leading)
+    }
+}
+// MARK: -
+struct IbanCode: View {
+    let iban: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("IBAN:")                   // TODO: BBAN
+                    .talerFont(.subheadline)
+                Text(iban)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y")) // TODO: BBAN
+            CopyButton(textToCopy: iban, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))         // TODO: BBAN
+                .disabled(false)
+        } //  .padding(.top, -8)
+    }
+}
+// MARK: -
+struct AmountCode: View {
+    let amountStr: (String, String)
+    let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Amount:")
+                    .talerFont(.subheadline)
+                Text(amountStr.0)
+                    .accessibilityLabel(amountStr.1)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("Amount to transfer", comment: "a11y"))
+            CopyButton(textToCopy: amountValue, isCopied: $isCopied, vertical: true)
+            // only digits + separator, no currency name or symbol
+                .accessibilityLabel(Text("Copy the amount", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
+    }
+}
+// MARK: -
+struct XTalerCode: View {
+    let xTaler: String
+    @State var isCopied: Bool = false
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Account:")
+                    .talerFont(.subheadline)
+                Text(xTaler)
+                    .monospacedDigit()
+                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .padding(.leading)
+            }   .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(Text("account of the recipient", comment: "a11y"))
+            CopyButton(textToCopy: xTaler, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(Text("Copy the account", comment: "a11y"))
+                .disabled(false)
+        }   .padding(.top, -8)
     }
 }
 // MARK: -
@@ -108,129 +278,47 @@ struct ManualDetailsWireV: View {
                             : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
     }
 
-    @ViewBuilder func payeeZip() -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("Zip code:")
-                    .talerFont(.subheadline)
-                Text(receiverZip ?? EMPTYSTRING)
-                    .monospacedDigit()
-                    .padding(.leading)
-            }   .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Zip code", comment: "a11y"))
-            CopyButton(textToCopy: receiverZip ?? EMPTYSTRING, vertical: true)
-                .accessibilityLabel(Text("Copy the zip code", comment: "a11y"))
-                .disabled(false)
-        }   .padding(.top, -8)
-    }
+//    @ViewBuilder func cyclosCode() -> some View {
+//        HStack {
+//            VStack(alignment: .leading) {
+//                Text("Cyclos:")
+//                    .talerFont(.subheadline)
+//                Text(cyclos)
+//                    .monospacedDigit()
+//                    .padding(.leading)
+//            }   .frame(maxWidth: .infinity, alignment: .leading)
+//                .accessibilityElement(children: .combine)
+//                .accessibilityLabel(Text("cyclos account of the recipient", comment: "a11y"))
+//            CopyButton(textToCopy: cyclos, vertical: true)
+//                .accessibilityLabel(Text("Copy the cyclos account", comment: "a11y"))
+//                .disabled(false)
+//        }   .padding(.top, -8)
+//    }
 
-    @ViewBuilder func payeeTown() -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("City:")
-                    .talerFont(.subheadline)
-                Text(receiverTown ?? EMPTYSTRING)
-                    .monospacedDigit()
-                    .padding(.leading)
-            }   .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("City", comment: "a11y"))
-            CopyButton(textToCopy: receiverTown ?? EMPTYSTRING, vertical: true)
-                .accessibilityLabel(Text("Copy the city", comment: "a11y"))
-                .disabled(false)
-        }   .padding(.top, -8)
-    }
 
     var body: some View {
         List {
             let cryptoString = debitIBAN == nil ? reservePub : "kyc" + reservePub
-            let cryptocode = HStack {
-                Text(cryptoString)
-                    .monospacedDigit()
-                    .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                CopyButton(textToCopy: cryptoString, vertical: true)
-                    .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
-                    .disabled(false)
-            }   .padding(.leading)
-            let payeeCode = HStack {
-                VStack(alignment: .leading) {
-                    Text("Recipient:")
-                        .talerFont(.subheadline)
-                    Text(receiverStr)
-                        .monospacedDigit()
-                        .padding(.leading)
-                }   .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Recipient", comment: "a11y"))
-                CopyButton(textToCopy: receiverStr, vertical: true)
-//                CopyButton(textToCopy: buildReceiver(), vertical: true)
-                    .accessibilityLabel(Text("Copy the recipient", comment: "a11y"))
-                    .disabled(false)
-            }   .padding(.top, -8)
-            let ibanCode = HStack {
-                VStack(alignment: .leading) {
-                    Text("IBAN:")                   // TODO: BBAN
-                        .talerFont(.subheadline)
-                    Text(iban ?? EMPTYSTRING)
-                        .monospacedDigit()
-                        .padding(.leading)
-                }   .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y")) // TODO: BBAN
-                CopyButton(textToCopy: iban ?? EMPTYSTRING, vertical: true)
-                    .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))         // TODO: BBAN
-                    .disabled(false)
-            } //  .padding(.top, -8)
-            let amountCode = HStack {
-                VStack(alignment: .leading) {
-                    Text("Amount:")
-                        .talerFont(.subheadline)
-                    Text(amountStr.0)
-                        .accessibilityLabel(amountStr.1)
-                        .monospacedDigit()
-                        .padding(.leading)
-                }   .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Amount to transfer", comment: "a11y"))
-                CopyButton(textToCopy: amountValue, vertical: true)             // only digits + separator, no currency name or symbol
-                    .accessibilityLabel(Text("Copy the amount", comment: "a11y"))
-                    .disabled(false)
-            }   .padding(.top, -8)
-            let xTalerCode = HStack {
-                VStack(alignment: .leading) {
-                    Text("Account:")
-                        .talerFont(.subheadline)
-                    Text(xTaler)
-                        .monospacedDigit()
-                        .padding(.leading)
-                }   .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("account of the recipient", comment: "a11y"))
-                CopyButton(textToCopy: xTaler, vertical: true)
-                    .accessibilityLabel(Text("Copy the account", comment: "a11y"))
-                    .disabled(false)
-            }   .padding(.top, -8)
-            let step1 = Text(minimalistic ? "**Step 1:** Copy+Paste this subject:"
-                             : "**Step 1:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:")
+            let step2 = Text(minimalistic ? "**Step 2:** Copy+Paste this subject:"
+                             : "**Step 2:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
             let warningIcon = Image(systemName: WARNING)
+            let note = Text("**Note: Don't forget to copy and paste the code in Step 2.**")
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
                                          : String(localized: "This is mandatory, otherwise the verification will fail.")
-            let mandatory = Text("\(warningIcon) \(manda)")
+            let mandatory = Text("\(warningIcon) \(note)\n\(manda)")
                 .bold()
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .listRowSeparator(.hidden)
-            let step2i = Text(minimalistic ? "**Step 2:** Copy+Paste recipient and IBAN:"
-                              : "**Step 2:** If you don't already have it in your banking favorites list, then copy and paste recipient and IBAN into the recipient/IBAN fields in your banking app or website (and save it as favorite for the next time):")       // TODO: BBAN
+            let step1i = Text(minimalistic ? "**Step 1:** Copy+Paste recipient and IBAN:"
+                              : "**Step 1:** If you don't already have it in your banking favorites list, then copy and paste recipient and IBAN into the recipient/IBAN fields in your banking app or website (and save it as favorite for the next time):")       // TODO: BBAN
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
-            let step2x = Text(minimalistic ? "**Step 2:** Copy+Paste recipient and account:"
-                              : "**Step 2:** Copy and paste recipient and account into the corresponding fields in your banking app or website:")
+            let step1x = Text(minimalistic ? "**Step 1:** Copy+Paste recipient and account:"
+                              : "**Step 1:** Copy and paste recipient and account into the corresponding fields in your banking app or website:")
                 .talerFont(.body)
                 .multilineTextAlignment(.leading)
                 .padding(.top)
@@ -247,34 +335,35 @@ struct ManualDetailsWireV: View {
                                       debitIBAN: debitIBAN,
                                    restrictions: account.creditRestrictions)
                 .listRowSeparator(.visible)
-                step1
                 if !minimalistic {
                     mandatory
                 }
-                cryptocode
-                if iban != nil {
-                    step2i
-                    payeeCode
+                if let iban {
+                    step1i
+                    PayeeReceiver(receiverStr: receiverStr)
                     if let receiverZip {
                         if !receiverZip.isEmpty {
-                            payeeZip()
+                            PayeeZip(receiverZip: receiverZip)
                         }
                     }
                     if let receiverTown {
                         if !receiverTown.isEmpty {
-                            payeeTown()
+                            PayeeTown(receiverTown: receiverTown)
                         }
                     }
-                    ibanCode
+                    IbanCode(iban: iban)
                 } else if !cyclos.isEmpty {
-                    step2x
-                    payeeCode
+                    step1x
+                    PayeeReceiver(receiverStr: receiverStr)
+//                    cyclosCode()
                 } else {
-                    step2x
-                    payeeCode
-                    xTalerCode
+                    step1x
+                    PayeeReceiver(receiverStr: receiverStr)
+                    XTalerCode(xTaler: xTaler)
                 }
-                amountCode
+                AmountCode(amountStr: amountStr, amountValue: amountValue)
+                step2
+                Cryptocode(cryptoString: cryptoString)
 //                    .padding(.top)
                 step3 // .padding(.top, 6)
             }.listRowSeparator(.hidden)

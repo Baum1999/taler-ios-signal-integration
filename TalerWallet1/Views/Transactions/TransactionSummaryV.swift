@@ -52,6 +52,7 @@ struct TransactionSummaryV: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
 
+    @State private var isCopied: Bool = false
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
     @State var jsonTransaction: String = EMPTYSTRING
@@ -184,7 +185,7 @@ struct TransactionSummaryV: View {
                     }
                     if developerMode {
                         if !jsonTransaction.isEmpty {
-                            CopyButton(textToCopy: jsonTransaction, title: "Copy JSON")
+                            CopyButton(textToCopy: jsonTransaction, isCopied: $isCopied, title: "Copy JSON")
                         }
                     }
                 }   .listRowSeparator(.hidden)
@@ -436,6 +437,7 @@ struct TransactionSummaryV: View {
         @AppStorage("minimalistic") var minimalistic: Bool = false
         @State private var rotationEnabled = true
         @State private var ignoreAccept: Bool = false         // accept could be set by OIM to trigger accept
+        @State private var isCopied: Bool = false
 
         func refreshFee(input: Amount, output: Amount) -> Amount? {
             do {
@@ -600,7 +602,7 @@ struct TransactionSummaryV: View {
                                     }
                                     let stackStr = error.stack ?? EMPTYSTRING
                                     let errorStr = error.hint + "\n" + stackStr
-                                    CopyButton(textToCopy: errorStr, vertical: true)
+                                    CopyButton(textToCopy: errorStr, isCopied: $isCopied, vertical: true)
                                         .accessibilityLabel(Text("Copy the error", comment: "a11y"))
                                         .disabled(false)
                                 }

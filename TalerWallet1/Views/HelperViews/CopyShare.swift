@@ -64,6 +64,7 @@ struct FeedbackButton: View {
 struct CopyButton: View {
     private let symLog = SymLogV(0)
     let textToCopy: String
+    @Binding var isCopied: Bool
     let image: UIImage?
     let vertical: Bool
     let title: String?
@@ -73,15 +74,17 @@ struct CopyButton: View {
 
     @State private var scale: CGFloat = 1.0
 
-    init(textToCopy: String, vertical: Bool, image: UIImage? = nil) {
+    init(textToCopy: String, isCopied: Binding<Bool>, vertical: Bool, image: UIImage? = nil) {
         self.textToCopy = textToCopy
+        self._isCopied = isCopied
         self.image = image
         self.vertical = vertical
         self.title = nil
     }
 
-    init(textToCopy: String, title: String, image: UIImage? = nil) {
+    init(textToCopy: String, isCopied: Binding<Bool>, title: String, image: UIImage? = nil) {
         self.textToCopy = textToCopy
+        self._isCopied = isCopied
         self.image = image
         self.vertical = false
         self.title = title
@@ -98,6 +101,7 @@ struct CopyButton: View {
             items.append(images)
         }
         UIPasteboard.general.setItems(items)
+        isCopied = true
     }
 
     private func triggerPulse() {
@@ -223,13 +227,14 @@ struct ShareButton: View {
 // MARK: -
 struct CopyShare: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
+    @State var isCopied: Bool = false
 
     let textToCopy: String
     let image: UIImage?
 
     var body: some View {
         HStack {
-            CopyButton(textToCopy: textToCopy, vertical: false, image: image)
+            CopyButton(textToCopy: textToCopy, isCopied: $isCopied, vertical: false, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
             ShareButton(textToShare: textToCopy, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
