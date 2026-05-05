@@ -10,13 +10,13 @@ import SymLog
 
 struct TabBarView: View {
     private let symLog = SymLogV(0)
-    @Binding var selection: Tab
-    @Binding var userAction: Int // must be held in main view; used to make Action button jump to indicate it can be dragged
+    @Binding var selection: TalerTab
     @Binding var hidden: Int
     let onActionTab: () -> Void
     let onActionDrag: () -> Void
 
     @Environment(\.keyboardShowing) var keyboardShowing
+    @EnvironmentObject private var controller: Controller
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("tapped") var tapped: Int = 0
@@ -25,7 +25,7 @@ struct TabBarView: View {
     @State private var offset = CGSize.zero
     @State private var didDrag = false
 
-    private func tabBarItem(for tab: Tab) -> some View {
+    private func tabBarItem(for tab: TalerTab) -> some View {
         VStack(spacing: 0) {
             let isActions = (tab == .actions)
             let withText = isActions ? tapped < TAPPED
@@ -121,19 +121,27 @@ struct TabBarView: View {
             if keyboardShowing || hidden > 0 {
                 EmptyView()
             } else {
-                let actionTab = tabBarItem(for: Tab.actions)
-                let balanceTab = tabBarItem(for: Tab.balances)
-                let settingsTab = tabBarItem(for: Tab.settings)
+                let actionTab = tabBarItem(for: TalerTab.actions)
+                let balanceTab = tabBarItem(for: TalerTab.balances)
+                    .onTapGesture {
+                        selection = .balances
+                        controller.userAction += 1
+                    }
+                let settingsTab = tabBarItem(for: TalerTab.settings)
+                    .onTapGesture {
+                        selection = .settings
+                        controller.userAction += 1
+                    }
                 HStack(alignment: .bottom) {
-                    balanceTab.onTapGesture { selection = .balances; userAction += 1 }
+                    balanceTab
                     actionTab.onTapGesture {
                         onActionTab()
                         tapped += 1
                     }
-                    settingsTab.onTapGesture { selection = .settings; userAction += 1 }
+                    settingsTab
                 }
                 .background(WalletColors().backgroundColor.edgesIgnoringSafeArea(.bottom))
-                .onChange(of: userAction) { newValue in
+                .onChange(of: controller.userAction) { newValue in
                     userAction(newValue)
                 }
             }

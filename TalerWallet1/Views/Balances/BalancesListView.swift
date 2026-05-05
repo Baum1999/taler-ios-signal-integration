@@ -17,7 +17,6 @@ struct BalancesListView: View {
     let title: String
     @Binding var selectedBalance: Balance?                      // set in TransactionsListView
     @Binding var reloadTransactions: Int
-    @Binding var qrButtonTapped: Bool
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -118,7 +117,6 @@ struct BalancesListView: View {
                     if controller.oimModeActive {
                         OIMbalances(stack: stack.push(),
                           selectedBalance: $selectedBalance,                    // set to user choice
-                           qrButtonTapped: $qrButtonTapped,
                             historyTapped: $historyTapped,
                                   oimEuro: oimEuro)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart

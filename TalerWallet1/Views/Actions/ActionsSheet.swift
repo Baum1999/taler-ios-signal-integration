@@ -16,7 +16,6 @@ import taler_swift
 ///        [􀎻  Scan QR ]
 struct ActionsSheet: View {
     let stack: CallStack
-    @Binding var qrButtonTapped: Bool
 
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
@@ -47,6 +46,11 @@ struct ActionsSheet: View {
             }
         }
         return false
+    }
+    @MainActor
+    func dismissAndPost() {
+        dismissTop(stack.push())
+        NotificationCenter.default.post(name: .SettingsAction, object: nil)                // will trigger NavigationLink
     }
 
     var body: some View {
@@ -136,7 +140,7 @@ struct ActionsSheet: View {
                 .accessibility(sortPriority: 0)     // read this last
             ///        [􀎻  Scan QR ]
             QRButton(hideTitle: false) {
-                qrButtonTapped = true
+                NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger NavigationLink
             }
                 .lineLimit(5)
                 .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
@@ -187,7 +191,6 @@ struct ShoppingView: View {
 struct DualHeightSheet: View {
     let stack: CallStack
     let selectedBalance: Balance?
-    @Binding var qrButtonTapped: Bool
     let dismissScanner: () -> Void
 
     let logger = Logger(subsystem: "net.taler.gnu", category: "DualSheet")
@@ -221,8 +224,7 @@ struct DualHeightSheet: View {
         let scrollView = ScrollView {
             let background = colorScheme == .dark ? WalletColors().gray6
                                                   : WalletColors().gray2
-            ActionsSheet(stack: stack.push(),
-                qrButtonTapped: $qrButtonTapped2)
+            ActionsSheet(stack: stack.push())
             .presentationDragIndicator(.hidden)
             .presentationBackground {
                 background
@@ -231,24 +233,6 @@ struct DualHeightSheet: View {
             }
             .innerHeight($innerHeight)
 
-            .onChange(of: qrButtonTapped2) { tapped2 in
-                if tapped2 {
-//                    logger.trace("❗️the user tapped")
-                    qrButtonTapped = true           // tell our caller
-                    withAnimation(Animation.easeIn(duration: 0.6)) {
-                        // animate this sheet to full height
-                        let detent = minimalistic ? halfDetent : fullDetent
-                        selectedDetent = detent
-                    }
-                }
-            }
-            .onChange(of: qrButtonTapped) { tapped in
-                if !tapped {
-                    logger.trace("❗️dismissed, cleanup")
-                    sheetHeight = innerHeight
-                    qrButtonTapped2 = false
-                }
-            }
             .onChange(of: innerHeight) { newHeight in
                 logger.trace("onChange❗️set sheetHeight: \(sheetHeight) -> \(newHeight)❗️")
 //            withAnimation {
@@ -262,7 +246,7 @@ struct DualHeightSheet: View {
                 if newValue == detent {    // user swiped the sheet up to activate QR scanner
                     logger.trace("onChange❗️selectedDetent == (detent) ==> updateDetentsWithDelay()")
                     updateDetentsWithDelay()
-                    qrButtonTapped = true           // tell our caller
+                    NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger
                 } else {    // SwiftUI "innerHeight" determined how big the half sheet should be
                     logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
                     detents = [detent, .height(sheetHeight)]
@@ -279,18 +263,19 @@ struct DualHeightSheet: View {
 
         if #available(iOS 18.0, *) {
             scrollView
-                .sheet(isPresented: $qrButtonTapped,
-                         onDismiss: dismissScanner
-                ) {
-                    let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                        selectedBalance: selectedBalance,
-                                       scannedSomething: $scannedCode))
-                    let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
-                                                            : minimalistic ? HALFDETENT : FULLDETENT)
-                    Sheet(stack: stack.push(), sheetView: qrSheet)
-                        .presentationDetents([detent])
-                        .transition(.opacity)
-                }
+//                .sheet(isPresented: $qrButtonTapped,
+//                         onDismiss: dismissScanner
+//                ) {
+//                    let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+//                                        selectedBalance: selectedBalance,
+//                                       scannedSomething: $scannedCode))
+//                    let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
+//                                                            : minimalistic ? HALFDETENT : FULLDETENT)
+//                    Sheet(stack: stack.push(), sheetView: qrSheet)
+//                        .presentationDetents([detent])
+//                        .transition(.opacity)
+//                }
+                .defaultScrollAnchor(.top)
         } else {
             scrollView
         }

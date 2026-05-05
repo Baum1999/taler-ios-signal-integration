@@ -112,6 +112,7 @@ class Controller: ObservableObject {
 
     @Published var backendState: BackendState = .none       // only used for launch animation
     @Published var currencyTicker: Int = 0                  // updates whenever a new currency is added
+    @Published var userAction: Int = 0                      // make Action button jump
 
     @Published var isConnected: Bool = true
     @Published var oimModeActive: Bool = false

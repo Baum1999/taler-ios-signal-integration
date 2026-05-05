@@ -40,11 +40,8 @@ struct MainView: View {
     @State private var showActionSheet = false              // Action button tapped
     @State private var showScanner = false
 //    @State private var showCameraAlert: Bool = false
-    @State private var qrButtonTapped = false
-    @State private var qrButton2Tapped = false
     @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
-    @State private var userAction = 0                       // make Action button jump, hold here
     @State private var networkUnavailable = false
     @State private var backgrounded: Date?                  // time we go into background
 
@@ -58,10 +55,8 @@ struct MainView: View {
     private func dismissSheet() {
         showScanner = false
         showActionSheet = false
-        qrButtonTapped = false
-        qrButton2Tapped = false
         scannedCode = false
-        userAction += 1
+        controller.userAction += 1                      // make Action button jump
         // TODO: wallet-core could notify us when it creates a dialog tx
         NotificationCenter.default.post(name: .TransactionScanned, object: nil, userInfo: nil)
     }
@@ -82,9 +77,7 @@ struct MainView: View {
                selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
-                   showScanner: $showScanner,
-                qrButtonTapped: $qrButtonTapped,
-                    userAction: $userAction)
+                   showScanner: $showScanner)
             .onAppear() {
 #if DEBUG
                 if playSoundsI != 0  && playSoundsB && !soundPlayed {
@@ -213,22 +206,18 @@ struct MainView: View {
                         if #available(iOS 18.0, *) {
                             DualHeightSheet(stack: stack.push(),
                                   selectedBalance: selectedBalance,
-                                   qrButtonTapped: $qrButton2Tapped,
                                    dismissScanner: dismissSheet)        // needs to explicitely dismiss 2nd sheet
                         } else {
                             DualHeightSheet(stack: stack.push(),
                                   selectedBalance: selectedBalance,
-                                   qrButtonTapped: $qrButtonTapped,
                                    dismissScanner: {})//dismissSheet)
                         } // iOS 16 + 17
                     } else {
                         Group {
                             Spacer(minLength: 1)
                             ScrollView {
-                                ActionsSheet(stack: stack.push(),
-                                    qrButtonTapped: $qrButtonTapped)
-                                .innerHeight($innerHeight)
-//                              .padding()
+                                ActionsSheet(stack: stack.push())
+                                    .innerHeight($innerHeight)
                             }
                             .frame(maxHeight: innerHeight)
                             .ignoresSafeArea()
@@ -249,6 +238,13 @@ struct MainView: View {
             tabBarModel.oimActive = controller.oimModeActive ? 1 : 0
         }
 #endif
+        .onNotification(.QrScanAction) {
+            let delay = if #available(iOS 16.4, *) { 0.3 } else { 0.01 }
+            withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
+                showScanner = true      // switch to qrSheet => camera on
+            }
+        }
+
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
             // will be called on a taler:// scheme either
@@ -267,12 +263,6 @@ struct MainView: View {
                     showUrlSheet = true     // raise sheet
         }   }   }
 
-        .onChange(of: qrButtonTapped) { tapped in
-            if tapped {
-                let delay = if #available(iOS 16.4, *) { 0.5 } else { 0.01 }
-                withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
-                    showScanner = true      // switch to qrSheet => camera on
-        }   }   }
         .onChange(of: controller.isConnected) { isConnected in
             if isConnected {
                 withAnimation(.easeIn(duration: 1.0)) {
@@ -309,7 +299,7 @@ struct MainView: View {
     } // body
 }
 // MARK: - TabBar
-enum Tab: Int, Hashable, CaseIterable {
+enum TalerTab: Int, Hashable, CaseIterable {
     case balances = 0
     case actions
     case settings
@@ -354,7 +344,7 @@ class NamespaceWrapper: ObservableObject {
 }
 // MARK: -
 extension Label where Title == Text, Icon == Image {
-    init(_ tab: Tab) {
+    init(_ tab: TalerTab) {
         self.init(EMPTYSTRING, systemImage: tab.a11y)
     }
 }
@@ -372,8 +362,6 @@ extension MainView {
         @Binding var talerFontIndex: Int
         @Binding var showActionSheet: Bool
         @Binding var showScanner: Bool
-        @Binding var qrButtonTapped: Bool
-        @Binding var userAction: Int            // make Action button jump
 
         @EnvironmentObject private var controller: Controller
         @EnvironmentObject private var model: WalletModel
@@ -391,7 +379,7 @@ extension MainView {
         @State private var shouldReloadBalances = 0
         @State private var shouldReloadTransactions = 0
 //        @State private var shouldReloadPending = 0
-        @State private var selectedTab: Tab = .balances
+        @State private var selectedTab: TalerTab = .balances
         @State private var showKycAlert: Bool = false
         @State private var kycURI: URL?
 
@@ -416,7 +404,7 @@ extension MainView {
             }
         }
 
-        private func tabSelection() -> Binding<Tab> {
+        private func tabSelection() -> Binding<TalerTab> {
             Binding { //this is the get block
                 self.selectedTab
             } set: { tappedTab in
@@ -488,22 +476,21 @@ extension MainView {
                 NavLink(8, $tabBarModel.actionSelected) { manualWithdrawDest }
             }
             /// tab titles, and invisible tabItems which are only used for a11y
-            let balancesTitle = Tab.balances.title     // "Balances"
-            let actionTitle = Tab.actions.title        // "Actions"
-            let settingsTitle = Tab.settings.title     // "Settings"
-            let a11yBalanceTab = Label(Tab.balances).labelStyle(.titleOnly)
+            let balancesTitle = TalerTab.balances.title     // "Balances"
+            let actionTitle = TalerTab.actions.title        // "Actions"
+            let settingsTitle = TalerTab.settings.title     // "Settings"
+            let a11yBalanceTab = Label(TalerTab.balances).labelStyle(.titleOnly)
                                     .accessibilityLabel(balancesTitle)
-            let a11yActionsTab = Label(Tab.actions).labelStyle(.titleOnly)
+            let a11yActionsTab = Label(TalerTab.actions).labelStyle(.titleOnly)
                                     .accessibilityLabel(actionTitle)
-            let a11ySettingsTab = Label(Tab.settings).labelStyle(.titleOnly)
+            let a11ySettingsTab = Label(TalerTab.settings).labelStyle(.titleOnly)
                                     .accessibilityLabel(settingsTitle)
             /// NavigationViews for Balances & Settings
             let balancesStack = NavigationView {
                 BalancesListView(stack: stack.push(balancesTitle),
                                  title: balancesTitle,
                        selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
-                    reloadTransactions: $shouldReloadTransactions,
-                        qrButtonTapped: $qrButtonTapped)
+                    reloadTransactions: $shouldReloadTransactions)
                 .background(balanceActions)
             }.navigationViewStyle(.stack)
             let settingsStack = NavigationView {
@@ -514,13 +501,13 @@ extension MainView {
             /// the tabItems (EMPTYSTRING .titleOnly) could indeed be omitted and the app would work the same - but are needed for accessibilityLabel
             return TabView(selection: tabSelection()) {
                 balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
-                    .tag(Tab.balances)
+                    .tag(TalerTab.balances)
                     .tabItem { a11yBalanceTab }
                 Color.clear                                 // can't use EmptyView: VoiceOver wouldn't have the Actions tab
-                    .tag(Tab.actions)
+                    .tag(TalerTab.actions)
                     .tabItem { a11yActionsTab }
                 settingsStack.id(viewState2.rootViewId)     // change rootViewId to trigger popToRootView behaviour
-                    .tag(Tab.settings)
+                    .tag(TalerTab.settings)
                     .tabItem { a11ySettingsTab }
             } // TabView
         }
@@ -550,7 +537,6 @@ extension MainView {
 #endif
             // custom tabBar with the Actions button in the middle
             let tabBarView = TabBarView(selection: tabSelection(),
-                                       userAction: $userAction,
                                            hidden: $tabBarModel.tabBarHidden,
                                       onActionTab: onActionTab,
                                      onActionDrag: onActionDrag)

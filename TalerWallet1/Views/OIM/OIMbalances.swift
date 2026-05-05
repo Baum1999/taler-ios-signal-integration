@@ -33,7 +33,6 @@ struct OIMbalances: View {
     let stack: CallStack
 //    let decimal: Int            // 0 for ¥,HUF;   2 for $,€,£;   3 for ﷼,₯ (arabic)
     @Binding var selectedBalance: Balance?              // return user's choice
-    @Binding var qrButtonTapped: Bool
     @Binding var historyTapped: Int?
     let oimEuro: Bool
 
@@ -50,13 +49,11 @@ struct OIMbalances: View {
 
     init(stack: CallStack,
           selectedBalance: Binding<Balance?>,
-           qrButtonTapped: Binding<Bool>,
             historyTapped: Binding<Int?>,
                   oimEuro: Bool
     ) {
         self.stack = stack
         self._selectedBalance = selectedBalance
-        self._qrButtonTapped = qrButtonTapped
         self._historyTapped = historyTapped
         self.oimEuro = oimEuro
         let oimCurrency = oimCurrency(selectedBalance.wrappedValue?.scopeInfo, oimEuro: oimEuro)  // might be nil ==> OIMeuros
@@ -184,7 +181,7 @@ struct OIMbalances: View {
             if selectedBalance == nil {
                 let showQR = viewState == .chestsClosed
                 QRButton(hideTitle: true) {
-                    qrButtonTapped = true
+                    NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger NavigationLink
                 }
                 .opacity(showQR ? 1 : INVISIBLE)
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
