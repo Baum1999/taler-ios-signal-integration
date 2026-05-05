@@ -3,7 +3,18 @@
     {
       "filename" : "Exchange-logo-blue.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Exchange-logo-light-blue.svg",
+      "idiom" : "universal"
     }
+
   ],
   "info" : {
     "author" : "xcode",
