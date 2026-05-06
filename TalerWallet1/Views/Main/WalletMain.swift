@@ -18,7 +18,7 @@ struct ActionType: Hashable {
 }
 // MARK: - Content
 
-struct MainContent: View {
+struct WalletMain: View {
     let logger: Logger
     let stack: CallStack
     @Binding var selectedBalance: Balance?

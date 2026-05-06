@@ -44,6 +44,7 @@ struct MainView: View {
     @State private var innerHeight: CGFloat = .zero
     @State private var networkUnavailable = false
     @State private var backgrounded: Date?                  // time we go into background
+    @Namespace private var iOS26namespace
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -73,23 +74,29 @@ struct MainView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let mainContent = ZStack {
-            MainContent(logger: logger, stack: stack.push("Content"),
+#if POS
+            let contentView = PosMain()
+#else
+            let contentView = WalletMain(logger: logger, stack: stack.push("Content"),
                selectedBalance: $selectedBalance,
                 talerFontIndex: $talerFontIndex,
                showActionSheet: $showActionSheet,
                    showScanner: $showScanner)
-            .onAppear() {
-#if DEBUG
-                if playSoundsI != 0  && playSoundsB && !soundPlayed {
-                    controller.playSound(1008)
-                }
 #endif
-                soundPlayed = true
-            }                   // Startup chime
-            .overlay(alignment: .top) {
-                DebugViewV()
-                    .id("ViewID")
-            }     // Show the viewID on top of the app's NavigationView
+            contentView
+                .environmentObject(NamespaceWrapper(iOS26namespace))
+                .onAppear() {
+#if DEBUG
+                    if playSoundsI != 0  && playSoundsB && !soundPlayed {
+                        controller.playSound(1008)
+                    }
+#endif
+                    soundPlayed = true
+                }                   // Startup chime
+                .overlay(alignment: .top) {
+                    DebugViewV()
+                        .id("ViewID")
+                }     // Show the viewID on top of the app's NavigationView
 
             if (!showScanner && urlToOpen == nil) {
                 if let error2 = model.error2 {
@@ -227,6 +234,7 @@ struct MainView: View {
                 }   // ActionSheet
         }   // VStack { networkUnavailable + mainGroup }
 #if OIM
+        // set controller.oimModeActive
         .onRotate { newOrientation in
             let isSheetActive = showActionSheet || showScanner || showUrlSheet
             controller.setOIMmode(for: newOrientation, isSheetActive)
