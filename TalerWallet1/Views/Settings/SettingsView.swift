@@ -97,7 +97,6 @@ struct SettingsView: View {
 
     }
 
-
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -139,23 +138,23 @@ struct SettingsView: View {
                           description: String(localized: "Your accounts for deposit")) {}
                 }
 
-                let biometryType = biometricService.biometryType()
-                let hasFaceID = biometryType == .faceID
-                let hasTouchID = biometryType == .touchID
-                let biometryString = hasFaceID ? String(localized: "Use FaceID")
-                                   : hasTouchID ? String(localized: "Use TouchID")
-                                   : EMPTYSTRING
-                if !biometryString.isEmpty {
-                    SettingsToggle(name: biometryString,
-                                  value: $useAuthentication,
-                                    id1: "useFaceID",
-                              imageName: hasFaceID ? "faceid" : "touchid", // 􀎽  􀟒
-                            description: String(localized: "Protect your money")) { _ in
-                        biometricService.isAuthenticated = false
-                    }
-//                } else {
-//                    biometricService.isAuthenticated = false
+            let biometryType = controller.biometryType() ?? biometricService.biometryType()
+            let hasFaceID = biometryType == .faceID
+            let hasTouchID = biometryType == .touchID
+            let biometryString = hasFaceID ? String(localized: "Use FaceID")
+                               : hasTouchID ? String(localized: "Use TouchID")
+                               : EMPTYSTRING
+            if !biometryString.isEmpty {
+                SettingsToggle(name: biometryString,
+                              value: $useAuthentication,
+                                id1: "useFaceID",
+                          imageName: hasFaceID ? "faceid" : "touchid", // 􀎽  􀟒
+                        description: String(localized: "Protect your money")) { _ in
+                    biometricService.isAuthenticated = false
                 }
+//            } else {
+//                biometricService.isAuthenticated = false
+            }
 
 #if TALER_NIGHTLY
                 SettingsToggle(name: String(localized: "Push Notifications"), value: $pushNotifications,

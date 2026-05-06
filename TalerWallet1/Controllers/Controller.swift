@@ -9,6 +9,7 @@
  */
 import Foundation
 import AVFoundation
+import LocalAuthentication
 import SwiftUI
 import SymLog
 import os.log
@@ -149,6 +150,21 @@ class Controller: ObservableObject {
 //        print("😱 oimSheetActive = \(oimSheetActive)")
     }
 #endif
+
+    func biometryType() -> LABiometryType? {
+        let context = LAContext()
+        var error: NSError? = nil
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            return context.biometryType
+        }
+        // else device has no enabled biometrics
+#if DEBUG
+        if let error {
+            print(error)
+        }
+#endif
+        return nil
+    }
 
     @discardableResult
     func saveURL(_ passedURL: URL, urlCommand: UrlCommand) -> Bool {
