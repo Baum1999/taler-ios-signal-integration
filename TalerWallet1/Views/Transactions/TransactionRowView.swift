@@ -192,6 +192,10 @@ struct TransactionRowView: View {
         }
 
         let layout2 = VStack(alignment: .leading, spacing: 0) {
+            let timeline = TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
+#if DEBUG
+                .border(green)
+#endif
             if let topString {   // top & amount, bottom below
                 HStack(spacing: 6) {
                     TruncationDetectingText(topString,
@@ -211,16 +215,10 @@ struct TransactionRowView: View {
                         .background(red.opacity(0.2))
 #endif
                 }
-                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
-#if DEBUG
-                    .border(green)
-#endif
+                timeline
             } else {        // no top, bottom & amount
                 HStack(spacing: 6) {
-                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
-#if DEBUG
-                        .border(green)
-#endif
+                    timeline
                     Spacer(minLength: 2)
                     amountV
 #if DEBUG
