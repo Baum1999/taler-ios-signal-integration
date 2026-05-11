@@ -39,15 +39,11 @@ struct FullBackground: View {
     }
 
     var body: some View {
-#if TALER_NIGHTLY
         if isDark, liquidBack, #available(iOS 17.0, *) {
             liquidView
         } else {
             backgroundView
         }
-#else
-        backgroundView
-#endif
     }
 }
 public struct WalletColors {

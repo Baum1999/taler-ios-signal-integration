@@ -189,36 +189,14 @@ struct WalletMain: View {
             }.background(balanceActions)
              .accessibilitySortPriority(1) // Reads third
 
-                // ACTION & SETTINGS BUTTONS
-//                if #available(iOS 26.0, *) {
-//                    let actionsButton = ActionItem(tab: TalerTab.actions,
-//                                                 onTap: onActionTab,
-//                                                onDrag: onActionDrag)
-//                        .accessibilitySortPriority(2) // Reads second
-//                        .matchedTransitionSource(id: "unique_transition_id", in: wrapper.namespace)
-//                    let settingsButton = Button {
-//                        NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
-//                    } label: {
-//                        Label(settingsTitle, systemImage: TalerTab.settings.sysImg)
-//                            .labelStyle(.iconOnly)
-//                    }
-////                        .padding()
-//                        .buttonStyle(.glass)
-//                        .accessibilitySortPriority(0)
-//
-//                    HStack {
-//                        settingsButton
-//                        Spacer()
-//                        actionsButton           // floating bottom right
-//                    }
-//                    .padding(.horizontal)
-//                }
         }.navigationViewStyle(.stack)
             .accessibilitySortPriority(3) // Reads first
 
         if #available(iOS 26.0, *) {
+            // no TabView, just a NavigationView. BalancesListView => ActionsOverlay
             return balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
         } else {
+            // TabView with 3 tabs, middle is Actions
             let settingsStack = NavigationView {
                 SettingsView(stack: stack.push(),
                           navTitle: settingsTitle)

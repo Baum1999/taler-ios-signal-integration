@@ -116,10 +116,6 @@ struct TransactionRowView: View {
                                              done: done, incoming: incoming,
                                     shouldConfirm: shouldConfirm && pending,
                                          needsKYC: needsKYC && pending)
-        let amountV = AmountV(scope, transaction.amount(),
-                   isNegative: isZero ? nil : !incoming,
-                strikethrough: !donePendingDialog)
-            .foregroundColor(for2Color)
         let topA11y = topString(forA11y: true)!
         let topString = topString()
         let strikeColor = donePendingDialog ? nil : WalletColors().negative
@@ -134,6 +130,11 @@ struct TransactionRowView: View {
         let orange = debug ? Color.orange : Color.clear
         let purple = debug ? Color.purple : Color.clear
 #endif
+
+        let amountV = AmountV(scope, transaction.amount(),
+                   isNegative: isZero ? nil : !incoming,
+                strikethrough: !donePendingDialog)
+            .foregroundColor(for2Color)
 
         let layout0 = HStack(spacing: 4) {                                      // amount right centered, top & bottom left
                 VStack(alignment: .leading, spacing: 2) {
@@ -157,7 +158,7 @@ struct TransactionRowView: View {
                 }
 //                .border(orange)
                 Spacer(minLength: 0)
-                amountV //.frame(maxWidth: .infinity, alignment: .trailing)
+                amountV
 #if DEBUG
                 .background(orange.opacity(0.2))
 #endif
