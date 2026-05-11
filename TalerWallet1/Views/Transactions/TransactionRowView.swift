@@ -197,7 +197,7 @@ struct TransactionRowView: View {
                 .border(green)
 #endif
             if let topString {   // top & amount, bottom below
-                HStack(spacing: 6) {
+                HStack {
                     TruncationDetectingText(topString,
                                    maxLines: 1,
                                      layout: 2,
@@ -209,7 +209,7 @@ struct TransactionRowView: View {
 #if DEBUG
 //                    .border(red)
 #endif
-                    Spacer(minLength: 2)
+                    Spacer(minLength: 6)
                     amountV
 #if DEBUG
                         .background(red.opacity(0.2))
