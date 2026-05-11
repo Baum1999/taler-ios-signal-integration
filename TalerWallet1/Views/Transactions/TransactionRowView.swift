@@ -217,9 +217,9 @@ struct TransactionRowView: View {
                 }
                 timeline
             } else {        // no top, bottom & amount
-                HStack(spacing: 6) {
+                HStack {
                     timeline
-                    Spacer(minLength: 2)
+                    Spacer(minLength: 6)
                     amountV
 #if DEBUG
                         .background(purple.opacity(0.2))
