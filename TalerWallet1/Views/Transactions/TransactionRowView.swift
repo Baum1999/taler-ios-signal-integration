@@ -123,7 +123,7 @@ struct TransactionRowView: View {
                                           : topA11y +  String(localized: ", canceled", comment: "a11y")
 
 #if DEBUG
-        let debug = 1==0
+        let debug = 1==1
         let red = debug ? Color.red : Color.clear
         let green = debug ? Color.green : Color.clear
         let blue = debug ? Color.blue : Color.clear
