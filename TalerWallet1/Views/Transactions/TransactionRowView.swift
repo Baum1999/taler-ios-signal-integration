@@ -136,7 +136,7 @@ struct TransactionRowView: View {
                 strikethrough: !donePendingDialog)
             .foregroundColor(for2Color)
 
-        let layout0 = HStack(spacing: 4) {                                      // amount right centered, top & bottom left
+        let layout0 = HStack {                                      // amount right centered, top & bottom left
                 VStack(alignment: .leading, spacing: 2) {
                     if let topString {
                         TruncationDetectingText(topString,
@@ -157,7 +157,7 @@ struct TransactionRowView: View {
 #endif
                 }
 //                .border(orange)
-                Spacer(minLength: 0)
+                Spacer(minLength: 4)
                 amountV
 #if DEBUG
                 .background(orange.opacity(0.2))
