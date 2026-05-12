@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -263,7 +263,8 @@ struct TransactionRowView: View {
 #if DEBUG
                 .border(blue)
 #endif
-            ZStack {
+#if TALER_NIGHTLY
+            let layout = ZStack {
                 layout0
                     .layoutPriority(isLayoutSelected(0) ? 2 : 1)
                     .opacity(isLayoutSelected(0) ? 1 : 0)
@@ -289,6 +290,10 @@ struct TransactionRowView: View {
                         self.layoutStati1 = stati
                     }
                 }
+#else   // Stop using dynamic layouts for Taler Wallet and GNU Taler because of flickering
+            let layout = layout3
+#endif
+            layout
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(!donePendingDialog ? EMPTYSTRING
@@ -298,10 +303,6 @@ struct TransactionRowView: View {
             .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
     }
 }
-
-
-
-
 // MARK: -
 #if DEBUG
 struct TransactionRow_Previews: PreviewProvider {
