@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -74,20 +74,14 @@ struct TransactionsListView: View {
 //            Group {
                 ScrollViewReader { scrollProxy in
                     List {
-                        Section {
-                            TransactionsArraySliceV(symLog: symLog,
-                                                    logger: logger,
-                                                     stack: stack.push(),
-                                                     scope: scope,
-                                              transactions: $transactions,
-                                           reloadAllAction: reloadAllAction)
-                                .padding(.leading, ICONLEADING)
-                        } header: {
-                            let header = scope.url?.trimURL ?? scope.currency
-                            Text(header)
-                                .talerFont(.title3)
-                                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                        }
+                        let header = scope.url?.trimURL ?? scope.currency
+                        TransactionsArraySection(symLog: symLog,
+                                                 logger: logger,
+                                                  stack: stack.push(),
+                                                 header: header,
+                                                  scope: scope,
+                                           transactions: $transactions,
+                                        reloadAllAction: reloadAllAction)
                     }
                     .id(viewId)
                     .listStyle(myListStyle.style).anyView
@@ -141,16 +135,33 @@ struct TransactionsListView: View {
 }
 // MARK: -
 // used by TransactionsListView, and by BalancesSectionView to show the last 3 transactions
-struct TransactionsArraySliceV: View {
+struct TransactionsArraySection: View {
     let symLog: SymLogV?
     let logger: Logger?
     let stack: CallStack
+    let header: String?
     let scope: ScopeInfo
     @Binding var transactions: [TalerTransaction]
     let reloadAllAction: (_ stack: CallStack) async -> ()
 
     @EnvironmentObject private var model: WalletModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
     @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
+
+    @State private var padd = 0
+
+    @ViewBuilder
+    func headerView(_ header: String) -> some View {
+        Text(header)
+            .talerFont(.title3)
+            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+    }
 
     var body: some View {
 #if PRINT_CHANGES
@@ -163,37 +174,58 @@ struct TransactionsArraySliceV: View {
         let suspendAction = model.suspendTransaction
         let resumeAction = model.resumeTransaction
 
-        ForEach(transactions, id: \.self) { transaction in
-            let destination = TransactionSummaryV(stack: stack.push(),
-//                                                  scope: scope,
-                                          transactionId: transaction.id,
-                                                talerTX: $talerTX,
-                                               navTitle: nil,
-                                                hasDone: false,
-                                            abortAction: abortAction,
-                                           deleteAction: deleteAction,
-                                             failAction: failAction,
-                                          suspendAction: suspendAction,
-                                           resumeAction: resumeAction)
-            let row = NavigationLink { destination } label: {
-                TransactionRowView(logger: logger, scope: scope, transaction: transaction)
-            }.id(transaction.id)
-            if transaction.isDeleteable {
-                row.swipeActions(edge: .trailing) {
-                        Button {
-                            symLog?.log("deleteAction")
-                            Task { // runs on MainActor
-                                let _ = try? await deleteAction(transaction.id, false)
-                                await reloadAllAction(stack.push())
+        Section {
+            ForEach(transactions, id: \.self) { transaction in
+                let destination = TransactionSummaryV(stack: stack.push(),
+                                              transactionId: transaction.id,
+                                                    talerTX: $talerTX,
+                                                   navTitle: nil,
+                                                    hasDone: false,
+                                                abortAction: abortAction,
+                                               deleteAction: deleteAction,
+                                                 failAction: failAction,
+                                              suspendAction: suspendAction,
+                                               resumeAction: resumeAction)
+                let row = NavigationLink { destination } label: {
+                    TransactionRowView(logger: logger, scope: scope, transaction: transaction)
+                        .padding(.leading, ICONLEADING)
+                        .padding(.trailing, CGFloat(padd))
+                }.id(transaction.id)
+                if transaction.isDeleteable {
+                    row.swipeActions(edge: .trailing) {
+                            Button {
+                                symLog?.log("deleteAction")
+                                Task { // runs on MainActor
+                                    let _ = try? await deleteAction(transaction.id, false)
+                                    await reloadAllAction(stack.push())
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                            .tint(WalletColors().negative)
                         }
-                        .tint(WalletColors().negative)
-                    }
-            } else {
-                row
+                } else {
+                    row
+                }
             }
+        } header: {
+#if TALER_NIGHTLY
+            if developerMode {
+                HStack(spacing: 50) {
+                    Button("<") { padd -= 1 }
+                    Text("\(padd)")
+                    Button(">") { padd += 1 }
+                }
+            } else {
+                if let header {
+                    headerView(header)
+                }
+            }
+#else
+            if let header {
+                headerView(header)
+            }
+#endif
         }
     }
 }

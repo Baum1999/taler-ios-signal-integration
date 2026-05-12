@@ -159,25 +159,18 @@ extension BalancesSectionView: View {
             /// if there is only one currency, then show MAXRECENT recent transactions
             let recentCount = recentTransactions.count
             if sectionCount == 1 && recentCount > 0 {
-                Section {
-                    let _ = symLog.log("recent transactions")
-                    TransactionsArraySliceV(symLog: symLog,
-                                            logger: logger,
-                                             stack: stack.push(),
-                                             scope: scopeInfo,
-                                            transactions: $recentTransactions,
-                                            reloadAllAction: loadRecent)
-                        .padding(.leading, ICONLEADING)
-                } header: {
-                    if !minimalistic {
-                        let recentHeader = recentCount > 1
-                            ? String(localized: "Recent transactions", comment: "section header plural")
-                            : String(localized: "Recent transaction", comment: "section header singular")
-                        Text(recentHeader)
-                            .talerFont(.title3)
-                            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
-                    }
-                }
+                let _ = symLog.log("recent transactions")
+                let recentHeader = minimalistic ? nil
+                                 : recentCount > 1
+                    ? String(localized: "Recent transactions", comment: "section header plural")
+                    : String(localized: "Recent transaction", comment: "section header singular")
+                TransactionsArraySection(symLog: symLog,
+                                         logger: logger,
+                                          stack: stack.push(),
+                                         header: recentHeader,
+                                          scope: scopeInfo,
+                                   transactions: $recentTransactions,
+                                reloadAllAction: loadRecent)
             } // recent transactions
         }
     } // body
