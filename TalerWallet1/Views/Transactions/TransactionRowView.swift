@@ -178,12 +178,15 @@ struct TransactionRowView: View {
 #endif
                 .accessibilityLabel(a11yLabel)
             }
-            HStack(spacing: 6) {
+            // spacing + Spacer will result in twice the spacing
+//            HStack(spacing: 6) {        // will thrash if set to anything smaller than 5
+            HStack(spacing: 0) {        // will thrash if set to anything smaller than 5
+                                        // onChange(of: CGSize) action tried to update multiple times per frame.
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1, maxLines: 1)
 #if DEBUG
                     .border(green)
 #endif
-                Spacer(minLength: 0)
+                Spacer(minLength: 4)    // will thrash if set to 2 or more
                 amountV
 #if DEBUG
                     .background(green.opacity(0.2))
