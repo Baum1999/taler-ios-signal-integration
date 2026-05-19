@@ -114,7 +114,7 @@ struct ErrorView: View {
         }
         .padding()
         .safeAreaInset(edge: .bottom) {
-            Button("Close", role: .cancel) {
+            Button("OK", role: .cancel) {
                 onDismiss()
             }
             .buttonStyle(TalerButtonStyle(type: .bordered))
