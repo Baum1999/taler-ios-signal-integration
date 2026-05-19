@@ -39,6 +39,11 @@ struct TransactionRowView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State private var layoutStati0: [Int: Bool] = [:]
     @State private var layoutStati1: [Int: Bool] = [:]
@@ -122,8 +127,8 @@ struct TransactionRowView: View {
         let a11yLabel = donePendingDialog ? topA11y
                                           : topA11y +  String(localized: ", canceled", comment: "a11y")
 
-#if DEBUG
-        let debug = 1==1
+#if TALER_NIGHTLY
+        let debug = developerMode
         let red = debug ? Color.red : Color.clear
         let green = debug ? Color.green : Color.clear
         let blue = debug ? Color.blue : Color.clear
@@ -146,20 +151,20 @@ struct TransactionRowView: View {
                         .foregroundColor(textColor)
                         .talerFont(.headline)
                         .padding(.bottom, -2.0)
-#if DEBUG
+#if TALER_NIGHTLY
                         .border(red)
 #endif
                         .accessibilityLabel(a11yLabel)
                     }
                     TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
-#if DEBUG
+#if TALER_NIGHTLY
                         .border(green)
 #endif
                 }
 //                .border(orange)
                 Spacer(minLength: 4)
                 amountV
-#if DEBUG
+#if TALER_NIGHTLY
                 .background(orange.opacity(0.2))
 #endif
         }
@@ -173,7 +178,7 @@ struct TransactionRowView: View {
                 .foregroundColor(textColor)
                 .talerFont(.headline)
                 .padding(.bottom, -2.0)
-#if DEBUG
+#if TALER_NIGHTLY
                 .border(red)
 #endif
                 .accessibilityLabel(a11yLabel)
@@ -183,12 +188,12 @@ struct TransactionRowView: View {
             HStack(spacing: 0) {        // will thrash if set to anything smaller than 5
                                         // onChange(of: CGSize) action tried to update multiple times per frame.
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1, maxLines: 1)
-#if DEBUG
+#if TALER_NIGHTLY
                     .border(green)
 #endif
                 Spacer(minLength: 4)    // will thrash if set to 2 or more
                 amountV
-#if DEBUG
+#if TALER_NIGHTLY
                     .background(green.opacity(0.2))
 #endif
             }
@@ -196,7 +201,7 @@ struct TransactionRowView: View {
 
         let layout2 = VStack(alignment: .leading, spacing: 0) {
             let timeline = TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
-#if DEBUG
+#if TALER_NIGHTLY
                 .border(green)
 #endif
             if let topString {   // top & amount, bottom below
@@ -209,12 +214,12 @@ struct TransactionRowView: View {
                     .talerFont(.headline)
                     .padding(.bottom, -2.0)
                     .accessibilityLabel(a11yLabel)
-#if DEBUG
+#if TALER_NIGHTLY
 //                    .border(red)
 #endif
                     Spacer(minLength: 6)
                     amountV
-#if DEBUG
+#if TALER_NIGHTLY
                         .background(red.opacity(0.2))
 #endif
                 }
@@ -224,7 +229,7 @@ struct TransactionRowView: View {
                     timeline
                     Spacer(minLength: 6)
                     amountV
-#if DEBUG
+#if TALER_NIGHTLY
                         .background(purple.opacity(0.2))
 #endif
                 }
@@ -242,32 +247,35 @@ struct TransactionRowView: View {
                 .talerFont(.headline)
   //            .fontWeight(.medium)      iOS 16 only
                 .padding(.bottom, -2.0)
-#if DEBUG
+#if TALER_NIGHTLY
                 .border(red)
 #endif
                 .accessibilityLabel(a11yLabel)
 
             }
-            HStack(spacing: -4) {
+            HStack {
+//            HStack(spacing: -4) {
                 Spacer(minLength: 0)
                 amountV
-#if DEBUG
+#if TALER_NIGHTLY
                     .background(blue.opacity(0.2))
 #endif
             }
             TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3, maxLines: 10)
-#if DEBUG
+#if TALER_NIGHTLY
                 .border(green)
 #endif
         }
 
         HStack {
             iconBadge.talerFont(.title2)
-#if DEBUG
+#if TALER_NIGHTLY
                 .border(blue)
 #endif
 #if TALER_NIGHTLY
-            let layout = ZStack {
+//            let layout = ZStack {
+            if debug {
+              ZStack {
                 layout0
                     .layoutPriority(isLayoutSelected(0) ? 2 : 1)
                     .opacity(isLayoutSelected(0) ? 1 : 0)
@@ -280,7 +288,7 @@ struct TransactionRowView: View {
                 layout3
                     .layoutPriority(isLayoutSelected(3) ? 2 : 1)
                     .opacity(isLayoutSelected(3) ? 1 : 0)
-            }
+              }
                 .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
 //                    logger?.log("LayoutTruncationStatus0")
                     DispatchQueue.main.async {
@@ -293,10 +301,12 @@ struct TransactionRowView: View {
                         self.layoutStati1 = stati
                     }
                 }
+            } else {
+                layout3
+            }
 #else   // Stop using dynamic layouts for Taler Wallet and GNU Taler because of flickering
-            let layout = layout3
+            layout3
 #endif
-            layout
         }
             .accessibilityElement(children: .combine)
             .accessibilityValue(!donePendingDialog ? EMPTYSTRING
