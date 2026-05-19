@@ -25,7 +25,9 @@ extension View {
     @MainActor    @discardableResult
     func dismissTop(_ stack: CallStack? = nil, animated: Bool = true) -> Bool {
         let windows = UIApplication.shared.connectedScenes.compactMap {
-            ($0 as? UIWindowScene)?.keyWindow       // TODO: iPad might have more than 1 window
+            // TODO: iPad might have more than 1 window
+            // TODO: see UIScreen+screenSize for keyWindow
+            ($0 as? UIWindowScene)?.keyWindow
         }
         if var topController = windows.first?.rootViewController {
             var gotPresented = false

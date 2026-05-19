@@ -20,6 +20,7 @@ import SwiftUI
 
 struct SafeAreaEdgeInsetsKey: EnvironmentKey {
     static var defaultValue: EdgeInsets {
+        // TODO: see UIScreen+screenSize for keyWindow
         let keyWindows = UIApplication.shared.windows.filter { $0.isKeyWindow }.first ??
                 UIApplication.shared.windows[0]
 
