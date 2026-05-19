@@ -139,7 +139,7 @@ struct TwoRowButtons: View {
             sendButton(sendTitle.tabbed(oneLine: false))
             recvButton(recvTitle.tabbed(oneLine: false))
         }
-        let vLayout = VStack {
+        let vLayout = VStack(alignment: .leading) {
             // one below the other, text in one line (\t -> " ")
             sendButton(sendTitle.tabbed(oneLine: true))
             recvButton(recvTitle.tabbed(oneLine: true))
