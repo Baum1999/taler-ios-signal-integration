@@ -62,6 +62,11 @@ struct MainView: View {
         NotificationCenter.default.post(name: .TransactionScanned, object: nil, userInfo: nil)
     }
 
+    private func dismissActionSheet() {
+        showActionSheet = false
+        controller.userAction += 1                      // make Action button jump
+    }
+
     func hintApplicationResumed() {
         Task.detached {
             await model.hintApplicationResumedT()
@@ -180,7 +185,8 @@ struct MainView: View {
             mainGroup
                 .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
-                .sheet(isPresented: $showUrlSheet, onDismiss: sheetDismissed) {
+                .sheet(isPresented: $showUrlSheet,
+                         onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack: stack.push(),
                                selectedBalance: selectedBalance,
                                      urlToOpen: $urlToOpen)
@@ -206,7 +212,7 @@ struct MainView: View {
                     } // iOS 15
                 }   // QR Scanner
                 .sheet(isPresented: $showActionSheet,
-                       onDismiss: dismissSheet
+                         onDismiss: dismissActionSheet
                 ) {
                     if #available(iOS 16.4, *) {
 //                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
