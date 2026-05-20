@@ -213,7 +213,7 @@ struct TransactionsArraySection: View {
             if developerMode {
                 HStack(spacing: 50) {
                     Button("<") { padd -= 1 }
-                    Text("\(padd)")
+                    Button("\(padd)") { padd = 0 }
                     Button(">") { padd += 1 }
                 }
             } else {
