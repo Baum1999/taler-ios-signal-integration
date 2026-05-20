@@ -25,21 +25,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenString = deviceToken.hexEncodedString()
         symLog.log("deviceToken: \(tokenString)")
-        Controller.shared.deviceTokenAPNs = tokenString                         // TODO: tell walletCore
+        Controller.shared.deviceTokenAPNs = tokenString
+        // TODO: tell walletCore
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         symLog.log("Failed to register for remote notifications with error: \(error)")
+        // TODO: tell the user...
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         symLog.log(userInfo)
+        // TODO: react on receiving a background notification
 //        guard let groupId = userInfo[PushNotificationKeys.groupId] as? String else {
 //            completionHandler(.noData)
 //            return
 //        }
 //        notificationsCenterService.removeDeliveredNotifications(groupId: groupId)
         completionHandler(.newData)
-
     }
 }
