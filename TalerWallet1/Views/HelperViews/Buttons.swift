@@ -184,11 +184,9 @@ struct SettingsButton : View  {
         .tint(.accentColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
-#if compiler(>=6.2) // XCODE26
-        if #available(iOS 26.0, *) {
-            return button.buttonStyle(.glass)
-        }
-#endif
+//        if #available(iOS 26.0, *) {
+//            return button.buttonStyle(.glass)
+//        }
         return button
     }
 }
