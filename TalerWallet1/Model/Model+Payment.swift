@@ -351,16 +351,85 @@ struct TemplateContractDetails: Codable {
     let currency: String?               // specify currency when amount is nil - unspecified if nil
     let amount: Amount?                 // Total amount payable. Fixed if this field exists, editable if nil
     let scopeInfo: ScopeInfo?
-    let minimumAge: Int
-    let payDuration: RelativeTime
+    let minimumAge: Int?
+    let payDuration: RelativeTime?
+    let websiteRegex: String?
+    let choices: [OrderChoice]?
+    let templateType: String?
 
     enum CodingKeys: String, CodingKey {
         case summary, currency, amount
-        case scopeInfo
+        case scopeInfo, choices
         case minimumAge = "minimum_age"
         case payDuration = "pay_duration"
+        case websiteRegex = "website_regex"
+        case templateType = "template_type"
     }
 }
+
+struct OrderChoice: Codable {
+    let amount: Amount
+    let tip: Amount?
+    let description: String?
+    let descriptionI18n: String?
+    let inputs: [OrderInput]?
+    let outputs: [OrderOutput]?     // TODO: OrderOutputTaxReceipt
+    let maxFee: Amount?
+
+    enum CodingKeys: String, CodingKey {
+        case amount, tip, description
+        case descriptionI18n = "description_i18n"
+        case inputs, outputs
+        case maxFee = "max_fee"
+    }
+}
+
+struct OrderInput: Codable {    // see ContractInput
+    let type: String                            // "token"
+
+    // Token family slug as configured in the merchant backend.
+    // Slug is unique across all configured tokens of a merchant.
+    let tokenFamilySlug: String?
+
+    // How many units of the input are required.
+    // Defaults to 1 if not specified.
+    // Output with count == 0 are ignored by the merchant backend.
+    let count: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case type, count
+        case tokenFamilySlug = "token_family_slug"
+    }
+}
+
+struct OrderOutput: Codable {   // TODO: ContractOutput
+    let type: String                            // "token"
+
+    // Token family slug as configured in the merchant backend.
+    // Slug is unique across all configured tokens of a merchant.
+    let tokenFamilySlug: String?
+
+    // How many units of the output are issued by the merchant.
+    // Defaults to 1 if not specified.
+    // Output with count == 0 are ignored by the merchant backend.
+    let count: Int?
+
+    // When should the output token be valid. Can be specified if the
+    // desired validity period should be in the future (like selling
+    // a subscription for the next month). Optional. If not given,
+    // the validity is supposed to be "now" (time of order creation).
+    let validAt: Timestamp?
+
+    enum CodingKeys: String, CodingKey {
+        case type, count
+        case tokenFamilySlug = "token_family_slug"
+        case validAt = "valid_at"
+    }
+}
+struct OrderOutputTaxReceipt: Codable {
+    let type: String                            // "tax-receipt"
+}
+
 struct TemplateContractDetailsDefaults: Codable {
     let summary: String?                // Default 'Human-readable summary' when editable: empty if nil
     let currency: String?               // Default currency when unspecified: any if nil (e.g. donations)

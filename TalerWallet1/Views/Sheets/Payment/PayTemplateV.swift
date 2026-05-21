@@ -38,6 +38,7 @@ struct PayTemplateV: View {
     @State private var buttonSelected1 = false
     @State private var buttonSelected2 = false
     @State private var summaryIsEditable = false
+    @State private var isPaivana = false
     @State private var summary: String = EMPTYSTRING       // templateParam
     @State private var scope: ScopeInfo? = nil
 
@@ -96,8 +97,13 @@ struct PayTemplateV: View {
             if let amount = contract.amount {
                 controller.updateAmount(amount, forSaved: url)
             }
-            amountIsEditable = contract.amount == nil
-            summaryIsEditable = contract.summary == nil
+            if contract.templateType == "paivana" {
+                // TODO: ???
+                isPaivana = true
+            } else {
+                amountIsEditable = contract.amount == nil
+                summaryIsEditable = contract.summary == nil
+            }
 
             let prepCurrency = contract.currency ?? defaults?.currency ?? supportedCurrencies.first ?? UNKNOWN
             let zeroAmount = Amount(currency: prepCurrency, cent: 0)
