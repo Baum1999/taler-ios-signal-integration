@@ -94,10 +94,7 @@ struct BalancesListView: View {
                               oimEuro: oimEuro)
                         .environmentObject(NamespaceWrapper(namespace))         // keep OIMviews apart
 #endif // OIM
-                } else { if #available(iOS 26.0, *) {
-                    // TODO: Action button + view in Balances
-                    ActionsOverlay(stack: stack.push())
-                } }
+                }
             } }
     }
 }
