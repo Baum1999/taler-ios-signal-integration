@@ -29,7 +29,7 @@ struct WalletBackendResponseError: Codable {
     /// English diagnostic message that can give details for the instance of the error.
     var message: String?
 
-//    var requestUrl: String?
+    var requestUrl: String?
 //    var httpStatusCode: Int?
 //    var requestMethod: String?
 

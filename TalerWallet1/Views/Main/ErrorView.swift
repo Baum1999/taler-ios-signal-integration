@@ -17,16 +17,19 @@ struct ErrorView: View {
     let stack: CallStack
     var title: String
     var message: String? = nil
+    var requestUrl: String? = nil
     var copyable: Bool
 
     @State var isCopied: Bool = false
 
     var onDismiss: () -> Void
 
-    init(_ stack: CallStack, title: String, message: String? = nil, copyable: Bool, onDismiss: @escaping () -> Void) {
+    init(_ stack: CallStack, title: String, message: String? = nil,
+      requestUrl: String? = nil, copyable: Bool, onDismiss: @escaping () -> Void) {
         self.stack = stack
         self.title = title
         self.message = message
+        self.requestUrl = requestUrl
         self.copyable = copyable
         self.onDismiss = onDismiss
     }
@@ -45,8 +48,13 @@ struct ErrorView: View {
                 switch walletError {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
-                            if responseError.code == 7001 {
-                                self.init(stack, title: internetError, message: internetMessage, copyable: false, onDismiss: onDismiss)
+                            if responseError.code == 7001 || responseError.code == 7005 {
+                                self.init(stack,
+                                    title: internetError,
+                                  message: responseError.hint ?? internetMessage,
+                               requestUrl: responseError.requestUrl,
+                                 copyable: false,
+                                onDismiss: onDismiss)
                                 break
                             }
                         }
@@ -106,8 +114,14 @@ struct ErrorView: View {
                             .accessibilityLabel(Text("Copy the error JSON", comment: "a11y"))
                             .padding()
                     } else {
+                        if let requestUrl {
+                            Text(requestUrl)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                        }
                         Text(message)
                             .multilineTextAlignment(.center)
+                            .padding()
                     }
                 }
             }
