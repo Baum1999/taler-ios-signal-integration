@@ -1,3 +1,26 @@
+Version 1.5.5 (wallet-core 1.5.13)
+
+• Swiss localization changes
+• Paivana (in wallet-core)
+
+
+Version 1.5.4 (wallet-core 1.5.12.1)
+
+- fix QR sheet for iOS 26
+
+
+Version 1.5.3 (wallet-core 1.5.12)
+
+• Spanish localization
+- GNU Taler & Taler Wallet use static transaction views
+
+
+Version 1.5.2 (wallet-core 1.5.10.2)
+
+• Liquid background (in Dark Mode only). iOS 17+
+• Action on iOS 26 via overlay, not sheet (Taler Nightly only)
+
+
 Version 1.5.1 (wallet-core 1.5.10)
 
 • Hint to withdraw real money
