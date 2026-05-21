@@ -148,15 +148,33 @@ struct ActionsSheet: View {
             ///   [􁾩Deposit] [􁾭 Withdraw]
             DepositWithdrawV(stack: stack.push(), sendDisabled: depoDisabled, recvDisabled: noBalances)
                 .accessibility(sortPriority: 0)     // read this last
-            ///        [􀎻  Scan QR ]
-            QRButton(hideTitle: false) {
-                NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger NavigationLink
+            HStack {
+                if #available(iOS 26.0, *) {
+                    SettingsButton(accessibilityLabelStr: TalerTab.settings.title,
+                                   action: dismissAndPost)
+//                    .padding()
+                    .buttonStyle(TalerButtonStyle(type: .bordered,
+                                                dimmed: false,
+                                                narrow: true,
+                                              disabled: false,
+                                               aligned: .center))
+                    .accessibility(sortPriority: 0)     // read this last
+                    Spacer(minLength: 8)
+                }
+                ///   [􀎻  Scan QR ]
+                QRButton(hideTitle: false) {
+                    Task {
+                        NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will
+                    }
+                }
+                    .lineLimit(5)
+                    .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
+                    .accessibility(sortPriority: 3)     // read this first
             }
-                .lineLimit(5)
-                .buttonStyle(TalerButtonStyle(type: .bordered, narrow: true, aligned: .center))
-                .accessibility(sortPriority: 3)     // read this first
         }
-        .padding()
+        .padding(.top)
+        .padding(.horizontal)
+        .padding(.bottom, -8)
         .accessibilityElement(children: .contain)
     }
 }
@@ -210,8 +228,8 @@ struct DualHeightSheet: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 //    @State private var selectedDetent: PresentationDetent = scanDetent        // Cannot use instance member 'scanDetent' within property initializer
     @State private var selectedDetent: PresentationDetent = .fraction(0.1)      // workaround - update in .task
-    @State private var detents: Set<PresentationDetent> = [.fraction(0.1)]      //   "
-    @State private var qrButtonTapped2: Bool = false
+    @State private var supportedDetents: Set<PresentationDetent> = [.fraction(0.1)]      //   "
+//    @State private var qrButtonTapped2: Bool = false
     @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
     @State private var sheetHeight: CGFloat = .zero
@@ -225,32 +243,60 @@ struct DualHeightSheet: View {
             try? await Task.sleep(nanoseconds: 80_000_000)
             let detent = minimalistic ? halfDetent : fullDetent
             guard selectedDetent == detent else { return }
-            detents = [detent]
-            logger.trace("❗️detents = [scanDetent]")    // 0.999 %
+            supportedDetents = [detent]
+            logger.trace("updateDetentsWithDelay❗️supportedDetents = [scanDetent]")      // 0.999 %
+        }
+    }
+
+    func actionsSheet() -> some View {
+        let actionsSheet = ActionsSheet(stack: stack.push())
+                            .presentationDragIndicator(.hidden)
+//                            .presentationDragIndicator(.visible)
+        if #available(iOS 28.0, *) {        // TODO: adapt ActionsSheet() to glass-buttons
+            return actionsSheet
+                .presentationSizing(.fitted) // iOS 18+
+        } else {
+            let background = colorScheme == .dark ? WalletColors().gray6
+                                                  : WalletColors().gray2
+            return actionsSheet
+                .presentationBackground {
+                    background
+                    /// overflow the bottom of the screen by a sufficient amount to fill the gap that is seen when the size changes
+                        .padding(.bottom, -1000)
+                }
         }
     }
 
     var body: some View {
         let scrollView = ScrollView {
-            let background = colorScheme == .dark ? WalletColors().gray6
-                                                  : WalletColors().gray2
-            ActionsSheet(stack: stack.push())
-            .presentationDragIndicator(.hidden)
-            .presentationBackground {
-                background
-                /// overflow the bottom of the screen by a sufficient amount to fill the gap that is seen when the size changes
-                    .padding(.bottom, -1000)
-            }
+            actionsSheet()
             .innerHeight($innerHeight)
-
-            .onChange(of: innerHeight) { newHeight in
-                logger.trace("onChange❗️set sheetHeight: \(sheetHeight) -> \(newHeight)❗️")
-//            withAnimation {
-                sheetHeight = newHeight
-                selectedDetent = .height(sheetHeight)       // will update detents in .onChange(:)
+//            .onChange(of: qrButtonTapped2) { tapped2 in
+//                if tapped2 {
+////                    logger.trace("❗️the user tapped")
+//                    NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger
+//                    withAnimation(Animation.easeIn(duration: 0.6)) {
+//                        // animate this sheet to full height
+//                        let detent = minimalistic ? halfDetent : fullDetent
+//                        logger.trace("qrButtonTapped2❗️selected_Detent = \(FULLDETENT)")
+//                        selectedDetent = detent
+//                    }
+//                }
 //            }
+//            .onChange(of: qrButtonTapped) { tapped in
+//                if !tapped {
+//                    logger.trace("❗️dismissed, cleanup")
+//                    sheetHeight = innerHeight
+//                    qrButtonTapped2 = false
+//                }//tapped
+//            }//qr
+            .onChange(of: innerHeight) { newHeight in
+                logger.trace("onChange❗️innerHeight => set sheetHeight: \(sheetHeight) -> \(newHeight)❗️")
+                sheetHeight = newHeight
+                selectedDetent = .height(newHeight)         // will update supportedDetents in .onChange(:)
+                logger.trace("did set selectedDetent and sheetHeight to new innerHeight")
             }
-            .presentationDetents(detents, selection: $selectedDetent)
+            .presentationDetents(supportedDetents, selection: $selectedDetent)
             .onChange(of: selectedDetent) { newValue in
                 let detent = minimalistic ? halfDetent : fullDetent
                 if newValue == detent {    // user swiped the sheet up to activate QR scanner
@@ -258,17 +304,19 @@ struct DualHeightSheet: View {
                     updateDetentsWithDelay()
                     NotificationCenter.default.post(name: .QrScanAction, object: nil)   // will trigger
                 } else {    // SwiftUI "innerHeight" determined how big the half sheet should be
-                    logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))")
-                    detents = [detent, .height(sheetHeight)]
+                    logger.trace("onChange❗️selectedDetent = .height(\(sheetHeight))  supportedDetents = [detent, .height(sheetHeight)]")
+                    supportedDetents = [detent, newValue]
+//                    logger.trace("did set supportedDetents to [\(detent), .height(\(sheetHeight))]")
+                    let _ = print("did set supportedDetents to [\(detent), newValue: \(newValue))]")
                 }
             }
             .task {
                 logger.trace("task❗️selectedDetent = .height(\(sheetHeight))")
-                selectedDetent = .height(sheetHeight)       // will update detents in .onChange(:)
+                selectedDetent = .height(sheetHeight)       // will update supportedDetents in .onChange(:)
             }
 //            .animation(.spring(), value: selectedDetent)
         }
-        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
         .frame(maxHeight: innerHeight)
 
         if #available(iOS 18.0, *) {
