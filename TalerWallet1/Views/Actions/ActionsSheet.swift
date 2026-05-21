@@ -109,12 +109,8 @@ struct ActionsSheet: View {
 
     var body: some View {
         VStack {
-            let width = UIScreen.screenWidth / 3
-            RoundedRectangle(cornerRadius: 8)                                   // dropBar
-                .foregroundColor(WalletColors().gray4)
-                .frame(width: width + 6.5, height: 5)
-                .padding(.top, 5)
-                .padding(.bottom, 10)
+            Spacer(minLength: 4)                    // leave space under presentationDragIndicator
+                .frame(maxHeight: 8)
 
             if let balance = controller.balances.first,
                let shoppingUrls = balance.shoppingUrls,
@@ -250,8 +246,7 @@ struct DualHeightSheet: View {
 
     func actionsSheet() -> some View {
         let actionsSheet = ActionsSheet(stack: stack.push())
-                            .presentationDragIndicator(.hidden)
-//                            .presentationDragIndicator(.visible)
+                            .presentationDragIndicator(.visible)
         if #available(iOS 28.0, *) {        // TODO: adapt ActionsSheet() to glass-buttons
             return actionsSheet
                 .presentationSizing(.fitted) // iOS 18+
