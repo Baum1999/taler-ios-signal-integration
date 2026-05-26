@@ -17,12 +17,29 @@ import CoreHaptics
 import Network
 import taler_swift
 
-enum BackendState {
+enum BackendState: Equatable {
     case none
     case instantiated
     case initing
     case ready
-    case error
+    case error(EquatableError)
+
+    static func == (lhs: BackendState, rhs: BackendState) -> Bool {
+        switch (lhs, rhs) {
+            case (.none, .none):
+                return true
+            case (.instantiated, .instantiated):
+                return true
+            case (.initing, .initing):
+                return true
+            case (.ready, .ready):
+                return true
+            case (.error(let lhsError), .error(let rhsError)):
+                return lhsError == rhsError
+            default:
+                return false
+        }
+    }
 }
 
 enum UrlCommand: String, Codable {
@@ -443,7 +460,7 @@ class Controller: ObservableObject {
     }
 // MARK: -
     @MainActor
-    func initWalletCore(_ model: WalletModel, setTesting: Bool)
+    func initWalletCore(_ model: WalletModel, setTesting: Bool, delay: TimeInterval)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
@@ -452,17 +469,19 @@ class Controller: ObservableObject {
                 WalletCore.shared.versionInfo = versionInfo
 #if !TALER_WALLET
                 if developerMode {
-                    try? await model.setConfig(setTesting: true)
+                    try await model.setConfig(setTesting: true)
 //                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
-                    try? await model.setConfig(setTesting: false)
+                    try await model.setConfig(setTesting: false)
                 }
 #endif
                 defaultExchanges = await model.getDefaultExchanges()
-                backendState = .ready                       // dismiss the launch animation
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    self.backendState = .ready              // dismiss the launch animation
+                }
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
-                backendState = .error                       // ❗️Yikes app cannot continue
+                backendState = .error(error as! EquatableError)                       // ❗️Yikes app cannot continue
                 throw error
             }
         } else {

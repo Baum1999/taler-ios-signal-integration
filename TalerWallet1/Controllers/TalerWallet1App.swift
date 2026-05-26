@@ -52,10 +52,12 @@ struct TalerWallet1App: App {
                 .task {
 #if DEBUG
                     let testing = true
+                    let delay: TimeInterval = 2.25
 #else
                     let testing = false
+                    let delay: TimeInterval = 0.05      // TODO: also 2.25?
 #endif
-                    try! await controller.initWalletCore(model, setTesting: testing)     // will (and should) crash on failure
+                    try! await controller.initWalletCore(model, setTesting: testing, delay: delay)     // will (and should) crash on failure
                 }
         if #available(iOS 16.4, *) {
             return WindowGroup {
