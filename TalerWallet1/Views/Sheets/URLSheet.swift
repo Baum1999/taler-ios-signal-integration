@@ -14,6 +14,7 @@ struct URLSheet: View {
     let stack: CallStack
     let selectedBalance: Balance?
     @Binding var urlToOpen: URL?
+    let sheetURL: URL?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -25,14 +26,25 @@ struct URLSheet: View {
     @State private var urlCommand: UrlCommand?
     @State private var passedURL: URL?
 
+    init(_ stack: CallStack, selectedBalance: Balance? = nil,
+                                   urlToOpen: Binding<URL?>? = nil,
+                                    sheetURL: URL? = nil) {
+        self.stack = stack
+        self.selectedBalance = selectedBalance
+        self._urlToOpen = urlToOpen ?? Binding.constant(nil)
+        self.sheetURL = sheetURL
+    }
+
 //  don't need  @MainActor  here
     private func passUrlOnce() {
         if urlToOpen != nil {
             passedURL = urlToOpen
-            symLog.log("❗️ passed urlToOpen:  \(urlToOpen?.absoluteString)")
-            urlCommand = controller.openURL(urlToOpen!, stack: stack.push())
-            urlToOpen = nil
-            symLog.log("❗️ erase urlToOpen:  \(urlToOpen?.absoluteString)")
+            symLog.log("❗️ passed urlToOpen:  \(String(describing: urlToOpen?.absoluteString))")
+            urlCommand = controller.urlCommand(urlToOpen!, stack: stack.push())
+            urlToOpen = nil     // make sure we don't get this a second time
+        } else if let sheetURL {
+            passedURL = sheetURL
+            urlCommand = controller.urlCommand(sheetURL, stack: stack.push())
         }
     }
 

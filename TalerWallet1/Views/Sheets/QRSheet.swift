@@ -47,7 +47,7 @@ struct QRSheet: View {
                 if let scannedURL = codeToURL(scannedCode!) {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
-                        URLSheet(stack: stack.push(),
+                        URLSheet(stack.push(),
                        selectedBalance: selectedBalance,
                              urlToOpen: $urlToOpen)         // !!! will set @Binding to nil
                     } else {

@@ -187,7 +187,7 @@ struct MainView: View {
 //            .animation(.default, value: model.error2 == nil)
                 .sheet(isPresented: $showUrlSheet,
                          onDismiss: sheetDismissed) {
-                    let sheet = URLSheet(stack: stack.push(),
+                    let sheet = URLSheet(stack.push(),
                                selectedBalance: selectedBalance,
                                      urlToOpen: $urlToOpen)
                         .id("onOpenURL")

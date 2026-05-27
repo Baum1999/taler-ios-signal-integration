@@ -492,13 +492,13 @@ class Controller: ObservableObject {
 
 // MARK: -
 extension Controller {
-    func openURL(_ url: URL, stack: CallStack) -> UrlCommand {
+    func urlCommand(_ url: URL, stack: CallStack) -> UrlCommand {
         guard let scheme = url.scheme else {return UrlCommand.unknown}
 #if DEBUG
         symLog.log(url)
 #else
         let host = url.host ?? "  <- no command"
-        self.logger.trace("openURL(\(scheme)\(host)")
+        self.logger.trace("urlCommand(\(scheme)\(host)")
 #endif
         var uncrypted = false
         var urlCommand = UrlCommand.unknown
