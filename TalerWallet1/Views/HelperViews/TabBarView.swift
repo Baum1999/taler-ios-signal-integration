@@ -118,7 +118,7 @@ struct ActionItem: View {
         if #available(iOS 26.0, *) {
             vStack
                 .padding(.horizontal, 6)
-                .glassEffect(.regular.interactive())
+                .glassEffect(.clear.interactive())
                 .offset(offset)
         } else {
             vStack
