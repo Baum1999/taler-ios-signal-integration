@@ -159,7 +159,7 @@ struct ContractChoice: Codable {
 }
 
 struct MerchantContractTerms: Codable {
-    let version: Int?
+    let version: Int?                   // v0 doesn't know this
 
     // ContractTermsV0
     let amount: Amount?                 // Total amount payable
@@ -200,7 +200,7 @@ struct MerchantContractTerms: Codable {
     // Map of storing metadata and issue keys of
     // token families referenced in this contract.
     // @since protocol **vSUBSCRIBE**
-    let tokenFamilies: [String: ContractTokenFamily]?
+    let tokenFamilies: [String: ContractTokenFamily]?   // token_family_slug: String
 
     enum CodingKeys: String, CodingKey {
         case version
@@ -325,6 +325,40 @@ fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     var talerPayUri: String
     struct Args: Encodable {
         var talerPayUri: String
+    }
+}
+
+/**
+ * Forced coin selection for deposits/payments.
+ */
+struct ValueContribution: Codable {
+    var value: Amount
+    var contribution: Amount
+}
+struct ForcedCoinSel: Codable {
+    var coins: [ValueContribution]
+}
+
+enum ChoiceSelectionDetail: String, Codable {
+    case ChoiceSelectionDetailPaymentPossible
+    case ChoiceSelectionDetailInsufficientBalance
+}
+
+struct GetChoicesForPaymentResult: Codable {
+    var choices: [ChoiceSelectionDetail]
+
+}
+/// A request to get an exchange's payment contract terms.
+fileprivate struct GetChoicesForPayment: WalletBackendFormattedRequest {
+    typealias Response = GetChoicesForPaymentResult
+    func operation() -> String { "getChoicesForPayment" }
+    func args() -> Args { Args(transactionId: transactionId, forcedCoinSel: forcedCoinSel) }
+
+    var transactionId: String
+    var forcedCoinSel: ForcedCoinSel?
+    struct Args: Encodable {
+        var transactionId: String
+        var forcedCoinSel: ForcedCoinSel?
     }
 }
 
@@ -494,6 +528,13 @@ extension WalletModel {
       async throws -> PreparePayResult {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response
+    }
+
+    nonisolated func getChoicesForPayment(_ transactionId: String, viewHandles: Bool = false)
+      async throws -> GetChoicesForPaymentResult {
+        let request = GetChoicesForPayment(transactionId: transactionId, forcedCoinSel: nil)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
