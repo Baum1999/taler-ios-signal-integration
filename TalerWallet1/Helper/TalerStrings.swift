@@ -59,6 +59,18 @@ extension String {
         return result
     }
 
+    public var toURL: URL? {
+        if let someURL = URL(string: self) {
+            return someURL
+        }
+        if let encodedString = self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            if let encodedURL = URL(string: encodedString) {
+                return encodedURL
+            }
+        }
+        return nil
+    }
+
     func replacingOccurrences(of str1: String, with str2: String) -> String {
         let fragments = self.components(separatedBy: str1)
         if fragments.count > 1 {

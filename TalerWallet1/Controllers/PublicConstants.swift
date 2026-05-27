@@ -186,6 +186,7 @@ public let NOTIFICATIONTIME = "notif.time"
 public let NOTIFICATIONERROR = "notif.error"
 public let NOTIFICATIONANIMATION = "notif.animation"
 public let NOTIFICATIONSHARE = "notif.share"
+public let NOTIFICATIONPASTE = "notif.paste"
 
 /// Notifications sent by wallet-core
 extension Notification.Name {
@@ -228,4 +229,5 @@ extension Notification.Name {
     static let QrScanAction = Notification.Name("qrScanAction")
     static let SettingsAction = Notification.Name("settingsAction")
     static let ShareAction = Notification.Name("shareAction")
+    static let PasteAction = Notification.Name("pasteAction")
 }

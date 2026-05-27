@@ -26,6 +26,7 @@ struct WalletMain: View {
     @Binding var showActionSheet: Bool
     @Binding var showScanner: Bool
 
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var tabBarModel: TabBarModel
@@ -323,6 +324,12 @@ struct WalletMain: View {
                 let textToShare = actionData.textToShare
                 let image = actionData.image
                 ShareSheet.shareSheet(textToShare: textToShare, image: image)
+            }
+        }
+        .onNotification(.PasteAction){ notification in
+            if let notifData = notification.userInfo?[NOTIFICATIONPASTE] as? PasteType {
+                let pastedURL = notifData.pastedURL
+                openURL(pastedURL)
             }
         }
         .alert("You need to pass a legitimization procedure.",

@@ -23,6 +23,8 @@ struct TalerWallet1App: App {
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
     @State private var soundPlayed = false
+    @State private var pastedString: String? = nil
+    @State private var pastedWebURL: String? = nil      // TODO: debounce
 
     private let walletCore = WalletCore.shared
     private let controller = Controller.shared
@@ -35,6 +37,59 @@ struct TalerWallet1App: App {
         let request = BGAppRefreshTaskRequest(identifier: "net.taler.refresh")
         request.earliestBeginDate = .now.addingTimeInterval(4 * 3600)
         try? BGTaskScheduler.shared.submit(request)
+    }
+
+    @MainActor
+    func post(_ pastedURL: URL) {
+        Task {
+            let pasteType = PasteType(pastedURL: pastedURL)
+            let userinfo = [NOTIFICATIONPASTE: pasteType]
+            NotificationCenter.default.post(name: .PasteAction, object: nil, userInfo: userinfo)
+        }
+    }
+
+    func inspectPasteboard() {
+        let pasteboard = UIPasteboard.general
+        // We are only interested in strings
+        if !pasteboard.hasStrings { return }
+//        if !pasteboard.hasURLs { return }
+
+        pasteboard.detectPatterns(for: [UIPasteboard.DetectionPattern.probableWebURL],
+                            inItemSet: nil,
+                    completionHandler: { result in
+            switch result {
+                case .success(let detectedPatterns):
+                    // A pattern detection is completed,
+                    // regardless of whether the pasteboard has patterns we care about.
+                    // So we have to check if the detected patterns contains our patterns.
+
+                    if detectedPatterns.contains([UIPasteboard.DetectionPattern.probableWebURL]) {
+                        // Will match if the pasteboard string has a URL within it
+                        self.pastedWebURL = pasteboard.string
+                        if let string = pasteboard.string {
+                            if self.pastedString != string {
+                                self.pastedString = string
+                                if let pastedURL = string.toURL {
+                                    let scheme = pastedURL.scheme
+                                    if scheme?.lowercased() == "taler" {
+                                        print(string)
+                                        post(pastedURL)
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else {
+                        // We won't be retrieving the value, so we won't get a notification banner
+                        self.pastedWebURL = nil
+                    }
+                case .failure(let error):
+                    // This never gets called
+                    self.pastedWebURL = error.localizedDescription
+            }
+
+        })
     }
 
     var body: some Scene {
@@ -67,6 +122,8 @@ struct TalerWallet1App: App {
                 switch newPhase {
                     case .active:
                         logger.log("❗️.onChange() ==> Active")
+                        inspectPasteboard()
+
                     case .background:
                         logger.log("❗️.onChange() ==> Background)")
 //                      scheduleAppRefresh()
@@ -99,6 +156,10 @@ struct TalerWallet1App: App {
         }
 
     }
+}
+// MARK: -
+struct PasteType: Hashable {
+    let pastedURL: URL
 }
 
 final class ViewState : ObservableObject {
