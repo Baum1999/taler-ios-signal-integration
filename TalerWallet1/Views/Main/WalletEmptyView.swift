@@ -25,19 +25,40 @@ struct ProdSectionView: View {
 #endif
 
     @State private var selectedCurrency: Int = 0
+    @State private var showDropdown = true
+
+    func buttonAction() {
+        withAnimation {
+            showDropdown.toggle()
+        }
+    }
 
     var body: some View {
         let defaultExchanges = controller.defaultExchanges
         let count = defaultExchanges.count
         Section {
+            let chevron = Image(systemName: CHEVRON_UP)     // 􀆇
             if isEmpty {
                 Text("Welcome to Taler Wallet!")
                     .talerFont(.headline)
                 Text("To make your first payment, withdraw digital cash.")
                     .talerFont(.body)
-            } else {
-                Text("Currently you have only demo cash. Withdraw real digital cash:")
-                    .talerFont(.body)
+            } else if !developerMode {
+                Button(action: buttonAction) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("Currently you have only demo cash.")
+                            .talerFont(.body)
+                            .accessibilityAddTraits(.isSelected)
+                        Spacer()
+                        chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
+                            .accessibilityHidden(true)
+                    }
+                }   .buttonStyle(.plain)
+                if (showDropdown) {
+                    Text("Withdraw real digital cash:")
+                        .talerFont(.body)
+                        .padding(.top, -30)
+                }
             }
 #if false
             let qrButton = Image(systemName: QRBUTTON)                      // 􀎻 "qrcode.viewfinder"
@@ -47,7 +68,7 @@ struct ProdSectionView: View {
             Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
                 .talerFont(.body)
 #endif
-
+            if (showDropdown) {
 #if !TALER_WALLET
             if developerMode {
                 if defaultExchanges.count > 1 {
@@ -60,8 +81,6 @@ struct ProdSectionView: View {
 #endif
             let defaultExchange = defaultExchanges[selectedCurrency < count ? selectedCurrency : 0]
             let currency = defaultExchange.currency
-            let currencySpec = defaultExchange.currencySpec
-            let name = currencySpec.name
             let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
             Button(title) {
                 if let talerUri = URL(string: defaultExchange.talerUri) {
@@ -73,6 +92,7 @@ struct ProdSectionView: View {
                                           disabled: disabled,
                                            aligned: .center))
                 .padding(.bottom)
+            } // showDropdown
         } header: {
             if isEmpty {
                 let firstHeader = EMPTYSTRING
