@@ -110,7 +110,7 @@ struct TalerErrorDetail: Codable, Hashable {
 }
 // MARK: -
 /// Communicate with wallet-core
-class WalletModel: ObservableObject {
+final class WalletModel: ObservableObject, Sendable {
     public static let shared = WalletModel()
     let logger = Logger(subsystem: "net.taler.gnu", category: "WalletModel")
 
@@ -294,6 +294,7 @@ fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Will do networking
+    @discardableResult
     nonisolated func setConfig(setTesting: Bool) async throws -> VersionInfo {
         let request = ConfigRequest(setTesting: setTesting)
         let response = try await sendRequest(request)

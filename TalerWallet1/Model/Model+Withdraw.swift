@@ -185,7 +185,6 @@ fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest
 // MARK: -
 struct AcceptManualWithdrawalResult: Decodable {
     var reservePub: String
-    var exchangePaytoUris: [String]
     var withdrawalAccountsList: [ExchangeAccountDetails]
     var transactionId: String
 }

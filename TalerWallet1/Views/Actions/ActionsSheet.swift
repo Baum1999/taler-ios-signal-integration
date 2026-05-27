@@ -71,7 +71,6 @@ struct ScannedURLs: View {
 struct ActionsSheet: View {
     let stack: CallStack
 
-    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
     @AppStorage("demoHints") var demoHints: Bool = true
 

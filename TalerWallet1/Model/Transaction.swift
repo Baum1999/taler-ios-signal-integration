@@ -426,7 +426,6 @@ struct WithdrawalDetails: Decodable {
 
   /// Details for manual withdrawals:
     var reserveClosingDelay: RelativeTime?
-    var exchangePaytoUris: [String]?
 
   /// Details for bank-integrated withdrawals:
     /// Whether the bank has confirmed the withdrawal.
