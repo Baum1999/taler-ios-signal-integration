@@ -11,9 +11,10 @@ struct LaunchAnimationView: View {
     @State private var rotationEnabled = true
     var body: some View {
         ZStack {
-            Color(.systemGray6).ignoresSafeArea()
+            Color(.systemGray3).ignoresSafeArea()
             RotatingTaler(size: (350 < UIScreen.screenWidth) ? 200 : 250,
                       progress: true,
+                          once: true,
                rotationEnabled: $rotationEnabled)
                 .accessibilityLabel(Text("Progress indicator", comment: "a11y"))
         }
@@ -23,29 +24,51 @@ struct LaunchAnimationView: View {
 struct RotatingTaler: View {
     let size: CGFloat
     let progress: Bool
+    let once: Bool
 
     @Binding var rotationEnabled: Bool
     @State private var rotationDirection = false
 
     private let animationTimer = Timer
-        .publish(every: 1.6, on: .current, in: .common)
+        .publish(every: 1.5, on: .current, in: .common)
         .autoconnect()
 
     var body: some View {
-        Image(TALER_LOGO)
+        let image = Image(TALER_LOGO)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
-            .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: 900))
+            .padding(10)
             .accessibilityLabel(progress ? Text("In progress", comment: "a11y")
                                          : Text("Taler Logo", comment: "a11y"))       // decorative logo - with button function
+            .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: once ? 900 : 720))
             .onReceive(animationTimer) { timerValue in
+                print("Timer: \(timerValue), rotationDirection: \(rotationDirection)")
                 if rotationEnabled {
-                    withAnimation(.easeInOut(duration: 1.9)) {
+                    if !once {
+                        withAnimation(.easeInOut(duration: 1.5)) {
+                            rotationDirection.toggle()
+                        }
+                    }
+                }
+            }
+            .task {
+                if once {
+                    withAnimation(.easeInOut(duration: 2.0)) {
                         rotationDirection.toggle()
                     }
                 }
             }
+        if #available(iOS 26.0, *) {
+            image
+                .glassEffect(.clear)
+        } else {
+            image
+                .background {
+                    Capsule()
+                        .fill(Color(.systemGray6).opacity(0.3))
+                }
+        }
     }
 }
 // MARK: -

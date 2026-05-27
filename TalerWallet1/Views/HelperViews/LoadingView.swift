@@ -22,7 +22,9 @@ struct LoadingView: View {
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
-            RotatingTaler(size: 100, progress: true,                            // VoiceOver "In progress"
+            RotatingTaler(size: 100,
+                      progress: true,                 // VoiceOver "In progress"
+                          once: false,
                rotationEnabled: $rotationEnabled)
                 .onTapGesture(count: 1) {
                     rotationEnabled.toggle()

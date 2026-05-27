@@ -213,7 +213,7 @@ struct WalletEmptyView: View {
         ZStack {
             list
             if withDrawStarted {
-                RotatingTaler(size: 150, progress: true, rotationEnabled: $withDrawStarted)
+                RotatingTaler(size: 150, progress: true, once: false, rotationEnabled: $withDrawStarted)
             }
         }
         .onAppear() {

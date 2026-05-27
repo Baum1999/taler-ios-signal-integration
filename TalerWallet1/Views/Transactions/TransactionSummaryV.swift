@@ -472,7 +472,7 @@ struct TransactionSummaryV: View {
                         let title = EMPTYSTRING
                         Text(title)
                             .talerFont(.body)
-                        RotatingTaler(size: 100, progress: true, rotationEnabled: $rotationEnabled)
+                        RotatingTaler(size: 100, progress: true, once: false, rotationEnabled: $rotationEnabled)
                             .frame(maxWidth: .infinity, alignment: .center)
                             // has its own accessibilityLabel
                     case .withdrawal(let withdrawalTransaction): Group {
