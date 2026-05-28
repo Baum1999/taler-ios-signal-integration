@@ -1,3 +1,8 @@
+Version 1.5.6 (wallet-core 1.5.13.1)
+
+- fix Paivana
+
+
 Version 1.5.5 (wallet-core 1.5.13)
 
 • Swiss localization changes
