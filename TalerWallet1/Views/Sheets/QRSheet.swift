@@ -20,20 +20,7 @@ struct QRSheet: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var scannedCode: String?
-    @State private var urlToOpen: URL? = nil
     @State private var isTorchOn: Bool = false
-
-    func codeToURL(_ code: String) -> URL? {
-        if let scannedURL = URL(string: code) {
-            return scannedURL
-        }
-        if let encodedScan = code.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            if let encodedURL = URL(string: encodedScan) {
-                return encodedURL
-            }
-        }
-        return nil
-    }
 
     var body: some View {
 #if PRINT_CHANGES
@@ -43,15 +30,14 @@ struct QRSheet: View {
         Group {
             let errorAnnouncement = String(localized: "Error while scanning QR code", comment: "a11y")
             if scannedCode != nil {
-                // we need to evaluate the scanned code again, because urlToOpen will be set to nil
-                if let scannedURL = codeToURL(scannedCode!) {
+                if let scannedURL = scannedCode!.toURL {
                     let scheme = scannedURL.scheme
                     if scheme?.lowercased() == "taler" {
                         URLSheet(stack.push(),
                        selectedBalance: selectedBalance,
-                             urlToOpen: $urlToOpen)         // !!! will set @Binding to nil
+                              sheetURL: scannedURL)
                     } else {
-//                        let _ = print(scannedURL)       // TODO: error logging
+                        // TODO: error logging?
                         ErrorView(stack.push(),
                                   title: String(localized: "Scanned QR is no talerURI"),
                                 message: scannedURL.absoluteString,
@@ -80,7 +66,6 @@ struct QRSheet: View {
                         case .success(let result):
                             symLog.log("Found code: \(result.string)")
                             scannedSomething = true
-                            urlToOpen = codeToURL(result.string)
                             scannedCode = result.string
                             closingAnnouncement = String(localized: "QR code recognized", comment: "a11y")
                         case .failure(let error):
@@ -122,6 +107,7 @@ struct QRSheet: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbarBackground(.gray)
                         .toolbarBackground(.visible)
+//                        .toolbarBackground(.hidden)
                 } else {
                     codeScannerView
                         .onTapGesture { isTorchOn.toggle() }
@@ -130,10 +116,3 @@ struct QRSheet: View {
         }
     }
 }
-// MARK: -
-//struct PaySheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//            // needs BackendManager
-//        URLSheet(urlToOpen: URL(string: "ftp://this.URL.is.invalid")!)
-//    }
-//}
