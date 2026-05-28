@@ -51,6 +51,13 @@ struct SettingsView: View {
         }
     }
 
+    private var openSettingsButton: some View {
+        Button("Open Settings") {
+            mayNotUsePush = false
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
+    }
+
     func checkPushNotifications(_ shouldUsePush: Bool) {
 #if TALER_NIGHTLY
         // 1. Request authorisation for remote (push) notifications.
@@ -228,7 +235,8 @@ struct SettingsView: View {
             }
             .alert("Push Notifications are disabled",
                    isPresented: $mayNotUsePush,
-                   actions: { dismissAlertButton },
+                   actions: { openSettingsButton
+                              dismissAlertButton },
                    message: { Text("Please go to Settings > \(localizedAppName) > Notifications and turn them on.") }
             )
     } // body
