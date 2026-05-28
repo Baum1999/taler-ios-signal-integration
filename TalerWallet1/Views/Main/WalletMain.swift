@@ -170,7 +170,7 @@ struct WalletMain: View {
         }
         /// NavigationViews for Balances & Settings
         let balancesStack = NavigationView {
-            Group {
+            ZStack(alignment: .bottom) {
                 if controller.balances.isEmpty {
                     WalletEmptyHeader(stack: stack.push())
                 } else {
@@ -178,14 +178,37 @@ struct WalletMain: View {
 //                        CarouselView(stack: stack.push(balancesTitle),
 //                           selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
 //                        reloadTransactions: $shouldReloadTransactions)
-//                    } else {
-                        // Fallback on earlier versions
-                        BalancesListView(stack: stack.push(balancesTitle),
-                                         title: balancesTitle,
-                               selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
-                            reloadTransactions: $shouldReloadTransactions)
-//                    }
+//                    } else {   // Fallback on earlier versions
+                    BalancesListView(stack: stack.push(balancesTitle),
+                                     title: balancesTitle,
+                           selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
+                        reloadTransactions: $shouldReloadTransactions)
+//                    } iOS 15 + 16
+                }
+                // Action & Settings buttons
+                if #available(iOS 26.0, *) {
+                    let actionsButton = ActionItem(tab: TalerTab.actions,
+                                                 onTap: onActionTab,
+                                                onDrag: onActionDrag)
+                        .accessibilitySortPriority(2) // Reads second
+                        .matchedTransitionSource(id: "unique_transition_id", in: wrapper.namespace)
+//                let settingsButton = Button {
+//                    NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
+//                } label: {
+//                    Label(settingsTitle, systemImage: TalerTab.settings.sysImg)
+//                        .labelStyle(.iconOnly)
+//                }
+//                    .padding()
+//                    .buttonStyle(.glass)
+//                    .accessibilitySortPriority(0)
+
+                    HStack {
+//                    settingsButton
+                        Spacer(minLength: 8)
+                        actionsButton           // floating bottom right
                     }
+                    .padding(.horizontal)
+                } // iOS 26
             }.background(balanceActions)
              .accessibilitySortPriority(1) // Reads third
 
@@ -193,7 +216,7 @@ struct WalletMain: View {
             .accessibilitySortPriority(3) // Reads first
 
         if #available(iOS 26.0, *) {
-            // no TabView, just a NavigationView. BalancesListView => ActionsOverlay
+            // no TabView, just a single NavigationView. BalancesListView with overlaid Actions button
             return balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
         } else {
             // TabView with 3 tabs, middle is Actions
