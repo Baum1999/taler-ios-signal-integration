@@ -135,7 +135,7 @@ struct QRButton : View  {
                isPresented: $showCameraAlert,
                    actions: {   openSettingsButton
                                 dismissAlertButton },
-                   message: {   Text("Please allow camera access in settings.") }) // Scanning QR-codes
+                   message: {   Text("Please allow camera access in Settings.") }) // Scanning QR-codes
     }
 }
 
