@@ -113,7 +113,7 @@ struct SettingsView: View {
         let list = List {
                 let aboutStr = String(localized: "About \(localizedAppName)")
                 NavigationLink {        // whole row like in a tableView
-                    AboutView(stack: stack.push(), navTitle: aboutStr)
+                    AboutView(stack: stack.push(), localizedAppName: localizedAppName, navTitle: aboutStr)
                 } label: {
                     SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
                 }

@@ -12,6 +12,7 @@ import SymLog
 struct AboutView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
+    let localizedAppName: String
     let navTitle: String
 
     @EnvironmentObject private var controller: Controller
@@ -55,13 +56,23 @@ struct AboutView: View {
                     rotatingTaler
                 }
                 SettingsItem(name: String(localized: "Visit the taler.net website"),
-                              id1: "web",
+                              id1: "webTaler",
                         imageName: LINK,
-                      description: String(localized: "More info about GNU Taler in general...")) { }
+                      description: String(localized: "More info about GNU Taler in general")) { }
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {
                         UIApplication.shared.open(URL(string:TALER_NET)!, options: [:])
+                    }
+
+                SettingsItem(name: String(localized: "Open \(localizedAppName) settings"),
+                              id1: "webSettings",
+                        imageName: SETTINGS,
+                      description: String(localized: "System settings -> Apps")) { }
+                    .accessibilityAddTraits(.isLink)
+                    .accessibilityRemoveTraits(.isStaticText)
+                    .onTapGesture() {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
                     }
 
                 SettingsItem(name: String(localized: "App Version"), id1: "app") {
@@ -83,6 +94,7 @@ struct AboutView: View {
                         }
                     }
                 }.onTapGesture(count: 1) { showGitHash.toggle() }
+                
                 SettingsToggle(name: String(localized: "Onboarding"),
                                value: $onboarding.onChange({ shouldOnboard in
                                     if shouldOnboard {
@@ -147,7 +159,7 @@ extension Bundle {
 #if DEBUG
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
-        AboutView(stack: CallStack("Preview"), navTitle: "About")
+        AboutView(stack: CallStack("Preview"), localizedAppName: "GNU Taler", navTitle: "About")
     }
 }
 #endif
