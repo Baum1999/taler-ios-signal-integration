@@ -36,6 +36,7 @@ struct MainView: View {
     @StateObject private var tabBarModel = TabBarModel()
     @State private var selectedBalance: Balance? = nil      // for sheets, gets set in TransactionsListView
     @State private var urlToOpen: URL? = nil
+    @State private var sheetType: SheetType?
     @State private var showUrlSheet = false
     @State private var showActionSheet = false              // Action button tapped
     @State private var showScanner = false
@@ -47,13 +48,14 @@ struct MainView: View {
     @Namespace private var namespace
 
     func sheetDismissed() -> Void {
-        logger.info("sheet dismiss")
+        logger.info("sheetDismissed")
         symLog.log("sheet dismiss: \(urlToOpen)")
         urlToOpen = nil
         ViewState.shared.popToRootView(nil)
     }
 
     private func dismissSheet() {
+        logger.info("dismissSheet")
         showScanner = false
         showActionSheet = false
         scannedCode = false
@@ -63,6 +65,7 @@ struct MainView: View {
     }
 
     private func dismissActionSheet() {
+        logger.info("dismissActionSheet")
         showActionSheet = false
         controller.userAction += 1                      // make Action button jump
     }
@@ -71,6 +74,60 @@ struct MainView: View {
         Task.detached {
             await model.hintApplicationResumedT()
         }
+    }
+
+    @ViewBuilder func qrSheet() -> some View {
+        let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
+                            selectedBalance: selectedBalance,
+                           scannedSomething: $scannedCode))
+//        let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
+        if #available(iOS 16.4, *) {
+            let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
+                                                    : minimalistic ? HALFDETENT : FULLDETENT)
+            let sheet = Sheet(stack: stack.push(), sheetView: qrSheet)
+                .presentationDetents([detent])
+                .transition(.opacity)
+
+            if #available(iOS 18.0, *) {
+                sheet
+                    .navigationTransition(
+                        .zoom(sourceID: "unique_transition_id", in: namespace)
+                    )
+            } else {
+                sheet
+            }   // iOS 16 + 17
+        } else {
+            Sheet(stack: stack.push(), sheetView: qrSheet)
+                .transition(.opacity)
+        } // iOS 15
+    }
+
+    @ViewBuilder func actionSheet() -> some View {
+        if #available(iOS 16.4, *) {
+//            let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
+            if #available(iOS 18.0, *) {
+                DualHeightSheet(stack: stack.push(),
+                      selectedBalance: selectedBalance,
+                       dismissScanner: dismissSheet)        // needs to explicitely dismiss 2nd sheet
+//                .navigationTransition(
+//                    .zoom(sourceID: "unique_transition_id", in: namespace)
+//                )
+            } else {
+                DualHeightSheet(stack: stack.push(),
+                      selectedBalance: selectedBalance,
+                       dismissScanner: {})//dismissSheet)
+            } // iOS 16 + 17
+        } else {
+            Group {
+                Spacer(minLength: 1)    // leave space for VoiceOver dismiss
+                ScrollView {
+                    ActionsSheet(stack: stack.push())
+                        .innerHeight($innerHeight)
+                }
+                .frame(maxHeight: innerHeight)
+                .ignoresSafeArea()
+            }.background(WalletColors().gray2)
+        } // iOS 15
     }
 
     var body: some View {
@@ -185,6 +242,21 @@ struct MainView: View {
             mainGroup
                 .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
+                .sheet(item: $sheetType,
+                  onDismiss: sheetDismissed) { sheet in
+                    switch sheet {
+                        case .action:
+                            actionSheet()
+                        case .scanner:
+                            qrSheet()
+                        case .url(let url):
+                            let uSheet = URLSheet(stack.push(),
+                                        selectedBalance: selectedBalance,
+                                               sheetURL: url)
+                                .id("onOpenURL")
+                            Sheet(stack: stack.push(), sheetView: AnyView(uSheet))
+                    }
+                }
                 .sheet(isPresented: $showUrlSheet,
                          onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack.push(),
@@ -194,49 +266,13 @@ struct MainView: View {
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
                 }   // UrlSheet
                 .sheet(isPresented: $showScanner,
-                         onDismiss: dismissSheet
-                ) {
-                    let qrSheet = AnyView(QRSheet(stack: stack.push(".sheet"),
-                                        selectedBalance: selectedBalance,
-                                       scannedSomething: $scannedCode))
-//                    let _ = logger.trace("❗️showScanner: \(SCANDETENT)❗️")
-                    if #available(iOS 16.4, *) {
-                        let detent: PresentationDetent = .fraction(scannedCode ? FULLDETENT
-                                                                : minimalistic ? HALFDETENT : FULLDETENT)
-                        Sheet(stack: stack.push(), sheetView: qrSheet)
-                            .presentationDetents([detent])
-                            .transition(.opacity)
-                    } else {
-                        Sheet(stack: stack.push(), sheetView: qrSheet)
-                            .transition(.opacity)
-                    } // iOS 15
+                         onDismiss: dismissSheet) {
+                    qrSheet()
                 }   // QR Scanner
                 .sheet(isPresented: $showActionSheet,
                          onDismiss: dismissActionSheet
                 ) {
-                    if #available(iOS 16.4, *) {
-//                        let _ = logger.trace("❗️actionsSheet: small❗️ (showScanner == false)")
-                        if #available(iOS 18.0, *) {
-                            DualHeightSheet(stack: stack.push(),
-                                  selectedBalance: selectedBalance,
-                                   dismissScanner: dismissSheet)        // needs to explicitely dismiss 2nd sheet
-                        } else {
-                            DualHeightSheet(stack: stack.push(),
-                                  selectedBalance: selectedBalance,
-                                   dismissScanner: {})//dismissSheet)
-                        } // iOS 16 + 17
-                    } else {
-                        Group {
-                            Spacer(minLength: 1)
-                            ScrollView {
-                                ActionsSheet(stack: stack.push())
-                                    .innerHeight($innerHeight)
-                            }
-                            .frame(maxHeight: innerHeight)
-                            .ignoresSafeArea()
-                        }
-                        .background(WalletColors().gray2)
-                    } // iOS 15
+                    actionSheet()
                 }   // ActionSheet
         }   // VStack { networkUnavailable + mainGroup }
 #if OIM
@@ -254,7 +290,9 @@ struct MainView: View {
 #endif
         .onNotification(.QrScanAction) {
             let delay = if #available(iOS 16.4, *) { 0.3 } else { 0.01 }
+            logger.info("QrScanAction notification: showScanner = true")
             withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
+                showActionSheet = false
                 showScanner = true      // switch to qrSheet => camera on
             }
         }

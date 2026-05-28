@@ -9,6 +9,36 @@ import SwiftUI
 import SymLog
 import os.log
 
+enum SheetType: Equatable, Identifiable, Hashable {
+    case action
+    case scanner
+    case url(URL)
+
+    var id: String {
+        switch self {
+            case .action:
+                return "action"
+            case .scanner:
+                return "scanner"
+            case .url(let url):
+                return url.absoluteString
+        }
+    }
+
+    static func == (lhs: SheetType, rhs: SheetType) -> Bool {
+        switch (lhs, rhs) {
+            case (.action, .action):
+                return true
+            case (.scanner, .scanner):
+                return true
+            case (.url(let lhsUrl), .url(let rhsUrl)):
+                return lhsUrl == rhsUrl
+            default:
+                return false
+        }
+    }
+}
+
 struct Sheet: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
