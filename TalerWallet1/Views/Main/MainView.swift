@@ -44,7 +44,7 @@ struct MainView: View {
     @State private var innerHeight: CGFloat = .zero
     @State private var networkUnavailable = false
     @State private var backgrounded: Date?                  // time we go into background
-    @Namespace private var iOS26namespace
+    @Namespace private var namespace
 
     func sheetDismissed() -> Void {
         logger.info("sheet dismiss")
@@ -89,7 +89,7 @@ struct MainView: View {
                    showScanner: $showScanner)
 #endif
             contentView
-                .environmentObject(NamespaceWrapper(iOS26namespace))
+                .environmentObject(NamespaceWrapper(namespace))
                 .onAppear() {
 #if DEBUG
                     if playSoundsI != 0  && playSoundsB && !soundPlayed {
