@@ -85,227 +85,246 @@ struct TransactionRowView: View {
                                : result
         }
     }
-
-    var body: some View {
-#if DEBUG
-//        let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#if TALER_NIGHTLY
+    var red: Color { developerMode ? Color.red : Color.clear }
+    var green: Color { developerMode ? Color.green : Color.clear }
+    var blue: Color { developerMode ? Color.blue : Color.clear }
+    var orange: Color { developerMode ? Color.orange : Color.clear }
+    var purple: Color { developerMode ? Color.purple : Color.clear }
 #endif
-        let pending = transaction.isPending || transaction.common.isFinalizing
-        let needsKYC = transaction.isPendingKYC || transaction.isPendingKYCauth
-        let shouldConfirm = transaction.shouldConfirm
-        let done = transaction.isDone
-        let isDialog = transaction.isDialog
-        let doneOrPending = done || pending
-        let donePendingDialog = doneOrPending || isDialog
-        let increasedContrast = colorSchemeContrast == .increased
-        let details = transaction.detailsToShow()
-        let keys = details.keys
-        let common = transaction.common
-        let isZero = common.amountEffective.isZero
-        let incoming = common.isIncoming
-        let textColor = doneOrPending ? .primary
-               : colorScheme == .dark ? .secondary
-                  : increasedContrast ? Color(.darkGray)
-                                      : .secondary  // Color(.tertiaryLabel)
-        let refreshZero = common.type.isRefresh && isZero
-        let foreColor = refreshZero ? textColor
-                          : pending ? WalletColors().pendingColor(incoming)
-                             : done ? WalletColors().transactionColor(incoming)
-                                    : WalletColors().uncompletedColor
-        let for2Color = refreshZero ? textColor
-                : (pending || done) ? (incoming ? .accentColor : textColor)
-                                    : WalletColors().uncompletedColor
 
-        let iconBadge = TransactionIconBadge(type: common.type, foreColor: foreColor,
-                                             done: done, incoming: incoming,
-                                    shouldConfirm: shouldConfirm && pending,
-                                         needsKYC: needsKYC && pending)
-        let topA11y = topString(forA11y: true)!
-        let topString = topString()
-        let strikeColor = donePendingDialog ? nil : WalletColors().negative
-        let a11yLabel = donePendingDialog ? topA11y
-                                          : topA11y +  String(localized: ", canceled", comment: "a11y")
+    var common: TransactionCommon { transaction.common }
+    var done: Bool { transaction.isDone }
+    var pending: Bool { transaction.isPending || common.isFinalizing }
+    var needsKYC: Bool { transaction.isPendingKYC || transaction.isPendingKYCauth }
+    var doneOrPending: Bool { done || pending }
+    var donePendingDialog: Bool { doneOrPending || transaction.isDialog }
+    var shouldConfirm: Bool { transaction.shouldConfirm }
+    var isZero: Bool { common.amountEffective.isZero }
+    var incoming: Bool { common.isIncoming }
+    var refreshZero: Bool { common.type.isRefresh && isZero }
+
+    func textColor() -> Color {
+        let isDark = colorScheme == .dark
+        let increasedContrast = colorSchemeContrast == .increased
+        return doneOrPending ? .primary
+                    : isDark ? .secondary
+         : increasedContrast ? Color(.darkGray)
+                             : .secondary  // Color(.tertiaryLabel)
+        }
+    var strikeColor: Color? { donePendingDialog ? nil : WalletColors().negative }
+    func foreColor(_ textColor: Color) -> Color {
+        refreshZero ? textColor
+          : pending ? WalletColors().pendingColor(incoming)
+             : done ? WalletColors().transactionColor(incoming)
+                    : WalletColors().uncompletedColor
+    }
+    func for2Color(_ textColor: Color) -> Color {
+        return refreshZero ? textColor
+           : doneOrPending ? (incoming ? .accentColor : textColor)
+                           : WalletColors().uncompletedColor
+    }
+    func iconBadge(_ foreColor: Color) -> TransactionIconBadge {
+        TransactionIconBadge(type: common.type,
+                        foreColor: foreColor,
+                             done: done,
+                         incoming: incoming,
+                    shouldConfirm: shouldConfirm && pending,
+                         needsKYC: needsKYC && pending)
+    }
+    var topA11y: String { topString(forA11y: true)! }
+    var a11yLabel: String { donePendingDialog ? topA11y
+                                              : topA11y +  String(localized: ", canceled", comment: "a11y")
+        }
+    var amountV: AmountV { AmountV(scope, transaction.amount(),
+                              isNegative: isZero ? nil : !incoming,
+                           strikethrough: !donePendingDialog) }
 
 #if TALER_NIGHTLY
-        let debug = developerMode
-        let red = debug ? Color.red : Color.clear
-        let green = debug ? Color.green : Color.clear
-        let blue = debug ? Color.blue : Color.clear
-        let orange = debug ? Color.orange : Color.clear
-        let purple = debug ? Color.purple : Color.clear
-#endif
-
-        let amountV = AmountV(scope, transaction.amount(),
-                   isNegative: isZero ? nil : !incoming,
-                strikethrough: !donePendingDialog)
-            .foregroundColor(for2Color)
-
-        let layout0 = HStack {                                      // amount right centered, top & bottom left
-                VStack(alignment: .leading, spacing: 2) {
-                    if let topString {
-                        TruncationDetectingText(topString,
-                                       maxLines: 1,
-                                         layout: 0,
-                                    strikeColor: strikeColor)
+    @ViewBuilder func layout0(_ topString: String?, _ textColor: Color, _ for2Color: Color) -> some View {
+        // orange amount right centered, top & bottom left
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                if let topString {
+                    TruncationDetectingText(topString,
+                                   maxLines: 1,
+                                     layout: 0,
+                                strikeColor: strikeColor)
+                        .accessibilityLabel(a11yLabel)
                         .foregroundColor(textColor)
                         .talerFont(.headline)
                         .padding(.bottom, -2.0)
-#if TALER_NIGHTLY
-                        .border(red)
-#endif
-                        .accessibilityLabel(a11yLabel)
-                    }
-                    TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
-#if TALER_NIGHTLY
-                        .border(green)
-#endif
+                        .overlay { Color.clear.border(red) }
                 }
-//                .border(orange)
-                Spacer(minLength: 4)
-                amountV
-#if TALER_NIGHTLY
+                TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 0, maxLines: 1)
+                    .overlay { Color.clear.border(green) }
+            }
+//           .border(orange)
+            Spacer(minLength: 4)
+            amountV
+                .foregroundColor(for2Color)
                 .background(orange.opacity(0.2))
-#endif
         }
+    } // layout0
+#endif
 
-        let layout1 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, bottom & amount below
+#if TALER_NIGHTLY
+    @ViewBuilder func layout1(_ topString: String?, _ textColor: Color, _ for2Color: Color) -> some View {
+        // top full-width, bottom & green amount below
+        VStack(alignment: .leading, spacing: 2) {
             if let topString {
                 TruncationDetectingText(topString,
                                maxLines: 10,
                                  layout: 1,
                             strikeColor: strikeColor)
-                .foregroundColor(textColor)
-                .talerFont(.headline)
-                .padding(.bottom, -2.0)
-#if TALER_NIGHTLY
-                .border(red)
-#endif
-                .accessibilityLabel(a11yLabel)
+                    .accessibilityLabel(a11yLabel)
+                    .foregroundColor(textColor)
+                    .talerFont(.headline)
+                    .padding(.bottom, -2.0)
+                    .overlay { Color.clear.border(red) }
             }
             // spacing + Spacer will result in twice the spacing
 //            HStack(spacing: 6) {        // will thrash if set to anything smaller than 5
             HStack(spacing: 0) {        // will thrash if set to anything smaller than 5
                                         // onChange(of: CGSize) action tried to update multiple times per frame.
                 TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 1, maxLines: 1)
-#if TALER_NIGHTLY
-                    .border(green)
-#endif
+                    .overlay { Color.clear.border(green) }
                 Spacer(minLength: 4)    // will thrash if set to 2 or more
                 amountV
-#if TALER_NIGHTLY
+                    .foregroundColor(for2Color)
                     .background(green.opacity(0.2))
-#endif
             }
         }
-
-        let layout2 = VStack(alignment: .leading, spacing: 0) {
-            let timeline = TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
-#if TALER_NIGHTLY
-                .border(green)
+    } // layout1
 #endif
-            if let topString {   // top & amount, bottom below
+
+#if TALER_NIGHTLY
+    @ViewBuilder func layout2(_ topString: String?, _ textColor: Color, _ for2Color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            let timeline = TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 2, maxLines: 10)
+                .overlay { Color.clear.border(green) }
+            if let topString {
+                // top & red amount, bottom below
                 HStack {
                     TruncationDetectingText(topString,
                                    maxLines: 1,
                                      layout: 2,
                                 strikeColor: strikeColor)
-                    .foregroundColor(textColor)
-                    .talerFont(.headline)
-                    .padding(.bottom, -2.0)
-                    .accessibilityLabel(a11yLabel)
-#if TALER_NIGHTLY
-//                    .border(red)
-#endif
+                        .accessibilityLabel(a11yLabel)
+                        .foregroundColor(textColor)
+                        .talerFont(.headline)
+                        .padding(.bottom, -2.0)
+//                      .overlay { Color.clear.border(red) }
                     Spacer(minLength: 6)
                     amountV
-#if TALER_NIGHTLY
+                        .foregroundColor(for2Color)
                         .background(red.opacity(0.2))
-#endif
                 }
                 timeline
-            } else {        // no top, bottom & amount
+            } else {        // no top, bottom & purple amount
                 HStack {
                     timeline
                     Spacer(minLength: 6)
                     amountV
-#if TALER_NIGHTLY
+                        .foregroundColor(for2Color)
                         .background(purple.opacity(0.2))
-#endif
                 }
             }
         }
+    } // layout2
+#endif
 
-        let layout3 = VStack(alignment: .leading, spacing: 2) {                 // top full-width, amount trailing, bottom full-width
+    @ViewBuilder func layout3(_ topString: String?, _ textColor: Color, _ for2Color: Color) -> some View {
+        // top full-width, blue amount trailing, bottom full-width
+        VStack(alignment: .leading, spacing: 2) {
             if let topString {
                 TruncationDetectingText(topString,
                                maxLines: 10,
                                  layout: 3,
                             strikeColor: strikeColor)
-                .foregroundColor(textColor)
-  //            .strikethrough(!donePendingDialog, color: WalletColors().negative)
-                .talerFont(.headline)
-  //            .fontWeight(.medium)      iOS 16 only
-                .padding(.bottom, -2.0)
+                    .accessibilityLabel(a11yLabel)
+                    .foregroundColor(textColor)
+//                  .strikethrough(!donePendingDialog, color: WalletColors().negative)
+                    .talerFont(.headline)
+//                  .fontWeight(.medium)      iOS 16 only
+                    .padding(.bottom, -2.0)
 #if TALER_NIGHTLY
-                .border(red)
+                    .overlay { Color.clear.border(red) }
 #endif
-                .accessibilityLabel(a11yLabel)
-
             }
+//          HStack(spacing: -4) {
             HStack {
-//            HStack(spacing: -4) {
                 Spacer(minLength: 0)
                 amountV
+                    .foregroundColor(for2Color)
 #if TALER_NIGHTLY
                     .background(blue.opacity(0.2))
 #endif
             }
             TransactionTimeline(timestamp: common.timestamp, textColor: textColor, layout: 3, maxLines: 10)
 #if TALER_NIGHTLY
-                .border(green)
+                .overlay { Color.clear.border(green) }
 #endif
         }
+    } // layout3
 
+#if TALER_NIGHTLY
+    @ViewBuilder func layout(_ topString: String?) -> some View {
+        let textColor = textColor()
+        let for2Color = for2Color(textColor)
+        ZStack {
+            layout0(topString, textColor, for2Color)
+                .layoutPriority(isLayoutSelected(0) ? 2 : 1)
+                .opacity(isLayoutSelected(0) ? 1 : 0)
+            layout1(topString, textColor, for2Color)
+                .layoutPriority(isLayoutSelected(1) ? 2 : 1)
+                .opacity(isLayoutSelected(1) ? 1 : 0)
+            layout2(topString, textColor, for2Color)
+                .layoutPriority(isLayoutSelected(2) ? 2 : 1)
+                .opacity(isLayoutSelected(2) ? 1 : 0)
+            layout3(topString, textColor, for2Color)
+                .layoutPriority(isLayoutSelected(3) ? 2 : 1)
+                .opacity(isLayoutSelected(3) ? 1 : 0)
+        }
+        .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
+//          logger?.log("LayoutTruncationStatus0")
+            DispatchQueue.main.async {
+                self.layoutStati0 = stati
+            }
+        }
+        .onPreferenceChange(LayoutTruncationStatus1.self) { stati in    // Timeline
+//          logger?.log("LayoutTruncationStatus1")
+            DispatchQueue.main.async {
+                self.layoutStati1 = stati
+            }
+        }
+    }
+#endif
+
+
+    var body: some View {
+#if DEBUG
+//        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+//        let details = transaction.detailsToShow()
+//        let keys = details.keys
+        let topString = topString()
+        let textColor = textColor()
+        let foreColor = foreColor(textColor)
+        let iconBadge = iconBadge(foreColor)
         HStack {
             iconBadge.talerFont(.title2)
 #if TALER_NIGHTLY
-                .border(blue)
-#endif
-#if TALER_NIGHTLY
-//            let layout = ZStack {
-            if debug {
-              ZStack {
-                layout0
-                    .layoutPriority(isLayoutSelected(0) ? 2 : 1)
-                    .opacity(isLayoutSelected(0) ? 1 : 0)
-                layout1
-                    .layoutPriority(isLayoutSelected(1) ? 2 : 1)
-                    .opacity(isLayoutSelected(1) ? 1 : 0)
-                layout2
-                    .layoutPriority(isLayoutSelected(2) ? 2 : 1)
-                    .opacity(isLayoutSelected(2) ? 1 : 0)
-                layout3
-                    .layoutPriority(isLayoutSelected(3) ? 2 : 1)
-                    .opacity(isLayoutSelected(3) ? 1 : 0)
-              }
-                .onPreferenceChange(LayoutTruncationStatus0.self) { stati in    // top string
-//                    logger?.log("LayoutTruncationStatus0")
-                    DispatchQueue.main.async {
-                        self.layoutStati0 = stati
-                    }
-                }
-                .onPreferenceChange(LayoutTruncationStatus1.self) { stati in    // Timeline
-//                    logger?.log("LayoutTruncationStatus1")
-                    DispatchQueue.main.async {
-                        self.layoutStati1 = stati
-                    }
-                }
+            if #available(iOS 18.0, *) {
+                layout(topString)
             } else {
-                layout3
+                let for2Color = for2Color(textColor)
+                layout3(topString, textColor, for2Color)
             }
 #else   // Stop using dynamic layouts for Taler Wallet and GNU Taler because of flickering
-            layout3
+            let for2Color = for2Color(textColor)
+            layout3(topString, textColor, for2Color)
 #endif
         }
             .accessibilityElement(children: .combine)
