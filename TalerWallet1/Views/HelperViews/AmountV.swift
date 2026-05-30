@@ -119,8 +119,8 @@ extension AmountV {
         self.xLarge = false
         self.a11yDecSep = nil
     }
-    init(stack: CallStack?, scope: ScopeInfo?, amount: Amount, isNegative: Bool?,
-         strikethrough: Bool, large: Bool = false) {
+    init(stack: CallStack?, scope: ScopeInfo?, amount: Amount, isNegative: Bool? = nil,
+         strikethrough: Bool = false, large: Bool = false) {
         self.stack = stack
         self.scope = scope
         self.amount = amount
