@@ -109,6 +109,9 @@ struct AboutView: View {
                         description: String(localized: "Explain the Actions button"))
 #if DEBUG
                 Text(verbatim: "Tapped: \(tapped), dragged: \(dragged)")
+                    .onTapGesture {
+                        tapped = 0
+                    }
 #endif
 
 //                SettingsItem(name: "Supported Exchange Versions", id1: "exchange") {
