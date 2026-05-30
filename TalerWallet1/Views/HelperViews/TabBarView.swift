@@ -85,6 +85,13 @@ struct ActionItem: View {
                 .clipped() // Crop the image to the frame size
 //                .opacity(1 - Double(abs(offset.height / 35)))
                 .gesture(dragGesture())
+                .onLongPressGesture(minimumDuration: 0.4) {
+                    onDrag()
+                }
+                .onTapGesture {
+                    onTap()
+                    tapped += 1
+                }
             if #available(iOS 26.0, *) {
                 image
             } else {
@@ -98,7 +105,7 @@ struct ActionItem: View {
                     .talerFont(.body)
             }
         }   .id(tab)
-        //            .foregroundColor(isActive ? .accentColor : .secondary)
+//            .foregroundColor(isActive ? .accentColor : .secondary)
             .padding(.vertical, 4)
             .accessibilityElement(children: .combine)
             .accessibility(label: Text(tab.title))
@@ -106,13 +113,6 @@ struct ActionItem: View {
             .accessibility(removeTraits: [.isImage])
             .onChange(of: controller.userAction) { newValue in
                 hopAction(newValue)         // make Action button jump to indicate it can be dragged
-            }
-            .onTapGesture {
-                onTap()
-                tapped += 1
-            }
-            .onLongPressGesture(minimumDuration: 0.3) {
-                onDrag()
             }
 
         if #available(iOS 26.0, *) {
@@ -123,7 +123,6 @@ struct ActionItem: View {
         } else {
             vStack
                 .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
         }
     }
 }
