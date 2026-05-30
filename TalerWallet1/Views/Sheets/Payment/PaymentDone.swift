@@ -19,6 +19,7 @@ struct PaymentDone: View {
     @EnvironmentObject private var model: WalletModel
 
     @State private var paymentDone: Bool = false
+    @State private var paymentPending: Bool = false
     @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     @MainActor
@@ -28,6 +29,9 @@ struct PaymentDone: View {
             if confirmPayResult.type == "done" {
                 controller.removeURL(url)
                 paymentDone = true
+            } else {
+                controller.removeURL(url)    // TODO: pending might fail - in which case we might want to try again
+                paymentPending = true
             }
         }
     }
@@ -38,13 +42,14 @@ struct PaymentDone: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         Group {
-            if paymentDone {
-                let navTitle = String(localized: "Paid", comment: "Title, short")
+            if paymentDone || paymentPending {
+//                let navTitle = paymentDone ? String(localized: "Paid", comment: "Title, short")
+//                                           : String(localized: "Pending", comment: "Title, short")
                 TransactionSummaryV(stack: stack.push(),
 //                                    scope: scope,
                             transactionId: transactionId,
                                   talerTX: $talerTX,
-                                 navTitle: navTitle,        // TODO: nil so navTitle2 is used
+                                 navTitle: nil, // navTitle,            // use navTitle2
                                   hasDone: true,
                               abortAction: nil,
                              deleteAction: nil,
@@ -53,7 +58,6 @@ struct PaymentDone: View {
                              resumeAction: nil)
                 .navigationBarBackButtonHidden(true)
                 .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .navigationTitle(navTitle)
                 .safeAreaInset(edge: .bottom) {
                     Button("Done") { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: .bordered))

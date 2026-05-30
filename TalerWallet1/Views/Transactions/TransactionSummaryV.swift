@@ -85,8 +85,12 @@ struct TransactionSummaryV: View {
             if let transition = notification.userInfo?[TRANSACTIONTRANSITION] as? TransactionTransition {
                 if transition.transactionId == talerTX.common.transactionId {       // is the transition for THIS transaction?
                     symLog.log(logStr)
-                    dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
-                    return true
+                    if talerTX.common.type.isPayment {
+                        checkReload(notification, logStr)
+                    } else {
+                        dismissTop(stack.push())        // if this view is in a sheet then dissmiss the sheet
+                        return true
+                    }
                 }
             }
         } else { // no sheet but the details view -> reload
