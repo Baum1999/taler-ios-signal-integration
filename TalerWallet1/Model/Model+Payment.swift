@@ -89,7 +89,7 @@ struct ContractTokenFamily: Codable {
     }
 }
 
-struct ContractInput: Codable {
+struct ContractInput: Codable, Hashable {
     let type: String                            // "token"
 
     // Slug of the token family in the token_families map on the order
@@ -105,7 +105,7 @@ struct ContractInput: Codable {
     }
 }
 
-struct ContractOutput: Codable {
+struct ContractOutput: Codable, Hashable {
     let type: String                            // "token"
 
     // Slug of the token family in the token_families map on the order
@@ -142,7 +142,7 @@ struct ContractOutputTaxReceipt: Codable {
     }
 }
 
-struct ContractChoice: Codable {
+struct ContractChoice: Codable, Hashable {
     let amount: Amount                          // Total amount payable
     let maxFee: Amount                          // Maximum deposit fee covered by the merchant
     let description: String?                    //
@@ -339,15 +339,63 @@ struct ForcedCoinSel: Codable {
     var coins: [ValueContribution]
 }
 
-enum ChoiceSelectionDetail: String, Codable {
-    case ChoiceSelectionDetailPaymentPossible
-    case ChoiceSelectionDetailInsufficientBalance
+enum ChoiceSelectionDetailStatus: String, Codable {
+    case paymentPossible = "payment-possible"
+    case insufficientBalance = "insufficient-balance"
+}
+
+enum TokenAvailabilityHint: String, Codable {
+    case walletTokensAvailableInsufficient = "wallet-tokens-available-insufficient"
+    case merchantUnexpected = "merchant-unexpected"
+    case merchantUntrusted = "merchant-untrusted"
+
+}
+struct TokenFamily: Codable, Hashable, Equatable {
+    var causeHint: TokenAvailabilityHint?
+    var requested: Int
+    var available: Int
+    var unexpected: Int
+    var untrusted: Int
+}
+
+struct TokenDetails: Codable, Hashable, Equatable {
+    var tokensRequested: Int
+    var tokensAvailable: Int
+    var tokensUnexpected: Int
+    var tokensUntrusted: Int
+    var perTokenFamily: [String: TokenFamily]
+}
+
+struct ChoiceSelectionDetail: Codable, Hashable, Sendable {
+    var status: ChoiceSelectionDetailStatus
+    var amountRaw: Amount
+    var amountEffective: Amount?                                // only if possible
+    var tokenDetails: TokenDetails?                             // only if possible
+    var balanceDetails: PaymentInsufficientBalanceDetails?      // only if insufficient
 }
 
 struct GetChoicesForPaymentResult: Codable {
     var choices: [ChoiceSelectionDetail]
+    /**
+     * Index of the choice in @e choices array to present to the user as default.
+     * Won´t be set if no default selection is configured or no choice is payable,
+     * otherwise, it will always be 0 for v0 orders.
+     */
+    var defaultChoiceIndex: Int?
+    /**
+     * Whether the choice referenced by @e automaticExecutableIndex
+     * should be confirmed automatically without user interaction.
+     *
+     * If true, the wallet should call `confirmPay' immediately afterwards
+     * If false, the user should be first prompted to select and confirm a choice.
+     * Undefined when no choices are payable.
+     */
+    var automaticExecution: Bool?
+    var automaticExecutableIndex: Int?
 
+    var contractTerms: MerchantContractTerms
 }
+
 /// A request to get an exchange's payment contract terms.
 fileprivate struct GetChoicesForPayment: WalletBackendFormattedRequest {
     typealias Response = GetChoicesForPaymentResult
