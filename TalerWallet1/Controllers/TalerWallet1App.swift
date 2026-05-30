@@ -22,7 +22,6 @@ struct TalerWallet1App: App {
     @Environment(\.scenePhase) private var phase
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
-    @State private var soundPlayed = false
     @State private var pastedString: String? = nil
     @State private var pastedWebURL: String? = nil      // TODO: debounce
 
@@ -93,7 +92,7 @@ struct TalerWallet1App: App {
     }
 
     var body: some Scene {
-        let mainView = MainView(logger: logger, stack: CallStack("App"), soundPlayed: $soundPlayed)
+        let mainView = MainView(logger: logger, stack: CallStack("App"))
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(viewState2)      // popToRoot

@@ -23,8 +23,7 @@ struct MoreSettingsView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("useHaptics") var useHaptics: Bool = true
-    @AppStorage("playSoundsI") var playSoundsI: Int = 1
-    @AppStorage("playSoundsB") var playSoundsB: Bool = false
+    @AppStorage("playSounds") var playSounds: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -66,7 +65,7 @@ struct MoreSettingsView: View {
                                    description: String(localized: "Vibration Feedback"))
                 }
 
-                SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSoundsB,
+                SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSounds,
                                 id1: "playSounds",
                         description: String(localized: "When a transaction finished")) {_ in}
 

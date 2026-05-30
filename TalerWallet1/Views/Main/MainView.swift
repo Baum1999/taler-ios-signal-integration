@@ -16,7 +16,6 @@ struct MainView: View {
     private let symLog = SymLogV(0)
     let logger: Logger
     let stack: CallStack
-    @Binding var soundPlayed: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -29,8 +28,6 @@ struct MainView: View {
 #endif
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0       // extension mustn't define this, so it must be here
-    @AppStorage("playSoundsI") var playSoundsI: Int = 1             // extension mustn't define this, so it must be here
-    @AppStorage("playSoundsB") var playSoundsB: Bool = false
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
 
     @StateObject private var tabBarModel = TabBarModel()
@@ -147,14 +144,6 @@ struct MainView: View {
 #endif
             contentView
                 .environmentObject(NamespaceWrapper(namespace))
-                .onAppear() {
-#if DEBUG
-                    if playSoundsI != 0  && playSoundsB && !soundPlayed {
-                        controller.playSound(1008)
-                    }
-#endif
-                    soundPlayed = true
-                }                   // Startup chime
                 .overlay(alignment: .top) {
                     DebugViewV()
                         .id("ViewID")

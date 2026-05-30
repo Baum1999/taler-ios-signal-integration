@@ -71,9 +71,7 @@ extension Controller {
             AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
             logger.trace("\(sound, privacy: .public) \(soundID)")
         }
-        if number == 0 || number > 9 || playSoundsI < 0 {
-            AudioServicesPlaySystemSound(soundID);
-        } else if playSoundsI > 0 && playSoundsB {
+        if playSounds {
             if let url = Bundle.main.url(forResource: (number == 1) ? "payment_sent"
                                                                     : "payment_received",
                                        withExtension: "m4a") {
