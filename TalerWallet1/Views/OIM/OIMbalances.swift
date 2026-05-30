@@ -239,7 +239,7 @@ struct OIMbalances: View {
                     // multiple savings chests (Euro, Sierra Leone, Côte d'Ivoire)
                     Spacer()
                     HStack(spacing: 30) {
-                        ForEach(Array(controller.balances.enumerated()), id: \.element) { index, balance in
+                        ForEachWithIndex(data: controller.balances) { index, balance in
                             let oimCurrency = oimCurrency(balance.scopeInfo, oimEuro: oimEuro)
                             let itsMe = selectedBalance == balance
                             let isClosed = selectedBalance == nil
