@@ -120,19 +120,15 @@ struct DebugViewV: View {
 #endif
         let viewIDString = debugViewC.viewID > 0 ? String(debugViewC.viewID)
                                                  : EMPTYSTRING
+        let viewIDv = Text(viewIDString)
+                        .foregroundColor(.red)
+                        .font(.system(size: 11))        // no talerFont
+                        .monospacedDigit()
+                        .id("viewID")
         HStack {
             Spacer()
-            Spacer()
-            if UIScreen.hasNotch {
-                Spacer()
-                Spacer()
-            }
-            Text(viewIDString)
-                .foregroundColor(.red)
-                .font(.system(size: 11))        // no talerFont
-                .monospacedDigit()
-                .id("viewID")
-            Spacer()
+            viewIDv
+                .padding(.trailing, 50)
         }
         .accessibilityHidden(true)
         .ignoresSafeArea(edges: .top)
