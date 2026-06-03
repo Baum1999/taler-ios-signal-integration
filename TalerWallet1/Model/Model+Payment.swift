@@ -434,7 +434,7 @@ struct TemplateContractDetails: Codable {
     let amount: Amount?                 // Total amount payable. Fixed if this field exists, editable if nil
     let scopeInfo: ScopeInfo?
     let minimumAge: Int?
-    let payDuration: RelativeTime?
+    let payDuration: Duration?
     let websiteRegex: String?
     let choices: [OrderChoice]?
     let templateType: String?

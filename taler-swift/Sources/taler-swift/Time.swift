@@ -19,60 +19,6 @@ enum TimestampError: Error {
     /// The value `never` cannot be returned as UInt64.
     case invalidUInt64Value
 }
-
-public enum RelativeTime: Codable, Hashable, Sendable {
-    // Duration in microseconds or "forever"
-    // to represent an infinite duration. Numeric
-    // values are capped at 2^53 - 1 inclusive.
-    case microseconds(UInt64)
-    case forever
-
-    enum CodingKeys: String, CodingKey {
-        case d_us = "d_us"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        do {
-            self = RelativeTime.microseconds(try container.decode(UInt64.self, forKey: .d_us))
-        } catch {       // rethrows or never
-            let stringValue = try container.decode(String.self, forKey: .d_us)
-            if stringValue == "forever" {
-                self = RelativeTime.forever
-            } else {
-                throw TimestampError.invalidStringRepresentation
-            }
-        }
-    }
-    public func hash(into hasher: inout Hasher) {
-        switch self {
-            case .microseconds(let d_us):
-                hasher.combine(d_us)
-            case .forever:
-                hasher.combine("forever")
-        }
-    }
-    public func encode(to encoder: Encoder) throws {
-        var value = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-            case .microseconds(let d_us):
-                try value.encode(d_us, forKey: .d_us)
-            case .forever:
-                try value.encode("forever", forKey: .d_us)
-        }
-    }
-}
-
-extension RelativeTime {
-    public func microseconds() throws -> UInt64 {
-        switch self {
-            case .microseconds(let d_us):
-                return d_us
-            case .forever:
-                throw TimestampError.invalidUInt64Value
-        }
-    }
-}
 // MARK: -
 /// A point in time, represented by milliseconds from January 1, 1970..
 public enum Timestamp: Codable, Hashable, Sendable {
@@ -187,6 +133,14 @@ extension Timestamp {
                 throw TimestampError.invalidUInt64Value
         }
     }
+    public func duration() throws -> Duration {
+        do {
+            let result: Duration = try self - Timestamp.now()
+            return result
+        } catch {
+            throw TimestampError.invalidUInt64Value
+        }
+    }
 }
 // MARK: -
 /// extend iOS Date to work with milliseconds since 1970
@@ -200,8 +154,8 @@ extension Date {
     }
 }
 // MARK: -
-/// A duration of time, measured in milliseconds.
-public enum Duration: Codable, Hashable, Equatable {
+/// A duration of time, measured in microseconds.
+public enum Duration: Codable, Hashable, Sendable {
     case microseconds(UInt64)
     case forever
 
@@ -237,6 +191,56 @@ public enum Duration: Codable, Hashable, Equatable {
                 try value.encode(d_us, forKey: .d_us)
             case .forever:
                 try value.encode("forever", forKey: .d_us)
+        }
+    }
+
+    public func microseconds() throws -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us
+            case .forever:
+                throw TimestampError.invalidUInt64Value
+        }
+    }
+
+    public func toMilliseconds() -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us / 1000
+            case .forever:
+                return .max
+        }
+    }
+    public func toSeconds() -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us / 1_000_000
+            case .forever:
+                return .max
+        }
+    }
+    public func toMinutes() -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us / 60_000_000
+            case .forever:
+                return .max
+        }
+    }
+    public func toHours() -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us / 3_600_000_000
+            case .forever:
+                return .max
+        }
+    }
+    public func toDays() -> UInt64 {
+        switch self {
+            case .microseconds(let d_us):
+                return d_us / 86_400_000_000
+            case .forever:
+                return .max
         }
     }
 }

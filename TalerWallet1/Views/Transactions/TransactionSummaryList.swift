@@ -463,7 +463,7 @@ struct TransactionSummaryList: View {
             return nil
         }
 
-        func abortedHint(_ delay: RelativeTime?) -> String? {
+        func abortedHint(_ delay: Duration?) -> String? {
             if let delay {
                 if let microseconds = try? delay.microseconds() {
                     let days = microseconds / (24 * 3600 * 1000 * 1000)

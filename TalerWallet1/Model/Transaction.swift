@@ -425,7 +425,7 @@ struct WithdrawalDetails: Decodable {
     var exchangeCreditAccountDetails: [ExchangeAccountDetails]?
 
   /// Details for manual withdrawals:
-    var reserveClosingDelay: RelativeTime?
+    var reserveClosingDelay: Duration?
 
   /// Details for bank-integrated withdrawals:
     /// Whether the bank has confirmed the withdrawal.
