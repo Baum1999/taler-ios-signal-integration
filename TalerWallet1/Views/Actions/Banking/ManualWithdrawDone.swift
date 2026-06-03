@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -48,33 +48,21 @@ struct ManualWithdrawDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
+        ZStack {
             if let transactionId {
-                TransactionSummaryV(stack: stack.push(),
-//                                    scope: scope,                               // TODO: use data from tx itself
-                            transactionId: transactionId,
-                                  talerTX: $talerTX,
-                                 navTitle: navTitle,
-                                  hasDone: true,
-                              abortAction: nil,
-                             deleteAction: nil,
-                               failAction: nil,
-                            suspendAction: nil,
-                             resumeAction: nil)
-                .navigationBarBackButtonHidden(true)
-                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-//                .navigationTitle(navTitle)
-                .safeAreaInset(edge: .bottom) {
-                    Button("Done") { dismissTop(stack.push()) }
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
-                }
+                TransactionSummaryList(stack: stack.push(),
+//                                     scope: scope,           // TODO: use data from tx itself
+                               transactionId: transactionId,
+                                     talerTX: $talerTX,
+                                    navTitle: navTitle,
+                                     hasDone: true,
+                                    showDone: .prominent,
+                                 withActions: false)
             } else {
                 LoadingView(stack: stack.push(), scopeInfo: nil, message: baseURL.trimURL)
                     .task { await viewDidLoad() }
             }
-        }
-        .onAppear() {
+        }.onAppear() {
             symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_ACCEPT, stack: stack.push())
         }

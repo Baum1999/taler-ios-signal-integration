@@ -168,24 +168,17 @@ struct TransactionsArraySection: View {
         let _ = Self._printChanges()
         let _ = symLog?.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let abortAction = model.abortTransaction
         let deleteAction = model.deleteTransaction
-        let failAction = model.failTransaction
-        let suspendAction = model.suspendTransaction
-        let resumeAction = model.resumeTransaction
 
         Section {
             ForEach(transactions, id: \.self) { transaction in
-                let destination = TransactionSummaryV(stack: stack.push(),
-                                              transactionId: transaction.id,
-                                                    talerTX: $talerTX,
-                                                   navTitle: nil,
-                                                    hasDone: false,
-                                                abortAction: abortAction,
-                                               deleteAction: deleteAction,
-                                                 failAction: failAction,
-                                              suspendAction: suspendAction,
-                                               resumeAction: resumeAction)
+                let destination = TransactionSummaryList(stack: stack.push(),
+                                                 transactionId: transaction.id,
+                                                       talerTX: $talerTX,
+                                                      navTitle: nil,
+                                                       hasDone: false,
+                                                      showDone: nil,
+                                                   withActions: true)
                 let row = NavigationLink { destination } label: {
                     TransactionRowView(logger: logger, scope: scope, transaction: transaction)
                         .padding(.leading, ICONLEADING)

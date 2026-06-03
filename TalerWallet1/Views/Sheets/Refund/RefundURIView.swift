@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -34,34 +34,31 @@ struct RefundURIView: View {
     }
 
     var body: some View {
-        if let refundTransactionId {    //, let transaction {
+        ZStack {
+            if let refundTransactionId {    //, let transaction {
 //            let common = transaction.common
-//            let scope = common.scopes[0]                                        // TODO: tx could span multiple scopes
+//            let scope = common.scopes[0]              // TODO: tx could span multiple scopes
 //            let raw = common.amountRaw
 //            let currency = raw.currencyStr
 
-            TransactionSummaryV(stack: stack.push(),
-//                                scope: scope,
-                        transactionId: refundTransactionId,
-                              talerTX: $talerTX,
-                             navTitle: nil,   // navTitle,
-                              hasDone: true,
-                          abortAction: model.abortTransaction,
-                         deleteAction: model.deleteTransaction,
-                           failAction: model.failTransaction,
-                        suspendAction: model.suspendTransaction,
-                         resumeAction: model.resumeTransaction)
-            .safeAreaInset(edge: .bottom) {
-                Button("Done") { dismissTop(stack.push()) }
-                    .buttonStyle(TalerButtonStyle(type: .prominent))
-                    .padding(.horizontal)
+                TransactionSummaryList(stack: stack.push(),
+//                                     scope: scope,
+                            transactionId: refundTransactionId,
+                                  talerTX: $talerTX,
+                                 navTitle: nil,   // navTitle,
+                                  hasDone: true,
+                                 showDone: .prominent,
+                              withActions: true)
+//                .task(id: controller.currencyTicker) {
+//                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
+//                }
+            } else {
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
+                    .task { await viewDidLoad() }
             }
-//            .task(id: controller.currencyTicker) {
-//                currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-//            }
-        } else {
-            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
-                .task { await viewDidLoad() }
+        }.onAppear() {
+            symLog.log("onAppear")
+            DebugViewC.shared.setSheetID(SHEET_REFUND)
         }
     }
 }

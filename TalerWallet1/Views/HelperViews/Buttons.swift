@@ -322,12 +322,12 @@ struct ReloadButton : View  {
     }
 }
 
+enum TalerButtonStyleType {
+    case plain
+    case bordered
+    case prominent
+}
 struct TalerButtonStyle: ButtonStyle {
-    enum TalerButtonStyleType {
-        case plain
-        case bordered
-        case prominent
-    }
     var type: TalerButtonStyleType = .plain
     var dimmed: Bool = false
     var narrow: Bool = false

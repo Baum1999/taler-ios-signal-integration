@@ -55,13 +55,13 @@ struct P2PReadyV: View {
         if outgoing {
             // TODO: let user choose baseURL
             if let response = try? await model.initiatePeerPushDebit(scope: scope, terms: terms) {
-                // will switch from WithdrawProgressView to TransactionSummaryV
+                // will switch from WithdrawProgressView to TransactionSummaryList
                 transactionId = response.transactionId
             }
         } else {
             // TODO: let user choose baseURL
             if let response = try? await model.initiatePeerPullCredit(nil, terms: terms) {
-                // will switch from WithdrawProgressView to TransactionSummaryV
+                // will switch from WithdrawProgressView to TransactionSummaryList
                 transactionId = response.transactionId
             }
         }
@@ -79,24 +79,14 @@ struct P2PReadyV: View {
         let navTitle = String(localized: "Ready")
         Group {
             if let transactionId {
-                TransactionSummaryV(stack: stack.push(),
-//                                    scope: scope,
-                            transactionId: transactionId,
-                                  talerTX: $talerTX,
-                                 navTitle: navTitle,
-                                  hasDone: true,
-                              abortAction: nil,
-                             deleteAction: nil,
-                               failAction: nil,
-                            suspendAction: nil,
-                             resumeAction: nil)
-                .navigationBarBackButtonHidden(true)
-                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .safeAreaInset(edge: .bottom) {
-                    Button("Done", action: doneAction)
-                        .buttonStyle(TalerButtonStyle(type: .prominent))
-                        .padding(.horizontal)
-                }
+                TransactionSummaryList(stack: stack.push(),
+//                                     scope: scope,
+                               transactionId: transactionId,
+                                     talerTX: $talerTX,
+                                    navTitle: navTitle,
+                                     hasDone: true,
+                                    showDone: .prominent,
+                                 withActions: false)
             } else {
 #if DEBUG
                 let message = amountToTransfer.currencyStr

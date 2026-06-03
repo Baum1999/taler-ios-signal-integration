@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -25,7 +25,7 @@ extension TalerTransaction {             // for Dummys
     }
 }
 // MARK: -
-struct TransactionSummaryV: View {
+struct TransactionSummaryList: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 //    let scope: ScopeInfo?
@@ -33,11 +33,8 @@ struct TransactionSummaryV: View {
     @Binding var talerTX: TalerTransaction
     let navTitle: String?
     let hasDone: Bool
-    let abortAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
-    let deleteAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
-    let failAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
-    let suspendAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
-    let resumeAction: ((_ transactionId: String, _ viewHandles: Bool) async throws -> Void)?
+    let showDone: TalerButtonStyleType?
+    let withActions: Bool
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -144,33 +141,34 @@ struct TransactionSummaryV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let common = talerTX.common
-        if common.type != .dummy && transactionId == common.transactionId {
-            let scope = common.scopes.first                                     // might be nil if scopes == []
-//            let pending = transaction.isPending
-            let locale = TalerDater.shared.locale
-            let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
-            let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-            let navTitle2 = talerTX.isDone ? talerTX.localizedTypePast
-                                           : talerTX.localizedType
+        let scope = common.scopes.first                                     // might be nil if scopes == []
+        let locale = TalerDater.shared.locale
+        let (dateString, date) = TalerDater.dateString(common.timestamp, minimalistic)
+        let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+        let navTitle2 = talerTX.isDone ? talerTX.localizedTypePast
+                                       : talerTX.localizedType
+        Group {
+          if common.type != .dummy && transactionId == common.transactionId {
             List {
-                if developerMode {
-                    if talerTX.isSuspendable { if let suspendAction {
+                if withActions && developerMode {
+                    if talerTX.isSuspendable {
                         TransactionButton(transactionId: common.transactionId,
                                                 command: .suspend,
                                                 warning: nil,
                                              didExecute: $ignoreThis,
-                                                 action: suspendAction)
+                                                 action: model.suspendTransaction)
                         .listRowSeparator(.hidden)
-                    } }
-                    if talerTX.isResumable { if let resumeAction {
+                    }
+                    if talerTX.isResumable {
                         TransactionButton(transactionId: common.transactionId,
                                                 command: .resume,
                                                 warning: nil,
                                              didExecute: $ignoreThis,
-                                                 action: resumeAction)
+                                                 action: model.resumeTransaction)
                         .listRowSeparator(.hidden)
-                    } }
+                    }
                 } // Suspend + Resume buttons
+
                 Group {
                     Text(dateString)
                         .talerFont(.body)
@@ -209,35 +207,46 @@ struct TransactionSummaryV: View {
 //                    TransactionButton(transactionId: common.transactionId, command: .retry,
 //                                      warning: nil, action: abortAction)
 //                } // Retry button
-                if talerTX.isAbortable, let abortAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                            command: .abort,
-                                            warning: String(localized: "Are you sure you want to abort this transaction?"),
-                                         didExecute: $ignoreThis,
-                                             action: abortAction)
-                } // Abort button
-                if talerTX.isFailable, let failAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                            command: .fail,
-                                            warning: String(localized: "Are you sure you want to abandon this transaction?"),
-                                         didExecute: $ignoreThis,
-                                             action: failAction)
-                } // Fail button
-                if talerTX.isDeleteable, let deleteAction {
-                    TransactionButton(transactionId: common.transactionId,
-                                            command: .delete,
-                                            warning: String(localized: "Are you sure you want to delete this transaction?"),
-                                         didExecute: $didDelete,
-                                             action: deleteAction)
-                    .onChange(of: didDelete) { wasDeleted in
-                        if wasDeleted {
-                            symLog.log("wasDeleted -> dismiss view")
-                            dismiss(stack)
+                if withActions {
+                    if talerTX.isAbortable {
+                        TransactionButton(transactionId: common.transactionId,
+                                                command: .abort,
+                                                warning: String(localized: "Are you sure you want to abort this transaction?"),
+                                             didExecute: $ignoreThis,
+                                                 action: model.abortTransaction)
+                    } // Abort button
+                    if talerTX.isFailable {
+                        TransactionButton(transactionId: common.transactionId,
+                                                command: .fail,
+                                                warning: String(localized: "Are you sure you want to abandon this transaction?"),
+                                             didExecute: $ignoreThis,
+                                                 action: model.failTransaction)
+                    } // Fail button
+                    if talerTX.isDeleteable {
+                        TransactionButton(transactionId: common.transactionId,
+                                                command: .delete,
+                                                warning: String(localized: "Are you sure you want to delete this transaction?"),
+                                             didExecute: $didDelete,
+                                                 action: model.deleteTransaction)
+                        .onChange(of: didDelete) { wasDeleted in
+                            if wasDeleted {
+                                symLog.log("wasDeleted -> dismiss view")
+                                dismiss(stack)
+                            }
                         }
-                    }
-                } // Delete button
+                    } // Delete button
+                }
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
+            .navigationBarBackButtonHidden(hasDone)
+            .interactiveDismissDisabled(hasDone)           // can only use "Done" button to dismiss
+            .safeAreaInset(edge: .bottom) {
+                if let showDone {
+                    Button("Done") { dismissTop(stack.push()) }
+                        .buttonStyle(TalerButtonStyle(type: showDone))
+                        .padding(.horizontal)
+                }
+            }
             .onNotification(.TransactionExpired) { notification in
                 // TODO: Alert user that this tx just expired
                 if checkDismiss(notification, "newTxState.major == expired  => dismiss sheet") {
@@ -259,20 +268,21 @@ struct TransactionSummaryV: View {
                 }
             }
             .navigationTitle(navTitle ?? navTitle2)
-            .onAppear {
-                symLog.log("onAppear")
-                DebugViewC.shared.setViewID(VIEW_TRANSACTIONSUMMARY, stack: stack.push())
-            }
-            .onDisappear {
-                symLog.log("onDisappear")
-            }
-        } else {
+          } else {
             Color.clear
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .task {
                     symLog.log("task - load transaction")
                     await loadTransaction()
                 }
+          } // else
+        } // Group
+        .onAppear {
+            symLog.log("onAppear")
+            DebugViewC.shared.setViewID(VIEW_TRANSACTIONSUMMARY, stack: stack.push())
+        }
+        .onDisappear {
+            symLog.log("onDisappear")
         }
     }
     // MARK: -
@@ -472,13 +482,14 @@ struct TransactionSummaryV: View {
             let dialog = transaction.isDialog
             Group {
                 switch transaction {
-                    case .dummy(_):
+                    case .dummy(_): Group {
                         let title = EMPTYSTRING
                         Text(title)
                             .talerFont(.body)
                         RotatingTaler(size: 100, progress: true, once: false, rotationEnabled: $rotationEnabled)
                             .frame(maxWidth: .infinity, alignment: .center)
                             // has its own accessibilityLabel
+                    }
                     case .withdrawal(let withdrawalTransaction): Group {
                         let details = withdrawalTransaction.details
                         if common.isAborted && details.withdrawalDetails.type == .manual {
@@ -524,7 +535,7 @@ struct TransactionSummaryV: View {
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
-                        if common.isDialog {
+                        if common.isDialog {        // show payment confirmation dialog
                             let firstScope = common.scopes.first
                             PaymentView2(stack: stack.push(),
                                           paid: false,
@@ -537,7 +548,7 @@ struct TransactionSummaryV: View {
                                       products: details.info.products,
                                 balanceDetails: nil)
 
-                        } else {
+                        } else {                    // show finished payment
                             TransactionPayDetailV(paymentTx: paymentTransaction)
                             ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
@@ -674,7 +685,7 @@ struct TransactionSummaryV: View {
                     } // p2p
 
                     case .recoup(let recoupTransaction): Group {
-                        let details = recoupTransaction.details                 // TODO: more details
+                        let details = recoupTransaction.details
                         ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,
@@ -684,7 +695,7 @@ struct TransactionSummaryV: View {
                                          noFees: nil,
                                   feeIsNegative: nil,
                                           large: true,             // TODO: baseURL, noFees
-                                        summary: nil,
+                                        summary: details.recoupReason,
                                        merchant: nil)
                     }
                     case .denomLoss(let denomLossTransaction): Group {
@@ -749,7 +760,7 @@ struct TransactionSummaryV: View {
 //    static var previews: some View {
 //        Group {
 //            TransactionSummaryV(transaction: withdrawal, reloadAction: reloadActionDummy, doneAction: doneActionDummy)
-//            TransactionSummaryV(transaction: payment, reloadAction: reloadActionDummy, deleteAction: deleteTransactionDummy)
+//            TransactionSummaryV(transaction: payment, reloadAction: reloadActionDummy)
 //        }
 //    }
 //}

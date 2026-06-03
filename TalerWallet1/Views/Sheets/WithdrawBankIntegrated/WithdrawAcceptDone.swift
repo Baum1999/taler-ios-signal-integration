@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -51,21 +51,16 @@ struct WithdrawAcceptDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        ZStack {
             if let transactionId {
-                TransactionSummaryV(stack: stack.push(),
-//                                    scope: scope,
-                            transactionId: transactionId,
-                                  talerTX: $talerTX,
-                                 navTitle: navTitle,
-                                  hasDone: true,
-                              abortAction: nil,
-                             deleteAction: nil,
-                               failAction: nil,
-                            suspendAction: nil,
-                             resumeAction: nil)
-                .navigationBarBackButtonHidden(true)
-                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .navigationTitle(navTitle)
+                TransactionSummaryList(stack: stack.push(),
+//                                     scope: scope,
+                               transactionId: transactionId,
+                                     talerTX: $talerTX,
+                                    navTitle: navTitle,
+                                     hasDone: true,
+                                    showDone: nil,
+                                 withActions: false)
                 .safeAreaInset(edge: .bottom) {
                     let shouldConfirm = talerTX.shouldConfirm
                     if talerTX.common.type != .dummy {
@@ -78,16 +73,17 @@ struct WithdrawAcceptDone: View {
                             .padding(.horizontal)
                     }
                 }
-                .onAppear() {
-                    symLog.log("onAppear")
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE)
-                }
             } else {
                 let fallback = String(localized: "Bank Authorization", comment: "loading")
-                LoadingView(stack: stack.push(), scopeInfo: nil,
-                              message: exchangeBaseUrl?.trimURL ?? fallback)
-                .task { await viewDidLoad() }
+                LoadingView(stack: stack.push(),
+                        scopeInfo: nil,
+                          message: exchangeBaseUrl?.trimURL ?? fallback)
+                    .task { await viewDidLoad() }
             }
+        }.onAppear() {
+            symLog.log("onAppear")
+            DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE)
+        }
     }
 }
 // MARK: -

@@ -41,28 +41,18 @@ struct PaymentDone: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        Group {
+        ZStack {
             if paymentDone || paymentPending {
 //                let navTitle = paymentDone ? String(localized: "Paid", comment: "Title, short")
 //                                           : String(localized: "Pending", comment: "Title, short")
-                TransactionSummaryV(stack: stack.push(),
-//                                    scope: scope,
-                            transactionId: transactionId,
-                                  talerTX: $talerTX,
-                                 navTitle: nil, // navTitle,            // use navTitle2
-                                  hasDone: true,
-                              abortAction: nil,
-                             deleteAction: nil,
-                               failAction: nil,
-                            suspendAction: nil,
-                             resumeAction: nil)
-                .navigationBarBackButtonHidden(true)
-                .interactiveDismissDisabled()           // can only use "Done" button to dismiss
-                .safeAreaInset(edge: .bottom) {
-                    Button("Done") { dismissTop(stack.push()) }
-                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .padding(.horizontal)
-                }
+                TransactionSummaryList(stack: stack.push(),
+//                                     scope: scope,
+                               transactionId: transactionId,
+                                     talerTX: $talerTX,
+                                    navTitle: nil, // navTitle,            // use navTitle2
+                                     hasDone: true,
+                                    showDone: .bordered,
+                                 withActions: false)
             } else {
                 let message = String(localized: "Paying...", comment: "loading")
                 LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
