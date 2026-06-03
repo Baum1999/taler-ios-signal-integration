@@ -570,9 +570,9 @@ struct TransactionSummaryList: View {
                                      effective: common.amountEffective,
                                     firstScope: firstScope,
                                        baseURL: nil,
-                                       summary: details.info.summary,
-                                      merchant: details.info.merchant.name,
-                                      products: details.info.products,
+                                       summary: details.info?.summary,
+                                      merchant: details.info?.merchant.name,
+                                      products: details.info?.products,
                                 balanceDetails: nil)
 
                         } else {                    // show finished payment
@@ -586,8 +586,8 @@ struct TransactionSummaryList: View {
                                          noFees: nil,               // TODO: noFees
                                   feeIsNegative: false,
                                           large: true,
-                                        summary: details.info.summary,
-                                       merchant: details.info.merchant.name)
+                                        summary: details.info?.summary,
+                                       merchant: details.info?.merchant.name)
                         }
                     }
                     case .refund(let refundTransaction): Group {

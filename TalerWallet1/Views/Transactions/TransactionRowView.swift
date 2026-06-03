@@ -74,7 +74,7 @@ struct TransactionRowView: View {
     func topString(forA11y: Bool = false) -> String? {
         switch transaction {
             case .payment(let paymentTransaction):
-                return paymentTransaction.details.info.merchant.name
+                return paymentTransaction.details.info?.merchant.name ?? "..."
             case .peer2peer(let p2pTransaction):
                 return p2pTransaction.details.info.summary
             default:

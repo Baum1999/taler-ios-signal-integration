@@ -468,7 +468,7 @@ struct RefundInfo: Decodable {
     var timestamp: Timestamp
 }
 struct PaymentTransactionDetails: Decodable {
-    var info: OrderShortInfo
+    var info: OrderShortInfo?           // only if wallet-core already has it
     var totalRefundRaw: Amount
     var totalRefundEffective: Amount
     var refundPending: Amount?
@@ -768,7 +768,7 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
             case .deposit(let depositTransaction):
                 result[EXCHANGEBASEURL] = depositTransaction.details.depositGroupId
             case .payment(let paymentTransaction):
-                result["summary"] = paymentTransaction.details.info.summary
+                result["summary"] = paymentTransaction.details.info?.summary ?? EMPTYSTRING
             case .refund(let refundTransaction):
                 if let info = refundTransaction.details.info {
                     result["summary"] = info.summary
