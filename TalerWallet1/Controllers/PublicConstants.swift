@@ -67,7 +67,8 @@ public let ARROW_TOP = "arrow.up.to.line"           // 􀄿                     
 public let ARROW_BOT = "arrow.down.to.line"         // 􀅀                       1.0 (iOS 13)
 public let RELOAD = "arrow.clockwise"               // 􀅈                       1.0 (iOS 13)
 public let COPY1 = "doc.on.doc"                     // 􀉁                       1.0 (iOS 13)
-public let COPY6 = "doc.on.clipboard"               // 􀉃                       6.0 (iOS 18)
+//public let COPY6 = "document.on.clipboard"        // 􀉃                       6.0 (iOS 18)
+public let PASTE = "doc.on.clipboard"               // 􀉃                       1.0 (iOS 13)
 public let SHARE = "square.and.arrow.up"            // 􀈂                       1.0 (iOS 13)
 public let RETURN = "return"                        // 􀅇 􁂇                    1.0 (iOS 13)   reverses for RTL
 

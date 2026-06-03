@@ -20,6 +20,7 @@ struct TalerWallet1App: App {
 #endif
     private let symLog = SymLogV()
     @Environment(\.scenePhase) private var phase
+    @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
     @State private var pastedString: String? = nil
@@ -47,7 +48,7 @@ struct TalerWallet1App: App {
         }
     }
 
-    func inspectPasteboard() {
+    func inspectPasteboard(playSound: Bool) {
         let pasteboard = UIPasteboard.general
         // We are only interested in strings
         if !pasteboard.hasStrings { return }
@@ -73,6 +74,7 @@ struct TalerWallet1App: App {
                                     if scheme?.lowercased() == "taler" {
                                         print(string)
                                         post(pastedURL)
+                                        return
                                     }
                                 }
                             }
@@ -82,6 +84,9 @@ struct TalerWallet1App: App {
                     else {
                         // We won't be retrieving the value, so we won't get a notification banner
                         self.pastedWebURL = nil
+                        if playSound {
+                            controller.playSound(0)     // tell the user we didn't find anything
+                        }
                     }
                 case .failure(let error):
                     // This never gets called
@@ -121,8 +126,9 @@ struct TalerWallet1App: App {
                 switch newPhase {
                     case .active:
                         logger.log("❗️.onChange() ==> Active")
-                        inspectPasteboard()
-
+                        if pasteAutomatically {
+                            inspectPasteboard(playSound: false)
+                        }
                     case .background:
                         logger.log("❗️.onChange() ==> Background)")
 //                      scheduleAppRefresh()

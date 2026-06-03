@@ -73,6 +73,7 @@ struct ActionsSheet: View {
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("demoHints") var demoHints: Bool = true
+    @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
 
     private var hasKudos: Bool {
         for balance in controller.balances {
@@ -146,7 +147,7 @@ struct ActionsSheet: View {
             HStack {
                 if #available(iOS 26.0, *) {
                     SettingsButton(accessibilityLabelStr: TalerTab.settings.title,
-                                   action: dismissAndPost)
+                                                  action: dismissAndPost)
 //                    .padding()
                     .buttonStyle(TalerButtonStyle(type: .bordered,
                                                 dimmed: false,
@@ -154,6 +155,17 @@ struct ActionsSheet: View {
                                               disabled: false,
                                                aligned: .center))
                     .accessibility(sortPriority: 0)     // read this last
+                    if !pasteAutomatically {
+                        PasteButton(accessibilityLabelStr: "Paste") {
+                            TalerWallet1App().inspectPasteboard(playSound: true)
+                        }
+                        .buttonStyle(TalerButtonStyle(type: .bordered,
+                                                    dimmed: false,
+                                                    narrow: true,
+                                                  disabled: false,
+                                                   aligned: .center))
+                        .accessibility(sortPriority: 1)
+                    }
                     Spacer(minLength: 8)
                 }
                 ///   [􀎻  Scan QR ]

@@ -24,6 +24,7 @@ struct MoreSettingsView: View {
 #endif
     @AppStorage("useHaptics") var useHaptics: Bool = true
     @AppStorage("playSounds") var playSounds: Bool = false
+    @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -62,12 +63,16 @@ struct MoreSettingsView: View {
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
                                     id1: "haptics",
-                                   description: String(localized: "Vibration Feedback"))
+                            description: String(localized: "Vibration Feedback"))
                 }
 
                 SettingsToggle(name: String(localized: "Play Payment Sounds"), value: $playSounds,
                                 id1: "playSounds",
                         description: String(localized: "When a transaction finished")) {_ in}
+
+                SettingsToggle(name: String(localized: "Paste automatically"), value: $pasteAutomatically,
+                                id1: "pasteAutomatically",
+                        description: String(localized: "When this app activates")) {_ in}
 
                 /// Backup
                 let backupTitle = String(localized: "TitleBackup", defaultValue: "Backup / Restore")

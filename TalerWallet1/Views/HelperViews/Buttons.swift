@@ -190,6 +190,23 @@ struct SettingsButton : View  {
         return button
     }
 }
+struct PasteButton : View  {
+    let accessibilityLabelStr: String
+    let action: () -> Void
+
+    var body: some View {
+        let button = Button(action: action) {
+            Image(systemName: PASTE)
+        }
+            .tint(.accentColor)
+            .talerFont(.title)
+            .accessibilityLabel(accessibilityLabelStr)
+//        if #available(iOS 26.0, *) {
+//            return button.buttonStyle(.glass)
+//        }
+        return button
+    }
+}
 
 struct ZoomInButton : View  {
     let accessibilityLabelStr: String
