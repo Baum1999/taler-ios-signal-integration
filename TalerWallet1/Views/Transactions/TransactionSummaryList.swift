@@ -286,6 +286,33 @@ struct TransactionSummaryList: View {
         }
     }
     // MARK: -
+    struct MerchantHeader: View {
+        let terms: MerchantContractTerms?
+
+        var body: some View {
+            if let terms {
+                Section {
+                    Text(terms.summary)
+                        .talerFont(.title3)
+                } header: {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .center) {
+                            let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
+                            Image(systemName: imageName)
+                                .resizable()
+                                .frame(width: 44, height: 44)
+                            let merchant = terms.merchant.name
+                            Text(merchant)
+                                .talerFont(.title3)
+                        }.foregroundStyle(Color(.primary))
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+    // MARK: -
     struct KYCbutton: View {
         let kycUrl: String?
 

@@ -71,6 +71,8 @@ public let COPY1 = "doc.on.doc"                     // 􀉁                     
 public let PASTE = "doc.on.clipboard"               // 􀉃                       1.0 (iOS 13)
 public let SHARE = "square.and.arrow.up"            // 􀈂                       1.0 (iOS 13)
 public let RETURN = "return"                        // 􀅇 􁂇                    1.0 (iOS 13)   reverses for RTL
+public let MERCHANT14 = "handbag"                   // 􁞸                       2.0 (iOS 14)
+public let MERCHANT17 = "storefront"                // 􁽇                       5.0 (iOS 17)
 
 
 public let BALANCES = "chart.bar.xaxis"             // 􀣉                       2.0 (iOS 14)
