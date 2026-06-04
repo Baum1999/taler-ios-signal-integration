@@ -369,6 +369,7 @@ struct TokenDetails: Codable, Hashable, Equatable {
 struct ChoiceSelectionDetail: Codable, Hashable, Sendable {
     var status: ChoiceSelectionDetailStatus
     var amountRaw: Amount
+    var scopeInfo: ScopeInfo?                                   // only if wallet-core has the info
     var amountEffective: Amount?                                // only if possible
     var tokenDetails: TokenDetails?                             // only if possible
     var balanceDetails: PaymentInsufficientBalanceDetails?      // only if insufficient

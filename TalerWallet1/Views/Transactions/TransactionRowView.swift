@@ -403,6 +403,7 @@ extension TalerTransaction {             // for PreViews
                                                   refunds: [],
                                         refundQueryActive: false,
                                             contractTerms: nil,
+                                  repurchaseTransactionId: nil,
                                               abortReason: nil)
             self = .payment(PaymentTransaction(common: common, details: pDetails))
         }

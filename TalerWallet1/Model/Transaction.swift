@@ -478,6 +478,7 @@ struct PaymentTransactionDetails: Decodable {
     var posConfirmationDeadline: Timestamp?
     var posConfirmationViaNfc: Bool?
     let contractTerms: MerchantContractTerms?       // TODO: show data in tx details
+    let repurchaseTransactionId: String?
     let abortReason: WalletBackendAbortReason?
 }
 struct PaymentTransaction : Sendable {
