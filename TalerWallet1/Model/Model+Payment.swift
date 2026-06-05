@@ -10,6 +10,7 @@ import taler_swift
 import AnyCodable
 //import SymLog
 
+typealias I18nDict = [String: String]           // two-char language code, e.g. "de", "en"
 // MARK: - ContractTerms
 
 //  export interface TalerProtocolDuration {
@@ -70,7 +71,7 @@ struct ContractTokenFamily: Codable {
     let description: String
 
     // Map from IETF BCP 47 language tags to localized descriptions.
-    let descriptionI18n: [String: String]?
+    let descriptionI18n: I18nDict?
 
     // Public keys used to validate tokens issued by this token family.
     let keys: [TokenIssuePublicKey]
@@ -146,7 +147,7 @@ struct ContractChoice: Codable, Hashable {
     let amount: Amount                          // Total amount payable
     let maxFee: Amount                          // Maximum deposit fee covered by the merchant
     let description: String?                    //
-    let descriptionI18n: [String: String]?      //      "      localized     "
+    let descriptionI18n: I18nDict?              //      "      localized     "
     let inputs: [ContractInput]
     let outputs: [ContractOutput]
 
@@ -167,7 +168,7 @@ struct MerchantContractTerms: Codable {
 
     // ContractTermsCommon
     let summary: String                 // Human-readable short summary of the contract
-    let summaryI18n: [String: String]?  //      "      localized     "
+    let summaryI18n: I18nDict?          //      "      localized     "
     let orderID: String                 // uniquely identify the purchase within one merchant instance
     let publicReorderURL: String?       // URL meant to share the shopping cart
     let fulfillmentURL: String?         // Fulfillment URL to view the product or delivery status
@@ -436,6 +437,7 @@ struct TemplateContractDetails: Codable {
     let scopeInfo: ScopeInfo?
     let minimumAge: Int?
     let payDuration: Duration?
+    let maxPickupDuration: Duration?
     let websiteRegex: String?
     let choices: [OrderChoice]?
     let templateType: String?
@@ -445,6 +447,7 @@ struct TemplateContractDetails: Codable {
         case scopeInfo, choices
         case minimumAge = "minimum_age"
         case payDuration = "pay_duration"
+        case maxPickupDuration = "max_pickup_duration"
         case websiteRegex = "website_regex"
         case templateType = "template_type"
     }
@@ -454,7 +457,7 @@ struct OrderChoice: Codable {
     let amount: Amount
     let tip: Amount?
     let description: String?
-    let descriptionI18n: String?
+    let descriptionI18n: I18nDict?
     let inputs: [OrderInput]?
     let outputs: [OrderOutput]?     // TODO: OrderOutputTaxReceipt
     let maxFee: Amount?
