@@ -539,12 +539,11 @@ struct TransactionSummaryList: View {
                                          noFees: nil,               // TODO: noFees
                                   feeIsNegative: true,
                                           large: false,
-                                        summary: nil,
-                                       merchant: nil)
+                                        summary: nil)
                     }
                     case .deposit(let depositTransaction): Group {
                         if transaction.common.isPendingKYCauth {
-                            KYCauth(stack: stack.push(), common: transaction.common)
+                            KYCauth(stack: stack.push(), common: common)
                         } else if transaction.isPendingKYC {
                             KYCbutton(kycUrl: common.kycUrl)
                         }
@@ -557,8 +556,7 @@ struct TransactionSummaryList: View {
                                          noFees: nil,               // TODO: noFees
                                   feeIsNegative: false,
                                           large: true,
-                                        summary: nil,
-                                       merchant: nil)
+                                        summary: nil)
                     }
                     case .payment(let paymentTransaction): Group {
                         let details = paymentTransaction.details
@@ -571,7 +569,6 @@ struct TransactionSummaryList: View {
                                     firstScope: firstScope,
                                        baseURL: nil,
                                        summary: details.info?.summary,
-                                      merchant: details.info?.merchant.name,
                                       products: details.info?.products,
                                 balanceDetails: nil)
 
@@ -586,12 +583,11 @@ struct TransactionSummaryList: View {
                                          noFees: nil,               // TODO: noFees
                                   feeIsNegative: false,
                                           large: true,
-                                        summary: details.info?.summary,
-                                       merchant: details.info?.merchant.name)
+                                        summary: details.info?.summary)
                         }
                     }
                     case .refund(let refundTransaction): Group {
-                        let details = refundTransaction.details                 // TODO: more details
+                        let details = refundTransaction.details                 // TODO: more details, details.info?.merchant.name
                         ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,
@@ -601,8 +597,7 @@ struct TransactionSummaryList: View {
                                          noFees: nil,               // TODO: noFees
                                   feeIsNegative: true,
                                           large: true,
-                                        summary: details.info?.summary,
-                                       merchant: details.info?.merchant.name)
+                                        summary: details.info?.summary)
                     }
                     case .refresh(let refreshTransaction): Group {
                         let labelColor = WalletColors().labelColor
@@ -679,6 +674,7 @@ struct TransactionSummaryList: View {
                                          transactionId: common.transactionId)
                         } else {
                         // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
+                            // TODO: details.info.summary
                         if pending {
                             if transaction.isPendingReady {
                                 QRCodeDetails(transaction: transaction)
@@ -686,7 +682,7 @@ struct TransactionSummaryList: View {
                                     Text("QR code and link can also be scanned or copied / shared from Transactions later.")
                                         .multilineTextAlignment(.leading)
                                         .talerFont(.subheadline)
-                                        .padding(.top)
+//                                        .padding(.top)
                                 }
                             } else {
                                 Text("This transaction is not yet ready...")
@@ -706,38 +702,35 @@ struct TransactionSummaryList: View {
                                          noFees: nil,         // TODO: noFees
                                   feeIsNegative: true,
                                           large: false,
-                                        summary: details.info.summary,
-                                       merchant: nil)
+                                        summary: details.info.summary)
                         } // else
                     } // p2p
 
                     case .recoup(let recoupTransaction): Group {
-                        let details = recoupTransaction.details
+                        let details = recoupTransaction.details     // TODO: details.recoupReason
                         ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Recoup:", comment: "mini"),
                                        topTitle: String(localized: "Recoup:"),
-                                        baseURL: nil,
+                                        baseURL: nil,               // TODO: baseURL, noFees
                                          noFees: nil,
                                   feeIsNegative: nil,
-                                          large: true,             // TODO: baseURL, noFees
-                                        summary: details.recoupReason,
-                                       merchant: nil)
+                                          large: true,
+                                        summary: details.recoupReason)
                     }
                     case .denomLoss(let denomLossTransaction): Group {
-                        let details = denomLossTransaction.details              // TODO: more details
+                        let details = denomLossTransaction.details              // TODO: more details, details.lossEventType.rawValue
                         ThreeAmountsSheet(stack: stack.push(),
                                           scope: scope,
                                          common: common,
                                       topAbbrev: String(localized: "Lost:", comment: "mini"),
                                        topTitle: String(localized: "Money lost:"),
                                         baseURL: details.exchangeBaseUrl,
-                                         noFees: nil,
+                                         noFees: nil,               // TODO: noFees
                                   feeIsNegative: nil,
-                                          large: true,             // TODO: baseURL, noFees
-                                        summary: details.lossEventType.rawValue,
-                                       merchant: nil)
+                                          large: true,
+                                        summary: details.lossEventType.rawValue)
                     }
                 } // switch
             } // Group

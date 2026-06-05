@@ -136,7 +136,6 @@ struct PeerPullDebitView: View  {
                           baseURL: nil,
                        txStateLcl: nil,
                           summary: summary,
-                         merchant: nil,
                          products: nil)
     }
 }

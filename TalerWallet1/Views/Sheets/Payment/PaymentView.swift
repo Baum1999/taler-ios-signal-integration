@@ -179,7 +179,6 @@ struct PaymentView: View, Sendable {
                            baseURL: baseURL,
 //                             terms: terms,
                            summary: terms.summary,
-                          merchant: terms.merchant.name,
                           products: terms.products,
                     balanceDetails: preparePayResult.balanceDetails)
 
@@ -243,7 +242,6 @@ struct PaymentView2: View, Sendable {
     let baseURL: String?
 //    let terms: MerchantContractTerms
     let summary: String?
-    let merchant: String?
     let products: [Product]?
     let balanceDetails: PayMerchantInsufficientBalanceDetails?
 
@@ -280,8 +278,7 @@ struct PaymentView2: View, Sendable {
                                      incoming: false,
                                       baseURL: baseURL,
                                    txStateLcl: nil,
-                                      summary: summary,
-                                     merchant: merchant,
+                                      summary: nil,     // summary already shown in PaymentView above choices
                                      products: products)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails {    // Insufficient
@@ -304,15 +301,13 @@ struct PaymentView2: View, Sendable {
                                      incoming: false,
                                       baseURL: baseURL,
                                    txStateLcl: nil,
-                                      summary: summary,
-                                     merchant: merchant,
+                                      summary: nil,     // summary already shown in PaymentView above choices
                                      products: products)
                 } else {
                     // TODO: Error - neither effective nor balanceDetails
                     Text("Error")
                         .talerFont(.body)
                 }
-
     }
 }
 // MARK: -

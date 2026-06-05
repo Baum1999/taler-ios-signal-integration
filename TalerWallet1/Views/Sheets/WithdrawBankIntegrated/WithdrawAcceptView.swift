@@ -94,7 +94,6 @@ struct WithdrawAcceptView: View {
                                           baseURL: exchange2.exchangeBaseUrl,
                                        txStateLcl: nil,        // common.txState.major.localizedState
                                           summary: nil,
-                                         merchant: nil,
                                          products: nil)
                         if let wireFee {
                             if !wireFee.isZero {

@@ -21,7 +21,6 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
     var feeIsNegative: Bool?                // show fee with minus (or plus) sign, or no sign if nil
     let large: Bool               // set to false for QR or IBAN
     let summary: String?
-    let merchant: String?
 
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -66,7 +65,6 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                           baseURL: baseURL,
                        txStateLcl: txStateLcl,
                           summary: summary,
-                         merchant: merchant,
                          products: nil)
     }
 }
@@ -113,7 +111,6 @@ struct ThreeAmountsSection: View {
     let baseURL: String?
     let txStateLcl: String?                 // localizedState
     let summary: String?
-    let merchant: String?
     let products: [Product]?
 
     @Environment(\.colorScheme) private var colorScheme
@@ -170,12 +167,6 @@ struct ThreeAmountsSection: View {
 //                        .lineLimit(9)       // TODO: remove completely?
                         .padding(.bottom)
                 }
-            }
-            if let merchant {
-                Text(merchant)
-                    .talerFont(.title3)
-                    .lineLimit(4)
-                    .padding(.bottom)
             }
             AmountRowV(stack: stack.push(),
                        title: minimalistic ? topAbbrev : topTitle,
@@ -264,7 +255,7 @@ struct ThreeAmounts_Previews: PreviewProvider {
                                topTitle: "Withdrawal",
                                 baseURL: DEMOEXCHANGE,
                                  noFees: false,
-                                  large: 1==0, summary: nil, merchant: nil)
+                                  large: 1==0, summary: nil)
                 .safeAreaInset(edge: .bottom) {
                     Button(String("Preview")) {}
                         .buttonStyle(TalerButtonStyle(type: .prominent))
