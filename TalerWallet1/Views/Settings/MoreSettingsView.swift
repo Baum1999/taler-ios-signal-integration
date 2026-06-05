@@ -30,6 +30,7 @@ struct MoreSettingsView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("showQRauto16") var showQRauto16: Bool = true
     @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @AppStorage("oimEuro") var oimEuro: Bool = false
     @AppStorage("oimChart") var oimChart: Bool = false
 
@@ -60,6 +61,9 @@ struct MoreSettingsView: View {
                             description: showQRhint)
                 }
 
+                SettingsTriState(name: String(localized: "Prefered Color Mode"), value: $preferredColorScheme,
+                                  id1: "colorScheme",
+                          description: String(localized: "Individual preference"))
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
                                     id1: "haptics",

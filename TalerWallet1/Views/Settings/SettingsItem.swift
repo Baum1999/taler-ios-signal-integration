@@ -221,13 +221,20 @@ struct SettingsTriState: View {
     var description: String?
     var action: (_ value: Int) -> Void = {value in }
 
-    func imageName(_ value: Int) -> (String, String) {
+    func imageName1(_ value: Int) -> (String, String) {
         return (value == 0) ? ("eye.slash", "Off")
              : (value == 1) ? ("eye",       "Type only")
                             : ("eye.fill",  "Type and JSON")
     }
+    func imageName2(_ value: Int) -> (String, String) {
+        return (value == 0) ? ("iphone",    "System")   // or apple.logo
+             : (value == 1) ? (LIGHT_OFF, "light")      // 􀛭
+                            : (LIGHT_ON,  "dark")       // 􀛮
+    }
+
     var body: some View {
-        let image = imageName(value)
+        let observe = "observe" == id1
+        let image = observe ? imageName1(value) : imageName2(value)
 
         VStack {
             HStack {
@@ -240,11 +247,15 @@ struct SettingsTriState: View {
                     if value > 0 {
                         value = -1
                         action(value)
-                        Controller.shared.playSound(1)
+                        if observe {
+                            Controller.shared.playSound(1)
+                        }
                     } else {
                         value = value + 1
                         action(value)
-                        Controller.shared.playSound(value)
+                        if observe {
+                            Controller.shared.playSound(value)
+                        }
                     }
                 } label: {
                     Image(systemName: image.0)

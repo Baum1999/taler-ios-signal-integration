@@ -21,6 +21,8 @@ struct TalerWallet1App: App {
     private let symLog = SymLogV()
     @Environment(\.scenePhase) private var phase
     @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
+
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
     @State private var pastedString: String? = nil
@@ -97,7 +99,11 @@ struct TalerWallet1App: App {
     }
 
     var body: some Scene {
+        let colorScheme = preferredColorScheme < 0 ? ColorScheme.dark
+                        : preferredColorScheme > 0 ? ColorScheme.light
+                                                   : nil    // use the current scheme
         let mainView = MainView(logger: logger, stack: CallStack("App"))
+                .preferredColorScheme(colorScheme)
                 .environmentObject(debugViewC)      // change viewID / sheetID
                 .environmentObject(viewState)       // popToRoot
                 .environmentObject(viewState2)      // popToRoot
