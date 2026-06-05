@@ -133,11 +133,8 @@ struct ThreeAmountsSection: View {
         productImages = temp
     }
 
-    var body: some View {
-        let labelColor = WalletColors().labelColor
-        let foreColor = pending ? WalletColors().pendingColor(incoming)
-                                : WalletColors().transactionColor(incoming)
-        let hasNoFees = noFees ?? false
+    @ViewBuilder
+    var productImageSections: some View {
         ForEach(productImages, id: \.self) { productImage in
             if let image = productImage.image {
                 Section {
@@ -159,12 +156,19 @@ struct ThreeAmountsSection: View {
                 }
             }
         }
+    }
+
+    var body: some View {
+        let labelColor = WalletColors().labelColor
+        let foreColor = pending ? WalletColors().pendingColor(incoming)
+                                : WalletColors().transactionColor(incoming)
+        let hasNoFees = noFees ?? false
+        productImageSections
         Section {
             if let summary {
-                if productImages.isEmpty {
-                    Text(summary)
+                if productImages.isEmpty {  // otherwise we already have rendered the images
+                    Text(summary)           // and thus don't need a summary
                         .talerFont(.title3)
-//                        .lineLimit(9)       // TODO: remove completely?
                         .padding(.bottom)
                 }
             }
@@ -219,10 +223,12 @@ struct ThreeAmountsSection: View {
                 .accessibilityElement(children: .combine)
             }
         } header: {
-            let header = scope?.url?.trimURL ?? scope?.currency ?? "Summary"
-            Text(header)
-                .talerFont(.title3)
-                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            let header = scope?.url?.trimURL ?? scope?.currency ?? summary != nil ? "Summary" : nil
+            if let header {
+                Text(header)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            }
         }
         .task { await viewDidLoad() }
     }

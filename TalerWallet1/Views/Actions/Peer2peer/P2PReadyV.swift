@@ -79,7 +79,7 @@ struct P2PReadyV: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let navTitle = String(localized: "Ready")
-        Group {
+        ZStack {
             if let transactionId {
                 TransactionSummaryList(stack: stack.push(),
 //                                     scope: scope,
@@ -99,10 +99,9 @@ struct P2PReadyV: View {
                 LoadingView(stack: stack.push(), scopeInfo: scope, message: message)
                     .task { await viewDidLoad() }
             }
-        }
-        .onAppear {
+        }.onAppear {
+            symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_P2P_READY, stack: stack.push())
-//            print("❗️ P2PReadyV onAppear")
         }
         .onDisappear {
 //            print("❗️ P2PReadyV onDisappear")

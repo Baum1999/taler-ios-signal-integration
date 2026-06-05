@@ -146,7 +146,6 @@ struct MainView: View {
                 .environmentObject(NamespaceWrapper(namespace))
                 .overlay(alignment: .top) {
                     DebugViewV()
-                        .id("ViewID")
                 }     // Show the viewID on top of the app's NavigationView
 
             if (!showScanner && urlToOpen == nil) {
@@ -204,7 +203,7 @@ struct MainView: View {
             // show launch animation until either ready or error
             switch controller.backendState {
                 case .ready: mainContent
-                case .error: ErrorView(stack.push("mainGroup"),
+                case .error(let error): ErrorView(stack.push("mainGroup"),
                                        title: EMPTYSTRING,   // TODO: String(localized: ""),
                                     copyable: true) {}
                 default:     LaunchAnimationView()
@@ -226,7 +225,7 @@ struct MainView: View {
                         insertion: .move(edge: .top),
                         removal: .move(edge: .top)
                     ))
-            }
+            } // red bar on top
 
             mainGroup
                 .environmentObject(tabBarModel)
