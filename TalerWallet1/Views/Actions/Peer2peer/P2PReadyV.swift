@@ -88,6 +88,7 @@ struct P2PReadyV: View {
                                     navTitle: navTitle,
                                      hasDone: true,
                                     showDone: .prominent,
+                                         url: nil,
                                  withActions: false)
             } else {
 #if DEBUG

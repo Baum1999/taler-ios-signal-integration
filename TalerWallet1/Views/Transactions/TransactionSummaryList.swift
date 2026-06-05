@@ -34,6 +34,7 @@ struct TransactionSummaryList: View {
     let navTitle: String?
     let hasDone: Bool
     let showDone: TalerButtonStyleType?
+    let url: URL?           // the scanned talerURL from PaymentView
     let withActions: Bool
 
     @EnvironmentObject private var controller: Controller

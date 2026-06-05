@@ -52,6 +52,7 @@ struct PaymentDone: View {
                                     navTitle: nil, // navTitle,            // use navTitle2
                                      hasDone: true,
                                     showDone: .bordered,
+                                         url: nil,
                                  withActions: false)
             } else {
                 let message = String(localized: "Paying...", comment: "loading")

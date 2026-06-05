@@ -48,6 +48,7 @@ struct RefundURIView: View {
                                  navTitle: nil,   // navTitle,
                                   hasDone: true,
                                  showDone: .prominent,
+                                      url: nil,
                               withActions: true)
 //                .task(id: controller.currencyTicker) {
 //                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)

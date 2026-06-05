@@ -57,6 +57,7 @@ struct ManualWithdrawDone: View {
                                     navTitle: navTitle,
                                      hasDone: true,
                                     showDone: .prominent,
+                                         url: nil,
                                  withActions: false)
             } else {
                 LoadingView(stack: stack.push(), scopeInfo: nil, message: baseURL.trimURL)

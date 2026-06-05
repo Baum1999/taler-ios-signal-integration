@@ -178,6 +178,7 @@ struct TransactionsArraySection: View {
                                                       navTitle: nil,
                                                        hasDone: false,
                                                       showDone: nil,
+                                                           url: nil,
                                                    withActions: true)
                 let row = NavigationLink { destination } label: {
                     TransactionRowView(logger: logger, scope: scope, transaction: transaction)

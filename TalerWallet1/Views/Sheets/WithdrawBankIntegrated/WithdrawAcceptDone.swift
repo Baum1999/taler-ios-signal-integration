@@ -60,6 +60,7 @@ struct WithdrawAcceptDone: View {
                                     navTitle: navTitle,
                                      hasDone: true,
                                     showDone: nil,
+                                         url: nil,
                                  withActions: false)
                 .safeAreaInset(edge: .bottom) {
                     let shouldConfirm = talerTX.shouldConfirm
