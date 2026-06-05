@@ -285,6 +285,15 @@ struct MainView: View {
                 showScanner = true      // switch to qrSheet => camera on
             }
         }
+        .onNotification(.PasteAction) { notification in
+            if let notifData = notification.userInfo?[NOTIFICATIONPASTE] as? PasteType {
+                symLog.log(".PasteAction: \(notifData)")
+                urlToOpen = notifData.pastedURL
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showUrlSheet = true     // raise sheet
+                }
+            }
+        }
 
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")

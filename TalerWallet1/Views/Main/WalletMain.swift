@@ -326,12 +326,6 @@ struct WalletMain: View {
                 ShareSheet.shareSheet(textToShare: textToShare, image: image)
             }
         }
-        .onNotification(.PasteAction){ notification in
-            if let notifData = notification.userInfo?[NOTIFICATIONPASTE] as? PasteType {
-                let pastedURL = notifData.pastedURL
-                openURL(pastedURL)
-            }
-        }
         .alert("You need to pass a legitimization procedure.",
                isPresented: $showKycAlert,
                actions: {   openKycButton
