@@ -20,7 +20,7 @@ struct LoadingView: View {
     @State private var rotationEnabled = true
 
     var body: some View {
-        VStack(alignment: .center) {
+        let view = VStack(alignment: .center) {
             Spacer()
             RotatingTaler(size: 100,
                       progress: true,                 // VoiceOver "In progress"
@@ -50,6 +50,12 @@ struct LoadingView: View {
         .talerFont(.title)
         .navigationTitle("Loading…")
         .background(FullBackground())
+        if #available(iOS 17.0, *) {
+            view.toolbarTitleDisplayMode(.inlineLarge)
+        } else {
+            view
+        }
+
     }
 }
 // MARK: -
