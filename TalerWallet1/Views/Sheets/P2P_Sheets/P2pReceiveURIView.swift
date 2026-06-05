@@ -187,18 +187,24 @@ struct PeerPushCreditView: View  {
 }
 // MARK: -
 struct ExpiresView: View  {
-    let expiration: Timestamp
+    let expiration: Timestamp?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
     var body: some View {
-        let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
-        let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
-        let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
-        Text("Expires: \(dateString)")
-            .talerFont(.body)
-            .accessibilityLabel(a11yLabel)
-            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+        if let expiration {
+            let (dateString, date) = TalerDater.dateString(expiration, minimalistic)
+            let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
+            let a11yLabel = String(localized: "Expires: \(a11yDate)", comment: "a11y")
+            Text("Expires: \(dateString)")
+                .talerFont(.body)
+                .accessibilityLabel(a11yLabel)
+                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+        } else { // should never happen
+            Text("Unknown Expiration")
+                .talerFont(.body)
+                .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+        }
     }
 }

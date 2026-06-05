@@ -39,6 +39,8 @@ struct P2PSubjectV: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var myFeeLabel: (String, String) = (EMPTYSTRING, EMPTYSTRING)
+    @State private var defaultExpiration: Duration? = nil
+    @State private var maxExpirationDate: Timestamp? = nil
     @State private var transactionStarted: Bool = false
     @State private var sendOrRequest: Bool = false
     @FocusState private var isFocused: Bool
@@ -83,11 +85,20 @@ struct P2PSubjectV: View {
                     myFeeLabel = (String(localized: "+ \(feeStr.0) fee"),
                                   String(localized: "+ \(feeStr.1) fee"))
                 } else { myFeeLabel = (EMPTYSTRING, EMPTYSTRING) }
+                defaultExpiration = ppCheck.defaultExpiration
+                maxExpirationDate = ppCheck.maxExpirationDate
             } else {
                 print("❗️ checkPeerPushDebitM failed")
 
             }
         }
+    }
+
+    var maxExpirationHours: UInt64 {
+        if let duration = try? maxExpirationDate?.duration() {
+            return duration.toHours()
+        }
+        return 0
     }
 
     var body: some View {
@@ -140,8 +151,8 @@ struct P2PSubjectV: View {
                 .accessibilityValue(String(localized: "\(numChars) characters of 100"))
 
             // TODO: compute max Expiration day from peerPushCheck to disable 30 (and even 7)
-            SelectDays(selected: $expireDays, maxExpiration: THIRTYDAYS, outgoing: outgoing)
-                .disabled(false)
+            SelectDays(selected: $expireDays, maxExpirationHours: maxExpirationHours,
+                       defaultExpirationHours: defaultExpiration?.toHours() ?? 28*24, outgoing: outgoing)
                 .padding(.bottom)
 
             let disabled = (expireDays == 0)    // || (numChars < 1)    // TODO: check amountAvailable

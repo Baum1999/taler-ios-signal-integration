@@ -36,8 +36,8 @@ struct P2PReadyV: View {
     @Namespace var namespace
 
     @MainActor
-    private func initiateP2P() async {
-        symLog.log(".task")
+    private func viewDidLoad() async {
+        symLog.log("viewDidLoad")
         guard transactionStarted == false else {
 // TODO:    logger.warning("Trying to start P2P a second time")
             symLog.log("Yikes❗️ Trying to start P2P a second time")
@@ -48,9 +48,11 @@ struct P2PReadyV: View {
                                                               : expireDays > 5  ? 60        //  1h
                                                                                 : 3)        //  3m
                                       : Timestamp.inSomeDays(expireDays)
+        let purseExpiration = developerMode ? timestamp
+                                 : outgoing ? nil : timestamp
         let terms = PeerContractTerms(amount: amountToTransfer,
                                      summary: summary,
-                            purse_expiration: timestamp,
+                            purse_expiration: purseExpiration,
                                      icon_id: iconID)
         if outgoing {
             // TODO: let user choose baseURL
@@ -94,10 +96,9 @@ struct P2PReadyV: View {
                 let message: String? = nil
 #endif
                 LoadingView(stack: stack.push(), scopeInfo: scope, message: message)
+                    .task { await viewDidLoad() }
             }
         }
-        .navigationTitle(navTitle)
-        .task { await initiateP2P() }
         .onAppear {
             DebugViewC.shared.setViewID(VIEW_P2P_READY, stack: stack.push())
 //            print("❗️ P2PReadyV onAppear")

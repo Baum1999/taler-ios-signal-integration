@@ -14,7 +14,9 @@ import AnyCodable
 struct PeerContractTerms: Codable {
     let amount: Amount
     let summary: String
-    let purse_expiration: Timestamp
+    // Optional only for InitiatePeerPushDebit:
+    // if nil then defaultExpiration is taken
+    let purse_expiration: Timestamp?
     let icon_id: String?
 }
 // MARK: - max PeerPushDebit amount
@@ -48,6 +50,7 @@ struct CheckPeerPushDebitResponse: Codable {
     let exchangeBaseUrl: String?                // API "2:0:1"
     let amountRaw: Amount
     let amountEffective: Amount
+    let defaultExpiration: Duration
     let maxExpirationDate: Timestamp?           // API "2:0:1" TODO: limit expiration (30 days or 7 days)
 }
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {

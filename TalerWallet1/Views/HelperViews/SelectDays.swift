@@ -11,7 +11,6 @@ import SymLog
 
 struct SelectDays: View {
     private let symLog = SymLogV(0)
-    @Environment(\.isEnabled) private var isEnabled: Bool
     @AppStorage("minimalistic") var minimalistic: Bool = false
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -20,7 +19,8 @@ struct SelectDays: View {
 #endif
 
     @Binding var selected: UInt
-    let maxExpiration: UInt
+    let maxExpirationHours: UInt64
+    let defaultExpirationHours: UInt64
     let outgoing: Bool
 
     func oneDayAction() -> Void {
@@ -39,7 +39,12 @@ struct SelectDays: View {
     }
 
     var body: some View {
-        Section {   // (alignment: .leading)
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        let maxExpiration = maxExpirationHours / 24
+        let chooseExpiration = Section {   // (alignment: .leading)
             Text("Expires in:")
                 .accessibilityLabel(Text("Choose the expiration duration", comment: "a11y"))
                 .accessibilityAddTraits(.isHeader)
@@ -53,9 +58,8 @@ struct SelectDays: View {
                         Text("\(ONEDAY) Day", comment: "1 Day, might get plural (e.g. 2..3 Days), 4 letters max., abbreviate if longer")     // TODO: Plural
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == ONEDAY) ? .prominent : .bordered,
-                                             dimmed: true, disabled: !isEnabled))
+                                             dimmed: true))
                     .accessibilityAddTraits(selected == ONEDAY ? .isSelected : [])
-                    .disabled(!isEnabled)
 
                 Button(action: sevenDayAction) {
                     if developerMode {
@@ -64,9 +68,9 @@ struct SelectDays: View {
                         Text("\(SEVENDAYS) Days", comment: "7 Days, always plural (3..9), 4 letters max., abbreviate if longer")
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == SEVENDAYS) ? .prominent : .bordered, dimmed: true,
-                                              disabled: !isEnabled || maxExpiration < SEVENDAYS))
+                                              disabled: maxExpiration < SEVENDAYS))
                     .accessibilityAddTraits(selected == SEVENDAYS ? .isSelected : [])
-                    .disabled(!isEnabled || maxExpiration < SEVENDAYS)
+                    .disabled(maxExpiration < SEVENDAYS)
 
                 Button(action: thirtyDayAction) {
                     if developerMode {
@@ -76,9 +80,9 @@ struct SelectDays: View {
                         Text(thirtyDays)
                     }
                 }.buttonStyle(TalerButtonStyle(type: (selected == THIRTYDAYS) ? .prominent : .bordered, dimmed: true,
-                                              disabled: !isEnabled || maxExpiration < THIRTYDAYS))
+                                              disabled: maxExpiration < THIRTYDAYS))
                     .accessibilityAddTraits(selected == THIRTYDAYS ? .isSelected : [])
-                    .disabled(!isEnabled || maxExpiration < THIRTYDAYS)
+                    .disabled(maxExpiration < THIRTYDAYS)
             } // 3 buttons
             if !minimalistic {
                 Text(outgoing ? "The payment service will send your money back if it won't get collected on time, or when you abort the operation."
@@ -86,6 +90,23 @@ struct SelectDays: View {
                 .talerFont(.body)
             }
         }
+#if TALER_WALLET
+        chooseExpiration
+#else
+        if developerMode {
+            chooseExpiration
+        } else if outgoing {
+            if !minimalistic {
+                Section {   // (alignment: .leading)
+                    Text(defaultExpirationHours < 49 ? "The payment service will send your money back if it won't get collected in the next \(defaultExpirationHours) hours, or when you abort the operation."
+                    : "The payment service will send your money back if it won't get collected in the next \(defaultExpirationHours/24) days, or when you abort the operation.")
+                    .talerFont(.body)
+                }
+            }
+        } else {
+            chooseExpiration
+        }
+#endif
     }
 }
 // MARK: -
@@ -93,7 +114,7 @@ struct SelectDays: View {
 struct SelectDays_Previews: PreviewProvider {
     static var previews: some View {
         @State var expireDays: UInt = 1
-        SelectDays(selected: $expireDays, maxExpiration: 20, outgoing: false)
+        SelectDays(selected: $expireDays, maxExpirationHours: 30*24, defaultExpirationHours: 7, outgoing: false)
     }
 }
 #endif
