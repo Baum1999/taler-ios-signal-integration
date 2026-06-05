@@ -37,12 +37,13 @@ struct ChoicesView: View, Sendable {
             let contractChoice: ContractChoice = choice.1
             let index: Int = choice.2
             let isPaymentPossible = selectionDetail.status == .paymentPossible
+            let scopeInfo = selectionDetail.scopeInfo
             if let description = contractChoice.description {
                 Section(header: Text(description)) {
                     let amountV = HStack {
                         Spacer()
                         AmountV(stack: stack.push(),
-                                scope: nil,
+                                scope: scopeInfo,
                                amount: contractChoice.amount)
                             .foregroundColor(isPaymentPossible ? .primary : .secondary  )
                     } .overlay {
