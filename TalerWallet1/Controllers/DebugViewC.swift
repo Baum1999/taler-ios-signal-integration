@@ -27,19 +27,13 @@ import os.log
 // MARK: - Main View
 public let VIEW_EMPTY_WALLET = 10                                   // 10 WalletEmptyView
 public let VIEW_BALANCES = VIEW_EMPTY_WALLET + 1                    // 11 BalancesListView
-public let VIEW_SETTINGS = VIEW_BALANCES + 1                        // 12 SettingsView
-public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 13 AboutView
-public let VIEW_PAYMENT_SERVICES = VIEW_ABOUT + 1                   // 14 ExchangeListView
-public let VIEW_BANK_ACCOUNTS = VIEW_PAYMENT_SERVICES + 1           // 15 BankListView
-public let VIEW_BACKUP = VIEW_BANK_ACCOUNTS + 1                     // 16 BackupView
-public let VIEW_CAROUSEL = VIEW_BACKUP + 1                          // 17 CarouselView
+public let VIEW_CAROUSEL = VIEW_BALANCES + 1                        // 12 CarouselView
 
-// MARK: Transactions
+// MARK: - Transactions
 public let VIEW_EMPTY_HISTORY = VIEW_EMPTY_WALLET + 10              // 20 TransactionsEmptyView
 public let VIEW_TRANSACTIONLIST = VIEW_EMPTY_HISTORY + 1            // 21 TransactionsListView
 public let VIEW_TRANSACTIONSUMMARY = VIEW_TRANSACTIONLIST + 1       // 22 TransactionSummary
 public let VIEW_TRANSACTIONDETAIL = VIEW_TRANSACTIONSUMMARY + 1     // 23 TransactionDetail
-
 
 // MARK: - (Manual) Withdrawal (from Actions)
 // receive coins from bank ==> shows payee, IBAN + Purpose/Subject for manual wire transfer
@@ -67,11 +61,20 @@ public let VIEW_P2P_READY = VIEW_P2P_SUBJECT + 1                    // 53 Send /
 public let VIEW_P2P_REQUEST = VIEW_P2P_SEND + 10                    // 60 Request Amount
 public let VIEW_P2P_TOS = VIEW_P2P_REQUEST + 1                      // 61 Request ToS
 
-// MARK: Business Invoice (from Actions)
+// MARK: - Settings
+public let VIEW_SETTINGS = VIEW_P2P_REQUEST + 10                    // 70 SettingsView
+public let VIEW_ABOUT = VIEW_SETTINGS + 1                           // 71 AboutView
+public let VIEW_PAYMENT_SERVICES = VIEW_ABOUT + 1                   // 72 ExchangeListView
+public let VIEW_BANK_ACCOUNTS = VIEW_PAYMENT_SERVICES + 1           // 73 BankListView
+public let VIEW_BACKUP = VIEW_BANK_ACCOUNTS + 1                     // 74 BackupView
+public let VIEW_SETTINGS2 = VIEW_BACKUP + 1                         // 75 MoreSettingsView
+public let VIEW_SETTINGS3 = VIEW_SETTINGS2 + 1                      // 76 DebugSettingsView
+
+// MARK: - Business Invoice (from Actions)
 // TBD
-//public let VIEW_INVOICE_P2P = VIEW_REQUEST_P2P + 10                 // 70 Invoice Amount
-//public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 71 Invoice ToS
-//public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 72 Invoice Purpose
+//public let VIEW_INVOICE_P2P = VIEW_SETTINGS + 10                    // 80 Invoice Amount
+//public let VIEW_INVOICE_TOS = VIEW_INVOICE_P2P + 1                  // 81 Invoice ToS
+//public let VIEW_INVOICE_PURPOSE = VIEW_INVOICE_TOS + 1              // 82 Invoice Purpose
 
 
 // MARK: - Bank-Integrated Withdrawal
@@ -128,7 +131,7 @@ struct DebugViewV: View {
         HStack {
             Spacer()
             viewIDv
-                .padding(.trailing, 50)
+                .padding(.trailing, UIScreen.hasNotch ? 50 : 60)     // need more space for touchID phones
         }
         .accessibilityHidden(true)
         .ignoresSafeArea(edges: .top)

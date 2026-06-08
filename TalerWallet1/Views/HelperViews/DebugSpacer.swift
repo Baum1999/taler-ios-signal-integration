@@ -10,6 +10,7 @@ import SwiftUI
 #if TALER_NIGHTLY
 struct Spacer: View {
     @AppStorage("developerMode") var developerMode: Bool = false
+    @AppStorage("debugViews") var debugViews: Bool = false
     let minLength: CGFloat?
 
     init(minLength: CGFloat? = nil) {
@@ -18,7 +19,7 @@ struct Spacer: View {
 
     var body: some View {
         let spacer = SwiftUI.Spacer(minLength: minLength)
-        if developerMode {
+        if developerMode && debugViews {
             spacer.background {
                 GeometryReader { geometry in
                     let isVertical = geometry.size.height > geometry.size.width
@@ -27,8 +28,6 @@ struct Spacer: View {
                         .frame(
                             width: isVertical ? 12 : nil,
                             height: isVertical ? nil : 12
-//                            maxWidth: isVertical ? 12 : .infinity,
-//                            maxHeight: isVertical ? .infinity : 12
                         )
                 }
             }

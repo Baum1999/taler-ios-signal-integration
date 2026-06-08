@@ -44,6 +44,7 @@ struct TransactionRowView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("debugViews") var debugViews: Bool = false
 
     @State private var layoutStati0: [Int: Bool] = [:]
     @State private var layoutStati1: [Int: Bool] = [:]
@@ -86,11 +87,11 @@ struct TransactionRowView: View {
         }
     }
 #if TALER_NIGHTLY
-    var red: Color { developerMode ? Color.red : Color.clear }
-    var green: Color { developerMode ? Color.green : Color.clear }
-    var blue: Color { developerMode ? Color.blue : Color.clear }
-    var orange: Color { developerMode ? Color.orange : Color.clear }
-    var purple: Color { developerMode ? Color.purple : Color.clear }
+    var red: Color { developerMode && debugViews ? Color.red : Color.clear }
+    var green: Color { developerMode && debugViews ? Color.green : Color.clear }
+    var blue: Color { developerMode && debugViews ? Color.blue : Color.clear }
+    var orange: Color { developerMode && debugViews ? Color.orange : Color.clear }
+    var purple: Color { developerMode && debugViews ? Color.purple : Color.clear }
 #endif
 
     var common: TransactionCommon { transaction.common }

@@ -152,6 +152,8 @@ struct TransactionsArraySection: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("debugViews") var debugViews: Bool = false
+
     @State private var talerTX: TalerTransaction = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     @State private var padd = 0
@@ -204,7 +206,7 @@ struct TransactionsArraySection: View {
             }
         } header: {
 #if TALER_NIGHTLY
-            if developerMode {
+            if developerMode && debugViews {
                 HStack(spacing: 50) {
                     Button("<") { padd -= 1 }
                     Button("\(padd)") { padd = 0 }

@@ -30,6 +30,7 @@ struct DebugSettingsView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("localConsoleL") var localConsoleL: Bool = false                // for Logs
     @AppStorage("localConsoleO") var localConsoleO: Int = 0                     // for Observability
+    @AppStorage("debugViews") var debugViews: Bool = false
 
     @State private var checkDisabled = false
     @State private var withDrawDisabled = false
@@ -94,6 +95,9 @@ struct DebugSettingsView: View {
                         consoleManager.isVisible = localConsoleO != 0 || localConsoleL
                         consoleManager.clear()
                     }
+                    SettingsToggle(name: String(localized: "Show view sizes"), value: $debugViews,
+                                    id1: "debugViews",
+                            description: String(localized: "Debug view layout and flickering"))
 #if DEBUG
                     let banks = ["glstest.taler.net", "taler.fdold.eu", "regio-taler.fdold.eu",
                                  "taler.grothoff.org", "taler.ar",
@@ -266,7 +270,7 @@ struct DebugSettingsView: View {
         .navigationTitle(navTitle)
         .onAppear() {
             showDevelopItems = developerMode
-            DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_SETTINGS3, stack: stack.push())
         }
         .onDisappear() {
             checkDisabled = false    // reset
