@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -12,10 +12,6 @@ import AnyCodable
 
 typealias I18nDict = [String: String]           // two-char language code, e.g. "de", "en"
 // MARK: - ContractTerms
-
-//  export interface TalerProtocolDuration {
-//      readonly d_us: number | "forever";
-//  }
 
 struct TokenIssuePublicKey: Codable {
     let cipher: String          // "RSA", "CS"
@@ -192,6 +188,8 @@ struct MerchantContractTerms: Codable {
     let extra: Extra?                   // Extra data, interpreted by the merchant only
     let minimumAge: Int?
 
+    let defaultMoneyPot: Int?
+
 // deprecated   let wireFeeAmortization: Int?       // Share of the wire fee that must be settled with one payment
 //    let maxWireFee: Amount?             // Maximum wire fee that the merchant agrees to pay for
 //    let auditors: [Auditor]?
@@ -232,6 +230,7 @@ struct MerchantContractTerms: Codable {
         case autoRefund = "auto_refund"
         case extra
         case minimumAge = "minimum_age"
+        case defaultMoneyPot = "default_money_pot"
 
 //        case wireFeeAmortization = "wire_fee_amortization"
 //        case maxWireFee = "max_wire_fee"
@@ -302,25 +301,15 @@ struct ExchangeFeeGapEstimate: Codable {
 struct PerScopeDetails: Codable {
     let scopeInfo: ScopeInfo
 }
-/// The result from PreparePayForUri
-struct PreparePayResult: Codable {
-    let status: PreparePayResultType                            // InsufficientBalance, AlreadyConfirmed, PaymentPossible, ChoiceSelection
-    let transactionId: String
-    let contractTerms: MerchantContractTerms
-    let contractTermsHash: String?                              // not for InsufficientBalance
-    let scopes: [ScopeInfo]?                                    // not for ChoiceSelection
-//  let detailsPerScope: [ScopeInfo : PreparePayDetails]
-    let amountRaw: Amount                                       // TODO: not for ChoiceSelection
 
-    let amountEffective: Amount?                                // only if status != insufficientBalance
-    let paid: Bool?                                             // only if status == alreadyConfirmed
-    let talerUri: String?
-    let balanceDetails: PayMerchantInsufficientBalanceDetails?  // only if status == insufficientBalance
+/// The result from PreparePayForUri2 and preparePayForTemplate2
+struct PreparePayResult2: Codable {
+    let transactionId: String
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
-    typealias Response = PreparePayResult
-    func operation() -> String { "preparePayForUri" }
+    typealias Response = PreparePayResult2
+    func operation() -> String { "preparePayForUriV2" }
     func args() -> Args { Args(talerPayUri: talerPayUri) }
 
     var talerPayUri: String
@@ -418,8 +407,8 @@ struct TemplateParams: Codable {
 }
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
-    typealias Response = PreparePayResult
-    func operation() -> String { "preparePayForTemplate" }
+    typealias Response = PreparePayResult2
+    func operation() -> String { "preparePayForTemplateV2" }
     func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams) }
 
     var talerPayTemplateUri: String
@@ -560,11 +549,26 @@ struct ConfirmPayResult: Decodable {
 fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
     func operation() -> String { "confirmPay" }
-    func args() -> Args { Args(transactionId: transactionId) }
+    func args() -> Args { Args(transactionId: transactionId, choiceIndex: choiceIndex) }
 
     var transactionId: String
+    var choiceIndex: Int?
     struct Args: Encodable {
         var transactionId: String
+        var useDonau: Bool?
+        var sessionId: String?
+        var forcedCoinSel: ForcedCoinSel?
+        /**
+         * Whether token selection should be forced
+         * e.g. use tokens with non-matching `expected_domains'
+         *
+         * Only applies to v1 orders.
+         */
+        var forcedTokenSel: Bool?
+        /**
+         * Only applies to v1 orders.
+         */
+        var choiceIndex: Int?
     }
 }
 // MARK: -
@@ -578,7 +582,7 @@ extension WalletModel {
     }
 
     nonisolated func preparePayForTemplate(_ talerPayTemplateUri: String, amount: Amount?, summary: String?, viewHandles: Bool = false)
-      async throws -> PreparePayResult {
+      async throws -> PreparePayResult2 {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
         let response = try await sendRequest(request, viewHandles: viewHandles)
@@ -593,15 +597,16 @@ extension WalletModel {
     }
 
     nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
-      async throws -> PreparePayResult {
+      async throws -> PreparePayResult2 {
         let request = PreparePayForUri(talerPayUri: talerPayUri)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
 
-    nonisolated func confirmPay(_ transactionId: String, viewHandles: Bool = false)
+    nonisolated func confirmPay(_ transactionId: String, choiceIndex: Int?, viewHandles: Bool = false)
       async throws -> ConfirmPayResult {
-        let request = ConfirmPayForUri(transactionId: transactionId)
+        let request = ConfirmPayForUri(transactionId: transactionId,
+                                       choiceIndex: choiceIndex)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }

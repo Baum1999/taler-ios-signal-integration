@@ -56,31 +56,7 @@ struct PayTemplateV: View {
         buttonSelected2 = true
     }
 
-    @MainActor
-    func acceptAction(preparePayResult: PreparePayResult) {
-        Task { // runs on MainActor
-            if let confirmPayResult = try? await model.confirmPay(preparePayResult.transactionId) {
-//                symLog.log(confirmPayResult as Any)
-                if confirmPayResult.type == "done" {
-                    dismissTop(stack.push())
-                } else if confirmPayResult.type == "error" {
-                    controller.playSound(0)
-                    // TODO: show error
-                }
-            }
-        }
-    }
-
     private func computeFeePayTemplate(_ amount: Amount) async -> ComputeFeeResult? {
-//        if let result = await preparePayForTemplate(model: model,
-//                                                      url: url,
-//                                                   amount: amountToTransfer,
-//                                                  summary: summaryIsEditable ? summary ?? SPACE
-//                                                                             : nil,
-//                                                 announce: announce)
-//        {
-//            preparePayResult = result.ppCheck
-//        }
         return nil
     }
 

@@ -15,55 +15,6 @@ fileprivate func feeLabel(_ feeString: String) -> String {
     feeString.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeString) fee")
 }
 
-func templateFee(ppCheck: PreparePayResult?) -> Amount? {
-    do {
-        if let ppCheck {
-            // Outgoing: fee = effective - raw
-            if let effective = ppCheck.amountEffective { // , let raw = ppCheck.amountRaw {
-                let raw = ppCheck.amountRaw
-                let fee = try effective - raw
-                return fee
-            }
-        }
-    } catch {}
-    return nil
-}
-
-/// at the moment the merchant doesn't provide live fee updates, but only after creating the payment. Thus we cannot show life fees...
-//struct PayForTemplateResult {
-//    let ppCheck: PreparePayResult
-//    let insufficient: Bool
-//    let feeAmount: Amount?
-//    let feeStr: String
-//}
-//
-//func preparePayForTemplate(model: WalletModel,
-//                             url: URL,
-//                          amount: Amount?,
-//                         summary: String?,
-//                        announce: Announce)
-//  async -> PayForTemplateResult? {
-//    if let ppCheck = try? await model.preparePayForTemplateM(url.absoluteString, amount: amount, summary: summary) {
-//        let controller = Controller.shared
-//        let amountRaw = ppCheck.amountRaw
-//        let currency = amountRaw.currencyStr
-//        let currencyInfo = controller.info(for: currency, controller.currencyTicker)
-//        let amountVoiceOver = amountRaw.formatted(currencyInfo, isNegative: false)
-//        let insufficient = ppCheck.status == .insufficientBalance
-//        if let feeAmount = templateFee(ppCheck: ppCheck) {
-//            let feeStr = feeAmount.formatted(currencyInfo, isNegative: false)
-//            let feeLabel = feeLabel(feeStr)
-//            announce("\(amountVoiceOver), \(feeLabel)")
-//            return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
-//                                        feeAmount: feeAmount, feeStr: feeStr)
-//        }
-//        announce(amountVoiceOver)
-//        return PayForTemplateResult(ppCheck: ppCheck, insufficient: insufficient,
-//                                    feeAmount: nil, feeStr: EMPTYSTRING)
-//    }
-//    return nil
-//}
-
 // MARK: -
 // Will be called either by the user scanning a <pay> QR code or tapping the provided link,
 // both from the shop's website - or even from a printed QR code.
@@ -86,37 +37,11 @@ struct PaymentView: View, Sendable {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State var preparePayResult: PreparePayResult? = nil
-    @State private var elapsed: Int = 0
+    @State var txId: String? = nil
 
-    @MainActor
-    func checkCurrencyInfo(for result: PreparePayResult) async {
-        if let scopes = result.scopes {
-            if !scopes.isEmpty {
-                for scope in scopes {
-                    controller.checkInfo(for: scope, model: model)
-                }
-                return
-            }
-        }
-        // else fallback to contractTerms.exchanges
-        // TODO: wallet-core should return status==UnknownCurrency. When we get that,
-        //      we should let the user decide whether they want info about that 
-//        let exchanges = result.contractTerms.exchanges
-//        for exchange in exchanges {
-//            let baseUrl = exchange.url
-                        // Yikes - getExchangeByUrl does NOT query the exchange via network,
-                        // but returns "exchange entry not found in wallet database"
-                        // so it doesn't make sense to call it here
-//            if let someExchange = try? await model.getExchangeByUrl(url: baseUrl) {
-//                symLog.log("\(baseUrl.trimURL) loaded")
-//                await controller.checkCurrencyInfo(for: baseUrl, model: model)
-//                symLog.log("Info(for: \(baseUrl.trimURL) loaded")
-//                return
-//            }
-//        }
-        symLog.log("Couldn't load Info(for: \(result.amountRaw.currencyStr))")
-    }
+    @State private var selectedChoice: Int = 0
+    @State private var elapsed: Int = 0
+    @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
     @MainActor
     private func viewDidLoad() async {
@@ -125,113 +50,81 @@ struct PaymentView: View, Sendable {
             if let templateResponse = try? await model.preparePayForTemplate(url.absoluteString,
                                                    amount: amountIsEditable ? amountToTransfer : nil,
                                                  summary: summaryIsEditable ? summary : nil) {
-                await checkCurrencyInfo(for: templateResponse)
-                preparePayResult = templateResponse
-                let raw = templateResponse.amountRaw
-                controller.updateAmount(raw, forSaved: url)
+                txId = templateResponse.transactionId
+//                preparePayResult = templateResponse
+//                let raw = templateResponse.amountRaw
+//                controller.updateAmount(raw, forSaved: url)
             }
         } else {
             if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
-                let raw = payResponse.amountRaw
-                amountToTransfer = raw
-                await checkCurrencyInfo(for: payResponse)
-                preparePayResult = payResponse
-                controller.updateAmount(raw, forSaved: url)
+                txId = payResponse.transactionId
+//                let raw = payResponse.amountRaw
+//                controller.updateAmount(raw, forSaved: url)
             }
         }
     }
 
     var body: some View {
-      Group {
-        if let preparePayResult {
-            let status = preparePayResult.status
-            let scopes = preparePayResult.scopes            // TODO: might be nil
-            let firstScope = scopes?.first
-            let raw = preparePayResult.amountRaw
-//            let currency = raw?.currencyStr ?? UNKNOWN      // TODO: v1 has currencies buried in choices
-            let currency = raw.currencyStr
-            let effective = preparePayResult.amountEffective
-            let terms = preparePayResult.contractTerms
-            let exchanges = terms.exchanges
-            let baseURL = terms.exchanges.first?.url
-            let paid = status == .alreadyConfirmed
-            let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
-                                : String(localized: "Confirm Payment", comment:"pay merchant navTitle")
-            List {
-                if paid {
-                    Text("You already paid for this article.")
-                        .talerFont(.headline)
-                    if let fulfillmentUrl = terms.fulfillmentURL {
-                        if let destination = URL(string: fulfillmentUrl) {
-                            let buttonTitle = terms.fulfillmentMessage ?? String(localized: "Open merchant website")
-                            Link(buttonTitle, destination: destination)
-                                .buttonStyle(TalerButtonStyle(type: .bordered))
-                                .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "a11y"))
-                        }
-                    }
-                }
+        ZStack {
+            if let txId {
+                TransactionSummaryList(stack: stack.push(),
+                               transactionId: txId,
+                                     talerTX: $talerTX,
+                                    navTitle: nil,
+                                     hasDone: true,
+                                    showDone: .prominent,
+                                         url: url,
+                                 withActions: false)
+#if TALER_NIGHTLY2
+//            if let preparePayResult {
+                let status = preparePayResult.status
+                let paid = status == .alreadyConfirmed
+                let navTitle = paid ? String(localized: "Already paid", comment:"pay merchant navTitle")
+                                    : String(localized: "Confirm Payment", comment:"pay merchant navTitle")
+                let list = List {
+                    TransactionSummaryList.MerchantHeader(terms: terms)
 
-                PaymentView2(stack: stack.push(),
-                              paid: paid,
-                               raw: raw,
-                         effective: effective,
-                        firstScope: firstScope,
-                           baseURL: baseURL,
-//                             terms: terms,
-                           summary: terms.summary,
-                          products: terms.products,
-                    balanceDetails: preparePayResult.balanceDetails)
-
-            }
-            .listStyle(myListStyle.style).anyView
-            .safeAreaInset(edge: .bottom) {
-                if !paid {
-                    if let effective {
-                        PaySafeArea(symLog: symLog,
-                                    stack: stack.push(),
-                                    terms: terms,
-                                      url: url,
-                                effective: effective,
-                            transactionId: preparePayResult.transactionId,
-                             currencyInfo: $currencyInfo)
-                    } else {
-                        Button("Cancel") {
-                            dismissTop(stack.push())
+                    if paid {
+                        Text("You already paid for this article.")
+                            .talerFont(.headline)
+                        if let fulfillmentUrl = terms.fulfillmentURL {
+                            if let destination = URL(string: fulfillmentUrl) {
+                                let buttonTitle = terms.fulfillmentMessage ?? String(localized: "Open merchant website")
+                                Link(buttonTitle, destination: destination)
+                                    .buttonStyle(TalerButtonStyle(type: .bordered))
+                                    .accessibilityHint(String(localized: "Will go to the merchant website.", comment: "a11y"))
+                            }
                         }
-                        .buttonStyle(TalerButtonStyle(type: .bordered))
-                        .padding(.horizontal)
-                    } // Cancel
+                    } // You already paid
+
                 }
-            }
-            .navigationTitle(navTitle)
-            .task(id: controller.currencyTicker) {
-                let currency = amountToTransfer.currencyStr
-                let scopes = preparePayResult.scopes            // TODO: might be nil
-                if let resultScope = scopes?.first {            // TODO: let user choose which currency
-                    currencyInfo = controller.info(for: resultScope, controller.currencyTicker)
-                } else {
-                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
-                }
-                symLog.log("Info(for: \(currency)) loaded: \(currencyInfo.name)")
-            }
+                .listStyle(myListStyle.style).anyView
 #if OIM
-            .overlay { if #available(iOS 16.4, *) {
-                if controller.oimSheetActive {
-                    OIMpayView(stack: stack.push(),
-                               amount: effective)
-                }
-            } }
+                .overlay { if #available(iOS 16.4, *) {
+                    if controller.oimSheetActive {
+                        OIMpayView(stack: stack.push(),
+                                   amount: effective)
+                    }
+                } }
 #endif
-        } else {
-            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
-                .task { await viewDidLoad() }
+
+                if #available(iOS 17.0, *) {
+                    list.toolbarTitleDisplayMode(.inlineLarge)
+                } else {
+                    list
+                }
+#endif
+            } else {
+                LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)
+                    .task { await viewDidLoad() }
+            }
+        }.onAppear() {
+            symLog.log("onAppear")
+            DebugViewC.shared.setSheetID(SHEET_PAYMENT)
         }
-      }.onAppear() {
-          symLog.log("onAppear")
-          DebugViewC.shared.setSheetID(SHEET_PAYMENT)
-      }
     }
 }
+// MARK: -
 // MARK: -
 struct PaymentView2: View, Sendable {
     let stack: CallStack
@@ -243,7 +136,7 @@ struct PaymentView2: View, Sendable {
 //    let terms: MerchantContractTerms
     let summary: String?
     let products: [Product]?
-    let balanceDetails: PayMerchantInsufficientBalanceDetails?
+    let balanceDetails: PaymentInsufficientBalanceDetails?
 
     func computeFee(raw: Amount?, eff: Amount?) -> Amount? {
         if let raw, let eff {
@@ -260,9 +153,9 @@ struct PaymentView2: View, Sendable {
                                       : String(localized: "Pay:", comment: "mini")
                 let bottomTitle = paid ? String(localized: "Spent amount:")
                                        : String(localized: "Amount to spend:")
-                if let effective {
+                if let effective {  // payment possible
                     let fee = computeFee(raw: raw, eff: effective)
-                    ThreeAmountsSection(stack: stack.push(),
+                    ThreeAmountsSection(stack: stack.push("PaymentView2"),
                                         scope: firstScope,
                                      topTitle: topTitle,
                                     topAbbrev: topAbbrev,
@@ -282,9 +175,10 @@ struct PaymentView2: View, Sendable {
                                      products: products)
                     // TODO: payment: popup with all possible exchanges, check fees
                 } else if let balanceDetails {    // Insufficient
-                    let localizedCause = balanceDetails.causeHint.localizedCause(raw.currencyStr)
-                    Text(localizedCause)
-                        .talerFont(.headline)
+                    if let localizedCause = balanceDetails.causeHint?.localizedCause(raw.currencyStr) {
+                        Text(localizedCause)
+                            .talerFont(.headline)
+                    }
                     ThreeAmountsSection(stack: stack.push(),
                                         scope: firstScope,
                                      topTitle: topTitle,
@@ -319,6 +213,7 @@ struct PaySafeArea: View, Sendable {
     let url: URL
     let effective: Amount
     let transactionId: String
+    let choiceIndex: Int
     @Binding var currencyInfo: CurrencyInfo
 
     func timeToPay(_ terms: MerchantContractTerms) -> Int {
@@ -338,37 +233,49 @@ struct PaySafeArea: View, Sendable {
         return 0
     }
 
+    @ViewBuilder
+    func timeView(_ timeToPay: Int) -> some View {
+        let startDate = Date()
+        HStack {
+            Text("Time to pay:")
+            TimelineView(.animation) { context in
+                let elapsed = Int(context.date.timeIntervalSince(startDate))
+                let seconds = timeToPay - elapsed
+                let text = Text(verbatim: "\(seconds)")
+                if #available(iOS 17.0, *) {
+                    text
+                        .contentTransition(.numericText(countsDown: true))
+                        .animation(.default, value: elapsed)
+                } else if #available(iOS 16.4, *) {
+                    text
+                        .animation(.default, value: elapsed)
+                } else {
+                    text
+                }
+            }.monospacedDigit()
+            Text("seconds")
+        }.accessibilityElement(children: .combine)
+    }
+
     var body: some View {
+        let currency = currencyInfo.currency
         let timeToPay = timeToPay(terms)
-        VStack {
-            if timeToPay > 0 && timeToPay < 300 {
-                let startDate = Date()
-                HStack {
-                    Text("Time to pay:")
-                    TimelineView(.animation) { context in
-                        let elapsed = Int(context.date.timeIntervalSince(startDate))
-                        let seconds = timeToPay - elapsed
-                        let text = Text(verbatim: "\(seconds)")
-                        if #available(iOS 17.0, *) {
-                            text
-                                .contentTransition(.numericText(countsDown: true))
-                                .animation(.default, value: elapsed)
-                        } else if #available(iOS 16.4, *) {
-                            text
-                                .animation(.default, value: elapsed)
-                        } else {
-                            text
-                        }
-                    }.monospacedDigit()
-                    Text("seconds")
-                }.accessibilityElement(children: .combine)
+        let showTime = timeToPay > 0 && timeToPay < 300
+        let view = VStack {
+            if showTime {
+                timeView(timeToPay)
+                    .padding(.top)
             } else {
                 let _ = symLog?.log("\(timeToPay) not shown")
             }
+            Text("Payment is made in \(currency)")
+                .talerFont(.callout)
+                .padding(.top, 4)
             let destination = PaymentDone(stack: stack.push(),
                                             url: url,
 //                                        scope: firstScope,    // TODO: let user choose which currency
-                                  transactionId: transactionId)
+                                  transactionId: transactionId,
+                                    choiceIndex: choiceIndex)
             NavigationLink(destination: destination) {
                 let formatted = effective.formatted(currencyInfo, isNegative: false)
                 Text("Pay \(formatted.0) now")
@@ -376,10 +283,14 @@ struct PaySafeArea: View, Sendable {
             }
             .buttonStyle(TalerButtonStyle(type: .prominent))
             .padding(.horizontal)
-            let currency = currencyInfo.currency
-//          let currency = amountToTransfer.currencyStr
-            Text("Payment is made in \(currency)")
-                .talerFont(.callout)
+            .padding(.bottom, 4)
+        }
+        if #available(iOS 26.0, *) {
+            view
+                .glassEffect(in: .rect(cornerRadius: 16.0))
+                .padding(.horizontal)
+        } else {
+            view
         }
     }
 }
