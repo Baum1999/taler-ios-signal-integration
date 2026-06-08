@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -23,14 +23,12 @@ struct BackupView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
-    @State private var amountLastUsed = Amount.zero(currency: EMPTYSTRING)      // needed for Deposit, ignore
     @State private var created: Bool = false
     @State private var restored: Bool = false
-    @State private var files: [String] = []
+    @State private var backups: [String] = []
     @State private var filename: String = EMPTYSTRING
     @State private var selectedBackup: String? = nil
     @State private var showRestoreAlert: Bool = false
-
 
     private func restoreBackup(_ path: String) {
         restored = true
@@ -84,7 +82,7 @@ struct BackupView: View {
                                           includingPropertiesForKeys: nil,
                                                              options: []) {
                 let filenames = contentsOfDocDir.map { $0.lastPathComponent }
-                withAnimation { files = filenames }
+                backups = filenames.filter { $0.hasPrefix(BACKUP) }.sorted(by: >)
             }
         }
     }
@@ -94,28 +92,28 @@ struct BackupView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let a11yLabelStr = String(localized: "Add bank account", comment: "a11y for the + button")
-        let addTitleStr = String(localized: "Add bank account", comment: "title of the addExchange alert")
         let buttonTitle = String(localized: "Create Backup", comment: "button")
-
 
         let backupHint = Text("Tap 'Create Backup' to make a copy of your digital money. Connect your iPhone to a computer, then use the Files dialog and copy that backup to the computer.")
 
-        let restoreHint = Text("To restore your digital money, connect your iPhone to your computer, then use the Files dialog and copy a previously saved backup from your computer into the Taler Wallet.")
+        let restoreHint = Text("To restore your digital money, tap on the backup you want to restore from the list below.")
 
-        let backups = files.filter { $0.hasPrefix(BACKUP) }
+        let restoreHint2 = Text("To restore on a different iPhone, first install the Taler Wallet app there. Then connect it to your computer, and use the Files dialog to copy a previously saved backup into the Taler Wallet. Finally open the Backup/Restore dialog there, and select the backup you just copied.")
         let hasBackups = !backups.isEmpty
         List {
             Section {
                 backupHint
                     .listRowSeparator(.hidden)
                 FeedbackButton(buttonTitle, disabled: created) { createBackup() }
-                    .padding()
+                    .padding(.horizontal)
                     .listRowSeparator(.hidden)
                 restoreHint
+                restoreHint2
             }
-            if hasBackups {
-                Section {
+            .talerFont(.body)
+
+            Section {
+                if hasBackups {
                     ForEach(backups, id: \.self) { file in
                         let isSelected = file == selectedBackup
                         HStack {
@@ -124,17 +122,20 @@ struct BackupView: View {
                             Spacer()
                         }
                         .background {
-                            Color.primary.opacity(isSelected ? 0.2 : 0.05)
+                            Color.primary.opacity(isSelected ? 0.12 : 0.001)
                         }
                         .onTapGesture {
                             withAnimation { selectedBackup = file }
                             showRestoreAlert = true
                         }
                     }
-                } header: {
-                    Text("Available for restore:")
-                        .talerFont(.title3)
+                } else {
+                    Text("No backups yet...")
+                        .talerFont(.body)
                 }
+            } header: {
+                Text("Available for restore:")
+                    .talerFont(.title3)
             }
         }
         .listStyle(myListStyle.style).anyView
@@ -151,7 +152,7 @@ struct BackupView: View {
                           resetButton },
                message: { Text("Are you sure you want to overwrite your wallet with this backup?\nThis cannot be reverted, all money which is now still in your wallet will be lost.") })
         .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_BANK_ACCOUNTS, stack: stack.push())
+            DebugViewC.shared.setViewID(VIEW_BACKUP, stack: stack.push())
         }
     } // body
 }
