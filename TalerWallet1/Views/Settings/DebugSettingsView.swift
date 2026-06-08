@@ -62,8 +62,7 @@ struct DebugSettingsView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let walletCore = WalletCore.shared
-        Group {
-            List {
+        let list = List {
                 SettingsToggle(name: String("Developer Mode"), value: $developerMode,
                                 id1: "devMode",
                         description: String("More information intended for debugging")) { newVal in
@@ -166,9 +165,9 @@ struct DebugSettingsView: View {
                         Button(title) {
                             Task { // runs on MainActor
                                 symLog.log("running applyDevExperiment Refresh")
-                                try? await model.setConfig(setTesting: true)
-                                try? await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
-                                try? await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
+                                try await model.setConfig(setTesting: true)
+                                try await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
+                                try await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
                             }
                         }
                         .buttonStyle(.bordered)
@@ -263,24 +262,26 @@ struct DebugSettingsView: View {
                     }.id("resetWallet")
                 }
             }
-            .padding(.bottom)
             .id(listID)
             .listStyle(myListStyle.style).anyView
+            .navigationTitle(navTitle)
+            .onAppear() {
+                showDevelopItems = developerMode
+                DebugViewC.shared.setViewID(VIEW_SETTINGS3, stack: stack.push())
+            }
+            .onDisappear() {
+                checkDisabled = false    // reset
+                withDrawDisabled = false
+            }
+            .alert("Reset Wallet", isPresented: $showResetAlert,
+                actions: { dismissAlertButton
+                           resetButton },
+                message: { Text(verbatim: "Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
+        if #available(iOS 26.0, *) {
+            list
+        } else {
+            list
+                .padding(.bottom)
         }
-        .navigationTitle(navTitle)
-        .onAppear() {
-            showDevelopItems = developerMode
-            DebugViewC.shared.setViewID(VIEW_SETTINGS3, stack: stack.push())
-        }
-        .onDisappear() {
-            checkDisabled = false    // reset
-            withDrawDisabled = false
-        }
-        .alert("Reset Wallet",
-               isPresented: $showResetAlert,
-               actions: { dismissAlertButton
-                          resetButton },
-               message: {   Text(verbatim: "Are you sure you want to reset your wallet?\nThis cannot be reverted, all money will be lost.") })
-
     } // body
 }

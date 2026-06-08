@@ -223,11 +223,8 @@ struct SettingsView: View {
                           description: nil) {}
                 }
         }
-            .padding(.bottom)
             .id(listID)
             .listStyle(myListStyle.style).anyView
-
-        list
             .navigationTitle(navTitle)
             .onAppear() {
                 DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
@@ -239,6 +236,12 @@ struct SettingsView: View {
                               dismissAlertButton },
                    message: { Text("Please go to Settings > \(localizedAppName) > Notifications and turn them on.") }
             )
+        if #available(iOS 26.0, *) {
+            list
+        } else {
+            list
+                .padding(.bottom)
+        }
     } // body
 }
 // MARK: -

@@ -50,9 +50,7 @@ struct MoreSettingsView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let walletCore = WalletCore.shared
-        Group {
-            List {
+        let list = List {
                 let showQRstring = String(localized: "Show QR codes")
                 let showQRhint = String(localized: "Automatically for P2P transactions")
                 if #available(iOS 17.7, *) {
@@ -115,14 +113,18 @@ struct MoreSettingsView: View {
 
 //                SettingsFont(title: String(localized: "Font:"), value: talerFontIndex, action: redraw)
 //                    .id("font")
-            }
-            .padding(.bottom)
+        }
             .id(listID)
             .listStyle(myListStyle.style).anyView
-        }
-        .navigationTitle(navTitle)
-        .onAppear() {
-            DebugViewC.shared.setViewID(VIEW_SETTINGS, stack: stack.push())
+            .navigationTitle(navTitle)
+            .onAppear() {
+                DebugViewC.shared.setViewID(VIEW_SETTINGS2, stack: stack.push())
+            }
+        if #available(iOS 26.0, *) {
+            list
+        } else {
+            list
+                .padding(.bottom)
         }
     } // body
 }
