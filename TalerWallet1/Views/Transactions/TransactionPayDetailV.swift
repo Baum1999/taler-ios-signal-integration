@@ -57,16 +57,6 @@ struct TransactionPayDetailV: View {
                     Text(fulfillmentMessage)
                         .talerFont(.body)
                 }
-                if let products = info.products {
-                    ForEach(products) {product in
-                        Section {
-                            if let product_id = product.product_id {
-                                Text(product_id)
-                                    .talerFont(.body)
-                            }
-                        }
-                    }
-                }
             }
             if let abortReason = details.abortReason {
                 if let exchangeResponse = abortReason.exchangeResponse,
@@ -77,6 +67,16 @@ struct TransactionPayDetailV: View {
                 if developerMode {
                     if let hint = abortReason.hint {
                         Text(hint)
+                            .talerFont(.body)
+                    }
+                }
+            }
+        }
+        if let products = info?.products {
+            ForEach(products) { product in
+                if let product_id = product.product_id {
+                    Section {
+                        Text(product_id)
                             .talerFont(.body)
                     }
                 }
