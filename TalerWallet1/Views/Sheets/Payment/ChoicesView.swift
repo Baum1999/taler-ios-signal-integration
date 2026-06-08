@@ -30,6 +30,21 @@ struct ChoicesView: View, Sendable {
                 .foregroundColor(Color.clear)
         }
     }
+    func description(_ contractChoice: ContractChoice) -> String? {
+        if let i18nDict = contractChoice.descriptionI18n {
+            if !i18nDict.isEmpty {
+                for code in Locale.preferredLanguageCodes {
+                    if let descI18n = i18nDict[code] {
+                        return descI18n
+                    }
+                }
+            }
+        }
+        if let desc = contractChoice.description {
+            return desc
+        }
+        return String(localized: "No description", comment: "contractChoice.description")
+    }
 
     var body: some View {
         ForEach(choiceTriple, id: \.1) { choice in
@@ -37,8 +52,9 @@ struct ChoicesView: View, Sendable {
             let contractChoice: ContractChoice = choice.1
             let index: Int = choice.2
             let isPaymentPossible = selectionDetail.status == .paymentPossible
+            // Only show items with human readable description
             let scopeInfo = selectionDetail.scopeInfo
-            if let description = contractChoice.description {
+            if let description = description(contractChoice) {
                 Section(header: Text(description)) {
                     let amountV = HStack {
                         Spacer()
