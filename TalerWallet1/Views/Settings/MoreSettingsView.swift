@@ -33,6 +33,8 @@ struct MoreSettingsView: View {
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @AppStorage("oimEuro") var oimEuro: Bool = false
     @AppStorage("oimChart") var oimChart: Bool = false
+    @AppStorage("payTokenAutomatically") var payTokenAutomatically: Bool = true
+    @AppStorage("payMoneyAutomatically") var payMoneyAutomatically: Bool = false
 
     @State private var listID = UUID()
 
@@ -89,6 +91,17 @@ struct MoreSettingsView: View {
                           description: String(localized: "Backup your money")) {}
                 }
 
+                Section(header: Text(String(localized: "Pay automatically"))) {
+                    SettingsToggle(name: String(localized: "Pay token automatically"), value: $payTokenAutomatically,
+                                    id1: "payTokenAutomatically",
+                            description: String(localized: "Quicker access with tokens", comment: "Pay automatically"))
+                    SettingsToggle(name: String(localized: "Pay money automatically"), value: $payMoneyAutomatically,
+                                    id1: "payMoneyAutomatically",
+                            description: String(localized: "Quicker access with money", comment: "Pay automatically"))
+                    if payMoneyAutomatically {
+                        Text("More to come here...")
+                    }
+                }
 #if OIM
                 SettingsToggle(name: String(localized: "OIM: Euro"), value: $oimEuro,
                                 id1: "oimEuro",
