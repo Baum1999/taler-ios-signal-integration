@@ -77,13 +77,14 @@ enum TransactionMajorState: String, Codable {
       // No state, only used when reporting transitions into the initial state
     case none
     case pending
-    // Florian: Should IMO be rendered like a done state, but with the possibility of suspend/resume buttons. In the minor state auto-refund, we could display some additional hint "The wallet is automatically checking for refunds until XYZ" but very low priority to show this IMO.
-    case finalizing
     case done
     case aborting
     case aborted
-    case suspended
     case dialog
+    // Florian: Should IMO be rendered like a done state, but with the possibility of suspend/resume buttons. In the minor state auto-refund, we could display some additional hint "The wallet is automatically checking for refunds until XYZ" but very low priority to show this IMO.
+    case finalizing
+    case suspended
+    case suspendedFinalizing = "suspended-finalizing"
     case suspendedAborting = "suspended-aborting"
     case failed
     case expired
@@ -101,6 +102,7 @@ enum TransactionMajorState: String, Codable {
             case .suspended: return                   "Suspended"
             case .dialog:    return String(localized: "MajorState.Dialog", defaultValue: "Dialog", comment: "TxMajorState heading")
             case .suspendedAborting: return           "AbortingSuspended"
+            case .suspendedFinalizing: return         "FinalizingSuspended"
             case .failed:    return String(localized: "MajorState.Failed", defaultValue: "Abandoned", comment: "TxMajorState heading")
             case .expired:   return String(localized: "MajorState.Expired", defaultValue: "Expired", comment: "TxMajorState heading")
             case .deleted:   return String(localized: "MajorState.Deleted", defaultValue: "Deleted", comment: "TxMajorState heading")
