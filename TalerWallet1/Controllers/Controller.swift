@@ -242,7 +242,6 @@ class Controller: ObservableObject {
         }
     }
 
-
     func startObserving() {
         let defaults = UserDefaults.standard
         self.diagnosticModeObservation = defaults.observe(\.diagnosticModeEnabled, options: [.new, .old,.prior,.initial]) {  [weak self](_, _) in

@@ -256,7 +256,7 @@ struct WalletMain: View {
         showActionSheet = true
     }
 
-    func onActionDrag() {
+    func onActionDrag() {                           // TODO: gets called multiple times
         logger.log("onActionDrag: showScanner = true")
         showScanner = true
     }

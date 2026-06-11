@@ -43,6 +43,7 @@ struct RotatingTaler: View {
                                          : Text("Taler Logo", comment: "a11y"))       // decorative logo - with button function
             .rotationEffect(rotationDirection ? Angle(degrees: 0) : Angle(degrees: once ? 900 : 720))
             .onReceive(animationTimer) { timerValue in
+//                print("Timer: \(timerValue), rotationDirection: \(rotationDirection)")
                 if rotationEnabled {
                     if !once {
                         withAnimation(.easeInOut(duration: 1.5)) {
