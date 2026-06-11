@@ -37,16 +37,10 @@ struct BalancesListView: View {
         await controller.loadBalances(stack.push("refreshing balances"), model)
     }
 
-    var body: some View {
-#if PRINT_CHANGES
-        let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-#endif
-        /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
-        ///   However, the user can select another balance (with the picker) in each action
-        /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
+    @ViewBuilder
+    func balancesList() -> some View {
         let count = controller.balances.count
-        List {
+        let list = List {
             if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
                 ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
             }
@@ -77,6 +71,36 @@ struct BalancesListView: View {
                 await refresh()
             }
             .navigationTitle(title)
+        if #available(iOS 26.0, *) {
+            list
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
+                        } label: {
+                            Label(TalerTab.settings.title, systemImage: TalerTab.settings.sysImg)
+                                .labelStyle(.iconOnly)
+                        }
+                        //                                  .padding()
+                        .buttonStyle(.glass)
+//                        .accessibilitySortPriority(0)
+                    }
+                }
+        } else {
+            list
+        }
+    }
+
+    var body: some View {
+#if PRINT_CHANGES
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+#endif
+        /// In standard mode, selectedBalance just sets a "preference" which balance to pre-select for Actions.
+        ///   However, the user can select another balance (with the picker) in each action
+        /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
+
+        balancesList()
             .onChange(of: controller.oimModeActive) { oimModeActive in
                 if !oimModeActive {
                     print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")

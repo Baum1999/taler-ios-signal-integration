@@ -101,11 +101,6 @@ struct ActionsSheet: View {
         }
         return false
     }
-    @MainActor
-    func dismissAndPost() {
-        dismissTop(stack.push())
-        NotificationCenter.default.post(name: .SettingsAction, object: nil)                // will trigger NavigationLink
-    }
 
     var body: some View {
         VStack {
@@ -146,24 +141,15 @@ struct ActionsSheet: View {
                 .accessibility(sortPriority: 0)     // read this last
             HStack {
                 if #available(iOS 26.0, *) {
-                    SettingsButton(accessibilityLabelStr: TalerTab.settings.title,
-                                                  action: dismissAndPost)
-//                    .padding()
-                    .buttonStyle(TalerButtonStyle(type: .bordered,
-                                                dimmed: false,
-                                                narrow: true,
-                                              disabled: false,
-                                               aligned: .center))
-                    .accessibility(sortPriority: 0)     // read this last
                     if !pasteAutomatically {
+                        let isEnabled = UIPasteboard.general.hasURLs
                         PasteButton(accessibilityLabelStr: "Paste") {
                             TalerWallet1App().inspectPasteboard(playSound: true)
-                        }
-                        .buttonStyle(TalerButtonStyle(type: .bordered,
-                                                    dimmed: false,
-                                                    narrow: true,
-                                                  disabled: false,
-                                                   aligned: .center))
+                        }.buttonStyle(TalerButtonStyle(type: .bordered,
+                                                     dimmed: false,
+                                                     narrow: true,
+                                                   disabled: !isEnabled,
+                                                    aligned: .center))
                         .accessibility(sortPriority: 1)
                     }
                     Spacer(minLength: 8)
