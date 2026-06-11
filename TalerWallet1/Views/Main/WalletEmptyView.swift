@@ -43,7 +43,7 @@ struct ProdSectionView: View {
                     .talerFont(.headline)
                 Text("To make your first payment, withdraw digital cash.")
                     .talerFont(.body)
-            } else if !developerMode {
+            } else {
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
                         Text("Currently you have only demo cash.")
@@ -70,28 +70,28 @@ struct ProdSectionView: View {
 #endif
             if (showDropdown) {
 #if !TALER_WALLET
-            if developerMode {
-                if defaultExchanges.count > 1 {
-                    CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
-                               exchanges: defaultExchanges) { index in
-                        selectedCurrency = index
+                if developerMode {
+                    if defaultExchanges.count > 1 {
+                        CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
+                                   exchanges: defaultExchanges) { index in
+                            selectedCurrency = index
+                        }
                     }
                 }
-            }
 #endif
-            let defaultExchange = defaultExchanges[selectedCurrency < count ? selectedCurrency : 0]
-            let currency = defaultExchange.currency
-            let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
-            Button(title) {
-                if let talerUri = URL(string: defaultExchange.talerUri) {
-                    controller.talerURI = talerUri
+                let defaultExchange = defaultExchanges[selectedCurrency < count ? selectedCurrency : 0]
+                let currency = defaultExchange.currency
+                let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
+                Button(title) {
+                    if let talerUri = URL(string: defaultExchange.talerUri) {
+                        controller.talerURI = talerUri
+                    }
                 }
-            }
                 .buttonStyle(TalerButtonStyle(type: isEmpty ? .prominent : .bordered,
                                             narrow: false,
                                           disabled: disabled,
                                            aligned: .center))
-                .padding(.bottom)
+                .padding(.bottom, 6)
             } // showDropdown
         } header: {
             if isEmpty {
