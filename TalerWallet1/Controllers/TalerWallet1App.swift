@@ -52,10 +52,10 @@ struct TalerWallet1App: App {
 
     func inspectPasteboard(playSound: Bool) {
         let pasteboard = UIPasteboard.general
-        // We are only interested in strings
-        if !pasteboard.hasStrings { return }
-//        if !pasteboard.hasURLs { return }
+        // We are only interested in URLs
+        if !pasteboard.hasURLs { return }
 
+        // users get asked whether they want to paste, and only if they agree we go to completion
         pasteboard.detectPatterns(for: [UIPasteboard.DetectionPattern.probableWebURL],
                             inItemSet: nil,
                     completionHandler: { result in
@@ -74,16 +74,14 @@ struct TalerWallet1App: App {
                                 if let pastedURL = string.toURL {
                                     let scheme = pastedURL.scheme
                                     if scheme?.lowercased() == "taler" {
-                                        print(string)
+//                                        print(string)
                                         post(pastedURL)
                                         return
                                     }
                                 }
                             }
                         }
-
-                    }
-                    else {
+                    } else {
                         // We won't be retrieving the value, so we won't get a notification banner
                         self.pastedWebURL = nil
                         if playSound {
@@ -94,7 +92,6 @@ struct TalerWallet1App: App {
                     // This never gets called
                     self.pastedWebURL = error.localizedDescription
             }
-
         })
     }
 
