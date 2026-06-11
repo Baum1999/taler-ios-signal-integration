@@ -360,10 +360,12 @@ extension WalletCore {
                         if let event = payload.event, let json = event.toJSON() {
                             let type = event["type"]?.value as? String
                             let eventID = event["id"]?.value as? String
-                            observe(json: json,
-                                    type: type,
-                                    eventID: eventID,
-                                    timestamp: timestamp)
+                            if #available(iOS 16.0, *) {
+                                observe(json: json,
+                                        type: type,
+                                     eventID: eventID,
+                                   timestamp: timestamp)
+                            }
                         }
                     }
                     // TODO: remove these once wallet-core doesn't send them anymore
@@ -382,12 +384,15 @@ extension WalletCore {
     }
 
     @MainActor func handleLog(message: String) {
-        if isLogging {
-            let consoleManager = LCManager.shared
-            consoleManager.print(message)
+        if #available (iOS 16.0, *) {
+            if isLogging {
+                let consoleManager = LCManager.shared
+                consoleManager.print(message)
+            }
         }
     }
 
+    @available(iOS 16.0, *)
     @MainActor func observe(json: String, type: String?, eventID: String?, timestamp: String) {
         let consoleManager = LCManager.shared
         if let type {

@@ -75,24 +75,26 @@ struct DebugSettingsView: View {
                                     id1: "logTransactions",
                             description: String("full log with all tx"))
 #endif
-                    let localConsStr = String("on LocalConsole")
-                    let observability = String("Observe walletCore")
-                    SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
-                        walletCore.isObserving = isObserving}),
-                                      id1: "observe",
-                              description: localConsStr) { isObserving in
-                        let consoleManager = LCManager.shared
-                        consoleManager.isVisible = localConsoleO != 0 || localConsoleL
-                        consoleManager.clear()
-                    }
-                    let showLogs = String("Show logs")
-                    SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
-                        walletCore.isLogging = isLogging}),
-                                    id1: "localConsoleL",
-                            description: localConsStr) { _ in
-                        let consoleManager = LCManager.shared
-                        consoleManager.isVisible = localConsoleO != 0 || localConsoleL
-                        consoleManager.clear()
+                    if #available (iOS 16.0, *) {
+                        let localConsStr = String("on LocalConsole")
+                        let observability = String("Observe walletCore")
+                        SettingsTriState(name: observability, value: $localConsoleO.onChange({ isObserving in
+                            walletCore.isObserving = isObserving}),
+                                          id1: "observe",
+                                  description: localConsStr) { isObserving in
+                            let consoleManager = LCManager.shared
+                            consoleManager.isVisible = localConsoleO != 0 || localConsoleL
+                            consoleManager.clear()
+                        }
+                        let showLogs = String("Show logs")
+                        SettingsToggle(name: showLogs, value: $localConsoleL.onChange({ isLogging in
+                            walletCore.isLogging = isLogging}),
+                                        id1: "localConsoleL",
+                                description: localConsStr) { _ in
+                            let consoleManager = LCManager.shared
+                            consoleManager.isVisible = localConsoleO != 0 || localConsoleL
+                            consoleManager.clear()
+                        }
                     }
                     SettingsToggle(name: String(localized: "Show view sizes"), value: $debugViews,
                                     id1: "debugViews",
