@@ -387,7 +387,7 @@
 				4EE171912B49FE4E00BF9FF5 /* OrderedCollections */,
 				4E18539B2BDAE6E50034F3BA /* LocalConsole */,
 			);
-			productName = Taler;
+			productName = "GNU Taler";
 			productReference = 4E3EAE892A990778009F1BE8 /* GNU_Taler.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -435,7 +435,7 @@
 				4E563DEE2DC3C52C008FA91D /* OrderedCollections */,
 				4E563DF02DC3C52C008FA91D /* LocalConsole */,
 			);
-			productName = Taler;
+			productName = "Taler Nightly";
 			productReference = 4E563E0A2DC3C52C008FA91D /* Taler_Nightly.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -483,7 +483,7 @@
 				4EE1718F2B49FE2B00BF9FF5 /* OrderedCollections */,
 				4E1853992BDAE6D40034F3BA /* LocalConsole */,
 			);
-			productName = Taler;
+			productName = "Taler Wallet";
 			productReference = D14AFD1D24D232B300C51073 /* Taler_Wallet.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -697,7 +697,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -717,7 +717,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -742,7 +742,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -762,7 +762,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -786,7 +786,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -807,7 +807,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -831,7 +831,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -852,7 +852,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-3";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1007,7 +1007,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1027,7 +1027,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.5.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1052,7 +1052,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(TARGET_NAME).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.5.13.1;
+				CURRENT_PROJECT_VERSION = 1.6.3;
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1072,7 +1072,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.6;
+				MARKETING_VERSION = 1.5.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talerwallet-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -1,3 +1,8 @@
+Version 1.6.0 (wallet-core 1.6.3)
+
+• first implementation of V1 payments
+
+
 Version 1.5.6 (wallet-core 1.5.13.1)
 
 - fix Paivana
@@ -18,6 +23,11 @@ Version 1.5.3 (wallet-core 1.5.12)
 
 • Spanish localization
 - GNU Taler & Taler Wallet use static transaction views
+
+
+Version 1.5.2 (wallet-core 1.6.3)
+
+ - fix URL problem
 
 
 Version 1.5.2 (wallet-core 1.5.10.2)
