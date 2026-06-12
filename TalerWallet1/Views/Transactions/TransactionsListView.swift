@@ -207,11 +207,17 @@ struct TransactionsArraySection: View {
         } header: {
 #if TALER_NIGHTLY
             if developerMode && debugViews {
-                HStack(spacing: 50) {
-                    Button("<") { padd -= 1 }
+                HStack {
+                    Button("<<") { padd += 10 }
+                    Spacer()
+                    Button("<") { padd += 1 }
+                    Spacer()
                     Button("\(padd)") { padd = 0 }
-                    Button(">") { padd += 1 }
-                }
+                    Spacer()
+                    Button(">") { padd -= 1 }
+                    Spacer()
+                    Button(">>") { padd -= 10 }
+                }.font(.body)
             } else {
                 if let header {
                     headerView(header)
