@@ -59,7 +59,7 @@ struct PaymentView: View, Sendable {
             if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
                 txId = payResponse.transactionId
 //                let raw = payResponse.amountRaw
-//                controller.updateAmount(raw, forSaved: url)
+//                controller.updateAmount(raw, forSaved: url)       // TODO: update scanned URL
             }
         }
     }
@@ -209,7 +209,6 @@ struct PaySafeArea: View, Sendable {
     let symLog: SymLogV?
     let stack: CallStack
     let terms: MerchantContractTerms
-    @Binding var currencyInfo: CurrencyInfo
     let amountString: String
     let amountA11y: String
     @Binding var payNow: Bool
@@ -256,7 +255,6 @@ struct PaySafeArea: View, Sendable {
     }
 
     var body: some View {
-        let currency = currencyInfo.currency
         let timeToPay = timeToPay(terms)
         let showTime = timeToPay > 0 && timeToPay < 300
         let view = VStack {
@@ -266,9 +264,6 @@ struct PaySafeArea: View, Sendable {
             } else {
                 let _ = symLog?.log("\(timeToPay) not shown")
             }
-            Text("Payment is made in \(currency)")
-                .talerFont(.callout)
-                .padding(.top, 4)
             Button("Pay \(amountString) now") { payNow = true }
                 .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
                 .buttonStyle(TalerButtonStyle(type: .prominent))

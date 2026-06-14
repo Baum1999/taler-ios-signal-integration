@@ -113,11 +113,13 @@ struct ThreeAmountsSection: View {
     let summary: String?
     let products: [Product]?
 
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var productImages: [ProductImage] = []
+    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
 
     @MainActor
     private func viewDidLoad() async {
@@ -131,6 +133,9 @@ struct ThreeAmountsSection: View {
             }
         }
         productImages = temp
+        if let scope {
+            currencyInfo = controller.info(for: scope) ?? CurrencyInfo.zero(UNKNOWN)
+        }
     }
 
     @ViewBuilder
@@ -159,6 +164,7 @@ struct ThreeAmountsSection: View {
     }
 
     var body: some View {
+        let currency = currencyInfo.currency
         let labelColor = WalletColors().labelColor
         let foreColor = pending ? WalletColors().pendingColor(incoming)
                                 : WalletColors().transactionColor(incoming)
@@ -172,6 +178,12 @@ struct ThreeAmountsSection: View {
                         .padding(.bottom)
                 }
             }
+
+            Text(pending ? "Payment will be made in \(currency)"
+                         : "Payment was made in \(currency)")
+                .talerFont(.callout)
+                .padding(.top, 4)
+
             AmountRowV(stack: stack.push(),
                        title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
@@ -231,6 +243,11 @@ struct ThreeAmountsSection: View {
             }
         }
         .task { await viewDidLoad() }
+        .onChange(of: scope) { newVal in
+            if let newVal {
+                currencyInfo = controller.info(for: newVal) ?? CurrencyInfo.zero(UNKNOWN)
+            }
+        }
     }
 }
 // MARK: -

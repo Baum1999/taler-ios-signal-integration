@@ -285,7 +285,6 @@ struct TransactionSummaryList: View {
                         PaySafeArea(symLog: symLog,
                                      stack: stack.push(),
                                      terms: terms,
-                              currencyInfo: $currencyInfo,
                               amountString: formatted.0,
                                 amountA11y: formatted.1,
                                     payNow: $payNow)
