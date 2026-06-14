@@ -139,11 +139,11 @@ struct OrderShortInfo: Codable {
     var orderId: String
     var merchant: Merchant
     var summary: String
-//    var summary_i18n:   ?
+    var summary_i18n: I18nDict?
     var products: [Product]?
     var fulfillmentUrl: String?
     var fulfillmentMessage: String?
-//    var fulfillmentMessage_i18n:    ?
+    var fulfillmentMessage_i18n: I18nDict?
     var contractTermsHash: String?
 }
 // MARK: -

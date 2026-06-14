@@ -586,6 +586,22 @@ struct TransactionSummaryList: View {
                 }
             }
 
+            func summary(_ info: OrderShortInfo?) -> String? {
+                if let i18nDict = info?.summary_i18n {
+                    if !i18nDict.isEmpty {
+                        for code in Locale.preferredLanguageCodes {
+                            if let i18n = i18nDict[code] {
+                                return i18n
+                            }
+                        }
+                    }
+                }
+                if let summary = info?.summary {
+                    return summary
+                }
+                return String(localized: "No summary", comment: "OrderShortInfo.summary")
+            }
+
             var body: some View {
                 Group {
                     let details = paymentTransaction.details
@@ -618,7 +634,7 @@ struct TransactionSummaryList: View {
                                          effective: effective,
                                         firstScope: scope,
                                            baseURL: nil,
-                                           summary: details.info?.summary ?? EMPTYSTRING,
+                                           summary: summary(details.info),
                                           products: details.info?.products ?? [],
                                     balanceDetails: selectionDetail.balanceDetails)
 //                            }
