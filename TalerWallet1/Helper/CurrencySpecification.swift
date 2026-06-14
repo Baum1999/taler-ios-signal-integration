@@ -37,7 +37,7 @@ extension Locale {
 }
 // MARK: -
 extension Amount {
-    func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool,
+    func formatted(_ currencyInfo: CurrencyInfo?, isNegative: Bool = false,
                            useISO: Bool = false, a11yDecSep: String? = nil
     ) -> (String, String) {
         if let currencyInfo {
