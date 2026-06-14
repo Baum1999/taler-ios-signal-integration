@@ -13,6 +13,7 @@ typealias ChoiceTriple = (ChoiceSelectionDetail, ContractChoice, Int)
 struct ChoicesView: View, Sendable {
     let stack: CallStack
     let choiceTriple: [ChoiceTriple]
+    let automaticIndex: Int?
     @Binding var selectedChoice: Int
 
     @ViewBuilder
@@ -30,7 +31,7 @@ struct ChoicesView: View, Sendable {
                 .foregroundColor(Color.clear)
         }
     }
-    func description(_ contractChoice: ContractChoice) -> String? {
+    func description(_ contractChoice: ContractChoice) -> String {
         if let i18nDict = contractChoice.descriptionI18n {
             if !i18nDict.isEmpty {
                 for code in Locale.preferredLanguageCodes {
@@ -52,9 +53,14 @@ struct ChoicesView: View, Sendable {
             let contractChoice: ContractChoice = choice.1
             let index: Int = choice.2
             let isPaymentPossible = selectionDetail.status == .paymentPossible
-            // Only show items with human readable description
+            let payAutomatic = automaticIndex == index
             let scopeInfo = selectionDetail.scopeInfo
-            if let description = description(contractChoice) {
+            let amount = selectionDetail.amountRaw
+            /// If it contains money, always show it. Disable but don’t hide it if insufficient - that serves as advertisement what you could buy if you had more money / tokens.
+            /// If it only contains tokens, and insufficient, then hide it. Most probably there is a money payment option to acquire those tokens, which is advertisement enough.
+            /// Tokens only, paymentPossible. If automaticIndex, then also hide it (and auto-pay it). Otherwise show it, so the user can select it.
+            if (!amount.isZero || isPaymentPossible) && !payAutomatic {
+                let description = description(contractChoice)
                 Section(header: Text(description)) {
                     let amountV = HStack {
                         Spacer()
