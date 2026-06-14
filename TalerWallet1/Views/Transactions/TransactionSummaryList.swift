@@ -58,6 +58,7 @@ struct TransactionSummaryList: View {
     @State private var selectedChoice: Int = 0
     @State private var effective: Amount? = nil
     @State private var scope: ScopeInfo? = nil
+    @State private var payNow: Bool = false
     @Namespace var topID
 
     func loadTransaction() async {
@@ -76,6 +77,24 @@ struct TransactionSummaryList: View {
         } else {
             withAnimation{ talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY); viewId = UUID() }
             jsonTransaction = EMPTYSTRING
+        }
+    }
+
+    private func payTransaction() async {
+        if let confirmPayResult = try? await model.confirmPay(transactionId,
+                                                              choiceIndex: selectedChoice) {
+//          symLog.log(confirmPayResult as Any)
+            if confirmPayResult.type == "done" {
+                if let url {
+                    controller.removeURL(url)
+                }
+//                paymentDone = true
+            } else {
+                if let url {
+                    controller.removeURL(url)    // TODO: pending might fail - in which case we might want to try again
+                }
+//                paymentPending = true
+            }
         }
     }
 
@@ -242,6 +261,7 @@ struct TransactionSummaryList: View {
                 }
                 TypeDetail(stack: stack.push(),
                      transaction: $talerTX,
+                          payNow: $payNow,
                   selectedChoice: $selectedChoice,
                            scope: $scope,
                        effective: $effective,
@@ -261,15 +281,22 @@ struct TransactionSummaryList: View {
                 if isPaying, case .payment(let paymentTransaction) = talerTX {
                     let details = paymentTransaction.details
                     if let effective, let url, let terms = details.contractTerms {
-                        // Pay button, will advance to PaymentDone
+                        let formatted = effective.formatted(currencyInfo)
                         PaySafeArea(symLog: symLog,
                                      stack: stack.push(),
                                      terms: terms,
-                                       url: url,    // for controller.removeURL
-                                 effective: effective,
-                             transactionId: transactionId,
-                               choiceIndex: selectedChoice,
-                              currencyInfo: $currencyInfo)
+                              currencyInfo: $currencyInfo,
+                              amountString: formatted.0,
+                                amountA11y: formatted.1,
+                                    payNow: $payNow)
+                        .onChange(of: payNow) { payNow2 in
+                            if payNow2 {
+                                payNow = false
+                                Task {
+                                    await payTransaction()
+                                }
+                            }
+                        }
                     } else {
                         Button("Cancel") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: .bordered))
@@ -421,6 +448,7 @@ struct TransactionSummaryList: View {
     struct TypeDetail: View {
         let stack: CallStack
         @Binding var transaction: TalerTransaction
+        @Binding var payNow: Bool
         @Binding var selectedChoice: Int
         @Binding var scope: ScopeInfo?
         @Binding var effective: Amount?
@@ -461,7 +489,9 @@ struct TransactionSummaryList: View {
             let paymentTransaction: PaymentTransaction
             @Binding var scope: ScopeInfo?
             @Binding var effective: Amount?
+            @Binding var payNow: Bool
             @Binding var selectedChoice: Int
+
             @EnvironmentObject private var model: WalletModel
             @State var choicesForPayment: GetChoicesForPaymentResult? = nil
             @State var isLoadingChoices: Bool = false
@@ -512,8 +542,11 @@ struct TransactionSummaryList: View {
                         MerchantHeader(terms: details.contractTerms)
 
                         if let choices = choiceTriple() {
+                            let hasAutomatic = choicesForPayment?.automaticExecution ?? false
+                            let automaticIndex = hasAutomatic ? choicesForPayment?.automaticExecutableIndex : nil
                             ChoicesView(stack: stack.push(),
                                  choiceTriple: choices,
+                               automaticIndex: automaticIndex,
                                selectedChoice: $selectedChoice)
                             .onChange(of: selectedChoice) { newValue in
                                 let newChoice = choices[newValue]
@@ -524,6 +557,11 @@ struct TransactionSummaryList: View {
                                 let firstChoice = choices[selectedChoice]
                                 effective = firstChoice.0.amountEffective
                                 scope = firstChoice.0.scopeInfo
+                                if let automaticIndex {
+                                    // Pay Automatically
+                                    selectedChoice = automaticIndex
+                                    payNow = true
+                                }
                             }
 
                             let choice = choices[selectedChoice]
@@ -630,6 +668,7 @@ struct TransactionSummaryList: View {
                                   paymentTransaction: paymentTransaction,
                                                scope: $scope,
                                            effective: $effective,
+                                              payNow: $payNow,
                                       selectedChoice: $selectedChoice)
 
                     case .refund(let refundTransaction): Group {

@@ -167,7 +167,7 @@ struct PaymentView2: View, Sendable {
                                  bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                                  bottomAmount: effective,
                                         large: false,
-                                      pending: false,
+                                      pending: !paid,
                                      incoming: false,
                                       baseURL: baseURL,
                                    txStateLcl: nil,
@@ -209,12 +209,10 @@ struct PaySafeArea: View, Sendable {
     let symLog: SymLogV?
     let stack: CallStack
     let terms: MerchantContractTerms
-    // the scanned URL
-    let url: URL
-    let effective: Amount
-    let transactionId: String
-    let choiceIndex: Int
     @Binding var currencyInfo: CurrencyInfo
+    let amountString: String
+    let amountA11y: String
+    @Binding var payNow: Bool
 
     func timeToPay(_ terms: MerchantContractTerms) -> Int {
         if let milliseconds = try? terms.payDeadline.milliseconds() {
@@ -271,19 +269,11 @@ struct PaySafeArea: View, Sendable {
             Text("Payment is made in \(currency)")
                 .talerFont(.callout)
                 .padding(.top, 4)
-            let destination = PaymentDone(stack: stack.push(),
-                                            url: url,
-//                                        scope: firstScope,    // TODO: let user choose which currency
-                                  transactionId: transactionId,
-                                    choiceIndex: choiceIndex)
-            NavigationLink(destination: destination) {
-                let formatted = effective.formatted(currencyInfo, isNegative: false)
-                Text("Pay \(formatted.0) now")
-                    .accessibilityLabel(Text("Pay \(formatted.1) now", comment: "a11y"))
-            }
-            .buttonStyle(TalerButtonStyle(type: .prominent))
-            .padding(.horizontal)
-            .padding(.bottom, 4)
+            Button("Pay \(amountString) now") { payNow = true }
+                .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
+                .buttonStyle(TalerButtonStyle(type: .prominent))
+                .padding(.horizontal)
+                .padding(.bottom, 4)
         }
         if #available(iOS 26.0, *) {
             view
