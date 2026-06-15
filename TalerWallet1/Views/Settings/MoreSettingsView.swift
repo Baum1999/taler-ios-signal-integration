@@ -92,12 +92,13 @@ struct MoreSettingsView: View {
                 Section(header: Text(String(localized: "Pay automatically"))) {
                     SettingsToggle(name: String(localized: "Pay token automatically"), value: $payTokenAutomatically,
                                     id1: "payTokenAutomatically",
-                            description: String(localized: "Quicker access with tokens", comment: "Pay automatically"))
+                            description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
                     SettingsToggle(name: String(localized: "Pay money automatically"), value: $payMoneyAutomatically,
                                     id1: "payMoneyAutomatically",
-                            description: String(localized: "Quicker access with money", comment: "Pay automatically"))
+                            description: String(localized: "Skip confirmation to speed up", comment: "Pay automatically"))
                     if payMoneyAutomatically {
-                        Text("More to come here...")
+                        Text("Not yet implemented...")
+                        Text("Allow automatic payments for chosen merchants only.")
                     }
                 }
 #if OIM
