@@ -1,3 +1,8 @@
+Version 1.6.1 (wallet-core 1.6.4)
+
+• first implementation of automatic payments
+
+
 Version 1.6.0 (wallet-core 1.6.3)
 
 • first implementation of V1 payments
