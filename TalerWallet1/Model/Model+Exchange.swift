@@ -164,8 +164,12 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 fileprivate struct DefaultExchanges: WalletBackendFormattedRequest {
     func operation() -> String { "getDefaultExchanges" }
     func args() -> Args { Args() }
+//    func args() -> Args { Args(stage: stage) }
 
-    struct Args: Encodable {}                           // no arguments needed
+    var stage: Bool
+    struct Args: Encodable {
+//        var stage: Bool
+    }
 
     struct Response: Decodable {        // list of known exchanges
         var defaultExchanges: [DefaultExchange]
@@ -290,10 +294,10 @@ extension WalletModel {
     }
 
     /// ask wallet-core for its list of default exchanges   ==> currently only taler-ops.ch
-    nonisolated func getDefaultExchanges(viewHandles: Bool = false)
+    nonisolated func getDefaultExchanges(stage: Bool, viewHandles: Bool = false)
     async -> [DefaultExchange] {     // M for MainActor
         do {
-            let request = DefaultExchanges()
+            let request = DefaultExchanges(stage: stage)
             let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.defaultExchanges
         } catch {

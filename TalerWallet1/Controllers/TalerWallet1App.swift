@@ -22,6 +22,11 @@ struct TalerWallet1App: App {
     @Environment(\.scenePhase) private var phase
     @AppStorage("pasteAutomatically") var pasteAutomatically: Bool = false
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @StateObject private var viewState = ViewState.shared           // popToRootView()
     @StateObject private var viewState2 = ViewState2.shared         // popToRootView()
@@ -119,7 +124,8 @@ struct TalerWallet1App: App {
                     let testing = false
                     let delay: TimeInterval = 2.25
 #endif
-                    try! await controller.initWalletCore(model, setTesting: testing, delay: delay)     // will (and should) crash on failure
+                    try! await controller.initWalletCore(model, stage: developerMode,
+                                              setTesting: testing, delay: delay)     // will (and should) crash on failure
                 }
         if #available(iOS 16.4, *) {
             return WindowGroup {

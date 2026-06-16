@@ -458,7 +458,7 @@ class Controller: ObservableObject {
     }
 // MARK: -
     @MainActor
-    func initWalletCore(_ model: WalletModel, setTesting: Bool, delay: TimeInterval)
+    func initWalletCore(_ model: WalletModel, stage: Bool, setTesting: Bool, delay: TimeInterval)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
@@ -474,7 +474,14 @@ class Controller: ObservableObject {
                     try await model.setConfig(setTesting: false)
                 }
 #endif
-                defaultExchanges = await model.getDefaultExchanges()
+                defaultExchanges = await model.getDefaultExchanges(stage: stage)
+                if stage, let talerOps = defaultExchanges.first {
+                    let stageExc = DefaultExchange(talerUri: "taler://withdraw-exchange/exchange.stage.taler-ops.ch",
+                                                   currency: talerOps.currency,
+                                               currencySpec: talerOps.currencySpec
+                    )
+                    defaultExchanges.insert(stageExc, at: 0)
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.backendState = .ready              // dismiss the launch animation
                 }
