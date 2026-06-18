@@ -1,3 +1,8 @@
+Version 1.6.2 (wallet-core 1.6.5)
+
+• support for shorter payment QR code data
+
+
 Version 1.6.1 (wallet-core 1.6.4)
 
 • first implementation of automatic payments
