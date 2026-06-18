@@ -66,7 +66,7 @@ struct RotatingTaler: View {
             image
                 .background {
                     Capsule()
-                        .fill(Color(.systemGray6).opacity(0.3))
+                        .fill(Color(.systemGray6).opacity(0.7))
                 }
         }
     }

@@ -26,10 +26,24 @@ extension AccountRestriction: Identifiable {
     var id: AccountRestriction {self}
 }
 
+enum TransferType: String, Codable {
+    case payto
+    case chQrBill = "ch-qr-bill"
+}
+
+struct TransferOption: Codable, Hashable {
+    var type: TransferType
+    var paytoUri: String?                                       // only if type == payto
+    var qrReferenceNumber: String?
+    var qrCodes: [QrCodeSpec]?
+}
+
 struct ExchangeAccountDetails: Decodable {
     var status: String                                          // "OK" or "error" - then conversionError
     var paytoUri: String
     var transferAmount: Amount?                                 // only if "OK"
+    var transferOptions: [TransferOption]?
+    var transferExpiry: Timestamp?
     var bankLabel: String?                                      // only if wallet-core knows it
     var currencySpecification: CurrencySpecification?           // only if wallet-core knows it
     var creditRestrictions: [AccountRestriction]?               // only if restrictions apply
@@ -205,7 +219,7 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
-struct QrCodeSpec: Decodable, Hashable {
+struct QrCodeSpec: Codable, Hashable {
     var type: String
     var qrContent: String
 }
