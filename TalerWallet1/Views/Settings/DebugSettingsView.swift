@@ -100,7 +100,9 @@ struct DebugSettingsView: View {
                                     id1: "debugViews",
                             description: String(localized: "Debug view layout and flickering"))
 #if DEBUG
-                    let banks = ["glstest.taler.net", "taler.fdold.eu", "regio-taler.fdold.eu",
+                    let banks = [//"stage.taler-ops.ch",    <= never has a bank!
+//                                 "glstest.taler.net",
+                                 "taler.fdold.eu", "regio-taler.fdold.eu",
                                  "taler.grothoff.org", "taler.ar",
                                  "head.taler.net", "test.taler.net", "demo.taler.net", "kyctest.taler.net"]
                     ForEach(banks, id: \.self) { bank in

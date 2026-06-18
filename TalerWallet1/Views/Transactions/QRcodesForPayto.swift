@@ -48,13 +48,8 @@ struct QRcodesForPayto: View {
         let textToShare = String(receiverStr + "\n" + amountStr + "\n" + message)
         List {
             if !minimalistic {
-//                if count > 1 {
-                    Text("If your banking software runs on another device, you can scan one of these QR codes:")
-                        .listRowSeparator(.hidden)
-//                } else {
-//                    Text("If your banking software runs on another device, you can scan this QR code:")
-//                        .listRowSeparator(.hidden)
-//                }
+                Text("If your banking software runs on another device, you can scan one of these QR codes:")
+                    .listRowSeparator(.hidden)
             }
             ForEach(transferOptions, id: \.self) { option in
                 if let qrCodes = option.qrCodes {

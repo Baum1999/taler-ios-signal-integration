@@ -118,6 +118,8 @@ struct ManualDetailsV: View {
                                                  amountStr: amountStr.0,
                                                 messageStr: payto.messageStr)
                                 } else if countA > 0 {   // show the single QR directly
+//                                    Text("If your banking software runs on another device, you can scan this QR code:")
+//                                        .listRowSeparator(.hidden)
                                     if let qrCodeSpecs = transferOptions.first?.qrCodes {
                                         if let qrCode = qrCodeSpecs.first {
                                             let message = payto.messageStr ?? EMPTYSTRING

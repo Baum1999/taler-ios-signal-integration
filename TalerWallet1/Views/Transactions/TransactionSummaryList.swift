@@ -290,8 +290,8 @@ struct TransactionSummaryList: View {
                                     payNow: $payNow)
                         .onChange(of: payNow) { payNow2 in
                             if payNow2 {
-                                payNow = false
                                 Task {
+                                    payNow = false
                                     await payTransaction()
                                 }
                             }

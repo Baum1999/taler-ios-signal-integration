@@ -26,7 +26,6 @@ struct WalletMain: View {
     @Binding var showActionSheet: Bool
     @Binding var showScanner: Bool
 
-    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var tabBarModel: TabBarModel
