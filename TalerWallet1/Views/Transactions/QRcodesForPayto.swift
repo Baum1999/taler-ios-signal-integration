@@ -34,7 +34,7 @@ struct QRcodeCopyShare: View {
 
 struct QRcodesForPayto: View {
     let stack: CallStack
-    @Binding var qrCodeSpecs: [QrCodeSpec]
+    var transferOptions: [TransferOption]
     let receiverStr: String
     let amountStr: String
     let messageStr: String?
@@ -46,20 +46,23 @@ struct QRcodesForPayto: View {
     var body: some View {
         let message = messageStr ?? EMPTYSTRING
         let textToShare = String(receiverStr + "\n" + amountStr + "\n" + message)
-        let count = qrCodeSpecs.count
         List {
             if !minimalistic {
-                if count > 1 {
+//                if count > 1 {
                     Text("If your banking software runs on another device, you can scan one of these QR codes:")
                         .listRowSeparator(.hidden)
-                } else {
-                    Text("If your banking software runs on another device, you can scan this QR code:")
-                        .listRowSeparator(.hidden)
-                }
+//                } else {
+//                    Text("If your banking software runs on another device, you can scan this QR code:")
+//                        .listRowSeparator(.hidden)
+//                }
             }
-            ForEach(qrCodeSpecs, id: \.self) { spec in
-                QRcodeCopyShare(spec: spec, textToShare: textToShare)
-                    .listRowSeparator(.automatic)
+            ForEach(transferOptions, id: \.self) { option in
+                if let qrCodes = option.qrCodes {
+                    ForEach(qrCodes, id: \.self) { spec in
+                        QRcodeCopyShare(spec: spec, textToShare: textToShare)
+                            .listRowSeparator(.automatic)
+                    }
+                }
             }
         }
         .navigationTitle(navTitle)

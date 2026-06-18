@@ -23,7 +23,6 @@ struct ManualDetailsV: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var accountID = 0
     @State private var listID = UUID()
-    @State private var qrCodeSpecs: [QrCodeSpec] = []
 
     func redraw(_ newAccount: Int) -> Void {
         if newAccount != accountID {
@@ -37,15 +36,21 @@ struct ManualDetailsV: View {
         }
     }
 
-    @MainActor
-    private func viewDidLoad(_ paytoUri: String) async {
-        if let specs = try? await model.getQrCodesForPayto(paytoUri) {
-            qrCodeSpecs = specs
-            return
+    @ViewBuilder func qrCodesRow(_ transferOptions: [TransferOption],
+                                       receiverStr: String,
+                                         amountStr: String,
+                                        messageStr: String?) -> some View {
+        let qrCodesForPayto = QRcodesForPayto(stack: stack.push(),
+                                    transferOptions: transferOptions,
+                                        receiverStr: receiverStr,
+                                          amountStr: amountStr,
+                                         messageStr: messageStr)
+        NavigationLink(destination: qrCodesForPayto) {
+            Text(minimalistic ? "QR"
+                              : "Wire transfer QR codes")
+            .talerFont(.title3)
         }
-        qrCodeSpecs = []
     }
-
     var body: some View {
         if let accountDetails = details.exchangeCreditAccountDetails {
             let validDetails = validDetails(accountDetails)
@@ -76,13 +81,11 @@ struct ManualDetailsV: View {
                             SegmentControl(value: $accountID, accountDetails: validDetails, action: redraw)
                                 .listRowSeparator(.hidden)
                         }
-                    } else if let amount = account.transferAmount {
-                        if let bankName = account.bankLabel {
-                            Text(bankName + ":   " + amountStr.0)
-                                .accessibilityLabel(bankName + ":   " + amountStr.1)
-//                        } else {
-//                            Text(amountStr)
-                        }
+                    } else if let bankName = account.bankLabel {
+                        Text(bankName + ":   " + amountStr.0)
+                            .accessibilityLabel(bankName + ":   " + amountStr.1)
+//                    } else {
+//                        Text(amountStr)
                     }
                     let payto = PayTo(account.paytoUri)
                     if let receiverStr = payto.receiver {
@@ -106,24 +109,25 @@ struct ManualDetailsV: View {
                                 .talerFont(.title3)
                             }
 
-                            let count = qrCodeSpecs.count
-                            if count > 1 {
-                                let qrCodesForPayto = QRcodesForPayto(stack: stack.push(),
-                                                                qrCodeSpecs: $qrCodeSpecs,
-                                                                receiverStr: receiverStr,
-                                                                  amountStr: amountStr.0,
-                                                                 messageStr: payto.messageStr
-                                )
-                                NavigationLink(destination: qrCodesForPayto) {
-                                    Text(minimalistic ? "QR"
-                                                      : "Wire transfer QR codes")
-                                    .talerFont(.title3)
+                            if let transferOptions = account.transferOptions {
+                                let countA = transferOptions.count
+                                let countB = transferOptions.first?.qrCodes?.count ?? 0
+                                if countA > 1 || countB > 1 {
+                                    qrCodesRow(transferOptions,
+                                               receiverStr: receiverStr,
+                                                 amountStr: amountStr.0,
+                                                messageStr: payto.messageStr)
+                                } else if countA > 0 {   // show the single QR directly
+                                    if let qrCodeSpecs = transferOptions.first?.qrCodes {
+                                        if let qrCode = qrCodeSpecs.first {
+                                            let message = payto.messageStr ?? EMPTYSTRING
+                                            let textToShare = String(receiverStr + "\n" + amountStr.0 + "\n" + message)
+                                            QRcodeCopyShare(spec: qrCode,
+                                                     textToShare: textToShare)
+                                            .listRowSeparator(.automatic)
+                                        }
+                                    }
                                 }
-                            } else if count > 0 {
-                                let message = payto.messageStr ?? EMPTYSTRING
-                                let textToShare = String(receiverStr + "\n" + amountStr.0 + "\n" + message)
-                                QRcodeCopyShare(spec: qrCodeSpecs.first!, textToShare: textToShare)
-                                    .listRowSeparator(.automatic)
                             }
 #if DEBUG
                           if developerMode {
@@ -147,7 +151,6 @@ struct ManualDetailsV: View {
 #endif
                         }.id(listID)
                             .talerFont(.body)
-                            .task { await viewDidLoad(account.paytoUri) }
                     } else {
                         // TODO: Error No payto URL
                     }

@@ -31,6 +31,11 @@ enum TransferType: String, Codable {
     case chQrBill = "ch-qr-bill"
 }
 
+struct QrCodeSpec: Codable, Hashable {
+    var type: String
+    var qrContent: String
+}
+
 struct TransferOption: Codable, Hashable {
     var type: TransferType
     var paytoUri: String?                                       // only if type == payto
@@ -219,26 +224,6 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
-struct QrCodeSpec: Codable, Hashable {
-    var type: String
-    var qrContent: String
-}
-/// A request to accept a manual withdrawl.
-fileprivate struct GetQrCodesForPayto: WalletBackendFormattedRequest {
-    func operation() -> String { "getQrCodesForPayto" }
-    func args() -> Args { Args(paytoUri: paytoUri) }
-
-    var paytoUri: String
-
-    struct Response: Decodable, Sendable {              // list of QrCodeSpecs
-        var codes: [QrCodeSpec]
-    }
-
-    struct Args: Encodable {
-        var paytoUri: String
-    }
-}
-// MARK: -
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
     nonisolated func prepareWithdrawExchange(_ talerUri: String,
@@ -308,13 +293,5 @@ extension WalletModel {
         let request = AcceptManualWithdrawal(amount: amount, baseUrl: baseUrl, restrictAge: restrictAge)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
-    }
-
-    nonisolated func getQrCodesForPayto(_ paytoUri: String,
-                                       viewHandles: Bool = false)
-      async throws -> [QrCodeSpec]? {
-        let request = GetQrCodesForPayto(paytoUri: paytoUri)
-        let response = try await sendRequest(request, viewHandles: viewHandles)
-        return response.codes
     }
 }
