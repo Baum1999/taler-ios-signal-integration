@@ -371,10 +371,12 @@ struct TransactionSummaryList: View {
                     HStack {
                         Spacer()
                         VStack(alignment: .center) {
+#if TALER_NIGHTLY
                             let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
                             Image(systemName: imageName)
                                 .resizable()
                                 .frame(width: 44, height: 44)
+#endif
                             let merchant = terms.merchant.name
                             Text(merchant)
                                 .talerFont(.title3)
