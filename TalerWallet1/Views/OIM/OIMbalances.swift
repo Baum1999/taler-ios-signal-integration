@@ -177,6 +177,12 @@ struct OIMbalances: View {
         let enabled = if let available {
             !available.isZero
         } else { false }
+        let showSend = viewState == .chestIsOpen
+#if DEBUG
+        let showRequest = viewState == .chestIsOpen
+#else
+        let showRequest = false
+#endif
         let topButtons = HStack(alignment: .top) {
             if selectedBalance == nil {
                 let showQR = viewState == .chestsClosed
@@ -187,16 +193,17 @@ struct OIMbalances: View {
                 .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                 .matchedGeometryEffect(id: OIMBACK, in: wrapper.namespace, isSource: true)
             } else {
-                let showRequest = viewState == .chestIsOpen
+
+            }
+            Spacer()
+            VStack {
+                OIMactionButton(type: .sendP2P, isFinal: false, action: sendTapped)
+                    .frame(width: OIMbuttonSize, height: OIMbuttonSize)
+                    .opacity(showSend ? 1 : INVISIBLE)
                 OIMactionButton(type: .requestP2P, isFinal: false, action: requestTapped)
                     .frame(width: OIMbuttonSize, height: OIMbuttonSize)
                     .opacity(showRequest ? 1 : INVISIBLE)
             }
-            Spacer()
-            let showSend = viewState == .chestIsOpen
-            OIMactionButton(type: .sendP2P, isFinal: false, action: sendTapped)
-                .frame(width: OIMbuttonSize, height: OIMbuttonSize)
-                .opacity(showSend ? 1 : INVISIBLE)
         }
 
         let maxAvailable = cash.max(available: available?.centValue ?? 0)       // TODO: centValue factor
@@ -255,7 +262,7 @@ struct OIMbalances: View {
                                 .frame(width: size, height: size)
                                 .zIndex(itsMe ? 3 : 0)
                                 .opacity((isClosed || itsMe) ? 1 : INVISIBLE)
-                                .matchedGeometryEffect(id: itsMe ? OIMNUMBER
+                                .matchedGeometryEffect(id: itsMe ? OIMNUMBER // (sending ? OIMBACK : OIMNUMBER)
 //                                                               : String(index),
                                                                  : oimCurrency.currencyStr,
                                                        in: wrapper.namespace, isSource: false)
