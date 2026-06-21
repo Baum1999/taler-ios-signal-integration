@@ -128,16 +128,8 @@ struct BorderWithNFC<Content: View>: View {
     @State private var showTOTP = false
     @ObservedObject var nfcWriter = NFCWriter()
 
-    var lockImage: Image {
-        let name = ICONNAME_LOCKCLOCK
-        let sysName = SYSTEM_LOCKCLOCK                                          // 􂆉 "lock.badge.clock"
-        if UIImage(named: name) != nil {
-            return Image(name)
-        } else if UIImage(systemName: sysName) != nil {
-            return Image(systemName: sysName)
-        } else {
-            return Image(systemName: FALLBACK_LOCK)
-        }
+    var lockImage: Image {             // 􂆉 "lock.badge.clock"
+        Image(ICONNAME_LOCKCLOCK, SYSTEM_LOCKCLOCK, fallback: FALLBACK_LOCK)
     }
 
     private var MAGIC_HEADER: Data {

@@ -214,12 +214,7 @@ struct ZoomInButton : View  {
 
     var body: some View {
         Button(action: action) {
-            let name = ICONNAME_ZOOM_IN
-            if UIImage(named: name) != nil {
-                Image(name)
-            } else {
-                Image(systemName: SYSTEM_ZOOM_IN)
-            }
+            Image(ICONNAME_ZOOM_IN, SYSTEM_ZOOM_IN)
         }
         .tint(.accentColor)
         .talerFont(.title)
@@ -233,12 +228,7 @@ struct ZoomOutButton : View  {
 
     var body: some View {
         Button(action: action) {
-            let name = ICONNAME_ZOOM_OUT
-            if UIImage(named: name) != nil {
-                Image(name)
-            } else {
-                Image(systemName: SYSTEM_ZOOM_OUT)
-            }
+            Image(ICONNAME_ZOOM_OUT, SYSTEM_ZOOM_OUT)
         }
         .tint(.accentColor)
         .talerFont(.title)
@@ -253,14 +243,7 @@ struct BackButton : View  {
         Button(action: action) {
             let name = ICONNAME_INCOMING + ICONNAME_FILL
             let sysName = SYSTEM_INCOMING4 + ICONNAME_FILL
-            if UIImage(named: name) != nil {
-                Image(name)
-            } else if UIImage(systemName: sysName) != nil {
-                Image(systemName: sysName)
-            } else {
-                // TODO: ultralight vs black
-                Image(systemName: FALLBACK_INCOMING)
-            }
+            Image(name, sysName, fallback: FALLBACK_INCOMING)
         }
         .tint(.accentColor)
         .talerFont(.largeTitle)
@@ -283,14 +266,7 @@ struct ForwardButton : View  {
                                     : ICONNAME_OUTGOING
             let sysName   = enabled ? SYSTEM_OUTGOING4 + ICONNAME_FILL
                                     : SYSTEM_OUTGOING4
-            if UIImage(named: imageName) != nil {
-                Image(imageName)
-            } else if UIImage(systemName: sysName) != nil {
-                Image(systemName: sysName)
-            } else {
-                // TODO: ultralight vs black
-                Image(systemName: FALLBACK_OUTGOING)
-            }
+            Image(imageName, sysName, fallback: FALLBACK_OUTGOING)
         }
         .tint(.accentColor)
         .talerFont(.largeTitle)
