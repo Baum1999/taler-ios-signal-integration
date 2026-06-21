@@ -25,6 +25,171 @@ extension TalerTransaction {             // for Dummys
     }
 }
 // MARK: -
+struct MerchantHeader: View {
+    let terms: MerchantContractTerms?
+
+    var body: some View {
+        if let terms {
+            Section {
+                Text(terms.summary)
+                    .talerFont(.title3)
+            } header: {
+                HStack {
+                    Spacer()
+                    VStack(alignment: .center) {
+#if TALER_NIGHTLY
+                        let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
+                        Image(systemName: imageName)
+                            .resizable()
+                            .frame(width: 44, height: 44)
+#endif
+                        let merchant = terms.merchant.name
+                        Text(merchant)
+                            .talerFont(.title3)
+                    }.foregroundStyle(Color(.primary))
+                    Spacer()
+                }
+            }
+        }
+    }
+}
+// MARK: -
+struct PaymentTransactionView: View {
+    private let symLog = SymLogV()
+    let stack: CallStack
+    let common: TransactionCommon
+    let paymentTransaction: PaymentTransaction
+    @Binding var scope: ScopeInfo?
+    @Binding var effective: Amount?
+    @Binding var payNow: Bool
+    @Binding var isLoadingChoices: Bool?
+    @Binding var selectedChoice: Int
+
+    @EnvironmentObject private var model: WalletModel
+    @State var choicesForPayment: GetChoicesForPaymentResult? = nil
+//    @State var isLoadingChoices: Bool? = nil
+
+    @MainActor
+    func choiceTriple() -> [ChoiceTriple]? {
+        if let choicesForPayment {
+            if let ctChoices = choicesForPayment.contractTerms.choices {
+                let combined = Array(zip(choicesForPayment.choices, ctChoices, ctChoices.indices))
+                return combined
+            }
+        }
+        return nil
+    }
+
+    private func getChoicesForPayment() async {
+        if isLoadingChoices == nil {
+            symLog.log("first getChoicesForPayment, stack: \(stack)")
+            isLoadingChoices = false
+        }
+        if isLoadingChoices == false {
+            isLoadingChoices = true
+            let txId = common.transactionId
+            if let choiceResponse = try? await model.getChoicesForPayment(txId) {
+                choicesForPayment = choiceResponse
+                isLoadingChoices = false
+            }
+        } else {
+            symLog.log("getChoicesForPayment already in progress")
+        }
+    }
+
+    func summary(_ info: OrderShortInfo?) -> String? {
+        if let i18nDict = info?.summary_i18n {
+            if !i18nDict.isEmpty {
+                for code in Locale.preferredLanguageCodes {
+                    if let i18n = i18nDict[code] {
+                        return i18n
+                    }
+                }
+            }
+        }
+        if let summary = info?.summary {
+            return summary
+        }
+        return String(localized: "No summary", comment: "OrderShortInfo.summary")
+    }
+
+    var body: some View {
+        let _ = Self._printChanges()
+        let _ = symLog.vlog()
+        Group {
+            let details = paymentTransaction.details
+            if common.isDialog {        // show payment confirmation dialog
+                MerchantHeader(terms: details.contractTerms)
+
+                if let choices = choiceTriple() {
+                    let hasAutomatic = choicesForPayment?.automaticExecution ?? false
+                    let automaticIndex = hasAutomatic ? choicesForPayment?.automaticExecutableIndex : nil
+                    ChoicesView(stack: stack.push(),
+                         choiceTriple: choices,
+                       automaticIndex: automaticIndex,
+                       selectedChoice: $selectedChoice)
+                    .onChange(of: selectedChoice) { newValue in
+                        let newChoice = choices[newValue]
+                        effective = newChoice.0.amountEffective
+                        scope = newChoice.0.scopeInfo
+                    }
+                    .task {
+                        let firstChoice = choices[selectedChoice]
+                        effective = firstChoice.0.amountEffective
+                        scope = firstChoice.0.scopeInfo
+                        if let automaticIndex {
+                            // Pay Automatically
+                            selectedChoice = automaticIndex
+                            payNow = true
+                        }
+                    }
+
+                    let choice = choices[selectedChoice]
+                    let selectionDetail: ChoiceSelectionDetail = choice.0
+                    let contractChoice: ContractChoice = choice.1
+
+//                    if selectionDetail.status == .paymentPossible {
+                        PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
+                                      paid: false,
+                                       raw: selectionDetail.amountRaw,
+                                 effective: effective,
+                                firstScope: scope,
+                                   baseURL: nil,
+                                   summary: summary(details.info),
+                                  products: details.info?.products ?? [],
+                            balanceDetails: selectionDetail.balanceDetails)
+//                    }
+                }
+            } else { // show finished payment
+                TransactionPayDetailV(paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
+                ThreeAmountsSheet(stack: stack.push(),
+                                  scope: scope,
+                                 common: common,
+                              topAbbrev: String(localized: "Price:", comment: "mini"),
+                               topTitle: String(localized: "Price (net):"),
+                                baseURL: nil,               // TODO: baseURL
+                                 noFees: nil,               // TODO: noFees
+                          feeIsNegative: false,
+                                  large: true,
+                                summary: details.info?.summary ?? EMPTYSTRING)
+            } // show finished payment
+        }
+        .task(id: common.txState.hashValue) {
+            let state = common.txState
+            if common.isDialog {
+                if choicesForPayment == nil {
+                    symLog.log("❗️❗️ task: \(common.txState)")
+                    await getChoicesForPayment()
+                } else {
+                    symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
+                }
+            } else {
+                symLog.log("❗️❗️ \(common.type.rawValue), no need for task: \(state)")
+            }
+        }
+    } // body
+} // PaymentTransactionView
+// MARK: -
 struct TransactionSummaryList: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -239,10 +404,10 @@ struct TransactionSummaryList: View {
     }
 
     var body: some View {
-#if PRINT_CHANGES
+//#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-#endif
+//#endif
         let common = talerTX.common
 //        let scope = common.scopes.first                                     // might be nil if scopes == []
         let locale = TalerDater.shared.locale
@@ -259,13 +424,13 @@ struct TransactionSummaryList: View {
                         .listRowSeparator(.hidden)
                         .talerFont(.title)
                 }
-                TypeDetail(stack: stack.push(),
-                     transaction: $talerTX,
-                          payNow: $payNow,
-                  selectedChoice: $selectedChoice,
-                           scope: $scope,
-                       effective: $effective,
-                         hasDone: hasDone)
+                TransactionTypeDetail(stack: stack.push(),
+                                transaction: $talerTX,
+                                     payNow: $payNow,
+                             selectedChoice: $selectedChoice,
+                                      scope: $scope,
+                                  effective: $effective,
+                                    hasDone: hasDone)
 
                 // TODO: Retry Countdown, Retry Now button
 //                if talerTX.isRetryable, let retryAction {
@@ -358,35 +523,7 @@ struct TransactionSummaryList: View {
             symLog.log("onDisappear")
         }
     }
-    // MARK: -
-    struct MerchantHeader: View {
-        let terms: MerchantContractTerms?
-
-        var body: some View {
-            if let terms {
-                Section {
-                    Text(terms.summary)
-                        .talerFont(.title3)
-                } header: {
-                    HStack {
-                        Spacer()
-                        VStack(alignment: .center) {
-#if TALER_NIGHTLY
-                            let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
-                            Image(systemName: imageName)
-                                .resizable()
-                                .frame(width: 44, height: 44)
-#endif
-                            let merchant = terms.merchant.name
-                            Text(merchant)
-                                .talerFont(.title3)
-                        }.foregroundStyle(Color(.primary))
-                        Spacer()
-                    }
-                }
-            }
-        }
-    }
+} // TransactionSummaryList
     // MARK: -
     struct KYCbutton: View {
         let kycUrl: String?
@@ -445,384 +582,7 @@ struct TransactionSummaryList: View {
             } // switch
         }
     }
-    // MARK: -
-    struct TypeDetail: View {
-        let stack: CallStack
-        @Binding var transaction: TalerTransaction
-        @Binding var payNow: Bool
-        @Binding var selectedChoice: Int
-        @Binding var scope: ScopeInfo?
-        @Binding var effective: Amount?
-        let hasDone: Bool
-        @Environment(\.colorScheme) private var colorScheme
-        @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-        @AppStorage("minimalistic") var minimalistic: Bool = false
-        @State private var rotationEnabled = true
-        @State private var ignoreAccept: Bool = false         // accept could be set by OIM to trigger accept
-        @State private var isCopied: Bool = false
-
-        func refreshFee(input: Amount, output: Amount) -> Amount? {
-            do {
-                let fee = try input - output
-                return fee
-            } catch {
-                
-            }
-            return nil
-        }
-
-        func abortedHint(_ delay: Duration?) -> UInt? {
-            if let delay {
-                if let microseconds = try? delay.microseconds() {
-                    let days = microseconds / (24 * 3600 * 1000 * 1000)
-                    if days > 0 {
-                        return UInt(days)
-                    }
-                }
-                return 0
-            }
-            return nil
-        }
-
-        struct PaymentTransactionView: View {
-            let stack: CallStack
-            let common: TransactionCommon
-            let paymentTransaction: PaymentTransaction
-            @Binding var scope: ScopeInfo?
-            @Binding var effective: Amount?
-            @Binding var payNow: Bool
-            @Binding var selectedChoice: Int
-
-            @EnvironmentObject private var model: WalletModel
-            @State var choicesForPayment: GetChoicesForPaymentResult? = nil
-            @State var isLoadingChoices: Bool = false
-
-            @MainActor
-            func choiceTriple() -> [ChoiceTriple]? {
-                if let choicesForPayment {
-                    if let ctChoices = choicesForPayment.contractTerms.choices {
-                        let combined = Array(zip(choicesForPayment.choices, ctChoices, ctChoices.indices))
-                        return combined
-                    }
-                }
-                return nil
-            }
-
-            private func getChoicesForPayment() async {
-                if !isLoadingChoices {
-                    isLoadingChoices = true
-                    let txId = common.transactionId
-                    if let choiceResponse = try? await model.getChoicesForPayment(txId) {
-                        choicesForPayment = choiceResponse
-                    }
-                } else {
-                    print("getChoicesForPayment already in progress")
-                }
-            }
-
-            func summary(_ info: OrderShortInfo?) -> String? {
-                if let i18nDict = info?.summary_i18n {
-                    if !i18nDict.isEmpty {
-                        for code in Locale.preferredLanguageCodes {
-                            if let i18n = i18nDict[code] {
-                                return i18n
-                            }
-                        }
-                    }
-                }
-                if let summary = info?.summary {
-                    return summary
-                }
-                return String(localized: "No summary", comment: "OrderShortInfo.summary")
-            }
-
-            var body: some View {
-                Group {
-                    let details = paymentTransaction.details
-                    if common.isDialog {        // show payment confirmation dialog
-                        MerchantHeader(terms: details.contractTerms)
-
-                        if let choices = choiceTriple() {
-                            let hasAutomatic = choicesForPayment?.automaticExecution ?? false
-                            let automaticIndex = hasAutomatic ? choicesForPayment?.automaticExecutableIndex : nil
-                            ChoicesView(stack: stack.push(),
-                                 choiceTriple: choices,
-                               automaticIndex: automaticIndex,
-                               selectedChoice: $selectedChoice)
-                            .onChange(of: selectedChoice) { newValue in
-                                let newChoice = choices[newValue]
-                                effective = newChoice.0.amountEffective
-                                scope = newChoice.0.scopeInfo
-                            }
-                            .task {
-                                let firstChoice = choices[selectedChoice]
-                                effective = firstChoice.0.amountEffective
-                                scope = firstChoice.0.scopeInfo
-                                if let automaticIndex {
-                                    // Pay Automatically
-                                    selectedChoice = automaticIndex
-                                    payNow = true
-                                }
-                            }
-
-                            let choice = choices[selectedChoice]
-                            let selectionDetail: ChoiceSelectionDetail = choice.0
-                            let contractChoice: ContractChoice = choice.1
-
-//                            if selectionDetail.status == .paymentPossible {
-                                PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
-                                              paid: false,
-                                               raw: selectionDetail.amountRaw,
-                                         effective: effective,
-                                        firstScope: scope,
-                                           baseURL: nil,
-                                           summary: summary(details.info),
-                                          products: details.info?.products ?? [],
-                                    balanceDetails: selectionDetail.balanceDetails)
-//                            }
-                        }
-                    } else { // show finished payment
-                        TransactionPayDetailV(paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Price:", comment: "mini"),
-                                       topTitle: String(localized: "Price (net):"),
-                                        baseURL: nil,               // TODO: baseURL
-                                         noFees: nil,               // TODO: noFees
-                                  feeIsNegative: false,
-                                          large: true,
-                                        summary: details.info?.summary ?? EMPTYSTRING)
-                    } // show finished payment
-                }
-                .task (id: common.txState.hashValue) {
-                    if common.isDialog {
-                        if choicesForPayment == nil {
-                            await getChoicesForPayment()
-                        }
-                    }
-                }
-            } // body
-        } // PaymentTransactionView
-
-        var body: some View {
-            let common = transaction.common
-            let pending = transaction.isPending
-            let isDialog = transaction.isDialog
-            Group {
-                switch transaction {
-                    case .dummy(_): Group {
-                        let title = EMPTYSTRING
-                        Text(title)
-                            .talerFont(.body)
-                        RotatingTaler(size: 100, progress: true, once: false, rotationEnabled: $rotationEnabled)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            // has its own accessibilityLabel
-                    }
-                    case .withdrawal(let withdrawalTransaction): Group {
-                        let details = withdrawalTransaction.details
-                        if common.isAborted && details.withdrawalDetails.type == .manual {
-                            if let days = abortedHint(details.withdrawalDetails.reserveClosingDelay) {
-                                let wireBack = days > 0 ? String(localized: "If you have already sent money to the payment service, it will wire it back in \(days) days.")
-                                                        : String(localized: "If you have already sent money to the payment service, it will wire it back in a few days.")
-                                Text("The withdrawal was aborted.\n\n\(wireBack)")
-                                    .talerFont(.callout)
-                            }
-                        }
-                        if pending {
-                            PendingWithdrawalDetails(stack: stack.push(),
-                                               transaction: $transaction,
-                                                   details: details)
-                        } // ManualDetails or Confirm now (with bank)
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Chosen:", comment: "mini"),
-                                       topTitle: String(localized: "Chosen amount to withdraw:"),
-                                        baseURL: details.exchangeBaseUrl,
-                                         noFees: nil,               // TODO: noFees
-                                  feeIsNegative: true,
-                                          large: false,
-                                        summary: nil)
-                    }
-                    case .deposit(let depositTransaction): Group {
-                        if transaction.common.isPendingKYCauth {
-                            KYCauth(stack: stack.push(), common: common)
-                        } else if transaction.isPendingKYC {
-                            KYCbutton(kycUrl: common.kycUrl)
-                        }
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Deposit:", comment: "mini"),
-                                       topTitle: String(localized: "Amount to deposit:"),
-                                        baseURL: nil,               // TODO: baseURL
-                                         noFees: nil,               // TODO: noFees
-                                  feeIsNegative: false,
-                                          large: true,
-                                        summary: nil)
-                    }
-
-                    case .payment(let paymentTransaction):
-                        PaymentTransactionView(stack: stack.push(),
-                                              common: common,
-                                  paymentTransaction: paymentTransaction,
-                                               scope: $scope,
-                                           effective: $effective,
-                                              payNow: $payNow,
-                                      selectedChoice: $selectedChoice)
-
-                    case .refund(let refundTransaction): Group {
-                        let details = refundTransaction.details                 // TODO: more details, details.info?.merchant.name
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Refunded:", comment: "mini"),
-                                       topTitle: String(localized: "Refunded amount:"),
-                                        baseURL: nil,               // TODO: baseURL
-                                         noFees: nil,               // TODO: noFees
-                                  feeIsNegative: true,
-                                          large: true,
-                                        summary: details.info?.summary)
-                    }
-                    case .refresh(let refreshTransaction): Group {
-                        let labelColor = WalletColors().labelColor
-                        let errorColor = WalletColors().errorColor
-                        let details = refreshTransaction.details
-                        Section {
-                            Text(details.refreshReason.localizedRefreshReason)
-                                .talerFont(.title)
-                            let input = details.refreshInputAmount
-                            AmountRowV(stack: stack.push(),
-                                       title: minimalistic ? "Refreshed:" : "Refreshed amount:",
-                                      amount: input,
-                                       scope: scope,
-                                  isNegative: nil,
-                                       color: labelColor,
-                                       large: true)
-                            if let fee = refreshFee(input: input, output: details.refreshOutputAmount) {
-                                AmountRowV(stack: stack.push(),
-                                           title: minimalistic ? "Fee:" : "Refreshed fee:",
-                                          amount: fee,
-                                           scope: scope,
-                                      isNegative: fee.isZero ? nil : true,
-                                           color: labelColor,
-                                           large: true)
-                            }
-                            if let error = details.error {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(error.hint)
-                                            .talerFont(.headline)
-                                            .foregroundColor(errorColor)
-                                            .listRowSeparator(.hidden)
-                                        if let stack = error.stack {
-                                            Text(stack)
-                                                .talerFont(.body)
-                                                .foregroundColor(errorColor)
-                                                .listRowSeparator(.hidden)
-                                        }
-                                    }
-                                    let stackStr = error.stack ?? EMPTYSTRING
-                                    let errorStr = error.hint + "\n" + stackStr
-                                    CopyButton(textToCopy: errorStr, isCopied: $isCopied, vertical: true)
-                                        .accessibilityLabel(Text("Copy the error", comment: "a11y"))
-                                        .disabled(false)
-                                }
-                            }
-                        }
-                    }
-
-                    case .peer2peer(let p2pTransaction): Group {
-                        let details = p2pTransaction.details
-                        if transaction.isPendingKYC {
-                            KYCbutton(kycUrl: common.kycUrl)
-                        }
-                        if !transaction.isDone {
-                            ExpiresView(expiration: details.info.expiration)
-                        }
-                        if transaction.isRcvCoins && common.isDialog {
-                            PeerPushCreditView(stack: stack.push(),
-                                                 raw: common.amountRaw,
-                                           effective: common.amountEffective,
-                                               scope: scope,
-                                             summary: details.info.summary)
-                            PeerPushCreditAccept(stack: stack.push(), url: nil,
-                                         transactionId: common.transactionId,
-                                                accept: $ignoreAccept)
-                        } else if transaction.isPayInvoice && common.isDialog {
-                            PeerPullDebitView(stack: stack.push(),
-                                                raw: common.amountRaw,
-                                          effective: common.amountEffective,
-                                              scope: scope,
-                                            summary: details.info.summary)
-                            PeerPullDebitConfirm(stack: stack.push(), url: nil,
-                                         transactionId: common.transactionId)
-                        } else {
-                        // TODO: isSendCoins should show QR only while not yet expired  - either set timer or wallet-core should do so and send a state-changed notification
-                            // TODO: details.info.summary
-                        if pending {
-                            if transaction.isPendingReady {
-                                QRCodeDetails(transaction: transaction)
-                                if hasDone {
-                                    Text("QR code and link can also be scanned or copied / shared from Transactions later.")
-                                        .multilineTextAlignment(.leading)
-                                        .talerFont(.subheadline)
-//                                        .padding(.top)
-                                }
-                            } else {
-                                Text("This transaction is not yet ready...")
-                                    .multilineTextAlignment(.leading)
-                                    .talerFont(.subheadline)
-                            }
-                        }
-                        let colon = ":"
-                        let localizedType = transaction.isDone ? transaction.localizedTypePast
-                                                               : transaction.localizedType
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: localizedType + colon,
-                                       topTitle: localizedType + colon,
-                                        baseURL: details.exchangeBaseUrl,
-                                         noFees: nil,         // TODO: noFees
-                                  feeIsNegative: true,
-                                          large: false,
-                                        summary: details.info.summary)
-                        } // else
-                    } // p2p
-
-                    case .recoup(let recoupTransaction): Group {
-                        let details = recoupTransaction.details     // TODO: details.recoupReason
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Recoup:", comment: "mini"),
-                                       topTitle: String(localized: "Recoup:"),
-                                        baseURL: nil,               // TODO: baseURL, noFees
-                                         noFees: nil,
-                                  feeIsNegative: nil,
-                                          large: true,
-                                        summary: details.recoupReason)
-                    }
-                    case .denomLoss(let denomLossTransaction): Group {
-                        let details = denomLossTransaction.details              // TODO: more details, details.lossEventType.rawValue
-                        ThreeAmountsSheet(stack: stack.push(),
-                                          scope: scope,
-                                         common: common,
-                                      topAbbrev: String(localized: "Lost:", comment: "mini"),
-                                       topTitle: String(localized: "Money lost:"),
-                                        baseURL: details.exchangeBaseUrl,
-                                         noFees: nil,               // TODO: noFees
-                                  feeIsNegative: nil,
-                                          large: true,
-                                        summary: details.lossEventType.rawValue)
-                    }
-                } // switch
-            } // Group
-        }
-    }
-    // MARK: -
+// MARK: -
     struct QRCodeDetails: View {
         var transaction : TalerTransaction
         var body: some View {
@@ -848,7 +608,6 @@ struct TransactionSummaryList: View {
             }
         }
     }
-} // TransactionSummaryV
 // MARK: -
 #if DEBUG
 //struct TransactionSummary_Previews: PreviewProvider {
