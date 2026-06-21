@@ -192,20 +192,15 @@ struct WalletMain: View {
                                                 onDrag: onActionDrag)
                         .accessibilitySortPriority(2) // Reads second
                         .matchedTransitionSource(id: "unique_transition_id", in: wrapper.namespace)
-//                let settingsButton = Button {
-//                    NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
-//                } label: {
-//                    Label(settingsTitle, systemImage: TalerTab.settings.sysImg)
-//                        .labelStyle(.iconOnly)
-//                }
-//                    .padding()
-//                    .buttonStyle(.glass)
-//                    .accessibilitySortPriority(0)
-
-                    HStack {
-//                    settingsButton
+                    HStack {           // floating bottom right
                         Spacer(minLength: 8)
-                        actionsButton           // floating bottom right
+#if OIM
+                        if !controller.oimModeActive {  // hide for OIM
+                            actionsButton
+                        }
+#else
+                        actionsButton
+#endif
                     }
                     .padding(.horizontal)
                 } // iOS 26

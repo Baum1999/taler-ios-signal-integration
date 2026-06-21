@@ -72,7 +72,7 @@ struct BalancesListView: View {
             }
             .navigationTitle(title)
         if #available(iOS 26.0, *) {
-            list
+            let list26 = list
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -86,6 +86,15 @@ struct BalancesListView: View {
 //                        .accessibilitySortPriority(0)
                     }
                 }
+#if OIM
+            if controller.oimModeActive {
+                list    // hide SettingsButton (in Toolbar)
+            } else {
+                list26
+            }
+#else
+            list26
+#endif
         } else {
             list
         }
