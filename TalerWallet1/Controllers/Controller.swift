@@ -158,8 +158,15 @@ class Controller: ObservableObject {
 
     private var diagnosticModeObservation: NSKeyValueObservation?
 #if OIM
+    private var lastOIMmode: UIDeviceOrientation = .portrait
     func setOIMmode(for newOrientation: UIDeviceOrientation, _ sheetActive: Bool) {
+        if lastOIMmode == .landscapeRight {
+            if newOrientation == .faceUp {
+                return
+            }
+        }
         let isLandscapeRight = newOrientation == .landscapeRight
+        lastOIMmode = newOrientation
         oimSheetActive = sheetActive && isLandscapeRight
          oimModeActive = sheetActive ? false
                                      : isLandscapeRight
