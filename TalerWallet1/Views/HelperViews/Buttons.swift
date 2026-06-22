@@ -324,6 +324,7 @@ struct TalerButtonStyle: ButtonStyle {
     var type: TalerButtonStyleType = .plain
     var dimmed: Bool = false
     var narrow: Bool = false
+    var one: Bool = false
     var disabled: Bool = false
     var aligned: TextAlignment = .center
     var badge: String = EMPTYSTRING
@@ -340,6 +341,7 @@ struct TalerButtonStyle: ButtonStyle {
                 configuration: configuration,
                      disabled: disabled,
                        narrow: narrow,
+                          one: one,
                       aligned: aligned,
                         badge: badge,
                        scheme: colorScheme,
@@ -390,6 +392,7 @@ struct TalerButtonStyle: ButtonStyle {
         let configuration: ButtonStyle.Configuration
         let disabled: Bool
         let narrow: Bool
+        let one: Bool
         let aligned: TextAlignment
         var badge: String
         var scheme: ColorScheme
@@ -402,6 +405,7 @@ struct TalerButtonStyle: ButtonStyle {
             let hasBadge = !badge.isEmpty
             let buttonLabel = configuration.label
                                 .multilineTextAlignment(aligned)
+                                .lineLimit(one ? 1 : 3)
                                 .talerFont(.title3)         //   narrow ? .title3 : .title2
                                 .frame(maxWidth: narrow ? nil : .infinity, alignment: aligned2)
                                 .padding(.vertical, 10)
