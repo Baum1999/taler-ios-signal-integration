@@ -140,6 +140,11 @@ public let ICONNAME_LOCKCLOCK = "taler.lock.clock"                  // 􂆉
 public let SYSTEM_LOCKCLOCK = "lock.badge.clock"                    // 􂆉       5.0 (iOS 17)
 public let FALLBACK_LOCK = "lock"                                   // 􀎠       1.0 (iOS 13)
 
+public let ICONNAME_PASSES = "taler.calendar.badge.record"          // 􀉉􀢙     2.0 (iOS 14)
+public let SYSTEM_PASSES = "calendar.badge.clock"                   // 􀧞       2.0 (iOS 14)
+public let ICONNAME_DISCOUNTS = "taler.percent.seal"                // 􀟆􀘾
+public let SYSTEM_DISCOUNTS = "percent"                             // 􀘾       1.0 (iOS 14)
+
 public let SUNFILL = "sun.max.fill"                                 // 􀆮       1.0 (iOS 13)
 public let MOONFILL = "moon.fill"                                   // 􀆺       1.0 (iOS 13)
 
