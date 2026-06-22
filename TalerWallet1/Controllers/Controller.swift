@@ -125,6 +125,7 @@ class Controller: ObservableObject {
 
     @Published var haveProdBalance: Bool = false
     @Published var balances: [Balance] = []
+    @Published var discounts: [Discount] = []
     @Published var defaultExchanges: [DefaultExchange] = []
     @Published var scannedURLs: [ScannedURL] = []
 
@@ -305,6 +306,7 @@ class Controller: ObservableObject {
         currencyInfos = [:]
         exchanges = []
         balances = []
+        discounts = []
         defaultExchanges = []
 //        printFonts()
 //        checkInternetConnection()
@@ -337,6 +339,22 @@ class Controller: ObservableObject {
             if balance.scopeInfo == scope {
                 return balance
             }
+        }
+        return nil
+    }
+    // MARK: -
+    @MainActor
+    @discardableResult
+    func loadDiscounts(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+        if let response = try? await model.listDiscounts(stack.push()) {
+            let reloaded = response.discounts
+            if reloaded != discounts {
+                self.logger.log("••Got new discounts, will redraw")
+                discounts = reloaded         // redraw
+            } else {
+                self.logger.log("••Same discounts, no redraw")
+            }
+            return reloaded.count
         }
         return nil
     }
