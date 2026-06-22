@@ -20,6 +20,7 @@ struct SegmentControl: View {
 
     public var body: some View {
         let count = accountDetails.count
+      if count > 0 {
         ZStack(alignment: .center) {
             GeometryReader { geo in
                 RoundedRectangle(cornerRadius: 6.0)
@@ -79,5 +80,57 @@ struct SegmentControl: View {
             RoundedRectangle(cornerRadius: 6.0)
                 .fill(WalletColors().sideBackgroundColor)
         )
-    }
+      }
+    } // body
+}
+
+struct SegmentControl2: View {
+    @Binding var value: Int
+    let strings: [String]
+    let action: (Int) -> Void
+
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    public var body: some View {
+        let count = strings.count
+        if count > 0 {
+            ZStack(alignment: .center) {
+                GeometryReader { geo in
+                    RoundedRectangle(cornerRadius: 6.0)
+                        .foregroundColor(WalletColors().pickerSelected(colorScheme, colorSchemeContrast))
+                        .cornerRadius(6.0)
+                        .padding(4)
+                        .frame(width: geo.size.width / CGFloat(count))
+                        .offset(x: geo.size.width / CGFloat(count) * CGFloat(value), y: 0)
+                }
+
+                HStack(spacing: 0) {
+                    ForEach((0..<count), id: \.self) { index in
+                        let string = strings[index]
+                        VStack(spacing: 6) {
+                            Text(string)
+                                .talerFont(.title3)
+                        }
+                        .padding(.vertical, 8)
+                        .accessibilityElement(children: .combine)
+//                        .accessibilityLabel(a11yLabel)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityAddTraits(index == value ? .isSelected : [])
+                        .frame(maxWidth: .infinity)
+                        .onTapGesture {
+                            action(index)
+                            withAnimation(.easeInOut(duration: 0.150)) {
+                                value = index
+                            }
+                        }
+                    }
+                }
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 6.0)
+                    .fill(WalletColors().sideBackgroundColor)
+            )
+        }
+    } // body
 }
