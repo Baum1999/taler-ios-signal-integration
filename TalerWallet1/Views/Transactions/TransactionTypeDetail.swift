@@ -194,6 +194,7 @@ struct TransactionTypeDetail: View {
                         PeerPushCreditView(stack: stack.push(),
                                              raw: common.amountRaw,
                                        effective: common.amountEffective,
+                                          isDone: common.isDone,
                                            scope: scope,
                                          summary: details.info.summary)
                         PeerPushCreditAccept(stack: stack.push(), url: nil,
@@ -203,6 +204,7 @@ struct TransactionTypeDetail: View {
                         PeerPullDebitView(stack: stack.push(),
                                             raw: common.amountRaw,
                                       effective: common.amountEffective,
+                                         isDone: common.isDone,
                                           scope: scope,
                                         summary: details.info.summary)
                         PeerPullDebitConfirm(stack: stack.push(), url: nil,

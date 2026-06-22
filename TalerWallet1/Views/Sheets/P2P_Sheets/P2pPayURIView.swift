@@ -45,6 +45,7 @@ struct P2pPayURIView: View {
                     PeerPullDebitView(stack: stack.push(),
                                         raw: peerPullDebitResponse.amountRaw,
                                   effective: peerPullDebitResponse.amountEffective,
+                                     isDone: false,
                                       scope: peerPullDebitResponse.scopeInfo,
                                     summary: peerPullDebitResponse.contractTerms.summary)
                     let expiration = peerPullDebitResponse.contractTerms.purse_expiration
@@ -110,6 +111,7 @@ struct PeerPullDebitView: View  {
 //    let peerPullDebitResponse: PreparePeerPullDebitResponse
     let raw: Amount
     let effective: Amount
+    let isDone: Bool
     let scope: ScopeInfo?
     let summary: String
 
@@ -120,7 +122,6 @@ struct PeerPullDebitView: View  {
 //        let raw = peerPullDebitResponse.amountRaw
 //        let effective = peerPullDebitResponse.amountEffective
 //        let scope = peerPullDebitResponse.scopeInfo
-        let currency = raw.currencyStr
         let fee = try! Amount.diff(raw, effective)
         ThreeAmountsSection(stack: stack.push(),
                             scope: scope,
@@ -132,7 +133,10 @@ struct PeerPullDebitView: View  {
                       bottomTitle: String(localized: "Amount to be spent:"),
                      bottomAbbrev: String(localized: "Effective:", comment: "mini"),
                      bottomAmount: effective,
-                            large: false, pending: false, incoming: false,
+                            large: false,
+                    pendingDialog: false,
+                           isDone: isDone,
+                         incoming: false,
                           baseURL: nil,
                        txStateLcl: nil,
                           summary: summary,

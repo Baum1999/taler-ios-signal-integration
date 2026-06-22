@@ -89,7 +89,8 @@ struct WithdrawAcceptView: View {
                                      bottomAbbrev: String(localized: "Obtain:", comment: "Amount to obtain:"),
                                      bottomAmount: effective,
                                             large: false,
-                                          pending: false,
+                                    pendingDialog: false,
+                                           isDone: false,
                                          incoming: true,
                                           baseURL: exchange2.exchangeBaseUrl,
                                        txStateLcl: nil,        // common.txState.major.localizedState

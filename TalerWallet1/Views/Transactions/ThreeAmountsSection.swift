@@ -34,6 +34,7 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
         let fee = common.fee()
         let incoming = common.isIncoming
         let pending = common.isPending || common.isFinalizing
+        let dialog = common.isDialog
         let isDone = common.isDone
         let incomplete = !(isDone || pending)
 
@@ -60,7 +61,8 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                      bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
                      bottomAmount: incomplete ? nil : effective,
                             large: large,
-                          pending: pending,
+                    pendingDialog: pending || dialog,
+                           isDone: isDone,
                          incoming: incoming,
                           baseURL: baseURL,
                        txStateLcl: txStateLcl,
@@ -106,7 +108,8 @@ struct ThreeAmountsSection: View {
     var bottomAbbrev: String
     var bottomAmount: Amount?               // nil = incomplete (aborted, timed out)
     let large: Bool
-    let pending: Bool
+    let pendingDialog: Bool
+    let isDone: Bool
     let incoming: Bool
     let baseURL: String?
     let txStateLcl: String?                 // localizedState
@@ -166,8 +169,8 @@ struct ThreeAmountsSection: View {
     var body: some View {
         let currency = currencyInfo.currency
         let labelColor = WalletColors().labelColor
-        let foreColor = pending ? WalletColors().pendingColor(incoming)
-                                : WalletColors().transactionColor(incoming)
+        let foreColor = pendingDialog ? WalletColors().pendingColor(incoming)
+                                      : WalletColors().transactionColor(incoming)
         let hasNoFees = noFees ?? false
         productImageSections
         Section {
@@ -179,11 +182,12 @@ struct ThreeAmountsSection: View {
                 }
             }
 
-            Text(pending ? "Payment will be made in \(currency)"
-                         : "Payment was made in \(currency)")
-                .talerFont(.callout)
-                .padding(.top, 4)
-
+            if pendingDialog || isDone {
+                Text(pendingDialog ? "Payment will be made in \(currency)"
+                                   : "Payment was made in \(currency)")
+                    .talerFont(.callout)
+                    .padding(.top, 4)
+            }
             AmountRowV(stack: stack.push(),
                        title: minimalistic ? topAbbrev : topTitle,
                       amount: topAmount,
