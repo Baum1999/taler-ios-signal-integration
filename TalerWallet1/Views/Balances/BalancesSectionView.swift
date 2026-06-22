@@ -154,23 +154,28 @@ extension BalancesSectionView: View {
             await loadPending(stack.push(".task - load pending"))
             await loadScanned(stack.push(".task - load scanned"))
         }
-
-        /// if there is only one currency, then show MAXRECENT recent transactions
-        let recentCount = recentTransactions.count
-        if sectionCount == 1 && recentCount > 0 {
-            let _ = symLog.log("recent transactions")
-            let recentHeader = minimalistic ? nil
-                             : recentCount > 1
-                ? String(localized: "Recent transactions", comment: "section header plural")
-                : String(localized: "Recent transaction", comment: "section header singular")
-            TransactionsArraySection(symLog: symLog,
-                                     logger: logger,
-                                      stack: stack.push(),
-                                     header: recentHeader,
-                                      scope: scopeInfo,
-                               transactions: $recentTransactions,
-                            reloadAllAction: loadRecent)
-        } // recent transactions
+        if sectionCount == 1 {
+#if DEBUG
+            // show Discounts & Passes before recents
+            DiscountPassesSection(stack: stack.push())
+#endif
+            // if there is only one currency, then show MAXRECENT recent transactions
+            let recentCount = recentTransactions.count
+            if recentCount > 0 {
+                let _ = symLog.log("recent transactions")
+                let recentHeader = minimalistic ? nil
+                                 : recentCount > 1
+                    ? String(localized: "Recent transactions", comment: "section header plural")
+                    : String(localized: "Recent transaction", comment: "section header singular")
+                TransactionsArraySection(symLog: symLog,
+                                         logger: logger,
+                                          stack: stack.push(),
+                                         header: recentHeader,
+                                          scope: scopeInfo,
+                                   transactions: $recentTransactions,
+                                reloadAllAction: loadRecent)
+            } // recent transactions
+        } // 1 Section only
     } // body
 } // BalancesSectionView
 // MARK: -
