@@ -23,7 +23,7 @@ struct Balance: Identifiable, Decodable, Hashable, Sendable {
         if let url = scopeInfo.url {
             return url
         }
-        return scopeInfo.currency
+        return scopeInfo.currency   // only ISO 4217 currencies!
     }
 
     var scopeInfo: ScopeInfo
@@ -83,11 +83,75 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
     typealias Response = BalancesResponse
 }
 // MARK: -
+struct Discount: Identifiable, Codable, Hashable, Sendable {
+    // Hash of token family info.
+    var tokenFamilyHash: String
+    // Hash of token issue public key.
+    var tokenIssuePubHash: String
+    // URL of the merchant issuing the token.
+    var merchantBaseUrl: String
+    // Name of the merchant instance issuing the token.
+    var merchantInfo: MerchantInfo?
+    // Human-readable name for the token family.
+    var name: String
+    // Human-readable description for the token family.
+    var description: String
+    // Optional map from IETF BCP 47 language tags to localized descriptions.
+    var descriptionI18n: I18nDict?
+    // Start time of the token's validity period.
+    var validityStart: Timestamp
+    // End time of the token's validity period.
+    var validityEnd: Timestamp
+    // Number of tokens available to use.
+    var tokensAvailable: Int
+
+    var id: String {
+        return tokenFamilyHash
+    }
+}
+// MARK: -
+struct DiscountsResponse: Decodable, Hashable, Sendable {
+    let discounts: [Discount]
+}
+
+/// A request to get the balances held in the wallet.
+fileprivate struct ListDiscounts: WalletBackendFormattedRequest {
+    func operation() -> String { "listDiscounts" }
+    func args() -> Args { Args() }
+
+    struct Args: Encodable {}                           // no arguments needed
+
+    typealias Response = DiscountsResponse
+}
+/// A request to delete a discount by ID.
+struct DeleteDiscount: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
+    func operation() -> String { "deleteDiscount" }
+    func args() -> Args { Args(tokenFamilyHash: tokenFamilyHash) }
+
+    var tokenFamilyHash: String
+    struct Args: Encodable {
+        var tokenFamilyHash: String
+    }
+}
+// MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
     nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> BalancesResponse {
         let request = Balances()
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
+    }
+    /// fetch Discounts from Wallet-Core. No networking involved
+    nonisolated func listDiscounts(_ stack: CallStack, viewHandles: Bool = false) async throws -> DiscountsResponse {
+        let request = ListDiscounts()
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response
+    }
+    /// fetch Discounts from Wallet-Core. No networking involved
+    nonisolated func deleteDiscount(tokenFamilyHash: String, viewHandles: Bool = false) async throws {
+        let request = DeleteDiscount(tokenFamilyHash: tokenFamilyHash)
+        logger.notice("deleteDiscount: \(tokenFamilyHash, privacy: .private(mask: .hash))")
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
