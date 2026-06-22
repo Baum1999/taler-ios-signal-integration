@@ -125,7 +125,8 @@ class Controller: ObservableObject {
 
     @Published var haveProdBalance: Bool = false
     @Published var balances: [Balance] = []
-    @Published var discounts: [Discount] = []
+    @Published var discounts: [TalerToken] = []
+    @Published var subscriptions: [TalerToken] = []
     @Published var defaultExchanges: [DefaultExchange] = []
     @Published var scannedURLs: [ScannedURL] = []
 
@@ -307,6 +308,7 @@ class Controller: ObservableObject {
         exchanges = []
         balances = []
         discounts = []
+        subscriptions = []
         defaultExchanges = []
 //        printFonts()
 //        checkInternetConnection()
@@ -353,6 +355,22 @@ class Controller: ObservableObject {
                 discounts = reloaded         // redraw
             } else {
                 self.logger.log("••Same discounts, no redraw")
+            }
+            return reloaded.count
+        }
+        return nil
+    }
+    // MARK: -
+    @MainActor
+    @discardableResult
+    func loadSubscriptions(_ stack: CallStack,_ model: WalletModel) async -> Int? {
+        if let response = try? await model.listSubscriptions(stack.push()) {
+            let reloaded = response.subscriptions
+            if reloaded != subscriptions {
+                self.logger.log("••Got new passes, will redraw")
+                subscriptions = reloaded         // redraw
+            } else {
+                self.logger.log("••Same passes, no redraw")
             }
             return reloaded.count
         }

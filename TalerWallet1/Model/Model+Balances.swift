@@ -83,7 +83,7 @@ fileprivate struct Balances: WalletBackendFormattedRequest {
     typealias Response = BalancesResponse
 }
 // MARK: -
-struct Discount: Identifiable, Codable, Hashable, Sendable {
+struct TalerToken: Identifiable, Codable, Hashable, Sendable {
     // Hash of token family info.
     var tokenFamilyHash: String
     // Hash of token issue public key.
@@ -103,7 +103,7 @@ struct Discount: Identifiable, Codable, Hashable, Sendable {
     // End time of the token's validity period.
     var validityEnd: Timestamp
     // Number of tokens available to use.
-    var tokensAvailable: Int
+    var tokensAvailable: Int?                   // Only for Discount
 
     var id: String {
         return tokenFamilyHash
@@ -111,7 +111,7 @@ struct Discount: Identifiable, Codable, Hashable, Sendable {
 }
 // MARK: -
 struct DiscountsResponse: Decodable, Hashable, Sendable {
-    let discounts: [Discount]
+    let discounts: [TalerToken]
 }
 
 /// A request to get the balances held in the wallet.
@@ -135,6 +135,31 @@ struct DeleteDiscount: WalletBackendFormattedRequest {
     }
 }
 // MARK: -
+struct SubscriptionsResponse: Decodable, Hashable, Sendable {
+    let subscriptions: [TalerToken]
+}
+
+/// A request to get the balances held in the wallet.
+fileprivate struct ListSubscriptions: WalletBackendFormattedRequest {
+    func operation() -> String { "listSubscriptions" }
+    func args() -> Args { Args() }
+
+    struct Args: Encodable {}                           // no arguments needed
+
+    typealias Response = SubscriptionsResponse
+}
+/// A request to delete a subscription by ID.
+struct DeleteSubscription: WalletBackendFormattedRequest {
+    struct Response: Decodable {}   // no result - getting no error back means success
+    func operation() -> String { "deleteSubscription" }
+    func args() -> Args { Args(tokenFamilyHash: tokenFamilyHash) }
+
+    var tokenFamilyHash: String
+    struct Args: Encodable {
+        var tokenFamilyHash: String
+    }
+}
+// MARK: -
 extension WalletModel {
     /// fetch Balances from Wallet-Core. No networking involved
     nonisolated func getBalances(_ stack: CallStack, viewHandles: Bool = false) async throws -> BalancesResponse {
@@ -148,10 +173,22 @@ extension WalletModel {
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
-    /// fetch Discounts from Wallet-Core. No networking involved
+    /// delete a discount. No networking involved
     nonisolated func deleteDiscount(tokenFamilyHash: String, viewHandles: Bool = false) async throws {
         let request = DeleteDiscount(tokenFamilyHash: tokenFamilyHash)
         logger.notice("deleteDiscount: \(tokenFamilyHash, privacy: .private(mask: .hash))")
+        let _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+    /// fetch Subscriptions from Wallet-Core. No networking involved
+    nonisolated func listSubscriptions(_ stack: CallStack, viewHandles: Bool = false) async throws -> SubscriptionsResponse {
+        let request = ListSubscriptions()
+        let response = try await sendRequest(request, viewHandles: viewHandles)
+        return response
+    }
+    /// delete a subscription. No networking involved
+    nonisolated func deleteSubscription(tokenFamilyHash: String, viewHandles: Bool = false) async throws {
+        let request = DeleteSubscription(tokenFamilyHash: tokenFamilyHash)
+        logger.notice("deleteSubscription: \(tokenFamilyHash, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }

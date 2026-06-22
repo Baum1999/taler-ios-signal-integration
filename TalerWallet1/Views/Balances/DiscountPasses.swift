@@ -27,7 +27,7 @@ struct DiscountsPassesList: View {
         if isDiscount {
             await controller.loadDiscounts(stack.push("refreshing discounts"), model)
         } else {
-//            await controller.loadPasses(stack.push("refreshing passes"), model)
+            await controller.loadSubscriptions(stack.push("refreshing passes"), model)
         }
     }
 
