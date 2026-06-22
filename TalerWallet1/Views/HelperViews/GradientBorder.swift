@@ -24,6 +24,22 @@
  */
 import SwiftUI
 
+fileprivate let nfcLogo = Image(systemName: NFCLOGO)        // 􀭹 "wave.3.right.circle"
+
+struct NFCbutton: View {
+    let title: String
+    let action: () -> Void
+
+    @AppStorage("minimalistic") var minimalistic: Bool = false
+    var body: some View {
+        let logo = nfcLogo
+        let nfcButton = Button(minimalistic ? "\(logo)"
+                                            : "\(logo) \(title)") {
+            action()
+        }.buttonStyle(TalerButtonStyle(type: .prominent))
+    }
+}
+
 @available(iOS 17.7, *)
 struct BorderWithHCE<Content: View>: View {
     let talerURI: String
@@ -33,15 +49,16 @@ struct BorderWithHCE<Content: View>: View {
     var content: () -> Content
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("showQRauto16") var showQRauto16: Bool = true
-    @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true   // iOS 16 doesn't have NFC emulation
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false  // but iOS 17 does
     @StateObject private var tagEmulation = TagEmulation.shared
     @State private var showQRcode = false
 
     var body: some View {
 //        let _ = Self._printChanges()
         let qrCode = Image(systemName: QRCODE)                                  // 􀖂 "qrcode"
-        let qrButton = Button(minimalistic ? "\(qrCode)" : "\(qrCode) Show QR code") {
+        let qrButton = Button(minimalistic ? "\(qrCode)"
+                                           : "\(qrCode) Show QR code") {
             withAnimation { showQRcode = true }
         }
 
@@ -55,11 +72,6 @@ struct BorderWithHCE<Content: View>: View {
         }
 
         if tagEmulation.canUseHCE {
-            let nfcLogo = Image(systemName: NFCLOGO)                            // 􀭹 "wave.3.right.circle"
-            let nfcButton = Button(minimalistic ? "\(nfcLogo)" : "\(nfcLogo) Start NFC") {
-                tagEmulation.emulateTag(talerURI)
-            }.buttonStyle(TalerButtonStyle(type: .prominent))
-
             VStack {
                 if nfcHint {    // QRCodeDetailView
                     if showQRcode {
@@ -68,7 +80,7 @@ struct BorderWithHCE<Content: View>: View {
                                 .talerFont(.subheadline)
                                 .padding(.vertical, -4)
                         }
-                        let screenWidth = UIScreen.screenWidth
+//                        let screenWidth = UIScreen.screenWidth
                         GradientBorder(size: size + 20.0,
                                       color: .accentColor,
                                  background: WalletColors().backgroundColor)
@@ -78,7 +90,9 @@ struct BorderWithHCE<Content: View>: View {
                         }
                         hint
                     } else {
-                        nfcButton
+                        NFCbutton(title: String(localized: "Start NFC")) {
+                            tagEmulation.emulateTag(talerURI)
+                        }
                         qrButton.buttonStyle(TalerButtonStyle(type: .bordered))
                     }
                 } else {        // AboutView
@@ -123,8 +137,8 @@ struct BorderWithNFC<Content: View>: View {
     var content: () -> Content
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("showQRauto16") var showQRauto16: Bool = true
-    @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true   // iOS 16 doesn't have NFC emulation
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false  // but iOS 17 does
     @State private var showTOTP = false
     @ObservedObject var nfcWriter = NFCWriter()
 
@@ -168,13 +182,7 @@ struct BorderWithNFC<Content: View>: View {
             }
         }
 
-        if true {   // check for write capabilities
-            let nfcLogo = Image(systemName: NFCLOGO)                            // 􀭹 "wave.3.right.circle"
-            let nfcButton = Button(minimalistic ? "\(nfcLogo)"
-                                                : "\(nfcLogo) Write NFC") {
-                    nfcWriter.write(totpData)
-            }.buttonStyle(TalerButtonStyle(type: .prominent))
-
+        if true {   // TODO: check for write capabilities
             VStack {
                 if nfcHint {    // QRCodeDetailView
                     if showTOTP {
@@ -183,7 +191,7 @@ struct BorderWithNFC<Content: View>: View {
                                 .talerFont(.subheadline)
                                 .padding(.vertical, -4)
                         }
-                        let screenWidth = UIScreen.screenWidth
+//                        let screenWidth = UIScreen.screenWidth
                         GradientBorder(size: size + 20.0,
                                        color: .accentColor,
                                        background: WalletColors().backgroundColor)
@@ -193,7 +201,9 @@ struct BorderWithNFC<Content: View>: View {
                         }
                         hint
                     } else {
-                        nfcButton
+                        NFCbutton(title: String(localized: "Write NFC")) {
+                            nfcWriter.write(totpData)
+                        }
                         totpButton.buttonStyle(TalerButtonStyle(type: .bordered))
                     }
                 }

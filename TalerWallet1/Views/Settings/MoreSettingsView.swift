@@ -28,8 +28,8 @@ struct MoreSettingsView: View {
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("showQRauto16") var showQRauto16: Bool = true
-    @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true   // iOS 16 doesn't have NFC emulation
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false  // but iOS 17 does
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @AppStorage("oimEuro") var oimEuro: Bool = false
     @AppStorage("oimChart") var oimChart: Bool = false

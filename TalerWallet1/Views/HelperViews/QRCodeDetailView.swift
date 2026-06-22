@@ -18,8 +18,8 @@ struct QRCodeDetailView: View {
 
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @AppStorage("showQRauto16") var showQRauto16: Bool = true
-    @AppStorage("showQRauto17") var showQRauto17: Bool = false
+    @AppStorage("showQRauto16") var showQRauto16: Bool = true   // iOS 16 doesn't have NFC emulation
+    @AppStorage("showQRauto17") var showQRauto17: Bool = false  // but iOS 17 does
 
     @State private var showQRcode = false
     @State private var currencyInfo: CurrencyInfo?
