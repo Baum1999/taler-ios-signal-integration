@@ -393,7 +393,7 @@ extension TalerTransaction {             // for PreViews
                                                       withdrawalDetails: withdrawalDetails)
             self = .withdrawal(WithdrawalTransaction(common: common, details: wDetails))
         } else {
-            let merchant = Merchant(name: "some random shop")
+            let merchant = MerchantInfo(name: "some random shop")
             let info = OrderShortInfo(orderId: "some order ID",
                                      merchant: merchant,
                                       summary: "some product summary",

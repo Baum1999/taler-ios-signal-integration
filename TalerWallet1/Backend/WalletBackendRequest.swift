@@ -92,7 +92,7 @@ struct ScopeInfo: Codable, Hashable {
 }
 // MARK: -
 /// A billing or mailing location.
-struct Location: Codable {
+struct Location: Codable, Equatable, Hashable {
     var country: String?
     var country_subdivision: String?
     var district: String?
@@ -106,10 +106,17 @@ struct Location: Codable {
 }
 
 /// Information identifying a merchant.
-struct Merchant: Codable {
+struct MerchantInfo: Identifiable, Codable, Hashable, Sendable {
     var name: String
+    var email: String?
+    var website: String?
+    var logo: String?       // ImageDataUrl
     var address: Location?
     var jurisdiction: Location?
+
+    var id: String {
+        return name + (email ?? EMPTYSTRING)
+    }
 }
 
 /// A tax made on a payment.
@@ -137,7 +144,7 @@ struct Product: Codable, Identifiable {
 /// Brief information about an order.
 struct OrderShortInfo: Codable {
     var orderId: String
-    var merchant: Merchant
+    var merchant: MerchantInfo
     var summary: String
     var summary_i18n: I18nDict?
     var products: [Product]?

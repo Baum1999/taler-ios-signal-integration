@@ -177,7 +177,7 @@ struct MerchantContractTerms: Codable {
     let wireTransferDeadline: Timestamp?// Deadline for the wire transfer
     let merchantPub: String             // Public key of the merchant
     let merchantBaseURL: String         // Base URL of the merchant's backend
-    let merchant: Merchant
+    let merchant: MerchantInfo
     let hWire: String                   // Hash of the merchant's wire details
     let wireMethod: String              // merchant wants to use
     let exchanges: [ExchangeForPay]
