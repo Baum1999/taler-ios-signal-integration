@@ -99,7 +99,7 @@ extension BalancesSectionView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let scopeInfo = balance.scopeInfo
-        let balanceDest = TransactionsListView(stack: stack.push("\(Self.className())()"),
+        let balanceDest = TransactionsListView(stack: stack.push("BalanceCellV"),
                                                scope: scopeInfo,
                                              balance: balance,
                                      selectedBalance: $selectedBalance,

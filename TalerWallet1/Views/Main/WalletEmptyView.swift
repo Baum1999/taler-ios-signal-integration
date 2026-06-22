@@ -53,11 +53,12 @@ struct ProdSectionView: View {
                         chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
                             .accessibilityHidden(true)
                     }
+                    .contentShape(.rect)    // can tap in background also
                 }   .buttonStyle(.plain)
                 if (showDropdown) {
                     Text("Withdraw real digital cash:")
                         .talerFont(.body)
-                        .padding(.top, -30)
+                        .padding(.vertical, -16)
                 }
             }
 #if false
@@ -91,6 +92,7 @@ struct ProdSectionView: View {
                                             narrow: false,
                                           disabled: disabled,
                                            aligned: .center))
+                .padding(.top, -6)
                 .padding(.bottom, 6)
             } // showDropdown
         } header: {
@@ -152,7 +154,7 @@ struct WalletEmptyHeader: View {
             emptyView
                 .toolbar {
                     logoItem
-                    ToolbarItem(placement: .primaryAction) {
+                    ToolbarItem(placement: .primaryAction) {        // Settings button
                         Button {
                             NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
                         } label: {

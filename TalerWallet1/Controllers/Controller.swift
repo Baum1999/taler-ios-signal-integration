@@ -108,7 +108,7 @@ enum UrlCommand: String, Codable {
 
 struct ScannedURL: Identifiable {
     var id: String {
-        return url.absoluteString
+        url.absoluteString
     }
     var url: URL
     var command: UrlCommand

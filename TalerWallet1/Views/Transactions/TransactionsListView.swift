@@ -174,7 +174,7 @@ struct TransactionsArraySection: View {
 
         Section {
             ForEach(transactions, id: \.self) { transaction in
-                let destination = TransactionSummaryList(stack: stack.push(),
+                let destination = TransactionSummaryList(stack: stack.push("TransactionsArraySection"),
                                                  transactionId: transaction.id,
                                                        talerTX: $talerTX,
                                                       navTitle: nil,

@@ -230,7 +230,11 @@ struct TransactionSummaryList: View {
         if let reloadedTransaction = try? await model.getTransactionById(transactionId,
                                                     includeContractTerms: true, viewHandles: false) {
             symLog.log("reloaded \(reloadedTransaction.localizedType): \(reloadedTransaction.common.txState.major)")
-            withAnimation { talerTX = reloadedTransaction; viewId = UUID() }      // redraw
+            withAnimation {
+                talerTX = reloadedTransaction;
+                scope = reloadedTransaction.common.scopes.first
+                viewId = UUID()      // redraw
+            }
             if developerMode {
                 if let json = try? await model.jsonTransactionById(transactionId,
                                               includeContractTerms: true, viewHandles: false) {
