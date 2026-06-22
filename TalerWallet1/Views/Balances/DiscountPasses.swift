@@ -62,6 +62,7 @@ struct DiscountsPassesList: View {
 // MARK: -
 struct DiscountPassesSection: View {
     let stack: CallStack
+    @EnvironmentObject private var controller: Controller
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
@@ -69,61 +70,39 @@ struct DiscountPassesSection: View {
     @State private var passes: Bool = false
 
     var body: some View {
+        let discText = String(localized: "Discounts")
+        let passText = String(localized: "Passes")
+        let activeColor = WalletColors().talerColor
+        let inactiveColor = WalletColors().secondary(colorScheme, colorSchemeContrast)
         Section {
-            let discText = String(localized: "Discounts")
-            let discountsLink = Button(action: {discounts = true} ) {
-                Label {
-                    Text(discText)
-                } icon: {
-                    Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
-                }
-            }.buttonStyle(TalerButtonStyle(type: .bordered, one: true))
+            let discCount = controller.discounts.count
+            let discColor = discCount > 0 ? activeColor : inactiveColor
+            let discountsLabel = Label {
+                                     Text(discText)
+                                 } icon: {
+                                     Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
+                                         .foregroundColor(discColor)
+                                 }
 
-            let passText = String(localized: "Passes")
-            let passesLink = Button(action: {passes = true} ) {
-                Label {
-                    Text(passText)
-                } icon: {
-                    Image(ICONNAME_PASSES, SYSTEM_PASSES)
-                }
-            }.buttonStyle(TalerButtonStyle(type: .bordered, one: true))
+            let passCount = controller.subscriptions.count
+            let passColor = passCount > 0 ? activeColor : inactiveColor
+            let passesLabel = Label {
+                                  Text(passText)
+                              } icon: {
+                                  Image(ICONNAME_PASSES, SYSTEM_PASSES)
+                                      .foregroundColor(passColor)
+                              }
 
-            let vLayout = VStack {
-                discountsLink
-                passesLink
-            }
-
-            let actions = Group {
-                let discountsDest = DiscountsPassesList(stack: stack.push(),
-                                                   isDiscount: true,
-                                                     navTitle: discText)
-                let passesDest = DiscountsPassesList(stack: stack.push(),
-                                                isDiscount: false,
-                                                  navTitle: passText)
-                NavLink($discounts) { discountsDest }
-                NavLink($passes) { passesDest }
-            }
-
-            Group {
-//                if #available(iOS 16.4, *) {      // TODO: truncates "• Discoun…"
-//                    LayoutThatFits([HStackLayout(), VStackLayout()]) {
-//                        discountsLink
-//                        passesLink
-//                    }
-//                    ViewThatFits() {
-//                        HStack {
-//                            discountsLink
-//                            passesLink
-//                        }
-//                        vLayout
-//                    }
-//                } else {
-                    vLayout
-//                }
-            }
-            .background(actions)
-            .talerFont(.title2)
-            .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
+            let discountsDest = DiscountsPassesList(stack: stack.push(),
+                                               isDiscount: true,
+                                                 navTitle: discText)
+            let passesDest = DiscountsPassesList(stack: stack.push(),
+                                            isDiscount: false,
+                                              navTitle: passText)
+            NavigationLink(destination: discountsDest) { discountsLabel }
+            NavigationLink(destination: passesDest) { passesLabel }
         }
+        .listRowSeparator(.hidden)
+        .talerFont(.title2)
     }
 }
