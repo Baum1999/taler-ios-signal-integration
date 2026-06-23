@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -114,7 +114,7 @@ struct DiscountsResponse: Decodable, Hashable, Sendable {
     let discounts: [TalerToken]
 }
 
-/// A request to get the balances held in the wallet.
+/// A request to get the discounts held in the wallet.
 fileprivate struct ListDiscounts: WalletBackendFormattedRequest {
     func operation() -> String { "listDiscounts" }
     func args() -> Args { Args() }
@@ -139,7 +139,7 @@ struct SubscriptionsResponse: Decodable, Hashable, Sendable {
     let subscriptions: [TalerToken]
 }
 
-/// A request to get the balances held in the wallet.
+/// A request to get the subscriptions held in the wallet.
 fileprivate struct ListSubscriptions: WalletBackendFormattedRequest {
     func operation() -> String { "listSubscriptions" }
     func args() -> Args { Args() }

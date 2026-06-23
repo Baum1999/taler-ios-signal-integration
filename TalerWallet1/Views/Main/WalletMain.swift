@@ -357,6 +357,8 @@ struct WalletMain: View {
         .task(id: shouldReloadBalances) {   // runs once at launch, then on each onNotification(.BalanceChange)
 //            symLog.log(".task shouldReloadBalances \(shouldReloadBalances)")
             await controller.loadBalances(stack.push("refreshing balances"), model)
+            await controller.loadDiscounts(stack.push("refreshing discounts"), model)
+            await controller.loadSubscriptions(stack.push("refreshing passes"), model)
         } // task
     } // body
 } // Content
