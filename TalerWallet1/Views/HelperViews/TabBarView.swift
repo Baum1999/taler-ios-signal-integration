@@ -105,7 +105,7 @@ struct ActionItem: View {
                     .talerFont(.body)
             }
         }   .id(tab)
-//            .foregroundColor(isActive ? .accentColor : .secondary)
+//            .foregroundColor(isActive ? WalletColors().talerColor : .secondary)
             .padding(.vertical, 4)
             .accessibilityElement(children: .combine)
             .accessibility(label: Text(tab.title))
@@ -175,7 +175,7 @@ struct TabBarView: View {
                 }
             }
         }   .id(tab)
-            .foregroundColor(isActive ? .accentColor : .secondary)
+            .foregroundColor(isActive ? WalletColors().talerColor : .secondary)
             .padding(.vertical, 8)
             .accessibilityElement(children: .combine)
             .accessibility(label: Text(tab.title))

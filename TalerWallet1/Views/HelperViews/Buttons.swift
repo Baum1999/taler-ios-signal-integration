@@ -118,7 +118,7 @@ struct QRButton : View  {
                 qrImage
                     .resizable()
                     .scaledToFit()
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(WalletColors().talerColor)
             } else if minimalistic {
                 let width = UIScreen.screenWidth / 7
                 qrText.talerFont(.largeTitle)
@@ -148,12 +148,12 @@ struct DoneButton : View  {
         Button(action: action) {
             if let titleStr {
                 Text(titleStr)
-                    .tint(.accentColor)
+//                    .tint(WalletColors().talerColor)
             } else {
                 Image(systemName: CHECKMARK)    // 􀆅
             }
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
@@ -167,7 +167,7 @@ struct PlusButton : View  {
         Button(action: action) {
             Image(systemName: PLUS)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
@@ -181,7 +181,7 @@ struct SettingsButton : View  {
         let button = Button(action: action) {
             Image(systemName: SETTINGS)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
 //        if #available(iOS 26.0, *) {
@@ -198,7 +198,7 @@ struct PasteButton : View  {
         let button = Button(action: action) {
             Image(systemName: PASTE)
         }
-            .tint(.accentColor)
+            .tint(WalletColors().talerColor)
             .talerFont(.title)
             .accessibilityLabel(accessibilityLabelStr)
 //        if #available(iOS 26.0, *) {
@@ -216,7 +216,7 @@ struct ZoomInButton : View  {
         Button(action: action) {
             Image(ICONNAME_ZOOM_IN, SYSTEM_ZOOM_IN)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
@@ -230,7 +230,7 @@ struct ZoomOutButton : View  {
         Button(action: action) {
             Image(ICONNAME_ZOOM_OUT, SYSTEM_ZOOM_OUT)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(accessibilityLabelStr)
     }
@@ -245,7 +245,7 @@ struct BackButton : View  {
             let sysName = SYSTEM_INCOMING4 + ICONNAME_FILL
             Image(name, sysName, fallback: FALLBACK_INCOMING)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.largeTitle)
         .accessibilityLabel(Text("Back", comment: "a11y"))
     }
@@ -268,7 +268,7 @@ struct ForwardButton : View  {
                                     : SYSTEM_OUTGOING4
             Image(imageName, sysName, fallback: FALLBACK_OUTGOING)
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.largeTitle)
         .accessibilityLabel(Text("Continue", comment: "a11y"))
     }
@@ -281,7 +281,7 @@ struct ArrowUpButton : View  {
         Button(action: action) {
             Image(systemName: ARROW_TOP)       // 􀄿
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title2)
         .accessibilityLabel(Text("Scroll up", comment: "a11y"))
     }
@@ -294,7 +294,7 @@ struct ArrowDownButton : View  {
         Button(action: action) {
             Image(systemName: ARROW_BOT)        // 􀅀
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title2)
         .accessibilityLabel(Text("Scroll down", comment: "a11y"))
     }
@@ -308,7 +308,7 @@ struct ReloadButton : View  {
         Button(action: action) {
             Image(systemName: RELOAD)           // 􀅈
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.title)
         .accessibilityLabel(Text("Reload", comment: "a11y"))
         .disabled(disabled)

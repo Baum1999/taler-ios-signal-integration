@@ -121,8 +121,9 @@ struct TransactionRowView: View {
                     : WalletColors().uncompletedColor
     }
     func for2Color(_ textColor: Color) -> Color {
+        let talerColor = WalletColors().talerColor
         return refreshZero ? textColor
-           : doneOrPending ? (incoming ? .accentColor : textColor)
+           : doneOrPending ? (incoming ? talerColor : textColor)
                            : WalletColors().uncompletedColor
     }
     func iconBadge(_ foreColor: Color) -> TransactionIconBadge {

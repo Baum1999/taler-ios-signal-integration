@@ -142,7 +142,7 @@ struct CopyButton: View {
                 }
             }
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.body)
         .scaleEffect(scale)
         .disabled(!isEnabled)
@@ -218,7 +218,7 @@ struct ShareButton: View {
                 Text(title)
             }
         }
-        .tint(.accentColor)
+        .tint(WalletColors().talerColor)
         .talerFont(.body)
         .scaleEffect(scale)
         .disabled(!isEnabled)
