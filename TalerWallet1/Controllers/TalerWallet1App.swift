@@ -40,11 +40,13 @@ struct TalerWallet1App: App {
     let logger = Logger(subsystem: "net.taler.gnu", category: "Main App")
     private let biometricService = BiometricService.shared
 
+#if TALER_NIGHTLY
     func scheduleAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: "net.taler.refresh")
         request.earliestBeginDate = .now.addingTimeInterval(4 * 3600)
         try? BGTaskScheduler.shared.submit(request)
     }
+#endif
 
     @MainActor
     func post(_ pastedURL: URL) {
@@ -140,10 +142,13 @@ struct TalerWallet1App: App {
                         }
                     case .background:
                         logger.log("❗️.onChange() ==> Background)")
+#if TALER_NIGHTLY
 //                      scheduleAppRefresh()
+#endif
                     default: break
                 }
             }
+#if TALER_NIGHTLY
             .backgroundTask(.appRefresh("net.taler.refresh")) {
 //                symLog.log("backgroundTask running")
 //#if 0
@@ -162,6 +167,7 @@ struct TalerWallet1App: App {
 //                }
 //#endif
             }
+#endif
         } else {
             // Fallback on earlier versions
             return WindowGroup {
