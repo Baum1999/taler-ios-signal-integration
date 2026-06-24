@@ -87,7 +87,7 @@ struct SegmentControl: View {
 struct SegmentControl2: View {
     @Binding var value: Int
     let strings: [String]
-    let action: (Int) -> Void
+//    let action: (Int) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -119,7 +119,7 @@ struct SegmentControl2: View {
                         .accessibilityAddTraits(index == value ? .isSelected : [])
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
-                            action(index)
+//                            action(index)
                             withAnimation(.easeInOut(duration: 0.150)) {
                                 value = index
                             }
