@@ -174,9 +174,9 @@ extension WalletModel {
         return response
     }
     /// delete a discount. No networking involved
-    nonisolated func deleteDiscount(tokenFamilyHash: String, viewHandles: Bool = false) async throws {
-        let request = DeleteDiscount(tokenFamilyHash: tokenFamilyHash)
-        logger.notice("deleteDiscount: \(tokenFamilyHash, privacy: .private(mask: .hash))")
+    nonisolated func deleteDiscount(_ tokenID: String, viewHandles: Bool = false) async throws {
+        let request = DeleteDiscount(tokenFamilyHash: tokenID)
+        logger.notice("deleteDiscount: \(tokenID, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
     /// fetch Subscriptions from Wallet-Core. No networking involved
@@ -186,9 +186,9 @@ extension WalletModel {
         return response
     }
     /// delete a subscription. No networking involved
-    nonisolated func deleteSubscription(tokenFamilyHash: String, viewHandles: Bool = false) async throws {
-        let request = DeleteSubscription(tokenFamilyHash: tokenFamilyHash)
-        logger.notice("deleteSubscription: \(tokenFamilyHash, privacy: .private(mask: .hash))")
+    nonisolated func deleteSubscription(_ tokenID: String, viewHandles: Bool = false) async throws {
+        let request = DeleteSubscription(tokenFamilyHash: tokenID)
+        logger.notice("deleteSubscription: \(tokenID, privacy: .private(mask: .hash))")
         let _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 }
