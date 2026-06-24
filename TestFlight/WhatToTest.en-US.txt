@@ -1,3 +1,10 @@
+Version 1.6.3 (wallet-core 1.6.5.3)
+
+• Passes & Discounts (w.i.p., Taler Nightly only)
+• Full Taler logo in QR codes
+• adopt amount from Template Link
+
+
 Version 1.6.2 (wallet-core 1.6.5.1)
 
 • OIM stays in faceUp
