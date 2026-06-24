@@ -513,7 +513,7 @@ class Controller: ObservableObject {
                     try await model.setConfig(setTesting: true)
 //                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
-//                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/flag-confirm-pay-no-wait?v=10")
+                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/flag-confirm-pay-no-wait?v=10")
                     try await model.setConfig(setTesting: false)
                 }
 #endif
