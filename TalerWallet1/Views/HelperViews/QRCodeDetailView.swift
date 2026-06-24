@@ -69,7 +69,7 @@ struct QRCodeDetailView: View {
                                         : (sending(amountStr.0), sending(amountStr.1))
                 let logo = Image(TALER_LOGO_QR)
                 let size = 276.0            // 240.0
-                let logoSize = 72.0         // 88 is too big, Android phones don't recognize the QR code anymore
+                let logoSize = 60.0         // 88 is too big, Android phones don't recognize the QR code anymore
                 let qrView = QRGeneratorView(text: talerURI, size: size, logo: logo, logoSize: logoSize, image: $qrImage)
                         .frame(maxWidth: .infinity, alignment: .center)
                 if #available(iOS 17.7, *) {

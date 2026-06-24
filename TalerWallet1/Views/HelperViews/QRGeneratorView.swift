@@ -40,7 +40,7 @@ struct QRGeneratorView: View {
                     logo
                         .resizable()
                         .scaledToFit()
-                        .frame(width: logoSize, height: logoSize)
+                        .frame(width: logoSize * 2, height: logoSize)
                 }
             } else {
                 EmptyView()
