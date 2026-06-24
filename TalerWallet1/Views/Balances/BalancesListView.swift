@@ -20,6 +20,7 @@ struct BalancesListView: View {
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("oimEuro") var oimEuro: Bool = false
 
@@ -79,20 +80,12 @@ struct BalancesListView: View {
         if #available(iOS 26.0, *) {
             let list26 = list
                 .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
-                        } label: {
-                            Label(TalerTab.settings.title, systemImage: TalerTab.settings.sysImg)
-                                .labelStyle(.iconOnly)
-                        }
-                        //                                  .padding()
-                        .buttonStyle(.glass)
-//                        .accessibilitySortPriority(0)
+                    ToolbarItem(placement: .topBarTrailing) {   //secondaryAction
+                        SettingsButton26(sortPriority: 0)
                     }
                 }
 #if OIM
-            if controller.oimModeActive {
+            if controller.oimModeActive || voiceOverEnabled {
                 list    // hide SettingsButton (in Toolbar)
             } else {
                 list26

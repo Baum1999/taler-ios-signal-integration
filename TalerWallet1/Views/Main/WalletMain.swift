@@ -32,6 +32,7 @@ struct WalletMain: View {
     @EnvironmentObject private var viewState: ViewState     // popToRootView()
     @EnvironmentObject private var viewState2: ViewState2     // popToRootView()
     @EnvironmentObject private var wrapper: NamespaceWrapper
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
@@ -170,7 +171,7 @@ struct WalletMain: View {
         }
         /// NavigationViews for Balances & Settings
         let balancesStack = NavigationView {
-            ZStack(alignment: .bottom) {
+            ZStack(alignment: .trailing) {
                 if controller.balances.isEmpty {
                     WalletEmptyHeader(stack: stack.push())
                 } else {
@@ -183,38 +184,43 @@ struct WalletMain: View {
                                      title: balancesTitle,
                            selectedBalance: $selectedBalance,    // needed for sheets, gets set in TransactionsListView
                         reloadTransactions: $shouldReloadTransactions)
+                    .accessibilitySortPriority(1) // Reads third
 //                    } iOS 15 + 16
                 }
-                // Action & Settings buttons
                 if #available(iOS 26.0, *) {
-                    let actionsButton = ActionItem(tab: TalerTab.actions,
-                                                 onTap: onActionTab,
-                                                onDrag: onActionDrag)
+                    // floating Settings & Action buttons
+                    let buttons = VStack(alignment: .trailing) {
+                        if voiceOverEnabled {
+                            SettingsButton26(sortPriority: 0)
+                        }
+                        Spacer()
+                        ActionItem(tab: TalerTab.actions,
+                                 onTap: onActionTab,
+                                onDrag: onActionDrag)
                         .accessibilitySortPriority(2) // Reads second
                         .matchedTransitionSource(id: "unique_transition_id", in: wrapper.namespace)
-                    HStack {           // floating bottom right
-                        Spacer(minLength: 8)
-#if OIM
-                        if !controller.oimModeActive {  // hide for OIM
-                            actionsButton
-                        }
-#else
-                        actionsButton
-#endif
+//                        .navigationTransition(.zoom(sourceID: "unique_transition_id", in: wrapper.namespace))
                     }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
+#if OIM
+                    if !controller.oimModeActive {  // hide for OIM
+                        buttons
+                    }
+#else
+                    buttons
+#endif
                 } // iOS 26
             }.background(balanceActions)
-             .accessibilitySortPriority(1) // Reads third
 
         }.navigationViewStyle(.stack)
             .accessibilitySortPriority(3) // Reads first
 
         if #available(iOS 26.0, *) {
-            // no TabView, just a single NavigationView. BalancesListView with overlaid Actions button
+            // no TabView, just a single NavigationView, containing the BalancesListView
+            // with floating Liquid Glass Actions button
             return balancesStack.id(viewState.rootViewId)      // change rootViewId to trigger popToRootView behaviour
         } else {
-            // TabView with 3 tabs, middle is Actions
+            // iOS 15..18: TabView with 3 tabs, middle is Actions
             let settingsStack = NavigationView {
                 SettingsView(stack: stack.push(),
                           navTitle: settingsTitle)
@@ -256,7 +262,8 @@ struct WalletMain: View {
     }
 
     func tabBarView() -> some View {
-        // custom tabBar (with Actions button) is rendered on top of the TabView, and overlaps its tabBar
+        // iOS 15..18: custom tabBar (with Actions button) is rendered on top of the TabView,
+        // and overlays the native iOS tabBar (which is still used for VoiceOver)
         TabBarView(selection: tabSelection(),
                       hidden: $tabBarModel.tabBarHidden,
                  onActionTab: onActionTab,

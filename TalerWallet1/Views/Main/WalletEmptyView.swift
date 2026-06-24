@@ -119,6 +119,7 @@ struct WalletEmptyHeader: View {
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     func refresh() async {
         controller.hapticNotification(.success)
@@ -129,12 +130,13 @@ struct WalletEmptyHeader: View {
     var body: some View {
         let talerLogo = HStack(spacing: 2) {
             Image(TALER_LOGO_FULL)
-            //                        .border(Color.gray, width: 1)
-            //                    Text("TALER Wallet")
+//                .border(Color.gray, width: 1)
+//            Text("TALER Wallet")
             Text("Wallet")
-            //                        .font(.logo(27, weight: .medium))
+//                .font(.logo(27, weight: .medium))
                 .font(.logo("Atkinson Hyperlegible Next", size: 27, weight: .medium))
                 .kerning(1.0)
+                .fixedSize(horizontal: true, vertical: true)
         }
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isHeader)
@@ -151,22 +153,26 @@ struct WalletEmptyHeader: View {
                 .padding(.top, 10)
         }
         if #available(iOS 26.0, *) {
-            emptyView
-                .toolbar {
-                    logoItem
-                    ToolbarItem(placement: .primaryAction) {        // Settings button
-                        Button {
-                            NotificationCenter.default.post(name: .SettingsAction, object: nil)   // will trigger NavigationLink
-                        } label: {
-                            Label(TalerTab.settings.title, systemImage: TalerTab.settings.sysImg)
-                                .labelStyle(.iconOnly)
+            if voiceOverEnabled {
+                emptyView
+                    .toolbar { logoItem }
+            } else {
+                emptyView
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            HStack {
+                                SettingsButton26(sortPriority: 0)
+                                    .hidden()
+                                Spacer()
+                                talerLogo
+                                    .padding(.top, 10)
+                                Spacer()
+                                SettingsButton26(sortPriority: 0)
+                                    .offset(x: 16, y: 0)
+                            }
                         }
-                        //                                  .padding()
-                        .buttonStyle(.glass)
-                        .accessibilitySortPriority(0)
-
                     }
-                }
+            }
         } else { // iOS 15..18 Settings is the 3rd tab
             emptyView
                 .toolbar { logoItem }

@@ -173,6 +173,24 @@ struct PlusButton : View  {
     }
 }
 
+@available(iOS 26.0, *)
+struct SettingsButton26 : View  {
+    let sortPriority: Double
+
+    var body: some View {
+        Button {
+            // will trigger NavigationLink
+            NotificationCenter.default.post(name: .SettingsAction, object: nil)
+        } label: {
+            Label(TalerTab.settings.title, systemImage: TalerTab.settings.sysImg)
+                .labelStyle(.iconOnly)
+        }
+//        .padding()
+        .buttonStyle(.glass)
+        .accessibilitySortPriority(sortPriority)
+    }
+}
+
 struct SettingsButton : View  {
     let accessibilityLabelStr: String
     let action: () -> Void
