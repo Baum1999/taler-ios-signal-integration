@@ -199,6 +199,7 @@ struct DiscountsPassesList: View {
             }
     }
 }
+// MARK: -
 struct DiscountPassesSection: View {
     let stack: CallStack
     @EnvironmentObject private var controller: Controller

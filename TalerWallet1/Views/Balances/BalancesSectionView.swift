@@ -155,7 +155,7 @@ extension BalancesSectionView: View {
             await loadScanned(stack.push(".task - load scanned"))
         }
         if sectionCount == 1 {
-#if DEBUG
+#if DEBUG || TALER_NIGHTLY
             // show Discounts & Passes before recents
             DiscountPassesSection(stack: stack.push())
 #endif

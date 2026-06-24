@@ -56,7 +56,7 @@ struct BalancesListView: View {
                             historyTapped: $historyTapped,
                        reloadTransactions: $reloadTransactions)
             }
-#if DEBUG
+#if DEBUG || TALER_NIGHTLY
             if count > 1 {      // otherwise it comes before recentTransactions
                 DiscountPassesSection(stack: stack.push())
             }
