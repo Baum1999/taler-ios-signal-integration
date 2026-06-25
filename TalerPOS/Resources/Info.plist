@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required to scan QR codes for merchant backend configuration.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.taler-systems.talersale-2.pos-setup</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>taler-pos</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

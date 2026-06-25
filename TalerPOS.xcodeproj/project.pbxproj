@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,7 +11,51 @@
 		A1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000002 /* ContentView.swift */; };
 		A1000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000003 /* Assets.xcassets */; };
 		A1000004 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000004 /* Preview Assets.xcassets */; };
+		B1000001 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000001 /* Amount.swift */; };
+		B1000002 /* PosConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000002 /* PosConfig.swift */; };
+		B1000003 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000003 /* Order.swift */; };
+		B1000004 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000004 /* Payment.swift */; };
+		B1000005 /* OrderHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000005 /* OrderHistoryEntry.swift */; };
+		B1000006 /* MerchantApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000006 /* MerchantApi.swift */; };
+		B1000007 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000007 /* ConfigManager.swift */; };
+		B1000008 /* OrderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000008 /* OrderManager.swift */; };
+		B1000009 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000009 /* PaymentManager.swift */; };
+		B100000A /* HistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000A /* HistoryManager.swift */; };
+		B100000B /* RefundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000B /* RefundManager.swift */; };
+		B100000C /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000C /* ConfigView.swift */; };
+		B100000D /* OrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000D /* OrderView.swift */; };
+		B100000E /* AmountEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000E /* AmountEntryView.swift */; };
+		B100000F /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200000F /* PaymentView.swift */; };
+		B1000010 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000010 /* HistoryView.swift */; };
+		B1000011 /* RefundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000011 /* RefundView.swift */; };
+		B1000012 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000012 /* SettingsView.swift */; };
+		B1000013 /* ScreenshotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000013 /* ScreenshotController.swift */; };
+		B1000014 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000014 /* LanguageManager.swift */; };
+		B1000015 /* PosQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000015 /* PosQRView.swift */; };
+		B1000016 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000016 /* QRScannerView.swift */; };
+		C1000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C2000001 /* Localizable.xcstrings */; };
+		C1000003 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2000003 /* Strings.swift */; };
+		D1000001 /* ConfigProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000001 /* ConfigProductTests.swift */; };
+		D1000002 /* OrderManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000002 /* OrderManagerTests.swift */; };
+		E1000001 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2000001 /* ScreenshotTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D3000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5000001;
+			remoteInfo = TalerPOS;
+		};
+		E3000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5000001;
+			remoteInfo = TalerPOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A2000001 /* TalerPOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerPOSApp.swift; sourceTree = "<group>"; };
@@ -19,10 +63,57 @@
 		A2000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000004 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A2000010 /* TalerPOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalerPOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2000001 /* Amount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
+		B2000002 /* PosConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosConfig.swift; sourceTree = "<group>"; };
+		B2000003 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		B2000004 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
+		B2000005 /* OrderHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryEntry.swift; sourceTree = "<group>"; };
+		B2000006 /* MerchantApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantApi.swift; sourceTree = "<group>"; };
+		B2000007 /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
+		B2000008 /* OrderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderManager.swift; sourceTree = "<group>"; };
+		B2000009 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
+		B200000A /* HistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryManager.swift; sourceTree = "<group>"; };
+		B200000B /* RefundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundManager.swift; sourceTree = "<group>"; };
+		B200000C /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
+		B200000D /* OrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderView.swift; sourceTree = "<group>"; };
+		B200000E /* AmountEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountEntryView.swift; sourceTree = "<group>"; };
+		B200000F /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		B2000010 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		B2000011 /* RefundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundView.swift; sourceTree = "<group>"; };
+		B2000012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B2000013 /* ScreenshotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotController.swift; sourceTree = "<group>"; };
+		B2000014 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		B2000015 /* PosQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosQRView.swift; sourceTree = "<group>"; };
+		B2000016 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		C2000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		C2000003 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		D2000001 /* ConfigProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigProductTests.swift; sourceTree = "<group>"; };
+		D2000002 /* OrderManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderManagerTests.swift; sourceTree = "<group>"; };
+		D2000010 /* TalerPOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerPOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2000001 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+		E2000010 /* TalerPOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalerPOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		6027F5812FE45E4F0010C598 /* screenshot-products */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "screenshot-products"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A3000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -36,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				A4000002 /* TalerPOS */,
+				D4000001 /* TalerPOSTests */,
+				E4000001 /* TalerPOSUITests */,
 				A4000010 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,6 +146,7 @@
 				A400000A /* Model */,
 				A400000B /* Views */,
 				A400000C /* Resources */,
+				A400000E /* Debug */,
 			);
 			path = TalerPOS;
 			sourceTree = "<group>";
@@ -69,6 +163,8 @@
 		A4000004 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				B2000007 /* ConfigManager.swift */,
+				B2000014 /* LanguageManager.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -76,6 +172,7 @@
 		A4000005 /* Order */ = {
 			isa = PBXGroup;
 			children = (
+				B2000008 /* OrderManager.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -83,6 +180,7 @@
 		A4000006 /* Payment */ = {
 			isa = PBXGroup;
 			children = (
+				B2000009 /* PaymentManager.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -90,6 +188,7 @@
 		A4000007 /* History */ = {
 			isa = PBXGroup;
 			children = (
+				B200000A /* HistoryManager.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -97,6 +196,7 @@
 		A4000008 /* Refund */ = {
 			isa = PBXGroup;
 			children = (
+				B200000B /* RefundManager.swift */,
 			);
 			path = Refund;
 			sourceTree = "<group>";
@@ -104,6 +204,7 @@
 		A4000009 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				B2000006 /* MerchantApi.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -111,6 +212,11 @@
 		A400000A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B2000001 /* Amount.swift */,
+				B2000002 /* PosConfig.swift */,
+				B2000003 /* Order.swift */,
+				B2000004 /* Payment.swift */,
+				B2000005 /* OrderHistoryEntry.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -118,6 +224,15 @@
 		A400000B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B200000C /* ConfigView.swift */,
+				B200000D /* OrderView.swift */,
+				B200000E /* AmountEntryView.swift */,
+				B200000F /* PaymentView.swift */,
+				B2000010 /* HistoryView.swift */,
+				B2000011 /* RefundView.swift */,
+				B2000012 /* SettingsView.swift */,
+				B2000015 /* PosQRView.swift */,
+				B2000016 /* QRScannerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -127,6 +242,8 @@
 			children = (
 				A2000003 /* Assets.xcassets */,
 				A400000D /* Preview Content */,
+				C2000001 /* Localizable.xcstrings */,
+				C2000003 /* Strings.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -139,12 +256,40 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		A400000E /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				6027F5812FE45E4F0010C598 /* screenshot-products */,
+				B2000013 /* ScreenshotController.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		A4000010 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				A2000010 /* TalerPOS.app */,
+				D2000010 /* TalerPOSTests.xctest */,
+				E2000010 /* TalerPOSUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D4000001 /* TalerPOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				D2000001 /* ConfigProductTests.swift */,
+				D2000002 /* OrderManagerTests.swift */,
+			);
+			path = TalerPOSTests;
+			sourceTree = "<group>";
+		};
+		E4000001 /* TalerPOSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E2000001 /* ScreenshotTests.swift */,
+			);
+			path = TalerPOSUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,10 +307,49 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				6027F5812FE45E4F0010C598 /* screenshot-products */,
+			);
 			name = TalerPOS;
 			productName = TalerPOS;
 			productReference = A2000010 /* TalerPOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D5000001 /* TalerPOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7000001 /* Build configuration list for PBXNativeTarget "TalerPOSTests" */;
+			buildPhases = (
+				D6000001 /* Sources */,
+				D3000002 /* Frameworks */,
+				D6000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D3000003 /* PBXTargetDependency */,
+			);
+			name = TalerPOSTests;
+			productName = TalerPOSTests;
+			productReference = D2000010 /* TalerPOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E5000001 /* TalerPOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7000001 /* Build configuration list for PBXNativeTarget "TalerPOSUITests" */;
+			buildPhases = (
+				E6000001 /* Sources */,
+				E3000002 /* Frameworks */,
+				E6000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E3000003 /* PBXTargetDependency */,
+			);
+			name = TalerPOSUITests;
+			productName = TalerPOSUITests;
+			productReference = E2000010 /* TalerPOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -179,6 +363,14 @@
 				TargetAttributes = {
 					A5000001 = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					D5000001 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = A5000001;
+					};
+					E5000001 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = A5000001;
 					};
 				};
 			};
@@ -196,6 +388,8 @@
 			projectRoot = "";
 			targets = (
 				A5000001 /* TalerPOS */,
+				D5000001 /* TalerPOSTests */,
+				E5000001 /* TalerPOSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -207,6 +401,21 @@
 			files = (
 				A1000004 /* Preview Assets.xcassets in Resources */,
 				A1000003 /* Assets.xcassets in Resources */,
+				C1000001 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,10 +428,63 @@
 			files = (
 				A1000001 /* TalerPOSApp.swift in Sources */,
 				A1000002 /* ContentView.swift in Sources */,
+				B1000001 /* Amount.swift in Sources */,
+				B1000002 /* PosConfig.swift in Sources */,
+				B1000003 /* Order.swift in Sources */,
+				B1000004 /* Payment.swift in Sources */,
+				B1000005 /* OrderHistoryEntry.swift in Sources */,
+				B1000006 /* MerchantApi.swift in Sources */,
+				B1000007 /* ConfigManager.swift in Sources */,
+				B1000014 /* LanguageManager.swift in Sources */,
+				B1000008 /* OrderManager.swift in Sources */,
+				B1000009 /* PaymentManager.swift in Sources */,
+				B100000A /* HistoryManager.swift in Sources */,
+				B100000B /* RefundManager.swift in Sources */,
+				B100000C /* ConfigView.swift in Sources */,
+				B100000D /* OrderView.swift in Sources */,
+				B100000E /* AmountEntryView.swift in Sources */,
+				B100000F /* PaymentView.swift in Sources */,
+				B1000010 /* HistoryView.swift in Sources */,
+				B1000011 /* RefundView.swift in Sources */,
+				B1000012 /* SettingsView.swift in Sources */,
+				B1000015 /* PosQRView.swift in Sources */,
+				B1000016 /* QRScannerView.swift in Sources */,
+				B1000013 /* ScreenshotController.swift in Sources */,
+				C1000003 /* Strings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1000001 /* ConfigProductTests.swift in Sources */,
+				D1000002 /* OrderManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1000001 /* ScreenshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D3000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5000001 /* TalerPOS */;
+			targetProxy = D3000001 /* PBXContainerItemProxy */;
+		};
+		E3000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5000001 /* TalerPOS */;
+			targetProxy = E3000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A9000001 /* Debug */ = {
@@ -358,6 +620,7 @@
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TalerPOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler POS";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -369,7 +632,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talersale-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -396,6 +659,7 @@
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TalerPOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler POS";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -407,7 +671,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talersale-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -417,6 +681,88 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D9000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.TalerPOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerPOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TalerPOS";
+			};
+			name = Debug;
+		};
+		D9000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.TalerPOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalerPOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TalerPOS";
+			};
+			name = Release;
+		};
+		E9000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.TalerPOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TalerPOS;
+			};
+			name = Debug;
+		};
+		E9000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.TalerPOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TalerPOS;
 			};
 			name = Release;
 		};
@@ -437,6 +783,24 @@
 			buildConfigurations = (
 				A9000003 /* Debug */,
 				A9000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7000001 /* Build configuration list for PBXNativeTarget "TalerPOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9000001 /* Debug */,
+				D9000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7000001 /* Build configuration list for PBXNativeTarget "TalerPOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9000001 /* Debug */,
+				E9000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
