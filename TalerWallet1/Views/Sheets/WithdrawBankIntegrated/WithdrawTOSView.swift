@@ -70,7 +70,7 @@ struct WithdrawTOSView: View {
             }
             .onAppear() {
                 if viewID > SHEET_WITHDRAWAL {
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS)
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_TOS, stack: stack.push())
                 } else {
                     DebugViewC.shared.setViewID(VIEW_WITHDRAW_TOS, stack: stack.push())
                 }

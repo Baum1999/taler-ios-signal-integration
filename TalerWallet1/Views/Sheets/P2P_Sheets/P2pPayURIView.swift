@@ -79,7 +79,7 @@ struct P2pPayURIView: View {
         }
         .onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_PAY_P2P)
+            DebugViewC.shared.setSheetID(SHEET_PAY_P2P, stack: stack.push())
         }
     }
 }

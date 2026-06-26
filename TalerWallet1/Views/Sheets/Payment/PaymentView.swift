@@ -120,7 +120,7 @@ struct PaymentView: View, Sendable {
             }
         }.onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_PAYMENT)
+            DebugViewC.shared.setSheetID(SHEET_PAYMENT, stack: stack.push())
         }
     }
 }

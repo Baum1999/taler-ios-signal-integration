@@ -59,7 +59,7 @@ struct RefundURIView: View {
             }
         }.onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_REFUND)
+            DebugViewC.shared.setSheetID(SHEET_REFUND, stack: stack.push())
         }
     }
 }

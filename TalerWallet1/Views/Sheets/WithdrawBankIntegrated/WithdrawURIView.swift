@@ -203,7 +203,7 @@ struct WithdrawURIView: View {
                 }
                 .onAppear() {
                     symLog.log("onAppear")
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL)
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAWAL, stack: stack.push())
                 }
 //              agePicker.setAges(ages: details?.ageRestrictionOptions)
             }

@@ -104,7 +104,8 @@ struct ManualWithdraw: View {
             .background(FullBackground())
             .onAppear {
                 if isSheet {
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)         // 132 WithdrawAcceptView
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT,         // 132 WithdrawAcceptView
+                                                 stack: stack.push())
                 } else {
                     DebugViewC.shared.setViewID(VIEW_WITHDRAWAL,                // 30 WithdrawAmount
                                                 stack: stack.push())

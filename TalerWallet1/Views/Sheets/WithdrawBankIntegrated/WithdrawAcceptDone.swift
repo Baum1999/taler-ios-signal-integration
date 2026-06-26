@@ -83,7 +83,7 @@ struct WithdrawAcceptDone: View {
             }
         }.onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE)
+            DebugViewC.shared.setSheetID(SHEET_WITHDRAW_AUTHORIZE, stack: stack.push())
         }
     }
 }

@@ -204,7 +204,7 @@ struct PayTemplateV: View {
             .background(FullBackground())
             .onAppear() {
                 symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE)
+                DebugViewC.shared.setSheetID(SHEET_PAY_TEMPLATE, stack: stack.push())
             }
         } else {
             LoadingView(stack: stack.push(), scopeInfo: nil, message: url.host)

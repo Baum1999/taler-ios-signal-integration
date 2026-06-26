@@ -130,7 +130,7 @@ struct P2pReceiveURIView: View {
         .task { await viewDidLoad() }
         .onAppear() {
             symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_RCV_P2P)
+            DebugViewC.shared.setSheetID(SHEET_RCV_P2P, stack: stack.push())
         }
     }
 }

@@ -158,42 +158,40 @@ class DebugViewC: ObservableObject {
 //    }
 
     @MainActor func setViewID(_ newID: Int, stack: CallStack) -> Void {
-        if developerMode {
-            if viewID == 0 {
-                logger.log("switching ON, \(newID, privacy: .public)")
-                viewID = newID                              // publish ON
-//                announce("Current view is: \(newID).")
-            } else if viewID != newID {
-                logger.log("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public)")
-//                announce("View switched from \(self.viewID) to \(newID).")
-                viewID = newID                              // publish new viewID
-            } else {
-                logger.log("\(newID, privacy: .public) stays")
-                // don't set viewID to the same value, it would just trigger an unneccessary redraw
-            }
+#if DEBUG
+        let msg = stack.peek()?.file ?? "?"
+#else
+        let msg = stack.peek()?.message ?? "?"
+#endif
+        if viewID == 0 {
+            logger.log("switching to \(newID, privacy: .public) \(msg, privacy: .public)")
+            if developerMode { viewID = newID }
+        } else if viewID != newID {
+            logger.log("switching from \(self.viewID, privacy: .public) to \(newID, privacy: .public) \(msg, privacy: .public)")
+            viewID = developerMode ? newID : 0
         } else {
-            logger.log("view \(newID, privacy: .public)")
-            if viewID > 0 {
-                viewID = 0                                      // publish OFF
-            }
+            logger.log("\(newID, privacy: .public) stays \(msg, privacy: .public)")
+            // don't set viewID to the same value, it would just trigger an unneccessary redraw
+            if !developerMode { viewID = 0 }
         }
     }
     
-    @MainActor func setSheetID(_ newID: Int) -> Void {
-        if developerMode {
-            if sheetID != newID {
-                logger.log("sheet switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public)")
-                sheetID = newID                             // publish new sheetID
-            } else {
-                logger.log("sheet \(newID, privacy: .public) stays")
-                // don't set sheetID to the same value, it would just trigger an unneccessary redraw
-            }
+    @MainActor func setSheetID(_ newID: Int, stack: CallStack) -> Void {
+#if DEBUG
+        let msg = stack.peek()?.file ?? "?"
+#else
+        let msg = stack.peek()?.message ?? "?"
+#endif
+        if sheetID == 0 {
+            logger.log("switching to \(newID, privacy: .public) \(msg, privacy: .public)")
+            if developerMode { sheetID = newID }
+        } else if sheetID != newID {
+            logger.log("sheet switching from \(self.sheetID, privacy: .public) to \(newID, privacy: .public) \(msg, privacy: .public)")
+            sheetID = developerMode ? newID : 0                             // publish new sheetID
         } else {
-            logger.log("sheet \(newID, privacy: .public)")
-            if sheetID > 0 {
-                // might happen after switching DevMode off, if sheetID still has the old value of the last sheet
-                sheetID = 0                                     // publish OFF
-            }
+            logger.log("sheet \(newID, privacy: .public) stays \(msg, privacy: .public)")
+            // don't set sheetID to the same value, it would just trigger an unneccessary redraw
+            if !developerMode { sheetID = 0 }
         }
     }
 }

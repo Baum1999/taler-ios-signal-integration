@@ -133,7 +133,8 @@ struct WithdrawAcceptView: View {
             }
             .onAppear() {
                 symLog.log("onAppear")
-                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT)             // 132 WithdrawAcceptView
+                DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT,             // 132 WithdrawAcceptView
+                                             stack: stack.push())
             }
           } else {        // no exchange - should not happen
 #if DEBUG

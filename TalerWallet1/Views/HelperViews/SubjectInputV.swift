@@ -104,7 +104,7 @@ struct SubjectInputV<TargetView: View>: View {
         .background(FullBackground())
         .onAppear() {
 //            symLog.log("onAppear")
-            DebugViewC.shared.setSheetID(SHEET_PAY_TEMPL_SUBJECT)
+            DebugViewC.shared.setSheetID(SHEET_PAY_TEMPL_SUBJECT, stack: stack.push())
         }
     }
 }
