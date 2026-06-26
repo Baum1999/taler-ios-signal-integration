@@ -2,10 +2,10 @@
 <svg
    width="196.2"
    height="87.3"
-   viewBox="-25 -30 250 150"
+   viewBox="-10 -10 220 110"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-   <rect x="-20" y="-30" width="240" height="150" rx="40" ry="40" fill="white"/>
+   <rect x="-10" y="-10" width="220" height="110" rx="40" ry="40" fill="white"/>
   <g
      fill="#0042b3"
      fill-rule="evenodd"
