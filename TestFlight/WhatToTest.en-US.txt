@@ -1,3 +1,8 @@
+Version 1.6.3 (wallet-core 1.6.5.4)
+
+- fix V0, improve V1 payments
+
+
 Version 1.6.3 (wallet-core 1.6.5.3)
 
 • Passes & Discounts (w.i.p., Taler Nightly only)
