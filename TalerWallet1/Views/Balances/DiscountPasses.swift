@@ -24,6 +24,8 @@ struct DiscountsPassesItem: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
+    @State private var dateToggled: Bool = false
+
     func validDate(_ isValid: Bool, isExpired: Bool) -> (String, String) {
         if isExpired {
             let (endDateString, endDate) = TalerDater.dateString(token.validityEnd, minimalistic)
@@ -35,7 +37,7 @@ struct DiscountsPassesItem: View {
             let result0 = String(localized: "Validity period: \(dateString) - \(endDateString)")
             let result1 = String(localized: "Validity period: \(a11yDate) to \(endA11yDate)")
             return (result0, result1)
-        } else if isValid {
+        } else if isValid != dateToggled {
             let (dateString, date) = TalerDater.dateString(token.validityEnd, minimalistic)
             let a11yDate = TalerDater.accessibilityDate(date) ?? dateString
             let result0 = String(localized: "Valid until \(dateString)")
@@ -112,6 +114,11 @@ struct DiscountsPassesItem: View {
                     .talerFont(.body)
             }.frame(maxWidth: .infinity)
                 .background(talerColor.opacity(isValid ? 0.1 : 0))
+                .onTapGesture {
+                    if !isExpired {
+                        dateToggled.toggle()
+                    }
+                }
         }
     }
 }
