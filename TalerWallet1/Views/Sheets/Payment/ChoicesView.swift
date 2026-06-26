@@ -13,6 +13,7 @@ typealias ChoiceTriple = (ChoiceSelectionDetail, ContractChoice, Int)
 struct ChoicesView: View, Sendable {
     let stack: CallStack
     let choiceTriple: [ChoiceTriple]
+    let showHeader: Bool
     let automaticIndex: Int?
     @Binding var selectedChoice: Int
 
@@ -31,7 +32,7 @@ struct ChoicesView: View, Sendable {
                 .foregroundColor(Color.clear)
         }
     }
-    func description(_ contractChoice: ContractChoice) -> String {
+    func description(_ contractChoice: ContractChoice) -> String? {
         if let i18nDict = contractChoice.descriptionI18n {
             if !i18nDict.isEmpty {
                 for code in Locale.preferredLanguageCodes {
@@ -44,7 +45,7 @@ struct ChoicesView: View, Sendable {
         if let desc = contractChoice.description {
             return desc
         }
-        return String(localized: "No description", comment: "contractChoice.description")
+        return nil
     }
 
     var body: some View {
@@ -60,8 +61,7 @@ struct ChoicesView: View, Sendable {
             /// If it only contains tokens, and insufficient, then hide it. Most probably there is a money payment option to acquire those tokens, which is advertisement enough.
             /// Tokens only, paymentPossible. If automaticIndex, then also hide it (and auto-pay it). Otherwise show it, so the user can select it.
             if (!amount.isZero || isPaymentPossible) && !payAutomatic {
-                let description = description(contractChoice)
-                Section(header: Text(description)) {
+                Section {
                     let amountV = HStack {
                         Spacer()
                         AmountV(stack: stack.push(),
@@ -84,7 +84,11 @@ struct ChoicesView: View, Sendable {
                     } else {
                         amountV
                     }
-                }
+                } header: {
+                    if showHeader {
+                        if let description = description(contractChoice) {
+                            Text(description)
+                }   }   }
             }
         }
     }

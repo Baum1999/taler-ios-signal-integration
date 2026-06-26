@@ -10049,6 +10049,7 @@
     },
     "No description" : {
       "comment" : "contractChoice.description",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

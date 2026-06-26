@@ -29,14 +29,14 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
 #endif
 
     var body: some View {
-        let raw = common.amountRaw
-        let effective = common.amountEffective
-        let fee = common.fee()
         let incoming = common.isIncoming
         let pending = common.isPending || common.isFinalizing
         let dialog = common.isDialog
         let isDone = common.isDone
-        let incomplete = !(isDone || pending)
+        let incomplete = !(isDone || pending || dialog)
+        let raw = common.amountRaw
+        let effective: Amount? = incomplete ? nil : common.amountEffective
+        let fee: Amount? = incomplete ? nil : common.fee()
 
         let defaultBottomTitle  = incoming ? (pending ? String(localized: "Pending amount to obtain:")
                                                       : String(localized: "Obtained amount:") )
@@ -59,7 +59,7 @@ struct ThreeAmountsSheet: View {    // should be in a separate file
                     feeIsNegative: feeIsNegative,
                       bottomTitle: bottomTitle ?? defaultBottomTitle,
                      bottomAbbrev: bottomAbbrev ?? defaultBottomAbbrev,
-                     bottomAmount: incomplete ? nil : effective,
+                     bottomAmount: effective,
                             large: large,
                     pendingDialog: pending || dialog,
                            isDone: isDone,
@@ -196,7 +196,7 @@ struct ThreeAmountsSection: View {
                        color: labelColor,
                        large: false)
                 .padding(.bottom, 4)
-            if hasNoFees == false {
+            if hasNoFees == false {     // otherwise raw==effective
                 if let fee {
                     let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
                                              : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")

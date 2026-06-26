@@ -28,21 +28,47 @@ extension TalerTransaction {             // for Dummys
 struct MerchantHeader: View {
     let terms: MerchantContractTerms?
 
+    func summary(_ terms: MerchantContractTerms) -> String {
+        if let i18nDict = terms.summaryI18n {
+            if !i18nDict.isEmpty {
+                for code in Locale.preferredLanguageCodes {
+                    if let descI18n = i18nDict[code] {
+                        return descI18n
+                    }
+                }
+            }
+        }
+        return terms.summary
+    }
+
     var body: some View {
         if let terms {
             Section {
-                Text(terms.summary)
+                Text(summary(terms))
                     .talerFont(.title3)
             } header: {
                 HStack {
                     Spacer()
                     VStack(alignment: .center) {
+                        if let imageBase64 = terms.merchant.logo {
+                            if let url = NSURL(string: imageBase64) {
+                                if let data = NSData(contentsOf: url as URL) {
+                                    if let uiImage = UIImage(data: data as Data) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(maxHeight: 60)
+                                    }
+                                }
+                            }
+                        } else {
 #if TALER_NIGHTLY
-                        let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
-                        Image(systemName: imageName)
-                            .resizable()
-                            .frame(width: 44, height: 44)
+                            let imageName = if #available(iOS 17.0, *) { MERCHANT17 } else { MERCHANT14 }
+                            Image(systemName: imageName)
+                                .resizable()
+                                .frame(width: 44, height: 44)
 #endif
+                        }
                         let merchant = terms.merchant.name
                         Text(merchant)
                             .talerFont(.title3)
@@ -70,11 +96,25 @@ struct PaymentTransactionView: View {
 //    @State var isLoadingChoices: Bool? = nil
 
     @MainActor
-    func choiceTriple() -> [ChoiceTriple]? {
+    func choiceTriple() -> ([ChoiceTriple], Bool)? {
         if let choicesForPayment {
-            if let ctChoices = choicesForPayment.contractTerms.choices {
-                let combined = Array(zip(choicesForPayment.choices, ctChoices, ctChoices.indices))
-                return combined
+            let choices = choicesForPayment.choices
+            let terms = choicesForPayment.contractTerms
+            if let ctChoices = terms.choices {
+                let combined = Array(zip(choices, ctChoices, ctChoices.indices))
+                return (combined, true)
+            } else if let amount = terms.amount {       // V0
+                let maxFee = terms.maxFee ?? Amount.zero(currency: amount.currencyStr)
+                let ctChoice = ContractChoice(amount: amount,
+                                              maxFee: maxFee,
+                                         description: terms.summary,
+                                     descriptionI18n: terms.summaryI18n,
+                                              inputs: [],
+                                             outputs: [])
+                let combined = Array(zip(choices, [ctChoice], [0]))
+                return (combined, false)
+            } else {
+                symLog.log("  ❗️Yikes, neither choices nor amount in contractTerms!\n\(stack)")
             }
         }
         return nil
@@ -121,11 +161,12 @@ struct PaymentTransactionView: View {
             if common.isDialog {        // show payment confirmation dialog
                 MerchantHeader(terms: details.contractTerms)
 
-                if let choices = choiceTriple() {
+                if let (choices, showHeader) = choiceTriple() {
                     let hasAutomatic = choicesForPayment?.automaticExecution ?? false
                     let automaticIndex = hasAutomatic ? choicesForPayment?.automaticExecutableIndex : nil
                     ChoicesView(stack: stack.push(),
                          choiceTriple: choices,
+                           showHeader: showHeader,
                        automaticIndex: automaticIndex,
                        selectedChoice: $selectedChoice)
                     .onChange(of: selectedChoice) { newValue in

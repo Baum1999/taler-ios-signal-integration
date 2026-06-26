@@ -311,8 +311,6 @@ struct PaymentURIView_Previews: PreviewProvider {
                                publicReorderURL: "publicReorderURL",
                              fulfillmentMessage: nil,
                          fulfillmentMessageI18n: nil,
-                            wireFeeAmortization: 0,
-                                     maxWireFee: Amount(currency: LONGCURRENCY, cent: 20),
                                      minimumAge: nil
 //                                        extra: extra,
 //                                     auditors: []

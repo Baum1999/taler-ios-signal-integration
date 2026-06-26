@@ -190,9 +190,7 @@ struct MerchantContractTerms: Codable {
 
     let defaultMoneyPot: Int?
 
-// deprecated   let wireFeeAmortization: Int?       // Share of the wire fee that must be settled with one payment
-//    let maxWireFee: Amount?             // Maximum wire fee that the merchant agrees to pay for
-//    let auditors: [Auditor]?
+// deprecated   let auditors: [Auditor]?
 
     // ContractTermsV1
     let choices: [ContractChoice]?
@@ -232,8 +230,6 @@ struct MerchantContractTerms: Codable {
         case minimumAge = "minimum_age"
         case defaultMoneyPot = "default_money_pot"
 
-//        case wireFeeAmortization = "wire_fee_amortization"
-//        case maxWireFee = "max_wire_fee"
 //        case auditors
         case choices
         case tokenFamilies = "token_families"
