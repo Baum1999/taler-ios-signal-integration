@@ -164,7 +164,7 @@ struct PeerPushCreditView: View  {
     let effective: Amount
     let isDone: Bool
     let scope: ScopeInfo?
-    let summary: String
+    let summary: String?
 
     var body: some View {
         let fee = try! Amount.diff(raw, effective)

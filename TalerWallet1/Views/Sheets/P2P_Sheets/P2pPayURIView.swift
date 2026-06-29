@@ -113,7 +113,7 @@ struct PeerPullDebitView: View  {
     let effective: Amount
     let isDone: Bool
     let scope: ScopeInfo?
-    let summary: String
+    let summary: String?
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast

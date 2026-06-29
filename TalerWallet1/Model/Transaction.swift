@@ -564,8 +564,8 @@ struct RefreshTransaction : Sendable {
 }
 // MARK: - P2P
 struct P2pShortInfo: Codable, Sendable {
-    var summary: String
-    var expiration: Timestamp
+    var summary: String?
+    var expiration: Timestamp?
     var iconId: String?
 }
 struct P2PTransactionDetails: Codable, Sendable {
