@@ -251,7 +251,7 @@ public func +(lhs: Timestamp, rhs: Duration) -> Timestamp {
     case .milliseconds(let lhs_ms):
         switch rhs {
         case .microseconds(let rhs_us):
-            let result = lhs_ms.addingReportingOverflow(rhs_us * 1000)
+            let result = lhs_ms.addingReportingOverflow(rhs_us / 1000)
             if result.overflow {
                 return Timestamp.never
             } else {
@@ -271,7 +271,7 @@ public func -(lhs: Timestamp, rhs: Duration) -> Timestamp {
     case .milliseconds(let lhs_ms):
         switch rhs {
         case .microseconds(let rhs_us):
-            let result = lhs_ms.subtractingReportingOverflow(rhs_us * 1000)
+            let result = lhs_ms.subtractingReportingOverflow(rhs_us / 1000)
             if result.overflow {
                 return Timestamp.milliseconds(0)
             } else {
