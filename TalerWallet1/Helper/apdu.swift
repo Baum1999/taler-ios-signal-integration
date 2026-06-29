@@ -220,6 +220,7 @@ class APDU {
             return lenData
         } // 00b0000002
 
+        guard commandApdu.count >= 2 else { return A_ERROR }
         /// Sixth (and seventh) Command: Read the NDEF File       // 00b0 00 02 3b, and 00b0 00 3d 27
         if NDEF_READ_BINARY == commandApdu[0..<2] {
             let count = commandApdu.count
@@ -227,9 +228,8 @@ class APDU {
                 var arrayApdu = Array<UInt8>(repeating: 0, count: count)
                 _ = arrayApdu.withUnsafeMutableBytes { commandApdu.copyBytes(to: $0) }
 
-                let wantedLength = Int(arrayApdu[4])
-                let offset = Int(arrayApdu[3]) + (Int(arrayApdu[2]) << 8)
-                logger.info("NDEF_READ_BINARY offset \(offset), length \(wantedLength) triggered. Our Response: data + A_OKAY")
+                let wantedLength = UInt(arrayApdu[4])
+                let offset = UInt(arrayApdu[3]) + (UInt(arrayApdu[2]) << 8)
 
                 var data = NDEF_RECORD_HEADER_SHORT                             // 2 bytes
                 let uriCount8 = UInt8((uriCount + 1) & 0xff)
@@ -241,11 +241,22 @@ class APDU {
                 data.append(zeroData)                                           // 1 byte
                 data.append(talerUri.data(using: .utf8)!)
 
-                var result = Data(fromData: data,
-                                    offset: Int(offset) - 2,    // subtract 2 length bytes
-                                      size: wantedLength)
-                result.append(A_OKAY)                                           // 2 bytes
-
+                var result = A_ERROR
+                let lengthBytes = UInt(2)
+                // ensure wanted data starts after two length bytes
+                if offset >= lengthBytes {
+                    // Swift.Data doesn't have the length bytes within the data
+                    let diffOffset = offset - lengthBytes
+                    let count = UInt(data.count)
+                    // ensure wanted data doesn't exceed buffer
+                    if diffOffset + wantedLength <= count {
+                        logger.info("NDEF_READ_BINARY offset \(offset), length \(wantedLength) triggered. Our Response: data + A_OKAY")
+                        result = Data(fromData: data,
+                                        offset: diffOffset,
+                                          size: wantedLength)
+                        result.append(A_OKAY)                                   // 2 bytes
+                    }
+                }
                 readCapabilityContainerCheck = false
                 return result
             }
