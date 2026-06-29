@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -69,14 +69,6 @@ extension String {
             }
         }
         return nil
-    }
-
-    func replacingOccurrences(of str1: String, with str2: String) -> String {
-        let fragments = self.components(separatedBy: str1)
-        if fragments.count > 1 {
-            return fragments.joined(separator: str2)
-        }
-        return self
     }
 
     func deletingPrefix(_ prefix: String) -> String {
