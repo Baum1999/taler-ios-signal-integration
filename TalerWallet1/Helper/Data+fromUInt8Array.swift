@@ -23,15 +23,20 @@ extension Data {
         return self.map { String(format: format, $0) }.joined()
     }
 
-    mutating func append(data: Data, offset: Int, size: Int) {
-        let start = data.startIndex + offset
-        let end = start + size
-        self.append(data[start..<end])
+    static func clampedData(_ data: Data, offset: UInt, size: UInt) -> Data {
+        let endIndex = UInt(data.endIndex)
+        let start = UInt(data.startIndex) + offset
+        let start2 = Swift.min(start, endIndex-1)
+        let end = start2 + size
+        let end2 = Swift.min(end, endIndex)
+        return data[start2..<end2]
     }
 
-    init(fromData data: Data, offset: Int, size: Int) {
-        let start = data.startIndex + offset
-        let end = start + size
-        self.init(data[start..<end])
+    mutating func append(data: Data, offset: UInt, size: UInt) {
+        self.append(Data.clampedData(data, offset: offset, size: size))
+    }
+
+    init(fromData data: Data, offset: UInt, size: UInt) {
+        self.init(Data.clampedData(data, offset: offset, size: size))
     }
 }
