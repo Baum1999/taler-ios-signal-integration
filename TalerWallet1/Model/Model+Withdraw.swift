@@ -29,6 +29,7 @@ extension AccountRestriction: Identifiable {
 enum TransferType: String, Codable {
     case payto
     case chQrBill = "ch-qr-bill"
+    case uri
 }
 
 struct QrCodeSpec: Codable, Hashable {
@@ -38,6 +39,7 @@ struct QrCodeSpec: Codable, Hashable {
 
 struct TransferOption: Codable, Hashable {
     var type: TransferType
+    var uri: String?                                            // only if type == uri
     var paytoUri: String?                                       // only if type == payto
     var qrReferenceNumber: String?
     var qrCodes: [QrCodeSpec]?

@@ -132,7 +132,7 @@ struct TransactionTypeDetail: View {
                                      noFees: nil,               // TODO: noFees
                               feeIsNegative: true,
                                       large: true,
-                                    summary: details.info?.summary)
+                                    summary: details.paymentInfo?.summary)
                 }
                 case .refresh(let refreshTransaction): Group {
                     let labelColor = WalletColors().labelColor

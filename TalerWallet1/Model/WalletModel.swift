@@ -61,11 +61,11 @@ struct InsufficientBalanceDetailsPerExchange: Codable, Hashable {
     var balanceMaterial: Amount
     var balanceExchangeDepositable: Amount
     var balanceAgeAcceptable: Amount
-    var balanceReceiverAcceptable: Amount
+    var balanceReceiverAcceptable: Amount?          // deprecated
     var balanceReceiverDepositable: Amount
     var maxEffectiveSpendAmount: Amount
     /// Exchange doesn't have global fees configured for the relevant year, p2p payments aren't possible.
-    var missingGlobalFees: Bool
+    var missingGlobalFees: Bool?                    // deprecated
 }
 
 ///  Detailed reason for why the wallet's balance is insufficient.

@@ -106,7 +106,8 @@ extension WalletModel {
 // MARK: - Deposit
 struct WireTypeDetails: Codable {
     let paymentTargetType: PaytoType
-    let talerBankHostnames: [String]
+    let preferredEntryType: String?         // iban / bban  TODO: use this
+    let talerBankHostnames: [String]?
 }
 
 struct DepositWireTypesResponse: Codable {
@@ -237,6 +238,7 @@ struct BankAccountsInfo: Decodable, Hashable {
     var bankAccountId: String
     var paytoUri: String
     var kycCompleted: Bool
+    var currencies: [String]?       // Currencies supported by the bank, if known
     var label: String?
     var payToWorkAround: String {
         let payto = PayTo(paytoUri)

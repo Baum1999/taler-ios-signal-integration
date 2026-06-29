@@ -436,7 +436,7 @@ struct WithdrawalDetails: Decodable {
     var bankConfirmationUrl: String?
 }
 struct WithdrawalTransactionDetails: Decodable {
-    var exchangeBaseUrl: String
+    var exchangeBaseUrl: String?
     var withdrawalDetails: WithdrawalDetails
 }
 struct WithdrawalTransaction : Sendable {
@@ -490,10 +490,7 @@ struct PaymentTransaction : Sendable {
 // MARK: - Refund
 struct RefundTransactionDetails: Decodable {
     var refundedTransactionId: String
-    var refundPending: Amount?
-    /// The amount that couldn't be applied because refund permissions expired.
-    var amountInvalid: Amount?
-    var info: OrderShortInfo?       // TODO: is this still here?
+    var paymentInfo: OrderShortInfo?
 }
 struct RefundTransaction : Sendable {
     var common: TransactionCommon
@@ -510,6 +507,7 @@ enum RefreshReason: String, Decodable {
     case abortPay = "abort-pay"
     case abortDeposit = "abort-deposit"
     case abortPeerPushDebit = "abort-peer-push-debit"
+    case abortPeerPullDebit = "abort-peer-pull-debit"
     case recoup
     case backupRestored = "backup-restored"
     case scheduled
@@ -534,6 +532,8 @@ enum RefreshReason: String, Decodable {
                                                   comment: "RefreshReason")
             case .abortPeerPushDebit:   return String(localized: "Abort Sending",
                                                     comment: "RefreshReason")
+            case .abortPeerPullDebit:   return String(localized: "Abort Requesting",
+                                                      comment: "RefreshReason")
             case .recoup:           return String(localized: "Recoup",
                                                   comment: "RefreshReason")
             case .backupRestored:   return String(localized: "Backup restored",
@@ -773,7 +773,7 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
             case .payment(let paymentTransaction):
                 result["summary"] = paymentTransaction.details.info?.summary ?? EMPTYSTRING
             case .refund(let refundTransaction):
-                if let info = refundTransaction.details.info {
+                if let info = refundTransaction.details.paymentInfo {
                     result["summary"] = info.summary
                 }
             case .refresh(let refreshTransaction):

@@ -273,17 +273,6 @@ enum PreparePayResultType: String, Codable {
     case choiceSelection = "choice-selection"
 }
 
-struct PayMerchantInsufficientBalanceDetails: Codable {
-    let amountRequested: Amount
-    let balanceAvailable: Amount
-    let balanceMaterial: Amount
-    let balanceAgeAcceptable: Amount
-    let balanceReceiverAcceptable: Amount
-    let balanceReceiverDepositable: Amount
-    let perExchange: [String:ExchangeFeeGapEstimate]
-    let causeHint: InsufficientBalanceHint
-}
-
 struct ExchangeFeeGapEstimate: Codable {
     let balanceAvailable: Amount
     let balanceMaterial: Amount
