@@ -44,7 +44,7 @@ public struct CStringArray {
 
         // This uses the deallocator available on the data structure as a solution to the fact that structs do not have `deinit`
         self.data = Data(bytesNoCopy: pointer, count: MemoryLayout<UnsafeMutablePointer<CChar>>.size * count, deallocator: .custom({_,_ in
-            for i in 0...count - 1 {
+            for i in 0..<count {
                 free(pointer[i])
             }
             pointer.deallocate()
