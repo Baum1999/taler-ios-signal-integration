@@ -73,7 +73,7 @@ extension Timestamp: Comparable {
                 switch rhs {
                     case .milliseconds(let rhs_ms):
                         return lhs_ms < rhs_ms
-                    case .never: break
+                    case .never: return true
                 }
             case .never: break
         }
