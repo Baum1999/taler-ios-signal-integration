@@ -48,6 +48,7 @@ class TagEmulation: ObservableObject {
         // presentmentIntent.isValid to ensure the assertion remains active.
         var result = false
 
+        guard emulatedData.count < 8192 else { return false }
         do {
             if presentmentIntent == nil {
                 presentmentIntent = try await NFCPresentmentIntentAssertion.acquire()
@@ -108,7 +109,7 @@ class TagEmulation: ObservableObject {
     }
 
     private func eventStream(_ mySession: CardSession, data emulatedData: String) async throws {
-        let apdu = APDU(emulatedData)
+        let apdu = try APDU(emulatedData)
         // Iterate over events as the card session produces them.
         for try await event in mySession.eventStream {
 //            if presentmentIntent?.isValid ?? false {

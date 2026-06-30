@@ -8,14 +8,22 @@
 import Foundation
 import os.log
 
+enum APDUError: Error {
+    case invalidStringValue
+}
+
 @MainActor
 class APDU {
-    let talerUri: String
+    let talerUri: String        // contains only ASCII, never Unicode
     nonisolated let logger = Logger(subsystem: "net.taler.gnu", category: "APDU")
     private var readCapabilityContainerCheck = false
 
-    init(_ talerUri: String) {
-        self.talerUri = talerUri
+    init(_ talerUri: String) throws {
+        if talerUri.count < 8192 {
+            self.talerUri = talerUri
+        } else {
+            throw APDUError.invalidStringValue
+        }
     }
 
     private var APDU_SELECT: Data {
@@ -204,8 +212,11 @@ class APDU {
             return A_OKAY
         } // 00a4000c02e104
 
+        // TODO: This only works for talerURIs < 256 bytes
+        // but they may be up to 8192 bytes long
+        // So we need to change to long header...
         let uriCount = talerUri.count
-        let ndefLen = UInt16(uriCount + 5)     // NDEF_RECORD_HEADER is 4 bytes
+        let ndefLen = UInt16(uriCount + 5)     // NDEF_RECORD_HEADER_SHORT + len + "U" + 0
         /// Fifth Command: Read the Length of the NDEF File     // 00b0 00 00 02
         if NDEF_READ_BINARY_NLEN == commandApdu {
             logger.info("NDEF_READ_BINARY_NLEN triggered. Our Response: length \(ndefLen) + A_OKAY")
