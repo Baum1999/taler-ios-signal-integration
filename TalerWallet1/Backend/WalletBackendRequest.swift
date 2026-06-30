@@ -154,28 +154,6 @@ struct OrderShortInfo: Codable {
     var contractTermsHash: String?
 }
 // MARK: -
-/// A request to process a refund.
-struct WalletBackendApplyRefundRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "applyRefund" }
-    func args() -> Args { Args(talerRefundUri: talerRefundUri) }
-
-    var talerRefundUri: String
-
-    struct Args: Encodable {
-        var talerRefundUri: String
-    }
-
-    struct Response: Decodable {
-        var contractTermsHash: String
-        var amountEffectivePaid: Amount
-        var amountRefundGranted: Amount
-        var amountRefundGone: Amount
-        var pendingAtExchange: Bool
-        var info: OrderShortInfo
-    }
-}
-
-
 /// A request to force update an exchange.
 struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
     func operation() -> String { "addRequest" }
