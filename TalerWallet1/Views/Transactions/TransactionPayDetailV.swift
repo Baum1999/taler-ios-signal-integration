@@ -38,14 +38,14 @@ struct TransactionPayDetailV: View {
                 }
             }
 //            Text(info.summary)
-            Text("Order-ID:")
-                .talerFont(.title3)
-                .listRowSeparator(.hidden)
-            Text(info?.orderId ?? "Unknown")
-                .talerFont(.body)
-//            Text(info.merchant.name)
-
             if let info {
+//              Text(info.merchant.name)        TODO: show name & logo here?
+                Text("Order-ID:")
+                    .talerFont(.title3)
+                    .listRowSeparator(.hidden)
+                Text(info.orderId)
+                    .talerFont(.body)
+
                 if let fulfillmentUrl = info.fulfillmentUrl {
                     if let destination = URL(string: fulfillmentUrl) {
                         let buttonTitle = info.fulfillmentMessage ?? String(localized: "Open merchant website")
@@ -58,6 +58,12 @@ struct TransactionPayDetailV: View {
                         .talerFont(.body)
                 }
             }
+            if let failReason = common.failReason {
+                if let hint = failReason.hint {
+                    Text(hint)
+                        .talerFont(.title3)
+                }
+            }
             if let abortReason = details.abortReason {
                 if let exchangeResponse = abortReason.exchangeResponse,
                    let hint2 = exchangeResponse.hint {
@@ -65,8 +71,8 @@ struct TransactionPayDetailV: View {
                         .talerFont(.body)
                 }
                 if developerMode {
-                    if let hint = abortReason.hint {
-                        Text(hint)
+                    if let hint3 = abortReason.hint {
+                        Text(hint3)
                             .talerFont(.body)
                     }
                 }

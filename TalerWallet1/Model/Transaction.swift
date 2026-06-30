@@ -328,6 +328,7 @@ struct TransactionCommon: Decodable, Sendable {
     var amountRaw: Amount
     var amountEffective: Amount
     var error: TalerErrorDetail?
+    var failReason: TalerErrorDetail?       // only for isFailed TODO: i18n
     var kycUrl: String?
     var kycAuthTransferInfo: KycAuthTransferInfo?
 
