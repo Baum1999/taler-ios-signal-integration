@@ -212,10 +212,11 @@ extension WalletCore {
             if let errorInfo = decoded.errorInfo {
                 // reload pending transaction list to add error badge
                 postNotification(.TransactionError, userInfo: [NOTIFICATIONERROR: WalletBackendError.walletCoreError(errorInfo)])
-            }
-            guard decoded.newTxState != decoded.oldTxState else {
-                logger.info("handleStateTransition: No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
-                return
+            } else {
+                guard decoded.newTxState != decoded.oldTxState else {
+                    logger.info("handleStateTransition: No State change: \(decoded.transactionId, privacy: .private(mask: .hash))")
+                    return
+                }
             }
 
             let components = decoded.transactionId.components(separatedBy: ":")
