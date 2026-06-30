@@ -81,61 +81,17 @@ struct MerchantHeader: View {
 }
 // MARK: -
 struct PaymentTransactionView: View {
-    private let symLog = SymLogV()
+    private let symLog = SymLogV(0)
     let stack: CallStack
     let common: TransactionCommon
     let paymentTransaction: PaymentTransaction
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
     @Binding var payNow: Bool
-    @Binding var isLoadingChoices: Bool?
     @Binding var selectedChoice: Int
 
+    @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
-    @State var choicesForPayment: GetChoicesForPaymentResult? = nil
-//    @State var isLoadingChoices: Bool? = nil
-
-    @MainActor
-    func choiceTriple() -> ([ChoiceTriple], Bool)? {
-        if let choicesForPayment {
-            let choices = choicesForPayment.choices
-            let terms = choicesForPayment.contractTerms
-            if let ctChoices = terms.choices {
-                let combined = Array(zip(choices, ctChoices, ctChoices.indices))
-                return (combined, true)
-            } else if let amount = terms.amount {       // V0
-                let maxFee = terms.maxFee ?? Amount.zero(currency: amount.currencyStr)
-                let ctChoice = ContractChoice(amount: amount,
-                                              maxFee: maxFee,
-                                         description: terms.summary,
-                                     descriptionI18n: terms.summaryI18n,
-                                              inputs: [],
-                                             outputs: [])
-                let combined = Array(zip(choices, [ctChoice], [0]))
-                return (combined, false)
-            } else {
-                symLog.log("  ❗️Yikes, neither choices nor amount in contractTerms!\n\(stack)")
-            }
-        }
-        return nil
-    }
-
-    private func getChoicesForPayment() async {
-        if isLoadingChoices == nil {
-            symLog.log("first getChoicesForPayment, stack: \(stack)")
-            isLoadingChoices = false
-        }
-        if isLoadingChoices == false {
-            isLoadingChoices = true
-            let txId = common.transactionId
-            if let choiceResponse = try? await model.getChoicesForPayment(txId) {
-                choicesForPayment = choiceResponse
-                isLoadingChoices = false
-            }
-        } else {
-            symLog.log("getChoicesForPayment already in progress")
-        }
-    }
 
     func summary(_ info: OrderShortInfo?) -> String? {
         if let i18nDict = info?.summary_i18n {
@@ -154,16 +110,18 @@ struct PaymentTransactionView: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()
-        Group {
-            let details = paymentTransaction.details
-            if common.isDialog {        // show payment confirmation dialog
-                MerchantHeader(terms: details.contractTerms)
+#endif
+        let details = paymentTransaction.details
+        if common.isDialog {        // show payment confirmation dialog
+            MerchantHeader(terms: details.contractTerms)
 
-                if let (choices, showHeader) = choiceTriple() {
-                    let hasAutomatic = choicesForPayment?.automaticExecution ?? false
-                    let automaticIndex = hasAutomatic ? choicesForPayment?.automaticExecutableIndex : nil
+            if let choicesForPayment = controller.choicesForPayment {
+                if let (choices, showHeader) = choicesForPayment.choiceTriple() {
+                    let hasAutomatic = choicesForPayment.automaticExecution ?? false
+                    let automaticIndex = hasAutomatic ? choicesForPayment.automaticExecutableIndex : nil
                     ChoicesView(stack: stack.push(),
                          choiceTriple: choices,
                            showHeader: showHeader,
@@ -201,33 +159,20 @@ struct PaymentTransactionView: View {
                             balanceDetails: selectionDetail.balanceDetails)
 //                    }
                 }
-            } else { // show finished payment
-                TransactionPayDetailV(paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
-                ThreeAmountsSheet(stack: stack.push(),
-                                  scope: scope,
-                                 common: common,
-                              topAbbrev: String(localized: "Price:", comment: "mini"),
-                               topTitle: String(localized: "Price (net):"),
-                                baseURL: nil,               // TODO: baseURL
-                                 noFees: nil,               // TODO: noFees
-                          feeIsNegative: false,
-                                  large: true,
-                                summary: details.info?.summary ?? EMPTYSTRING)
-            } // show finished payment
-        }
-        .task(id: common.txState.hashValue) {
-            let state = common.txState
-            if common.isDialog {
-                if choicesForPayment == nil {
-                    symLog.log("❗️❗️ task: \(common.txState)")
-                    await getChoicesForPayment()
-                } else {
-                    symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
-                }
-            } else {
-                symLog.log("❗️❗️ \(common.type.rawValue), no need for task: \(state)")
             }
-        }
+        } else { // show finished payment
+            TransactionPayDetailV(paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
+            ThreeAmountsSheet(stack: stack.push(),
+                              scope: scope,
+                             common: common,
+                          topAbbrev: String(localized: "Price:", comment: "mini"),
+                           topTitle: String(localized: "Price (net):"),
+                            baseURL: nil,               // TODO: baseURL
+                             noFees: nil,               // TODO: noFees
+                      feeIsNegative: false,
+                              large: true,
+                            summary: details.info?.summary ?? EMPTYSTRING)
+        } // show finished payment
     } // body
 } // PaymentTransactionView
 // MARK: -
@@ -358,14 +303,17 @@ struct TransactionSummaryList: View {
     }
 
     func localizedState(_ txState: TransactionState) -> String {
-        if let minorState = txState.minor {
-            if developerMode { return minorState.localizedDbgState }
-            if talerTX.isPayment {
-//                return String(localized: "Payment", comment: "TxMajorState heading")
+        let major = txState.major
+        if major != .failed {
+            if let minorState = txState.minor {
+                if developerMode { return minorState.localizedDbgState }
+//                if talerTX.isPayment {
+//                  return String(localized: "Payment", comment: "TxMajorState heading")
+//                }
+                return minorState.localizedState ?? major.localizedState
             }
-            return minorState.localizedState ?? txState.major.localizedState
         }
-        return txState.major.localizedState
+        return major.localizedState
     }
 
     @ViewBuilder
@@ -386,7 +334,7 @@ struct TransactionSummaryList: View {
             imageT
             Spacer(minLength: 0)
             statusT
-        }
+        }   // TODO: a11y for tx icon
         if developerMode {
             if !jsonTransaction.isEmpty {
                 CopyButton(textToCopy: jsonTransaction, isCopied: $isCopied, title: "Copy JSON")
@@ -449,10 +397,10 @@ struct TransactionSummaryList: View {
     }
 
     var body: some View {
-//#if PRINT_CHANGES
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
-//#endif
+#endif
         let common = talerTX.common
 //        let scope = common.scopes.first                                     // might be nil if scopes == []
         let locale = TalerDater.shared.locale

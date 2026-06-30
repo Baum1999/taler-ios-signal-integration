@@ -350,7 +350,9 @@ struct ChoiceSelectionDetail: Codable, Hashable, Sendable {
     var balanceDetails: PaymentInsufficientBalanceDetails?      // only if insufficient
 }
 
-struct GetChoicesForPaymentResult: Codable {
+typealias ChoiceTriple = (ChoiceSelectionDetail, ContractChoice, Int)
+
+struct ChoicesForPayment: Codable {
     var choices: [ChoiceSelectionDetail]
     /**
      * Index of the choice in @e choices array to present to the user as default.
@@ -370,11 +372,31 @@ struct GetChoicesForPaymentResult: Codable {
     var automaticExecutableIndex: Int?
 
     var contractTerms: MerchantContractTerms
+
+    func choiceTriple() -> ([ChoiceTriple], Bool)? {
+        let terms = self.contractTerms
+        if let ctChoices = terms.choices {
+            let combined = Array(zip(choices, ctChoices, ctChoices.indices))
+            return (combined, true)
+        } else if let amount = terms.amount {       // V0
+            let maxFee = terms.maxFee ?? Amount.zero(currency: amount.currencyStr)
+            let ctChoice = ContractChoice(amount: amount,
+                                          maxFee: maxFee,
+                                     description: terms.summary,
+                                 descriptionI18n: terms.summaryI18n,
+                                          inputs: [],
+                                         outputs: [])
+            let combined = Array(zip(choices, [ctChoice], [0]))
+            return (combined, false)
+        }
+//        symLog.log("  ❗️Yikes, neither choices nor amount in contractTerms!\n\(stack)")
+        return nil
+    }
 }
 
 /// A request to get an exchange's payment contract terms.
 fileprivate struct GetChoicesForPayment: WalletBackendFormattedRequest {
-    typealias Response = GetChoicesForPaymentResult
+    typealias Response = ChoicesForPayment
     func operation() -> String { "getChoicesForPayment" }
     func args() -> Args { Args(transactionId: transactionId, forcedCoinSel: forcedCoinSel) }
 
@@ -575,7 +597,7 @@ extension WalletModel {
     }
 
     nonisolated func getChoicesForPayment(_ transactionId: String, viewHandles: Bool = false)
-      async throws -> GetChoicesForPaymentResult {
+      async throws -> ChoicesForPayment {
         let request = GetChoicesForPayment(transactionId: transactionId, forcedCoinSel: nil)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response

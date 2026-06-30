@@ -139,6 +139,8 @@ class Controller: ObservableObject {
     @Published var oimSheetActive: Bool = false
     @Published var diagnosticModeEnabled: Bool = false
     @Published var talerURI: URL? = nil
+    @Published var choicesForPayment: ChoicesForPayment? = nil
+
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Bool = false
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0         // extension mustn't define this, so it must be here
@@ -155,6 +157,7 @@ class Controller: ObservableObject {
     private var currencyInfos: [ScopeInfo : CurrencyInfo]
     var exchanges: [Exchange]
     var messageForSheet: String? = nil
+    var isLoadingChoices: String? = nil
 
     private let monitor = NWPathMonitor()
 
@@ -344,7 +347,7 @@ class Controller: ObservableObject {
         }
         return nil
     }
-    // MARK: -
+// MARK: -
     @MainActor
     @discardableResult
     func loadDiscounts(_ stack: CallStack,_ model: WalletModel) async -> Int? {
@@ -360,7 +363,7 @@ class Controller: ObservableObject {
         }
         return nil
     }
-    // MARK: -
+// MARK: -
     @MainActor
     @discardableResult
     func loadSubscriptions(_ stack: CallStack,_ model: WalletModel) async -> Int? {
@@ -375,6 +378,28 @@ class Controller: ObservableObject {
             return reloaded.count
         }
         return nil
+    }
+    // MARK: -
+    @MainActor
+    @discardableResult
+    func loadChoicesForPayment(_ stack: CallStack,
+                               _ model: WalletModel,
+                                  txId: String) async -> Bool {
+        self.logger.log("getChoicesForPayment: \(txId)")
+        if isLoadingChoices != txId {
+            isLoadingChoices = txId
+            if let choiceResponse = try? await model.getChoicesForPayment(txId) {
+                choicesForPayment = choiceResponse
+                isLoadingChoices = nil
+                return true
+            } else {
+                isLoadingChoices = nil
+                self.logger.log("getChoicesForPayment failed: \(txId)")
+            }
+        } else {
+            self.logger.log("getChoicesForPayment already in progress: \(txId)")
+        }
+        return false
     }
 // MARK: -
     func exchange(for baseUrl: String) -> Exchange? {

@@ -8,8 +8,6 @@
 import SwiftUI
 import taler_swift
 
-typealias ChoiceTriple = (ChoiceSelectionDetail, ContractChoice, Int)
-
 struct ChoicesView: View, Sendable {
     let stack: CallStack
     let choiceTriple: [ChoiceTriple]

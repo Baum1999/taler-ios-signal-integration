@@ -19,13 +19,15 @@ struct TransactionTypeDetail: View {
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
     let hasDone: Bool
+
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var rotationEnabled = true
     @State private var ignoreAccept: Bool = false         // accept could be set by OIM to trigger accept
     @State private var isCopied: Bool = false
-    @State var isLoadingChoices: Bool? = nil
 
     func refreshFee(input: Amount, output: Amount) -> Amount? {
         do {
@@ -51,8 +53,10 @@ struct TransactionTypeDetail: View {
     }
 
     var body: some View {
+#if PRINT_CHANGES
         let _ = Self._printChanges()
         let _ = symLog.vlog()
+#endif
         let common = transaction.common
         let pending = transaction.isPending
         let isDialog = transaction.isDialog
@@ -111,16 +115,27 @@ struct TransactionTypeDetail: View {
                 }
 
                 case .payment(let paymentTransaction):
-                    /// this will always be recreated, thus we need to pass isLoadingChoices as Binding
                     PaymentTransactionView(stack: stack.push(),
                                           common: common,
                               paymentTransaction: paymentTransaction,
                                            scope: $scope,
                                        effective: $effective,
                                           payNow: $payNow,
-                                isLoadingChoices: $isLoadingChoices,
                                   selectedChoice: $selectedChoice)
-
+                    .task(id: common.txState.hashValue) {
+                        let state = common.txState
+                        if common.isDialog {
+                            if controller.choicesForPayment == nil {
+                                symLog.log("❗️❗️ task: \(common.txState)")
+                                await controller.loadChoicesForPayment(stack.push(),model,
+                                                                       txId: common.transactionId)
+                            } else {
+                                symLog.log("❗️❗️ choicesForPayment exists, no need for task: \(state)")
+                            }
+                        } else {
+                            symLog.log("❗️❗️ \(common.type.rawValue), no need for task: \(state)")
+                        }
+                    }
                 case .refund(let refundTransaction): Group {
                     let details = refundTransaction.details                 // TODO: more details, details.info?.merchant.name
                     ThreeAmountsSheet(stack: stack.push(),
