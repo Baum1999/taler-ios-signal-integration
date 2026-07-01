@@ -44,6 +44,7 @@ struct TalerPOSApp: App {
 
         merchantApi.onUnauthorized = { [weak config] in
             Task { @MainActor in
+                guard config?.merchantConfig != nil else { return }
                 config?.forgetPassword()
                 config?.sessionExpired = true
             }

@@ -16,6 +16,9 @@
 
 import Foundation
 import Combine
+import os
+
+private let logger = Logger(subsystem: "net.taler.pos", category: "LanguageManager")
 
 /// Manages in-app language override. Changes apply immediately
 /// without requiring an app restart.
@@ -31,37 +34,75 @@ final class LanguageManager: ObservableObject {
         let saved = UserDefaults.standard.string(forKey: Self.storageKey) ?? ""
         selectedLanguage = saved
         bundle = Self.bundle(for: saved)
+        logger.info("Init: saved=\(saved) appPreferred=\(Locale.preferredLanguages) systemPreferred=\(Self.systemPreferredLanguages) resolved=\(self.bundle.bundlePath)")
     }
 
+    @Published var languageChangedToast: String?
+
     func setLanguage(_ tag: String) {
+        let previousTag = selectedLanguage
         selectedLanguage = tag
         if tag.isEmpty {
             UserDefaults.standard.removeObject(forKey: Self.storageKey)
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
         } else {
             UserDefaults.standard.set(tag, forKey: Self.storageKey)
+            UserDefaults.standard.set([tag], forKey: "AppleLanguages")
         }
         bundle = Self.bundle(for: tag)
+        logger.info("setLanguage: tag=\(tag) AppleLanguages=\(UserDefaults.standard.object(forKey: "AppleLanguages") as? [String] ?? []) resolved=\(self.bundle.bundlePath)")
+        if tag != previousTag {
+            languageChangedToast = S.toastLanguageChanged
+        }
     }
 
     var locale: Locale {
         selectedLanguage.isEmpty ? .current : Locale(identifier: selectedLanguage)
     }
 
+    var resolvedLanguageLabel: String? {
+        guard selectedLanguage.isEmpty else { return nil }
+        let resolved = Self.resolveSystemLanguage()
+        return Locale.current.localizedString(forLanguageCode: resolved)
+    }
+
+    private static var systemPreferredLanguages: [String] {
+        let value = CFPreferencesCopyValue(
+            "AppleLanguages" as CFString,
+            kCFPreferencesAnyApplication,
+            kCFPreferencesCurrentUser,
+            kCFPreferencesAnyHost
+        )
+        return value as? [String] ?? Locale.preferredLanguages
+    }
+
+    private static func resolveSystemLanguage() -> String {
+        let systemLangs = systemPreferredLanguages
+        let available = Set(Bundle.main.localizations)
+        for lang in systemLangs {
+            if available.contains(lang) { return lang }
+            let base = lang.components(separatedBy: "-").first ?? lang
+            if available.contains(base) { return base }
+        }
+        return "en"
+    }
+
     private static func bundle(for languageTag: String) -> Bundle {
-        guard !languageTag.isEmpty else { return .main }
+        let tag = languageTag.isEmpty ? resolveSystemLanguage() : languageTag
+        return lprojBundle(for: tag) ?? .main
+    }
 
-        if let path = Bundle.main.path(forResource: languageTag, ofType: "lproj"),
-           let lprojBundle = Bundle(path: path) {
-            return lprojBundle
+    private static func lprojBundle(for tag: String) -> Bundle? {
+        if let path = Bundle.main.path(forResource: tag, ofType: "lproj"),
+           let b = Bundle(path: path) {
+            return b
         }
-
-        let base = languageTag.components(separatedBy: "-").first ?? languageTag
-        if base != languageTag,
+        let base = tag.components(separatedBy: "-").first ?? tag
+        if base != tag,
            let path = Bundle.main.path(forResource: base, ofType: "lproj"),
-           let lprojBundle = Bundle(path: path) {
-            return lprojBundle
+           let b = Bundle(path: path) {
+            return b
         }
-
-        return .main
+        return nil
     }
 }

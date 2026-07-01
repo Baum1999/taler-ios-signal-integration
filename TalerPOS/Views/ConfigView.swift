@@ -267,6 +267,8 @@ struct ConfigView: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(.posPrimary)
+                    .foregroundColor(.posOnPrimary)
                     .disabled(isSubmitting)
                 }
 
@@ -397,10 +399,15 @@ struct ConfigView: View {
                 await MainActor.run {
                     handleChallengeResponse(error.challengeResponse)
                 }
+            } catch let error as ApiError where error.isUnauthorized {
+                await MainActor.run {
+                    isSubmitting = false
+                    errorMessage = S.configAuthError
+                }
             } catch {
                 await MainActor.run {
                     isSubmitting = false
-                    errorMessage = error.localizedDescription
+                    errorMessage = S.configErrorNetwork
                 }
             }
         }
@@ -572,7 +579,6 @@ private struct TanInputSheet: View {
     let onResend: () -> Void
 
     @State private var codeText: String = ""
-    @FocusState private var isCodeFieldFocused: Bool
 
     private var channelLabel: String {
         switch challenge.tanChannel {
@@ -592,43 +598,44 @@ private struct TanInputSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                Text(S.mfaEnterCode)
-                    .font(.headline)
-                    .padding(.top, 20)
-
                 Text(S.mfaChallengeMessage(channelLabel, channelInfo))
                     .font(.subheadline)
                     .foregroundColor(.posOnSurfaceVariant)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
-                ZStack {
-                    TextField("", text: $codeText)
-                        .keyboardType(.numberPad)
-                        .textContentType(.none)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                        .focused($isCodeFieldFocused)
-                        .foregroundColor(.clear)
-                        .tint(.clear)
-                        .accentColor(.clear)
-                        .onChange(of: codeText) { newValue in
-                            let digitsOnly = newValue.filter(\.isNumber)
-                            let clamped = String(digitsOnly.prefix(MFA_CODE_DIGITS))
-                            if clamped != newValue {
-                                codeText = clamped
+                if isPhone {
+                    HStack(spacing: 8) {
+                        digitBoxesView
+                            .contentShape(Rectangle())
+                            .onLongPressGesture {
+                                if let pasted = UIPasteboard.general.string {
+                                    let digitsOnly = pasted.filter(\.isNumber)
+                                    let clamped = String(digitsOnly.prefix(MFA_CODE_DIGITS))
+                                    codeText = clamped
+                                    syncDigits()
+                                }
                             }
-                            let chars = Array(clamped)
-                            for i in 0..<MFA_CODE_DIGITS {
-                                digits[i] = i < chars.count ? String(chars[i]) : ""
+                        Button(S.mfaResendCode) { onResend() }
+                            .font(.caption)
+                            .foregroundColor(.posPrimary)
+                    }
+                } else {
+                    digitBoxesView
+                        .contentShape(Rectangle())
+                        .onLongPressGesture {
+                            if let pasted = UIPasteboard.general.string {
+                                let digitsOnly = pasted.filter(\.isNumber)
+                                let clamped = String(digitsOnly.prefix(MFA_CODE_DIGITS))
+                                codeText = clamped
+                                syncDigits()
                             }
                         }
 
-                    digitBoxesView
-                        .allowsHitTesting(false)
+                    Button(S.mfaResendCode) { onResend() }
+                        .font(.subheadline)
+                        .foregroundColor(.posPrimary)
                 }
-                .contentShape(Rectangle())
-                .onTapGesture { isCodeFieldFocused = true }
 
                 if let errorMessage = errorMessage {
                     Text(errorMessage)
@@ -636,11 +643,8 @@ private struct TanInputSheet: View {
                         .foregroundColor(.posError)
                 }
 
-                Button(S.mfaResendCode) { onResend() }
-                    .font(.subheadline)
-                    .foregroundColor(.posPrimary)
-
-                Spacer()
+                digitNumpad
+                    .padding(.horizontal, 20)
 
                 Button(action: onConfirm) {
                     Text(S.mfaVerify)
@@ -649,6 +653,8 @@ private struct TanInputSheet: View {
                         .padding(.vertical, 12)
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(.posPrimary)
+                .foregroundColor(.posOnPrimary)
                 .disabled(!isComplete)
                 .padding(.horizontal)
                 .padding(.bottom, 20)
@@ -663,18 +669,118 @@ private struct TanInputSheet: View {
             }
             .onAppear {
                 codeText = digits.joined()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    isCodeFieldFocused = true
-                }
-            }
-            .onChange(of: digits) { newDigits in
-                let joined = newDigits.joined()
-                if joined != codeText {
-                    codeText = joined
-                }
             }
         }
         .presentationDetents([.large])
+    }
+
+    private func syncDigits() {
+        let chars = Array(codeText)
+        for i in 0..<MFA_CODE_DIGITS {
+            digits[i] = i < chars.count ? String(chars[i]) : ""
+        }
+    }
+
+    private func appendDigit(_ d: String) {
+        guard codeText.count < MFA_CODE_DIGITS else { return }
+        codeText.append(d)
+        syncDigits()
+    }
+
+    private func deleteLastDigit() {
+        guard !codeText.isEmpty else { return }
+        codeText.removeLast()
+        syncDigits()
+    }
+
+    private var isPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
+
+    private var digitNumpad: some View {
+        Group {
+            if isPhone {
+                phoneNumpad
+            } else {
+                tabletNumpad
+            }
+        }
+    }
+
+    private func numpadDigitButton(_ digit: String) -> some View {
+        Button { appendDigit(digit) } label: {
+            Text(digit)
+                .font(isPhone ? .body : .title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity)
+                .frame(height: isPhone ? 44 : 52)
+                .background(Color.posSurface)
+                .foregroundColor(.posOnSurface)
+                .cornerRadius(isPhone ? 10 : 12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: isPhone ? 10 : 12)
+                        .stroke(Color.posOutlineVariant, lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func numpadIconButton(icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(isPhone ? .body : .title3)
+                .frame(maxWidth: .infinity)
+                .frame(height: isPhone ? 44 : 52)
+                .background(Color.posSurface)
+                .foregroundColor(.posOnSurface)
+                .cornerRadius(isPhone ? 10 : 12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: isPhone ? 10 : 12)
+                        .stroke(Color.posOutlineVariant, lineWidth: 1)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var phoneNumpad: some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 6) {
+                ForEach(1...5, id: \.self) { n in numpadDigitButton("\(n)") }
+                numpadIconButton(icon: "doc.on.clipboard") {
+                    if let pasted = UIPasteboard.general.string {
+                        let digitsOnly = pasted.filter(\.isNumber)
+                        codeText = String(digitsOnly.prefix(MFA_CODE_DIGITS))
+                        syncDigits()
+                    }
+                }
+            }
+            HStack(spacing: 6) {
+                ForEach(6...9, id: \.self) { n in numpadDigitButton("\(n)") }
+                numpadDigitButton("0")
+                numpadIconButton(icon: "delete.left") { deleteLastDigit() }
+            }
+        }
+    }
+
+    private var tabletNumpad: some View {
+        VStack(spacing: 8) {
+            ForEach(0..<3, id: \.self) { row in
+                HStack(spacing: 8) {
+                    ForEach(1...3, id: \.self) { col in
+                        numpadDigitButton("\(row * 3 + col)")
+                    }
+                }
+            }
+            HStack(spacing: 8) {
+                numpadIconButton(icon: "doc.on.clipboard") {
+                    if let pasted = UIPasteboard.general.string {
+                        let digitsOnly = pasted.filter(\.isNumber)
+                        codeText = String(digitsOnly.prefix(MFA_CODE_DIGITS))
+                        syncDigits()
+                    }
+                }
+                numpadDigitButton("0")
+                numpadIconButton(icon: "delete.left") { deleteLastDigit() }
+            }
+        }
     }
 
     private var digitBoxesView: some View {

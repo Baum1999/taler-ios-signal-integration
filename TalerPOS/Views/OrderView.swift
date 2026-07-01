@@ -25,6 +25,8 @@ struct OrderView: View {
 
     @State private var showCustomProduct = false
     @State private var refreshTimer: Timer?
+    @State private var toastMessage: String?
+    @State private var manualReloadTriggered = false
 
     private var liveOrder: LiveOrder? { orderManager.currentLiveOrder }
     private var isTablet: Bool { UIDevice.current.userInterfaceIdiom == .pad }
@@ -38,10 +40,17 @@ struct OrderView: View {
         .onAppear { startInventoryRefresh() }
         .onDisappear { stopInventoryRefresh() }
         .sheet(isPresented: $showCustomProduct) {
-            CustomProductDialog(currency: orderManager.currentLiveOrder?.order.currency ?? configManager.currency ?? "")  { product in
+            CustomProductDialog(currency: orderManager.currentLiveOrder?.order.currency ?? configManager.currency ?? "", currencySpec: configManager.currencySpec)  { product in
                 if let orderId = liveOrder?.id {
                     orderManager.addProduct(orderId: orderId, product: product)
                 }
+            }
+        }
+        .toast(message: $toastMessage)
+        .onChange(of: configManager.isLoading) { loading in
+            if !loading && manualReloadTriggered {
+                manualReloadTriggered = false
+                toastMessage = S.toastReloaded
             }
         }
     }
@@ -77,6 +86,8 @@ struct OrderView: View {
                     label: S.menuReload,
                     enabled: true
                 ) {
+                    manualReloadTriggered = true
+                    toastMessage = S.toastReloading
                     configManager.reloadConfig()
                 }
             }
@@ -91,8 +102,8 @@ struct OrderView: View {
                 .padding(.vertical, 8)
                 .padding(.horizontal, 14)
                 .frame(minHeight: 40)
-                .background(enabled ? Color.posSecondaryContainer : Color.posSecondaryContainer.opacity(0.4))
-                .foregroundColor(enabled ? .posOnSecondaryContainer : .posOnSecondaryContainer.opacity(0.4))
+                .background(enabled ? Color.posSecondaryContainer : Color.posSurfaceVariant)
+                .foregroundColor(enabled ? .posOnSecondaryContainer : .posOnSurfaceVariant)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
         }
         .buttonStyle(.plain)
@@ -133,7 +144,7 @@ struct OrderView: View {
                     liveOrder: liveOrder,
                     currencySpec: configManager.currencySpec,
                     compact: compact,
-                    onSelectLine: { liveOrder?.selectOrderLine($0) },
+                    onSelectLine: { product in liveOrder?.selectOrderLine(product) },
                     onIncrease: { liveOrder?.increaseSelectedOrderLine() },
                     onDecrease: { liveOrder?.decreaseSelectedOrderLine() },
                     onCustom: { showCustomProduct = true },
@@ -336,7 +347,7 @@ struct OrderColumnPane: View {
                                 isSelected: lo.selectedProductKey == product.id,
                                 compact: compact
                             ) {
-                                onSelectLine(lo.selectedProductKey == product.id ? nil : product)
+                                onSelectLine(product)
                             }
                             Color.posOutlineVariant.frame(height: 1)
                         }
@@ -407,6 +418,7 @@ struct OrderRow: View {
             }
             .padding(.horizontal, compact ? 6 : 10)
             .padding(.vertical, compact ? 4 : 8)
+            .contentShape(Rectangle())
             .background(isSelected ? Color.posSecondaryContainer : Color.clear)
         }
         .buttonStyle(.plain)
@@ -485,83 +497,98 @@ private extension Array {
 
 struct CustomProductDialog: View {
     let currency: String
+    let currencySpec: CurrencySpecification?
     let onAdd: (ConfigProduct) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var name = S.orderCustomProductDefault
-    @State private var priceString = ""
-    @State private var priceError: String?
+    @State private var amount: Amount = .zero("")
+    @FocusState private var nameFieldFocused: Bool
 
-    private var parsedPrice: Amount? {
-        Amount.fromString(currency, priceString)
+    private var numInputDigits: Int {
+        currencySpec?.numFractionalInputDigits ?? 2
     }
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(S.orderCustomProduct)
-                        .font(.caption)
-                        .foregroundColor(.posOnSurfaceVariant)
-                    TextField(S.orderCustomProduct, text: $name)
-                        .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.posOutline, lineWidth: 1)
-                        )
-                }
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(currency)
-                        .font(.caption)
-                        .foregroundColor(.posOnSurfaceVariant)
-                    TextField("0.00", text: $priceString)
-                        .keyboardType(.decimalPad)
-                        .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(priceError != nil ? Color.posError : Color.posOutline, lineWidth: 1)
-                        )
-                        .onChange(of: priceString) { _ in
-                            if priceString.isEmpty {
-                                priceError = nil
-                            } else if parsedPrice == nil {
-                                priceError = S.refundErrorInvalidAmount
-                            } else {
-                                priceError = nil
-                            }
+            GeometryReader { geo in
+                ScrollView {
+                    VStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(S.orderCustomProduct)
+                                .font(.caption)
+                                .foregroundColor(.posOnSurfaceVariant)
+                            TextField(S.orderCustomProduct, text: $name)
+                                .focused($nameFieldFocused)
+                                .submitLabel(.done)
+                                .onSubmit { nameFieldFocused = false }
+                                .padding(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.posOutline, lineWidth: 1)
+                                )
                         }
-                    if let priceError {
-                        Text(priceError)
-                            .font(.caption)
-                            .foregroundColor(.posError)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                        HStack {
+                            Spacer()
+                            Text(amount.amountStr(numDigits: numInputDigits))
+                                .font(.system(size: 40, weight: .bold))
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
+                            Text(currency)
+                                .font(.title3)
+                                .foregroundColor(.posOnSurfaceVariant)
+                            Spacer()
+                        }
+                        .padding(.vertical, 8)
+                        .onTapGesture { nameFieldFocused = false }
+
+                        AmountNumpad(
+                            amount: $amount,
+                            currency: currency,
+                            numInputDigits: numInputDigits,
+                            isCompact: true,
+                            onKeyPressed: { nameFieldFocused = false }
+                        )
+                        .frame(height: geo.size.height * 0.55)
+                        .padding(.horizontal, 20)
+
+                        Button {
+                            guard !name.isEmpty, !amount.isZero else { return }
+                            let product = ConfigProduct(
+                                description: name,
+                                price: amount,
+                                categories: [Int.min],
+                                quantity: 1
+                            )
+                            onAdd(product)
+                            dismiss()
+                        } label: {
+                            Text(S.orderCustomAdd)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(!name.isEmpty && !amount.isZero ? Color.posPrimary : Color.posSurfaceVariant)
+                                .foregroundColor(!name.isEmpty && !amount.isZero ? .posOnPrimary : .posOnSurfaceVariant)
+                                .cornerRadius(12)
+                        }
+                        .disabled(name.isEmpty || amount.isZero)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 12)
                     }
                 }
-
-                Spacer()
+                .scrollDismissesKeyboard(.interactively)
             }
-            .padding(20)
             .navigationTitle(S.orderCustom)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(S.refundAbort) { dismiss() }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(S.orderCustomAdd) {
-                        guard !name.isEmpty,
-                              let price = parsedPrice,
-                              !price.isZero else { return }
-                        let product = ConfigProduct(
-                            description: name,
-                            price: price,
-                            categories: [Int.min],
-                            quantity: 1
-                        )
-                        onAdd(product)
-                        dismiss()
-                    }
-                    .disabled(name.isEmpty || priceString.isEmpty || parsedPrice == nil || parsedPrice?.isZero == true)
-                }
+            }
+            .onAppear {
+                amount = .zero(currency)
             }
         }
     }

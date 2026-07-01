@@ -81,9 +81,23 @@ class LiveOrder: ObservableObject, Identifiable {
     }
 
     func removeProduct(_ product: ConfigProduct) {
+        let removedIndex = order.products.firstIndex(where: { $0.id == product.id })
+        lastAddedProduct = nil
         order = order.removing(product)
         restartState = order.products.isEmpty ? .disabled : .enabled
-        repairSelection()
+        if let idx = order.products.firstIndex(where: { $0.id == product.id }) {
+            selectedOrderLine = order.products[idx]
+        } else {
+            let products = order.products
+            if products.isEmpty {
+                selectedOrderLine = nil
+            } else if let ri = removedIndex {
+                let newIdx = min(ri, products.count - 1)
+                selectedOrderLine = products[newIdx]
+            } else {
+                selectedOrderLine = products.last
+            }
+        }
         onChanged()
     }
 
@@ -106,7 +120,9 @@ class LiveOrder: ObservableObject, Identifiable {
     }
 
     func selectOrderLine(_ product: ConfigProduct?) {
+        lastAddedProduct = nil
         selectedOrderLine = product
+        onChanged()
     }
 
     func repairSelection() {

@@ -83,6 +83,26 @@ enum PosDestination: Hashable {
         default: return false
         }
     }
+
+    var savedKey: String {
+        switch self {
+        case .amountEntry: return "amountEntry"
+        case .order: return "order"
+        case .history: return "history"
+        case .settings: return "settings"
+        default: return ""
+        }
+    }
+
+    static func from(savedKey: String) -> PosDestination? {
+        switch savedKey {
+        case "amountEntry": return .amountEntry
+        case "order": return .order
+        case "history": return .history
+        case "settings": return .settings
+        default: return nil
+        }
+    }
 }
 
 struct NavigationDrawer: View {
@@ -159,6 +179,7 @@ struct PosTopBar<Actions: View>: View {
                     Image(systemName: "line.3.horizontal")
                         .font(.title2)
                         .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                         .foregroundColor(.posOnSurface)
                 }
                 .buttonStyle(.plain)
@@ -167,6 +188,7 @@ struct PosTopBar<Actions: View>: View {
                     .font(.title3)
                     .fontWeight(.medium)
                     .lineLimit(1)
+                    .foregroundColor(.posOnSurface)
 
                 Spacer(minLength: 0)
 
@@ -198,6 +220,7 @@ struct ContentView: View {
     @State private var navigationPath = NavigationPath()
     @State private var currentRoot: PosDestination = .amountEntry
     @State var drawerOpen = false
+    @AppStorage("pos_current_root") private var savedRoot: String = ""
 
     private var mainDestinations: [PosDestination] {
         let preferred: PosDestination = configManager.initialOrderScreen.destination
@@ -251,9 +274,14 @@ struct ContentView: View {
                         navigationPath.append(dest)
                     }
                 }
+            } else if let restored = PosDestination.from(savedKey: savedRoot), restored.isMainDestination {
+                currentRoot = restored
             } else {
                 currentRoot = configManager.initialOrderScreen.destination
             }
+        }
+        .onChange(of: currentRoot) { newRoot in
+            savedRoot = newRoot.savedKey
         }
         .alert(S.sessionExpiredToast, isPresented: $configManager.sessionExpired) {
             Button(S.configOk) {
@@ -278,6 +306,7 @@ struct ContentView: View {
             if let order = paymentManager.payment?.order {
                 orderManager.onOrderPaid(order.id)
             }
+            historyManager.fetchHistory()
             navigationPath.removeLast(navigationPath.count)
             navigateTo(.paymentSuccess)
         }
@@ -325,6 +354,7 @@ struct ContentView: View {
         ZStack(alignment: .leading) {
             NavigationStack(path: $navigationPath) {
                 rootView(for: currentRoot)
+                    .id(currentRoot)
                     .navigationDestination(for: PosDestination.self) { destination in
                         destinationView(for: destination)
                     }

@@ -86,6 +86,7 @@ class ConfigManager: ObservableObject {
     @Published var merchantConfig: MerchantConfig?
     @Published var currency: String?
     @Published var currencySpec: CurrencySpecification?
+    @Published var backendVersion: String?
     @Published var configResult: ConfigUpdateResult?
     @Published var isLoading = false
     @Published var sessionExpired = false
@@ -139,7 +140,7 @@ class ConfigManager: ObservableObject {
     }
 
     func reloadConfig() {
-        fetchConfigInternal(url: merchantUrl, token: accessToken, save: true, inventoryOnly: false, silent: false)
+        fetchConfigInternal(url: merchantUrl, token: accessToken, save: true, inventoryOnly: true, silent: false)
     }
 
     func refreshConfigInBackground() {
@@ -210,6 +211,7 @@ class ConfigManager: ObservableObject {
                 self.merchantConfig = mc
                 self.currency = backendConfig.currency
                 self.currencySpec = spec
+                self.backendVersion = backendConfig.version
                 self.saveCachedRuntimeConfig(CachedRuntimeConfig(
                     posConfig: posConfigWithCachedStock,
                     merchantConfig: mc,

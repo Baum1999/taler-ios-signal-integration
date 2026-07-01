@@ -371,11 +371,7 @@ class MerchantApi {
         }
 
         let tokenResponse = try decoder.decode(LimitedTokenResponse.self, from: data)
-        let token = tokenResponse.token
-        if token.hasPrefix("secret-token:") {
-            return String(token.dropFirst("secret-token:".count))
-        }
-        return token
+        return tokenResponse.token
     }
 
     /// POST /instances/{username}/challenge/{challengeId}

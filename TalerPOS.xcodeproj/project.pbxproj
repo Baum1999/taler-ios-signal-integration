@@ -33,6 +33,7 @@
 		B1000014 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000014 /* LanguageManager.swift */; };
 		B1000015 /* PosQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000015 /* PosQRView.swift */; };
 		B1000016 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000016 /* QRScannerView.swift */; };
+		B1000017 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000017 /* ToastView.swift */; };
 		C1000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C2000001 /* Localizable.xcstrings */; };
 		C1000003 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2000003 /* Strings.swift */; };
 		D1000001 /* ConfigProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2000001 /* ConfigProductTests.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		605930B92FEE7E6500487A2B /* TalerPOSRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TalerPOSRelease.entitlements; sourceTree = "<group>"; };
 		A2000001 /* TalerPOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalerPOSApp.swift; sourceTree = "<group>"; };
 		A2000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A2000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 		B2000014 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		B2000015 /* PosQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosQRView.swift; sourceTree = "<group>"; };
 		B2000016 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		B2000017 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		C2000001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		C2000003 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		D2000001 /* ConfigProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigProductTests.swift; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		A4000002 /* TalerPOS */ = {
 			isa = PBXGroup;
 			children = (
+				605930B92FEE7E6500487A2B /* TalerPOSRelease.entitlements */,
 				A4000003 /* App */,
 				A4000004 /* Config */,
 				A4000005 /* Order */,
@@ -233,6 +237,7 @@
 				B2000012 /* SettingsView.swift */,
 				B2000015 /* PosQRView.swift */,
 				B2000016 /* QRScannerView.swift */,
+				B2000017 /* ToastView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 				B1000012 /* SettingsView.swift in Sources */,
 				B1000015 /* PosQRView.swift in Sources */,
 				B1000016 /* QRScannerView.swift in Sources */,
+				B1000017 /* ToastView.swift in Sources */,
 				B1000013 /* ScreenshotController.swift in Sources */,
 				C1000003 /* Strings.swift in Sources */,
 			);
@@ -522,6 +528,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -585,6 +592,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -615,7 +623,7 @@
 				CODE_SIGN_ENTITLEMENTS = TalerPOS/Resources/TalerPOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"TalerPOS/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -623,16 +631,17 @@
 				INFOPLIST_FILE = TalerPOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler POS";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan QR codes for merchant backend configuration.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talersale-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -651,10 +660,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = TalerPOS/Resources/TalerPOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TalerPOS/TalerPOSRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"TalerPOS/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				ENABLE_PREVIEWS = YES;
@@ -662,16 +671,17 @@
 				INFOPLIST_FILE = TalerPOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Taler POS";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to scan QR codes for merchant backend configuration.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taler-systems.talersale-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -690,7 +700,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
@@ -711,7 +720,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
@@ -731,7 +739,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
@@ -751,7 +758,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GUDDQ9428Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;

@@ -137,6 +137,7 @@ enum S {
     static var settingsInstanceTitle: String { s("settings_instance_title") }
     static var settingsInstanceButton: String { s("settings_instance_button") }
     static var settingsLogoutButton: String { s("settings_logout_button") }
+    static var settingsAboutTitle: String { s("settings_about_title") }
     static var settingsInstanceDescription: String { s("settings_instance_description") }
 
     // MARK: - Errors
@@ -182,6 +183,11 @@ enum S {
     static var appNameShort: String { s("app_name_short") }
     static var projectName: String { s("project_name") }
 
-    // MARK: - Session
+    // MARK: - Toasts
     static var sessionExpiredToast: String { s("session_expired_toast") }
+    static var toastReloading: String { s("toast_reloading") }
+    static var toastReloaded: String { s("toast_reloaded") }
+    static var toastHistoryRefreshing: String { s("toast_history_refreshing") }
+    static var toastHistoryRefreshed: String { s("toast_history_refreshed") }
+    static var toastLanguageChanged: String { s("toast_language_changed") }
 }

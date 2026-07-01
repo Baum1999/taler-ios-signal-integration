@@ -3,6 +3,16 @@
     {
       "filename" : "talerpos-logo.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "talerpos-logo-dark.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

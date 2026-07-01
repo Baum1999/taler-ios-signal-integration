@@ -24,64 +24,109 @@ struct RefundFormView: View {
     @Environment(\.dismiss) private var dismiss
     let item: OrderHistoryEntry
 
-    @State private var amountText: String = ""
+    @State private var amount: Amount = .zero("")
     @State private var reason: String = ""
     @State private var errorText: String? = nil
     @State private var showErrorAlert: (String, String)? = nil
-    @FocusState private var amountFocused: Bool
     @FocusState private var reasonFocused: Bool
 
+    private var numInputDigits: Int {
+        configManager.currencySpec?.numFractionalInputDigits ?? 2
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(item.summary)
-                .font(.body)
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: 12) {
+                    Text(item.summary)
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
 
-            TextField(S.refundAmount, text: $amountText)
-                .keyboardType(.decimalPad)
-                .textFieldStyle(.roundedBorder)
-                .focused($amountFocused)
-                .onSubmit { reasonFocused = true }
-                .onChange(of: amountText) { _ in errorText = nil }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(S.refundReason)
+                            .font(.caption)
+                            .foregroundColor(.posOnSurfaceVariant)
+                        TextField(S.refundReason, text: $reason)
+                            .focused($reasonFocused)
+                            .submitLabel(.done)
+                            .onSubmit { reasonFocused = false }
+                            .padding(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.posOutline, lineWidth: 1)
+                            )
+                    }
+                    .padding(.horizontal, 20)
 
-            if let errorText = errorText {
-                Text(errorText)
-                    .font(.caption)
-                    .foregroundColor(.posError)
+                    HStack {
+                        Spacer()
+                        Text(amount.amountStr(numDigits: numInputDigits))
+                            .font(.system(size: 40, weight: .bold))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                        Text(item.amount.currency)
+                            .font(.title3)
+                            .foregroundColor(.posOnSurfaceVariant)
+                        Spacer()
+                    }
+                    .padding(.vertical, 4)
+                    .onTapGesture { reasonFocused = false }
+
+                    if let errorText {
+                        Text(errorText)
+                            .font(.caption)
+                            .foregroundColor(.posError)
+                    }
+
+                    AmountNumpad(
+                        amount: $amount,
+                        currency: item.amount.currency,
+                        numInputDigits: numInputDigits,
+                        isCompact: true,
+                        onKeyPressed: {
+                            reasonFocused = false
+                            errorText = nil
+                        }
+                    )
+                    .frame(height: geo.size.height * 0.45)
+                    .padding(.horizontal, 20)
+
+                    Button(action: submitRefund) {
+                        Text(S.refundConfirm)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(!amount.isZero ? Color.posPrimary : Color.posSurfaceVariant)
+                            .foregroundColor(!amount.isZero ? .posOnPrimary : .posOnSurfaceVariant)
+                            .cornerRadius(12)
+                    }
+                    .disabled(amount.isZero)
+                    .padding(.horizontal, 20)
+
+                    Button(action: {
+                        refundManager.abortRefund()
+                        dismiss()
+                    }) {
+                        Text(S.paymentCancel)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(Color.posErrorContainer)
+                            .foregroundColor(.posOnErrorContainer)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
+                }
             }
-
-            TextField(S.refundReason, text: $reason)
-                .textFieldStyle(.roundedBorder)
-                .focused($reasonFocused)
-                .onSubmit { submitRefund() }
-
-            Button(action: submitRefund) {
-                Text(S.refundConfirm)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-
-            Button(action: {
-                refundManager.abortRefund()
-                dismiss()
-            }) {
-                Text(S.paymentCancel)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-
-            Spacer()
-        }
-        .padding(20)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            amountFocused = false
-            reasonFocused = false
+            .scrollDismissesKeyboard(.interactively)
         }
         .navigationTitle(S.historyRefund)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            amountText = item.amount.amountStr(numDigits: configManager.currencySpec?.inputDigits ?? 2)
-            amountFocused = true
+            amount = item.amount
         }
         .onChange(of: refundManager.refundResult) { result in
             guard let result = result else { return }
@@ -109,33 +154,19 @@ struct RefundFormView: View {
     }
 
     private func submitRefund() {
-        amountFocused = false
         reasonFocused = false
-
         let maxAmount = item.amount
-        let normalizedText = amountText.trimmingCharacters(in: .whitespaces)
 
-        let inputAmount: Amount
-        if normalizedText.isEmpty {
-            inputAmount = maxAmount
-        } else {
-            guard let parsed = Amount.fromString(item.amount.currency, normalizedText) else {
-                errorText = S.refundErrorInvalidAmount
-                return
-            }
-            inputAmount = parsed
-        }
-
-        if inputAmount > maxAmount {
-            errorText = S.refundErrorMaxAmount(maxAmount.amountStr(numDigits: configManager.currencySpec?.inputDigits ?? 2))
+        if amount > maxAmount {
+            errorText = S.refundErrorMaxAmount(maxAmount.amountStr(numDigits: numInputDigits))
             return
         }
-        if inputAmount.isZero {
+        if amount.isZero {
             errorText = S.refundErrorZero
             return
         }
 
-        refundManager.refund(item: item, amount: inputAmount, reason: reason)
+        refundManager.refund(item: item, amount: amount, reason: reason)
     }
 }
 

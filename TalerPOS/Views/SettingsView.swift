@@ -44,6 +44,12 @@ struct SettingsView: View {
     let onNavigate: (PosDestination) -> Void
     var openDrawer: (() -> Void)?
 
+    private var username: String? {
+        guard !configManager.merchantUrl.isEmpty,
+              let url = URL(string: configManager.merchantUrl) else { return nil }
+        return url.pathComponents.last(where: { !$0.isEmpty && $0 != "/" })
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             PosTopBar(title: S.menuSettings, onMenuTap: { openDrawer?() })
@@ -62,18 +68,23 @@ struct SettingsView: View {
                     set: { languageManager.setLanguage($0) }
                 )) {
                     ForEach(supportedLanguages) { lang in
-                        Text(lang.label).tag(lang.tag)
+                        if lang.tag.isEmpty, let resolved = languageManager.resolvedLanguageLabel {
+                            Text("\(lang.label) (\(resolved))").tag(lang.tag)
+                        } else {
+                            Text(lang.label).tag(lang.tag)
+                        }
                     }
                 }
             } header: {
                 Text(S.settingsAppTitle)
+                    .foregroundColor(.posOnSurface)
             }
 
             Section {
                 VStack(alignment: .leading, spacing: 12) {
                     Text(S.settingsInstanceDescription)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.posOnSurface)
 
                     Button {
                         onNavigate(.config)
@@ -104,6 +115,21 @@ struct SettingsView: View {
                 }
             } header: {
                 Text(S.settingsInstanceTitle)
+                    .foregroundColor(.posOnSurface)
+            }
+
+            Section {
+                aboutRow(label: S.appName, value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
+                if let username {
+                    aboutRow(label: S.configUsername, value: username)
+                }
+                if !configManager.merchantUrl.isEmpty {
+                    let suffix = configManager.backendVersion.map { " (\($0))" } ?? ""
+                    aboutRow(label: S.configMerchantUrl, value: "\(configManager.merchantUrl)\(suffix)")
+                }
+            } header: {
+                Text(S.settingsAboutTitle)
+                    .foregroundColor(.posOnSurface)
             }
 
         }
@@ -112,5 +138,19 @@ struct SettingsView: View {
         }
         .background(Color.posSurface)
         .navigationBarHidden(true)
+        .toast(message: Binding(
+            get: { languageManager.languageChangedToast },
+            set: { languageManager.languageChangedToast = $0 }
+        ), duration: 4)
+    }
+
+    private func aboutRow(label: String, value: String) -> some View {
+        HStack(spacing: 4) {
+            Text(label + ":")
+                .fontWeight(.bold)
+            Text(value)
+        }
+        .font(.subheadline)
+        .foregroundColor(.posOnSurfaceVariant)
     }
 }

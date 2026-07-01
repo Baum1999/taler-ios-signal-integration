@@ -67,11 +67,17 @@ struct HistoryView: View {
     let onNavigate: (PosDestination) -> Void
     var openDrawer: (() -> Void)?
     @State private var showRefundStateMissing = false
+    @State private var toastMessage: String?
+    @State private var manualRefreshTriggered = false
 
     var body: some View {
         VStack(spacing: 0) {
             PosTopBar(title: S.menuHistory, onMenuTap: { openDrawer?() }) {
-                Button(action: { historyManager.fetchHistory() }) {
+                Button(action: {
+                    manualRefreshTriggered = true
+                    toastMessage = S.toastHistoryRefreshing
+                    historyManager.fetchHistory()
+                }) {
                     Text(S.historyRefresh)
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -183,6 +189,13 @@ struct HistoryView: View {
         } message: {
             Text(S.refundStateMissing)
         }
+        .toast(message: $toastMessage)
+        .onChange(of: historyManager.isLoading) { loading in
+            if !loading && manualRefreshTriggered {
+                manualRefreshTriggered = false
+                toastMessage = S.toastHistoryRefreshed
+            }
+        }
     }
 }
 
@@ -243,17 +256,24 @@ struct HistoryItemCard: View {
                 if item.hasPendingRefund || hasPendingRefund {
                     Button(S.historyShowRefund, action: onShowRefundClicked)
                         .buttonStyle(.borderedProminent)
+                        .tint(.posPrimary)
+                        .foregroundColor(.posOnPrimary)
                         .controlSize(.small)
                 } else if item.refundable {
                     Button(S.historyRefund, action: onRefundClicked)
                         .buttonStyle(.borderedProminent)
+                        .tint(.posPrimary)
+                        .foregroundColor(.posOnPrimary)
                         .controlSize(.small)
                 } else if !item.paid {
                     Button(S.historyShowPayment, action: onShowPaymentClicked)
                         .buttonStyle(.borderedProminent)
+                        .tint(.posPrimary)
+                        .foregroundColor(.posOnPrimary)
                         .controlSize(.small)
                     Button(S.orderDelete, action: onDeleteClicked)
                         .buttonStyle(.bordered)
+                        .tint(.posPrimary)
                         .controlSize(.small)
                 }
             }
@@ -261,6 +281,10 @@ struct HistoryItemCard: View {
         .padding(16)
         .background(Color.posSurface)
         .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.posOutlineVariant, lineWidth: 1)
+        )
     }
 }
 

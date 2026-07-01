@@ -84,7 +84,7 @@ struct AmountEntryView: View {
         GeometryReader { geo in
             VStack(spacing: 12) {
                 tabletAmountPane
-                    .frame(height: geo.size.height * 0.35)
+                    .frame(maxHeight: geo.size.height * 0.35)
 
                 HStack {
                     Spacer()
@@ -92,9 +92,9 @@ struct AmountEntryView: View {
                         .frame(width: geo.size.width * 0.6)
                     Spacer()
                 }
-                .frame(height: geo.size.height * 0.65 - 12)
             }
             .padding(16)
+            .padding(.bottom, geo.safeAreaInsets.bottom > 0 ? 0 : 16)
         }
     }
 
@@ -200,69 +200,14 @@ struct AmountEntryView: View {
     // MARK: - Keypad Pane
 
     private func keypadPane(isCompact: Bool) -> some View {
-        let rowSpacing: CGFloat = isCompact ? 6 : 8
-        let digitFontSize: CGFloat = isCompact ? 24 : 28
-
-        return VStack(spacing: rowSpacing) {
-            ForEach(digitRows, id: \.self) { row in
-                HStack(spacing: rowSpacing) {
-                    ForEach(row, id: \.self) { digit in
-                        AmountKeyButton(
-                            text: digit,
-                            fontSize: digitFontSize,
-                            action: { handleKey(digit) }
-                        )
-                    }
-                }
-                .frame(maxHeight: .infinity)
-            }
-
-            bottomRow(rowSpacing: rowSpacing, digitFontSize: digitFontSize, isCompact: isCompact)
-                .frame(maxHeight: .infinity)
-
+        VStack(spacing: isCompact ? 6 : 8) {
+            AmountNumpad(
+                amount: $amount,
+                currency: selectedCurrency.isEmpty ? (configManager.currency ?? "") : selectedCurrency,
+                numInputDigits: numInputDigits,
+                isCompact: isCompact
+            )
             chargeButton
-        }
-    }
-
-    private var digitRows: [[String]] {
-        [
-            ["1", "2", "3"],
-            ["4", "5", "6"],
-            ["7", "8", "9"],
-        ]
-    }
-
-    private func bottomRow(rowSpacing: CGFloat, digitFontSize: CGFloat, isCompact: Bool) -> some View {
-        let clearLabel = S.amountEntryClear
-        let clearFontSize: CGFloat = {
-            let len = clearLabel.count
-            if len >= 14 { return isCompact ? 12 : 14 }
-            if len >= 10 { return isCompact ? 14 : 16 }
-            return isCompact ? 16 : 20
-        }()
-
-        return HStack(spacing: rowSpacing) {
-            AmountKeyButton(
-                text: clearLabel,
-                fontSize: clearFontSize,
-                action: { handleKey("clear") }
-            )
-
-            AmountKeyButton(
-                text: "0",
-                fontSize: digitFontSize,
-                action: { handleKey("0") }
-            )
-
-            Button(action: { handleKey("backspace") }) {
-                Image(systemName: "delete.backward")
-                    .font(.system(size: digitFontSize))
-                    .foregroundColor(.posOnSecondaryContainer)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.posSecondaryContainer)
-                    .cornerRadius(12)
-            }
-            .accessibilityLabel(S.amountEntryBackspace)
         }
     }
 
@@ -273,33 +218,11 @@ struct AmountEntryView: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
-                .background(canCharge ? Color.posPrimary : Color.posSecondary.opacity(0.12))
-                .foregroundColor(canCharge ? .posOnPrimary : .posOnSurface.opacity(0.38))
+                .background(canCharge ? Color.posPrimary : Color.posSurfaceVariant)
+                .foregroundColor(canCharge ? .posOnPrimary : .posOnSurfaceVariant)
                 .cornerRadius(12)
         }
         .disabled(!canCharge)
-    }
-
-    // MARK: - Input
-
-    private func handleKey(_ key: String) {
-        errorMessage = nil
-        let currency = selectedCurrency.isEmpty ? (configManager.currency ?? "") : selectedCurrency
-        if amount.currency != currency {
-            amount = .zero(currency)
-        }
-        switch key {
-        case "clear":
-            amount = .zero(currency)
-        case "backspace":
-            amount = amount.removeInputDigit(numInputDigits: numInputDigits)
-        default:
-            if let digit = Int(key) {
-                if let newAmount = amount.addInputDigit(digit, numInputDigits: numInputDigits) {
-                    amount = newAmount
-                }
-            }
-        }
     }
 
     // MARK: - Create Payment
@@ -336,9 +259,89 @@ struct AmountEntryView: View {
     }
 }
 
-// MARK: - Key Button
+// MARK: - Reusable Numpad
 
-private struct AmountKeyButton: View {
+struct AmountNumpad: View {
+    @Binding var amount: Amount
+    let currency: String
+    let numInputDigits: Int
+    var isCompact: Bool = false
+    var onKeyPressed: (() -> Void)? = nil
+
+    private var digitRows: [[String]] {
+        [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+    }
+
+    var body: some View {
+        let rowSpacing: CGFloat = isCompact ? 6 : 8
+        let digitFontSize: CGFloat = isCompact ? 24 : 28
+
+        VStack(spacing: rowSpacing) {
+            ForEach(digitRows, id: \.self) { row in
+                HStack(spacing: rowSpacing) {
+                    ForEach(row, id: \.self) { digit in
+                        AmountKeyButton(text: digit, fontSize: digitFontSize) {
+                            handleKey(digit)
+                        }
+                    }
+                }
+                .frame(maxHeight: .infinity)
+            }
+
+            bottomRow(rowSpacing: rowSpacing, digitFontSize: digitFontSize)
+                .frame(maxHeight: .infinity)
+        }
+    }
+
+    private func bottomRow(rowSpacing: CGFloat, digitFontSize: CGFloat) -> some View {
+        let clearLabel = S.amountEntryClear
+        let clearFontSize: CGFloat = {
+            let len = clearLabel.count
+            if len >= 14 { return isCompact ? 12 : 14 }
+            if len >= 10 { return isCompact ? 14 : 16 }
+            return isCompact ? 16 : 20
+        }()
+
+        return HStack(spacing: rowSpacing) {
+            AmountKeyButton(text: clearLabel, fontSize: clearFontSize) {
+                handleKey("clear")
+            }
+            AmountKeyButton(text: "0", fontSize: digitFontSize) {
+                handleKey("0")
+            }
+            Button(action: { handleKey("backspace") }) {
+                Image(systemName: "delete.backward")
+                    .font(.system(size: digitFontSize))
+                    .foregroundColor(.posOnSecondaryContainer)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.posSecondaryContainer)
+                    .cornerRadius(12)
+            }
+            .accessibilityLabel(S.amountEntryBackspace)
+        }
+    }
+
+    private func handleKey(_ key: String) {
+        onKeyPressed?()
+        if amount.currency != currency {
+            amount = .zero(currency)
+        }
+        switch key {
+        case "clear":
+            amount = .zero(currency)
+        case "backspace":
+            amount = amount.removeInputDigit(numInputDigits: numInputDigits)
+        default:
+            if let digit = Int(key) {
+                if let newAmount = amount.addInputDigit(digit, numInputDigits: numInputDigits) {
+                    amount = newAmount
+                }
+            }
+        }
+    }
+}
+
+struct AmountKeyButton: View {
     let text: String
     let fontSize: CGFloat
     let action: () -> Void
