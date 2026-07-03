@@ -489,9 +489,15 @@ struct PaymentTransaction : Sendable {
     var details: PaymentTransactionDetails
 }
 // MARK: - Refund
+struct RefundPaymentInfo: Decodable {
+    var summary: String
+    var summary_i18n: I18nDict?
+    var merchant: MerchantInfo
+}
+
 struct RefundTransactionDetails: Decodable {
     var refundedTransactionId: String
-    var paymentInfo: OrderShortInfo?
+    var paymentInfo: RefundPaymentInfo?
 }
 struct RefundTransaction : Sendable {
     var common: TransactionCommon
