@@ -41,6 +41,11 @@ Version 1.5.5 (wallet-core 1.5.13)
 • Paivana (in wallet-core)
 
 
+HotFix Version 1.5.4 (wallet-core 1.6.3.2)
+
+ - fix withdrawal problem
+
+
 HotFix Version 1.5.3 (wallet-core 1.6.3.1)
 
  - fix QR button dismissing the sheet immediately
