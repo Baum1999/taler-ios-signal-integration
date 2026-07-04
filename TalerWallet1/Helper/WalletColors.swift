@@ -147,12 +147,12 @@ public struct WalletColors {
     }
 
     func pendingColor(_ incoming: Bool) -> Color {
-        incoming ? Color("PendingIncoming")
-                 : Color("PendingOutgoing")
+        incoming ? talerColor   // Color("PendingIncoming")
+                 : primary()    // Color("PendingOutgoing")
     }
 
     func transactionColor(_ incoming: Bool) -> Color {
-        incoming ? Color("Incoming")
-                 : Color("Outgoing")
+        incoming ? talerColor   // Color("Incoming")
+                 : primary()    // Color("Outgoing")
     }
 }
