@@ -169,8 +169,8 @@ struct ThreeAmountsSection: View {
     var body: some View {
         let currency = currencyInfo.currency
         let labelColor = WalletColors().labelColor
-        let foreColor = pendingDialog ? WalletColors().pendingColor(incoming)
-                                      : WalletColors().transactionColor(incoming)
+        let bottomColor = pendingDialog ? WalletColors().pendingColor(incoming)
+                                        : WalletColors().transactionColor(incoming)
         let hasNoFees = noFees ?? false
         productImageSections
         Section {
@@ -215,7 +215,7 @@ struct ThreeAmountsSection: View {
                               amount: bottomAmount,
                                scope: scope,
                           isNegative: nil,
-                               color: foreColor,
+                               color: bottomColor,
                                large: large)
                 }
             }
