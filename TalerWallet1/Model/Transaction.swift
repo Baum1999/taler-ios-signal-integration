@@ -154,7 +154,9 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
 struct TransactionState: Codable, Hashable {
     var major: TransactionMajorState
     var minor: TransactionMinorState?
+    var working: Bool?
 
+    var isWorking: Bool { working ?? false }
     var isConfirmed: Bool { major == .done
                          || major == .pending
                          || major == .finalizing }
@@ -349,6 +351,7 @@ struct TransactionCommon: Decodable, Sendable {
     var isPendingKYCauth: Bool { isPending && txState.isKYCauth }
     var isFinalizing    : Bool { txState.major == .finalizing }
     var isDone          : Bool { txState.major == .done }
+    var isWorking       : Bool { txState.isWorking }
     var isAborting      : Bool { txState.major == .aborting }
     var isAborted       : Bool { txState.major == .aborted }
     var isSuspended     : Bool { txState.major == .suspended }
@@ -715,6 +718,7 @@ enum TalerTransaction: Decodable, Hashable, Identifiable, Sendable {
     var isPendingKYC    : Bool { common.isPendingKYC }
     var isPendingKYCauth: Bool { common.isPendingKYCauth }
     var isDone          : Bool { common.isDone }
+    var isWorking       : Bool { common.isWorking }
     var isAborting      : Bool { common.isAborting }
     var isAborted       : Bool { common.isAborted }
     var isSuspended     : Bool { common.isSuspended }
