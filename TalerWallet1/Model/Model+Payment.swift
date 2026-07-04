@@ -556,12 +556,13 @@ struct ConfirmPayResult: Decodable {
 fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
     func operation() -> String { "confirmPay" }
-    func args() -> Args { Args(transactionId: transactionId, choiceIndex: choiceIndex) }
-
+    func args() -> Args { Args(transactionId: transactionId, noWait: true,
+                                 choiceIndex: choiceIndex) }
     var transactionId: String
     var choiceIndex: Int?
     struct Args: Encodable {
         var transactionId: String
+        var noWait: Bool?
         var useDonau: Bool?
         var sessionId: String?
         var forcedCoinSel: ForcedCoinSel?

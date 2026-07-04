@@ -533,15 +533,12 @@ class Controller: ObservableObject {
             do {
                 let versionInfo = try await model.initWalletCore(setTesting: setTesting)
                 WalletCore.shared.versionInfo = versionInfo
-#if !TALER_WALLET
                 if developerMode {
                     try await model.setConfig(setTesting: true)
 //                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
                     try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
-                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/flag-confirm-pay-no-wait?v=10")
-                    try await model.setConfig(setTesting: false)
+//                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/start-tc?delay_resp=5000")
                 }
-#endif
                 defaultExchanges = await model.getDefaultExchanges(stage: stage)
                 if stage, let talerOps = defaultExchanges.first {
                     let stageExc = DefaultExchange(talerUri: "taler://withdraw-exchange/exchange.stage.taler-ops.ch",
