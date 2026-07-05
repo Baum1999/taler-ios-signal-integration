@@ -35,9 +35,9 @@ struct TypeButton: View {
         let orange = debug ? Color.orange : Color.clear
 #endif
         let disabledColor = WalletColors().gray2
-        let talerColor = WalletColors().talerColor
+        let primaryAccent = WalletColors().primaryAccent
         let badge = ButtonIconBadge(type: type,
-                               foreColor: disabled ? disabledColor : talerColor,
+                               foreColor: disabled ? disabledColor : primaryAccent,
                                     done: false)
                         .talerFont(.title2)
         let hLayout = HStack {

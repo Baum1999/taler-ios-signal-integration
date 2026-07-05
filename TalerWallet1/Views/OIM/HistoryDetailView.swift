@@ -97,7 +97,7 @@ struct HistoryDetailView: View {
                     withStroke: Color.primary,
                     lineWidth: 2,
                     fill: LinearGradient(
-//                        gradient: Gradient(colors: [WalletColors().talerColor, .white]),
+//                        gradient: Gradient(colors: [WalletColors().primaryAccent, .white]),
                         gradient: Gradient(colors: [WalletColors().transactionColor(incoming), .white]),
                       startPoint: .top,
                         endPoint: .bottom

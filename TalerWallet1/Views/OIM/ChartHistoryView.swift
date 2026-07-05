@@ -121,7 +121,7 @@ struct ChartHistoryView: View {
                 let yVal = yTransform(item.balance)
                 LineMark(x: .value("x", xVal),
                          y: .value("y", yVal))
-                .foregroundStyle(WalletColors().talerColor)
+                .foregroundStyle(WalletColors().primaryAccent)
                 .lineStyle(StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
                 // 0 = uniform spline, 0.5 = centripetal spline, 1.0 = chordal spline
                 // See https://en.wikipedia.org/wiki/File:Catmull-Rom_examples_with_parameters..png
@@ -153,7 +153,7 @@ struct ChartHistoryView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 25)
-                            .foregroundStyle(WalletColors().talerColor)
+                            .foregroundStyle(WalletColors().primaryAccent)
                     })
                 }
             }

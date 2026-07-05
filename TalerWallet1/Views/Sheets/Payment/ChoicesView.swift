@@ -18,7 +18,7 @@ struct ChoicesView: View, Sendable {
     @ViewBuilder
     func selectedBackground(_ useColor: Bool) -> some View {
         let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
-        let color: Color = useColor ? WalletColors().talerColor
+        let color: Color = useColor ? WalletColors().primaryAccent
                                     : .secondary
         if #available(iOS 17.0, *) {
             RoundedRectangle(cornerRadius: is26 ? 26 : 10)

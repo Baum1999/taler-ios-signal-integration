@@ -32,9 +32,9 @@ struct ScannedURLs: View {
                 Button(action: action) {
                     HStack {
                         Text(scannedURL.command.localizedCommand)
-                        let talerColor = WalletColors().talerColor
+                        let primaryAccent = WalletColors().primaryAccent
                         ButtonIconBadge(type: scannedURL.command.transactionType,
-                                        foreColor: talerColor, done: false)
+                                        foreColor: primaryAccent, done: false)
                         .talerFont(.title2)
 
                         Spacer()

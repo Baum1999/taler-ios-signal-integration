@@ -74,7 +74,7 @@ public struct WalletColors {
                         contrast: ColorSchemeContrast,
                        prominent: Bool = false) -> Color {
             disabled ? gray2
-        : !prominent ? talerColor
+        : !prominent ? primaryAccent
         : scheme == .dark ? primary(contrast)
            : pressed ? gray6 : Color.white
     }
@@ -83,7 +83,7 @@ public struct WalletColors {
                         disabled: Bool,
                        prominent: Bool = false) -> Color {
             disabled ? gray7
-         : prominent ? talerColor
+         : prominent ? primaryAccent
            : pressed ? gray4 : gray5
     }
 
@@ -142,17 +142,17 @@ public struct WalletColors {
         Color("Error")
     }
 
-    var talerColor: Color {
+    var primaryAccent: Color {
         Color("Taler")
     }
 
     func pendingColor(_ incoming: Bool) -> Color {
-        incoming ? talerColor   // Color("PendingIncoming")
-                 : primary()    // Color("PendingOutgoing")
+        incoming ? primaryAccent    // Color("PendingIncoming")
+                 : primary()        // Color("PendingOutgoing")
     }
 
     func transactionColor(_ incoming: Bool) -> Color {
-        incoming ? talerColor   // Color("Incoming")
-                 : primary()    // Color("Outgoing")
+        incoming ? primaryAccent    // Color("Incoming")
+                 : primary()        // Color("Outgoing")
     }
 }

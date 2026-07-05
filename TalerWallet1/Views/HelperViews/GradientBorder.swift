@@ -82,7 +82,7 @@ struct BorderWithHCE<Content: View>: View {
                         }
 //                        let screenWidth = UIScreen.screenWidth
                         GradientBorder(size: size + 20.0,
-                                      color: WalletColors().talerColor,
+                                      color: WalletColors().primaryAccent,
                                  background: WalletColors().backgroundColor)
                         {
                             content()
@@ -193,7 +193,7 @@ struct BorderWithNFC<Content: View>: View {
                         }
 //                        let screenWidth = UIScreen.screenWidth
                         GradientBorder(size: size + 20.0,
-                                      color: WalletColors().talerColor,
+                                      color: WalletColors().primaryAccent,
                                  background: WalletColors().backgroundColor)
                         {
                             content()

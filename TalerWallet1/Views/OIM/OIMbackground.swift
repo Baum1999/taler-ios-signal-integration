@@ -18,7 +18,7 @@ struct OIMamountV: View {
     let factor: Int             // workaround because TEST has no large denominations, so we multiply with 100
     let mayChangeSpeed: Bool
 
-    @State private var color = WalletColors().talerColor
+    @State private var color = WalletColors().primaryAccent
 
     init(amount: Amount?, currencyName: String, factor: Int, mayChangeSpeed: Bool = true) {
         self.amount = amount
@@ -30,10 +30,10 @@ struct OIMamountV: View {
     func updateColor() {
 #if DEBUG
         color = debugAnimations ? .orange
-                                : fastAnimations ? WalletColors().talerColor
+                                : fastAnimations ? WalletColors().primaryAccent
                                                  : .red
 #else
-        color = fastAnimations ? WalletColors().talerColor
+        color = fastAnimations ? WalletColors().primaryAccent
                                : WalletColors().confirm
 #endif
     }

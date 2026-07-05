@@ -36,7 +36,7 @@ struct OIMactionButton: View {
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .foregroundStyle(WalletColors().talerColor)
+                .foregroundStyle(WalletColors().primaryAccent)
         }
             .tagStyle(isFinal ? .bordered : .borderless)
             .opacity(disabled ? INVISIBLE : 1)

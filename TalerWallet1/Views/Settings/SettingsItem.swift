@@ -76,7 +76,7 @@ struct SettingsBase<Content: View>: View {
 
     var body: some View {
         let isWeb = id1?.hasPrefix("web") ?? false
-        let foreColor = isWeb ? WalletColors().talerColor
+        let foreColor = isWeb ? WalletColors().primaryAccent
                               : .primary
         VStack {
             content()

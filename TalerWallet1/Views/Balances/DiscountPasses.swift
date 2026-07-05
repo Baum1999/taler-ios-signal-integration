@@ -56,7 +56,7 @@ struct DiscountsPassesItem: View {
         let isExpired = token.validityEnd < .now()
         let primary = WalletColors().primary(colorSchemeContrast)
         let secondary = WalletColors().secondary(colorScheme, colorSchemeContrast)
-        let talerColor = WalletColors().talerColor
+        let primaryAccent = WalletColors().primaryAccent
 
         let name = Text(token.name)
             .talerFont(.title)
@@ -78,12 +78,12 @@ struct DiscountsPassesItem: View {
                 if let available = token.tokensAvailable {
                     // Discount
                     Text("x\(available)")
-                        .foregroundColor(talerColor)
+                        .foregroundColor(primaryAccent)
                 } else {
                     // Pass
                     if isValid {
                         Text("active")
-                            .foregroundColor(talerColor)
+                            .foregroundColor(primaryAccent)
                     }
                 }
             }
@@ -113,7 +113,7 @@ struct DiscountsPassesItem: View {
                     .accessibilityLabel(dateStrings.1)
                     .talerFont(.body)
             }.frame(maxWidth: .infinity)
-                .background(talerColor.opacity(isValid ? 0.1 : 0))
+                .background(primaryAccent.opacity(isValid ? 0.1 : 0))
                 .onTapGesture {
                     if !isExpired {
                         dateToggled.toggle()
@@ -219,7 +219,7 @@ struct DiscountPassesSection: View {
     var body: some View {
         let discText = String(localized: "Discounts")
         let passText = String(localized: "Passes")
-        let activeColor = WalletColors().talerColor
+        let activeColor = WalletColors().primaryAccent
         let inactiveColor = WalletColors().secondary(colorScheme, colorSchemeContrast)
         Section {
             let discCount = controller.discounts.count
