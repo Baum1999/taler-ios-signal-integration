@@ -15,7 +15,7 @@ struct TransactionTypeDetail: View {
     let stack: CallStack
     @Binding var transaction: TalerTransaction
     @Binding var payNow: Bool
-    @Binding var selectedChoice: Int
+    @Binding var selectedChoice: Int?
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
     let hasDone: Bool

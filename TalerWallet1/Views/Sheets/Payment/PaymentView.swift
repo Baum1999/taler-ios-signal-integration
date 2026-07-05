@@ -39,7 +39,6 @@ struct PaymentView: View, Sendable {
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
     @State var txId: String? = nil
 
-    @State private var selectedChoice: Int = 0
     @State private var elapsed: Int = 0
     @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 

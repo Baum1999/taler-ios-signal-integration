@@ -88,7 +88,7 @@ struct PaymentTransactionView: View {
     @Binding var scope: ScopeInfo?
     @Binding var effective: Amount?
     @Binding var payNow: Bool
-    @Binding var selectedChoice: Int
+    @Binding var selectedChoice: Int?
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -109,6 +109,39 @@ struct PaymentTransactionView: View {
         return String(localized: "No summary", comment: "OrderShortInfo.summary")
     }
 
+    func selectIndex(_ index: Int?, of choices: [ChoiceTriple]) -> Int? {
+        let index1 = index ?? 0
+        let select = index1 < choices.count ? index1 : 0
+        let choice = choices[select]
+        let selectionDetail = choice.0
+        if selectionDetail.status == .paymentPossible {
+            selectedChoice = select
+            effective = selectionDetail.amountEffective
+            return select
+        }
+        return nil
+    }
+
+    func automaticOrDefault(_ automaticIndex: Int?,_ defaultChoiceIndex: Int?, of choices: [ChoiceTriple]) {
+        if let automaticIndex {
+            // Pay Automatically - usually with a subscription token
+            if let selectedAutomatic = selectIndex(automaticIndex, of: choices) {
+                if selectedAutomatic == automaticIndex {
+                    // TODO: check if automatic choice does NOT have an amount
+                    // we definitely don't want to pay MONEY automatically, only tokens
+                    payNow = true
+                    return
+                } else if let defaultChoiceIndex {
+                    if selectedAutomatic == defaultChoiceIndex { return }
+                    // else fall thru and select defaultChoiceIndex
+                } else {
+                    return      // there is no default - keep selectedAutomatic
+                }
+            }
+        }
+        let _ = selectIndex(defaultChoiceIndex, of: choices)
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -127,25 +160,24 @@ struct PaymentTransactionView: View {
                            showHeader: showHeader,
                        automaticIndex: automaticIndex,
                        selectedChoice: $selectedChoice)
-                    .onChange(of: selectedChoice) { newValue in
-                        let newChoice = choices[newValue]
-                        effective = newChoice.0.amountEffective
-                        scope = newChoice.0.scopeInfo
-                    }
                     .task {
-                        let firstChoice = choices[selectedChoice]
-                        effective = firstChoice.0.amountEffective
-                        scope = firstChoice.0.scopeInfo
-                        if let automaticIndex {
-                            // Pay Automatically
-                            selectedChoice = automaticIndex
-                            payNow = true
+                        automaticOrDefault(automaticIndex, choicesForPayment.defaultChoiceIndex, of: choices)
+                    }
+                    .onChange(of: selectedChoice) { newValue in
+                        if let newValue, newValue < choices.count {
+                            let newChoice = choices[newValue]
+                            effective = newChoice.0.amountEffective
+                            scope = newChoice.0.scopeInfo
+                        } else {
+                            effective = nil
+                            scope = nil
                         }
                     }
 
-                    let choice = choices[selectedChoice]
-                    let selectionDetail: ChoiceSelectionDetail = choice.0
-                    let contractChoice: ContractChoice = choice.1
+                    if let selectedChoice {
+                        let choice = choices[selectedChoice]
+                        let selectionDetail: ChoiceSelectionDetail = choice.0
+//                        let contractChoice: ContractChoice = choice.1
 
 //                    if selectionDetail.status == .paymentPossible {
                         PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
@@ -158,6 +190,7 @@ struct PaymentTransactionView: View {
                                   products: details.info?.products ?? [],
                             balanceDetails: selectionDetail.balanceDetails)
 //                    }
+                    }
                 }
             }
         } else { // show finished payment
@@ -206,7 +239,7 @@ struct TransactionSummaryList: View {
     @State private var didDelete: Bool = false
     @State var jsonTransaction: String = EMPTYSTRING
     @State var viewId = UUID()
-    @State private var selectedChoice: Int = 0
+    @State private var selectedChoice: Int? = nil
     @State private var effective: Amount? = nil
     @State private var scope: ScopeInfo? = nil
     @State private var payNow: Bool = false
@@ -413,9 +446,18 @@ struct TransactionSummaryList: View {
             let list = List {
                 if developerMode && withActions { suspendResume(common) }
                 if !isPaying {
-                    dateAndStatus(common)
-                        .listRowSeparator(.hidden)
-                        .talerFont(.title)
+                    Section {
+                        VStack(alignment: .leading) {
+                            dateAndStatus(common)
+                                .listRowSeparator(.hidden)
+                                .talerFont(.title)
+                        }.overlay {
+                            if common.isWorking {
+                                RotatingTaler(size: 80, progress: true, once: false,
+                                   rotationEnabled: Binding.constant(true))
+                            }
+                        }
+                    }
                 }
                 TransactionTypeDetail(stack: stack.push(),
                                 transaction: $talerTX,

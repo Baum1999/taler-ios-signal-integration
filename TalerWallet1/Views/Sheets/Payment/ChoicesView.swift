@@ -13,7 +13,7 @@ struct ChoicesView: View, Sendable {
     let choiceTriple: [ChoiceTriple]
     let showHeader: Bool
     let automaticIndex: Int?
-    @Binding var selectedChoice: Int
+    @Binding var selectedChoice: Int?
 
     @ViewBuilder
     func selectedBackground(_ useColor: Bool) -> some View {
@@ -70,7 +70,9 @@ struct ChoicesView: View, Sendable {
                         Color.primary.opacity(0.001)        // Color.clear doesn't accept taps!
                             .contentShape(.rect)
                             .onTapGesture {
-                                selectedChoice = index
+                                if isPaymentPossible {
+                                    selectedChoice = index
+                                }
                             }
                     }
                     if index == selectedChoice {
