@@ -56,6 +56,14 @@ struct DebugSettingsView: View {
     }
     @State private var listID = UUID()
 
+    func setDelay(_ doDelay: Bool, for walletCore: WalletCore) async {
+        walletCore.developDelay = doDelay
+        symLog.log(doDelay ? "wallet-core delaying by 5 seconds"
+                           : "wallet-core stop delaying")
+        let delayTime = doDelay ? 5000 : 0
+        try? await model.devExperimentT("taler://dev-experiment/start-tc?delay_resp=\(delayTime)")
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -67,6 +75,13 @@ struct DebugSettingsView: View {
                                 id1: "devMode",
                         description: String("More information intended for debugging")) { newVal in
                     withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
+                    Task {
+                        symLog.log((newVal ? "enabling" : "disabling") + " applyDevExperiment")
+                        try await model.setConfig(setTesting: newVal)
+                        if newVal && walletCore.developDelay == true {
+                            try await setDelay(true, for: walletCore)
+                        }
+                    }
                 }
                 if showDevelopItems {
 #if DEBUG
@@ -155,11 +170,14 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(withDrawDisabled)
                     }.id("head1withdraw")
-                    SettingsToggle(name: String("Set 2 seconds delay"),
+                    SettingsToggle(name: String("Set 5 seconds delay"),
                                   value: $developDelay.onChange({ delay in
-                                            walletCore.developDelay = delay}),
+                        Task {
+                            try await setDelay(delay, for: walletCore)
+                        }
+                    }),
                                     id1: "delay",
-                            description: String("After each wallet-core action"))
+                            description: String("After each network call"))
                         .id("delay")
 #if DEBUG
                     SettingsItem(name: String("Run Dev Experiment Refresh"),
@@ -170,8 +188,8 @@ struct DebugSettingsView: View {
                             Task { // runs on MainActor
                                 symLog.log("running applyDevExperiment Refresh")
                                 try await model.setConfig(setTesting: true)
-                                try await model.devExperimentT(talerUri: "taler://dev-experiment/start-block-refresh")
-                                try await model.devExperimentT(talerUri: "taler://dev-experiment/insert-pending-refresh")
+                                try await model.devExperimentT("taler://dev-experiment/start-block-refresh")
+                                try await model.devExperimentT("taler://dev-experiment/insert-pending-refresh")
                             }
                         }
                         .buttonStyle(.bordered)

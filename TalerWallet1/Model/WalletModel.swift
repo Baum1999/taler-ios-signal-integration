@@ -537,7 +537,7 @@ fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// tell wallet-core to mock new transactions
-    nonisolated func devExperimentT(talerUri: String, viewHandles: Bool = false) async throws {
+    nonisolated func devExperimentT(_ talerUri: String, viewHandles: Bool = false) async throws {
         // T for any Thread
         let request = DevExperimentRequest(talerUri: talerUri)
         _ = try await sendRequest(request, viewHandles: viewHandles)

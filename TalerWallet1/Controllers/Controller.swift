@@ -531,17 +531,23 @@ class Controller: ObservableObject {
         if backendState == .instantiated {
             backendState = .initing
             do {
+                let walletCore = WalletCore.shared
                 let versionInfo = try await model.initWalletCore(setTesting: setTesting)
-                WalletCore.shared.versionInfo = versionInfo
+                walletCore.versionInfo = versionInfo
                 if developerMode {
                     try await model.setConfig(setTesting: true)
-//                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/default-exchange-demo?val=1")
-                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
-//                    try? await model.devExperimentT(talerUri: "taler://dev-experiment/start-tc?delay_resp=5000")
+                    if walletCore.developDelay == true {
+                        try? await model.devExperimentT(
+                            "taler://dev-experiment/start-tc?delay_resp=5000")
+                    }
+//                    try? await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
+                    try? await model.devExperimentT(
+                        "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                 }
                 defaultExchanges = await model.getDefaultExchanges(stage: stage)
                 if stage, let talerOps = defaultExchanges.first {
-                    let stageExc = DefaultExchange(talerUri: "taler://withdraw-exchange/exchange.stage.taler-ops.ch",
+                    let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
+                    let stageExc = DefaultExchange(talerUri: stageURI,
                                                    currency: talerOps.currency,
                                                currencySpec: talerOps.currencySpec
                     )

@@ -33,7 +33,7 @@ class WalletCore: QuickjsMessageHandler {
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
-    var developDelay: Bool?                 // if set in SettingsView will delay wallet-core after each action
+    var developDelay: Bool?                 // delay wallet-core after each network call
     var isObserving: Int
     var isLogging: Bool
     var logTransactions: Bool
@@ -413,18 +413,6 @@ extension WalletCore {
     /// here not only responses, but also notifications from wallet-core will be received
     @MainActor func handleMessage(message: String) {
         do {
-            var asyncDelay = 0
-            if let delay: Bool = developDelay {   // Settings: 2 seconds delay
-                if delay {
-                    asyncDelay = 2
-                }
-            }
-            if asyncDelay > 0 {
-                symLog.log(message)
-                symLog.log("...going to sleep for \(asyncDelay) seconds...")
-                sleep(UInt32(asyncDelay))
-                symLog.log("waking up again after \(asyncDelay) seconds, will deliver message")
-            }
             guard let messageData = message.data(using: .utf8) else {
                 throw WalletBackendError.deserializationError
             }

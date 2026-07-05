@@ -26,7 +26,7 @@ struct DevExperimentView: View {
     private func viewDidLoad() async {
         symLog.log(".task \(url.absoluteString)")
         try? await model.setConfig(setTesting: true)
-        try? await model.devExperimentT(talerUri: url.absoluteString)
+        try? await model.devExperimentT(url.absoluteString)
         finished = true
     }
 
