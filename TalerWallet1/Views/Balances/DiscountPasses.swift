@@ -132,6 +132,7 @@ struct DiscountsPassesList: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @State private var activeExpired: Int = 0
 
     func delete(_ tokenID: String) async {
@@ -195,15 +196,20 @@ struct DiscountsPassesList: View {
         }
             .listStyle(myListStyle.style).anyView
             .background(FullBackground())
+            .navigationTitle(navTitle)
             .refreshable {
                 controller.hapticNotification(.success)
                 await refresh()
             }
-        list
-            .navigationTitle(navTitle)
             .task {
                 await refresh()
             }
+        if #available(iOS 17.0, *) {
+            list
+                .scrollContentBackground(preferredColorScheme == 3 ? .hidden : .visible)
+        } else {
+            list
+        }
     }
 }
 // MARK: -

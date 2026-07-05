@@ -221,20 +221,14 @@ struct SettingsTriState: View {
     var description: String?
     var action: (_ value: Int) -> Void = {value in }
 
-    func imageName1(_ value: Int) -> (String, String) {
+    func imageName(_ value: Int) -> (String, String) {
         return (value == 0) ? ("eye.slash", "Off")
              : (value == 1) ? ("eye",       "Type only")
                             : ("eye.fill",  "Type and JSON")
     }
-    func imageName2(_ value: Int) -> (String, String) {
-        return (value == 0) ? ("iphone",    "System")   // or apple.logo
-             : (value == 1) ? (LIGHT_OFF, "light")      // 􀛭
-                            : (LIGHT_ON,  "dark")       // 􀛮
-    }
 
     var body: some View {
-        let observe = "observe" == id1
-        let image = observe ? imageName1(value) : imageName2(value)
+        let image = imageName(value)
 
         VStack {
             HStack {
@@ -247,15 +241,11 @@ struct SettingsTriState: View {
                     if value > 0 {
                         value = -1
                         action(value)
-                        if observe {
-                            Controller.shared.playSound(1)
-                        }
+                        Controller.shared.playSound(1)
                     } else {
                         value = value + 1
                         action(value)
-                        if observe {
-                            Controller.shared.playSound(value)
-                        }
+                        Controller.shared.playSound(value)
                     }
                 } label: {
                     Image(systemName: image.0)
@@ -269,6 +259,53 @@ struct SettingsTriState: View {
         .accessibilityLabel(name)
         .accessibility(value: Text(image.1))
         .accessibilityHint(description ?? EMPTYSTRING)
+        .padding([.bottom], 4)
+    }
+}
+// MARK: -
+struct SettingsQuadState: View {
+    var name: String
+    @Binding var value: Int
+    let id1: String?
+    var action: (_ value: Int) -> Void = {value in }
+
+    func imageName(_ value: Int) -> (String, String) {
+        return (value == 0) ? ("iphone",    "System")           // or apple.logo
+             : (value == 1) ? (LIGHT_OFF, "Light")              // 􀛭
+             : (value == 2) ? (LIGHT_ON,  "Dark")               // 􀛮
+             : ("swirl.circle.righthalf.filled", "Liquid dark") // 􁹢
+    }
+
+    var body: some View {
+        let image = imageName(value)
+
+        VStack {
+            HStack {
+                Text(name)
+                    .talerFont(.title2)
+                Spacer()
+                Text(verbatim: " ")
+                    .talerFont(.largeTitle)
+                Button {
+                    var maxValue = if #available(iOS 17.0, *) { 3 } else { 2 }
+                    if value >= maxValue {
+                        value = 0
+                        action(value)
+                    } else {
+                        value = value + 1
+                        action(value)
+                    }
+                } label: {
+                    Image(systemName: image.0)
+                        .talerFont(.largeTitle)
+                }
+            }
+
+            SettingsDescription(id1: id1, description: image.1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(name)
+        .accessibility(value: Text(image.1))
         .padding([.bottom], 4)
     }
 }

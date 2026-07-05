@@ -60,9 +60,9 @@ struct MoreSettingsView: View {
                     SettingsToggle(name: showQRstring, value: $showQRauto16, id1: "showQRautomatic",
                             description: showQRhint)
                 }
-                SettingsTriState(name: String(localized: "Preferred Appearance"), value: $preferredColorScheme,
-                                  id1: "colorScheme",
-                          description: String(localized: "Individual preference"))
+                SettingsQuadState(name: String(localized: "Preferred Appearance"),
+                                 value: $preferredColorScheme,
+                                   id1: "colorScheme")
                 if controller.hapticCapability.supportsHaptics {
                     SettingsToggle(name: String(localized: "Haptics"), value: $useHaptics,
                                     id1: "haptics",

@@ -23,6 +23,7 @@ struct ProdSectionView: View {
 #else
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
 
     @State private var selectedCurrency: Int = 0
     @State private var showDropdown = true
@@ -36,7 +37,7 @@ struct ProdSectionView: View {
     var body: some View {
         let defaultExchanges = controller.defaultExchanges
         let count = defaultExchanges.count
-        Section {
+        let section = Section {
             let chevron = Image(systemName: CHEVRON_UP)     // 􀆇
             if isEmpty {
                 Text("Welcome to Taler Wallet!")
@@ -108,6 +109,12 @@ struct ProdSectionView: View {
         }
         .listRowSeparator(.hidden)
 //        .listSectionSpacing(.compact) iOS 17
+
+        if preferredColorScheme == 3, #available(iOS 17.0, *) {
+            section.listRowBackground(Color.white.opacity(0.1))
+        } else {
+            section
+        }
     }
 }
 
@@ -187,6 +194,7 @@ struct WalletEmptyView: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @State private var withDrawStarted = false
     @State private var urlToOpen: URL? = nil
 
@@ -206,7 +214,7 @@ struct WalletEmptyView: View {
 //                    .talerFont(.body)
 //              }
 #endif
-            Section {
+            let section = Section {
 //                Text("Demo")
 //                    .talerFont(.headline)
 //                Text("Get digital cash to experience how easy you can pay online, and send money to friends & family.")
@@ -234,12 +242,21 @@ struct WalletEmptyView: View {
 //                    .talerFont(.title3)
 //                    .foregroundColor(WalletColors().secondary(colorScheme, colorSchemeContrast))
             }
+            if preferredColorScheme == 3, #available(iOS 17.0, *) {
+                section.listRowBackground(Color.white.opacity(0.1))
+            } else {
+                section
+            }
         }
             .listStyle(myListStyle.style).anyView
             .talerFont(.title2)
             .background(FullBackground())
         ZStack {
-            list
+            if preferredColorScheme == 3, #available(iOS 17.0, *) {
+                list.scrollContentBackground(.hidden)
+            } else {
+                list
+            }
             if withDrawStarted {
                 RotatingTaler(size: 150, progress: true, once: false, rotationEnabled: $withDrawStarted)
             }

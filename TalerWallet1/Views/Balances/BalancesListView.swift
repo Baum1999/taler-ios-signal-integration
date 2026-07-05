@@ -22,6 +22,7 @@ struct BalancesListView: View {
     @EnvironmentObject private var controller: Controller
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @AppStorage("oimEuro") var oimEuro: Bool = false
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
@@ -107,7 +108,7 @@ struct BalancesListView: View {
         ///   However, the user can select another balance (with the picker) in each action
         /// In OIM mode, the user selects a balance 'here' (in OIMView) when tapping on a savings box (representing the balance)
 
-        balancesList()
+        let list = balancesList()
             .onChange(of: controller.oimModeActive) { oimModeActive in
                 if !oimModeActive {
                     print("🚩BalancesListView.onChange(of: oimModeActive) reset selectedBalance")
@@ -116,6 +117,13 @@ struct BalancesListView: View {
 //                    }
                  }
             }
+        ZStack {
+            if preferredColorScheme == 3, #available(iOS 17.0, *) {
+                list.scrollContentBackground(.hidden)
+            } else {
+                list
+            }
+        }
             .overlay { if #available(iOS 16.4, *) {
                 if controller.oimModeActive {
 #if OIM

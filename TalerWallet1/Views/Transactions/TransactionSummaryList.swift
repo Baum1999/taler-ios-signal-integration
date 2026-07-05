@@ -227,6 +227,7 @@ struct TransactionSummaryList: View {
     @Environment(\.dismiss) var dismiss     // call dismiss() to pop back
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
 #else
@@ -475,6 +476,7 @@ struct TransactionSummaryList: View {
                 if withActions { abortFailDelete(common) }
             }.id(viewId)    // change viewId to enforce a draw update
             .listStyle(myListStyle.style).anyView
+            .background(FullBackground())
             .navigationBarBackButtonHidden(hasDone)
             .interactiveDismissDisabled(hasDone)           // can only use "Done" button to dismiss
             .safeAreaInset(edge: .bottom) {
@@ -530,12 +532,12 @@ struct TransactionSummaryList: View {
             .navigationTitle(navTitle ?? navTitle2)
 
             if #available(iOS 17.0, *) {
-                list.toolbarTitleDisplayMode(.inlineLarge)
+                list
+                    .scrollContentBackground(preferredColorScheme == 3 ? .hidden : .visible)
+                    .toolbarTitleDisplayMode(.inlineLarge)
             } else {
                 list
             }
-
-
           } else {
             Color.clear
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

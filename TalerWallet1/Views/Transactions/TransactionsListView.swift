@@ -31,6 +31,7 @@ struct TransactionsListView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @State private var viewId = UUID()
     @StateObject private var cash: OIMcash
     @Namespace var namespace
@@ -71,8 +72,7 @@ struct TransactionsListView: View {
                     await reloadAllAction(stack.push())
                 }
         } else {
-//            Group {
-                ScrollViewReader { scrollProxy in
+            let list = ScrollViewReader { scrollProxy in
                     List {
                         let header = scope.url?.trimURL ?? scope.currency
                         TransactionsArraySection(symLog: symLog,
@@ -85,6 +85,7 @@ struct TransactionsListView: View {
                     }
                     .id(viewId)
                     .listStyle(myListStyle.style).anyView
+                    .background(FullBackground())
                     .refreshable {
                         controller.hapticNotification(.success)
                         symLog.log("refreshing")
@@ -118,7 +119,14 @@ struct TransactionsListView: View {
                     print("🚩,32TransactionsListView.onAppear() set selectedBalance to", balance.scopeInfo.currency)
                     selectedBalance = balance           // set this balance (fix) for send/request/deposit/withdraw
                 }
-//            }
+
+            ZStack {
+                if preferredColorScheme == 3, #available(iOS 17.0, *) {
+                    list.scrollContentBackground(.hidden)
+                } else {
+                    list
+                }
+            }
 #if OIM
             .overlay { if #available(iOS 16.4, *) {
                 if controller.oimModeActive {

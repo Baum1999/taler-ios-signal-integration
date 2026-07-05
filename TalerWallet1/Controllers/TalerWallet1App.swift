@@ -103,7 +103,7 @@ struct TalerWallet1App: App {
     }
 
     var body: some Scene {
-        let colorScheme = preferredColorScheme < 0 ? ColorScheme.dark
+        let colorScheme = preferredColorScheme > 1 ? ColorScheme.dark
                         : preferredColorScheme > 0 ? ColorScheme.light
                                                    : nil    // use the current scheme
         let mainView = MainView(logger: logger, stack: CallStack("App"))

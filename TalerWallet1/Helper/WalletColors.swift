@@ -10,10 +10,7 @@ import SwiftUI
 fileprivate let grouped = true
 
 struct FullBackground: View {
-    @Environment(\.colorScheme) private var colorScheme
-    @AppStorage("liquidBack") var liquidBack: Bool = false
-
-    var isDark: Bool { colorScheme == .dark }
+    @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
 
     @available(iOS 17.0, *)
     @MainActor
@@ -39,7 +36,7 @@ struct FullBackground: View {
     }
 
     var body: some View {
-        if isDark, liquidBack, #available(iOS 17.0, *) {
+        if preferredColorScheme == 3, #available(iOS 17.0, *) {
             liquidView
         } else {
             backgroundView
