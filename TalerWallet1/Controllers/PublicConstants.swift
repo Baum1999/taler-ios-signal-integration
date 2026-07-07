@@ -100,6 +100,10 @@ public let SYSTEM_WITHDRAWAL5 = "arrowshape.down"                   // 􁾬 􁾭
 public let FALLBACK_WITHDRAWAL = "arrow.down"                       // 􀄩       1.0 (iOS 13)   no fill variant!
 //                             "arrow.down.to.line"                 //    􀅀    1.0 (iOS 13)
 
+public let ICONNAME_BANK = "building.columns"                       // 􀤨 􀤩    2.0 (iOS 14)
+public let ICONNAME_PERSON_SMALL = "person.small"                   // 􀉩 􀉪
+public let ICONNAME_PERSON_BOTTOM = "person.bottom"                 // 􀉩 􀉪
+
 public let ICONNAME_DEPOSIT = "taler.deposit"                       // 􁾨 􁾩
 public let SYSTEM_DEPOSIT5 = "arrowshape.up"                        // 􁾨 􁾩    5.0 (iOS 17)
 public let FALLBACK_DEPOSIT = "arrow.up"                            // 􀄨       1.0 (iOS 13)   no fill variant!
@@ -114,6 +118,9 @@ public let ICONNAME_INCOMING = "taler.incoming"                     // 􁉈 􁉅
 public let SYSTEM_INCOMING4 = "arrowshape.backward"                 // 􁉈 􁉅    4.0 (iOS 16)
 public let FALLBACK_INCOMING = "arrow.backward"                     // 􀰌       2.0 (iOS 14)   no fill variant!
 //                             "arrow.backward.to.line"             //    􁂊    3.0 (iOS 15)
+
+public let ICONNAME_PERSON_LEFT = "person.left"                     // 􁒃
+public let ICONNAME_PERSON_RIGHT = "person.right"                   // 􁒄
 
 public let ICONNAME_OUTGOING = "taler.outgoing"                     // 􁉆 􁉇
 public let SYSTEM_OUTGOING4 = "arrowshape.forward"                  // 􁉆 􁉇    4.0 (iOS 16)
