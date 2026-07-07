@@ -48,7 +48,8 @@ struct ErrorView: View {
                 switch walletError {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
-                            if responseError.code == 7001 || responseError.code == 7005 {
+                            let code = responseError.code
+                            if code == 7002 || code == 7032 {
                                 self.init(stack,
                                     title: internetError,
                                   message: responseError.hint ?? internetMessage,
@@ -57,16 +58,19 @@ struct ErrorView: View {
                                 onDismiss: onDismiss)
                                 break
                             }
+                            // for now, always show JSON and allow to copy it
+                            if let json = responseError.toJSON() {
+                                self.init(stack, title: walletCoreError, message: json, copyable: true, onDismiss: onDismiss)
+                                break
+//                            } else if let hint = responseError.errorResponse?.hint ?? responseError.hint {
+//                                self.init(stack, title: walletCoreError, message: hint, copyable: true, onDismiss: onDismiss)
+//                                break
+//                            } else if let message = responseError.message {
+//                                self.init(stack, title: walletCoreError, message: message, copyable: true, onDismiss: onDismiss)
+//                                break
+                            }
                         }
-                        if let json = walletBackendResponseError?.toJSON(), devMode {
-                            self.init(stack, title: walletCoreError, message: json, copyable: true, onDismiss: onDismiss)
-                        } else if let hint = walletBackendResponseError?.errorResponse?.hint ?? walletBackendResponseError?.hint {
-                            self.init(stack, title: walletCoreError, message: hint, copyable: false, onDismiss: onDismiss)
-                        } else if let message = walletBackendResponseError?.message {
-                            self.init(stack, title: walletCoreError, message: message, copyable: false, onDismiss: onDismiss)
-                        } else {
-                            self.init(stack, title: walletCoreError, copyable: false, onDismiss: onDismiss)
-                        }
+                        self.init(stack, title: walletCoreError, copyable: false, onDismiss: onDismiss)
                     case .initializationError:
                         self.init(stack, title: initializationError, copyable: false, onDismiss: onDismiss)
                     case .serializationError:
