@@ -12,6 +12,7 @@ let LINELIMIT = 5
 
 struct TypeButton: View {
     let stack: CallStack
+    let phase: Int
     let title: String
     let a11y: String
     var type: TransactionType
@@ -36,12 +37,13 @@ struct TypeButton: View {
 #endif
         let disabledColor = WalletColors().gray2
         let primaryAccent = WalletColors().primaryAccent
-        let badge = ButtonIconBadge(type: type,
-                               foreColor: disabled ? disabledColor : primaryAccent,
-                                    done: false)
+        let icon = ButtonIconBadge(type: type,
+                                  phase: phase,
+                              foreColor: disabled ? disabledColor : primaryAccent,
+                                   done: false)
                         .talerFont(.title2)
         let hLayout = HStack {
-            badge
+            icon
             Spacer()
             Text(title)
                 .fixedSize(horizontal: true, vertical: false)
@@ -57,7 +59,7 @@ struct TypeButton: View {
             if fragCount > 1 {
                 Text(fragments[0])
                 HStack {
-                    badge
+                    icon
                     Spacer()
                     Text(fragments[1])
                         .fixedSize(horizontal: true, vertical: false)
@@ -83,7 +85,7 @@ struct TypeButton: View {
 
         Button(action: dismissAndPost) {
             if minimalistic {
-                badge
+                icon
             } else {
                 if #available(iOS 16.4, *) {
                     ViewThatFits(in: .horizontal) {
@@ -105,6 +107,7 @@ struct TypeButton: View {
 // MARK: -
 struct TwoRowButtons: View {
     let stack: CallStack
+    let phase: Int?
     let sendTitle: String
     var sendType: TransactionType
     let sendA11y: String
@@ -116,8 +119,9 @@ struct TwoRowButtons: View {
     let recvDisabled: Bool   // can't receive/withdraw if wallet has no payments services
     let recvAction: NSNotification.Name
 
-    func sendButton(_ title: String) -> TypeButton {
+    func sendButton(_ title: String, _ phase: Int) -> TypeButton {
         TypeButton(stack: stack.push(),
+                   phase: phase,
                    title: title,
                     a11y: sendA11y,
                     type: sendType,
@@ -125,8 +129,9 @@ struct TwoRowButtons: View {
                   action: sendAction)
     }
 
-    func recvButton(_ title: String) -> TypeButton {
+    func recvButton(_ title: String, _ phase: Int) -> TypeButton {
         TypeButton(stack: stack.push(),
+                   phase: phase,
                    title: title,
                     a11y: recvA11y,
                     type: recvType,
@@ -134,16 +139,28 @@ struct TwoRowButtons: View {
                   action: recvAction)
     }
 
+    func phase(_ first: Bool) -> Int {
+        if let phase {
+            let myPhase = phase % 16
+            if first {
+                return myPhase > 7 ? 0 : myPhase
+            }
+            return myPhase < 9 ? 0 : myPhase - 8
+        }
+        return 0
+    }
+
     var body: some View {
+//        let _ = Self._printChanges()
         let hLayout = HStack(spacing: HSPACING) {
             // side by side, text in 1+ lines (\t -> \n)
-            sendButton(sendTitle.tabbed(oneLine: false))
-            recvButton(recvTitle.tabbed(oneLine: false))
+            sendButton(sendTitle.tabbed(oneLine: false), phase(true))
+            recvButton(recvTitle.tabbed(oneLine: false), phase(false))
         }
         let vLayout = VStack(alignment: .leading) {
             // one below the other, text in one line (\t -> " ")
-            sendButton(sendTitle.tabbed(oneLine: true))
-            recvButton(recvTitle.tabbed(oneLine: true))
+            sendButton(sendTitle.tabbed(oneLine: true), phase(true))
+            recvButton(recvTitle.tabbed(oneLine: true), phase(false))
         }
 
         if #available(iOS 16.4, *) {
@@ -162,6 +179,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
     static var previews: some View {
         List {
             TwoRowButtons(stack: CallStack("Preview"),
+                         phase: nil,
                       sendTitle: "Send " + TESTCURRENCY,
                        sendType: .peerPushDebit,
                        sendA11y: "Send " + TESTCURRENCY,
@@ -174,6 +192,7 @@ struct TwoRowButtons_Previews: PreviewProvider {
                      recvAction: .RequestAction)
                 .listRowSeparator(.hidden)
             TwoRowButtons(stack: CallStack("Preview"),
+                         phase: nil,
                       sendTitle: "Send " + DEMOCURRENCY,
                        sendType: .peerPushDebit,
                        sendA11y: "Send " + DEMOCURRENCY,

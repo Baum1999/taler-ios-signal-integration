@@ -24,6 +24,9 @@ struct PendingIconBadge: View {
               foreColor: foreColor,
           shouldConfirm: shouldConfirm,
                needsKYC: needsKYC,
+                  phase: 0,
+             firstImage: nil,
+            secondImage: nil,
                wideIcon: nil)
     }
 }
@@ -78,22 +81,45 @@ struct TransactionIconBadge: View {
               foreColor: foreColor,
           shouldConfirm: shouldConfirm,
                needsKYC: needsKYC,
+                  phase: 0,
+             firstImage: nil,
+            secondImage: nil,
                wideIcon: TransactionType.refund.icon())
                       // "arrowshape.turn.up.backward" is wider than all others
     }
 }
 // MARK: -
 struct ButtonIconBadge: View {
-    var type: TransactionType
+    let type: TransactionType
+    let phase: Int
     let foreColor:Color
     let done: Bool
 
     var body: some View {
+        let isSend = type.isSendCoins
+        let isRcve = type.isSendInvoice
+        let isDepo = type.isDeposit
+        let isWthd = type.isWithdrawal
+        let left = ICONNAME_PERSON_LEFT + ICONNAME_FILL
+        let right = ICONNAME_PERSON_RIGHT
+        let bottom = ICONNAME_PERSON_BOTTOM + ICONNAME_FILL
+        let top = ICONNAME_BANK
+        let firstImage = isSend ? Image(left)
+                       : isRcve ? Image(right)
+                       : isDepo ? Image(bottom)
+                       : isWthd ? Image(top) : nil
+        let secondImage = isSend ? Image(right)
+                        : isRcve ? Image(left)
+                        : isDepo ? Image(top)
+                        : isWthd ? Image(bottom) : nil
         IconBadge(image: type.icon(done),
                    done: true,
               foreColor: foreColor,
           shouldConfirm: false,
                needsKYC: false,
+                  phase: phase,
+             firstImage: firstImage,
+            secondImage: secondImage,
                wideIcon: TransactionType.peerPushDebit.icon())
                       // button is send/receive/withdraw/deposit, never payment or refund
     }
@@ -105,18 +131,45 @@ struct IconBadge: View {
     let foreColor:Color
     let shouldConfirm: Bool
     let needsKYC: Bool
+    let phase: Int
+    let firstImage: Image?
+    let secondImage: Image?
     let wideIcon: Image?        // cheating: ZStack with widest icon to ensure all have the same width
                                 // TODO: EqualIconWidth...
 
     @ScaledMetric var spacing = 6       // relative to fontSize
+    @State private var showFirst = false
+    @State private var showSecond = false
+    @State private var showImage = true
 
     var body: some View {
+//        let _ = Self._printChanges()
         HStack(alignment: .top, spacing: -spacing) {
             ZStack {
                 if let wideIcon {
                     wideIcon.foregroundColor(.clear)
                 }
-                image.foregroundColor(foreColor)
+                if let firstImage, let secondImage {
+                    let duration = 0.66
+                    ZStack {
+                        image.opacity(showImage ? 1 : 0)
+                            .animation(.easeInOut(duration: duration), value: showImage)
+                        firstImage.opacity(showFirst ? 1 : 0)
+                            .animation(.easeOut(duration: duration), value: showFirst)
+                        secondImage.opacity(showSecond ? 1 : 0)
+                            .animation(.easeIn(duration: duration), value: showSecond)
+                    }   .foregroundColor(foreColor)
+                        .onChange(of: phase) { phaseVal in
+                            switch phaseVal {
+                                case 0, 4: showFirst = false; showSecond = false; showImage = true
+                                case 2, 3: showFirst = true; showSecond = false; showImage = false
+                                case 5, 6: showFirst = false; showSecond = true; showImage = false
+                                default: showFirst = false; showSecond = false; showImage = false
+                            }
+                        }
+                } else {
+                    image.foregroundColor(foreColor)
+                }
             }
             // ZStack centers the main icon, so the badge will always be at the same position
             let badgeName = needsKYC ? NEEDS_KYC

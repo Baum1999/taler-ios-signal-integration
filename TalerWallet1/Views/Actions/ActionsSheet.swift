@@ -34,7 +34,9 @@ struct ScannedURLs: View {
                         Text(scannedURL.command.localizedCommand)
                         let primaryAccent = WalletColors().primaryAccent
                         ButtonIconBadge(type: scannedURL.command.transactionType,
-                                        foreColor: primaryAccent, done: false)
+                                       phase: 0,
+                                   foreColor: primaryAccent,
+                                        done: false)
                         .talerFont(.title2)
 
                         Spacer()
@@ -134,18 +136,19 @@ struct ActionsSheet: View {
             let sendDisabled = noP2P
             let recvDisabled = noBalances || noP2P
             let depoDisabled = !mayDeposit
-            ///   [􁉇 Send   ] [􁉅 Request]
-            SendRequestV(stack: stack.push(), sendDisabled: sendDisabled, recvDisabled: recvDisabled)
-                .accessibility(sortPriority: 1)     // read this after maps
-            ///   [􁾩Deposit] [􁾭 Withdraw]
-            DepositWithdrawV(stack: stack.push(), sendDisabled: depoDisabled, recvDisabled: noBalances)
-                .accessibility(sortPriority: 0)     // read this last
+            TimelineView(.periodic(from: .now, by: 60/80)) { context in
+                PhaseView(stack: stack.push(), date: context.date,
+                   sendDisabled: sendDisabled, recvDisabled: recvDisabled,
+                   depoDisabled: depoDisabled, wthdDisabled: noBalances)
+            }
             HStack {
                 if #available(iOS 26.0, *) {
                     if !pasteAutomatically {
                         let isEnabled = UIPasteboard.general.hasURLs
                         PasteButton(accessibilityLabelStr: "Paste") {
-                            TalerWallet1App().inspectPasteboard(playSound: true)
+                            Task {
+                                TalerWallet1App().inspectPasteboard(playSound: true)
+                            }
                         }.buttonStyle(TalerButtonStyle(type: .bordered,
                                                      dimmed: false,
                                                      narrow: true,
