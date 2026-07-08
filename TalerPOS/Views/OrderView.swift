@@ -37,7 +37,12 @@ struct OrderView: View {
             threeColumnLayout
         }
         .navigationBarHidden(true)
-        .onAppear { startInventoryRefresh() }
+        .onAppear {
+            startInventoryRefresh()
+            if ScreenshotController.showCustomDialog {
+                showCustomProduct = true
+            }
+        }
         .onDisappear { stopInventoryRefresh() }
         .sheet(isPresented: $showCustomProduct) {
             CustomProductDialog(currency: orderManager.currentLiveOrder?.order.currency ?? configManager.currency ?? "", currencySpec: configManager.currencySpec)  { product in

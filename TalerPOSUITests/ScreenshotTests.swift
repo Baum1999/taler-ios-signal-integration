@@ -18,33 +18,61 @@ import XCTest
 
 final class ScreenshotTests: XCTestCase {
 
-    private func launchAndCapture(scenario: String) {
-        let app = XCUIApplication()
-        app.launchArguments += ["-SCREENSHOT_SCENARIO", scenario]
-        app.launch()
+    private static let scenarios = [
+        "login",
+        "mfa-select",
+        "mfa-code",
+        "amount-entry",
+        "order",
+        "order-custom",
+        "order-custom-added",
+        "payment",
+        "payment-success",
+        "history",
+        "refund",
+        "refund-qr",
+        "navigation",
+        "settings",
+    ]
 
-        sleep(2)
-
-        let screenshot = app.windows.firstMatch.screenshot()
-        let attachment = XCTAttachment(screenshot: screenshot)
-        attachment.name = scenario
-        attachment.lifetime = .keepAlways
-        add(attachment)
+    private var screenshotLocale: String {
+        ProcessInfo.processInfo.environment["SCREENSHOT_LOCALE"] ?? "en"
     }
 
-    func testScreenshotAmountEntry() {
-        launchAndCapture(scenario: "amount-entry")
+    func testAllScreenshots() {
+        runScenarios(Self.scenarios)
     }
 
-    func testScreenshotOrder() {
-        launchAndCapture(scenario: "order")
+    func testSelectedScenarios() {
+        let env = ProcessInfo.processInfo.environment["SCREENSHOT_SCENARIOS"] ?? ""
+        let selected = env.split(separator: ",").map(String.init)
+        guard !selected.isEmpty else {
+            XCTFail("SCREENSHOT_SCENARIOS env var is empty")
+            return
+        }
+        runScenarios(selected)
     }
 
-    func testScreenshotPayment() {
-        launchAndCapture(scenario: "payment")
-    }
+    private func runScenarios(_ scenarios: [String]) {
+        for scenario in scenarios {
+            let app = XCUIApplication()
+            app.launchArguments = ["-SCREENSHOT_SCENARIO", scenario,
+                                   "-SCREENSHOT_LOCALE", screenshotLocale]
+            app.launch()
 
-    func testScreenshotPaymentSuccess() {
-        launchAndCapture(scenario: "payment-success")
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                XCUIDevice.shared.orientation = .landscapeLeft
+            }
+
+            sleep(1)
+
+            let screenshot = XCUIScreen.main.screenshot()
+            let attachment = XCTAttachment(screenshot: screenshot)
+            attachment.name = scenario
+            attachment.lifetime = .keepAlways
+            add(attachment)
+
+            app.terminate()
+        }
     }
 }

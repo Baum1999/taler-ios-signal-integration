@@ -42,6 +42,7 @@ class HistoryManager: ObservableObject {
     }
 
     func fetchHistory() {
+        if ScreenshotController.isActive { return }
         fetchHistoryPage(reset: true)
     }
 
@@ -92,6 +93,7 @@ class HistoryManager: ObservableObject {
     }
 
     private func fetchHistoryPage(reset: Bool) {
+        if ScreenshotController.isActive { return }
         guard let merchantConfig = configManager.merchantConfig else {
             logger.error("fetchHistoryPage: no merchantConfig, bailing")
             isLoading = false

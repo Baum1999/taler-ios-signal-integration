@@ -39,6 +39,7 @@ struct ConfigView: View {
     @State private var saveToken: Bool = true
     @State private var isSubmitting: Bool = false
     @State private var showPassword: Bool = false
+    @State private var showInstanceInfo: Bool = false
     @State private var errorMessage: String? = nil
     @FocusState private var focusedField: ConfigField?
 
@@ -185,22 +186,22 @@ struct ConfigView: View {
                     Text(S.configMerchantUrl)
                         .font(.caption)
                         .foregroundColor(.posOnSurfaceVariant)
-                    HStack {
+                    HStack(spacing: 8) {
                         Text("https://")
                             .foregroundColor(.posOnSurfaceVariant)
-                        TextField("backend.example.com", text: $merchantUrlText)
+                        TextField("my.taler-ops.ch", text: $merchantUrlText)
                             .keyboardType(.URL)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .focused($focusedField, equals: .merchantUrl)
                             .submitLabel(.next)
                             .onSubmit { focusedField = .username }
+                            .padding(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.posOutline, lineWidth: 1)
+                            )
                     }
-                    .padding(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.posOutline, lineWidth: 1)
-                    )
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -278,9 +279,111 @@ struct ConfigView: View {
                         .foregroundColor(.posError)
                         .padding(.top, 4)
                 }
+
+                instanceInfoBox
             }
             .padding(20)
         }
+    }
+
+    // MARK: - Instance info box
+
+    private var instanceInfoBox: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { showInstanceInfo.toggle() }
+            } label: {
+                HStack {
+                    Text("No instance?")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundColor(.posOnSurface)
+                    Spacer()
+                    Image(systemName: showInstanceInfo ? "chevron.up" : "chevron.down")
+                        .font(.caption)
+                        .foregroundColor(.posOnSurfaceVariant)
+                }
+                .padding(12)
+            }
+            .buttonStyle(.plain)
+
+            if showInstanceInfo {
+                VStack(alignment: .leading, spacing: 16) {
+                    Divider()
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        (Text("1.")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.posOnSurface) +
+                        Text(" Check out the setup tutorials at")
+                            .foregroundColor(.posOnSurfaceVariant))
+                            .font(.subheadline)
+
+                        Link("tutorials.taler.net", destination: URL(string: "https://tutorials.taler.net/merchant/merchant-backoffice/obtain-instance/index")!)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("2.")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.posOnSurface) +
+                        Text(" You can try the app with the public demo instance. Note that this instance is shared — anyone can modify its data at any time. Use it only to explore the app and its features.")
+                            .foregroundColor(.posOnSurfaceVariant)
+
+                        Button {
+                            merchantUrlText = "backend.demo.taler.net"
+                            usernameText = "sandbox"
+                            tokenText = "sandbox"
+                        } label: {
+                            Text("Fill demo credentials")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 14)
+                                .background(Color.posSecondaryContainer)
+                                .foregroundColor(.posOnSecondaryContainer)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .font(.subheadline)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("3.")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.posOnSurface) +
+                        Text(" If you are reviewing this app, you most likely already have access to a controlled test user. To prefill the merchant portal URL, press the button below.")
+                            .foregroundColor(.posOnSurfaceVariant)
+
+                        Button {
+                            merchantUrlText = "backend.demo.taler.net"
+                            usernameText = ""
+                            tokenText = ""
+                        } label: {
+                            Text("Fill review URL")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 14)
+                                .background(Color.posSecondaryContainer)
+                                .foregroundColor(.posOnSecondaryContainer)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .font(.subheadline)
+                }
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
+            }
+        }
+        .background(Color.posSurface)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.posOutline, lineWidth: 1)
+        )
     }
 
     // MARK: - Challenge selection
@@ -341,8 +444,34 @@ struct ConfigView: View {
         merchantUrlText = configManager.merchantUrl
         saveToken = configManager.savePassword
 
-        if !merchantUrlText.isEmpty {
+        if merchantUrlText.isEmpty {
+            merchantUrlText = "my.taler-ops.ch"
+        } else {
             sanitizeMerchantUrlAndUpdateFields()
+        }
+
+        if ScreenshotController.isActive {
+            if ScreenshotController.activeScenario == .login {
+                usernameText = "pos"
+                tokenText = "secret-password"
+            }
+            if ScreenshotController.showMfaSelect {
+                usernameText = "pos"
+                tokenText = "secret-password"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    challengeSelectionData = ChallengeSelectionData(
+                        challenges: ScreenshotController.mfaMockChallenges
+                    )
+                }
+            }
+            if ScreenshotController.showMfaCode {
+                usernameText = "pos"
+                tokenText = "secret-password"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    tanDigits = ["5", "8", "2", "7", "", "", "", ""]
+                    tanChallenge = ScreenshotController.mfaMockTanChallenge
+                }
+            }
         }
     }
 

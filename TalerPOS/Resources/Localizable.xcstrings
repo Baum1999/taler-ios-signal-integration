@@ -4,6 +4,15 @@
     "" : {
 
     },
+    " Check out the setup tutorials at" : {
+
+    },
+    " If you are reviewing this app, you most likely already have access to a controlled test user. To prefill the merchant portal URL, press the button below." : {
+
+    },
+    " You can try the app with the public demo instance. Note that this instance is shared — anyone can modify its data at any time. Use it only to explore the app and its features." : {
+
+    },
     "-" : {
 
     },
@@ -38,6 +47,15 @@
       }
     },
     "%lld" : {
+
+    },
+    "1." : {
+
+    },
+    "2." : {
+
+    },
+    "3." : {
 
     },
     "amount_entry_backspace" : {
@@ -749,9 +767,6 @@
           }
         }
       }
-    },
-    "backend.example.com" : {
-
     },
     "common_error" : {
       "extractionState" : "stale",
@@ -3722,6 +3737,12 @@
         }
       }
     },
+    "Fill demo credentials" : {
+
+    },
+    "Fill review URL" : {
+
+    },
     "force_delete_dialog_confirm" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6355,6 +6376,9 @@
         }
       }
     },
+    "my.taler-ops.ch" : {
+
+    },
     "never_expires" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6425,6 +6449,9 @@
           }
         }
       }
+    },
+    "No instance?" : {
+
     },
     "no_deadline_set" : {
       "extractionState" : "stale",
@@ -11782,6 +11809,9 @@
           }
         }
       }
+    },
+    "tutorials.taler.net" : {
+
     }
   },
   "version" : "1.0"

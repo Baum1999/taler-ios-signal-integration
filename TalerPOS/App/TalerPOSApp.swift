@@ -113,10 +113,13 @@ struct TalerPOSApp: App {
                 .environmentObject(refundManager)
                 .onAppear {
                     if let scenario = ScreenshotController.activeScenario {
+                        ScreenshotController.applyLocaleIfNeeded()
                         ScreenshotController.applyFixture(
                             configManager: configManager,
                             orderManager: orderManager,
                             paymentManager: paymentManager,
+                            historyManager: historyManager,
+                            refundManager: refundManager,
                             scenario: scenario
                         )
                     } else {

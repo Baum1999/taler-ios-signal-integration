@@ -265,13 +265,33 @@ struct ContentView: View {
         }
         .onAppear {
             if let scenario = ScreenshotController.activeScenario {
-                let dest = scenario.destination
-                if dest.isMainDestination {
-                    currentRoot = dest
-                } else {
+                switch scenario {
+                case .refund:
+                    currentRoot = .history
+                    DispatchQueue.main.async {
+                        if let item = refundManager.toBeRefunded {
+                            navigationPath.append(PosDestination.refund(item))
+                        }
+                    }
+                case .refundQr:
+                    currentRoot = .history
+                    DispatchQueue.main.async {
+                        navigationPath.append(PosDestination.refundUri)
+                    }
+                case .navigation:
                     currentRoot = .order
                     DispatchQueue.main.async {
-                        navigationPath.append(dest)
+                        drawerOpen = true
+                    }
+                default:
+                    let dest = scenario.destination
+                    if dest.isMainDestination {
+                        currentRoot = dest
+                    } else {
+                        currentRoot = .order
+                        DispatchQueue.main.async {
+                            navigationPath.append(dest)
+                        }
                     }
                 }
             } else if let restored = PosDestination.from(savedKey: savedRoot), restored.isMainDestination {
