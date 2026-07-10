@@ -59,16 +59,16 @@ struct RotatingTaler: View {
                     }
                 }
             }
-        if #available(iOS 26.0, *) {
-            image
-                .glassEffect(.clear)
-        } else {
+//        if #available(iOS 26.0, *) {
+//            image
+//                .glassEffect(.clear)
+//        } else {
             image
                 .background {
                     Capsule()
                         .fill(Color(.systemGray6).opacity(0.7))
                 }
-        }
+//        }
     }
 }
 // MARK: -

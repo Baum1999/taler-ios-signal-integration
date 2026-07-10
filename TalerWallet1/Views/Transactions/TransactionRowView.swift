@@ -96,6 +96,7 @@ struct TransactionRowView: View {
 
     var common: TransactionCommon { transaction.common }
     var done: Bool { transaction.isDone }
+    var isWorking: Bool { transaction.isWorking }
     var pending: Bool { transaction.isPending || common.isFinalizing }
     var needsKYC: Bool { transaction.isPendingKYC || transaction.isPendingKYCauth }
     var doneOrPending: Bool { done || pending }
@@ -238,7 +239,7 @@ struct TransactionRowView: View {
 
     @ViewBuilder func layout3(_ topString: String?, _ textColor: Color, _ for2Color: Color) -> some View {
         // top full-width, blue amount trailing, bottom full-width
-        VStack(alignment: .leading, spacing: 2) {
+        let row = VStack(alignment: .leading, spacing: 2) {
             if let topString {
                 TruncationDetectingText(topString,
                                maxLines: 10,
@@ -267,6 +268,13 @@ struct TransactionRowView: View {
 #if TALER_NIGHTLY
                 .overlay { Color.clear.border(green) }
 #endif
+        }
+        ZStack {
+            row
+            if isWorking {
+                RotatingTaler(size: 80, progress: true, once: false,
+                   rotationEnabled: Binding.constant(true))
+            }
         }
     } // layout3
 
