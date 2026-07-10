@@ -25,6 +25,7 @@ struct ProdSectionView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
+    @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State private var selectedCurrency: Int = 0
 
@@ -49,8 +50,12 @@ struct ProdSectionView: View {
                     .talerFont(.body)
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
-                        Text("Currently you have only demo cash.")
-                            .talerFont(.body)
+                        if minimalistic {
+                            withdraw
+                        } else {
+                            Text("Currently you have only demo cash.")
+                                .talerFont(.body)
+                        }
                         Spacer()
                         chevron.rotationEffect(.degrees((showRealCashHint ?  -180 : 0)))
                             .accessibilityHidden(true)
@@ -60,7 +65,7 @@ struct ProdSectionView: View {
                                                              : "Show available real money withdrawals"))
                     .contentShape(.rect)    // can tap in background also
                 }   .buttonStyle(.plain)
-                if showRealCashHint {
+                if showRealCashHint && !minimalistic {
                     withdraw
                         .padding(.vertical, -16)
                 }
