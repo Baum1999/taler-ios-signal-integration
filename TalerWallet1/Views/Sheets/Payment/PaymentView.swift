@@ -213,6 +213,7 @@ struct PaySafeArea: View, Sendable {
     let amountString: String
     let amountA11y: String
     @Binding var payNow: Bool
+    @State private var wasTapped: Bool = false
 
     func timeToPay(_ terms: MerchantContractTerms) -> Int {
         if let milliseconds = try? terms.payDeadline.milliseconds() {
@@ -258,25 +259,35 @@ struct PaySafeArea: View, Sendable {
     var body: some View {
         let timeToPay = timeToPay(terms)
         let showTime = timeToPay > 0 && timeToPay < 300
-        let view = VStack {
-            if showTime {
+        let button = Button("Pay \(amountString) now") {
+            if !wasTapped {
+                wasTapped = true
+                symLog?.log("paying \(amountString) now")
+                payNow = true
+            }
+        }
+            .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
+            .buttonStyle(TalerButtonStyle(type: .prominent))
+            .disabled(wasTapped)
+            .padding(.horizontal)
+
+        if showTime {
+            let view = VStack {
                 timeView(timeToPay)
                     .padding(.top)
-            } else {
-                let _ = symLog?.log("\(timeToPay) not shown")
+                button
+                    .padding(.bottom, 4)
             }
-            Button("Pay \(amountString) now") { payNow = true }
-                .accessibilityLabel(Text("Pay \(amountA11y) now", comment: "a11y"))
-                .buttonStyle(TalerButtonStyle(type: .prominent))
-                .padding(.horizontal)
-                .padding(.bottom, 4)
-        }
-        if #available(iOS 26.0, *) {
-            view
-                .glassEffect(in: .rect(cornerRadius: 16.0))
-                .padding(.horizontal)
+            if #available(iOS 26.0, *) {
+                view
+                    .glassEffect(in: .rect(cornerRadius: 16.0))
+                    .padding(.horizontal)
+            } else {
+                view
+            }
         } else {
-            view
+            let _ = symLog?.log("\(timeToPay) not shown")
+            button
         }
     }
 }
