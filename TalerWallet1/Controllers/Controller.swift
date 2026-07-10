@@ -52,7 +52,7 @@ enum UrlCommand: String, Codable {
     case payPush
     case payTemplate
     case refund
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
     case devExperiment
 #endif
 
@@ -83,7 +83,7 @@ enum UrlCommand: String, Codable {
                                              comment: "UrlCommand")
             case .refund:           String(localized: "Refund",
                                              comment: "UrlCommand")
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
             case .devExperiment:    String("DevExperiment")
 #endif
         }
@@ -99,7 +99,7 @@ enum UrlCommand: String, Codable {
             case .payPush:          .scanPushCredit
             case .payTemplate:      .payment
             case .refund:           .refund
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
             case .devExperiment:    .dummy
 #endif
         }
@@ -619,7 +619,7 @@ extension Controller {
             case "pay-push":            return .payPush
             case "pay-template":        return .payTemplate
             case "refund":              return .refund
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
             case "dev-experiment":      return .devExperiment
 #endif
             default:

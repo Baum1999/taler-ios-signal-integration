@@ -10,7 +10,7 @@ import SymLog
 import taler_swift
 
 
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
 struct DevExperimentView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack

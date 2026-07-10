@@ -75,7 +75,7 @@ struct URLSheet: View {
                     PayTemplateV(stack: stack.push(), url: passedURL)
                 case .refund:
                     RefundURIView(stack: stack.push(), url: passedURL)
-#if GNU_TALER
+#if GNU_TALER || TALER_NIGHTLY
                 case .devExperiment:
                     DevExperimentView(stack: stack.push(), url: passedURL)
 #endif
