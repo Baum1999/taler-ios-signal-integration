@@ -162,35 +162,44 @@ struct DiscountsPassesList: View {
                           : !isValid
         }
     }
+
+    @ViewBuilder func section(_ token: TalerToken, index: Int) -> some View {
+        DiscountsPassesItem(stack: stack.push(),
+                            token: token,
+                           isPass: isPass,
+                    activeExpired: activeExpired,
+                            index: index
+        ) { deletionID in
+            Task { // runs on MainActor
+                let _ = await delete(deletionID)
+                await refresh()
+            }
+        }
+    }
+
     var body: some View {
         let tokens = talerTokens()
         let count = tokens.count
+        let comment: StaticString = "segmented control for passes & discounts"
+        let strings = [String(localized: "Active", comment: comment),
+                       String(localized: "Expired", comment: comment)]
         let list = List {
-            if count == 0 {
-                Text(isPass ? "No passes yet"
-                            : "No discounts yet")
+            Section {
+                if count == 0 {
+                    Text(isPass ? ( activeExpired == 0 ? "No active passes yet" : "No expired / used passes yet")
+                                : ( activeExpired == 0 ? "No active discounts yet" : "No expired / used discounts yet"))
                     .talerFont(.headline)
-            } else {
-                let comment: StaticString = "segmented control for passes & discounts"
-                let strings = [String(localized: "Active", comment: comment),
-                               String(localized: "Expired", comment: comment)]
+                } else {
+                    let token = tokens[0]
+                    section(token, index: 0)
+                }
+            } header: {
                 SegmentControl2(value: $activeExpired, strings: strings)
-                    .listRowSeparator(.hidden)
-                    .padding(.bottom, 10)
-
-                ForEach(0..<count, id: \.self) { index in
+            }
+            if count > 1 {
+                ForEach(1..<count, id: \.self) { index in
                     let token = tokens[index]
-                    DiscountsPassesItem(stack: stack.push(),
-                                        token: token,
-                                       isPass: isPass,
-                                activeExpired: activeExpired,
-                                        index: index
-                    ) { deletionID in
-                        Task { // runs on MainActor
-                            let _ = await delete(deletionID)
-                            await refresh()
-                        }
-                    }
+                    section(token, index: index)
                 }
             }
         }
