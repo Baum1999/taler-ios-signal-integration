@@ -182,61 +182,63 @@ struct ThreeAmountsSection: View {
                 }
             }
 
-            if pendingDialog || isDone {
-                Text(pendingDialog ? "Payment will be made in \(currency)"
-                                   : "Payment was made in \(currency)")
-                    .talerFont(.callout)
-                    .padding(.top, 4)
-            }
-            AmountRowV(stack: stack.push(),
-                       title: minimalistic ? topAbbrev : topTitle,
-                      amount: topAmount,
-                       scope: scope,
-                  isNegative: nil,
-                       color: labelColor,
-                       large: false)
-                .padding(.bottom, 4)
-            if hasNoFees == false {     // otherwise raw==effective
-                if let fee {
-                    let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:", comment: "short version")
-                                             : String(localized: "Exchange fee (long):", defaultValue: "Fee:", comment: "long version")
-                    AmountRowV(stack: stack.push(),
-                               title: title,
-                              amount: fee,
-                               scope: scope,
-                          isNegative: fee.isZero ? nil : feeIsNegative,
-                               color: labelColor,
-                               large: false)
+            if currency != "UNKNOWN" {
+                if pendingDialog || isDone {
+                    Text(pendingDialog ? "Payment will be made in \(currency)"
+                                       : "Payment was made in \(currency)")
+                        .talerFont(.callout)
+                        .padding(.top, 4)
+                }
+                AmountRowV(stack: stack.push(),
+                           title: minimalistic ? topAbbrev : topTitle,
+                          amount: topAmount,
+                           scope: scope,
+                      isNegative: nil,
+                           color: labelColor,
+                           large: false)
                     .padding(.bottom, 4)
+                if hasNoFees == false {     // otherwise raw==effective
+                    if let fee {
+                        let title = minimalistic ? String(localized: "Exchange fee (short):", defaultValue: "Fee:",     comment: "short version")
+                                                 : String(localized: "Exchange fee (long):", defaultValue: "Fee:",     comment: "long version")
+                        AmountRowV(stack: stack.push(),
+                                   title: title,
+                                  amount: fee,
+                                   scope: scope,
+                              isNegative: fee.isZero ? nil : feeIsNegative,
+                                   color: labelColor,
+                                   large: false)
+                        .padding(.bottom, 4)
+                    }
+                    if let bottomAmount {
+                        AmountRowV(stack: stack.push(),
+                                   title: minimalistic ? bottomAbbrev : bottomTitle,
+                                  amount: bottomAmount,
+                                   scope: scope,
+                              isNegative: nil,
+                                   color: bottomColor,
+                                   large: large)
+                    }
                 }
-                if let bottomAmount {
-                    AmountRowV(stack: stack.push(),
-                               title: minimalistic ? bottomAbbrev : bottomTitle,
-                              amount: bottomAmount,
-                               scope: scope,
-                          isNegative: nil,
-                               color: bottomColor,
-                               large: large)
+                let serviceURL = scope?.url ?? baseURL
+                if let serviceURL {
+                    VStack(alignment: .leading) {
+                                   // TODO: "Issued by" for withdrawals
+                        Text(minimalistic ? "Payment service:" : "Using payment service:")
+                            .multilineTextAlignment(.leading)
+                            .talerFont(.body)
+                        Text(serviceURL.trimURL)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .multilineTextAlignment(.center)
+                            .talerFont(large ? .title3 : .body)
+//                            .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
+                            .foregroundColor(labelColor)
+                    }
+                    .padding(.top, 4)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .listRowSeparator(.hidden)
+                    .accessibilityElement(children: .combine)
                 }
-            }
-            let serviceURL = scope?.url ?? baseURL
-            if let serviceURL {
-                VStack(alignment: .leading) {
-                               // TODO: "Issued by" for withdrawals
-                    Text(minimalistic ? "Payment service:" : "Using payment service:")
-                        .multilineTextAlignment(.leading)
-                        .talerFont(.body)
-                    Text(serviceURL.trimURL)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .multilineTextAlignment(.center)
-                        .talerFont(large ? .title3 : .body)
-//                        .fontWeight(large ? .medium : .regular)  // @available(iOS 16.0, *)
-                        .foregroundColor(labelColor)
-                }
-                .padding(.top, 4)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .listRowSeparator(.hidden)
-                .accessibilityElement(children: .combine)
             }
         } header: {
             let header = scope?.url?.trimURL ?? scope?.currency ?? summary != nil ? "Summary" : nil
