@@ -55,8 +55,9 @@ struct URLSheet: View {
 #endif
         if let urlCommand, let passedURL {
             switch urlCommand {
-                case .addExchange,      // TODO: just check the ToS
-                     .withdraw:
+                case .addExchange:      // TODO: just check the ToS
+                    ExchangeListView(stack: stack.push(), url: $passedURL)
+                case .withdraw:
                     WithdrawURIView(stack: stack.push(), url: passedURL)
                 case .withdrawExchange:
                     WithdrawExchangeV(stack: stack.push(),

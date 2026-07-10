@@ -93,7 +93,7 @@ enum UrlCommand: String, Codable {
             case .unknown:          .dummy
             case .withdraw:         .withdrawal
             case .withdrawExchange: .withdrawal
-            case .addExchange:      .withdrawal
+            case .addExchange:      .dummy
             case .pay:              .payment
             case .payPull:          .scanPullDebit
             case .payPush:          .scanPushCredit

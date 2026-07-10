@@ -29,7 +29,8 @@ func addExchange(_ exchange: String, model: WalletModel) -> Void {
 struct ExchangeListView: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
-    let navTitle: String
+    @Binding var url: URL?
+
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
 #if DEBUG
@@ -49,11 +50,18 @@ struct ExchangeListView: View {
         let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         let enterURL = String(localized: "Enter the URL")
+        let listView = ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
+                        .navigationTitle(TITLE_EXCHANGES)
+                        .navigationBarItems(trailing: plusButton)
+                        .task {
+                            if let newUrl = url {
+                                newExchange = newUrl.absoluteString
+                                showAlert = true
+                                url = nil
+                            }
+                        }
         if #available(iOS 16.4, *) {
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
-                .navigationTitle(navTitle)
-                .navigationBarItems(trailing: plusButton)
-                .alert(addTitleStr, isPresented: $showAlert) {
+            listView.alert(addTitleStr, isPresented: $showAlert) {
                     TextField("Address of the payment service", text: $newExchange)
                         .accessibilityLabel(enterURL)
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
@@ -66,9 +74,7 @@ struct ExchangeListView: View {
                         .accessibilityHidden(true)
                 }
         } else {    // iOS 15 cannot have a textfield in an alert, so we must
-            ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
-                .navigationTitle(navTitle)
-                .navigationBarItems(trailing: plusButton)
+            listView
                 .textFieldAlert(isPresented: $showAlert,
                                       title: addTitleStr,
                                    doneText: addButtonStr,

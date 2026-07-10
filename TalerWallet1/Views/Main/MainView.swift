@@ -237,12 +237,14 @@ struct MainView: View {
                             actionSheet()
                         case .scanner:
                             qrSheet()
+                                .environmentObject(tabBarModel)
                         case .url(let url):
                             let uSheet = URLSheet(stack.push(),
                                         selectedBalance: selectedBalance,
                                                sheetURL: url)
                                 .id("onOpenURL")
                             Sheet(stack: stack.push(), sheetView: AnyView(uSheet))
+                                .environmentObject(tabBarModel)
                     }
                 }
                 .sheet(isPresented: $showUrlSheet,
@@ -252,15 +254,18 @@ struct MainView: View {
                                      urlToOpen: $urlToOpen)
                         .id("onOpenURL")
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
+                        .environmentObject(tabBarModel)
                 }   // UrlSheet
                 .sheet(isPresented: $showScanner,
                          onDismiss: dismissSheet) {
                     qrSheet()
+                        .environmentObject(tabBarModel)
                 }   // QR Scanner
                 .sheet(isPresented: $showActionSheet,
                          onDismiss: dismissActionSheet
                 ) {
                     actionSheet()
+                        .environmentObject(tabBarModel)
                 }   // ActionSheet
         }   // VStack { networkUnavailable + mainGroup }
 #if OIM

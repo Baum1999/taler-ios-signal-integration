@@ -125,15 +125,13 @@ struct SettingsView: View {
                     SettingsItem(name: aboutStr, id1: "about", imageName: TALER_LOGO) {}
                 }
 
-                let exchangesTitle = String(localized: "TitleExchanges", defaultValue: "Payment Services")
-                let exchangesDest = ExchangeListView(stack: stack.push(exchangesTitle),
-                                                  navTitle: exchangesTitle)
                 NavigationLink {        // whole row like in a tableView
-                    exchangesDest
+                    ExchangeListView(stack: stack.push(), url: .constant(nil))
                 } label: {
-                    SettingsItem(name: exchangesTitle, id1: "exchanges", imageName: EXCHANGE_LOGO,
+                    SettingsItem(name: TITLE_EXCHANGES, id1: "exchanges", imageName: EXCHANGE_LOGO,
                           description: String(localized: "Manage payment services")) {}
                 }
+
                 let bankAccountsTitle = String(localized: "TitleBankAccounts", defaultValue: "Bank Accounts")
                 let bankAccountsDest = BankListView(stack: stack.push(bankAccountsTitle),
                                                  navTitle: bankAccountsTitle)

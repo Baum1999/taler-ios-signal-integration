@@ -185,6 +185,10 @@ public let TESTCURRENCY = "TESTKUDOS"
 //public let LONGCURRENCY = "gold-pressed Latinum"                // 20 characters, with dash and space
 public let LONGCURRENCY = "GOLDLATINUM"                         // 11 characters, no dash, no space
 
+// MARK: - Titles
+
+public let TITLE_EXCHANGES = String(localized: "TitleExchanges", defaultValue: "Payment Services")
+
 // MARK: - Keys used in JSON
 
 public let PLAINTEXT = "text/plain"
