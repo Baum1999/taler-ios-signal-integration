@@ -11,6 +11,7 @@ import taler_swift
 
 struct ProdSectionView: View {
     let stack: CallStack
+    @Binding var showRealCashHint: Bool
     let isEmpty: Bool
     let disabled: Bool
 
@@ -26,11 +27,10 @@ struct ProdSectionView: View {
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
 
     @State private var selectedCurrency: Int = 0
-    @State private var showDropdown = true
 
     func buttonAction() {
         withAnimation {
-            showDropdown.toggle()
+            showRealCashHint.toggle()
         }
     }
 
@@ -45,20 +45,23 @@ struct ProdSectionView: View {
                 Text("To make your first payment, withdraw digital cash.")
                     .talerFont(.body)
             } else {
+                let withdraw = Text("Withdraw real digital cash:")
+                    .talerFont(.body)
                 Button(action: buttonAction) {
                     HStack(alignment: .firstTextBaseline) {
                         Text("Currently you have only demo cash.")
                             .talerFont(.body)
-                            .accessibilityAddTraits(.isSelected)
                         Spacer()
-                        chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
+                        chevron.rotationEffect(.degrees((showRealCashHint ?  -180 : 0)))
                             .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint(Text(showRealCashHint ? "Hide available real money withdrawals"
+                                                             : "Show available real money withdrawals"))
                     .contentShape(.rect)    // can tap in background also
                 }   .buttonStyle(.plain)
-                if (showDropdown) {
-                    Text("Withdraw real digital cash:")
-                        .talerFont(.body)
+                if showRealCashHint {
+                    withdraw
                         .padding(.vertical, -16)
                 }
             }
@@ -70,7 +73,7 @@ struct ProdSectionView: View {
             Text("You can also add a payment service manually in the \(settings) Settings tab.", comment: "« 􀍟 » 'gear'")
                 .talerFont(.body)
 #endif
-            if (showDropdown) {
+            if (showRealCashHint) {
 #if !TALER_WALLET
                 if developerMode {
                     if defaultExchanges.count > 1 {
@@ -197,11 +200,14 @@ struct WalletEmptyView: View {
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @State private var withDrawStarted = false
     @State private var urlToOpen: URL? = nil
+    @State private var showRealCashHint = true
 
     var body: some View {
         let list = List {
             if !controller.defaultExchanges.isEmpty {
-                ProdSectionView(stack: stack.push(), isEmpty: true, disabled: withDrawStarted)
+                ProdSectionView(stack: stack.push(),
+                     showRealCashHint: $showRealCashHint,
+                              isEmpty: true, disabled: withDrawStarted)
             }
 #if GNU_TALER
                 Text("If you don't have a Swiss bank account, you can simply try out the demo…")

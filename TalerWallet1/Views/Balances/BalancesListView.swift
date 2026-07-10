@@ -27,6 +27,7 @@ struct BalancesListView: View {
 
     @State private var amountToTransfer = Amount.zero(currency: EMPTYSTRING)    // Update currency when used
     @State private var summary = EMPTYSTRING
+    @State private var showRealCashHint = true
 
     @State private var historyTapped: Int? = nil
     @Namespace var namespace
@@ -44,7 +45,10 @@ struct BalancesListView: View {
         let count = controller.balances.count
         let list = List {
             if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
-                ProdSectionView(stack: stack.push(), isEmpty: false, disabled: false)
+                ProdSectionView(stack: stack.push(),
+                     showRealCashHint: $showRealCashHint,
+                              isEmpty: false,
+                             disabled: false)
             }
             ForEachWithIndex(data: controller.balances) { index, balance in
                 BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
