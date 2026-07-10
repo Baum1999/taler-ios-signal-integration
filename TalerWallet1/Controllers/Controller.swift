@@ -150,6 +150,7 @@ class Controller: ObservableObject {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("deviceTokenAPNs") var deviceTokenAPNs: String?
+    @AppStorage("developDelay") var developDelay: Bool = false
     let hapticCapability = CHHapticEngine.capabilitiesForHardware()
     let logger = Logger(subsystem: "net.taler.gnu", category: "Controller")
     let player = AVQueuePlayer()
@@ -536,12 +537,13 @@ class Controller: ObservableObject {
                 walletCore.versionInfo = versionInfo
                 if developerMode {
                     try await model.setConfig(setTesting: true)
-                    if walletCore.developDelay == true {
-                        try? await model.devExperimentT(
-                            "taler://dev-experiment/start-tc?delay_resp=5000")
+                    if developDelay == true {
+                        try await model.devExperimentT(
+                            "taler://dev-experiment/start-tc?delay_resp=\(TCDELAY)")
                     }
-//                    try? await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
-                    try? await model.devExperimentT(
+//                    try await model.devExperimentT("taler://dev-experiment/start-tc?fake_500=0.7")
+//                    try await model.devExperimentT("taler://dev-experiment/default-exchange-demo?val=1")
+                    try await model.devExperimentT(
                         "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                 }
                 defaultExchanges = await model.getDefaultExchanges(stage: stage)

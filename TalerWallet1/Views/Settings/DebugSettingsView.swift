@@ -57,10 +57,9 @@ struct DebugSettingsView: View {
     @State private var listID = UUID()
 
     func setDelay(_ doDelay: Bool, for walletCore: WalletCore) async {
-        walletCore.developDelay = doDelay
         symLog.log(doDelay ? "wallet-core delaying by 5 seconds"
                            : "wallet-core stop delaying")
-        let delayTime = doDelay ? 5000 : 0
+        let delayTime = doDelay ? TCDELAY : 0
         try? await model.devExperimentT("taler://dev-experiment/start-tc?delay_resp=\(delayTime)")
     }
 
@@ -77,9 +76,9 @@ struct DebugSettingsView: View {
                     withAnimation(Animation.linear.delay(0.8)) { showDevelopItems = developerMode }
                     Task {
                         symLog.log((newVal ? "enabling" : "disabling") + " applyDevExperiment")
-                        try await model.setConfig(setTesting: newVal)
-                        if newVal && walletCore.developDelay == true {
-                            try await setDelay(true, for: walletCore)
+                        try? await model.setConfig(setTesting: newVal)
+                        if newVal && developDelay == true {
+                            await setDelay(true, for: walletCore)
                         }
                     }
                 }
@@ -111,9 +110,19 @@ struct DebugSettingsView: View {
                             consoleManager.clear()
                         }
                     }
+                    SettingsToggle(name: String("Set 5 seconds delay"),
+                                  value: $developDelay.onChange({ delay in
+                        Task {
+                            try await setDelay(delay, for: walletCore)
+                        }
+                    }),
+                                    id1: "delay",
+                            description: String("After each network call"))
+                        .id("delay")
                     SettingsToggle(name: String(localized: "Show view sizes"), value: $debugViews,
                                     id1: "debugViews",
                             description: String(localized: "Debug view layout and flickering"))
+                        .id("debugViews")
 #if DEBUG
                     let banks = [//"stage.taler-ops.ch",    <= never has a bank!
 //                                 "glstest.taler.net",
@@ -170,15 +179,6 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(withDrawDisabled)
                     }.id("head1withdraw")
-                    SettingsToggle(name: String("Set 5 seconds delay"),
-                                  value: $developDelay.onChange({ delay in
-                        Task {
-                            try await setDelay(delay, for: walletCore)
-                        }
-                    }),
-                                    id1: "delay",
-                            description: String("After each network call"))
-                        .id("delay")
 #if DEBUG
                     SettingsItem(name: String("Run Dev Experiment Refresh"),
                                   id1: "applyDevExperiment",

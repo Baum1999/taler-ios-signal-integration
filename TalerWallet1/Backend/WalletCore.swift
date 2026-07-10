@@ -33,7 +33,6 @@ class WalletCore: QuickjsMessageHandler {
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
-    var developDelay: Bool?                 // delay wallet-core after each network call
     var isObserving: Int
     var isLogging: Bool
     var logTransactions: Bool

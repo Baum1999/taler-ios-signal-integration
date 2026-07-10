@@ -19,6 +19,11 @@ let TALER_LOGO_QR = "taler-logo-qr"
 let EXCHANGE_LOGO = "Exchange-logo-blue"
 let SWISS_QR = "swiss_qr"
 
+#if DEBUG
+public let TCDELAY = 12000
+#else
+public let TCDELAY = 5000               // 5 seconds delay after each network call
+#endif
 public let INVISIBLE = 0.001
 public let MAXEXCHANGES = 1000          // per currency
 public let CHF_4217 = "CHF"             // ISO-4217 Swiss Francs
