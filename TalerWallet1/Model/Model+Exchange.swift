@@ -30,11 +30,11 @@ enum ExchangeUpdateStatus: String, Codable {
     case initial
     case initialUpdate = "initial-update"
     case suspended
-    case failed
+//    case failed
     case outdatedUpdate = "outdated-update"
     case ready
     case readyUpdate = "ready-update"
-    case unavailable
+    case unavailable            // even if wallet-core doesn't support this, we need it for L10n
     case unavailableUpdate = "unavailable-update"
 
     var localized: String {
@@ -42,7 +42,7 @@ enum ExchangeUpdateStatus: String, Codable {
             case .initial:           String(localized: "Exchange_status_initial", defaultValue: "Initial")
             case .initialUpdate:     String(localized: "Exchange_status_initial_update", defaultValue: "Initial (… updating …)")
             case .suspended:         String(localized: "Exchange_status_suspended", defaultValue: "Suspended")
-            case .failed:            String(localized: "Exchange_status_failed", defaultValue: "Failed")
+//            case .failed:            String(localized: "Exchange_status_failed", defaultValue: "Failed")
             case .outdatedUpdate:    String(localized: "Exchange_status_outdated_update", defaultValue: "Outdated (… updating …)")
             case .ready:             String(localized: "Exchange_status_ready", defaultValue: "Ready")
             case .readyUpdate:       String(localized: "Exchange_status_ready_update", defaultValue: "Ready (… updating …)")

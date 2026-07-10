@@ -179,7 +179,6 @@ struct PaymentTransactionView: View {
                         let selectionDetail: ChoiceSelectionDetail = choice.0
 //                        let contractChoice: ContractChoice = choice.1
 
-//                    if selectionDetail.status == .paymentPossible {
                         PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
                                       paid: false,
                                        raw: selectionDetail.amountRaw,
@@ -189,7 +188,6 @@ struct PaymentTransactionView: View {
                                    summary: summary(details.info),
                                   products: details.info?.products ?? [],
                             balanceDetails: selectionDetail.balanceDetails)
-//                    }
                     }
                 }
             }
@@ -277,12 +275,10 @@ struct TransactionSummaryList: View {
                 if let url {
                     controller.removeURL(url)
                 }
-//                paymentDone = true
             } else {
                 if let url {
                     controller.removeURL(url)    // TODO: pending might fail - in which case we might want to try again
                 }
-//                paymentPending = true
             }
         }
     }

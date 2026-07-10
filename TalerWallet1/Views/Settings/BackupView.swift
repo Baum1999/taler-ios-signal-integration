@@ -122,7 +122,7 @@ struct BackupView: View {
                             Spacer()
                         }
                         .background {
-                            Color.primary.opacity(isSelected ? 0.12 : 0.001)
+                            Color.primary.opacity(isSelected ? 0.12 : INVISIBLE)
                         }
                         .onTapGesture {
                             withAnimation { selectedBackup = file }

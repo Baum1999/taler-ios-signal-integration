@@ -67,7 +67,7 @@ struct ChoicesView: View, Sendable {
                                amount: contractChoice.amount)
                             .foregroundColor(isPaymentPossible ? .primary : .secondary  )
                     } .overlay {
-                        Color.primary.opacity(0.001)        // Color.clear doesn't accept taps!
+                        Color.primary.opacity(INVISIBLE)        // Color.clear doesn't accept taps!
                             .contentShape(.rect)
                             .onTapGesture {
                                 if isPaymentPossible {
