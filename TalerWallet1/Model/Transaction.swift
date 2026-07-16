@@ -167,6 +167,27 @@ struct TransactionState: Codable, Hashable {
     var isKYCauth: Bool { minor == .kycAuthRequired }
 }
 
+enum ProgressPhase: String, Codable {
+    case delayed        // after 5 seconds
+    case stalled        // after 10 seconds
+    case done           // either successful or error
+}
+struct RequestProgressPhase: Codable {             // Notification
+    var type: String        // request-progress-phase
+    var operation: String
+    var progressToken: String
+    var phase: ProgressPhase
+}
+
+struct RequestProgressError: Codable {             // Notification
+    var type: String        // request-progress-error
+    var operation: String
+    var progressToken: String
+    var error: TalerErrorDetail
+    var retryCounter: Int?
+    var nextRetryDelay: Duration?
+}
+
 struct TransactionTransition: Codable {             // Notification
     enum TransitionType: String, Codable {
         case transition = "transaction-state-transition"
