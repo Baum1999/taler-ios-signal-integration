@@ -40,7 +40,6 @@ struct MainView: View {
 //    @State private var showCameraAlert: Bool = false
     @State private var scannedCode: Bool = false
     @State private var innerHeight: CGFloat = .zero
-    @State private var networkUnavailable = false
     @State private var backgrounded: Date?                  // time we go into background
     @Namespace private var namespace
 
@@ -211,22 +210,11 @@ struct MainView: View {
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
 
         VStack {
-            if networkUnavailable {
-                Text("Network unavailable!")
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.red)
-                    }
-                    .padding(.horizontal)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .top),
-                        removal: .move(edge: .top)
-                    ))
-            } // red bar on top
-
+            if controller.networkUnavailable {
+                ErrorBanner(.networkUnavailable)        // red bar on top
+            } else if controller.slowConnection {
+                ErrorBanner(.warning5sec)               // yellow bar on top
+            }
             mainGroup
                 .environmentObject(tabBarModel)
 //            .animation(.default, value: model.error2 == nil)
@@ -317,14 +305,35 @@ struct MainView: View {
                     showUrlSheet = true     // raise sheet
         }   }   }
 
+        .onNotification(.RequestProgressPhase) { notification in
+            if let progress = notification.userInfo?[NOTIFICATIONPHASE] as? RequestProgressPhase {
+//                print(progress)
+                switch progress.phase {
+                    case .delayed:
+                        withAnimation(.easeOut(duration: BANNERDURATION)) {
+                            controller.slowConnection = true
+                            controller.stalledConnection = false
+                        }
+                    case .stalled:
+                        withAnimation(.easeIn(duration: BANNERDURATION)) {
+                            controller.slowConnection = false
+                            controller.stalledConnection = true
+                        }
+                    default:
+                        withAnimation(.easeIn(duration: BANNERDURATION)) {
+                            controller.slowConnection = false
+                            controller.stalledConnection = false
+                        }
+        }   }   }
+
         .onChange(of: controller.isConnected) { isConnected in
             if isConnected {
-                withAnimation(.easeIn(duration: 1.0)) {
-                    networkUnavailable = false
+                withAnimation(.easeIn(duration: BANNERDURATION)) {
+                    controller.networkUnavailable = false
                 }
             } else {
-                withAnimation(.easeOut(duration: 1.0)) {
-                    networkUnavailable = true
+                withAnimation(.easeOut(duration: BANNERDURATION)) {
+                    controller.networkUnavailable = true
         }   }   }
 
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)) { _ in
