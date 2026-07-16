@@ -43,6 +43,7 @@ public let ICONLEADING = CGFloat(-8)
 public let HSPACING = CGFloat(10)                  // space between items in HStack
 
 public let LAUNCHDURATION: Double = 1.60
+public let BANNERDURATION: Double = 0.666
 
 public let ONEDAY: UInt = 1         // 1..3
 public let SEVENDAYS: UInt = 7      // 3..9
@@ -208,6 +209,7 @@ public let TRANSACTIONID = "transactionID"
 
 public let NOTIFICATIONTIME = "notif.time"
 public let NOTIFICATIONERROR = "notif.error"
+public let NOTIFICATIONPHASE = "notif.phase"
 public let NOTIFICATIONANIMATION = "notif.animation"
 public let NOTIFICATIONSHARE = "notif.share"
 public let NOTIFICATIONPASTE = "notif.paste"
@@ -219,8 +221,10 @@ extension Notification.Name {
     static let BankAccountChange = Notification.Name(AccountChange.TransitionType.change.rawValue)
     static let ExchangeAdded = Notification.Name("exchange-added")
     static let ExchangeDeleted = Notification.Name("exchange-deleted")
-    static let ExchangeStateTransition = Notification.Name(ExchangeTransition.TransitionType.transition.rawValue)
-    static let TransactionStateTransition = Notification.Name(TransactionTransition.TransitionType.transition.rawValue)
+    static let ExchangeStateTransition = Notification.Name("exchange-state-transition")
+    static let RequestProgressPhase = Notification.Name("request-progress-phase")
+    static let RequestProgressError = Notification.Name("request-progress-error")
+    static let TransactionStateTransition = Notification.Name("transaction-state-transition")
     static let TransactionDone = Notification.Name("transaction-done")
     static let TransactionExpired = Notification.Name("transaction-expired")
     static let TransactionScanned = Notification.Name("transaction-scanned")

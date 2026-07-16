@@ -59,10 +59,7 @@ struct ExchangeState: Codable, Hashable {
 }
 
 struct ExchangeTransition: Codable {             // Notification
-    enum TransitionType: String, Codable {
-        case transition = "exchange-state-transition"
-    }
-    var type: TransitionType
+    var type: String        // exchange-state-transition
     var exchangeBaseUrl: String
     var oldExchangeState: ExchangeState
     var newExchangeState: ExchangeState
