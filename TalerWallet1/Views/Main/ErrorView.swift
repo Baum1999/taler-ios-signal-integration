@@ -8,6 +8,58 @@
 import SwiftUI
 import taler_swift
 
+enum BannerType {
+    case error
+    case networkUnavailable
+    case warning5sec
+}
+
+struct ErrorBanner: View {
+    let type: BannerType
+    
+    init(_ type: BannerType) {
+        self.type = type
+    }
+
+    var errorText: String {
+        switch type {
+            case .error:
+                return "An error occurred…"
+            case .networkUnavailable:
+                return "Network unavailable!"
+            case .warning5sec:
+                return "Network is slow…"
+        }
+    }
+
+    var errorColor: Color {
+        switch type {
+            case .error:
+                return .red
+            case .networkUnavailable:
+                return .red
+            case .warning5sec:
+                return .yellow
+        }
+    }
+
+    var body: some View {
+        Text(errorText)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(errorColor)
+            }
+            .padding(.horizontal)
+            .transition(.asymmetric(
+                insertion: .move(edge: .top),
+                removal: .move(edge: .top)
+            ))
+    }
+}
+
 enum ErrorData {
     case message(title: String, message: String)
     case error(Error)
@@ -49,7 +101,7 @@ struct ErrorView: View {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
                             let code = responseError.code
-                            if code == 7002 || code == 7032 {
+                            if code == 7002 || code == 7005 || code == 7032 {
                                 self.init(stack,
                                     title: internetError,
                                   message: responseError.hint ?? internetMessage,
