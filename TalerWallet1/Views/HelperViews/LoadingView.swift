@@ -48,7 +48,7 @@ struct LoadingView: View {
         }
         .frame(maxWidth: .infinity)
         .talerFont(.title)
-        .navigationTitle("Loading…")
+        .navigationTitle(navTitle)
         .background(FullBackground())
         if #available(iOS 17.0, *) {
             view.toolbarTitleDisplayMode(.inlineLarge)

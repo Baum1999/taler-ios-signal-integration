@@ -142,7 +142,7 @@ struct TransactionsListView: View {
     } // body
 }
 // MARK: -
-// used by TransactionsListView, and by BalancesSectionView to show the last 3 transactions
+// used by TransactionsListView, and by BalancesSectionView to show the last 4 transactions
 struct TransactionsArraySection: View {
     let symLog: SymLogV?
     let logger: Logger?

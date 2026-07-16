@@ -330,7 +330,7 @@ struct WalletMain: View {
         .alert("You need to pass a legitimization procedure.",
                isPresented: $showKycAlert,
                actions: {   openKycButton
-            dismissAlertButton },
+                            dismissAlertButton },
                message: {   Text("Tap the button to go to the legitimization website.") })
         .onNotification(.BalanceChange) { notification in
             logger.info(".onNotification(.BalanceChange) ==> reload balances")
