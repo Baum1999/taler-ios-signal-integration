@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -232,30 +232,6 @@ struct PaySafeArea: View, Sendable {
         return 0
     }
 
-    @ViewBuilder
-    func timeView(_ timeToPay: Int) -> some View {
-        let startDate = Date()
-        HStack {
-            Text("Time to pay:")
-            TimelineView(.animation) { context in
-                let elapsed = Int(context.date.timeIntervalSince(startDate))
-                let seconds = timeToPay - elapsed
-                let text = Text(verbatim: "\(seconds)")
-                if #available(iOS 17.0, *) {
-                    text
-                        .contentTransition(.numericText(countsDown: true))
-                        .animation(.default, value: elapsed)
-                } else if #available(iOS 16.4, *) {
-                    text
-                        .animation(.default, value: elapsed)
-                } else {
-                    text
-                }
-            }.monospacedDigit()
-            Text("seconds")
-        }.accessibilityElement(children: .combine)
-    }
-
     var body: some View {
         let timeToPay = timeToPay(terms)
         let showTime = timeToPay > 0 && timeToPay < 300
@@ -273,7 +249,8 @@ struct PaySafeArea: View, Sendable {
 
         if showTime {
             let view = VStack {
-                timeView(timeToPay)
+                TimeView(String(localized: "Time to pay:"),
+                                  seconds: timeToPay)
                     .padding(.top)
                 button
                     .padding(.bottom, 4)
