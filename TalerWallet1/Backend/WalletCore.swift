@@ -29,7 +29,7 @@ class WalletCore: QuickjsMessageHandler {
 
     private let quickjs: Quickjs
     private var requestsMade: UInt          // counter for array of completion closures
-    private var completions: [UInt : (Date, (UInt, Date, String?, Data?, WalletBackendResponseError?) -> Void)] = [:]
+    private var completions: [UInt : (Date, (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void)] = [:]
     var delegate: WalletBackendDelegate?
 
     var versionInfo: VersionInfo?           // shown in SettingsView
@@ -57,7 +57,7 @@ class WalletCore: QuickjsMessageHandler {
         let type: String
         let operation: String
         let id: UInt
-        let error: WalletBackendResponseError
+        let error: TalerErrorDetail
     }
 
     var lastError: FullError?
@@ -67,7 +67,7 @@ class WalletCore: QuickjsMessageHandler {
         let operation: String?
         let id: UInt?
         let result: AnyCodable?
-        let error: WalletBackendResponseError?
+        let error: TalerErrorDetail?
         let payload: AnyCodable?
     }
 
@@ -116,7 +116,7 @@ extension WalletCore {
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
-                let responseCode = walletError.errorResponse?.code ?? 0
+                let responseCode = walletError.code
                 logger.error("wallet-core sent back error \(walletError.code, privacy: .public), \(responseCode, privacy: .public) for request \(requestId, privacy: .public)")
                 symLog.log("id:\(requestId)  \(walletError)")
                 completion(requestId, timeSent, message, jsonData, walletError)
@@ -451,7 +451,7 @@ extension WalletCore {
         }
     }
     
-    private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, String?, Data?, WalletBackendResponseError?) -> Void) {
+    private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void) {
         // Encode the request and send it to the backend.
         queue.async {
             self.semaphore.wait()               // guard access to requestsMade
