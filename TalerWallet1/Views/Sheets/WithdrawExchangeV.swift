@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -72,7 +72,7 @@ struct WithdrawExchangeV: View {
                 currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
             }
         } else {
-            let message = String(localized: "No payment service...", comment: "loading")
+            let message = String(localized: "Contacting payment service...", comment: "loading")
             LoadingView(stack: stack.push(), scopeInfo: nil, message: message)
                 .task { await viewDidLoad() }
         }
