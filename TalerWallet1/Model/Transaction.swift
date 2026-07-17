@@ -189,10 +189,7 @@ struct RequestProgressError: Codable {             // Notification
 }
 
 struct TransactionTransition: Codable {             // Notification
-    enum TransitionType: String, Codable {
-        case transition = "transaction-state-transition"
-    }
-    var type: TransitionType
+    var type: String        // transaction-state-transition
     var oldTxState: TransactionState?
     var newTxState: TransactionState
     var transactionId: String
