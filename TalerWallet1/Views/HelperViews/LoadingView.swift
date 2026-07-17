@@ -17,39 +17,109 @@ struct LoadingView: View {
 //    let backButtonHidden: Bool
     let navTitle = String(localized: "Loading…")
 
+    @EnvironmentObject private var controller: Controller
+    @EnvironmentObject private var model: WalletModel
+
     @State private var rotationEnabled = true
+    @State private var showAlert: Bool = false
+    @State private var disabled: Bool = false
+    @State private var isFinished: Bool? = false
+
+    private var dismissButton: some View {
+        Button("Cancel", role: .cancel) {
+            showAlert = false
+            if let lastError = controller.lastProgressError {
+                controller.lastProgressError = nil
+                Task {
+                    try await model.cancelProgressToken(lastError.operation,
+                                                 token: lastError.progressToken)
+            }   }
+        }
+            .buttonStyle(TalerButtonStyle(type: .bordered, disabled: false))
+            .padding(.horizontal)
+    }
+
+    @ViewBuilder
+    func retryButton(disabled: Bool) -> some View {
+        Button("Retry now") {
+            withAnimation {
+                showAlert = false
+            }
+            if let lastError = controller.lastProgressError {
+                controller.lastProgressError = nil
+                Task {
+                    try await model.retryProgressTokenNow(lastError.operation,
+                                                   token: lastError.progressToken)
+            }   }
+        }
+            .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
+            .padding(.horizontal)
+    }
 
     var body: some View {
         let view = VStack(alignment: .center) {
-            Spacer()
-            RotatingTaler(size: 100,
-                      progress: true,                 // VoiceOver "In progress"
-                          once: false,
-               rotationEnabled: $rotationEnabled)
-                .onTapGesture(count: 1) {
-                    rotationEnabled.toggle()
+            if showAlert {
+                let lastError = controller.lastProgressError
+                let fallback = String(localized: "It seems that there is a problem with the network.")
+                Text("Couldn't establish a connection")
+                    .talerFont(.title2)
+                    .padding(.vertical)
+                Text(lastError?.error.hint ?? fallback)
+                    .talerFont(.body)
+                Spacer()
+                if let lastPhase = controller.lastProgressPhase {
+                    if lastPhase.phase == .stalled {
+                        if let lastError, let delay = lastError.nextRetryDelay {
+                            if isFinished == false {
+                                TimeView("Next retry in:", seconds: Int(delay.toSeconds()), isFinished: $isFinished)
+                                    .talerFont(.title3)
+                                    .padding(.vertical)
+                            } else if isFinished == true {
+                                Text("Working...")
+                                    .talerFont(.title3)
+                            } else {
+                                Text("Waiting for response...")
+                                    .talerFont(.title3)
+                            }
+                        }
+//                        Spacer()
+                        retryButton(disabled: isFinished ?? false)
+                    }
                 }
-            Spacer()
-            if let scopeInfo {
-                if let urlStr = scopeInfo.url {
-                    Text(urlStr.trimURL)
-                } else {
-                    Text(scopeInfo.currency)
+            } else {
+                Spacer()
+                RotatingTaler(size: 100,
+                          progress: true,                 // VoiceOver "In progress"
+                              once: false,
+                   rotationEnabled: $rotationEnabled)
+                    .onTapGesture(count: 1) {
+                        rotationEnabled.toggle()
+                    }
+                Spacer()
+                if let scopeInfo {
+                    if let urlStr = scopeInfo.url {
+                        Text(urlStr.trimURL)
+                            .talerFont(.title2)
+                    } else {
+                        Text(scopeInfo.currency)
+                            .talerFont(.title2)
+                    }
+                    Spacer()
                 }
+                Text(message ?? EMPTYSTRING)
+                    .talerFont(.title2)
                 Spacer()
             }
-            if let message {
-                Text(message)
-            } else {
-                Text(EMPTYSTRING)
-            }
-            Spacer()
-            Spacer()
+            dismissButton
         }
         .frame(maxWidth: .infinity)
         .talerFont(.title)
         .navigationTitle(navTitle)
         .background(FullBackground())
+        .onChange(of: controller.stalledConnection) { isStalled in
+            showAlert = isStalled
+        }
+
         if #available(iOS 17.0, *) {
             view.toolbarTitleDisplayMode(.inlineLarge)
         } else {
