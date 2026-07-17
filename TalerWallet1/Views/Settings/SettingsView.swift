@@ -27,6 +27,7 @@ struct SettingsView: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("useAuthentication") var useAuthentication: Bool = false
+    @AppStorage("useMixnet") var useMixnet: Bool = false
     @AppStorage("pushNotifications") var pushNotifications: Bool = false
 
     @State private var listID = UUID()
@@ -160,7 +161,13 @@ struct SettingsView: View {
 //            } else {
 //                biometricService.isAuthenticated = false
             }
-
+#if !TALER_WALLET
+            SettingsToggle(name: "NYM mixnet",
+                          value: $useMixnet,
+                            id1: "useMixnet",
+                      imageName: "eye.slash", // 􀋯
+                    description: String(localized: "Protect your privacy"))
+#endif
 #if TALER_NIGHTLY
                 SettingsToggle(name: String(localized: "Push Notifications"), value: $pushNotifications,
                                 id1: "pushNotifications",
