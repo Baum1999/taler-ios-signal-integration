@@ -25,7 +25,6 @@ struct URLSheet: View {
     @State private var summary = EMPTYSTRING
     @State private var urlCommand: UrlCommand?
     @State private var passedURL: URL?
-    @State private var showAlert: Bool = false
 
     init(_ stack: CallStack, selectedBalance: Balance? = nil,
                                    urlToOpen: Binding<URL?>? = nil,
@@ -46,23 +45,6 @@ struct URLSheet: View {
         } else if let sheetURL {
             passedURL = sheetURL
             urlCommand = controller.urlCommand(sheetURL, stack: stack.push())
-        }
-    }
-
-    private var dismissAlertButton: some View {
-        Button("Cancel", role: .cancel) {
-            showAlert = false
-            if let lastError = controller.lastProgressError {
-                controller.lastProgressError = nil
-                // TODO: cancel wallet-core operation
-            }
-        }
-    }
-
-    private var retryButton: some View {
-        Button("Retry now") {
-            showAlert = false
-            // TODO: retry wallet-core operation
         }
     }
 
@@ -118,33 +100,6 @@ struct URLSheet: View {
                     .task(id: urlToOpen) {
                         passUrlOnce()
                     }
-            }
-        }
-        .alert("Couldn't establish a connection", isPresented: $showAlert,
-            actions: {
-                if let lastPhase = controller.lastProgressPhase {
-                    if lastPhase.phase == .retryable {
-                        retryButton
-                    }
-                }
-                dismissAlertButton
-            },  message: {
-                let lastError = controller.lastProgressError
-                let fallback = String(localized: "It seems that there is a problem with the network.")
-                Text(lastError?.error.hint ?? fallback)
-                if let lastPhase = controller.lastProgressPhase {
-                    if lastPhase.phase == .retryable {
-                        if let lastError, let delay = lastError.nextRetryDelay {
-                            TimeView("Next retry in:", seconds: Int(delay.toSeconds()))
-                                .padding(.vertical)
-                        }
-                    }
-                }
-            }
-        )
-        .onChange(of: controller.stalledConnection) { isStalled in
-            if isStalled {
-                showAlert = true
             }
         }
     }
