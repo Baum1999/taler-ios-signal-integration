@@ -77,6 +77,16 @@ struct TransactionPayDetailV: View {
                     }
                 }
             }
+            if let choiceIndex = details.choiceIndex {
+                if let contractTerms = details.contractTerms {
+                    if let choices = contractTerms.choices,
+                       choices.indices.contains(choiceIndex) {
+                        let choice = choices[choiceIndex]
+//                        Text(choice.text)
+
+                    }
+                }
+            }
         }
         if let products = info?.products {
             ForEach(products) { product in
