@@ -64,7 +64,7 @@ enum WithdrawalOperationStatus: String, Codable {
     case aborted
     case confirmed
 }
-/// The result from getWithdrawalDetailsForUri
+/// The result from prepareBankIntegratedWithdrawal
 struct WithdrawUriInfoResponse: Decodable {
     var operationId: String
     var status: WithdrawalOperationStatus   // pending, selected, aborted, confirmed
@@ -78,10 +78,16 @@ struct WithdrawUriInfoResponse: Decodable {
     var editableExchange: Bool              // TODO: what for?
     var possibleExchanges: [Exchange]       // TODO: query these for fees?
 }
+
+struct PrepareBankIntegratedWithdrawalResponse: Decodable {
+    var transactionId: String
+    var info: WithdrawUriInfoResponse
+}
+
 /// A request to get an exchange's withdrawal details.
-fileprivate struct GetWithdrawalDetailsForURI: WalletBackendFormattedRequest {
-    typealias Response = WithdrawUriInfoResponse
-    func operation() -> String { "getWithdrawalDetailsForUri" }
+fileprivate struct PrepareBankIntegratedWithdrawal: WalletBackendFormattedRequest {
+    typealias Response = PrepareBankIntegratedWithdrawalResponse
+    func operation() -> String { "prepareBankIntegratedWithdrawal" }
     func args() -> Args { Args(talerWithdrawUri: talerUri) }
 
     var talerUri: String

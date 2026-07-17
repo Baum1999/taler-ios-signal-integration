@@ -102,7 +102,9 @@ struct WithdrawURIView: View {
     private func viewDidLoad() async {
         symLog.log(".task")
         do {
-            let uriInfoResponse = try await model.getWithdrawalDetailsForUri(url.absoluteString)
+            let response = try await model.prepareBankIntegratedWithdrawal(url.absoluteString)
+            let txId = response.transactionId
+            let uriInfoResponse = response.info
             let amount = uriInfoResponse.amount
             let currency = amount?.currencyStr ?? uriInfoResponse.currency
             amountToTransfer = amount ?? Amount.zero(currency: currency)
