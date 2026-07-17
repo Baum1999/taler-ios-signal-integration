@@ -300,6 +300,14 @@ struct MainView: View {
                     showUrlSheet = true     // raise sheet
         }   }   }
 
+        .onNotification(.RequestProgressError) { notification in
+            if let progress = notification.userInfo?[NOTIFICATIONERROR] as? RequestProgressError {
+                withAnimation(.easeIn(duration: BANNERDURATION)) {
+                    controller.errorConnection = true
+//                    print("❗️❗️❗️  progress.error: \(progress.error.code) ")
+                }
+        }   }
+
         .onNotification(.RequestProgressPhase) { notification in
             if let progress = notification.userInfo?[NOTIFICATIONPHASE] as? RequestProgressPhase {
 //                print(progress)

@@ -138,6 +138,7 @@ class Controller: ObservableObject {
     @Published var networkUnavailable: Bool = false
     @Published var slowConnection: Bool = false
     @Published var stalledConnection: Bool = false
+    @Published var errorConnection: Bool = false
     @Published var lastProgressError: RequestProgressError? = nil
     @Published var lastProgressPhase: RequestProgressPhase? = nil
     @Published var oimModeActive: Bool = false

@@ -75,10 +75,10 @@ struct LoadingView: View {
                                     .talerFont(.title3)
                                     .padding(.vertical)
                             } else if isFinished == true {
-                                Text("Working...")
+                                Text("Retrying…")
                                     .talerFont(.title3)
                             } else {
-                                Text("Waiting for response...")
+                                Text("Waiting for response…")
                                     .talerFont(.title3)
                             }
                         }
@@ -119,13 +119,19 @@ struct LoadingView: View {
         .onChange(of: controller.stalledConnection) { isStalled in
             showAlert = isStalled
         }
+        .onChange(of: controller.errorConnection) { isError in
+            if isError {
+//                print("❗️❗️❗️ error arrived, idle waiting starts")
+                isFinished = false
+                controller.errorConnection = false
+            }
+        }
 
         if #available(iOS 17.0, *) {
             view.toolbarTitleDisplayMode(.inlineLarge)
         } else {
             view
         }
-
     }
 }
 // MARK: -

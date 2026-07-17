@@ -185,6 +185,8 @@ extension WalletCore {
             let decoded = try JSONDecoder().decode(RequestProgressError.self, from: jsonData)
             DispatchQueue.main.async {
                 Controller.shared.lastProgressError = decoded
+                self.postNotification(.RequestProgressError,
+                                      userInfo: [NOTIFICATIONERROR: decoded])
             }
         }
     }
