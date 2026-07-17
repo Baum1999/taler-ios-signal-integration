@@ -105,6 +105,8 @@ struct MainView: View {
                 DualHeightSheet(stack: stack.push(),
                       selectedBalance: selectedBalance,
                        dismissScanner: dismissSheet)        // needs to explicitely dismiss 2nd sheet
+                // TODO: this is commented out because of the weird behavior when switching to the QR scanner.
+                // Once we have ONE sheet with different items, enable this again
 //                .navigationTransition(
 //                    .zoom(sourceID: "unique_transition_id", in: namespace)
 //                )
@@ -132,30 +134,25 @@ struct MainView: View {
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let mainContent = ZStack {
-#if POS
-            let contentView = PosMain()
-#else
-            let contentView = WalletMain(logger: logger, stack: stack.push("Content"),
-               selectedBalance: $selectedBalance,
-                talerFontIndex: $talerFontIndex,
-               showActionSheet: $showActionSheet,
-                   showScanner: $showScanner)
-#endif
-            contentView
-                .environmentObject(NamespaceWrapper(namespace))
-                .overlay(alignment: .top) {
-                    DebugViewV()
-                }     // Show the viewID on top of the app's NavigationView
+            WalletMain(logger: logger, stack: stack.push("Content"),
+              selectedBalance: $selectedBalance,
+               talerFontIndex: $talerFontIndex,
+              showActionSheet: $showActionSheet,
+                  showScanner: $showScanner)
+            .environmentObject(NamespaceWrapper(namespace))
+            .overlay(alignment: .top) {
+                DebugViewV()
+            }     // Show the viewID on top of the app's NavigationView
 
             if (!showScanner && urlToOpen == nil) {
                 if let error2 = model.error2 {
                     ErrorView(stack.push("Main"), data: error2, devMode: developerMode) {
                         model.setError(nil)
                     }.interactiveDismissDisabled()
-                    .background(FullBackground())
+                     .background(FullBackground())
 //                   .transition(.move(edge: .top))
-//                } else {
-//                    Color.clear
+//              } else {
+//                  Color.clear
                 }
             }
         }
@@ -203,8 +200,8 @@ struct MainView: View {
             switch controller.backendState {
                 case .ready: mainContent
                 case .error(let error): ErrorView(stack.push("mainGroup"),
-                                       title: EMPTYSTRING,   // TODO: String(localized: ""),
-                                    copyable: true) {}
+                                                  title: EMPTYSTRING,   // TODO: String(localized: ""),
+                                               copyable: true) {}
                 default:     LaunchAnimationView()
             }
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
@@ -217,7 +214,7 @@ struct MainView: View {
             }
             mainGroup
                 .environmentObject(tabBarModel)
-//            .animation(.default, value: model.error2 == nil)
+//              .animation(.default, value: model.error2 == nil)
                 .sheet(item: $sheetType,
                   onDismiss: sheetDismissed) { sheet in
                     switch sheet {
@@ -275,17 +272,15 @@ struct MainView: View {
             withAnimation(Animation.easeOut(duration: 0.5).delay(delay)) {
                 showActionSheet = false
                 showScanner = true      // switch to qrSheet => camera on
-            }
-        }
+        }   }
+
         .onNotification(.PasteAction) { notification in
             if let notifData = notification.userInfo?[NOTIFICATIONPASTE] as? PasteType {
                 symLog.log(".PasteAction: \(notifData)")
                 urlToOpen = notifData.pastedURL
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showUrlSheet = true     // raise sheet
-                }
-            }
-        }
+        }   }   }
 
         .onOpenURL { url in
             symLog.log(".onOpenURL: \(url)")
@@ -295,8 +290,8 @@ struct MainView: View {
             urlToOpen = url
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 showUrlSheet = true     // raise sheet
-            }
-        }
+        }   }
+
         .onChange(of: controller.talerURI) { url in
             if url != nil {
                 urlToOpen = url
@@ -358,7 +353,6 @@ struct MainView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)) { _ in
             logger.log("❗️App Did Become Active")
         }   // App Did Become Active
-
     } // body
 }
 // MARK: -
