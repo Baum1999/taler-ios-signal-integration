@@ -179,6 +179,28 @@ extension WalletCore {
         }
     }
 
+    @MainActor
+    private func handleRequestProgressError(_ jsonData: Data) throws {
+        do {
+            let decoded = try JSONDecoder().decode(RequestProgressError.self, from: jsonData)
+            DispatchQueue.main.async {
+                Controller.shared.lastProgressError = decoded
+            }
+        }
+    }
+
+    @MainActor
+    private func handleRequestProgressPhase(_ jsonData: Data) throws {
+        do {
+            let decoded = try JSONDecoder().decode(RequestProgressPhase.self, from: jsonData)
+            DispatchQueue.main.async {
+                Controller.shared.lastProgressPhase = decoded
+                self.postNotification(.RequestProgressPhase,
+                             userInfo: [NOTIFICATIONPHASE: decoded])
+            }
+        }
+    }
+
     private func handlePendingProcessed(_ payload: Payload) throws {
         guard let id = payload.id else {
             throw WalletBackendError.deserializationError
@@ -315,6 +337,12 @@ extension WalletCore {
                 case Notification.Name.ExchangeStateTransition.rawValue:
                     symLog.log(message)
                     break
+                case Notification.Name.RequestProgressError.rawValue:
+                    symLog.log(message)
+                    try handleRequestProgressError(jsonData)
+                case Notification.Name.RequestProgressPhase.rawValue:
+                    symLog.log(message)
+                    try handleRequestProgressPhase(jsonData)
                 case Notification.Name.TransactionStateTransition.rawValue:
                     symLog.log(message)
                     try handleStateTransition(jsonData)
