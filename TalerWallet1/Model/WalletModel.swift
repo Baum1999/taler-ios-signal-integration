@@ -190,14 +190,43 @@ extension WalletModel {
     }
 }
 // MARK: -
+/// A request to cancel a wallet transaction by token.
+fileprivate struct CancelProgressToken: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { "cancelProgressToken" }
+    func args() -> Args { Args(operation: op, progressToken: token) }
+
+    var op: String
+    var token: String
+
+    struct Args: Encodable {
+        var operation: String
+        var progressToken: String
+    }
+}
+/// A request to retry a wallet transaction by token.
+fileprivate struct RetryProgressTokenNow: WalletBackendFormattedRequest {
+    struct Response: Decodable {}
+    func operation() -> String { "retryProgressTokenNow" }
+    func args() -> Args { Args(operation: op, progressToken: token) }
+
+    var op: String
+    var token: String
+
+    struct Args: Encodable {
+        var operation: String
+        var progressToken: String
+    }
+}
+// MARK: -
 /// A request to get a wallet transaction by ID.
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = TalerTransaction
     func operation() -> String { "getTransactionById" }
-    func args() -> Args { Args(transactionId: transactionId, includeContractTerms: includeContractTerms) }
+    func args() -> Args { Args(transactionId: txId, includeContractTerms: inclTerms) }
 
-    var transactionId: String
-    var includeContractTerms: Bool?
+    var txId: String
+    var inclTerms: Bool?
 
     struct Args: Encodable {
         var transactionId: String
@@ -220,10 +249,20 @@ fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
 }
 
 extension WalletModel {
+    nonisolated func cancelProgressToken(_ op: String, token: String)
+      async throws {
+        let request = CancelProgressToken(op: op, token: token)
+        let _ = try await sendRequest(request)
+    }
+    nonisolated func retryProgressTokenNow(_ op: String, token: String)
+    async throws {
+        let request = RetryProgressTokenNow(op: op, token: token)
+        let _ = try await sendRequest(request)
+    }
     /// get the specified transaction from Wallet-Core. No networking involved
     nonisolated func getTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
       async throws -> TalerTransaction {
-        let request = GetTransactionById(transactionId: transactionId, includeContractTerms: includeContractTerms)
+        let request = GetTransactionById(txId: transactionId, inclTerms: includeContractTerms)
         return try await sendRequest(request, viewHandles: viewHandles)
     }
     nonisolated func jsonTransactionById(_ transactionId: String, includeContractTerms: Bool? = nil, viewHandles: Bool = false)
@@ -379,15 +418,15 @@ extension WalletModel {
             } catch {
                 logger.error("migrate: move failed \(error.localizedDescription)")
             }
-        } else {
-            logger.debug("migrate: nothing to do, no db at \(sourcePath)")
+//        } else {
+//            logger.debug("migrate: nothing to do, no db at \(sourcePath)")
         }
 
-        if fileManager.fileExists(atPath: targetPath) {
+//        if fileManager.fileExists(atPath: targetPath) {
 //            logger.debug("found db at \(targetPath)")
-        } else {
-            logger.debug("migrate: nothing to do, no db at \(targetPath)")
-        }
+//        } else {
+//            logger.debug("migrate: nothing to do, no db at \(targetPath)")
+//        }
     }
 
     private func dbPath() throws -> String {
