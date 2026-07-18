@@ -153,6 +153,22 @@ struct ContractChoice: Codable, Hashable {
         case descriptionI18n = "description_i18n"
         case inputs, outputs
     }
+
+    func description(_ preferredLanguageCodes: [String]) -> String? {
+        if let i18nDict = self.descriptionI18n {
+            if !i18nDict.isEmpty {
+                for code in preferredLanguageCodes {
+                    if let descI18n = i18nDict[code] {
+                        return descI18n
+                    }
+                }
+            }
+        }
+        if let desc = self.description {
+            return desc
+        }
+        return nil
+    }
 }
 
 struct MerchantContractTerms: Codable {
