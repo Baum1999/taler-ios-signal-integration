@@ -94,6 +94,7 @@ struct ErrorView: View {
         let serializationError = String(localized: "Serialization error")
         let deserializationError = String(localized: "Deserialization error")
         let unknownError = String(localized: "Unknown error")
+        let userCancelled = String(localized: "User cancelled")
 
         switch error {
             case let walletError as WalletBackendError:
@@ -101,9 +102,9 @@ struct ErrorView: View {
                     case .walletCoreError(let walletBackendResponseError):
                         if let responseError = walletBackendResponseError {
                             let code = responseError.code
-                            if code == 7002 || code == 7005 || code == 7032 {
+                            if code == 7002 || code == 7005 || code == 7032 || code == 7036 {
                                 self.init(stack,
-                                    title: internetError,
+                                    title: code == 7036 ? userCancelled : internetError,
                                   message: responseError.hint ?? internetMessage,
                                requestUrl: responseError.requestUrl,
                                  copyable: false,
