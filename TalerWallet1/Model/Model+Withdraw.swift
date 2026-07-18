@@ -105,11 +105,13 @@ struct WithdrawExchangeResponse: Decodable {
 fileprivate struct PrepareWithdrawExchange: WalletBackendFormattedRequest {
     typealias Response = WithdrawExchangeResponse
     func operation() -> String { "prepareWithdrawExchange" }
-    func args() -> Args { Args(talerUri: talerUri) }
+    func args() -> Args { Args(talerUri: talerUri,
+                          progressToken: "WithdrawExchange") }
 
     var talerUri: String
     struct Args: Encodable {
         var talerUri: String
+        var progressToken: String?
     }
 }
 // MARK: -
@@ -163,7 +165,8 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     func operation() -> String { "getExchangeTos" }
     func args() -> Args { Args(exchangeBaseUrl: baseUrl,
                                 acceptedFormat: acceptedFormat,
-                                acceptLanguage: acceptLanguage) }
+                                acceptLanguage: acceptLanguage,
+                                 progressToken: "ExchangeTos") }
     var baseUrl: String
     var acceptedFormat: [String]?
     var acceptLanguage: String?
@@ -171,6 +174,7 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
         var exchangeBaseUrl: String
         var acceptedFormat: [String]?
         var acceptLanguage: String?
+        var progressToken: String
     }
 }
 /// A request to mark an exchange's terms of service as accepted.
@@ -235,7 +239,7 @@ fileprivate struct AcceptManualWithdrawal: WalletBackendFormattedRequest {
 extension WalletModel {
     /// load withdraw-exchange details. Networking involved
     nonisolated func prepareWithdrawExchange(_ talerUri: String,
-                                                 viewHandles: Bool = false)
+                                            viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
         let response = try await sendRequest(request, viewHandles: viewHandles)
