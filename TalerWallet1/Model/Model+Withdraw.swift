@@ -243,10 +243,10 @@ extension WalletModel {
     }
 
     /// load withdrawal details. Networking involved
-    nonisolated func getWithdrawalDetailsForUri(_ talerUri: String,
+    nonisolated func prepareBankIntegratedWithdrawal(_ talerUri: String,
                                                viewHandles: Bool = false)
-      async throws -> WithdrawUriInfoResponse {
-        let request = GetWithdrawalDetailsForURI(talerUri: talerUri)
+      async throws -> PrepareBankIntegratedWithdrawalResponse {
+        let request = PrepareBankIntegratedWithdrawal(talerUri: talerUri)
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
