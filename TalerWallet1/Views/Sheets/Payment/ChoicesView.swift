@@ -30,21 +30,6 @@ struct ChoicesView: View, Sendable {
                 .foregroundColor(Color.clear)
         }
     }
-    func description(_ contractChoice: ContractChoice) -> String? {
-        if let i18nDict = contractChoice.descriptionI18n {
-            if !i18nDict.isEmpty {
-                for code in Locale.preferredLanguageCodes {
-                    if let descI18n = i18nDict[code] {
-                        return descI18n
-                    }
-                }
-            }
-        }
-        if let desc = contractChoice.description {
-            return desc
-        }
-        return nil
-    }
 
     var body: some View {
         ForEach(choiceTriple, id: \.1) { choice in
@@ -86,7 +71,7 @@ struct ChoicesView: View, Sendable {
                     }
                 } header: {
                     if showHeader {
-                        if let description = description(contractChoice) {
+                        if let description = contractChoice.descI18n {
                             Text(description)
                 }   }   }
             }

@@ -154,10 +154,10 @@ struct ContractChoice: Codable, Hashable {
         case inputs, outputs
     }
 
-    func description(_ preferredLanguageCodes: [String]) -> String? {
+    var descI18n: String? {
         if let i18nDict = self.descriptionI18n {
             if !i18nDict.isEmpty {
-                for code in preferredLanguageCodes {
+                for code in Locale.preferredLanguageCodes {
                     if let descI18n = i18nDict[code] {
                         return descI18n
                     }

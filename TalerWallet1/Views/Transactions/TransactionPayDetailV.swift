@@ -1,5 +1,5 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
@@ -82,8 +82,8 @@ struct TransactionPayDetailV: View {
                     if let choices = contractTerms.choices,
                        choices.indices.contains(choiceIndex) {
                         let choice = choices[choiceIndex]
-//                        Text(choice.text)
-
+                        Text(choice.descI18n ?? "Index: \(choiceIndex)")   // should never happen
+                            .talerFont(.body)
                     }
                 }
             }
