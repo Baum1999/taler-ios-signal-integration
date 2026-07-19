@@ -31,10 +31,11 @@ struct NFCbutton: View {
     let action: () -> Void
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
+
     var body: some View {
         let logo = nfcLogo
-        let nfcButton = Button(minimalistic ? "\(logo)"
-                                            : "\(logo) \(title)") {
+        Button(minimalistic ? "\(logo)"
+                            : "\(logo) \(title)") {
             action()
         }.buttonStyle(TalerButtonStyle(type: .prominent))
     }
@@ -81,13 +82,8 @@ struct BorderWithHCE<Content: View>: View {
                                 .padding(.vertical, -4)
                         }
 //                        let screenWidth = UIScreen.screenWidth
-                        GradientBorder(size: size + 20.0,
-                                      color: WalletColors().primaryAccent,
-                                 background: WalletColors().backgroundColor)
-                        {
-                            content()
-                                .onTapGesture(count: 1) { tagEmulation.emulateTag(talerURI) }
-                        }
+                        content()
+                            .onTapGesture(count: 1) { tagEmulation.emulateTag(talerURI) }
                         hint
                     } else {
                         NFCbutton(title: String(localized: "Start NFC")) {
@@ -111,13 +107,11 @@ struct BorderWithHCE<Content: View>: View {
                     }
                 }
             }
+        } else if showQRcode {
+            content()
+            hint
         } else {
-            if showQRcode {
-                content()
-                hint
-            } else {
-                qrButton.buttonStyle(TalerButtonStyle(type: .prominent))
-            }
+            qrButton.buttonStyle(TalerButtonStyle(type: .prominent))
         }
     }
 }
