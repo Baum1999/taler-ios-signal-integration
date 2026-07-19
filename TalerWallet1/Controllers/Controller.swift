@@ -555,11 +555,13 @@ class Controller: ObservableObject {
                 defaultExchanges = await model.getDefaultExchanges(stage: stage)
                 if stage, let talerOps = defaultExchanges.first {
                     let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
-                    let stageExc = DefaultExchange(talerUri: stageURI,
-                                                   currency: talerOps.currency,
-                                               currencySpec: talerOps.currencySpec
-                    )
-                    defaultExchanges.insert(stageExc, at: 0)
+                    if talerOps.talerUri != stageURI {
+                        let stageExc = DefaultExchange(talerUri: stageURI,
+                                                       currency: talerOps.currency,
+                                                   currencySpec: talerOps.currencySpec
+                        )
+                        defaultExchanges.insert(stageExc, at: 0)
+                    }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.backendState = .ready              // dismiss the launch animation
