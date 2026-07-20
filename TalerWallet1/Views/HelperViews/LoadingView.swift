@@ -19,6 +19,11 @@ struct LoadingView: View {
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State private var rotationEnabled = true
     @State private var showAlert: Bool = false
@@ -28,12 +33,24 @@ struct LoadingView: View {
     private var dismissButton: some View {
         Button("Cancel", role: .cancel) {
             showAlert = false
-            if let lastError = controller.lastProgressError {
-                controller.lastProgressError = nil
-                Task {
-                    try await model.cancelProgressToken(lastError.operation,
-                                                 token: lastError.progressToken)
-            }   }
+            if let token = controller.progressToken {
+                controller.progressToken = nil
+                if let operation = controller.progressOperation {
+                    controller.progressOperation = nil
+//                  model.setError(nil)
+                    Task {
+                        try await model.cancelProgressToken(operation, token: token)
+                        if !developerMode {
+                            model.setError(nil)
+                        }
+                    }
+                }
+                if !developerMode {
+                    dismissTop(stack.push())
+                }
+            } else {
+                dismissTop(stack.push())
+            }
         }
             .buttonStyle(TalerButtonStyle(type: .bordered, disabled: false))
             .padding(.horizontal)
