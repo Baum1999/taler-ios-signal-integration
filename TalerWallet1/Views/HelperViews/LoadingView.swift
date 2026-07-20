@@ -62,12 +62,14 @@ struct LoadingView: View {
             withAnimation {
                 showAlert = false
             }
-            if let lastError = controller.lastProgressError {
-                controller.lastProgressError = nil
-                Task {
-                    try await model.retryProgressTokenNow(lastError.operation,
-                                                   token: lastError.progressToken)
-            }   }
+            if let token = controller.progressToken {
+                if let operation = controller.progressOperation {
+                    controller.lastProgressError = nil
+                    Task {
+                        try await model.retryProgressTokenNow(operation, token: token)
+                    }
+                }
+            }
         }
             .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled))
             .padding(.horizontal)
