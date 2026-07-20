@@ -214,7 +214,8 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
     var operation: String { "createDepositGroup" }
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
                                  restrictScope: scope,
-                                        amount: amount) }
+                                        amount: amount,
+                                 progressToken: depositPaytoUri) }
     var depositPaytoUri: String
     var scope: ScopeInfo
     var amount: Amount
@@ -222,6 +223,7 @@ fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
         var depositPaytoUri: String
         var restrictScope: ScopeInfo
         var amount: Amount
+        var progressToken: String
     }
 }
 extension WalletModel {
@@ -229,6 +231,9 @@ extension WalletModel {
     nonisolated func createDepositGroup(_ depositPaytoUri: String, scope: ScopeInfo, amount: Amount, viewHandles: Bool = false)
       async throws -> DepositGroupResult {
         let request = CreateDepositGroup(depositPaytoUri: depositPaytoUri, scope: scope, amount: amount)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = depositPaytoUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
