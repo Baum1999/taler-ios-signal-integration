@@ -88,11 +88,12 @@ struct PrepareBankIntegratedWithdrawalResponse: Decodable {
 fileprivate struct PrepareBankIntegratedWithdrawal: WalletBackendFormattedRequest {
     typealias Response = PrepareBankIntegratedWithdrawalResponse
     var operation: String { "prepareBankIntegratedWithdrawal" }
-    func args() -> Args { Args(talerWithdrawUri: talerUri) }
-
+    func args() -> Args { Args(talerWithdrawUri: talerUri,
+                                  progressToken: talerUri) }    // TODO: lastPathComponent
     var talerUri: String
     struct Args: Encodable {
         var talerWithdrawUri: String
+        var progressToken: String?
     }
 }
 // MARK: -
@@ -253,6 +254,9 @@ extension WalletModel {
                                                viewHandles: Bool = false)
       async throws -> PrepareBankIntegratedWithdrawalResponse {
         let request = PrepareBankIntegratedWithdrawal(talerUri: talerUri)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = talerUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
