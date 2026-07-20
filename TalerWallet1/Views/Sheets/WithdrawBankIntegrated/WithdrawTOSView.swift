@@ -28,9 +28,9 @@ struct WithdrawTOSView: View {
     func loadToS(_ language: String) async {
         if let exchangeBaseUrl {
             let acceptedFormat: [String] = [MARKDOWN, PLAINTEXT]      // MARKDOWN, HTML, PLAINTEXT
-            if let someTOS = try? await model.loadExchangeTermsOfService(exchangeBaseUrl,
-                                                         acceptedFormat: acceptedFormat,
-                                                         acceptLanguage: language) {
+            if let someTOS = try? await model.getExchangeTos(exchangeBaseUrl,
+                                              acceptedFormat: acceptedFormat,
+                                              acceptLanguage: language) {
                 exchangeTOS = someTOS
             }
         } else {

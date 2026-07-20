@@ -166,7 +166,7 @@ fileprivate struct GetExchangeTermsOfService: WalletBackendFormattedRequest {
     func args() -> Args { Args(exchangeBaseUrl: baseUrl,
                                 acceptedFormat: acceptedFormat,
                                 acceptLanguage: acceptLanguage,
-                                 progressToken: "ExchangeTos") }
+                                 progressToken: baseUrl) }
     var baseUrl: String
     var acceptedFormat: [String]?
     var acceptLanguage: String?
@@ -271,14 +271,17 @@ extension WalletModel {
         return response
     }
 
-    nonisolated func loadExchangeTermsOfService(_ baseUrl: String,
-                                           acceptedFormat: [String],
-                                           acceptLanguage: String,
-                                              viewHandles: Bool = false)
+    nonisolated func getExchangeTos(_ baseUrl: String,
+                               acceptedFormat: [String],
+                               acceptLanguage: String,
+                                  viewHandles: Bool = false)
       async throws -> ExchangeTermsOfService {
         let request = GetExchangeTermsOfService(baseUrl: baseUrl,
                                          acceptedFormat: acceptedFormat,
                                          acceptLanguage: acceptLanguage)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = baseUrl
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
