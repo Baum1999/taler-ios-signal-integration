@@ -134,19 +134,19 @@ final class WalletModel: ObservableObject, Sendable {
     func sendRequest<T: WalletBackendFormattedRequest> (_ request: T, viewHandles: Bool = false, asJSON: Bool = false)
       async throws -> T.Response {    // T for any Thread
 #if !DEBUG
-        logger.log("sending: \(request.operation(), privacy: .public)")
+        logger.log("sending: \(request.operation, privacy: .public)")
 #endif
         let sendTime = Date.now
         do {
             let (response, id) = try await WalletCore.shared.sendFormattedRequest(request, asJSON: asJSON)
 #if !DEBUG
             let timeUsed = Date.now - sendTime
-            logger.log("received: \(request.operation(), privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
+            logger.log("received: \(request.operation, privacy: .public) (\(id, privacy: .public)) after \(timeUsed.milliseconds, privacy: .public) ms")
 #endif
             return response
         } catch {       // rethrows
             let timeUsed = Date.now - sendTime
-            logger.error("\(request.operation(), privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
+            logger.error("\(request.operation, privacy: .public) failed after \(timeUsed.milliseconds, privacy: .public) ms\n\(error, privacy: .public)")
             if !viewHandles {
                 // TODO: symlog + controller sound
                 await setError(error)
@@ -159,7 +159,7 @@ final class WalletModel: ObservableObject, Sendable {
 /// A request to tell wallet-core about the network.
 fileprivate struct ApplicationResumedRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { "hintApplicationResumed" }
+    var operation: String { "hintApplicationResumed" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
@@ -167,7 +167,7 @@ fileprivate struct ApplicationResumedRequest: WalletBackendFormattedRequest {
 
 fileprivate struct NetworkAvailabilityRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { "hintNetworkAvailability" }
+    var operation: String { "hintNetworkAvailability" }
     func args() -> Args { Args(isNetworkAvailable: isNetworkAvailable) }
 
     var isNetworkAvailable: Bool
@@ -193,7 +193,7 @@ extension WalletModel {
 /// A request to cancel a wallet transaction by token.
 fileprivate struct CancelProgressToken: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { "cancelProgressToken" }
+    var operation: String { "cancelProgressToken" }
     func args() -> Args { Args(operation: op, progressToken: token) }
 
     var op: String
@@ -207,7 +207,7 @@ fileprivate struct CancelProgressToken: WalletBackendFormattedRequest {
 /// A request to retry a wallet transaction by token.
 fileprivate struct RetryProgressTokenNow: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { "retryProgressTokenNow" }
+    var operation: String { "retryProgressTokenNow" }
     func args() -> Args { Args(operation: op, progressToken: token) }
 
     var op: String
@@ -222,7 +222,7 @@ fileprivate struct RetryProgressTokenNow: WalletBackendFormattedRequest {
 /// A request to get a wallet transaction by ID.
 fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
     typealias Response = TalerTransaction
-    func operation() -> String { "getTransactionById" }
+    var operation: String { "getTransactionById" }
     func args() -> Args { Args(transactionId: txId, includeContractTerms: inclTerms) }
 
     var txId: String
@@ -236,7 +236,7 @@ fileprivate struct GetTransactionById: WalletBackendFormattedRequest {
 
 fileprivate struct JSONTransactionById: WalletBackendFormattedRequest {
     typealias Response = String
-    func operation() -> String { "getTransactionById" }
+    var operation: String { "getTransactionById" }
     func args() -> Args { Args(transactionId: transactionId, includeContractTerms: includeContractTerms) }
 
     var transactionId: String
@@ -315,7 +315,7 @@ fileprivate struct Config: Encodable {
 fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
     var setTesting: Bool
 
-    func operation() -> String { "setWalletRunConfig" }
+    var operation: String { "setWalletRunConfig" }
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
@@ -346,7 +346,7 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
     var persistentStoragePath: String
     var setTesting: Bool
 
-    func operation() -> String { "init" }
+    var operation: String { "init" }
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
@@ -473,7 +473,7 @@ extension WalletModel {
 // MARK: -
 ///  A request to reset Wallet-core to a virgin DB. WILL DESTROY ALL COINS
 fileprivate struct ResetRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "clearDb" }
+    var operation: String { "clearDb" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
@@ -489,7 +489,7 @@ extension WalletModel {
 }
 // MARK: -
 fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
-    func operation() -> String { "exportDbToFile" }
+    var operation: String { "exportDbToFile" }
     func args() -> Args { Args(directory: directory, stem: stem, forceFormat: "json") }
 
     var directory: String
@@ -505,7 +505,7 @@ fileprivate struct ExportDbToFile: WalletBackendFormattedRequest {
 }
 
 fileprivate struct ImportDbFromFile: WalletBackendFormattedRequest {
-    func operation() -> String { "importDbFromFile" }
+    var operation: String { "importDbFromFile" }
     func args() -> Args { Args(path: path ) }
 
     var path: String
@@ -516,14 +516,14 @@ fileprivate struct ImportDbFromFile: WalletBackendFormattedRequest {
 }
 
 fileprivate struct GetDiagnostics: WalletBackendFormattedRequest {
-    func operation() -> String { "getDiagnostics" }
+    var operation: String { "getDiagnostics" }
     func args() -> Args { Args() }
     struct Args: Encodable {}                           // no arguments needed
     typealias Response = String
 }
 
 fileprivate struct GetPerformanceStats: WalletBackendFormattedRequest {
-    func operation() -> String { "testingGetPerformanceStats" }
+    var operation: String { "testingGetPerformanceStats" }
     func args() -> Args { Args() }
     struct Args: Encodable {}                           // no arguments needed
     typealias Response = String
@@ -563,7 +563,7 @@ extension WalletModel {
 }
 // MARK: -
 fileprivate struct DevExperimentRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "applyDevExperiment" }
+    var operation: String { "applyDevExperiment" }
     func args() -> Args { Args(devExperimentUri: talerUri) }
 
     var talerUri: String

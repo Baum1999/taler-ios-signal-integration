@@ -13,7 +13,7 @@ import SymLog
 // MARK: -
 /// A request to list the backend's currently pending operations.
 fileprivate struct GetPendingOperations: WalletBackendFormattedRequest {
-    func operation() -> String { "getPendingOperations" }
+    var operation: String { "getPendingOperations" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}

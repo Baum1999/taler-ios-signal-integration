@@ -15,7 +15,7 @@ fileprivate let MERCHANTAUTHTOKEN = "secret-token:sandbox"
 /// A request to add a test balance to the wallet.
 fileprivate struct WithdrawTestBalanceRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "withdrawTestBalance" }
+    var operation: String { "withdrawTestBalance" }
     func args() -> Args { Args(amount: amount,
                    corebankApiBaseUrl: bankBaseUrl,
                     useForeignAccount: true,
@@ -49,7 +49,7 @@ extension WalletModel {
 /// A request to add a test balance to the wallet.
 fileprivate struct RunIntegrationTest: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
+    var operation: String { newVersion ? "runIntegrationTestV2" : "runIntegrationTest" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
                             corebankApiBaseUrl: bankBaseUrl,
                                merchantBaseUrl: merchantBaseUrl,
@@ -96,7 +96,7 @@ extension WalletModel {
 /// A request to add a test balance to the wallet.
 fileprivate struct InfiniteTransactionLoop: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "testingInfiniteTransactionLoop" }
+    var operation: String { "testingInfiniteTransactionLoop" }
     func args() -> Args { Args(delayMs: delayMs,
                                shouldFetch: shouldFetch)
     }

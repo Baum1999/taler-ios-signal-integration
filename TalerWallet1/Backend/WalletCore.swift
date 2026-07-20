@@ -522,7 +522,7 @@ extension WalletCore {
 extension WalletCore {
     /// send async requests to wallet-core
     func sendFormattedRequest<T: WalletBackendFormattedRequest> (_ request: T, asJSON: Bool = false) async throws -> (T.Response, UInt) {
-        let reqData = WalletBackendRequest(operation: request.operation(),
+        let reqData = WalletBackendRequest(operation: request.operation,
                                            args: AnyEncodable(request.args()))
         return try await withCheckedThrowingContinuation { continuation in
             encodeAndSend(reqData) { [self] requestId, timeSent, message, result, error in
@@ -570,7 +570,7 @@ extension WalletCore {
                     }
                 } else if let error {
                     // TODO: WALLET_CORE_REQUEST_CANCELLED
-                    lastError = FullError(type: "error", operation: request.operation(), id: requestId, error: error)
+                    lastError = FullError(type: "error", operation: request.operation, id: requestId, error: error)
                     err = WalletBackendError.walletCoreError(error)
                 } else {        // both result and error are nil
                     lastError = nil

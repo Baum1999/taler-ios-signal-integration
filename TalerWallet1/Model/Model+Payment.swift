@@ -310,7 +310,7 @@ struct PreparePayResult2: Codable {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
-    func operation() -> String { "preparePayForUriV2" }
+    var operation: String { "preparePayForUriV2" }
     func args() -> Args { Args(talerPayUri: talerPayUri) }
 
     var talerPayUri: String
@@ -413,7 +413,7 @@ struct ChoicesForPayment: Codable {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct GetChoicesForPayment: WalletBackendFormattedRequest {
     typealias Response = ChoicesForPayment
-    func operation() -> String { "getChoicesForPayment" }
+    var operation: String { "getChoicesForPayment" }
     func args() -> Args { Args(transactionId: transactionId, forcedCoinSel: forcedCoinSel) }
 
     var transactionId: String
@@ -431,7 +431,7 @@ struct TemplateParams: Codable {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
-    func operation() -> String { "preparePayForTemplateV2" }
+    var operation: String { "preparePayForTemplateV2" }
     func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams) }
 
     var talerPayTemplateUri: String
@@ -552,7 +552,7 @@ struct WalletTemplateDetails: Codable {
 /// A request to get an exchange's payment contract terms.
 fileprivate struct CheckPayForTemplate: WalletBackendFormattedRequest {
     typealias Response = WalletTemplateDetails
-    func operation() -> String { "checkPayForTemplate" }
+    var operation: String { "checkPayForTemplate" }
     func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri) }
 
     var talerPayTemplateUri: String
@@ -571,7 +571,7 @@ struct ConfirmPayResult: Decodable {
 /// A request to get an exchange's payment details.
 fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
-    func operation() -> String { "confirmPay" }
+    var operation: String { "confirmPay" }
     func args() -> Args { Args(transactionId: transactionId, noWait: true,
                                  choiceIndex: choiceIndex) }
     var transactionId: String

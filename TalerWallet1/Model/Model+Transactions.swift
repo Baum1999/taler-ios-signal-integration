@@ -23,30 +23,6 @@ extension WalletModel {
     }
 }
 // MARK: -
-/// A request to get the transactions in the wallet's history.
-fileprivate struct GetTransactions: WalletBackendFormattedRequest {
-    func operation() -> String { "getTransactions" }
-    func args() -> Args { Args(scopeInfo: scopeInfo, currency: currency, search: search,
-                                    sort: sort, filterByState: filterByState, includeRefreshes: includeRefreshes) }
-    var scopeInfo: ScopeInfo?
-    var currency: String?
-    var search: String?
-    var sort: String?
-    var filterByState: TransactionStateFilter?
-    var includeRefreshes: Bool?
-    struct Args: Encodable {
-        var scopeInfo: ScopeInfo?
-        var currency: String?
-        var search: String?
-        var sort: String?
-        var filterByState: TransactionStateFilter?
-        var includeRefreshes: Bool?
-    }
-
-    struct Response: Decodable {                    // list of transactions
-        var transactions: [TalerTransaction]
-    }
-}
 enum TransactionStateFilter: String, Codable {
     case done
     case final              // done, aborted, expired, ...
@@ -60,7 +36,7 @@ struct TransactionOffset: Codable {
 }
 /// A request to get the transactions in the wallet's history.
 fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
-    func operation() -> String { "getTransactionsV2" }
+    var operation: String { "getTransactionsV2" }
     func args() -> Args { Args(scopeInfo: scope,
                            filterByState: filterByState,
                         includeRefreshes: includeRefreshes,
@@ -89,7 +65,7 @@ fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
 /// A request to abort a wallet transaction by ID.
 struct AbortTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "abortTransaction" }
+    var operation: String { "abortTransaction" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
@@ -100,7 +76,7 @@ struct AbortTransaction: WalletBackendFormattedRequest {
 /// A request to delete a wallet transaction by ID.
 struct DeleteTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "deleteTransaction" }
+    var operation: String { "deleteTransaction" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
@@ -111,7 +87,7 @@ struct DeleteTransaction: WalletBackendFormattedRequest {
 /// A request to delete a wallet transaction by ID.
 struct FailTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "failTransaction" }
+    var operation: String { "failTransaction" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
@@ -122,7 +98,7 @@ struct FailTransaction: WalletBackendFormattedRequest {
 /// A request to suspend a wallet transaction by ID.
 struct SuspendTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "suspendTransaction" }
+    var operation: String { "suspendTransaction" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
@@ -133,7 +109,7 @@ struct SuspendTransaction: WalletBackendFormattedRequest {
 /// A request to suspend a wallet transaction by ID.
 struct ResumeTransaction: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "resumeTransaction" }
+    var operation: String { "resumeTransaction" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String

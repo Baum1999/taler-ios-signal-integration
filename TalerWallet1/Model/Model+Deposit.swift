@@ -25,7 +25,7 @@ struct ValidateIbanResult: Codable {
 /// A request to validate an IBAN.
 fileprivate struct ValidateIban: WalletBackendFormattedRequest {
     typealias Response = ValidateIbanResult
-    func operation() -> String { "validateIban" }
+    var operation: String { "validateIban" }
     func args() -> Args { Args(iban: iban) }
 
     var iban: String
@@ -60,7 +60,7 @@ struct IbanAccountFieldToPaytoResponse: Codable {
 /// A request to convert an IBAN/BBAN to PayTo.
 fileprivate struct IbanAccountFieldToPayto: WalletBackendFormattedRequest {
     typealias Response = IbanAccountFieldToPaytoResponse
-    func operation() -> String { "convertIbanAccountFieldToPayto" }
+    var operation: String { "convertIbanAccountFieldToPayto" }
     func args() -> Args { Args(value: value, currency: currency) }
 
     var value: String
@@ -79,7 +79,7 @@ struct IbanPaytoToAccountFieldResponse: Codable {
 /// A request to convert PayTo to IBAN/BBAN.
 fileprivate struct IbanPaytoToAccountField: WalletBackendFormattedRequest {
     typealias Response = IbanPaytoToAccountFieldResponse
-    func operation() -> String { "convertIbanPaytoToAccountField" }
+    var operation: String { "convertIbanPaytoToAccountField" }
     func args() -> Args { Args(paytoUri: paytoUri) }
 
     var paytoUri: String
@@ -119,7 +119,7 @@ struct DepositWireTypesResponse: Codable {
 /// A request to get wire types that can be used for a deposit operation.
 fileprivate struct DepositWireTypes: WalletBackendFormattedRequest {
     typealias Response = DepositWireTypesResponse
-    func operation() -> String { "getDepositWireTypes" }
+    var operation: String { "getDepositWireTypes" }
     func args() -> Args { Args(currency: currency, scopeInfo: scopeInfo) }
 
     var currency: String?
@@ -147,7 +147,7 @@ fileprivate struct AmountResponse: Codable {
 }
 fileprivate struct GetMaxDepositAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
-    func operation() -> String { "getMaxDepositAmount" }
+    var operation: String { "getMaxDepositAmount" }
     func args() -> Args { Args(currency: scope.currency, restrictScope: scope) }
 
     var scope: ScopeInfo
@@ -182,7 +182,7 @@ struct CheckDepositResponse: Codable {
 /// A request to get an exchange's deposit contract terms.
 fileprivate struct CheckDeposit: WalletBackendFormattedRequest {
     typealias Response = CheckDepositResponse
-    func operation() -> String { "checkDeposit" }
+    var operation: String { "checkDeposit" }
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
                                         amount: amount,
                           clientCancellationId: "cancel") }
@@ -211,7 +211,7 @@ struct DepositGroupResult: Decodable {
 /// A request to deposit some coins.
 fileprivate struct CreateDepositGroup: WalletBackendFormattedRequest {
     typealias Response = DepositGroupResult
-    func operation() -> String { "createDepositGroup" }
+    var operation: String { "createDepositGroup" }
     func args() -> Args { Args(depositPaytoUri: depositPaytoUri,
                                  restrictScope: scope,
                                         amount: amount) }
@@ -258,7 +258,7 @@ struct BankAccounts: Decodable, Hashable {
 /// A request to list known bank accounts.
 fileprivate struct ListBankAccounts: WalletBackendFormattedRequest {
     typealias Response = BankAccounts
-    func operation() -> String { "listBankAccounts" }
+    var operation: String { "listBankAccounts" }
     func args() -> Args { Args(currency: currency) }
     var currency: String?
     struct Args: Encodable {
@@ -278,7 +278,7 @@ extension WalletModel {
 /// A request to get one bank account.
 fileprivate struct GetBankAccountById: WalletBackendFormattedRequest {
     typealias Response = BankAccountsInfo
-    func operation() -> String { "getBankAccountById" }
+    var operation: String { "getBankAccountById" }
     func args() -> Args { Args(bankAccountId: bankAccountId) }
     var bankAccountId: String
     struct Args: Encodable {
@@ -301,7 +301,7 @@ struct AddBankAccountResponse: Decodable, Hashable {
 /// A request to add a known bank account.
 fileprivate struct AddBankAccount: WalletBackendFormattedRequest {
     typealias Response = AddBankAccountResponse
-    func operation() -> String { "addBankAccount" }
+    var operation: String { "addBankAccount" }
     func args() -> Args { Args(paytoUri: uri,
                                   label: label,
                    replaceBankAccountId: replace) }
@@ -330,7 +330,7 @@ extension WalletModel {
 /// A request to forget a known bank account.
 fileprivate struct ForgetBankAccount: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "forgetBankAccount" }
+    var operation: String { "forgetBankAccount" }
     func args() -> Args { Args(bankAccountId: accountId) }
     var accountId: String
     struct Args: Encodable {

@@ -10,7 +10,7 @@ import Foundation
 // MARK: -
 /// A request to prepare a refund with an obtained URI
 struct StartRefundURIRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "startRefundQueryForUri" }
+    var operation: String { "startRefundQueryForUri" }
     func args() -> Args { Args(talerRefundUri: talerRefundUri) }
 
     var talerRefundUri: String
@@ -27,7 +27,7 @@ struct StartRefundURIRequest: WalletBackendFormattedRequest {
 
 /// A request to prepare a refund with a transactionID
 struct StartRefundQueryRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "startRefundQuery" }
+    var operation: String { "startRefundQuery" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String

@@ -23,7 +23,7 @@ protocol WalletBackendFormattedRequest {
     associatedtype Args: Encodable
     associatedtype Response: Decodable
     
-    func operation() -> String
+    var operation: String { get }
     func args() -> Args
 }
 // MARK: -
@@ -156,7 +156,7 @@ struct OrderShortInfo: Codable {
 // MARK: -
 /// A request to force update an exchange.
 struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "addRequest" }
+    var operation: String { "addRequest" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
     var exchangeBaseUrl: String
@@ -169,7 +169,7 @@ struct WalletBackendForceUpdateRequest: WalletBackendFormattedRequest {
 
 /// A request to deposit funds.
 struct WalletBackendCreateDepositGroupRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "createDepositGroup" }
+    var operation: String { "createDepositGroup" }
     func args() -> Args { Args(depositPayToUri: depositePayToUri, amount: amount) }
 
     var depositePayToUri: String
@@ -187,7 +187,7 @@ struct WalletBackendCreateDepositGroupRequest: WalletBackendFormattedRequest {
 
 /// A request to get information about a payment request.
 struct WalletBackendPreparePayRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "preparePay" }
+    var operation: String { "preparePay" }
     func args() -> Args { Args(talerPayUri: talerPayUri) }
     var talerPayUri: String
 
@@ -210,7 +210,7 @@ struct IntegrationTestArgs: Codable {
 
 /// A request to run a basic integration test.
 struct WalletBackendRunIntegrationTestRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "runIntegrationTest" }
+    var operation: String { "runIntegrationTest" }
     func args() -> Args { integrationTestArgs }
     var integrationTestArgs: IntegrationTestArgs
     
@@ -228,7 +228,7 @@ struct TestPayArgs: Codable {
 
 /// A request to make a test payment.
 struct WalletBackendTestPayRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "testPay" }
+    var operation: String { "testPay" }
     func args() -> Args { testPayArgs }
 
     var testPayArgs: TestPayArgs
@@ -251,7 +251,7 @@ struct Coin: Codable {
 
 /// A request to dump all coins to JSON.
 struct WalletBackendDumpCoinsRequest: WalletBackendFormattedRequest {
-    func operation() -> String { "dumpCoins" }
+    var operation: String { "dumpCoins" }
     func args() -> Args { Args() }
     struct Args: Encodable { }
 
@@ -264,7 +264,7 @@ struct WalletBackendDumpCoinsRequest: WalletBackendFormattedRequest {
 /// A request to suspend or unsuspend a coin.
 struct WalletBackendSuspendCoinRequest: WalletBackendFormattedRequest {
     struct Response: Decodable {}
-    func operation() -> String { "setCoinSuspended" }
+    var operation: String { "setCoinSuspended" }
     func args() -> Args { Args(coinPub: coinPub, suspended: suspended) }
 
     var coinPub: String

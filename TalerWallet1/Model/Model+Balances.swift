@@ -75,7 +75,7 @@ struct BalancesResponse: Decodable, Hashable, Sendable {
 
 /// A request to get the balances held in the wallet.
 fileprivate struct Balances: WalletBackendFormattedRequest {
-    func operation() -> String { "getBalances" }
+    var operation: String { "getBalances" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
@@ -116,7 +116,7 @@ struct DiscountsResponse: Decodable, Hashable, Sendable {
 
 /// A request to get the discounts held in the wallet.
 fileprivate struct ListDiscounts: WalletBackendFormattedRequest {
-    func operation() -> String { "listDiscounts" }
+    var operation: String { "listDiscounts" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
@@ -126,7 +126,7 @@ fileprivate struct ListDiscounts: WalletBackendFormattedRequest {
 /// A request to delete a discount by ID.
 struct DeleteDiscount: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "deleteDiscount" }
+    var operation: String { "deleteDiscount" }
     func args() -> Args { Args(tokenFamilyHash: tokenFamilyHash) }
 
     var tokenFamilyHash: String
@@ -141,7 +141,7 @@ struct SubscriptionsResponse: Decodable, Hashable, Sendable {
 
 /// A request to get the subscriptions held in the wallet.
 fileprivate struct ListSubscriptions: WalletBackendFormattedRequest {
-    func operation() -> String { "listSubscriptions" }
+    var operation: String { "listSubscriptions" }
     func args() -> Args { Args() }
 
     struct Args: Encodable {}                           // no arguments needed
@@ -151,7 +151,7 @@ fileprivate struct ListSubscriptions: WalletBackendFormattedRequest {
 /// A request to delete a subscription by ID.
 struct DeleteSubscription: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "deleteSubscription" }
+    var operation: String { "deleteSubscription" }
     func args() -> Args { Args(tokenFamilyHash: tokenFamilyHash) }
 
     var tokenFamilyHash: String

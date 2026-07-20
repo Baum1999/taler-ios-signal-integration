@@ -27,7 +27,7 @@ fileprivate struct AmountResponse: Codable {
 }
 fileprivate struct GetMaxPeerPushDebitAmount: WalletBackendFormattedRequest {
     typealias Response = AmountResponse
-    func operation() -> String { "getMaxPeerPushDebitAmount" }
+    var operation: String { "getMaxPeerPushDebitAmount" }
     func args() -> Args { Args(currency: scope.currency,
                           restrictScope: scope) }
     var scope: ScopeInfo
@@ -55,7 +55,7 @@ struct CheckPeerPushDebitResponse: Codable {
 }
 fileprivate struct CheckPeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPushDebitResponse
-    func operation() -> String { "checkPeerPushDebit" }
+    var operation: String { "checkPeerPushDebit" }
     func args() -> Args { Args(amount: amount,
                         restrictScope: scope,
                  clientCancellationId: "cancel") }
@@ -89,7 +89,7 @@ struct InitiatePeerPushDebitResponse: Codable {
 }
 fileprivate struct InitiatePeerPushDebit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPushDebitResponse
-    func operation() -> String { "initiatePeerPushDebit" }
+    var operation: String { "initiatePeerPushDebit" }
     func args() -> Args { Args(restrictScope: scope,
                         partialContractTerms: terms) }
     var scope: ScopeInfo
@@ -120,7 +120,7 @@ struct CheckPeerPullCreditResponse: Codable {
 }
 fileprivate struct CheckPeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = CheckPeerPullCreditResponse
-    func operation() -> String { "checkPeerPullCredit" }
+    var operation: String { "checkPeerPullCredit" }
     func args() -> Args { Args(amount: amount,
                         restrictScope: scope,
                       exchangeBaseUrl: scope?.url,
@@ -152,7 +152,7 @@ struct InitiatePeerPullCreditResponse: Codable {
 }
 fileprivate struct InitiatePeerPullCredit: WalletBackendFormattedRequest {
     typealias Response = InitiatePeerPullCreditResponse
-    func operation() -> String { "initiatePeerPullCredit" }
+    var operation: String { "initiatePeerPullCredit" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl,
                           partialContractTerms: partialContractTerms) }
     var exchangeBaseUrl: String?
@@ -187,7 +187,7 @@ struct PreparePeerPushCreditResponse: Codable {
 }
 fileprivate struct PreparePeerPushCredit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPushCreditResponse
-    func operation() -> String { "preparePeerPushCredit" }
+    var operation: String { "preparePeerPushCredit" }
     func args() -> Args { Args(talerUri: talerUri) }
 
     var talerUri: String
@@ -208,7 +208,7 @@ extension WalletModel {
 /// Accept an incoming peer push payment
 fileprivate struct AcceptPeerPushCredit: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "confirmPeerPushCredit" } // should be "acceptPeerPushCredit"
+    var operation: String { "confirmPeerPushCredit" } // should be "acceptPeerPushCredit"
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String
@@ -239,7 +239,7 @@ struct PreparePeerPullDebitResponse: Codable {
 }
 fileprivate struct PreparePeerPullDebit: WalletBackendFormattedRequest {
     typealias Response = PreparePeerPullDebitResponse
-    func operation() -> String { "preparePeerPullDebit" }
+    var operation: String { "preparePeerPullDebit" }
     func args() -> Args { Args(talerUri: talerUri) }
 
     var talerUri: String
@@ -260,7 +260,7 @@ extension WalletModel {
 /// Confirm incoming peer push request(invoice) and pay
 fileprivate struct ConfirmPeerPullDebit: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
-    func operation() -> String { "confirmPeerPullDebit" }
+    var operation: String { "confirmPeerPullDebit" }
     func args() -> Args { Args(transactionId: transactionId) }
 
     var transactionId: String

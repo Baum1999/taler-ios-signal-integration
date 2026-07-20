@@ -142,7 +142,7 @@ extension DefaultExchange: Identifiable {
 // MARK: -
 /// A request to list exchanges names for a currency
 fileprivate struct ListExchanges: WalletBackendFormattedRequest {
-    func operation() -> String { "listExchanges" }
+    var operation: String { "listExchanges" }
     func args() -> Args { Args(filterByScope: scope, filterByType: filterByType, filterByExchangeEntryStatus: filterByStatus) }
 
     var scope: ScopeInfo?
@@ -159,7 +159,7 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 }
 
 fileprivate struct DefaultExchanges: WalletBackendFormattedRequest {
-    func operation() -> String { "getDefaultExchanges" }
+    var operation: String { "getDefaultExchanges" }
     func args() -> Args { Args() }
 //    func args() -> Args { Args(stage: stage) }
 
@@ -175,7 +175,7 @@ fileprivate struct DefaultExchanges: WalletBackendFormattedRequest {
 
 /// A request to get info for one exchange.
 fileprivate struct GetExchangeByUrl: WalletBackendFormattedRequest {
-    func operation() -> String { "getExchangeEntryByUrl" }
+    var operation: String { "getExchangeEntryByUrl" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl) }
 
     var exchangeBaseUrl: String
@@ -188,7 +188,7 @@ fileprivate struct GetExchangeByUrl: WalletBackendFormattedRequest {
 
 /// A request to update a single exchange.
 fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
-    func operation() -> String { "updateExchangeEntry" }
+    var operation: String { "updateExchangeEntry" }
 //    func args() -> Args { Args(scopeInfo: scopeInfo) }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, force: force) }
 
@@ -204,7 +204,7 @@ fileprivate struct UpdateExchange: WalletBackendFormattedRequest {
 
 /// A request to add an exchange.
 fileprivate struct AddExchange: WalletBackendFormattedRequest {
-    func operation() -> String { "addExchange" }
+    var operation: String { "addExchange" }
     func args() -> Args { Args(uri: uri, allowCompletion: true) }
 
     var uri: String
@@ -217,7 +217,7 @@ fileprivate struct AddExchange: WalletBackendFormattedRequest {
 
 /// A request to delete an exchange.
 fileprivate struct DeleteExchange: WalletBackendFormattedRequest {
-    func operation() -> String { "deleteExchange" }
+    var operation: String { "deleteExchange" }
     func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, purge: purge) }
 
     var exchangeBaseUrl: String
@@ -231,7 +231,7 @@ fileprivate struct DeleteExchange: WalletBackendFormattedRequest {
 
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
-    func operation() -> String { "getCurrencySpecification" }
+    var operation: String { "getCurrencySpecification" }
     func args() -> Args { Args(scope: scope) }
 
     var scope: ScopeInfo
@@ -244,7 +244,7 @@ fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
 }
 /// A request to make a currency "global"
 fileprivate struct AddGlobalCurrency: WalletBackendFormattedRequest {
-    func operation() -> String { "addGlobalCurrencyExchange" }
+    var operation: String { "addGlobalCurrencyExchange" }
     func args() -> Args { Args(currency: currency,
                         exchangeBaseUrl: baseUrl,
                       exchangeMasterPub: masterPub) }
@@ -259,7 +259,7 @@ fileprivate struct AddGlobalCurrency: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
 }
 fileprivate struct RmvGlobalCurrency: WalletBackendFormattedRequest {
-    func operation() -> String { "removeGlobalCurrencyExchange" }
+    var operation: String { "removeGlobalCurrencyExchange" }
     func args() -> Args { Args(currency: currency,
                         exchangeBaseUrl: baseUrl,
                       exchangeMasterPub: masterPub) }
