@@ -106,8 +106,7 @@ fileprivate struct PrepareWithdrawExchange: WalletBackendFormattedRequest {
     typealias Response = WithdrawExchangeResponse
     var operation: String { "prepareWithdrawExchange" }
     func args() -> Args { Args(talerUri: talerUri,
-                          progressToken: "WithdrawExchange") }
-
+                          progressToken: talerUri) }
     var talerUri: String
     struct Args: Encodable {
         var talerUri: String
@@ -242,6 +241,9 @@ extension WalletModel {
                                             viewHandles: Bool = false)
       async throws -> WithdrawExchangeResponse {
         let request = PrepareWithdrawExchange(talerUri: talerUri)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = talerUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }

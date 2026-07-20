@@ -139,8 +139,6 @@ class Controller: ObservableObject {
     @Published var slowConnection: Bool = false
     @Published var stalledConnection: Bool = false
     @Published var errorConnection: Bool = false
-    @Published var lastProgressError: RequestProgressError? = nil
-    @Published var lastProgressPhase: RequestProgressPhase? = nil
     @Published var oimModeActive: Bool = false
     @Published var oimSheetActive: Bool = false
     @Published var diagnosticModeEnabled: Bool = false
@@ -165,6 +163,11 @@ class Controller: ObservableObject {
     var exchanges: [Exchange]
     var messageForSheet: String? = nil
     var isLoadingChoices: String? = nil
+
+    var lastProgressError: RequestProgressError? = nil
+    var lastProgressPhase: RequestProgressPhase? = nil
+    var progressOperation: String? = nil
+    var progressToken: String? = nil
 
     private let monitor = NWPathMonitor()
 
