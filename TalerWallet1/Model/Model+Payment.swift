@@ -436,13 +436,15 @@ struct TemplateParams: Codable {
 fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
     var operation: String { "preparePayForTemplateV2" }
-    func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams) }
+    func args() -> Args { Args(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams,
+                               progressToken: talerPayTemplateUri) }
 
     var talerPayTemplateUri: String
     var templateParams: TemplateParams
     struct Args: Encodable {
         var talerPayTemplateUri: String
         var templateParams: TemplateParams
+        var progressToken: String
     }
 }
 // MARK: -
@@ -616,6 +618,9 @@ extension WalletModel {
       async throws -> PreparePayResult2 {
         let templateParams = TemplateParams(amount: amount, summary: summary)
         let request = PreparePayForTemplateRequest(talerPayTemplateUri: talerPayTemplateUri, templateParams: templateParams)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = talerPayTemplateUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
