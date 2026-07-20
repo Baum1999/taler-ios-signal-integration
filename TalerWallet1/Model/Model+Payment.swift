@@ -311,11 +311,12 @@ struct PreparePayResult2: Codable {
 fileprivate struct PreparePayForUri: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
     var operation: String { "preparePayForUriV2" }
-    func args() -> Args { Args(talerPayUri: talerPayUri) }
+    func args() -> Args { Args(talerPayUri: talerPayUri, progressToken: talerPayUri ) }
 
     var talerPayUri: String
     struct Args: Encodable {
         var talerPayUri: String
+        var progressToken: String
     }
 }
 
@@ -326,6 +327,7 @@ struct ValueContribution: Codable {
     var value: Amount
     var contribution: Amount
 }
+
 struct ForcedCoinSel: Codable {
     var coins: [ValueContribution]
 }
@@ -341,6 +343,7 @@ enum TokenAvailabilityHint: String, Codable {
     case merchantUntrusted = "merchant-untrusted"
 
 }
+
 struct TokenFamily: Codable, Hashable, Equatable {
     var causeHint: TokenAvailabilityHint?
     var requested: Int
@@ -428,6 +431,7 @@ struct TemplateParams: Codable {
     let amount: Amount?                     // Total amount payable
     let summary: String?                    // Human-readable short summary of the contract
 }
+
 /// A request to get an exchange's payment contract terms.
 fileprivate struct PreparePayForTemplateRequest: WalletBackendFormattedRequest {
     typealias Response = PreparePayResult2
@@ -524,6 +528,7 @@ struct OrderOutput: Codable {   // TODO: ContractOutput
         case validAt = "valid_at"
     }
 }
+
 struct OrderOutputTaxReceipt: Codable {
     let type: String                            // "tax-receipt"
 }
@@ -533,6 +538,7 @@ struct TemplateContractDetailsDefaults: Codable {
     let currency: String?               // Default currency when unspecified: any if nil (e.g. donations)
     let amount: Amount?                 // Default amount when editable: unspecified if nil
 }
+
 struct TalerMerchantTemplateDetails: Codable {
     let templateContract: TemplateContractDetails
     let editableDefaults: TemplateContractDetailsDefaults?
@@ -568,6 +574,7 @@ struct ConfirmPayResult: Decodable {
     var transactionId: String
     var lastError: TalerErrorDetail?                // might, but only if type==pending
 }
+
 /// A request to get an exchange's payment details.
 fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
@@ -623,6 +630,9 @@ extension WalletModel {
     nonisolated func preparePayForUri(_ talerPayUri: String, viewHandles: Bool = false)
       async throws -> PreparePayResult2 {
         let request = PreparePayForUri(talerPayUri: talerPayUri)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = talerPayUri
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
