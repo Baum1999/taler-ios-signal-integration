@@ -89,6 +89,15 @@ struct PaymentInsufficientBalanceDetails: Codable, Hashable {
     var perExchange: [String : InsufficientBalanceDetailsPerExchange]
 }
 // MARK: -
+struct TalerErrorInfo: Codable, Hashable {
+    /// Numeric error code defined in the GANA gnu-taler-error-codes registry.
+    var code: Int
+    // all other fields are optional:
+    var when: Timestamp?
+    /// English description of the error code.
+    var hint: String?
+    var message: String?
+}
 struct TalerErrorDetail: Codable, Hashable {
     /// Numeric error code defined in the GANA gnu-taler-error-codes registry.
     var code: Int
@@ -105,6 +114,7 @@ struct TalerErrorDetail: Codable, Hashable {
     var requestMethod: String?
     var httpStatusCode: Int?
     var stack: String?
+    var errorResponse: TalerErrorInfo?
 
     var insufficientBalanceDetails: PaymentInsufficientBalanceDetails?
 }
