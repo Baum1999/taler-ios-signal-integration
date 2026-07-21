@@ -199,7 +199,8 @@ struct AcceptWithdrawalResponse: Decodable {
 fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest {
     typealias Response = AcceptWithdrawalResponse
     var operation: String { "acceptBankIntegratedWithdrawal" }
-    func args() -> Args { Args(talerWithdrawUri: talerUri, exchangeBaseUrl: baseUrl, amount: amount, restrictAge: restrictAge) }
+    func args() -> Args { Args(talerWithdrawUri: talerUri, exchangeBaseUrl: baseUrl,
+                               amount: amount, restrictAge: restrictAge, progressToken: talerUri) }
 
     var talerUri: String
     var baseUrl: String
@@ -211,6 +212,7 @@ fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest
         var exchangeBaseUrl: String
         var amount: Amount?
         var restrictAge: Int?
+        var progressToken: String
     }
 }
 // MARK: -
@@ -300,8 +302,11 @@ extension WalletModel {
                                            restrictAge: Int?,
                                            viewHandles: Bool = false)
       async throws -> AcceptWithdrawalResponse? {
-          let request = AcceptBankIntegratedWithdrawal(talerUri: withdrawURL, baseUrl: baseUrl,
-                                                         amount: amount, restrictAge: restrictAge)
+        let request = AcceptBankIntegratedWithdrawal(talerUri: withdrawURL, baseUrl: baseUrl,
+                                                       amount: amount, restrictAge: restrictAge)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = withdrawURL
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
