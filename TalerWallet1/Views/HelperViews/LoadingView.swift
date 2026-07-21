@@ -29,6 +29,7 @@ struct LoadingView: View {
     @State private var showAlert: Bool = false
     @State private var disabled: Bool = false
     @State private var isFinished: Bool? = false
+    @State private var isCopied: Bool = false
 
     private var dismissButton: some View {
         Button("Cancel", role: .cancel) {
@@ -75,6 +76,20 @@ struct LoadingView: View {
             .padding(.horizontal)
     }
 
+    fileprivate func toJSON(_ lastError: RequestProgressError?) -> String? {
+        if let lastError {
+            do {
+                let jsonData = try JSONEncoder().encode(lastError)
+                if let jsonString = String(data: jsonData, encoding: .utf8) {
+                    return jsonString
+                }
+            } catch {        // JSON encoding of error failed / should never happen
+                return "Couldn't encode error"
+            }
+        }
+        return nil
+    }
+
     var body: some View {
         let view = VStack(alignment: .center) {
             if showAlert {
@@ -85,6 +100,12 @@ struct LoadingView: View {
                     .padding(.vertical)
                 Text(lastError?.error.hint ?? fallback)
                     .talerFont(.body)
+                if developerMode {
+                    if let jsonString = toJSON(lastError) {
+                        CopyButton(textToCopy: jsonString, isCopied: $isCopied, title: "Copy JSON")
+                            .padding(.vertical)
+                    }
+                }
                 Spacer()
                 if let lastPhase = controller.lastProgressPhase {
                     if lastPhase.phase == .stalled {
