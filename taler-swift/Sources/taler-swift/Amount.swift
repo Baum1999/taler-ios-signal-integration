@@ -262,6 +262,9 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
             if let dotIndex = amountStr.firstIndex(of: ".") {
                 let integerStr = String(amountStr[..<dotIndex])
                 let fractionStr = String(amountStr[string.index(dotIndex, offsetBy: 1)...])
+                if (fractionStr.isEmpty) {   // reject a trailing separator, e.g. "EUR:1."
+                    throw AmountError.invalidStringRepresentation
+                }
                 if (fractionStr.count > Self.fractionalBaseDigits) {
                     throw AmountError.invalidStringRepresentation
                 }
