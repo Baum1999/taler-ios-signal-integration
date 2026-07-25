@@ -153,7 +153,14 @@ extension WalletCore {
                         symLog.log(message)
                     }
                 } else {
-                    symLog.log(message)
+                    if #available(iOS 16.0, *) {
+                        let regex = #/"data:image(.*?)"/#
+                        let modString = message.replacing(regex, with: "\"XXX\"")
+                        symLog.log(modString)
+                    } else {
+                        symLog.log(message)
+                    }
+
                 }
             }
 //            logger.info(result)   TODO: log result
