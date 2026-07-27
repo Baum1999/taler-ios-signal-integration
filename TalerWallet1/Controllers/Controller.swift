@@ -143,7 +143,7 @@ class Controller: ObservableObject {
     @Published var oimSheetActive: Bool = false
     @Published var diagnosticModeEnabled: Bool = false
     @Published var talerURI: URL? = nil
-    @Published var choicesForPayment: ChoicesForPayment? = nil
+    @Published var choicesTuple: ChoicesTuple = (nil, nil)
 
     @AppStorage("useHaptics") var useHaptics: Bool = true   // extension mustn't define this, so it must be here
     @AppStorage("playSounds") var playSounds: Bool = false
@@ -399,7 +399,7 @@ class Controller: ObservableObject {
         if isLoadingChoices != txId {
             isLoadingChoices = txId
             if let choiceResponse = try? await model.getChoicesForPayment(txId) {
-                choicesForPayment = choiceResponse
+                choicesTuple = (txId, choiceResponse)
                 isLoadingChoices = nil
                 return true
             } else {

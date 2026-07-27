@@ -151,7 +151,8 @@ struct PaymentTransactionView: View {
         if common.isDialog {        // show payment confirmation dialog
             MerchantHeader(terms: details.contractTerms)
 
-            if let choicesForPayment = controller.choicesForPayment {
+            let choicesTuple = controller.choicesTuple
+            if let txId = choicesTuple.0, let choicesForPayment = choicesTuple.1 {
                 if let (choices, showHeader) = choicesForPayment.choiceTriple() {
                     let hasAutomatic = choicesForPayment.automaticExecution ?? false
                     let automaticIndex = hasAutomatic ? choicesForPayment.automaticExecutableIndex : nil

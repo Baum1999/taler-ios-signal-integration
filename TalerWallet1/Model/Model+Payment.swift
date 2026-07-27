@@ -370,6 +370,7 @@ struct ChoiceSelectionDetail: Codable, Hashable, Sendable {
 }
 
 typealias ChoiceTriple = (ChoiceSelectionDetail, ContractChoice, Int)
+typealias ChoicesTuple = (String?, ChoicesForPayment?)        // txID
 
 struct ChoicesForPayment: Codable {
     var choices: [ChoiceSelectionDetail]

@@ -125,7 +125,9 @@ struct TransactionTypeDetail: View {
                     .task(id: common.txState.hashValue) {
                         let state = common.txState
                         if common.isDialog {
-                            if controller.choicesForPayment == nil {
+                            let choicesTuple = controller.choicesTuple
+                            let choicesForPayment = choicesTuple.1
+                            if choicesTuple.0 != common.transactionId || choicesForPayment == nil {
                                 symLog.log("❗️❗️ task: \(common.txState)")
                                 await controller.loadChoicesForPayment(stack.push(),model,
                                                                        txId: common.transactionId)
