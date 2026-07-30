@@ -50,7 +50,9 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
     }
     
     public func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
-        print("didDetectNDEFs", messages)
+        // Do not add code in this function.
+        // This method isn't called when you provide `reader(_:didDetect:)`.
+//        print("didDetectNDEFs", messages)
     }
 
     public func readerSession(_ session: NFCNDEFReaderSession, didDetect tags: [NFCNDEFTag]) {
@@ -87,7 +89,7 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
                     session.invalidate()
                 case .readWrite:
                     let payload: NFCNDEFPayload?
-                    if self.type == "T" {
+                    if self.type == "T" {       // TAG
                         payload = NFCNDEFPayload.init(
                             format: .nfcWellKnown,
                             type: Data("\(self.type)".utf8),
@@ -116,6 +118,7 @@ public class NFCWriter: NSObject, ObservableObject, NFCNDEFReaderSessionDelegate
     }
     
     public func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
+        // TODO: change statusLabel
     }
 
     public func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
