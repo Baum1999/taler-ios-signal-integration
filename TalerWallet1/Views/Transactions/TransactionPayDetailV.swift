@@ -29,10 +29,13 @@ struct TransactionPayDetailV: View {
                     .listRowSeparator(.hidden)
                 let totp = Text(posConfirmation)
                     .talerFont(.title1)
+                let posConfirmationViaNfc = details.posConfirmationViaNfc
+                let isPaying = common.isDialog   // We are ALWAYS already finished with the tx
                 if #available(iOS 17.7, *) {
-                    BorderWithNFC(totpString: posConfirmation, nfcHint: true, size: 250, scanHints: nil) {
-                        totp
-                    }
+                    BorderWithNFC(totpString: posConfirmation, nfcHint: true,
+                                automaticNfc: isPaying ? posConfirmationViaNfc : false,
+                                        size: 250, scanHints: nil
+                    ) { totp }
                 } else {
                     totp
                 }

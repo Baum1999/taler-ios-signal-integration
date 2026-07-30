@@ -126,6 +126,7 @@ extension FixedWidthInteger {
 struct BorderWithNFC<Content: View>: View {
     let totpString: String                    // might be a TOTP code
     let nfcHint: Bool
+    let automaticNfc: Bool?
     let size: CGFloat
     let scanHints: (String, String)?
     var content: () -> Content
@@ -134,6 +135,7 @@ struct BorderWithNFC<Content: View>: View {
     @AppStorage("showQRauto16") var showQRauto16: Bool = true   // iOS 16 doesn't have NFC emulation
     @AppStorage("showQRauto17") var showQRauto17: Bool = false  // but iOS 17 does
     @State private var showTOTP = false
+    @State private var didWriteTOTP = false
     @ObservedObject var nfcWriter = NFCWriter()
 
     var lockImage: Image {             // 􂆉 "lock.badge.clock"
@@ -178,7 +180,16 @@ struct BorderWithNFC<Content: View>: View {
 
         if true {   // TODO: check for write capabilities
             VStack {
-                if nfcHint {    // QRCodeDetailView
+                if let automaticNfc, automaticNfc, !didWriteTOTP {
+                    Text("\(nfcLogo) Point your iPhone to the NFC device")
+                        .tint(WalletColors().primaryAccent)
+                        .task {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                                nfcWriter.write(totpData)
+                                didWriteTOTP = true
+                            }
+                        }
+                } else if nfcHint {    // QRCodeDetailView
                     if showTOTP {
                         if !minimalistic {
                             Text("\(nfcLogo) Tap for NFC")
