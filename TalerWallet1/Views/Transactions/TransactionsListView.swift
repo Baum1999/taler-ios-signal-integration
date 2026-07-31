@@ -186,7 +186,7 @@ struct TransactionsArraySection: View {
                                                  transactionId: transaction.id,
                                                        talerTX: $talerTX,
                                                       navTitle: nil,
-                                                       hasDone: false,
+                                                       hasDone: false,          // just show an old tx
                                                       showDone: nil,
                                                            url: nil,
                                                    withActions: true)

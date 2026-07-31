@@ -58,7 +58,7 @@ struct WithdrawAcceptDone: View {
                                transactionId: transactionId,
                                      talerTX: $talerTX,
                                     navTitle: navTitle,
-                                     hasDone: true,
+                                     hasDone: true,             // conclude withdrawal
                                     showDone: nil,
                                          url: nil,
                                  withActions: false)

@@ -70,7 +70,7 @@ struct PaymentView: View, Sendable {
                                transactionId: txId,
                                      talerTX: $talerTX,
                                     navTitle: nil,
-                                     hasDone: true,
+                                     hasDone: true,                 // conclude payment
                                     showDone: .prominent,
                                          url: url,
                                  withActions: false)

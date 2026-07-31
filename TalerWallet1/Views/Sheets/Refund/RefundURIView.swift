@@ -17,8 +17,6 @@ struct RefundURIView: View {
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
 
-//    let navTitle = String(localized: "Refund", comment:"receive refund")
-
     @State var refundTransactionId: String? = nil
 //    @State var transaction: Transaction?
 //    @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
@@ -43,13 +41,13 @@ struct RefundURIView: View {
 
                 TransactionSummaryList(stack: stack.push(),
 //                                     scope: scope,
-                            transactionId: refundTransactionId,
-                                  talerTX: $talerTX,
-                                 navTitle: nil,   // navTitle,
-                                  hasDone: true,
-                                 showDone: .prominent,
-                                      url: nil,
-                              withActions: true)
+                               transactionId: refundTransactionId,
+                                     talerTX: $talerTX,
+                                    navTitle: nil,
+                                     hasDone: true,             // conclude refund
+                                    showDone: .prominent,
+                                         url: nil,
+                                 withActions: true)
 //                .task(id: controller.currencyTicker) {
 //                    currencyInfo = controller.info2(for: currency, controller.currencyTicker)
 //                }

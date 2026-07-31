@@ -86,7 +86,7 @@ struct P2PReadyV: View {
                                transactionId: transactionId,
                                      talerTX: $talerTX,
                                     navTitle: navTitle,
-                                     hasDone: true,
+                                     hasDone: true,             // conclude p2p
                                     showDone: .prominent,
                                          url: nil,
                                  withActions: false)

@@ -31,9 +31,9 @@ struct TransactionSummaryList: View {
     let transactionId: String
     @Binding var talerTX: TalerTransaction
     let navTitle: String?
-    let hasDone: Bool
+    let hasDone: Bool                       // false: just old tx, true: the conclusion of an transaction
     let showDone: TalerButtonStyleType?
-    let url: URL?           // the scanned talerURL from PaymentView
+    let url: URL?                           // the scanned talerURL from PaymentView
     let withActions: Bool
 
     @EnvironmentObject private var controller: Controller

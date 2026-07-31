@@ -55,7 +55,7 @@ struct ManualWithdrawDone: View {
                                transactionId: transactionId,
                                      talerTX: $talerTX,
                                     navTitle: navTitle,
-                                     hasDone: true,
+                                     hasDone: true,             // conclude withdrawal
                                     showDone: .prominent,
                                          url: nil,
                                  withActions: false)
