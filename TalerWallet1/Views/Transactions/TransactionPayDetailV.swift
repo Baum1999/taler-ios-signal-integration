@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct TransactionPayDetailV: View {
+    let stack: CallStack
     let paymentTx: PaymentTransaction
 
 #if DEBUG

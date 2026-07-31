@@ -30,6 +30,7 @@ struct TransactionTimeline: View {
 
 @MainActor
 struct TransactionRowView: View {
+    let stack: CallStack
     private let symLog = SymLogV(0)
     let logger: Logger?
     let scope: ScopeInfo
@@ -364,8 +365,8 @@ struct TransactionRow_Previews: PreviewProvider {
         var body: some View {
             let scope = ScopeInfo.zero(DEMOCURRENCY)
             List {
-                TransactionRowView(logger: nil, scope: scope, transaction: withdrawal)
-                TransactionRowView(logger: nil, scope: scope, transaction: payment)
+                TransactionRowView(stack: CallStack(), logger: nil, scope: scope, transaction: withdrawal)
+                TransactionRowView(stack: CallStack(), logger: nil, scope: scope, transaction: payment)
             }
         }
     }

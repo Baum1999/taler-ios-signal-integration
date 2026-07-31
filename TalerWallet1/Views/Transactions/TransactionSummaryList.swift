@@ -193,7 +193,8 @@ struct PaymentTransactionView: View {
                 }
             }
         } else { // show finished payment
-            TransactionPayDetailV(paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
+            TransactionPayDetailV(stack: stack.push(),
+                              paymentTx: paymentTransaction)    // TODO: details.info.merchant.name
             ThreeAmountsSheet(stack: stack.push(),
                               scope: scope,
                              common: common,

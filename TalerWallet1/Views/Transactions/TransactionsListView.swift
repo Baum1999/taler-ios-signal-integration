@@ -191,7 +191,8 @@ struct TransactionsArraySection: View {
                                                            url: nil,
                                                    withActions: true)
                 let row = NavigationLink { destination } label: {
-                    TransactionRowView(logger: logger, scope: scope, transaction: transaction)
+                    TransactionRowView(stack: stack.push("TransactionsArraySection"),
+                                      logger: logger, scope: scope, transaction: transaction)
                         .padding(.leading, ICONLEADING)
                         .padding(.trailing, CGFloat(padd))
                 }.id(transaction.id)
