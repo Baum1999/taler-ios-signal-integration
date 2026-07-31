@@ -47,7 +47,7 @@ struct P2pReceiveURIView: View {
     @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
-        if let ppResponse = try? await model.preparePeerPushCredit(url.absoluteString) {
+        if let ppResponse = try? await model.preparePeerPushCredit(url.trimmedString) {
             let baseUrl = ppResponse.exchangeBaseUrl
             exchange = try? await model.getExchangeByUrl(url: baseUrl)
             await controller.checkCurrencyInfo(for: baseUrl, model: model)

@@ -26,7 +26,7 @@ struct DevExperimentView: View {
     private func viewDidLoad() async {
         symLog.log(".task \(url.absoluteString)")
         try? await model.setConfig(setTesting: true)
-        try? await model.devExperimentT(url.absoluteString)
+        try? await model.devExperimentT(url.trimmedString)
         finished = true
     }
 
@@ -34,7 +34,7 @@ struct DevExperimentView: View {
         if finished {
             VStack {
                 Spacer()
-                Text(url.absoluteString)
+                Text(url.trimmedString)
                     .talerFont(.title2)
                     .padding()
                 Spacer()
@@ -45,7 +45,7 @@ struct DevExperimentView: View {
                 Spacer()
             }
         } else {
-            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.absoluteString)
+            LoadingView(stack: stack.push(), scopeInfo: nil, message: url.trimmedString)
                 .task { await viewDidLoad() }
         }
     }

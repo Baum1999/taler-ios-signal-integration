@@ -30,7 +30,7 @@ struct WithdrawAcceptDone: View {
         if let exchangeBaseUrl {
             // TODO: restrictAge
             if let result = try? await model.acceptBankIntWithdrawal(exchangeBaseUrl,
-                                                         withdrawURL: url.absoluteString,
+                                                         withdrawURL: url.trimmedString,
                                                               amount: amountToTransfer,
                                                          restrictAge: nil
             ) {

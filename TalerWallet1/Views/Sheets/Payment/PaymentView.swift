@@ -46,7 +46,7 @@ struct PaymentView: View, Sendable {
     private func viewDidLoad() async {
 //        symLog.log(".task")
         if template {
-            if let templateResponse = try? await model.preparePayForTemplate(url.absoluteString,
+            if let templateResponse = try? await model.preparePayForTemplate(url.trimmedString,
                                                    amount: amountIsEditable ? amountToTransfer : nil,
                                                  summary: summaryIsEditable ? summary : nil) {
                 txId = templateResponse.transactionId
@@ -55,7 +55,7 @@ struct PaymentView: View, Sendable {
 //                controller.updateAmount(raw, forSaved: url)
             }
         } else {
-            if let payResponse = try? await model.preparePayForUri(url.absoluteString) {
+            if let payResponse = try? await model.preparePayForUri(url.trimmedString) {
                 txId = payResponse.transactionId
 //                let raw = payResponse.amountRaw
 //                controller.updateAmount(raw, forSaved: url)       // TODO: update scanned URL

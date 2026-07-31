@@ -55,7 +55,7 @@ struct ExchangeListView: View {
                         .navigationBarItems(trailing: plusButton)
                         .task {
                             if let newUrl = url {
-                                newExchange = newUrl.absoluteString
+                                newExchange = newUrl.trimmedString
                                 showAlert = true
                                 url = nil
                             }

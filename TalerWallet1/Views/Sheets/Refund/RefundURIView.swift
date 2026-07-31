@@ -25,7 +25,7 @@ struct RefundURIView: View {
     @MainActor
     private func viewDidLoad() async {
         symLog.log(".task")
-        if let result = try? await model.startRefundForUri(url: url.absoluteString) {
+        if let result = try? await model.startRefundForUri(url: url.trimmedString) {
             refundTransactionId = result
 //            transaction = try? await model.getTransactionById(result)
         }

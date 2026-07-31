@@ -40,7 +40,7 @@ struct QRSheet: View {
                         // TODO: error logging?
                         ErrorView(stack.push(),
                                   title: String(localized: "Scanned QR is no talerURI"),
-                                message: scannedURL.absoluteString,
+                                message: scannedURL.trimmedString,
                                copyable: true) {
                             scannedSomething = false
                             dismissTop(stack.push())

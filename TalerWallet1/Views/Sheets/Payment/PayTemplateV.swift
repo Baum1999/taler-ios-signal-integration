@@ -62,7 +62,7 @@ struct PayTemplateV: View {
 
     @MainActor
     private func viewDidLoad() async {
-        if let response = try? await model.checkPayForTemplate(url.absoluteString) {
+        if let response = try? await model.checkPayForTemplate(url.trimmedString) {
             let details = response.templateDetails
             let defaults = details.editableDefaults     // might be nil, or its fields might be nil
                                                         // TODO: let the user choose a currency from supportedCurrencies[]

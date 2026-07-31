@@ -96,7 +96,7 @@ class QuickDataTask: NSObject {
     func run() {
         if let responseCb, let responseCbCls {
             let method = self.request.httpMethod ?? "Unknown"
-            let url = self.request.url?.absoluteString ?? EMPTYSTRING
+            let url = self.request.url?.trimmedString ?? EMPTYSTRING
             logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
             dataTask = urlSession.dataTask(with: request) { [self] data, response, error in
                 if let response = response as? HTTPURLResponse {

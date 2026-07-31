@@ -16,6 +16,10 @@ extension URL {
         self.init(string: "\(string)")!
     }
 
+    var trimmedString: String {
+        absoluteString.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var cyclos: String? {
         /// "payto://cyclos/" host ["/" fpath] "/" account-id [ "?" opts ]
         if scheme == "payto", let host = host {

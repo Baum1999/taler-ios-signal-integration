@@ -30,7 +30,7 @@ struct P2pPayURIView: View {
     private func viewDidLoad() async {
         do {
             symLog.log(".task")
-            let response = try? await model.preparePeerPullDebit(url.absoluteString)
+            let response = try? await model.preparePeerPullDebit(url.trimmedString)
             if let response {
                 controller.removeURL(url)       // tx is now saved by wallet-core
             }
