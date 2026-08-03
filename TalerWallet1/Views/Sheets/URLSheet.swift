@@ -37,8 +37,8 @@ struct URLSheet: View {
 
 //  don't need  @MainActor  here
     private func passUrlOnce() {
-        if urlToOpen != nil {
-            passedURL = urlToOpen
+        if let url = urlToOpen {
+            passedURL = url
             symLog.log("❗️ passed urlToOpen:  \(String(describing: urlToOpen?.absoluteString))")
             urlCommand = controller.urlCommand(urlToOpen!, stack: stack.push())
             urlToOpen = nil     // make sure we don't get this a second time
