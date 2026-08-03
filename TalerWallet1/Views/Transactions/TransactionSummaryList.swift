@@ -51,7 +51,6 @@ struct TransactionSummaryList: View {
 #endif
 
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
-    @State private var isCopied: Bool = false
     @State private var ignoreThis: Bool = false
     @State private var didDelete: Bool = false
     @State var jsonTransaction: String = EMPTYSTRING
@@ -185,7 +184,7 @@ struct TransactionSummaryList: View {
         }   // TODO: a11y for tx icon
         if developerMode {
             if !jsonTransaction.isEmpty {
-                CopyButton(textToCopy: jsonTransaction, isCopied: $isCopied, title: "Copy JSON")
+                CopyButton(jsonTransaction, title: "Copy JSON")
             }
         }
     }

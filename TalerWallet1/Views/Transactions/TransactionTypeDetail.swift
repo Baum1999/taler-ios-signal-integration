@@ -27,7 +27,6 @@ struct TransactionTypeDetail: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @State private var rotationEnabled = true
     @State private var ignoreAccept: Bool = false         // accept could be set by OIM to trigger accept
-    @State private var isCopied: Bool = false
 
     func refreshFee(input: Amount, output: Amount) -> Amount? {
         do {
@@ -191,7 +190,7 @@ struct TransactionTypeDetail: View {
                                 }
                                 let stackStr = error.stack ?? EMPTYSTRING
                                 let errorStr = error.hint + "\n" + stackStr
-                                CopyButton(textToCopy: errorStr, isCopied: $isCopied, vertical: true)
+                                CopyButton(errorStr, vertical: true)
                                     .accessibilityLabel(Text("Copy the error", comment: "a11y"))
                                     .disabled(false)
                             }

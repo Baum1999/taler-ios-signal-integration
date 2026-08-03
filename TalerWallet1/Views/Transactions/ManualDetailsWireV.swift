@@ -99,7 +99,7 @@ struct RestrictionsV: View {
 // MARK: -
 struct PayeeZip: View {
     let receiverZip: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -107,12 +107,12 @@ struct PayeeZip: View {
                     .talerFont(.subheadline)
                 Text(receiverZip)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Zip code", comment: "a11y"))
-            CopyButton(textToCopy: receiverZip, isCopied: $isCopied, vertical: true)
+            CopyButton(receiverZip, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the zip code", comment: "a11y"))
                 .disabled(false)
         }   .padding(.top, -8)
@@ -121,7 +121,7 @@ struct PayeeZip: View {
 // MARK: -
 struct PayeeReceiver: View {
     let receiverStr: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -129,12 +129,12 @@ struct PayeeReceiver: View {
                     .talerFont(.subheadline)
                 Text(receiverStr)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Recipient", comment: "a11y"))
-            CopyButton(textToCopy: receiverStr, isCopied: $isCopied, vertical: true)
+            CopyButton(receiverStr, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the recipient", comment: "a11y"))
                 .disabled(false)
         }   .padding(.top, -8)
@@ -143,7 +143,7 @@ struct PayeeReceiver: View {
 // MARK: -
 struct PayeeTown: View {
     let receiverTown: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -151,12 +151,12 @@ struct PayeeTown: View {
                     .talerFont(.subheadline)
                 Text(receiverTown)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("City", comment: "a11y"))
-            CopyButton(textToCopy: receiverTown, isCopied: $isCopied, vertical: true)
+            CopyButton(receiverTown, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the city", comment: "a11y"))
                 .disabled(false)
         }   .padding(.top, -8)
@@ -165,15 +165,15 @@ struct PayeeTown: View {
 // MARK: -
 struct Cryptocode: View {
     let cryptoString: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             Text(cryptoString)
-                .foregroundStyle(isCopied ? Color.secondary : .primary)
+                .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                 .monospacedDigit()
                 .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            CopyButton(textToCopy: cryptoString, isCopied: $isCopied, vertical: true)
+            CopyButton(cryptoString, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
                 .disabled(false)
         }   .padding(.leading)
@@ -182,7 +182,7 @@ struct Cryptocode: View {
 // MARK: -
 struct IbanCode: View {
     let iban: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -190,12 +190,12 @@ struct IbanCode: View {
                     .talerFont(.subheadline)
                 Text(iban)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("IBAN of the recipient", comment: "a11y")) // TODO: BBAN
-            CopyButton(textToCopy: iban, isCopied: $isCopied, vertical: true)
+            CopyButton(iban, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the IBAN", comment: "a11y"))         // TODO: BBAN
                 .disabled(false)
         } //  .padding(.top, -8)
@@ -205,7 +205,7 @@ struct IbanCode: View {
 struct AmountCode: View {
     let amountStr: (String, String)
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -214,12 +214,12 @@ struct AmountCode: View {
                 Text(amountStr.0)
                     .accessibilityLabel(amountStr.1)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Amount to transfer", comment: "a11y"))
-            CopyButton(textToCopy: amountValue, isCopied: $isCopied, vertical: true)
+            CopyButton(amountValue, isCopied: $isCopied, vertical: true)
             // only digits + separator, no currency name or symbol
                 .accessibilityLabel(Text("Copy the amount", comment: "a11y"))
                 .disabled(false)
@@ -229,7 +229,7 @@ struct AmountCode: View {
 // MARK: -
 struct XTalerCode: View {
     let xTaler: String
-    @State var isCopied: Bool = false
+    @State var isCopied: Bool? = false
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -237,12 +237,12 @@ struct XTalerCode: View {
                     .talerFont(.subheadline)
                 Text(xTaler)
                     .monospacedDigit()
-                    .foregroundStyle(isCopied ? Color.secondary : .primary)
+                    .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                     .padding(.leading)
             }   .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("account of the recipient", comment: "a11y"))
-            CopyButton(textToCopy: xTaler, isCopied: $isCopied, vertical: true)
+            CopyButton(xTaler, isCopied: $isCopied, vertical: true)
                 .accessibilityLabel(Text("Copy the account", comment: "a11y"))
                 .disabled(false)
         }   .padding(.top, -8)

@@ -144,7 +144,7 @@ struct ManualDetailsV: View {
                                 let minTitle = String(localized: "Share PayTo", comment: "mini")
                                 let textToShare = String("\(payto)\n\nIBAN: \(iban)\nReceiver: \(receiverStr)\nAmount: \(amountStr.1)\nSubject: \(details.reservePub)")
             let _ = print(textToShare)
-                                ShareButton(textToShare: textToShare, title: minimalistic ? minTitle : title)
+                                ShareButton(textToShare, title: minimalistic ? minTitle : title)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .accessibilityLabel(Text(title))
                                     .disabled(false)

@@ -72,8 +72,6 @@ struct ErrorView: View {
     var requestUrl: String? = nil
     var copyable: Bool
 
-    @State var isCopied: Bool = false
-
     var onDismiss: () -> Void
 
     init(_ stack: CallStack, title: String, message: String? = nil,
@@ -167,7 +165,7 @@ struct ErrorView: View {
                             Text(message).font(.system(.body, design: .monospaced))
                         }
 
-                        CopyButton(textToCopy: message, isCopied: $isCopied, vertical: false)
+                        CopyButton(message, vertical: false)
                             .accessibilityLabel(Text("Copy the error JSON", comment: "a11y"))
                             .padding()
                     } else {

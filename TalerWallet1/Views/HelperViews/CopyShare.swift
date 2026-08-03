@@ -64,7 +64,7 @@ struct FeedbackButton: View {
 struct CopyButton: View {
     private let symLog = SymLogV(0)
     let textToCopy: String
-    @Binding var isCopied: Bool
+    @Binding var isCopied: Bool?
     let image: UIImage?
     let vertical: Bool
     let title: String?
@@ -74,17 +74,19 @@ struct CopyButton: View {
 
     @State private var scale: CGFloat = 1.0
 
-    init(textToCopy: String, isCopied: Binding<Bool>, vertical: Bool, image: UIImage? = nil) {
+    init(_ textToCopy: String, isCopied: Binding<Bool?>? = nil,
+             vertical: Bool, image: UIImage? = nil) {
         self.textToCopy = textToCopy
-        self._isCopied = isCopied
+        self._isCopied = isCopied ?? Binding.constant(nil)
         self.image = image
         self.vertical = vertical
         self.title = nil
     }
 
-    init(textToCopy: String, isCopied: Binding<Bool>, title: String, image: UIImage? = nil) {
+    init(_ textToCopy: String, isCopied: Binding<Bool?>? = nil,
+         title: String, image: UIImage? = nil) {
         self.textToCopy = textToCopy
-        self._isCopied = isCopied
+        self._isCopied = isCopied ?? Binding.constant(nil)
         self.image = image
         self.vertical = false
         self.title = title
@@ -101,7 +103,9 @@ struct CopyButton: View {
             items.append(images)
         }
         UIPasteboard.general.setItems(items)
-        isCopied = true
+        if isCopied != nil {
+            isCopied = true
+        }
     }
 
     private func triggerPulse() {
@@ -163,12 +167,12 @@ struct ShareButton: View {
 
     @State private var scale: CGFloat = 1.0
 
-    init(textToShare: String, image: UIImage? = nil) {
+    init(_ textToShare: String, image: UIImage? = nil) {
         self.textToShare = textToShare
         self.image = image
         self.title = String(localized: "Share")
     }
-    init(textToShare: String, title: String, image: UIImage? = nil) {
+    init(_ textToShare: String, title: String, image: UIImage? = nil) {
         self.textToShare = textToShare
         self.image = image
         self.title = title
@@ -227,7 +231,6 @@ struct ShareButton: View {
 // MARK: -
 struct CopyShare: View {
     @Environment(\.isEnabled) private var isEnabled: Bool
-    @State var isCopied: Bool = false
 
     let textToCopy: String
     let image: UIImage?
@@ -238,9 +241,9 @@ struct CopyShare: View {
     }
 
     var body: some View {
-        let copyB = CopyButton(textToCopy: textToCopy, isCopied: $isCopied, vertical: false, image: image)
+        let copyB = CopyButton(textToCopy, vertical: false, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
-        let share = ShareButton(textToShare: textToCopy, image: image)
+        let share = ShareButton(textToCopy, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
 
         let vLayout = VStack {

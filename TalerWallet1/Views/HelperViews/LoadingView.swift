@@ -29,7 +29,6 @@ struct LoadingView: View {
     @State private var showAlert: Bool = false
     @State private var disabled: Bool = false
     @State private var isFinished: Bool? = false
-    @State private var isCopied: Bool = false
 
     private var dismissButton: some View {
         Button("Cancel", role: .cancel) {
@@ -102,7 +101,7 @@ struct LoadingView: View {
                     .talerFont(.body)
                 if developerMode {
                     if let jsonString = toJSON(lastError) {
-                        CopyButton(textToCopy: jsonString, isCopied: $isCopied, title: "Copy JSON")
+                        CopyButton(jsonString, title: "Copy JSON")
                             .padding(.vertical)
                     }
                 }
