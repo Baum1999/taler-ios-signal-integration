@@ -47,6 +47,7 @@ struct Sheet: View {
     @Environment(\.dismiss) var dismiss     // call dismiss() to get rid of the sheet
     @EnvironmentObject private var debugViewC: DebugViewC
     @EnvironmentObject private var model: WalletModel
+    @EnvironmentObject private var controller: Controller
     @AppStorage("talerFontIndex") var talerFontIndex: Int = 0
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -66,32 +67,39 @@ struct Sheet: View {
     var body: some View {
         let idString = debugViewC.sheetID > 0 ? String(debugViewC.sheetID)
                                               : EMPTYSTRING      // show nothing if 0
-        ZStack {
-            NavigationView {
-                sheetView
-                    .navigationBarTitleDisplayMode(.automatic)
-                    .background(FullBackground())
+        VStack {
+            if controller.networkUnavailable {
+                ErrorBanner(.networkUnavailable)    // red bar on top
+            } else if controller.slowConnection {
+                ErrorBanner(.warning5sec)           // yellow bar on top
             }
-            .navigationViewStyle(.stack)
-            .talerNavBar(talerFontIndex: talerFontIndex)
-            .overlay(alignment: .top) {
-                // Show the viewID on top of the sheet's NavigationView
-                Text(idString)
-                    .foregroundColor(.purple)
-                    .font(.system(size: 11))        // no talerFont
-                    .monospacedDigit()
-                    .ignoresSafeArea(edges: .top)
-                    .id("sheetID")
-                    .accessibilityLabel(Text("Sheet.ID.", comment: "a11y"))
-                    .accessibilityValue(idString)
-            }
-            if let error2 = model.error2 {
-                ErrorView(stack.push(), data: error2, devMode: developerMode) {
-                    model.setError(nil)
-                    logger.log("ErrorSheet dismissTop")
-                    dismissTop(stack.push())
+            ZStack {
+                NavigationView {
+                    sheetView
                 }
+                .navigationBarTitleDisplayMode(.automatic)
                 .background(FullBackground())
+                .navigationViewStyle(.stack)
+                .talerNavBar(talerFontIndex: talerFontIndex)
+                .overlay(alignment: .top) {
+                    // Show the viewID on top of the sheet's NavigationView
+                    Text(idString)
+                        .foregroundColor(.purple)
+                        .font(.system(size: 11))        // no talerFont
+                        .monospacedDigit()
+                        .ignoresSafeArea(edges: .top)
+                        .id("sheetID")
+                        .accessibilityLabel(Text("Sheet.ID.", comment: "a11y"))
+                        .accessibilityValue(idString)
+                }
+                if let error2 = model.error2 {
+                    ErrorView(stack.push(), data: error2, devMode: developerMode) {
+                        model.setError(nil)
+                        logger.log("ErrorSheet dismissTop")
+                        dismissTop(stack.push())
+                    }
+                    .background(FullBackground())
+                }
             }
         }
         .onDisappear {
