@@ -120,6 +120,7 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
     var town: String?
     var amountStr: String?
     var messageStr: String?
+    var chQRr: String?
     //   payto-cyclos-URI = "payto://cyclos/" host ["/" fpath] "/" account-id [ "?" opts ]
     var host: String?       //
 
@@ -145,8 +146,9 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
             receiver = param(key: "receiver-name", from: queryParameters)
             postalCode = param(key: "receiver-postal-code", from: queryParameters)
             town = param(key: "receiver-town", from: queryParameters)
-            amountStr = queryParameters["amount"] ?? EMPTYSTRING
-            messageStr = queryParameters["message"] ?? EMPTYSTRING
+            amountStr = queryParameters["amount"]
+            chQRr = queryParameters["ch-qrr"]
+            messageStr = queryParameters["message"]
         }
     }
 }
