@@ -60,7 +60,7 @@ extension String {
     }
 
     public var toURL: URL? {
-        if let someURL = URL(string: self) {
+        if let someURL = URL(string: self.trimmingCharacters(in: .whitespacesAndNewlines)) {
             return someURL
         }
         if let encodedString = self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
