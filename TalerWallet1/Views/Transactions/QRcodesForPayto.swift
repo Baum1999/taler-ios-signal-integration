@@ -10,24 +10,45 @@ import OrderedCollections
 import taler_swift
 
 struct QRcodeCopyShare: View {
-    let spec: QrCodeSpec
-    let textToShare: String
+    let option: TransferOption
     @State private var qrImage: UIImage? = nil
+
+    func textToShare() -> String? {
+        if let paytoUri = option.paytoUri {
+            let payto = PayTo(paytoUri)
+            if let receiverStr = payto.receiver {
+                if let amountStr = payto.amountStr {
+                    if let messageStr = option.qrReferenceNumber ?? payto.messageStr {
+                        return String(receiverStr + "\n" + amountStr + "\n" + messageStr)
+                    }
+                }
+            }
+        }
+        return nil
+    }
 
     var body: some View {
 //        Text(spec.type)
-        let logo = spec.type == "spc" ? Image(SWISS_QR) : nil
-        let size = 276.0    // 46x46mm, swiss flag = 7x7mm plus border  276*9/46 = 54
-        QRGeneratorView(text: spec.qrContent, size: size, logo: logo, logoSize: size * 9 / 46, image: $qrImage)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .listRowSeparator(.hidden)
-        HStack {
-            Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
-                .accessibilityHidden(true)
-                .foregroundColor(Color.clear)
-            //                  Spacer()
-            CopyShare(textToShare, image: qrImage)
-                .disabled(false)
+        if let qrCodes = option.qrCodes {
+            ForEach(qrCodes, id: \.self) { qrCodeSpec in
+                let logo = qrCodeSpec.type == "spc" ? Image(SWISS_QR) : nil
+                let size = 276.0    // 46x46mm, swiss flag = 7x7mm plus border  276*9/46 = 54
+                QRGeneratorView(text: qrCodeSpec.qrContent, size: size,
+                                logo: logo, logoSize: size * 9 / 46,
+                               image: $qrImage)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
+            }
+        }
+        if let textToShare = textToShare() {
+            HStack {
+//                Text(verbatim: "|")       // only reason for this leading-aligned text is to get a nice full length listRowSeparator
+//                    .accessibilityHidden(true)
+//                    .foregroundColor(Color.clear)
+//              Spacer()
+                CopyShare(textToShare, image: qrImage)
+                    .disabled(false)
+            }
         }
     }
 }
@@ -44,20 +65,14 @@ struct QRcodesForPayto: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     var body: some View {
-        let message = messageStr ?? EMPTYSTRING
-        let textToShare = String(receiverStr + "\n" + amountStr + "\n" + message)
         List {
             if !minimalistic {
                 Text("If your banking software runs on another device, you can scan one of these QR codes:")
                     .listRowSeparator(.hidden)
             }
             ForEach(transferOptions, id: \.self) { option in
-                if let qrCodes = option.qrCodes {
-                    ForEach(qrCodes, id: \.self) { spec in
-                        QRcodeCopyShare(spec: spec, textToShare: textToShare)
-                            .listRowSeparator(.automatic)
-                    }
-                }
+                QRcodeCopyShare(option: option)
+                    .listRowSeparator(.automatic)
             }
         }
         .navigationTitle(navTitle)

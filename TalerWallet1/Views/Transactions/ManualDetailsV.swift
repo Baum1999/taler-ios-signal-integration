@@ -110,8 +110,9 @@ struct ManualDetailsV: View {
                             }
 
                             if let transferOptions = account.transferOptions {
+                              if let firstOption = transferOptions.first {
                                 let countA = transferOptions.count
-                                let countB = transferOptions.first?.qrCodes?.count ?? 0
+                                let countB = firstOption.qrCodes?.count ?? 0
                                 if countA > 1 || countB > 1 {
                                     qrCodesRow(transferOptions,
                                                receiverStr: receiverStr,
@@ -120,16 +121,16 @@ struct ManualDetailsV: View {
                                 } else if countA > 0 {   // show the single QR directly
 //                                    Text("If your banking software runs on another device, you can scan this QR code:")
 //                                        .listRowSeparator(.hidden)
-                                    if let qrCodeSpecs = transferOptions.first?.qrCodes {
+                                    if let qrCodeSpecs = firstOption.qrCodes {
                                         if let qrCode = qrCodeSpecs.first {
                                             let message = payto.messageStr ?? EMPTYSTRING
                                             let textToShare = String(receiverStr + "\n" + amountStr.0 + "\n" + message)
-                                            QRcodeCopyShare(spec: qrCode,
-                                                     textToShare: textToShare)
+                                            QRcodeCopyShare(option: firstOption)
                                             .listRowSeparator(.automatic)
                                         }
                                     }
                                 }
+                              }
                             }
 #if DEBUG
                           if developerMode {
