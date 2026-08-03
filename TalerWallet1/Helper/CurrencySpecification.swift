@@ -275,7 +275,7 @@ public struct CurrencyInfo: Sendable {
     }
 }
 // MARK: -
-public struct CurrencySpecification: Codable, Equatable, Sendable {
+public struct CurrencySpecification: Codable, Equatable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey {
         case name
         case commonAmounts = "common_amounts"

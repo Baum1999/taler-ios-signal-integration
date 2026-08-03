@@ -45,7 +45,7 @@ struct TransferOption: Codable, Hashable {
     var qrCodes: [QrCodeSpec]?
 }
 
-struct ExchangeAccountDetails: Decodable {
+struct ExchangeAccountDetails: Decodable, Hashable {
     var status: String                                          // "OK" or "error" - then conversionError
     var paytoUri: String
     var transferAmount: Amount?                                 // only if "OK"
