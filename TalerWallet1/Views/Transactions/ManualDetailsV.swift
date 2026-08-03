@@ -21,12 +21,12 @@ struct ManualDetailsV: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
     @AppStorage("minimalistic") var minimalistic: Bool = false
-    @State private var accountID = 0
+    @State private var validIndex = 0
     @State private var listID = UUID()
 
-    func redraw(_ newAccount: Int) -> Void {
-        if newAccount != accountID {
-            accountID = newAccount
+    func redraw(_ newIndex: Int) -> Void {
+        if newIndex != validIndex {
+            validIndex = newIndex
             withAnimation { listID = UUID() }
         }
     }
@@ -56,7 +56,7 @@ struct ManualDetailsV: View {
             let validDetails = validDetails(accountDetails)
             let validCount = validDetails.count
             if validCount > 0 {
-                let account = validDetails[accountID]
+                let account = validDetails[validIndex]
                 if let amount = account.transferAmount {
                     let specs = account.currencySpecification
                     let amountStr = common.amountRaw.formatted(specs: specs, isNegative: false)
@@ -72,13 +72,13 @@ struct ManualDetailsV: View {
                     if validCount > 1 {
                         if validCount > 3 { // too many for SegmentControl
                             AccountPicker(title: String(localized: "Bank"),
-                                          value: $accountID,
+                                          value: $validIndex,
                                  accountDetails: validDetails,
                                          action: redraw)
                             .listRowSeparator(.hidden)
                             .pickerStyle(.menu)
                         } else {
-                            SegmentControl(value: $accountID, accountDetails: validDetails, action: redraw)
+                            SegmentControl(value: $validIndex, accountDetails: validDetails, action: redraw)
                                 .listRowSeparator(.hidden)
                         }
                     } else if let bankName = account.bankLabel {
