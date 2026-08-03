@@ -593,11 +593,8 @@ extension Controller {
         var uncrypted = false
         var urlCommand = UrlCommand.unknown
         switch scheme.lowercased() {
-            case "taler+http":
-                uncrypted = true
-                fallthrough
             case "taler", "ext+taler", "web+taler":
-                urlCommand = talerScheme(url, uncrypted)
+                urlCommand = talerScheme(url)
 //            case "payto":
 //                messageForSheet = url.absoluteString
 //                return paytoScheme(url)
@@ -617,12 +614,8 @@ extension Controller {
 //        return UrlCommand.unknown
 //    }
     
-    func talerScheme(_ url:URL,_ uncrypted: Bool = false) -> UrlCommand {
+    func talerScheme(_ url:URL) -> UrlCommand {
       if let command = url.host {
-        if uncrypted {
-            self.logger.trace("uncrypted http: taler://\(command)")
-            // TODO: uncrypted taler+http
-        }
         switch command.lowercased() {
             case "withdraw":            return .withdraw
             case "withdraw-exchange":   return .withdrawExchange
