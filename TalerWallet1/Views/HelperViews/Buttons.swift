@@ -208,7 +208,7 @@ struct SettingsButton : View  {
         return button
     }
 }
-struct PasteButton : View  {
+struct TalerPasteButton : View  {
     let accessibilityLabelStr: String
     let action: () -> Void
 

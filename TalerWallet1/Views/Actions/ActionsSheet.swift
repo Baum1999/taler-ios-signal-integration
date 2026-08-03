@@ -145,7 +145,7 @@ struct ActionsSheet: View {
                 if #available(iOS 26.0, *) {
                     if !pasteAutomatically {
                         let isEnabled = UIPasteboard.general.hasURLs
-                        PasteButton(accessibilityLabelStr: "Paste") {
+                        TalerPasteButton(accessibilityLabelStr: "Paste") {
                             Task {
                                 TalerWallet1App().inspectPasteboard(playSound: true)
                             }
