@@ -232,18 +232,39 @@ struct CopyShare: View {
     let textToCopy: String
     let image: UIImage?
 
+    init(_ string: String, image: UIImage? = nil) {
+        self.textToCopy = string
+        self.image = image
+    }
+
     var body: some View {
-        HStack {
-            CopyButton(textToCopy: textToCopy, isCopied: $isCopied, vertical: false, image: image)
+        let copyB = CopyButton(textToCopy: textToCopy, isCopied: $isCopied, vertical: false, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
-            ShareButton(textToShare: textToCopy, image: image)
+        let share = ShareButton(textToShare: textToCopy, image: image)
                 .buttonStyle(TalerButtonStyle(type: .bordered))
-        } // two buttons
+
+        let vLayout = VStack {
+            copyB
+            share
+        }
+
+        if #available(iOS 16.0, *) {
+            let hLayout = HStack(spacing: HSPACING) {
+                copyB
+                share
+            }
+            ViewThatFits(in: .horizontal) {
+                hLayout
+                vLayout
+            }
+        } else {
+            vLayout
+        }
     }
 }
 // MARK: -
 struct CopyShare_Previews: PreviewProvider {
     static var previews: some View {
-        CopyShare(textToCopy: "Hallö", image: nil)
+        CopyShare("Hallö", image: nil)
     }
 }

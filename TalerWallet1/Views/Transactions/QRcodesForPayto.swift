@@ -26,7 +26,7 @@ struct QRcodeCopyShare: View {
                 .accessibilityHidden(true)
                 .foregroundColor(Color.clear)
             //                  Spacer()
-            CopyShare(textToCopy: textToShare, image: qrImage)
+            CopyShare(textToShare, image: qrImage)
                 .disabled(false)
         }
     }

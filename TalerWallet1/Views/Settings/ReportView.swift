@@ -59,7 +59,7 @@ struct ReportView: View {
                         .onTapGesture {
                             expanded.toggle()
                         }
-                    CopyShare(textToCopy: report, image: nil)
+                    CopyShare(report, image: nil)
                 }
             }
             .listRowSeparator(.hidden)
