@@ -41,10 +41,7 @@ struct ManualDetailsV: View {
                                          amountStr: String,
                                         messageStr: String?) -> some View {
         let qrCodesForPayto = QRcodesForPayto(stack: stack.push(),
-                                    transferOptions: transferOptions,
-                                        receiverStr: receiverStr,
-                                          amountStr: amountStr,
-                                         messageStr: messageStr)
+                                    transferOptions: transferOptions)
         NavigationLink(destination: qrCodesForPayto) {
             Text(minimalistic ? "QR"
                               : "Wire transfer QR codes")

@@ -56,9 +56,6 @@ struct QRcodeCopyShare: View {
 struct QRcodesForPayto: View {
     let stack: CallStack
     var transferOptions: [TransferOption]
-    let receiverStr: String
-    let amountStr: String
-    let messageStr: String?
 
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer QR codes")
 
