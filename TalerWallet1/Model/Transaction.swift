@@ -449,6 +449,17 @@ struct WithdrawalDetails: Decodable {
     var reservePub: String
     var reserveIsReady: Bool
     var exchangeCreditAccountDetails: [ExchangeAccountDetails]?
+    var validDetails: [ExchangeAccountDetails]? {
+        if let details = exchangeCreditAccountDetails {
+            let result = details.filter { detail in
+                detail.status.lowercased() == "ok"
+            }
+            if !result.isEmpty {
+                return result           // guaranteed to have at least 1 item
+            }
+        }
+        return nil
+    }
 
   /// Details for manual withdrawals:
     var reserveClosingDelay: Duration?
