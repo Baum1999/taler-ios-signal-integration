@@ -252,17 +252,14 @@ struct XTalerCode: View {
 struct ManualDetailsWireV: View {
     let stack: CallStack
     let reservePub: String
-    let receiverStr: String
-    let receiverZip: String?
-    let receiverTown: String?
-    let iban: String?                   // TODO: BBAN
-    let cyclos: String
-    let xTaler: String
+    let payto: PayTo
+
+    let restrictions: [AccountRestriction]?               // only if restrictions apply
+//    let iban: String?                   // TODO: BBAN
     let amountValue: String             // string representation of the value, formatted as "`integer`.`fraction`"
     let amountStr: (String, String)
     let obtainStr: (String, String)?    // only for withdrawal
     let debitIBAN: String?              // only for deposit auth
-    let account: ExchangeAccountDetails
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
     let navTitle = String(localized: "Wire transfer", comment: "ViewTitle of wire-transfer instructions")
@@ -297,6 +294,7 @@ struct ManualDetailsWireV: View {
 
 
     var body: some View {
+      if let receiverStr = payto.receiver {
         List {
             let cryptoString = debitIBAN == nil ? reservePub : "kyc" + reservePub
             let step2 = Text(minimalistic ? "**Step 2:** Copy+Paste this subject:"
@@ -333,30 +331,30 @@ struct ManualDetailsWireV: View {
                 TransferRestrictionsV(amountStr: amountStr,
                                       obtainStr: obtainStr,
                                       debitIBAN: debitIBAN,
-                                   restrictions: account.creditRestrictions)
+                                   restrictions: restrictions)
                 .listRowSeparator(.visible)
                 if !minimalistic {
                     mandatory
                 }
-                if let iban {
+                if let iban = payto.iban {
                     step1i
                     PayeeReceiver(receiverStr: receiverStr)
-                    if let receiverZip {
+                    if let receiverZip = payto.postalCode {
                         if !receiverZip.isEmpty {
                             PayeeZip(receiverZip: receiverZip)
                         }
                     }
-                    if let receiverTown {
+                    if let receiverTown = payto.town {
                         if !receiverTown.isEmpty {
                             PayeeTown(receiverTown: receiverTown)
                         }
                     }
                     IbanCode(iban: iban)
-                } else if !cyclos.isEmpty {
+                } else if let cyclos = payto.cyclos, !cyclos.isEmpty {
                     step1x
                     PayeeReceiver(receiverStr: receiverStr)
 //                    cyclosCode()
-                } else {
+                } else if let xTaler = payto.xTaler {
                     step1x
                     PayeeReceiver(receiverStr: receiverStr)
                     XTalerCode(xTaler: xTaler)
@@ -373,6 +371,7 @@ struct ManualDetailsWireV: View {
 //            symLog.log("onAppear")
             DebugViewC.shared.setViewID(VIEW_WITHDRAW_INSTRUCTIONS, stack: stack.push())
         }
+      } // if receiverStr
     }
 }
 

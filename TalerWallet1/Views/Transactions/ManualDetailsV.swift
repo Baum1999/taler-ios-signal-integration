@@ -91,17 +91,13 @@ struct ManualDetailsV: View {
                     if let receiverStr = payto.receiver {
                         let wireDetails = ManualDetailsWireV(stack: stack.push(),
                                                         reservePub: details.reservePub,
-                                                       receiverStr: receiverStr,
-                                                       receiverZip: payto.postalCode,
-                                                      receiverTown: payto.town,
-                                                              iban: payto.iban,
-                                                            cyclos: payto.cyclos ?? EMPTYSTRING,
-                                                            xTaler: payto.xTaler ?? EMPTYSTRING,
+                                                             payto: payto,
+                                                      restrictions: account.creditRestrictions,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,
                                                          obtainStr: obtainStr,
                                                          debitIBAN: nil,        // only for deposit auth
-                                                           account: account)
+                                                )
                         Group {
                             NavigationLink(destination: wireDetails) {
                                 Text(minimalistic ? "Instructions"
