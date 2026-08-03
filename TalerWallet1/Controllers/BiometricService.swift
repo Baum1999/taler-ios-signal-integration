@@ -9,6 +9,7 @@
 import SwiftUI
 import LocalAuthentication
 
+@MainActor
 class BiometricService: ObservableObject {
     static let shared = BiometricService()
     @Published var canAuthenticate: Bool = true
@@ -42,7 +43,7 @@ class BiometricService: ObservableObject {
             }
             canAuthenticate = true
             context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { [weak self] success, authenticationError in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     if success {
                         self?.isAuthenticated = true
                         self?.authenticationError = nil
@@ -56,6 +57,7 @@ class BiometricService: ObservableObject {
         }
     }
 
+    @discardableResult
     private func resetContext() -> String {
         let reason = String(localized: "Authenticate to access your money", comment: "FaceID")
         context = LAContext()
