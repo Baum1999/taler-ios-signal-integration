@@ -25,6 +25,10 @@ struct ToSButtonView: View {
             .talerFont(.body)
             .multilineTextAlignment(.leading)
             .padding()
+        if let exchangeBaseUrl {
+            Text(exchangeBaseUrl.trimURL)
+                .talerFont(.body)
+        }
         let destination = WithdrawTOSView(stack: stack.push(),
                                 exchangeBaseUrl: exchangeBaseUrl,
                                          viewID: viewID,
