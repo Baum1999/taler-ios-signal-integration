@@ -41,7 +41,8 @@ struct CurrencyPicker: View {
             Picker(EMPTYSTRING, selection: $selected) {
                 ForEach(0..<count, id: \.self) { index in
                     let exchange = exchanges[index]
-                    Text(exchange.currencySpec.name)
+                    let base = index == 0 ? " (stage)" : " (prod)"
+                    Text(exchange.currencySpec.name + base)
                         .tag(index)
                 }
             }

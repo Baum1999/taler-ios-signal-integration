@@ -79,7 +79,6 @@ struct ProdSectionView: View {
                 .talerFont(.body)
 #endif
             if (showRealCashHint) {
-#if !TALER_WALLET
                 if developerMode {
                     if defaultExchanges.count > 1 {
                         CurrencyPicker(stack: stack.push(), value: $selectedCurrency,
@@ -88,7 +87,6 @@ struct ProdSectionView: View {
                         }
                     }
                 }
-#endif
                 let defaultExchange = defaultExchanges[selectedCurrency < count ? selectedCurrency : 0]
                 let currency = defaultExchange.currency
                 let title = String(localized: "LinkTitle_Withdraw", defaultValue: "Withdraw \(currency)")
