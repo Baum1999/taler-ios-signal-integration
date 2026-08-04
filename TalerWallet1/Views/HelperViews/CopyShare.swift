@@ -96,13 +96,15 @@ struct CopyButton: View {
         symLog.log(textToCopy)
         triggerPulse()
         controller.hapticFeedback(.medium)
-        let strings = [UTType.plainText.identifier : textToCopy]
-        var items: [[String : Any]] = [strings]
+        let pasteboard = UIPasteboard.general
         if let image {
-            let images = [UTType.image.identifier : image]
-            items.append(images)
+//            pasteboard.image = image
+            let strItem = [UTType.plainText.identifier : textToCopy]
+            let imgItem = [UTType.image.identifier : image]
+            pasteboard.items = [imgItem, strItem]       // iOS27 Notes.app crashes if text comes first!
+        } else {
+            pasteboard.string = textToCopy
         }
-        UIPasteboard.general.setItems(items)
         if isCopied != nil {
             isCopied = true
         }
