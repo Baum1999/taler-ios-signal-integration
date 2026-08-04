@@ -144,6 +144,29 @@ struct ActionsSheet: View {
             HStack {
                 if #available(iOS 26.0, *) {
                     if !pasteAutomatically {
+#if TALER_NIGHTLY
+                        PasteButton(supportedContentTypes: [.url]) { providers in
+                            for provider in providers {
+                                if provider.canLoadObject(ofClass: String.self) {
+                                    _ = provider.loadObject(ofClass: String.self) { string, error in
+                                        guard let string else { return }
+                                        if let pastedURL = string.toURL {
+                                            let scheme = pastedURL.scheme
+                                            if scheme?.lowercased() == "taler" {
+                                                let pasteType = PasteType(pastedURL: pastedURL)
+                                                let userinfo = [NOTIFICATIONPASTE: pasteType]
+                                                NotificationCenter.default.post(name: .PasteAction, object: nil, userInfo: userinfo)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .labelStyle(.iconOnly)
+                        .tint(WalletColors().primaryAccent)
+                        .buttonBorderShape(.circle) // capsule
+                        .accessibility(sortPriority: 1)
+#else
                         let isEnabled = UIPasteboard.general.hasURLs
                         TalerPasteButton(accessibilityLabelStr: "Paste") {
                             Task {
@@ -155,6 +178,7 @@ struct ActionsSheet: View {
                                                    disabled: !isEnabled,
                                                     aligned: .center))
                         .accessibility(sortPriority: 1)
+#endif
                     }
                     Spacer(minLength: 8)
                 }
