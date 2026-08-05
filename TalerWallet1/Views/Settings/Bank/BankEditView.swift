@@ -16,6 +16,7 @@ struct BankEditView: View {
     let stack: CallStack
     let accountID: String?
 
+    @Environment(\.dismiss) var dismiss     // pop back once
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -32,11 +33,15 @@ struct BankEditView: View {
     @State private var myAccount: String? = nil
     @State private var accountHolder: String = EMPTYSTRING
     @State private var iban: String = EMPTYSTRING
+    @State private var ibanValid = false
     @State private var xTaler: String = EMPTYSTRING
     @State private var accountLabel: String = EMPTYSTRING
     @State private var paytoType: PaytoType = .iban
     @State private var selected = 0
     @State private var kycCompleted = false
+    @State private var finished = false
+    @State private var unchanged = true
+    @State private var userTyped = false
 
     @FocusState private var focus:FocusedField?
 
@@ -54,19 +59,41 @@ struct BankEditView: View {
 //        }
 //    }
 
+    @ViewBuilder func barButton() -> some View {
+        let isNew = accountID == nil
+        let titleStr = isNew ? String(localized: "Add", comment: "button title: Add bank account")
+                             : String(localized: "Update", comment: "button title: Update bank account")
+        let a11yStr = isNew ? String(localized: "Add bank account", comment: "a11y")
+                            : String(localized: "Update bank account", comment: "a11y")
+        let notValid: Bool = paytoType == .iban ? (iban.isEmpty || !ibanValid)
+                                                : xTaler.isEmpty
+        DoneButton(titleStr: titleStr, accessibilityLabelStr: titleStr) {
+            Task {
+                if await updateAccount() {
+                    dismiss()
+                }
+            }
+        }
+            .disabled(disabled || notValid || unchanged)
+    }
+
     @MainActor
     private func viewDidLoad() async {
         if let accountID {
             if let account = try? await model.getBankAccountById(accountID) {
-                let payTo = PayTo(account.paytoUri)
-                iban = payTo.iban ?? EMPTYSTRING
-                xTaler = payTo.xTaler ?? EMPTYSTRING
-                if iban.isEmpty && xTaler.count > 1 {
-                    paytoType = .xTalerBank
-                }
                 accountLabel = account.label ?? EMPTYSTRING
                 kycCompleted = account.kycCompleted
+                let payTo = PayTo(account.paytoUri)
                 accountHolder = payTo.receiver ?? ownerName
+                xTaler = payTo.xTaler ?? EMPTYSTRING
+                iban = payTo.iban ?? EMPTYSTRING
+                if iban.isEmpty {
+                    if xTaler.count > 1 {
+                        paytoType = .xTalerBank
+                    }
+                } else if let result = try? await model.validateIban(iban) {
+                    ibanValid = result
+                }
             }
         } else {
 
@@ -74,20 +101,28 @@ struct BankEditView: View {
     }
 
     @MainActor
-    private func updateAccount() async {
-        let payto = "payto://iban/\(iban)?receiver-name=\(accountHolder)"       // TODO: convert BBAN to IBAN
-        let paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-
-        symLog.log(paytoUri)
-        if let account = try? await model.addBankAccount(paytoUri,
-                                                   label: accountLabel,
-                                                 replace: myAccount ?? accountID
-        ) {
-            symLog.log(account)
-            myAccount = account
-        } else {
-            symLog.log("error addBankAccount")
+    private func updateAccount() async -> Bool {
+        let isIBAN = paytoType == .iban
+        if !accountHolder.isEmpty && !accountLabel.isEmpty {
+            if isIBAN ? !iban.isEmpty
+                      : !xTaler.isEmpty {
+                let payto = isIBAN ? "payto://iban/\(iban)?receiver-name=\(accountHolder)"       // TODO: convert BBAN to IBAN
+                                   : "payto://xTaler/\(xTaler)?receiver-name=\(accountHolder)"
+                let paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                symLog.log(paytoUri)
+                if let account = try? await model.addBankAccount(paytoUri,
+                                                           label: accountLabel,
+                                                         replace: myAccount ?? accountID
+                ) {
+                    symLog.log(account)
+                    myAccount = account
+                    return true
+                } else {
+                    symLog.log("error addBankAccount")
+                }
+            }
         }
+        return false
     }
 
     @MainActor
@@ -114,11 +149,6 @@ struct BankEditView: View {
         let _ = Self._printChanges()
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
-        let titleStr = String(localized: "Done", comment: "Done button")
-        let a11yLabelStr = String(localized: "Done", comment: "a11y for the Done button")
-        let doneButton = DoneButton(titleStr: titleStr, accessibilityLabelStr: a11yLabelStr) {
-            dismissTop(stack.push())
-        }
 
         let methods = [PaytoType.iban, PaytoType.xTalerBank]
         List {
@@ -128,63 +158,73 @@ struct BankEditView: View {
                         .talerFont(.body)
                 }
             }
-          Section {
-            let labelTitle = String(localized: "Label")
-            let labelColon = String("\(labelTitle):")
-            if !minimalistic {
-                Text(labelColon)
-                    .talerFont(.picker)
-                    .accessibilityHidden(true)
-                    .padding(.bottom, -12)
-            }
-            TextField(minimalistic ? labelTitle : EMPTYSTRING, text: $accountLabel)
-                .accessibilityLabel(labelColon)
-                .focused($focus, equals: .accountLabel)
-                .talerFont(.title3)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-                .padding(.bottom)
+            Section {
+                let labelTitle = String(localized: "Label")
+                let labelColon = String("\(labelTitle):")
+                if !minimalistic {
+                    Text(labelColon)
+                        .talerFont(.picker)
+                        .accessibilityHidden(true)
+                        .padding(.bottom, -12)
+                }
+                TextField(minimalistic ? labelTitle : EMPTYSTRING, text: $accountLabel)
+                    .accessibilityLabel(labelColon)
+                    .focused($focus, equals: .accountLabel)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().fieldForeground)     // text color
+                    .background(WalletColors().fieldBackground)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.bottom)
+                    .onChange(of: accountLabel) { newValue in
+                        if userTyped {
+                            unchanged = false
+                        }
+                    }
 
-            let holderTitle = String(localized: "Account holder")
-            let holderColon = String("\(holderTitle):")
-            if !minimalistic {
-                Text(holderColon)
-                    .talerFont(.picker)
-                    .accessibilityHidden(true)
-                    .padding(.bottom, -12)
-            }
-            TextField(minimalistic ? holderTitle : EMPTYSTRING, text: $accountHolder)
-                .accessibilityLabel(holderColon)
-                .focused($focus, equals: .accountHolder)
-                .talerFont(.title3)
-                .foregroundColor(WalletColors().fieldForeground)     // text color
-                .background(WalletColors().fieldBackground)
-                .textFieldStyle(.roundedBorder)
-                .padding(.bottom)
+                let holderTitle = String(localized: "Account holder")
+                let holderColon = String("\(holderTitle):")
+                if !minimalistic {
+                    Text(holderColon)
+                        .talerFont(.picker)
+                        .accessibilityHidden(true)
+                        .padding(.bottom, -12)
+                }
+                TextField(minimalistic ? holderTitle : EMPTYSTRING, text: $accountHolder)
+                    .accessibilityLabel(holderColon)
+                    .focused($focus, equals: .accountHolder)
+                    .talerFont(.title3)
+                    .foregroundColor(WalletColors().fieldForeground)     // text color
+                    .background(WalletColors().fieldBackground)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.bottom)
+                    .onChange(of: accountHolder) { newValue in
+                        if userTyped {
+                            unchanged = false
+                        }
+                    }
 
-            let paytoStr = paytoType.rawValue.uppercased()
-            let paytoColon = String("\(paytoStr):")
-            if let accountID {
-                // we are editing an existing bank account
-                Text(paytoColon)
-                    .talerFont(.picker)
-                    .accessibilityHidden(true)
-                    .padding(.bottom, -12)
-            } else {
-                // this is a NEW bank account - choose a payment method
-                Picker(EMPTYSTRING, selection: $selected) {
-                    ForEach(0..<methods.count, id: \.self) { index in
-                        let method = methods[index]
-                        Text(method.rawValue.uppercased())
-                            .tag(index)
+                let paytoStr = paytoType.rawValue.uppercased()
+                let paytoColon = String("\(paytoStr):")
+                if let accountID {
+                    // we are editing an existing bank account
+                    Text(paytoColon)
+                        .talerFont(.picker)
+                        .accessibilityHidden(true)
+                        .padding(.bottom, -12)
+                } else {
+                    // this is a NEW bank account - choose a payment method
+                    Picker(EMPTYSTRING, selection: $selected) {
+                        ForEach(0..<methods.count, id: \.self) { index in
+                            let method = methods[index]
+                            Text(method.rawValue.uppercased())
+                                .tag(index)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: selected) { newValue in
+                        paytoType = methods[newValue]
                     }
                 }
-                .pickerStyle(.segmented)
-                .onChange(of: selected) { newValue in
-                    paytoType = methods[newValue]
-                }
-            }
                 if paytoType == .iban {
                     TextField(paytoStr, text: $iban)            // TODO: BBAN
                         .accessibilityLabel(paytoColon)
@@ -194,6 +234,13 @@ struct BankEditView: View {
                         .background(WalletColors().fieldBackground)
                         .textFieldStyle(.roundedBorder)
                         .padding(.bottom)
+                        .onChange(of: iban) { newValue in
+                            Task {
+                                if let result = try? await model.validateIban(newValue) {
+                                    ibanValid = result
+                                }
+                            }
+                        }
                 } else if paytoType == .xTalerBank {
                     TextField(paytoStr, text: $xTaler)
                         .accessibilityLabel(paytoColon)
@@ -203,32 +250,38 @@ struct BankEditView: View {
                         .background(WalletColors().fieldBackground)
                         .textFieldStyle(.roundedBorder)
                         .padding(.bottom)
+                        .onChange(of: xTaler) { newValue in
+                            if userTyped {
+                                unchanged = false
+                            }
+                        }
                 } else {
                     Text("unknown payment method")
                         .talerFont(.title3)
                         .padding(.bottom)
                 }
 
-            let buttonTitle = String(localized: "Account.Delete", defaultValue: "Forget bank account", comment: "Action button")
-            let warningText1 = String(localized: "Are you sure you want to forget this bank account?")
-            WarningButton(warningText: warningText1,
-                          buttonTitle: buttonTitle,
-                           buttonIcon: "trash",
-                                 role: .destructive,                            // TODO: WalletColors().errorColor
-                             disabled: $disabled,
-                               action: deleteAccount)
-            .padding(.top)
-          }.listRowSeparator(.hidden)
+                if let accountID {
+                    let buttonTitle = String(localized: "Account.Delete", defaultValue: "Forget bank account", comment: "Action button")
+                    let warningText1 = String(localized: "Are you sure you want to forget this bank account?")
+                    WarningButton(warningText: warningText1,
+                                  buttonTitle: buttonTitle,
+                                   buttonIcon: "trash",
+                                         role: .destructive,                            // TODO: WalletColors().errorColor
+                                     disabled: $disabled,
+                                       action: deleteAccount)
+                        .padding(.top)
+                }
+            }.listRowSeparator(.hidden)
         } // List
-        .navigationBarItems(trailing: doneButton)
+        .navigationBarItems(trailing: barButton())
 //        .ignoresSafeArea(.keyboard, edges: .bottom)
         .onChange(of: focus) { [focus] newState in
-            switch focus {
+            switch newState {
                 case .none:
                     break
-                case .some(_): Task {
-                    await updateAccount()
-                }
+                case .some(_):
+                    userTyped = true
             }
         }
         .task { await viewDidLoad() }
