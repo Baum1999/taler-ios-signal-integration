@@ -23,12 +23,24 @@ import SwiftUI
 
 extension Image {
     init(_ name: String, _ sysName: String, fallback: String = SYSTEM_DUMMY1) {
-        if UIImage(named: name) != nil {
-            self.init(name)
-        } else if UIImage(systemName: sysName) != nil {
-            self.init(systemName: sysName)
+        if let uiImage = UIImage(named: name) {
+            self.init(uiImage: uiImage)
+        } else if let sysImage = UIImage(systemName: sysName) {
+            self.init(uiImage: sysImage)
         } else {
             self.init(systemName: fallback)
         }
+    }
+
+    init?(imageBase64: String) {
+        if let url = NSURL(string: imageBase64) {
+            if let data = NSData(contentsOf: url as URL) {
+                if let uiImage = UIImage(data: data as Data) {
+                    self.init(uiImage: uiImage)
+                    return
+                }
+            }
+        }
+        return nil
     }
 }

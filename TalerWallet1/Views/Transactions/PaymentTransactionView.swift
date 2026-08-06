@@ -26,6 +26,12 @@ struct MerchantHeader: View {
         return terms.summary
     }
 
+    func logo(_ logoBase64: String) -> Image? {
+        if let image = Image(imageBase64: logoBase64) {
+            return image
+        }
+        return nil
+    }
     var body: some View {
         if let terms {
             Section {
@@ -36,15 +42,11 @@ struct MerchantHeader: View {
                     Spacer()
                     VStack(alignment: .center) {
                         if let imageBase64 = terms.merchant.logo {
-                            if let url = NSURL(string: imageBase64) {
-                                if let data = NSData(contentsOf: url as URL) {
-                                    if let uiImage = UIImage(data: data as Data) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(maxHeight: 60)
-                                    }
-                                }
+                            if let image = logo(imageBase64) {
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxHeight: 60)
                             }
                         } else {
 #if TALER_NIGHTLY
