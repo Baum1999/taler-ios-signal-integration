@@ -32,6 +32,13 @@ struct CurrencyPicker: View {
 
     @State private var selected = 0
 
+    func base(_ index: Int, _ count: Int) -> String {
+        if index != 0 && index == count - 1 {
+            return " (stage)"
+        }
+        return " (prod)"
+    }
+
     var body: some View {
 #if PRINT_CHANGES
         let _ = Self._printChanges()
@@ -41,8 +48,7 @@ struct CurrencyPicker: View {
             Picker(EMPTYSTRING, selection: $selected) {
                 ForEach(0..<count, id: \.self) { index in
                     let exchange = exchanges[index]
-                    let base = index == 0 ? " (stage)" : " (prod)"
-                    Text(exchange.currencySpec.name + base)
+                    Text(exchange.currencySpec.name + base(index, count))
                         .tag(index)
                 }
             }

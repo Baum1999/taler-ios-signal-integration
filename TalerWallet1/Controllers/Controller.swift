@@ -556,14 +556,16 @@ class Controller: ObservableObject {
                         "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                 }
                 defaultExchanges = await model.getDefaultExchanges(stage: stage)
-                if stage, let talerOps = defaultExchanges.first {
-                    let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
-                    if talerOps.talerUri != stageURI {
-                        let stageExc = DefaultExchange(talerUri: stageURI,
-                                                       currency: talerOps.currency,
-                                                   currencySpec: talerOps.currencySpec
-                        )
-                        defaultExchanges.insert(stageExc, at: 0)
+                if defaultExchanges.count == 1 {
+                    if stage, let talerOps = defaultExchanges.first {
+                        let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
+                        if talerOps.talerUri != stageURI {
+                            let stageExc = DefaultExchange(talerUri: stageURI,
+                                                           currency: talerOps.currency,
+                                                       currencySpec: talerOps.currencySpec
+                            )
+                            defaultExchanges.append(stageExc)
+                        }
                     }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
