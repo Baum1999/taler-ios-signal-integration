@@ -82,7 +82,9 @@ struct BalancesListView: View {
                 await refresh()
             }
             .navigationTitle(title)
-        if #available(iOS 26.0, *) {
+        if voiceOverEnabled {
+            list
+        } else if #available(iOS 26.0, *) {
             let list26 = list
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {   //secondaryAction
