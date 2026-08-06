@@ -292,15 +292,19 @@ struct ManualDetailsWireV: View {
 //        }   .padding(.top, -8)
 //    }
 
+    @ViewBuilder func step2(_ isChQrr: Bool) -> some View {
+        Text(isChQrr ? (minimalistic ? "**Step 2:** Copy+Paste this QR-Reference:"
+                                     : "**Step 2:** Copy this code and paste it into the QR-Reference field in your banking app or bank website:")
+                     : (minimalistic ? "**Step 2:** Copy+Paste this subject:"
+                                     : "**Step 2:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:"))
+                .talerFont(.body)
+                .multilineTextAlignment(.leading)
+    }
 
     var body: some View {
       if let receiverStr = payto.receiver {
         List {
             let cryptoString = debitIBAN == nil ? reservePub : "kyc" + reservePub
-            let step2 = Text(minimalistic ? "**Step 2:** Copy+Paste this subject:"
-                             : "**Step 2:** Copy this code and paste it into the subject/purpose field (or “Message to recipient”) in your banking app or bank website:")
-                .talerFont(.body)
-                .multilineTextAlignment(.leading)
             let warningIcon = Image(systemName: WARNING)
             let note = Text("**Note: Don't forget to copy and paste the code in Step 2.**")
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
@@ -360,7 +364,7 @@ struct ManualDetailsWireV: View {
                     XTalerCode(xTaler: xTaler)
                 }
                 AmountCode(amountStr: amountStr, amountValue: amountValue)
-                step2
+                step2(payto.chQRr != nil)
                 Cryptocode(cryptoString: cryptoString)
 //                    .padding(.top)
                 step3 // .padding(.top, 6)
