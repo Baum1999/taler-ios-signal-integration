@@ -40,9 +40,9 @@ struct QrCodeSpec: Codable, Hashable {
 struct TransferOption: Codable, Hashable {
     var type: TransferType
     var uri: String?                                            // only if type == uri
-    var paytoUri: String?                                       // only if type == payto
-    var qrReferenceNumber: String?
-    var qrCodes: [QrCodeSpec]?
+    var paytoUri: String?                                       // not if type == uri
+    var qrCodes: [QrCodeSpec]?                                  // not if type == uri
+    var qrReferenceNumber: String?                              // only if type == chQrBill
 }
 
 struct ExchangeAccountDetails: Decodable, Hashable {

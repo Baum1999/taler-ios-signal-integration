@@ -236,7 +236,8 @@ extension WalletCore {
             logger.log("❗️ \(pendingOp, privacy: .public): \(id, privacy: .public)")        // this is a new pendingOp I haven't seen before
         }
     }
-    @MainActor private func handleStateTransition(_ jsonData: Data) throws {
+    @MainActor
+    private func handleStateTransition(_ jsonData: Data) throws {
         do {
             let decoded = try JSONDecoder().decode(TransactionTransition.self, from: jsonData)
             if let errorInfo = decoded.errorInfo {

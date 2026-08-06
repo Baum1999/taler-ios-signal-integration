@@ -171,9 +171,9 @@ struct DepositAmountView: View {
                                     comment: "a11y")
                 Button(buttonTitle(amountToTransfer)) { startDeposit(balance.scopeInfo) }   // TODO: use exchange scope
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
-                .padding(.horizontal)
                 .disabled(disabled || depositStarted)
                 .accessibilityHint(disabled ? hint : EMPTYSTRING)
+                .padding(.horizontal)
             } else {    // no balance - Yikes
                 Text("No balance. There seems to be a problem with the database...")
             }

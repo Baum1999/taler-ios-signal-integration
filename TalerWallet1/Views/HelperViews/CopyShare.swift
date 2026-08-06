@@ -204,7 +204,6 @@ struct ShareButton: View {
                 withAnimation(.easeOut(duration: 0.25)) {
                     scale = 1.15
                 }
-//              ShareSheet.shareSheet(textToShare: textToShare, image: image)
                 dismissAndPost()
             }
             // Finally settle to normal

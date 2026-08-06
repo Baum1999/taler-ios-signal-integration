@@ -178,7 +178,7 @@ struct BorderWithNFC<Content: View>: View {
             }
         }
 
-        if true {   // TODO: check for write capabilities
+        if true {   // We always have NFC write capabilities
             VStack {
                 if let automaticNfc, automaticNfc, !didWriteTOTP {
                     Text("\(nfcLogo) Point your iPhone to the NFC device")

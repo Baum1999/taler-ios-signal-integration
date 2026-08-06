@@ -265,6 +265,7 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(checkDisabled)
                     }.id("runInfiniteLoop")
+#if false
                     SettingsItem(name: String("Save Logfile"), id1: "save",
                           description: String("Help debugging wallet-core")) {
                         Button("Save") {
@@ -274,6 +275,7 @@ struct DebugSettingsView: View {
                         .buttonStyle(.bordered)
                         .disabled(true)
                     }.id("saveLog")
+#endif
                     SettingsItem(name: String("Reset Wallet"), id1: "reset",
                           description: String("Throw away all your money")) {
                         Button("Reset") {

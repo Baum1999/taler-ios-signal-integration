@@ -148,7 +148,6 @@ struct DoneButton : View  {
         Button(action: action) {
             if let titleStr {
                 Text(titleStr)
-//                    .tint(WalletColors().primaryAccent)
             } else {
                 Image(systemName: CHECKMARK)    // 􀆅
             }
