@@ -165,16 +165,21 @@ struct PayeeTown: View {
 // MARK: -
 struct Cryptocode: View {
     let cryptoString: String
+    let chQRr: String?
+
     @State var isCopied: Bool? = false
     var body: some View {
+        let isChQRr = chQRr != nil
         HStack {
-            Text(cryptoString)
+            Text(chQRr ?? cryptoString)
                 .foregroundStyle(isCopied == true ? Color.secondary : .primary)
                 .monospacedDigit()
-                .accessibilityLabel(Text("Cryptocode", comment: "a11y"))
+                .accessibilityLabel(isChQRr ? Text("QR reference", comment: "a11y")
+                                            : Text("Cryptocode", comment: "a11y"))
                 .frame(maxWidth: .infinity, alignment: .leading)
-            CopyButton(cryptoString, isCopied: $isCopied, vertical: true)
-                .accessibilityLabel(Text("Copy the cryptocode", comment: "a11y"))
+            CopyButton(chQRr ?? cryptoString, isCopied: $isCopied, vertical: true)
+                .accessibilityLabel(isChQRr ? Text("Copy the QR reference", comment: "a11y")
+                                            : Text("Copy the cryptocode", comment: "a11y"))
                 .disabled(false)
         }   .padding(.leading)
     }
@@ -304,7 +309,7 @@ struct ManualDetailsWireV: View {
     var body: some View {
       if let receiverStr = payto.receiver {
         List {
-            let cryptoString = debitIBAN == nil ? reservePub : "kyc" + reservePub
+            let cryptoString = debitIBAN == nil ? reservePub : "KYC:" + reservePub
             let warningIcon = Image(systemName: WARNING)
             let note = Text("**Note: Don't forget to copy and paste the code in Step 2.**")
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
@@ -365,7 +370,7 @@ struct ManualDetailsWireV: View {
                 }
                 AmountCode(amountStr: amountStr, amountValue: amountValue)
                 step2(payto.chQRr != nil)
-                Cryptocode(cryptoString: cryptoString)
+                Cryptocode(cryptoString: cryptoString, chQRr: payto.chQRr)
 //                    .padding(.top)
                 step3 // .padding(.top, 6)
             }.listRowSeparator(.hidden)
