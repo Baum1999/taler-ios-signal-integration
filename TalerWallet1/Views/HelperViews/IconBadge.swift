@@ -38,17 +38,23 @@ struct TransactionIconBadge: View {
     let incoming: Bool
     let shouldConfirm: Bool
     let needsKYC: Bool
+    let imageBase64: String?
 
-    init(type: TransactionType, foreColor: Color, done: Bool, incoming: Bool, shouldConfirm: Bool, needsKYC: Bool) {
+    init(type: TransactionType, foreColor: Color, done: Bool, incoming: Bool,
+         shouldConfirm: Bool, needsKYC: Bool, imageBase64: String? = nil
+    ) {
         self.type = type
         self.foreColor = foreColor
         self.done = done
         self.incoming = incoming
         self.shouldConfirm = shouldConfirm
         self.needsKYC = needsKYC
+        self.imageBase64 = imageBase64
     }
 
-    init(from transaction: TalerTransaction, isDark: Bool, _ increasedContrast: Bool) {
+    init(from transaction: TalerTransaction, isDark: Bool, _ increasedContrast: Bool,
+         imageBase64: String? = nil
+    ) {
         let common = transaction.common
         self.type = common.type
         let done = transaction.isDone
@@ -73,19 +79,27 @@ struct TransactionIconBadge: View {
                              : done ? WalletColors().transactionColor(incoming)
                                     : WalletColors().uncompletedColor
         self.foreColor = foreColor
+        self.imageBase64 = imageBase64
     }
 
     var body: some View {
-        IconBadge(image: type.icon(done),
-                   done: true,
-              foreColor: foreColor,
-          shouldConfirm: shouldConfirm,
-               needsKYC: needsKYC,
-                  phase: 0,
-             firstImage: nil,
-            secondImage: nil,
-               wideIcon: TransactionType.refund.icon())
-                      // "arrowshape.turn.up.backward" is wider than all others
+        if let imageBase64, let image = Image(imageBase64: imageBase64) {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxHeight: 40)
+        } else {
+            IconBadge(image: type.icon(done),
+                       done: true,
+                  foreColor: foreColor,
+              shouldConfirm: shouldConfirm,
+                   needsKYC: needsKYC,
+                      phase: 0,
+                 firstImage: nil,
+                secondImage: nil,
+                   wideIcon: TransactionType.refund.icon())
+                          // "arrowshape.turn.up.backward" is wider than all others
+        }
     }
 }
 // MARK: -

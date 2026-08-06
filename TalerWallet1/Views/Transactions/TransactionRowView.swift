@@ -39,6 +39,7 @@ struct TransactionRowView: View {
     @Environment(\.sizeCategory) var sizeCategory
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -47,6 +48,7 @@ struct TransactionRowView: View {
 #endif
     @AppStorage("debugViews") var debugViews: Bool = false
 
+    @State private var merchantLogo: String? = nil
     @State private var layoutStati0: [Int: Bool] = [:]
     @State private var layoutStati1: [Int: Bool] = [:]
 
@@ -134,7 +136,8 @@ struct TransactionRowView: View {
                              done: done,
                          incoming: incoming,
                     shouldConfirm: shouldConfirm && pending,
-                         needsKYC: needsKYC && pending)
+                         needsKYC: needsKYC && pending,
+                      imageBase64: merchantLogo)
     }
     var topA11y: String { topString(forA11y: true)! }
     var a11yLabel: String { donePendingDialog ? topA11y
@@ -312,11 +315,41 @@ struct TransactionRowView: View {
     }
 #endif
 
+    func merchantLogo(talerTx: TalerTransaction) -> String? {
+        switch talerTx {
+            case .payment(let paymentTransaction):
+                if let terms = paymentTransaction.details.contractTerms {
+                    return terms.merchant.logo
+                }
+            default: break
+        }
+        return nil
+    }
+    private func viewDidLoad() async {
+        if transaction.isPayment {
+            let txId = transaction.id
+            if merchantLogo == nil {
+                symLog.log("loading merchantLogo for \(txId)")
+                if let fullTx = try? await model.getTransactionById(txId, includeContractTerms: true) {
+                    if let logo = merchantLogo(talerTx: fullTx) {
+                        symLog("found terms.merchant.logo for \(txId)")
+                        merchantLogo = logo
+                    } else {
+                        symLog("no logo")
+                    }
+                } else {
+                    symLog.log("loading \(txId) failed")
+                }
+            } else {
+                symLog.log("There is already a merchantLogo for \(txId)")
+            }
+        }
+    }
 
     var body: some View {
 #if DEBUG
 //        let _ = Self._printChanges()
-        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
+//        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
 //        let details = transaction.detailsToShow()
 //        let keys = details.keys
@@ -344,6 +377,9 @@ struct TransactionRowView: View {
                                    : shouldConfirm ? String(localized: ". Needs bank authorization", comment: "a11y")
                                                    : EMPTYSTRING)
             .accessibilityHint(String(localized: "Will go to detail view.", comment: "a11y"))
+            .task {
+                await viewDidLoad()
+            }
     }
 }
 // MARK: -
