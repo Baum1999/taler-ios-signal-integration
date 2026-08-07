@@ -116,7 +116,7 @@ struct PayTemplateScan: View {
             let amountLabel = minimalistic ? String(localized: "Amount:")
                                            : a11yLabel
             // final destination with amountToTransfer, after user input of amount
-            let finalDestinationI = PaymentView(stack: stack.push(),
+            let finalDestinationI = PaymentScan(stack: stack.push(),
                                                   url: url,
                                              template: true,
                                      amountToTransfer: $amountToTransfer,
@@ -125,7 +125,7 @@ struct PayTemplateScan: View {
                                     summaryIsEditable: summaryIsEditable)
 
             // final destination with amountShortcut, when user tapped a shortcut
-            let finalDestinationS = PaymentView(stack: stack.push(),
+            let finalDestinationS = PaymentScan(stack: stack.push(),
                                                   url: url,
                                              template: true,
                                      amountToTransfer: $amountShortcut,
@@ -190,7 +190,7 @@ struct PayTemplateScan: View {
                 } // inputDestination
             } else {    // both template contract amount and summary are fixed => directly show the payment
                 // Attention: contains a List, thus mustn't be included in a ScrollView
-                PaymentView(stack: stack.push(),
+                PaymentScan(stack: stack.push(),
                               url: url,
                          template: true,
                  amountToTransfer: $amountToTransfer,

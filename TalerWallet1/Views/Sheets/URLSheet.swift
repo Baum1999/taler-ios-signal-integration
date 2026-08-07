@@ -70,7 +70,7 @@ struct URLSheet: View {
                                    selectedBalance: selectedBalance,
                                                url: passedURL)
                     case .pay:
-                        PaymentView(stack: stack.push(), url: passedURL,
+                        PaymentScan(stack: stack.push(), url: passedURL,
                                  template: false, amountToTransfer: $amountToTransfer,     summary: $summary,
                          amountIsEditable: false, summaryIsEditable: false)
                     case .payPull:
