@@ -64,7 +64,7 @@ struct URLSheet: View {
                     case .addExchange:      // TODO: just check the ToS
                         ExchangeListView(stack: stack.push(), url: $passedURL)
                     case .withdraw:
-                        WithdrawURIView(stack: stack.push(), url: passedURL)
+                        WithdrawUriScan(stack: stack.push(), url: passedURL)
                     case .withdrawExchange:
                         WithdrawExchangeScan(stack: stack.push(),
                                    selectedBalance: selectedBalance,

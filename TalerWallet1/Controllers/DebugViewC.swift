@@ -79,7 +79,7 @@ public let VIEW_SETTINGS3 = VIEW_SETTINGS2 + 1                      // 76 DebugS
 
 // MARK: - Bank-Integrated Withdrawal
 // openURL (Link or scan QR) ==> obtains coins from bank
-public let SHEET_WITHDRAWAL = VIEW_WITHDRAWAL + 100                 // 130 WithdrawURIView
+public let SHEET_WITHDRAWAL = VIEW_WITHDRAWAL + 100                 // 130 WithdrawUriScan
 public let SHEET_WITHDRAW_TOS = SHEET_WITHDRAWAL + 1                // 131 WithdrawTOSView
 public let SHEET_WITHDRAW_ACCEPT = SHEET_WITHDRAW_TOS + 1           // 132 WithdrawAcceptView
 public let SHEET_WITHDRAW_AUTHORIZE = SHEET_WITHDRAW_ACCEPT + 1     // 133 waiting for bank confirmation
