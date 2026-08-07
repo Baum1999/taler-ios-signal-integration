@@ -12,7 +12,7 @@ import SymLog
 // Will be called either by the user scanning a <pay-template> QR code or tapping the provided link,
 // both from the shop's website - or even from a printed QR code.
 // We check whether amount and/or summary is editable, and finally go to PaymentView
-struct PayTemplateV: View {
+struct PayTemplateScan: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
 

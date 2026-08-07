@@ -78,7 +78,7 @@ struct URLSheet: View {
                     case .payPush:
                         P2pReceiveURIView(stack: stack.push(), url: passedURL, oimEuro:     oimEuro)
                     case .payTemplate:
-                        PayTemplateV(stack: stack.push(), url: passedURL)
+                        PayTemplateScan(stack: stack.push(), url: passedURL)
                     case .refund:
                         RefundURIView(stack: stack.push(), url: passedURL)
 #if GNU_TALER || TALER_NIGHTLY
