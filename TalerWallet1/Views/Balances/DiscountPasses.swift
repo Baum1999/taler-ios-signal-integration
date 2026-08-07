@@ -243,6 +243,7 @@ struct DiscountPassesSection: View {
                                      Text(discText)
                                  } icon: {
                                      Image(ICONNAME_DISCOUNTS, SYSTEM_DISCOUNTS)
+                                         .renderingMode(.template)
                                          .foregroundColor(discColor)
                                  }
 
@@ -252,6 +253,7 @@ struct DiscountPassesSection: View {
                                   Text(passText)
                               } icon: {
                                   Image(ICONNAME_PASSES, SYSTEM_PASSES)
+                                      .renderingMode(.template)
                                       .foregroundColor(passColor)
                               }
 
