@@ -84,7 +84,7 @@ public let SHEET_WITHDRAW_TOS = SHEET_WITHDRAWAL + 1                // 131 Withd
 public let SHEET_WITHDRAW_ACCEPT = SHEET_WITHDRAW_TOS + 1           // 132 WithdrawAcceptView
 public let SHEET_WITHDRAW_AUTHORIZE = SHEET_WITHDRAW_ACCEPT + 1     // 133 waiting for bank confirmation
 
-public let SHEET_WITHDRAW_EXCHANGE = SHEET_WITHDRAWAL + 5           // 135 WithdrawExchangeV
+public let SHEET_WITHDRAW_EXCHANGE = SHEET_WITHDRAWAL + 5           // 135 WithdrawExchangeScan
 
 
 // MARK: Merchant Payment

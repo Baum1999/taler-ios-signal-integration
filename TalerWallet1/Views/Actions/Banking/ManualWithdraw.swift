@@ -10,7 +10,7 @@ import taler_swift
 import SymLog
 
 // Called when tapping [􁾭Withdraw]
-// or from WithdrawExchangeV after a withdraw-exchange QR was scanned
+// or from WithdrawExchangeScan after a withdraw-exchange QR was scanned
 struct ManualWithdraw: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
@@ -21,7 +21,7 @@ struct ManualWithdraw: View {
     @Binding var amountToTransfer: Amount           // Update currency when used
     let exchange: Exchange?                         // only for withdraw-exchange
     let maySwitchCurrencies: Bool                   // not for withdraw-exchange
-    let isSheet: Bool
+    let isSheet: Bool                               // true: WithdrawExchangeScan
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
@@ -104,7 +104,7 @@ struct ManualWithdraw: View {
             .background(FullBackground())
             .onAppear {
                 if isSheet {
-                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_ACCEPT,         // 132 WithdrawAcceptView
+                    DebugViewC.shared.setSheetID(SHEET_WITHDRAW_EXCHANGE,       // 135 WithdrawExchangeScan
                                                  stack: stack.push())
                 } else {
                     DebugViewC.shared.setViewID(VIEW_WITHDRAWAL,                // 30 WithdrawAmount

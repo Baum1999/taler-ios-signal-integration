@@ -66,9 +66,9 @@ struct URLSheet: View {
                     case .withdraw:
                         WithdrawURIView(stack: stack.push(), url: passedURL)
                     case .withdrawExchange:
-                        WithdrawExchangeV(stack: stack.push(),
-                                selectedBalance: selectedBalance,
-                                            url: passedURL)
+                        WithdrawExchangeScan(stack: stack.push(),
+                                   selectedBalance: selectedBalance,
+                                               url: passedURL)
                     case .pay:
                         PaymentView(stack: stack.push(), url: passedURL,
                                  template: false, amountToTransfer: $amountToTransfer,     summary: $summary,

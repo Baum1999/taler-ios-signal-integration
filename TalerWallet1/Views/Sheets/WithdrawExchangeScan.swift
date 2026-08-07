@@ -11,7 +11,7 @@ import SymLog
 
 // Called either when scanning a QR code or tapping the provided link, both from the bank's website.
 // We show the user the manual withdrawal details in a sheet - but first the ToS must be accepted.
-struct WithdrawExchangeV: View {
+struct WithdrawExchangeScan: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     let selectedBalance: Balance?
