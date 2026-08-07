@@ -425,10 +425,8 @@ struct TransactionSummaryList: View {
                 @unknown default:
                     ErrorView(stack.push(),
                               title: "Unknown withdrawal type",        // should not happen, so no L10N
-                            message: withdrawalDetails.type.rawValue,
-                           copyable: true) {
-                        dismissTop(stack.push())
-                    }
+                            message: withdrawalDetails.toJSON(),
+                           copyable: true)
             } // switch
         }
     }

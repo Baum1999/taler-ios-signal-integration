@@ -93,10 +93,8 @@ struct ManualWithdraw: View {
                            amountToTransfer: $amountToTransfer,
                                    exchange: exchange)
             } else {  // should never happen, we either have an exchange or a balance
-                let title = "ManualWithdrawContent: Cannot determine scope"        // should not happen, so no L10N
-                ErrorView(stack.push("ManualWithdraw"), title: title, message: nil, copyable: true) {
-                    dismissTop(stack.push())
-                }
+                ErrorView(stack.push(), title: "ManualWithdraw",
+                        message: "ManualWithdrawContent: Cannot determine scope", copyable: true)
             }
         } // ScrollView
             .navigationTitle(navTitle)

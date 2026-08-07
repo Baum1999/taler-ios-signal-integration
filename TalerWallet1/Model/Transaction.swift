@@ -439,8 +439,8 @@ struct TransactionCommon: Decodable, Sendable {
     }
 }
 // MARK: - Withdrawal
-struct WithdrawalDetails: Decodable {
-    enum WithdrawalType: String, Decodable {
+struct WithdrawalDetails: Codable {
+    enum WithdrawalType: String, Codable {
         case manual = "manual-transfer"
         case bankIntegrated = "taler-bank-integration-api"
     }

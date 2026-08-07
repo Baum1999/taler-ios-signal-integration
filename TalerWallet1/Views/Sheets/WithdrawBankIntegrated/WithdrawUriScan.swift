@@ -217,10 +217,7 @@ struct WithdrawUriScan: View {
             ErrorView(stack.push(),
                       title: String(localized: "Error loading payment service details:"),
                     message: message,
-                    copyable: true
-            ) {
-                dismissTop(stack.push())
-            }
+                   copyable: true)
         } else {        // no details or no exchange
 #if DEBUG
             let message = url.host

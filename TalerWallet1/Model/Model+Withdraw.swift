@@ -45,7 +45,7 @@ struct TransferOption: Codable, Hashable {
     var qrReferenceNumber: String?                              // only if type == chQrBill
 }
 
-struct ExchangeAccountDetails: Decodable, Hashable {
+struct ExchangeAccountDetails: Codable, Hashable {
     var status: String                                          // "OK" or "error" - then conversionError
     var paytoUri: String
     var transferAmount: Amount?                                 // only if "OK"

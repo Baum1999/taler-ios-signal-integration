@@ -72,10 +72,10 @@ struct ErrorView: View {
     var requestUrl: String? = nil
     var copyable: Bool
 
-    var onDismiss: () -> Void
+    var onDismiss: (() -> Void)?
 
     init(_ stack: CallStack, title: String, message: String? = nil,
-      requestUrl: String? = nil, copyable: Bool, onDismiss: @escaping () -> Void) {
+         requestUrl: String? = nil, copyable: Bool = false, onDismiss: (() -> Void)? = nil) {
         self.stack = stack
         self.title = title
         self.message = message
@@ -84,7 +84,7 @@ struct ErrorView: View {
         self.onDismiss = onDismiss
     }
 
-    init(_ stack: CallStack, error: Error, devMode: Bool, onDismiss: @escaping () -> Void) {
+    init(_ stack: CallStack, error: Error, devMode: Bool, onDismiss: (() -> Void)? = nil) {
         let internetError = String(localized: "Network problem")
         let internetMessage = String(localized: "Please check your internet connection and try again.")
         let walletCoreError = String(localized: "Internal core error")
@@ -134,7 +134,7 @@ struct ErrorView: View {
         }
     }
 
-    init(_ stack: CallStack, data: ErrorData, devMode: Bool, onDismiss: @escaping () -> Void) {
+    init(_ stack: CallStack, data: ErrorData, devMode: Bool, onDismiss: (() -> Void)? = nil) {
         switch data {
             case .message(let title, let message):
                 self.init(stack, title: title, message: message, copyable: false, onDismiss: onDismiss)
@@ -184,7 +184,11 @@ struct ErrorView: View {
         .padding()
         .safeAreaInset(edge: .bottom) {
             Button("OK", role: .cancel) {
-                onDismiss()
+                if let onDismiss {
+                    onDismiss()
+                } else {
+                    dismissTop(stack.push())
+                }
             }
             .buttonStyle(TalerButtonStyle(type: .bordered))
             .padding(.bottom)

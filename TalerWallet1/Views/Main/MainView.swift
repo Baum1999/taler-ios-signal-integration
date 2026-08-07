@@ -199,9 +199,12 @@ struct MainView: View {
             // show launch animation until either ready or error
             switch controller.backendState {
                 case .ready: mainContent
-                case .error(let error): ErrorView(stack.push("mainGroup"),
-                                                  title: EMPTYSTRING,   // TODO: String(localized: ""),
-                                               copyable: true) {}
+                case .error(let error):
+                    ErrorView(stack.push("mainGroup"),
+                              title: "Launch error",   // TODO: String(localized: "")
+                            message: error.localizedDescription,
+                           copyable: true
+                    ) {}
                 default:     LaunchAnimationView()
             }
         }.animation(.linear(duration: LAUNCHDURATION), value: controller.backendState)
