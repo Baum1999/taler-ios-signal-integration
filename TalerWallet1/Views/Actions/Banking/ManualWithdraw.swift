@@ -286,30 +286,3 @@ struct ManualWithdrawContent: View {
         }
     }
 }
-// MARK: -
-#if DEBUG
-//struct ManualWithdraw_Previews: PreviewProvider {
-//    struct StateContainer : View {
-//        @State private var amountToPreview = Amount(currency: LONGCURRENCY, cent: 510)
-//        @State private var exchange: Exchange? = Exchange(exchangeBaseUrl: DEMOEXCHANGE,
-//                                                                scopeInfo: ScopeInfo(type: .exchange, currency: LONGCURRENCY),
-//                                                                paytoUris: [],
-//                                                                tosStatus: .accepted,
-//                                                      exchangeEntryStatus: .ephemeral,
-//                                                     exchangeUpdateStatus: .ready,
-//                                                    ageRestrictionOptions: [])
-//
-//        var body: some View {
-//            ManualWithdraw(stack: CallStack("Preview"), isSheet: false,
-//                       scopeInfo: <#ScopeInfo?#>,
-//                 exchangeBaseUrl: DEMOEXCHANGE,
-//                        exchange: $exchange,
-//                amountToTransfer: $amountToPreview)
-//        }
-//    }
-//
-//    static var previews: some View {
-//        StateContainer()
-//    }
-//}
-#endif

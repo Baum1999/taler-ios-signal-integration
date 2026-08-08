@@ -86,7 +86,7 @@ struct TransactionSummaryList: View {
 
     private func payTransaction() async {
         if let confirmPayResult = try? await model.confirmPay(transactionId,
-                                                              choiceIndex: selectedChoice) {
+                                                  choiceIndex: selectedChoice) {
 //          symLog.log(confirmPayResult as Any)
             if confirmPayResult.type == "done" {
                 if let url {

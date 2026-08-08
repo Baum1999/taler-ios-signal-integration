@@ -32,6 +32,7 @@ struct MerchantHeader: View {
         }
         return nil
     }
+
     var body: some View {
         if let terms {
             Section {
@@ -46,7 +47,7 @@ struct MerchantHeader: View {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(maxHeight: 60)
+                                    .frame(maxHeight: 50)
                             }
                         } else {
 #if TALER_NIGHTLY

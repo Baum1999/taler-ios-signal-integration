@@ -592,7 +592,6 @@ extension Controller {
         let host = url.host ?? "  <- no command"
         self.logger.trace("urlCommand(\(scheme)\(host)")
 #endif
-        var uncrypted = false
         var urlCommand = UrlCommand.unknown
         switch scheme.lowercased() {
             case "taler", "ext+taler", "web+taler":

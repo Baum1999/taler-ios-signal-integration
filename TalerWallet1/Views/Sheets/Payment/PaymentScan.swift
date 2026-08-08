@@ -243,8 +243,8 @@ struct PaySafeArea: View, Sendable {
                 wasTapped = true
                 controller.hapticNotification(.success)
                 symLog?.log("paying \(amountString) now")
-#if DEBUG
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+#if DEBUG       // 1 second delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     payNow = true
                 }
 #else

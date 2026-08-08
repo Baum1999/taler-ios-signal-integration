@@ -573,7 +573,7 @@ fileprivate struct CheckPayForTemplate: WalletBackendFormattedRequest {
 // MARK: -
 /// The result from confirmPayForUri
 struct ConfirmPayResult: Decodable {
-    var type: String                                // done || pending
+    var type: String?                               // done || pending
     var contractTerms: MerchantContractTerms?       // only if type==done
     var transactionId: String
     var lastError: TalerErrorDetail?                // might, but only if type==pending
