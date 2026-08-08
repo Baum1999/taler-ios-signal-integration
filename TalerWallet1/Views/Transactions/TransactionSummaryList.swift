@@ -303,14 +303,6 @@ struct TransactionSummaryList: View {
                               amountString: formatted.0,
                                 amountA11y: formatted.1,
                                     payNow: $payNow)
-                        .onChange(of: payNow) { payNow2 in
-                            if payNow2 {
-                                Task {
-                                    payNow = false
-                                    await payTransaction()
-                                }
-                            }
-                        }
                     } else {
                         Button("Cancel") { dismissTop(stack.push()) }
                             .buttonStyle(TalerButtonStyle(type: .bordered))
@@ -320,6 +312,14 @@ struct TransactionSummaryList: View {
                     Button("Done") { dismissTop(stack.push()) }
                         .buttonStyle(TalerButtonStyle(type: showDone))
                         .padding(.horizontal)
+                }
+            }
+            .onChange(of: payNow) { payNow2 in
+                if payNow2 {
+                    Task {
+                        payNow = false
+                        await payTransaction()
+                    }
                 }
             }
             .onNotification(.TransactionExpired) { notification in
