@@ -316,9 +316,14 @@ fileprivate struct Builtin: Encodable {
     // more to come...
 }
 
+fileprivate struct Features: Encodable {
+    var migrateNativeDb: Bool           // needed only once to migrate the DB
+}
+
 fileprivate struct Config: Encodable {
     var testing: Testing
     var builtin: Builtin
+    var features: Features
 }
 // MARK: -
 ///  A request to re-configure Wallet-core
@@ -329,7 +334,8 @@ fileprivate struct ConfigRequest: WalletBackendFormattedRequest {
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
-        let config = Config(testing: testing, builtin: builtin)
+        let features = Features(migrateNativeDb: false)
+        let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(config: config)
     }
 
@@ -355,14 +361,16 @@ extension WalletModel {
 fileprivate struct InitRequest: WalletBackendFormattedRequest {
     var persistentStoragePath: String
     var setTesting: Bool
+    var migrateNativeDb: Bool
 
     var operation: String { "init" }
     func args() -> Args {
         let testing = Testing(devModeActive: setTesting)
         let builtin = Builtin(exchanges: [])
-        let config = Config(testing: testing, builtin: builtin)
+        let features = Features(migrateNativeDb: migrateNativeDb)
+        let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(persistentStoragePath: persistentStoragePath,
-//                       cryptoWorkerType: "sync",
+//                       cryptoWorkerType: "sync",  qtart can ONLY use sync, that's the default anyway
                                  logLevel: "info",  // trace, info, warn, error, none
                                    config: config,
                          useNativeLogging: true)
@@ -382,10 +390,10 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
 
 extension WalletModel {
     /// initalize Wallet-Core. Might do networking
-    nonisolated func initWalletCore(setTesting: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
+    nonisolated func initWalletCore(setTesting: Bool, migrateNativeDb: Bool, viewHandles: Bool = false) async throws -> VersionInfo {
         let dbPath = try dbPath()
 //        logger.debug("dbPath: \(dbPath)")
-        let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting)
+        let request = InitRequest(persistentStoragePath: dbPath, setTesting: setTesting, migrateNativeDb: migrateNativeDb)
         let response = try await sendRequest(request, viewHandles: viewHandles)    // no Delay
         return response.versionInfo
     }

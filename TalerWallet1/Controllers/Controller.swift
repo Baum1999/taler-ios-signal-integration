@@ -542,7 +542,7 @@ class Controller: ObservableObject {
             backendState = .initing
             do {
                 let walletCore = WalletCore.shared
-                let versionInfo = try await model.initWalletCore(setTesting: setTesting)
+                let versionInfo = try await model.initWalletCore(setTesting: setTesting, migrateNativeDb: false)
                 walletCore.versionInfo = versionInfo
                 if developerMode {
                     try await model.setConfig(setTesting: true)
