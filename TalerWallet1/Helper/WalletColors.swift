@@ -114,8 +114,8 @@ public struct WalletColors {
     }
 
     func pickerSelected(_ scheme: ColorScheme, _ contrast: ColorSchemeContrast) -> Color {
-        return contrast == .increased ? (scheme == .dark ? gray3 : gray4)
-                                      : (scheme == .dark ? gray4 : gray5)
+        return contrast == .increased ? (scheme == .dark ? gray2 : gray3)
+                                      : (scheme == .dark ? gray3 : gray4)
     }
 
     var pickerBackground: Color {
