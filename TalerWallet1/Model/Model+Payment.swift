@@ -584,7 +584,8 @@ fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
     typealias Response = ConfirmPayResult
     var operation: String { "confirmPay" }
     func args() -> Args { Args(transactionId: transactionId, noWait: true,
-                                 choiceIndex: choiceIndex) }
+                                 choiceIndex: choiceIndex,
+                               progressToken: transactionId) }
     var transactionId: String
     var choiceIndex: Int?
     struct Args: Encodable {
@@ -604,6 +605,7 @@ fileprivate struct ConfirmPayForUri: WalletBackendFormattedRequest {
          * Only applies to v1 orders.
          */
         var choiceIndex: Int?
+        var progressToken: String?
     }
 }
 // MARK: -
@@ -651,6 +653,9 @@ extension WalletModel {
       async throws -> ConfirmPayResult {
         let request = ConfirmPayForUri(transactionId: transactionId,
                                        choiceIndex: choiceIndex)
+        let controller = Controller.shared
+        controller.progressOperation = request.operation
+        controller.progressToken = transactionId
         let response = try await sendRequest(request, viewHandles: viewHandles)
         return response
     }
