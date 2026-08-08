@@ -16,16 +16,18 @@ struct SegmentControl: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     @State private var selectedAccount = 0
-    @ScaledMetric var frameHeight = 80       // relative to fontSize
+    @ScaledMetric var frameHeight = 60       // relative to fontSize
 
     public var body: some View {
+        let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
+        let cornerRadius: CGFloat = is26 ? 16.0 : 6.0
         let count = accountDetails.count
       if count > 0 {
         ZStack(alignment: .center) {
             GeometryReader { geo in
-                RoundedRectangle(cornerRadius: 6.0)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundColor(WalletColors().pickerSelected(colorScheme, colorSchemeContrast))
-                    .cornerRadius(6.0)
+                    .cornerRadius(cornerRadius)
                     .padding(4)
                     .frame(width: geo.size.width / CGFloat(count))
                     .offset(x: geo.size.width / CGFloat(count) * CGFloat(selectedAccount), y: 0)
@@ -77,7 +79,7 @@ struct SegmentControl: View {
             action(selected)
         }
         .background(
-            RoundedRectangle(cornerRadius: 6.0)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(WalletColors().sideBackgroundColor)
         )
       }
@@ -93,13 +95,15 @@ struct SegmentControl2: View {
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     public var body: some View {
+        let is26: Bool = if #available(iOS 26.0, *) { true } else { false }
+        let cornerRadius: CGFloat = is26 ? 16.0 : 6.0
         let count = strings.count
         if count > 0 {
             ZStack(alignment: .center) {
                 GeometryReader { geo in
-                    RoundedRectangle(cornerRadius: 6.0)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .foregroundColor(WalletColors().pickerSelected(colorScheme, colorSchemeContrast))
-                        .cornerRadius(6.0)
+                        .cornerRadius(cornerRadius)
                         .padding(4)
                         .frame(width: geo.size.width / CGFloat(count))
                         .offset(x: geo.size.width / CGFloat(count) * CGFloat(value), y: 0)
@@ -128,7 +132,7 @@ struct SegmentControl2: View {
                 }
             }
             .background(
-                RoundedRectangle(cornerRadius: 6.0)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(WalletColors().sideBackgroundColor)
             )
         }
