@@ -141,43 +141,49 @@ struct PaymentTransactionView: View {
 
             let choicesTuple = controller.choicesTuple
             if let txId = choicesTuple.0, let choicesForPayment = choicesTuple.1 {
-                if let (choices, showHeader) = choicesForPayment.choiceTriple() {
-                    let hasAutomatic = choicesForPayment.automaticExecution ?? false
-                    let automaticIndex = hasAutomatic ? choicesForPayment.automaticExecutableIndex : nil
-                    ChoicesView(stack: stack.push(),
-                         choiceTriple: choices,
-                           showHeader: showHeader,
-                       automaticIndex: automaticIndex,
-                       selectedChoice: $selectedChoice)
-                    .task {
-                        automaticOrDefault(automaticIndex, choicesForPayment.defaultChoiceIndex, of: choices)
-                    }
-                    .onChange(of: selectedChoice) { newValue in
-                        if let newValue, newValue < choices.count {
-                            let newChoice = choices[newValue]
-                            effective = newChoice.0.amountEffective
-                            scope = newChoice.0.scopeInfo
-                        } else {
-                            effective = nil
-                            scope = nil
+                if txId == common.transactionId {
+                    if let (choices, showHeader) = choicesForPayment.choiceTriple() {
+                        let hasAutomatic = choicesForPayment.automaticExecution ?? false
+                        let automaticIndex = hasAutomatic ? choicesForPayment.automaticExecutableIndex : nil
+                        ChoicesView(stack: stack.push(),
+                             choiceTriple: choices,
+                               showHeader: showHeader,
+                           automaticIndex: automaticIndex,
+                           selectedChoice: $selectedChoice)
+                        .task {
+                            automaticOrDefault(automaticIndex, choicesForPayment.defaultChoiceIndex, of:    choices)
                         }
-                    }
+                        .onChange(of: selectedChoice) { newValue in
+                            if let newValue, newValue < choices.count {
+                                let newChoice = choices[newValue]
+                                effective = newChoice.0.amountEffective
+                                scope = newChoice.0.scopeInfo
+                            } else {
+                                effective = nil
+                                scope = nil
+                            }
+                        }
 
-                    if let selectedChoice {
-                        let choice = choices[selectedChoice]
-                        let selectionDetail: ChoiceSelectionDetail = choice.0
-//                        let contractChoice: ContractChoice = choice.1
+                        if let selectedChoice {
+                            let choice = choices[selectedChoice]
+                            let selectionDetail: ChoiceSelectionDetail = choice.0
+    //                        let contractChoice: ContractChoice = choice.1
 
-                        PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
-                                      paid: false,
-                                       raw: selectionDetail.amountRaw,
-                                 effective: effective,
-                                firstScope: scope,
-                                   baseURL: nil,
-                                   summary: summary(details.info),
-                                  products: details.info?.products ?? [],
-                            balanceDetails: selectionDetail.balanceDetails)
+                            PaymentView2(stack: stack.push(),           // TODO: details.info.merchant.name
+                                          paid: false,
+                                           raw: selectionDetail.amountRaw,
+                                     effective: effective,
+                                    firstScope: scope,
+                                       baseURL: nil,
+                                       summary: summary(details.info),
+                                      products: details.info?.products ?? [],
+                                balanceDetails: selectionDetail.balanceDetails)
+                        }
+                    } else { // should never happen...
+                        // TODO: show some error
                     }
+                } else {    // cached data outdated
+                    // TODO: purge and reload
                 }
             }
         } else { // show finished payment
