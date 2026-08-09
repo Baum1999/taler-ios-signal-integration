@@ -30,7 +30,7 @@ func request_create(userdata: Optional<UnsafeMutableRawPointer>,
 
             var request = URLRequest(url: url)
             request.httpMethod = method
-            request.timeoutInterval = TimeInterval(timeoutMs)
+            request.timeoutInterval = TimeInterval(timeoutMs) / 1000.0
             if let reqBody {        // caller will deallocate the req_body after dataTask finish or cancel
                 let body = Data(bytesNoCopy: reqBody, count: Int(bodyLen), deallocator: .none)
                 request.httpBody = body
