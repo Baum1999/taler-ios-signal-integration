@@ -62,6 +62,7 @@ struct DepositSelectV: View {
         List {
             Section {
                 depositHint
+                    .talerFont(.body)
             }
             if bankAccounts.isEmpty {
                 Section {

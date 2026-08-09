@@ -188,7 +188,6 @@ struct OIMtransactions: View {
                             let scrollBack = count == computedItems.count
 //        let _ = print("calling HistoryView", count, maxIndex, scrollBack)
                             if oimChart {
-#if TALER_WALLET
                                 ChartHistoryView(stack: stack.push(),
                                               currency: cash.currency,
                                             shownItems: $shownItems,
@@ -196,7 +195,8 @@ struct OIMtransactions: View {
                                             scrollBack: scrollBack,
                                               maxIndex: maxIndex,
                                               maxValue: chartMaxY)
-#else
+                            } else {
+#if TALER_WALLET
                                 ArrowHistoryView(stack: stack.push(),
                                               currency: cash.currency,
                                             shownItems: $shownItems,
@@ -204,8 +204,7 @@ struct OIMtransactions: View {
                                             scrollBack: scrollBack,
                                               maxIndex: maxIndex,
                                               maxValue: chartMaxY)
-#endif
-                            } else {
+#else
                                 RiverHistoryView(stack: stack.push(),
                                               currency: cash.currency,
                                             shownItems: $shownItems,
@@ -213,6 +212,7 @@ struct OIMtransactions: View {
                                             scrollBack: scrollBack,
                                               maxIndex: maxIndex,
                                               maxValue: chartMaxY)
+#endif
                             }
                         }
                         sidePosition
