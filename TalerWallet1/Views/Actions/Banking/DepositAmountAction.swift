@@ -9,8 +9,8 @@ import SwiftUI
 import taler_swift
 import SymLog
 
-// Called from DepositSelectV
-struct DepositAmountV: View {
+// Called from DepositSelectV -> BankSectionView
+struct DepositAmountAction: View {
     private let symLog = SymLogV(0)
     let stack: CallStack
     // when Action is tapped while in currency TransactionList…

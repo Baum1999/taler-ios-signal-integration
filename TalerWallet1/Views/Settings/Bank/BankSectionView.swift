@@ -85,11 +85,11 @@ struct BankSectionView: View {
                 } else {
                     let navTitle = String(localized: "NavTitle_Deposit",    // _Currency",
                                        defaultValue: "Deposit")             // \(currencySymbol)"
-                    DepositAmountV(stack: stack.push(),
-                         selectedBalance: selectedBalance,
-                          amountLastUsed: $amountLastUsed,
-                                paytoUri: account.payToWorkAround,  // TODO:  paytoUri,
-                                   label: account.label)
+                    DepositAmountAction(stack: stack.push(),
+                              selectedBalance: selectedBalance,
+                               amountLastUsed: $amountLastUsed,
+                                     paytoUri: account.payToWorkAround,  // TODO:  paytoUri,
+                                        label: account.label)
                     .navigationTitle(navTitle)
                 }
             } label: {
