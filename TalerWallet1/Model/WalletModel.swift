@@ -371,7 +371,7 @@ fileprivate struct InitRequest: WalletBackendFormattedRequest {
         let config = Config(testing: testing, builtin: builtin, features: features)
         return Args(persistentStoragePath: persistentStoragePath,
 //                       cryptoWorkerType: "sync",  qtart can ONLY use sync, that's the default anyway
-                                 logLevel: "info",  // trace, info, warn, error, none
+                                 logLevel: "info",  // trace, info, message, warn, error, none
                                    config: config,
                          useNativeLogging: true)
     }
