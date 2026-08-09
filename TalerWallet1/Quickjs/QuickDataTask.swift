@@ -131,7 +131,6 @@ class QuickDataTask: NSObject {
                         logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
 #endif
                         responseCb(responseCbCls, responseInfoPtr)
-                        return
                     } else { // data == nil
 #if DEBUG
                         logger.error("‼️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(response.statusCode, privacy: .public) \(errmsg, privacy: .public)")
