@@ -97,7 +97,9 @@ class QuickDataTask: NSObject {
         if let responseCb, let responseCbCls {
             let method = self.request.httpMethod ?? "Unknown"
             let url = self.request.url?.trimmedString ?? EMPTYSTRING
+#if DEBUG
             logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
+#endif
             dataTask = urlSession.dataTask(with: request) { [self] data, response, error in
                 if let response = response as? HTTPURLResponse {
                     var headerArray: [String] = []
@@ -125,11 +127,15 @@ class QuickDataTask: NSObject {
                                                             body_len: UInt32(data.count))
                         let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
                         // Initialization of 'UnsafeMutablePointer<JSHttpResponseInfo>' results in a dangling pointer
+#if DEBUG
                         logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
+#endif
                         responseCb(responseCbCls, responseInfoPtr)
                         return
                     } else { // data == nil
+#if DEBUG
                         logger.error("‼️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(response.statusCode, privacy: .public) \(errmsg, privacy: .public)")
+#endif
                         var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
                                                                   status: status,
                                                                   errmsg: errmsg_p0,
@@ -142,7 +148,9 @@ class QuickDataTask: NSObject {
                     }
                 } else {    // pass error to walletCore
                     Task.detached {
+#if DEBUG
                         self.logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
+#endif
                         Controller.shared.checkInternetConnection()
                         if let errmsg = error?.localizedDescription,
                            let errmsgC = errmsg.cString(using: .utf8)
