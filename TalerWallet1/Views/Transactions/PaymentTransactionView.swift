@@ -115,15 +115,22 @@ struct PaymentTransactionView: View {
             // Pay Automatically - usually with a subscription token
             if let selectedAutomatic = selectIndex(automaticIndex, of: choices) {
                 if selectedAutomatic == automaticIndex {
-                    // TODO: check if automatic choice does NOT have an amount
-                    // we definitely don't want to pay MONEY automatically, only tokens
-                    payNow = true
+                    // check if automatic choice does NOT have an amount
+                    let choiceTriple = choices[selectedAutomatic]
+                    let selectionDetail = choiceTriple.0
+                    if selectionDetail.status == .paymentPossible {
+                        // we currently don't want to pay MONEY automatically, only tokens
+                        // TODO: make the maximum value a user default
+                        if selectionDetail.amountRaw.isZero {
+                            payNow = true
+                        }
+                    }
                     return
                 } else if let defaultChoiceIndex {
                     if selectedAutomatic == defaultChoiceIndex { return }
-                    // else fall thru and select defaultChoiceIndex
-                } else {
-                    return      // there is no default - keep selectedAutomatic
+                        // else fall thru and select defaultChoiceIndex
+                } else {      // there is no default - keep selectedAutomatic
+                    return
                 }
             }
         }
