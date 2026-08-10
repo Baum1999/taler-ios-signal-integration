@@ -10,7 +10,7 @@ import SwiftUI
 struct AccountPicker: View {
     let title: String
     @Binding var value: Int
-    let accountDetails: [ExchangeAccountDetails]
+    let accountDetails: AccountDetailsArray
     let action: (Int) -> Void
 
     @State private var selected = 0

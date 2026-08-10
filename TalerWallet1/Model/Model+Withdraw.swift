@@ -57,6 +57,22 @@ struct ExchangeAccountDetails: Codable, Hashable {
 //    var conversionError: TalerErrorDetail?                    // only if error
     var scope: ScopeInfo?                                       // for Deposit
 }
+
+typealias AccountDetailsArray = [ExchangeAccountDetails]
+
+extension AccountDetailsArray {
+    /// filter array from Exchange for "ok"
+    var validDetails: AccountDetailsArray? {
+        let result = self.filter { detail in
+            detail.status.lowercased() == "ok"
+        }
+        if !result.isEmpty {
+            return result           // guaranteed to have at least 1 item
+        }
+        return nil
+    }
+}
+
 // MARK: -
 enum WithdrawalOperationStatus: String, Codable {
     case pending
@@ -121,7 +137,7 @@ struct WithdrawalDetailsForAmount: Decodable {
     var amountRaw: Amount               // Amount that the user will transfer to the exchange
     var amountEffective: Amount         // Amount that will be added to the user's wallet balance
     var numCoins: Int?                  // Number of coins this amountEffective will create
-    var withdrawalAccountsList: [ExchangeAccountDetails]?
+    var withdrawalAccountsList: AccountDetailsArray?
     var ageRestrictionOptions: [Int]?   // Array of ages
     var scopeInfo: ScopeInfo
 }
@@ -218,7 +234,7 @@ fileprivate struct AcceptBankIntegratedWithdrawal: WalletBackendFormattedRequest
 // MARK: -
 struct AcceptManualWithdrawalResult: Decodable {
     var reservePub: String
-    var withdrawalAccountsList: [ExchangeAccountDetails]
+    var withdrawalAccountsList: AccountDetailsArray
     var transactionId: String
 }
 /// A request to accept a manual withdrawl.

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SegmentControl: View {
     @Binding var value: Int
-    let accountDetails: [ExchangeAccountDetails]
+    let accountDetails: AccountDetailsArray
     let action: (Int) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
