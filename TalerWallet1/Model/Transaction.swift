@@ -334,10 +334,12 @@ enum TransactionType: String, Codable {
 
 struct KycAuthTransferInfo: Decodable, Sendable {
      /// The KYC auth transfer will *not* work if it originates from a different account.
-    var debitPaytoUri: String       /// Payto URI of the account that must make the transfer
-    var accountPub: String          /// Account public key that must be included in the subject
+    var debitPaytoUri: String                           /// Payto URI of the account that must make the transfer
+    var accountPub: String                              /// Account public key that must be included in the subject
+    var transferOptionsExt: AccountDetailsArray         /// Options for making the KYC auth transfer payment to the exchange
+    var transferExpiry: Timestamp?                      /// Validity of the transferOptions if they might expire
     var amount: Amount
-    var creditPaytoUris: [String]   /// Possible target payto URIs
+//    var creditPaytoUris: [String]         /// deprecated
 }
 
 struct TransactionCommon: Decodable, Sendable {
@@ -449,17 +451,6 @@ struct WithdrawalDetails: Codable {
     var reservePub: String
     var reserveIsReady: Bool
     var exchangeCreditAccountDetails: [ExchangeAccountDetails]?
-    var validDetails: [ExchangeAccountDetails]? {
-        if let details = exchangeCreditAccountDetails {
-            let result = details.filter { detail in
-                detail.status.lowercased() == "ok"
-            }
-            if !result.isEmpty {
-                return result           // guaranteed to have at least 1 item
-            }
-        }
-        return nil
-    }
 
   /// Details for manual withdrawals:
     var reserveClosingDelay: Duration?

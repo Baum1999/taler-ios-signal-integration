@@ -47,7 +47,7 @@ struct TransferOption: Codable, Hashable {
 
 struct ExchangeAccountDetails: Codable, Hashable {
     var status: String                                          // "OK" or "error" - then conversionError
-    var paytoUri: String
+//    var paytoUri: String                          // deprecated, use transferOptions
     var transferAmount: Amount?                                 // only if "OK"
     var transferOptions: [TransferOption]?
     var transferExpiry: Timestamp?

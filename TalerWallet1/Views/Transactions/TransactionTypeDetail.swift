@@ -101,7 +101,7 @@ struct TransactionTypeDetail: View {
                                     summary: nil)
                     if developerMode {
                         let withdrawalDetails = details.withdrawalDetails
-                        if let validDetails = withdrawalDetails.validDetails {
+                        if let validDetails = withdrawalDetails.exchangeCreditAccountDetails?.validDetails {
                             let validCount = validDetails.count
                             if validCount > 0 {
                                 ForEach(validDetails, id: \.self) { detail in
