@@ -68,7 +68,19 @@ struct MainView: View {
 
     func hintApplicationResumed() {
         Task.detached {
-            await model.hintApplicationResumedT()
+            if let result = try? await model.hintApplicationResumedT() {
+                if !result.dbReadHealthy {
+                    let error = TalerErrorDetail(code: 53,  // GENERIC_DB_FETCH_FAILED
+                                                 when: .now(),
+                                                 hint: "Can't read from database")
+                    await model.setError(WalletBackendError.walletCoreError(error))
+                } else if !result.dbWriteHealthy {
+                    let error = TalerErrorDetail(code: 52,  // GENERIC_DB_STORE_FAILED
+                                                 when: .now(),
+                                                 hint: "Can't write to database")
+                    await model.setError(WalletBackendError.walletCoreError(error))
+                }
+            }
         }
     }
 

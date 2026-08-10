@@ -166,9 +166,13 @@ final class WalletModel: ObservableObject, Sendable {
     }
 }
 // MARK: -
+struct DbStatus: Decodable, Sendable {
+    var dbReadHealthy: Bool
+    var dbWriteHealthy: Bool
+}
 /// A request to tell wallet-core about the network.
 fileprivate struct ApplicationResumedRequest: WalletBackendFormattedRequest {
-    struct Response: Decodable {}
+    typealias Response = DbStatus
     var operation: String { "hintApplicationResumed" }
     func args() -> Args { Args() }
 
@@ -193,10 +197,10 @@ extension WalletModel {
         let request = NetworkAvailabilityRequest(isNetworkAvailable: isNetworkAvailable)
         _ = try? await sendRequest(request)
     }
-    func hintApplicationResumedT() async {
+    func hintApplicationResumedT() async throws -> DbStatus {
         // T for any Thread
         let request = ApplicationResumedRequest()
-        _ = try? await sendRequest(request)
+        return try await sendRequest(request)
     }
 }
 // MARK: -
@@ -265,7 +269,7 @@ extension WalletModel {
         let _ = try await sendRequest(request)
     }
     nonisolated func retryProgressTokenNow(_ op: String, token: String)
-    async throws {
+      async throws {
         let request = RetryProgressTokenNow(op: op, token: token)
         let _ = try await sendRequest(request)
     }
