@@ -14,6 +14,30 @@ struct ManualDetailsV: View {
     let common: TransactionCommon
     let details: WithdrawalDetails
 
+    var body: some View {
+        if let validDetails = details.exchangeCreditAccountDetails?.validDetails {
+            WireTransferView(stack: stack.push(),
+                             title: String(localized: "The payment service is waiting for your wire-transfer.", comment: ""),
+                             isKYC: false,
+                        reservePub: details.reservePub,
+                         amountRaw: common.amountRaw,
+                   amountEffective: common.amountEffective,     // only for withdrawal
+                         debitIBAN: nil,                        // only for deposit auth
+                      validDetails: validDetails)
+        } else { ErrorView(stack.push(), title: "Payment Error", message: "No valid details") }
+    } // body
+}
+// MARK: -
+struct WireTransferView: View {
+    let stack: CallStack
+    let title: String
+    let isKYC: Bool
+    let reservePub: String
+    let amountRaw: Amount
+    let amountEffective: Amount?        // only for withdrawal
+    let debitIBAN: String?              // only for deposit auth
+    let validDetails: AccountDetailsArray
+
     @EnvironmentObject private var model: WalletModel
 #if DEBUG
     @AppStorage("developerMode") var developerMode: Bool = true
@@ -42,100 +66,99 @@ struct ManualDetailsV: View {
     }
 
     var body: some View {
-        if let validDetails = details.validDetails {
-            let validCount = validDetails.count         // guaranteed to be > 0
-            let account = validDetails[validIndex]
-            let json = account.toJSON()
-            if account.transferAmount != nil {
-                if let transferOptions = account.transferOptions, let firstOption = transferOptions.first {
-                    let specs = account.currencySpecification
-                    let amountStr = common.amountRaw.formatted(specs: specs, isNegative: false)
-                    let amountValue = common.amountRaw.valueStr
-                    let obtainStr = common.amountEffective.formatted(specs: specs, isNegative: false)
+        let validCount = validDetails.count         // guaranteed to be > 0
+        let account = validDetails[validIndex]
+        let json = account.toJSON()
+        if account.transferAmount != nil {
+            if let transferOptions = account.transferOptions, let firstOption = transferOptions.first {
+                let specs = account.currencySpecification
+                let amountStr = amountRaw.formatted(specs: specs, isNegative: false)
+                let amountValue = amountRaw.valueStr
+                let obtainStr = amountEffective?.formatted(specs: specs, isNegative: false)     // or nil
 //            let _ = print(amountStr, " | ", obtainStr)
-                    if !minimalistic {
-                        Text("The payment service is waiting for your wire-transfer.")
-                            .bold()
-                            .multilineTextAlignment(.leading)
-                            .listRowSeparator(.hidden)
-                    }
-                    if validCount > 1 {
-                        if validCount > 3 { // too many for SegmentControl
-                            AccountPicker(title: String(localized: "Bank"),
-                                          value: $validIndex,
-                                 accountDetails: validDetails,
-                                         action: redraw)
-                            .listRowSeparator(.hidden)
-                            .pickerStyle(.menu)
-                        } else {
-                            SegmentControl(value: $validIndex, accountDetails: validDetails, action: redraw)
-                                .listRowSeparator(.hidden)
-                        }
-                    } else if let bankName = account.bankLabel {
-                        Text(bankName + ":   " + amountStr.0)
-                            .accessibilityLabel(bankName + ":   " + amountStr.1)
+                if !minimalistic {
+                    Text(title)
+                        .bold()
+                        .multilineTextAlignment(.leading)
+                        .listRowSeparator(.hidden)
+                }
+                if validCount > 1 {
+                    if validCount > 3 { // too many for SegmentControl
+                        AccountPicker(title: String(localized: "Bank"),
+                                      value: $validIndex,
+                             accountDetails: validDetails,
+                                     action: redraw)
+                        .listRowSeparator(.hidden)
+                        .pickerStyle(.menu)
                     } else {
-                        Text(amountStr.0)
-                            .accessibilityLabel(amountStr.1)
+                        SegmentControl(value: $validIndex, accountDetails: validDetails, action: redraw)
+                            .listRowSeparator(.hidden)
                     }
+                } else if let bankName = account.bankLabel {
+                    Text(bankName + ":   " + amountStr.0)
+                        .accessibilityLabel(bankName + ":   " + amountStr.1)
+                } else {
+                    Text(amountStr.0)
+                        .accessibilityLabel(amountStr.1)
+                }
 
-                    let countA = transferOptions.count
-                    let countB = firstOption.qrCodes?.count ?? 0
+                let countA = transferOptions.count
+                let countB = firstOption.qrCodes?.count ?? 0
 
-                    if let paytoUri = firstOption.paytoUri {
-                        let payto = PayTo(paytoUri)
-                        if let receiverStr = payto.receiver {
-                            let wireDetails = ManualDetailsWireV(stack: stack.push(),
-                                                            reservePub: details.reservePub,
-                                                                 payto: payto,
-                                                          restrictions: account.creditRestrictions,
-                                                           amountValue: amountValue,
-                                                             amountStr: amountStr,
-                                                             obtainStr: obtainStr,
-                                                             debitIBAN: nil        // only for deposit auth
-                                                )
-                            NavigationLink(destination: wireDetails) {
-                                Text(minimalistic ? "Instructions"
-                                                  : "Wire transfer instructions")
-                                .talerFont(.title3)
+                if let paytoUri = firstOption.paytoUri {
+                    let payto = PayTo(paytoUri)
+                    if let receiverStr = payto.receiver {
+                        let wireDetails = ManualDetailsWireV(stack: stack.push(),
+                                                        reservePub: reservePub,
+                                                             payto: payto,
+                                                      restrictions: account.creditRestrictions,
+                                                       amountValue: amountValue,
+                                                         amountStr: amountStr,
+                                                         obtainStr: obtainStr,  // only for withdrawal
+                                                         debitIBAN: debitIBAN   // only for deposit auth
+                                            )
+                        NavigationLink(destination: wireDetails) {
+                            Text(minimalistic ? "Instructions"
+                                              : "Wire transfer instructions")
+                            .talerFont(.title3)
+                        }
+
+                        Group {
+                            if countA > 1 || countB > 1 {
+                                qrCodesRow(transferOptions)
+                            } else if countA > 0 {   // show the single QR directly
+                                Text("If your banking software runs on another device, you can scan this QR code:")
+                                    .listRowSeparator(.hidden)
+                                QRcodeCopyShare(option: firstOption)
+                                    .listRowSeparator(.automatic)
                             }
-
-                            Group {
-                                if countA > 1 || countB > 1 {
-                                    qrCodesRow(transferOptions)
-                                } else if countA > 0 {   // show the single QR directly
-                                    Text("If your banking software runs on another device, you can scan this QR code:")
-                                        .listRowSeparator(.hidden)
-                                    QRcodeCopyShare(option: firstOption)
-                                        .listRowSeparator(.automatic)
-                                }
-                            }.id(listID)
-                                .talerFont(.body)
+                        }.id(listID)
+                            .talerFont(.body)
 #if DEBUG
-                            if developerMode {
-                                if let iban = payto.iban {
-                                    Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
-                                                      : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
-                                        .multilineTextAlignment(.leading)
-                                        .padding(.top)
-                                        .listRowSeparator(.hidden)
-                                    let title = String(localized: "Share the PayTo URL", comment: "a11y")
-                                    let minTitle = String(localized: "Share PayTo", comment: "mini")
-                                    let textToShare = String("\(payto)\n\nIBAN: \(iban)\nReceiver: \(receiverStr)\nAmount: \(amountStr.1)\nSubject: \(details.reservePub)")
+                        if developerMode {
+                            if let iban = payto.iban {
+                                Text(minimalistic ? "**Alternative:** Use this PayTo-Link:"
+                                                  : "**Alternative:** If your bank already supports PayTo, you can use this PayTo-Link instead:")
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.top)
+                                    .listRowSeparator(.hidden)
+                                let title = String(localized: "Share the PayTo URL", comment: "a11y")
+                                let minTitle = String(localized: "Share PayTo", comment: "mini")
+                                // TODO: chQRr
+                                let textToShare = String("\(payto)\n\nIBAN: \(iban)\nReceiver: \(receiverStr)\nAmount: \(amountStr.1)\nSubject: \(reservePub)")
             let _ = print(textToShare)
-                                    ShareButton(textToShare, title: minimalistic ? minTitle : title)
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                        .accessibilityLabel(Text(title))
-                                        .disabled(false)
-                                        .listRowSeparator(.hidden)
-                                }
+                                ShareButton(textToShare, title: minimalistic ? minTitle : title)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .accessibilityLabel(Text(title))
+                                    .disabled(false)
+                                    .listRowSeparator(.hidden)
                             }
+                        }
 #endif
-                        } else { ErrorView(stack.push(), title: "No receiver", message: json, copyable: true) }
-                    } else { ErrorView(stack.push(), title: "No payto URL", message: json, copyable: true) }
-                } else { ErrorView(stack.push(), title: "No transfer options", message: json, copyable: true) }
-            } else { ErrorView(stack.push(), title:  "No amount", message: json, copyable: true) }
-        } else { ErrorView(stack.push(), title: "Payment Error", message: "No valid details") }
+                    } else { ErrorView(stack.push(), title: "No receiver", message: json, copyable: true) }
+                } else { ErrorView(stack.push(), title: "No payto URL", message: json, copyable: true) }
+            } else { ErrorView(stack.push(), title: "No transfer options", message: json, copyable: true) }
+        } else { ErrorView(stack.push(), title:  "No amount", message: json, copyable: true) }
     }
 }
 // MARK: -
