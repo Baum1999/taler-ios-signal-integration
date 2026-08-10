@@ -351,7 +351,8 @@ struct MainView: View {
             logger.log("❗️App Will Enter Foreground")
             if let backgrounded {
                 let interval = Date.now - backgrounded
-                if interval.seconds > 60 {
+                if interval.seconds > 10 {      // enough time to paste copied data and return
+                    // TODO: add another toggle with snail/hare for 60 sec / 10 sec
                     biometricService.isAuthenticated = false
                     if interval.seconds > 300 {     // 5 minutes
                         logger.log("More than 5 minutes in background - tell wallet-core")

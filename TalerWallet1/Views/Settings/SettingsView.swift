@@ -158,8 +158,7 @@ struct SettingsView: View {
                         description: String(localized: "Protect your money")) { _ in
                     biometricService.isAuthenticated = false
                 }
-//            } else {
-//                biometricService.isAuthenticated = false
+                // TODO: add another toggle with snail/hare for 60 sec / 10 sec
             }
 #if !TALER_WALLET
             SettingsToggle(name: "NYM mixnet",
