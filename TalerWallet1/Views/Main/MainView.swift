@@ -366,10 +366,10 @@ struct MainView: View {
                 if interval.seconds > 10 {      // enough time to paste copied data and return
                     // TODO: add another toggle with snail/hare for 60 sec / 10 sec
                     biometricService.isAuthenticated = false
-                    if interval.seconds > 300 {     // 5 minutes
-                        logger.log("More than 5 minutes in background - tell wallet-core")
-                        hintApplicationResumed()
-                    }
+                }
+                if interval.seconds > 30 {
+                    logger.log("More than 30 seconds in background - tell wallet-core")
+                    hintApplicationResumed()
                 }
             }
             backgrounded = nil
