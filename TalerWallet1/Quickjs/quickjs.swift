@@ -4,6 +4,7 @@
  */
 /**
  * @author Marc Stibane
+ * @author codex gpt5.6-sol
  */
 import Foundation
 import os.log
@@ -54,6 +55,7 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
 
     @Atomic(default: 0)                                                         // boilerPlate around NSLock…
     private var lastRequestID: Int32                                            // …to safeguard increments
+    private let requestsLock = NSLock()
     private var requests: [Int32: QuickDataTask] = [:]
 
     private lazy var urlSession: URLSession = {
@@ -84,22 +86,32 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
         let quickDataTask = QuickDataTask(urlSession: urlSession,
                                              request: request,
                                            requestID: requestID,
-                                            requests: &requests,
                                           responseCb: responseCb,
-                                       responseCbCls: responseCbCls)
-        quickDataTask.run()
+                                       responseCbCls: responseCbCls) { [weak self] requestID in
+            self?.removeRequest(requestID)
+        }
+
+        requestsLock.lock()
         requests[requestID] = quickDataTask
+        requestsLock.unlock()
+
+        quickDataTask.run()
         return requestID
     }
 
     func reqCancel(_ requestID: Int32) -> Int32 {
-        if let quickDataTask = requests[requestID] {
-            if let dataTask = quickDataTask.dataTask {
-                dataTask.cancel()
-            }
-        }
-        requests[requestID] = nil
+        requestsLock.lock()
+        let quickDataTask = requests[requestID]
+        requestsLock.unlock()
+
+        quickDataTask?.cancel()
         return 0
+    }
+
+    private func removeRequest(_ requestID: Int32) {
+        requestsLock.lock()
+        requests[requestID] = nil
+        requestsLock.unlock()
     }
 
     deinit {

@@ -1,9 +1,10 @@
 /*
- * This file is part of GNU Taler, ©2022-25 Taler Systems S.A.
+ * This file is part of GNU Taler, ©2022-26 Taler Systems S.A.
  * See LICENSE.md
  */
 /**
  * @author Marc Stibane
+ * @author codex gpt5.6-sol
  */
 import Foundation
 //import "Foundation/NSURLError.h"
@@ -47,7 +48,6 @@ func request_create(userdata: Optional<UnsafeMutableRawPointer>,
                     ptr += 1
                 }
             }
-
             return quickjs.reqCreate(request, responseCb, responseCbCls)
         }
     }
@@ -66,122 +66,225 @@ extension Error {
     }
 }
 // MARK: -
-class QuickDataTask: NSObject {
+final class QuickDataTask: NSObject, @unchecked Sendable {
     let urlSession: URLSession
     let request: URLRequest
     let requestID: Int32
-    var requests: [Int32: QuickDataTask]
     let responseCb: JSHttpResponseCb?
     let responseCbCls: Optional<UnsafeMutableRawPointer>
 
-    var dataTask: URLSessionDataTask? = nil
-    var logger: Logger
+    private let state = NSCondition()
+    private let onFinish: (Int32) -> Void
+    private var dataTask: URLSessionDataTask?
+    private var isCancelled = false
+    private var isCallbackActive = false
+    private var isFinished = false
+    private let logger: Logger
 
     init(urlSession: URLSession,
             request: URLRequest,
           requestID: Int32,
-           requests: inout [Int32: QuickDataTask],
          responseCb: JSHttpResponseCb?,
-      responseCbCls: Optional<UnsafeMutableRawPointer>
+      responseCbCls: Optional<UnsafeMutableRawPointer>,
+           onFinish: @escaping (Int32) -> Void
     ) {
         self.logger = Logger(subsystem: "net.taler.gnu", category: "Networking")
         self.urlSession = urlSession
         self.request = request
         self.requestID = requestID
-        self.requests = requests
         self.responseCb = responseCb
         self.responseCbCls = responseCbCls
+        self.onFinish = onFinish
     }
 
     func run() {
-        if let responseCb, let responseCbCls {
-            let method = self.request.httpMethod ?? "Unknown"
-            let url = self.request.url?.trimmedString ?? EMPTYSTRING
-#if DEBUG
-            logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
-#endif
-            dataTask = urlSession.dataTask(with: request) { [self] data, response, error in
-                if let response = response as? HTTPURLResponse {
-                    var headerArray: [String] = []
-                    var numHeaders: Int32 = 0
-                    let status = Int32(response.statusCode)
-                    let errmsg = HTTPURLResponse.localizedString(forStatusCode: Int(status))
-                    let errmsg_p0 = UnsafeMutablePointer<CChar>(mutating: errmsg.cString(using: .utf8))
-              // Initialization of 'UnsafeMutablePointer<CChar>' (aka 'UnsafeMutablePointer<Int8>') results in a dangling pointer
-                    let headers = response.allHeaderFields
-                    for (key,value) in headers {
-                        headerArray.append("\(key): \(value)")
-                        numHeaders += 1
-                    }
-                    let cHeaders = CStringArray(headerArray)
+        guard responseCb != nil, responseCbCls != nil else {
+            finish()
+            return
+        }
 
-                    if let data {
-                        let ndata:NSData = data as NSData
-                        let bodyPtr = UnsafeMutableRawPointer(mutating: ndata.bytes)
-                        var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                              status: status,
-                                                              errmsg: errmsg_p0,
-                                                    response_headers: cHeaders.pointer,
-                                                num_response_headers: numHeaders,
-                                                                body: bodyPtr,
-                                                            body_len: UInt32(data.count))
-                        let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
-                        // Initialization of 'UnsafeMutablePointer<JSHttpResponseInfo>' results in a dangling pointer
-#if DEBUG
-                        logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
-#endif
-                        responseCb(responseCbCls, responseInfoPtr)
-                    } else { // data == nil
-#if DEBUG
-                        logger.error("‼️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(response.statusCode, privacy: .public) \(errmsg, privacy: .public)")
-#endif
-                        var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                                  status: status,
-                                                                  errmsg: errmsg_p0,
-                                                        response_headers: cHeaders.pointer,
-                                                    num_response_headers: numHeaders,
-                                                                    body: nil,
-                                                                body_len: 0)
-                        let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
-                        responseCb(responseCbCls, responseInfoPtr)
-                    }
-                } else {    // pass error to walletCore
-                    Task.detached {
-#if DEBUG
-                        self.logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
-#endif
-                        Controller.shared.checkInternetConnection()
-                        if let errmsg = error?.localizedDescription,
-                           let errmsgC = errmsg.cString(using: .utf8)
-                        {
-                            let errmsg_p1 = UnsafeMutablePointer<CChar>(mutating: errmsgC)
-                            var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                                      status: 0,
-                                                                      errmsg: errmsg_p1,
-                                                            response_headers: nil,
-                                                        num_response_headers: 0,
-                                                                        body: nil,
-                                                                    body_len: 0)
-                            let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
-                            responseCb(responseCbCls, responseInfoPtr)
-                        } else {
-                            // should never happen
-                            let errmsg_p1 = UnsafeMutablePointer<CChar>(nil)
-                            var responseInfo = JSHttpResponseInfo(request_id: self.requestID,
-                                                                      status: 0,
-                                                                      errmsg: errmsg_p1,
-                                                            response_headers: nil,
-                                                        num_response_headers: 0,
-                                                                        body: nil,
-                                                                    body_len: 0)
-                            let responseInfoPtr = UnsafeMutablePointer<JSHttpResponseInfo>(&responseInfo)
-                            responseCb(responseCbCls, responseInfoPtr)
-                        }
-                    }
-                }
-                requests[requestID] = nil
+        let method = request.httpMethod ?? "Unknown"
+        let url = request.url?.trimmedString ?? EMPTYSTRING
+        logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
+        let task = urlSession.dataTask(with: request) { [self] data, response, error in
+            handleCompletion(data: data,
+                         response: response,
+                            error: error,
+                           method: method,
+                              url: url)
+        }
+
+        state.lock()
+        guard !isFinished else {
+            state.unlock()
+            task.cancel()
+            return
+        }
+        dataTask = task
+        let shouldStart = !isCancelled
+        state.unlock()
+
+        if shouldStart {
+            task.resume()
+        } else {
+            task.cancel()
+            finish()
+        }
+    }
+
+    /// Cancels the request and does not return until a native callback that had
+    /// already started has completed. A URLSession completion may still arrive
+    /// later, but `isCancelled` prevents it from entering the native callback.
+    func cancel() {
+        state.lock()
+        guard !isFinished else {
+            state.unlock()
+            return
+        }
+        isCancelled = true
+        let task = dataTask
+        state.unlock()
+
+        task?.cancel()
+
+        var shouldNotify = false
+        state.lock()
+        while isCallbackActive {
+            state.wait()
+        }
+        if !isFinished {
+            isFinished = true
+            dataTask = nil
+            shouldNotify = true
+        }
+        state.unlock()
+
+        if shouldNotify {
+            onFinish(requestID)
+        }
+    }
+
+    private func handleCompletion(data: Data?,
+                              response: URLResponse?,
+                                 error: Error?,
+                                method: String,
+                                   url: String) {
+        guard beginCallback() else {
+            finish()
+            return
+        }
+        defer { endCallback() }
+
+        if let response = response as? HTTPURLResponse {
+            deliver(response: response, data: data ?? Data(), method: method, url: url)
+        } else {
+            logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
+            Task.detached {
+                Controller.shared.checkInternetConnection()
             }
-            dataTask?.resume()
+            deliver(error: error)
+        }
+    }
+
+    private func deliver(response: HTTPURLResponse,
+                             data: Data,
+                           method: String,
+                              url: String) {
+        guard let responseCb, let responseCbCls else {
+            return
+        }
+
+        let status = Int32(response.statusCode)
+        let errmsg = HTTPURLResponse.localizedString(forStatusCode: response.statusCode)
+        let headerArray = response.allHeaderFields.map { "\($0.key): \($0.value)" }
+        let cHeaders = CStringArray(headerArray)
+
+        if data.isEmpty {
+            logger.error("‼️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(response.statusCode, privacy: .public) \(errmsg, privacy: .public)")
+        } else {
+            logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
+        }
+
+        errmsg.withCString { errmsgPtr in
+            data.withUnsafeBytes { bodyBytes in
+                var responseInfo = JSHttpResponseInfo(
+                       request_id: requestID,
+                           status: status,
+                           errmsg: UnsafeMutablePointer(mutating: errmsgPtr),
+                 response_headers: cHeaders.pointer,
+             num_response_headers: Int32(headerArray.count),
+                             body: UnsafeMutableRawPointer(mutating: bodyBytes.baseAddress),
+                         body_len: numericCast(data.count)
+                )
+                withUnsafeMutablePointer(to: &responseInfo) { responseInfoPtr in
+                    responseCb(responseCbCls, responseInfoPtr)
+                }
+            }
+        }
+    }
+
+    private func deliver(error: Error?) {
+        guard let responseCb, let responseCbCls else {
+            return
+        }
+
+        let errmsg = error?.localizedDescription ?? "Network request failed"
+        errmsg.withCString { errmsgPtr in
+            var responseInfo = JSHttpResponseInfo(
+                   request_id: requestID,
+                       status: 0,
+                       errmsg: UnsafeMutablePointer(mutating: errmsgPtr),
+             response_headers: nil,
+         num_response_headers: 0,
+                         body: nil,
+                     body_len: 0
+            )
+            withUnsafeMutablePointer(to: &responseInfo) { responseInfoPtr in
+                responseCb(responseCbCls, responseInfoPtr)
+            }
+        }
+    }
+
+    private func beginCallback() -> Bool {
+        state.lock()
+        defer { state.unlock() }
+        guard !isCancelled, !isFinished else {
+            return false
+        }
+        isCallbackActive = true
+        return true
+    }
+
+    private func endCallback() {
+        var shouldNotify = false
+        state.lock()
+        isCallbackActive = false
+        if !isFinished {
+            isFinished = true
+            dataTask = nil
+            shouldNotify = true
+        }
+        state.broadcast()
+        state.unlock()
+
+        if shouldNotify {
+            onFinish(requestID)
+        }
+    }
+
+    private func finish() {
+        var shouldNotify = false
+        state.lock()
+        if !isFinished {
+            isFinished = true
+            dataTask = nil
+            shouldNotify = true
+        }
+        state.broadcast()
+        state.unlock()
+
+        if shouldNotify {
+            onFinish(requestID)
         }
     }
 }
