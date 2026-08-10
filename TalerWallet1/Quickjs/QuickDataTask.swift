@@ -79,7 +79,9 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
     private var isCancelled = false
     private var isCallbackActive = false
     private var isFinished = false
+#if DEBUG || TALER_NIGHTLY
     private let logger: Logger
+#endif
 
     init(urlSession: URLSession,
             request: URLRequest,
@@ -88,7 +90,9 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
       responseCbCls: Optional<UnsafeMutableRawPointer>,
            onFinish: @escaping (Int32) -> Void
     ) {
+#if DEBUG || TALER_NIGHTLY
         self.logger = Logger(subsystem: "net.taler.gnu", category: "Networking")
+#endif
         self.urlSession = urlSession
         self.request = request
         self.requestID = requestID
@@ -105,7 +109,9 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
 
         let method = request.httpMethod ?? "Unknown"
         let url = request.url?.trimmedString ?? EMPTYSTRING
+#if DEBUG || TALER_NIGHTLY
         logger.trace("❓\(self.requestID, privacy: .public)  \(method, privacy: .public) \(url, privacy: .public)")
+#endif
         let task = urlSession.dataTask(with: request) { [self] data, response, error in
             handleCompletion(data: data,
                          response: response,
@@ -178,7 +184,9 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
         if let response = response as? HTTPURLResponse {
             deliver(response: response, data: data ?? Data(), method: method, url: url)
         } else {
+#if DEBUG || TALER_NIGHTLY
             logger.error("⁉️ \(self.requestID, privacy: .public)  \(method, privacy: .public)  \(error, privacy: .public)")
+#endif
             Task.detached {
                 Controller.shared.checkInternetConnection()
             }
@@ -199,11 +207,13 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
         let headerArray = response.allHeaderFields.map { "\($0.key): \($0.value)" }
         let cHeaders = CStringArray(headerArray)
 
+#if DEBUG || TALER_NIGHTLY
         if data.isEmpty {
             logger.error("‼️\(self.requestID, privacy: .public)  \(method, privacy: .public) \(response.statusCode, privacy: .public) \(errmsg, privacy: .public)")
         } else {
             logger.trace("❗️ \(self.requestID, privacy: .public) \(url, privacy: .public)")
         }
+#endif
 
         errmsg.withCString { errmsgPtr in
             data.withUnsafeBytes { bodyBytes in
