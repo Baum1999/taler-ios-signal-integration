@@ -109,7 +109,7 @@ struct ExchangeListCommonV: View {
 
             let exchanges = ["glsint.fdold.eu", "taler.magnetbank.hu", "stage.taler-ops.ch", "e.netzbon-basel.ch"]
             ForEach(exchanges, id: \.self) { exchange in
-                let urlStr = "https://exchange." + exchange
+                let urlStr = "exchange." + exchange
                 Button(urlStr) {
                     addExchange(urlStr, model: model)
                 }

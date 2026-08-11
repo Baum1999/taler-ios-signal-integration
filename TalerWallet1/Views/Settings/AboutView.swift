@@ -48,7 +48,7 @@ struct AboutView: View {
         Group {
             List {
                 if #available(iOS 17.7, *) {
-                    let talerURI = TALER_NET
+                    let talerURI = HTTPS + TALER
                     BorderWithHCE(talerURI: talerURI, nfcHint: false, size: size, scanHints: nil) {
                         rotatingTaler
                     }
@@ -62,7 +62,7 @@ struct AboutView: View {
                     .accessibilityAddTraits(.isLink)
                     .accessibilityRemoveTraits(.isStaticText)
                     .onTapGesture() {
-                        UIApplication.shared.open(URL(string:TALER_NET)!, options: [:])
+                        UIApplication.shared.open(URL(string:HTTPS + TALER)!, options: [:])
                     }
 
                 SettingsItem(name: String(localized: "Open \(localizedAppName) settings"),
