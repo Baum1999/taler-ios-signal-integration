@@ -19,6 +19,7 @@ func addExchange(_ exchange: String, model: WalletModel) -> Void {
             if UIAccessibility.isVoiceOverRunning {
                 UIAccessibility.post(notification: .announcement, argument: "added: \(exchange)")
             }
+            Controller.shared.hapticNotification(.success)
             NotificationCenter.default.post(name: .ExchangeAdded, object: nil, userInfo: nil)
             NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)       // TODO: ExchangeAdded should suffice
         }
@@ -39,8 +40,25 @@ struct ExchangeListView: View {
     @AppStorage("developerMode") var developerMode: Bool = false
 #endif
 
-    @State var showAlert: Bool = false
-    @State var newExchange: String = TESTEXCHANGE
+    @State private var showAlert: Bool = false
+    @State private var newExchange: String = EXCHANGE + DEMO        // without HTTPS
+
+    func checkExchanges() {
+        var hasNoDEMO = true
+        var hasNoTEST = true
+        for balance in controller.balances {
+            if let baseUrl = balance.scopeInfo.url {
+                if baseUrl.contains(EXCHANGE + DEMO) {
+                    hasNoDEMO = false
+                } else if baseUrl.contains(EXCHANGE + TEST) {
+                    hasNoTEST = false
+                }
+            }
+        }
+        newExchange = hasNoDEMO ? EXCHANGE + DEMO
+                                : hasNoTEST && developerMode ? EXCHANGE + TEST
+                                                             : EMPTYSTRING
+    }
 
     var body: some View {
         let a11yLabelStr = String(localized: "Add payment service", comment: "a11y for the + button")
@@ -50,7 +68,9 @@ struct ExchangeListView: View {
         let addTitleStr = String(localized: "Add payment service", comment: "title of the addExchange alert")
         let addButtonStr = String(localized: "Add", comment: "button in the addExchange alert")
         let enterURL = String(localized: "Enter the URL")
-        let listView = ExchangeListCommonV(symLog: symLog, stack: stack.push(), developerMode: developerMode)
+        let listView = ExchangeListCommonV(symLog: symLog, stack: stack.push(),
+                                      newExchange:  $newExchange,
+                                   checkExchanges: checkExchanges)
                         .navigationTitle(TITLE_EXCHANGES)
                         .navigationBarItems(trailing: plusButton)
                         .task {
@@ -58,6 +78,8 @@ struct ExchangeListView: View {
                                 newExchange = newUrl.trimmedString
                                 showAlert = true
                                 url = nil
+                            } else {
+                                checkExchanges()
                             }
                         }
         if #available(iOS 16.4, *) {
@@ -67,6 +89,9 @@ struct ExchangeListView: View {
 //                    .textFieldStyle(.roundedBorder)   Yikes: when adding style the alert will stop showing the textfield! Don't do this.
                     Button(addButtonStr) {
                         addExchange(newExchange, model: model)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            checkExchanges()
+                        }
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
@@ -88,12 +113,18 @@ struct ExchangeListView: View {
 struct ExchangeListCommonV: View {
     let symLog: SymLogV?
     let stack: CallStack
-    let developerMode: Bool
+    @Binding var newExchange: String
+    let checkExchanges: () -> Void
 
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     var body: some View {
 #if PRINT_CHANGES
@@ -122,7 +153,11 @@ struct ExchangeListCommonV: View {
                 ExchangeSectionView(stack: stack.push(),
                                   balance: balance,
                                  thousand: index * MAXEXCHANGES,        // unique ID
-                            developerMode: developerMode)
+                            developerMode: developerMode) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        checkExchanges()
+                    }
+                }
             }
 #if DEBUG
             if developerMode {
@@ -168,6 +203,9 @@ struct ExchangeListCommonV: View {
             symLog?.log("refreshing")
 //            await reloadExchanges()
             NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                checkExchanges()
+            }
         }
         .onAppear() {
             DebugViewC.shared.setViewID(VIEW_PAYMENT_SERVICES, stack: stack.push())

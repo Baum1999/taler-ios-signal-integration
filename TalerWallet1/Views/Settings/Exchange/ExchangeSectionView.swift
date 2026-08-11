@@ -17,6 +17,7 @@ struct ExchangeSectionView: View {
     let balance: Balance
     let thousand: Int           // index of balance times 1000 (MAXEXCHANGES per currency)
     let developerMode: Bool
+    let deleteTask: () -> Void
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -27,6 +28,7 @@ struct ExchangeSectionView: View {
     @State private var exchanges: [Exchange] = []
     @State private var reloadTransactions: Int = 0
     @State private var currencyInfo: CurrencyInfo = CurrencyInfo.zero(UNKNOWN)
+    @State private var withDrawStarted = false
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
@@ -62,6 +64,7 @@ struct ExchangeSectionView: View {
                     NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
                     NotificationCenter.default.post(name: .BalanceChange, object: nil, userInfo: nil)
                     demoHints = true
+                    deleteTask()
                 } else {
                     purge = true
                     showAlert = true
@@ -115,10 +118,26 @@ struct ExchangeSectionView: View {
                         description: String("Remove fee and gros from details"))
             }
             if DEMOCURRENCY == currency {
+                let title = String(localized: "LinkTitle_Test_Money2", defaultValue: "Get more demo cash")
+                Button(title) {
+                    withDrawStarted = true    // don't run twice
+                    Task { // runs on MainActor
+                        let amount = Amount(currency:  DEMOCURRENCY, cent: 1000)
+                        symLog.log("Withdraw 10 KUDOS")
+                        try? await model.loadTestKudos(0, amount: amount)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            withDrawStarted = false
+                        }
+                    }
+                }
+                    .buttonStyle(TalerButtonStyle(type: .bordered, narrow: false, disabled: withDrawStarted, aligned: .center))
+                    .disabled(withDrawStarted)
+
                 SettingsToggle(name: String(localized: "Demo Hints"), value: $demoHints,
                                 id1: "demoHints",
                         description: String(localized: "Show hints for demo money"))
-                .listRowSeparator(.hidden)
+                    .listRowSeparator(.hidden)
+
                 let bankingHint = String(localized: "Since the demo bank supports the Taler integration, you can start a withdrawal directly on the")
                 let linkTitle = String(localized: "LinkTitle_DEMOBANK", defaultValue: "Demo Bank Website")
                 if demoHints {
