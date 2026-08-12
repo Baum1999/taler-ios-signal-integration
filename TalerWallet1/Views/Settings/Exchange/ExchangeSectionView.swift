@@ -99,7 +99,7 @@ struct ExchangeSectionView: View {
         let scopeInfo = balance.scopeInfo
         let currency = scopeInfo.currency
         Section {
-            ForEachWithIndex(data: exchanges) { index, exchange in
+            ForEachWithIndex(array: exchanges) { index, exchange in
                 let _ = symLog.log("Index: \(thousand + index)")
                 ExchangeRowView(stack: stack.push(),
                              exchange: exchange,

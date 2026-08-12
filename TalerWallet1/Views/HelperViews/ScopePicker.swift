@@ -34,7 +34,7 @@ struct CurrencyPicker: View {
 
     var body: some View {
         Picker(EMPTYSTRING, selection: $selected) {
-            ForEachWithIndex(data: exchanges) { index, exchange in
+            ForEachWithIndex(array: exchanges) { index, exchange in
                 if exchange.talerUri.contains("exchange.stage.taler-ops.ch") {
                     Text(exchange.currencySpec.name + " (stage)")
                         .tag(index)

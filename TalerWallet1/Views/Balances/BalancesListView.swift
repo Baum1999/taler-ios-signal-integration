@@ -50,7 +50,7 @@ struct BalancesListView: View {
                               isEmpty: false,
                              disabled: false)
             }
-            ForEachWithIndex(data: controller.balances) { index, balance in
+            ForEachWithIndex(array: controller.balances) { index, balance in
                 BalancesSectionView(stack: stack.push("\(balance.scopeInfo.currency)"),
                                   balance: balance,                     // this is the currency to be used
                           selectedBalance: $selectedBalance,            // set in TransactionsListView

@@ -149,7 +149,7 @@ struct ExchangeListCommonV: View {
         }
 #endif
         let balanceList = List {
-            ForEachWithIndex(data: controller.balances) { index, balance in
+            ForEachWithIndex(array: controller.balances) { index, balance in
                 ExchangeSectionView(stack: stack.push(),
                                   balance: balance,
                                  thousand: index * MAXEXCHANGES,        // unique ID
