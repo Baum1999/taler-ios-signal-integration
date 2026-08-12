@@ -536,7 +536,7 @@ class Controller: ObservableObject {
     }
 // MARK: -
     @MainActor
-    func initWalletCore(_ model: WalletModel, stage: Bool, setTesting: Bool, delay: TimeInterval)
+    func initWalletCore(_ model: WalletModel, setTesting: Bool, delay: TimeInterval)
       async throws {
         if backendState == .instantiated {
             backendState = .initing
@@ -559,9 +559,10 @@ class Controller: ObservableObject {
                     try await model.devExperimentT(
                         "taler://dev-experiment/demo-shortcuts?val=KUDOS:4,KUDOS:8,KUDOS:16,KUDOS:32")
                 }
-                defaultExchanges = await model.getDefaultExchanges(stage: stage)
+                defaultExchanges = await model.getDefaultExchanges()
+#if GNU_TALER
                 if defaultExchanges.count == 1 {
-                    if stage, let talerOps = defaultExchanges.first {
+                    if let talerOps = defaultExchanges.first {
                         let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
                         if talerOps.talerUri != stageURI {
                             let stageExc = DefaultExchange(talerUri: stageURI,
@@ -572,6 +573,7 @@ class Controller: ObservableObject {
                         }
                     }
                 }
+#endif
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.backendState = .ready              // dismiss the launch animation
                 }

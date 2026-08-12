@@ -129,15 +129,15 @@ struct Exchange: Codable, Hashable, Identifiable {
     }
 }
 // MARK: -
-struct DefaultExchange: Codable {
+struct DefaultExchange: Codable, Hashable {
     var talerUri: String                        // taler://withdraw-exchange/exchange.taler-ops.ch/
     var currency: String                        // CHF
     var currencySpec: CurrencySpecification     // .name = "Swiss Francs"... alt_unit_names":{"0":"Fr.","-2":"Rp."}
 //    var restrictions: [String]                  // ["Swiss bank accounts only"]
 }
+
 extension DefaultExchange: Identifiable {
     var id: String { talerUri }
-
 }
 // MARK: -
 /// A request to list exchanges names for a currency
@@ -161,12 +161,8 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 fileprivate struct DefaultExchanges: WalletBackendFormattedRequest {
     var operation: String { "getDefaultExchanges" }
     func args() -> Args { Args() }
-//    func args() -> Args { Args(stage: stage) }
 
-    var stage: Bool
-    struct Args: Encodable {
-//        var stage: Bool
-    }
+    struct Args: Encodable {}
 
     struct Response: Decodable {        // list of known exchanges
         var defaultExchanges: [DefaultExchange]
@@ -292,10 +288,10 @@ extension WalletModel {
     }
 
     /// ask wallet-core for its list of default exchanges   ==> currently only taler-ops.ch
-    nonisolated func getDefaultExchanges(stage: Bool, viewHandles: Bool = false)
-    async -> [DefaultExchange] {     // M for MainActor
+    nonisolated func getDefaultExchanges(viewHandles: Bool = false)
+      async -> [DefaultExchange] {     // M for MainActor
         do {
-            let request = DefaultExchanges(stage: stage)
+            let request = DefaultExchanges()
             let response = try await sendRequest(request, viewHandles: viewHandles)
             return response.defaultExchanges
         } catch {

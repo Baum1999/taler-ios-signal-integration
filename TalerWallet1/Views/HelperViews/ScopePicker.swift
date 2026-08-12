@@ -32,36 +32,26 @@ struct CurrencyPicker: View {
 
     @State private var selected = 0
 
-    func base(_ index: Int, _ count: Int) -> String {
-        if index != 0 && index == count - 1 {
-            return " (stage)"
-        }
-        return " (prod)"
-    }
-
     var body: some View {
-#if PRINT_CHANGES
-        let _ = Self._printChanges()
-#endif
-        let count = exchanges.count
-        if (count > 0) {        // TODO: 1?
-            Picker(EMPTYSTRING, selection: $selected) {
-                ForEach(0..<count, id: \.self) { index in
-                    let exchange = exchanges[index]
-                    Text(exchange.currencySpec.name + base(index, count))
+        Picker(EMPTYSTRING, selection: $selected) {
+            ForEachWithIndex(data: exchanges) { index, exchange in
+                if exchange.talerUri.contains("exchange.stage.taler-ops.ch") {
+                    Text(exchange.currencySpec.name + " (stage)")
+                        .tag(index)
+                } else {
+                    Text(exchange.currencySpec.name)
                         .tag(index)
                 }
             }
-            .talerFont(.title3)
-            .task() {
-                // FIXME: check balance for non-zero and disable-peer-payments
-                withAnimation { selected = value }
-            }
-            .onChange(of: selected) { newValue in
-                action(newValue)
-            }
-
-        }   // TODO: else show static text?
+        }
+        .talerFont(.title3)
+        .task() {
+            // FIXME: check balance for non-zero and disable-peer-payments
+            withAnimation { selected = value }
+        }
+        .onChange(of: selected) { newValue in
+            action(newValue)
+        }
     }
 }
 struct ScopePicker: View {
