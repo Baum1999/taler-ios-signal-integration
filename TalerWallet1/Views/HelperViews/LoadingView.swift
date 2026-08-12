@@ -97,13 +97,13 @@ struct LoadingView: View {
                 Text("Couldn't establish a connection")
                     .talerFont(.title2)
                     .padding(.vertical)
-                Text(lastError?.error.hint ?? fallback)
+                let hint = lastError?.error.hint
+                        ?? lastError?.error.errorResponse?.hint
+                Text(hint ?? fallback)
                     .talerFont(.body)
-                if developerMode {
-                    if let jsonString = toJSON(lastError) {
-                        CopyButton(jsonString, title: "Copy JSON")
-                            .padding(.vertical)
-                    }
+                if let jsonString = toJSON(lastError) {
+                    CopyButton(jsonString, title: "Copy Details")
+                        .padding(.vertical)
                 }
                 Spacer()
                 if let lastPhase = controller.lastProgressPhase {
@@ -152,6 +152,7 @@ struct LoadingView: View {
             dismissButton
         }
         .frame(maxWidth: .infinity)
+        .padding()
         .talerFont(.title)
         .navigationTitle(navTitle)
         .background(FullBackground())
