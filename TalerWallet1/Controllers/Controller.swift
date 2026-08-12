@@ -577,6 +577,7 @@ class Controller: ObservableObject {
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.backendState = .ready              // dismiss the launch animation
                 }
+                await loadBalances(CallStack(), model)
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
                 backendState = .error(error as! EquatableError)                       // ❗️Yikes app cannot continue
