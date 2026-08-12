@@ -563,11 +563,15 @@ class Controller: ObservableObject {
 #if GNU_TALER
                 if defaultExchanges.count == 1 {
                     if let talerOps = defaultExchanges.first {
-                        let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch"
+                        let stageURI = "taler://withdraw-exchange/exchange.stage.taler-ops.ch/"
+                        let baseUrl = "https://exchange.stage.taler-ops.ch/"
                         if talerOps.talerUri != stageURI {
                             let stageExc = DefaultExchange(talerUri: stageURI,
+                                                    exchangeBaseUrl: baseUrl,
                                                            currency: talerOps.currency,
-                                                       currencySpec: talerOps.currencySpec
+                                                       currencySpec: talerOps.currencySpec,
+                                                exchangeEntryStatus: .preset,
+                                               exchangeUpdateStatus: .initial
                             )
                             defaultExchanges.append(stageExc)
                         }

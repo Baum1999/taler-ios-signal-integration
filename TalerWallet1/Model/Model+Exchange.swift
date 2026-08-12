@@ -130,14 +130,18 @@ struct Exchange: Codable, Hashable, Identifiable {
 }
 // MARK: -
 struct DefaultExchange: Codable, Hashable {
-    var talerUri: String                        // taler://withdraw-exchange/exchange.taler-ops.ch/
-    var currency: String                        // CHF
-    var currencySpec: CurrencySpecification     // .name = "Swiss Francs"... alt_unit_names":{"0":"Fr.","-2":"Rp."}
-//    var restrictions: [String]                  // ["Swiss bank accounts only"]
+    var talerUri: String                            // taler://withdraw-exchange/exchange.taler-ops.ch/
+    var exchangeBaseUrl: String                     // https://exchange.taler-ops.ch/
+    var currency: String                            // CHF
+    var currencySpec: CurrencySpecification         // .name = "Swiss Francs"... alt_unit_names":{"0":"Fr.","-2":"Rp."}
+ //   var restrictions: [AccountRestriction]?         // ["Swiss bank accounts only"] too bad, need to contact server to get this data
+    var exchangeEntryStatus: ExchangeEntryStatus
+    var exchangeUpdateStatus: ExchangeUpdateStatus
+    var recommendationReasons: [String]?
 }
 
 extension DefaultExchange: Identifiable {
-    var id: String { talerUri }
+    var id: String { exchangeBaseUrl }
 }
 // MARK: -
 /// A request to list exchanges names for a currency
@@ -159,13 +163,15 @@ fileprivate struct ListExchanges: WalletBackendFormattedRequest {
 }
 
 fileprivate struct DefaultExchanges: WalletBackendFormattedRequest {
-    var operation: String { "getDefaultExchanges" }
-    func args() -> Args { Args() }
+    var operation: String { "listWithdrawalExchangeCandidates" }
+    func args() -> Args { Args(presetOnly: true) }
 
-    struct Args: Encodable {}
+    struct Args: Encodable {
+        var presetOnly: Bool
+    }
 
     struct Response: Decodable {        // list of known exchanges
-        var defaultExchanges: [DefaultExchange]
+        var candidates: [DefaultExchange]
     }
 }
 
@@ -293,7 +299,7 @@ extension WalletModel {
         do {
             let request = DefaultExchanges()
             let response = try await sendRequest(request, viewHandles: viewHandles)
-            return response.defaultExchanges
+            return response.candidates
         } catch {
             return []               // empty, but not nil
         }
