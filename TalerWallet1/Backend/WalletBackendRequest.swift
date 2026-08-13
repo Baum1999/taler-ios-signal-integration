@@ -33,18 +33,28 @@ struct ScopeInfo: Codable, Hashable {
         case global
         case exchange
         case auditor
-        case madeUp     // => type unknown, currency name taken from amount
+        case exchangeLegacyKeys = "exchange-legacy-keys"
+        case unknown     // => type unknown, currency name taken from amount
+
+        /// A scope type this app does not know must not make the whole balance list undecodable.
+        /// NOTE: `unknown` is app-invented and wallet-core's codecForScopeInfo rejects it,
+        /// so a degraded ScopeInfo must never be sent back as an argument.
+        init(from decoder: Decoder) throws {
+            let raw = try decoder.singleValueContainer().decode(String.self)
+            self = ScopeInfoType(rawValue: raw) ?? .unknown
+        }
     }
     var type: ScopeInfoType
     var currency: String        // 3-char ISO 4217 code for global currency. Regional MUST be >= 4 letters
     var noFees: Bool?           // only for "global". Regional have this field per Exchange
-    var url: String?            // only for "exchange" and "auditor"
+    var url: String?            // only for "exchange", "auditor" and "exchange-legacy-keys"
+    var masterPub: String?      // only for "exchange-legacy-keys": the superseded key
 
     public static func zero() -> ScopeInfo {
-        ScopeInfo(type: .madeUp, currency: UNKNOWN)
+        ScopeInfo(type: .unknown, currency: UNKNOWN)
     }
     public static func zero(_ currency: String) -> ScopeInfo {
-        ScopeInfo(type: .madeUp, currency: currency)
+        ScopeInfo(type: .unknown, currency: currency)
     }
     public static func < (lhs: ScopeInfo, rhs: ScopeInfo) -> Bool {
         if lhs.type == .global {
@@ -80,7 +90,8 @@ struct ScopeInfo: Codable, Hashable {
             return false                                        // right but not left
         }
         return lhs.type == rhs.type &&
-        lhs.currency == rhs.currency
+        lhs.currency == rhs.currency &&
+        lhs.masterPub == rhs.masterPub      // two legacy-key scopes of one exchange differ
     }
     public func hash(into hasher: inout Hasher) {
         hasher.combine(type)
@@ -88,6 +99,7 @@ struct ScopeInfo: Codable, Hashable {
             hasher.combine(url)
         }
         hasher.combine(currency)
+        hasher.combine(masterPub)
     }
 }
 // MARK: -
