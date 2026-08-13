@@ -8,6 +8,7 @@
 import Foundation
 import taler_swift
 import SymLog
+import os.log
 
 // MARK: -
 extension WalletModel {
@@ -60,6 +61,35 @@ fileprivate struct GetTransactionsV2: WalletBackendFormattedRequest {
 
     struct Response: Decodable {                    // list of transactions
         var transactions: [TalerTransaction]
+
+        enum CodingKeys: String, CodingKey { case transactions }
+
+        /// Decode the array element by element so that ONE transaction wallet-core sends
+        /// in a shape this app does not understand costs us that transaction, not the
+        /// user's entire history. Decoding `[TalerTransaction]` directly throws on the
+        /// first bad element and every caller's `try?` then renders an empty list.
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let wrapped = try container.decode([SkippableTransaction].self, forKey: .transactions)
+            self.transactions = wrapped.compactMap { $0.transaction }
+        }
+    }
+}
+
+/// Wrapper whose own decoding never fails, so a failed element consumes its array slot
+/// instead of aborting the array. See GetTransactionsV2.Response.
+fileprivate struct SkippableTransaction: Decodable {
+    let transaction: TalerTransaction?
+
+    init(from decoder: Decoder) throws {
+        do {
+            transaction = try TalerTransaction(from: decoder)
+        } catch {
+            transaction = nil
+            let details = String(describing: error)
+            Logger(subsystem: "net.taler.gnu", category: "Transactions")
+                .error("dropped an undecodable transaction: \(details, privacy: .public)")
+        }
     }
 }
 /// A request to abort a wallet transaction by ID.

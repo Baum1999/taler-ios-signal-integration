@@ -20,6 +20,7 @@ enum TransactionDecodingError: Error {
 }
 
 enum TransactionMinorState: String, Codable {
+    case abort                                                  // failed - user abandoned it
     case abortingBank = "aborting-bank"                         // failed
     case acceptRefund = "accept-refund"
     case autoRefund = "auto-refund"                             // TODO: finalizing
@@ -51,6 +52,15 @@ enum TransactionMinorState: String, Codable {
     case withdraw
     // Placeholder until D37 is fully implemented
     case unknown
+
+    /// wallet-core keeps adding minor states (`abort` was added after this enum was
+    /// written). A raw-value enum throws on an unknown value even when the property is
+    /// Optional, and because the transaction list is decoded as one array that throw
+    /// discards *every* transaction. Degrade to `.unknown` instead.
+    init(from decoder: Decoder) throws {
+        let raw = try decoder.singleValueContainer().decode(String.self)
+        self = TransactionMinorState(rawValue: raw) ?? .unknown
+    }
 
     var localizedDbgState: String { self.rawValue }
     var localizedState: String? {
@@ -623,6 +633,13 @@ enum DenomLossEventType: String, Decodable {
     case denomExpired = "denom-expired"
     case denomVanished = "denom-vanished"
     case denomUnoffered = "denom-unoffered"
+    case denomRevoked = "denom-revoked"      // exchange revoked the denomination
+    case unknown                             // forward compatibility, see TransactionMinorState
+
+    init(from decoder: Decoder) throws {
+        let raw = try decoder.singleValueContainer().decode(String.self)
+        self = DenomLossEventType(rawValue: raw) ?? .unknown
+    }
 }
 struct DenomLossTransactionDetails: Decodable {
     var exchangeBaseUrl: String
