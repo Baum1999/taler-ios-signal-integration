@@ -18,6 +18,9 @@ enum TimestampError: Error {
 
     /// The value `never` cannot be returned as UInt64.
     case invalidUInt64Value
+
+    /// The number of seconds is outside the range the protocol allows.
+    case invalidSecondsValue
 }
 // MARK: -
 /// A point in time, represented by milliseconds from January 1, 1970..
@@ -30,14 +33,20 @@ public enum Timestamp: Codable, Hashable, Sendable {
         case t_ms = "t_ms"
     }
 
+    /// The protocol declares every timestamp as an integer capped at 2^53-1.
+    static let maxSeconds: UInt64 = (1 << 53) - 1
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let seconds: UInt64 = try? container.decode(UInt64.self, forKey: .t_s) {
+            // Reject out of range instead of letting `seconds * 1000` overflow, which
+            // would trap - a crash no do/catch around the decode could survive.
+            guard seconds <= Self.maxSeconds else { throw TimestampError.invalidSecondsValue }
+            self = Timestamp.milliseconds(seconds * 1000)
+            return
+        }
         do {
-            if let seconds: UInt64 = try? container.decode(UInt64.self, forKey: .t_s) {
-                self = Timestamp.milliseconds(seconds * 1000)
-            } else {
-                self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_ms))
-            }
+            self = Timestamp.milliseconds(try container.decode(UInt64.self, forKey: .t_ms))
         } catch {       // rethrows or never
             let stringValue = try container.decode(String.self, forKey: .t_s)
             if stringValue == "never" {
@@ -294,7 +303,14 @@ public func -(lhs: Timestamp, rhs: Timestamp) throws -> Duration {
             if lhs_ms < rhs_ms {
                 return Duration.microseconds(0)
             } else {
-                return Duration.microseconds((lhs_ms - rhs_ms) * 1000)
+                // A difference of more than ~585000 years cannot be expressed in
+                // microseconds. Saturate like + and - with a Duration do, don't trap.
+                let result = (lhs_ms - rhs_ms).multipliedReportingOverflow(by: 1000)
+                if result.overflow {
+                    return Duration.forever
+                } else {
+                    return Duration.microseconds(result.partialValue)
+                }
             }
         case .never:
             throw TimestampError.invalidArithmeticArguments

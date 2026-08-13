@@ -34,6 +34,21 @@ class TimeTests: XCTestCase {
         XCTAssertThrowsError(try JSONDecoder().decode(Timestamp.self, from: json2))
     }
 
+    func testParsingOutOfRangeSeconds() {
+        // The protocol caps a timestamp at 2^53-1 seconds, which must still decode...
+        let maxSeconds: UInt64 = (1 << 53) - 1
+        let json1 = "{ \"t_s\" : \(maxSeconds) }".data(using: .utf8)!
+        let t: Timestamp = try! JSONDecoder().decode(Timestamp.self, from: json1)
+        XCTAssertEqual(t, Timestamp.milliseconds(maxSeconds * 1000))
+
+        // ...while anything above it must be rejected. Multiplying it by 1000 unchecked
+        // overflows UInt64 and traps, which no do/catch around the decode can survive.
+        for tooBig in [maxSeconds + 1, 20_000_000_000_000_000, UInt64.max] {
+            let json = "{ \"t_s\" : \(tooBig) }".data(using: .utf8)!
+            XCTAssertThrowsError(try JSONDecoder().decode(Timestamp.self, from: json))
+        }
+    }
+
     func testSerialize() {
         // Encoding is lossy: milliseconds are truncated to whole seconds (see bugs.txt),
         // so a round trip only holds for whole-second timestamps.
@@ -97,5 +112,21 @@ class TimeTests: XCTestCase {
         XCTAssert(try! Timestamp.milliseconds(12309487) - Timestamp.milliseconds(12309487) == Duration.microseconds((0) * 1000))
         XCTAssert(try! Timestamp.milliseconds(12309487) - Timestamp.milliseconds(12309488) == Duration.microseconds((0) * 1000))
         XCTAssertThrowsError(try Timestamp.milliseconds(12309487) - Timestamp.never)
+    }
+
+    func testTimestampDifferenceOverflow() {
+        // t_s = 2^53-1 is a timestamp the protocol allows, so it can arrive from any
+        // exchange or merchant. Its distance from now doesn't fit into microseconds:
+        // the difference must saturate to forever, not trap.
+        let maxSeconds: UInt64 = (1 << 53) - 1
+        let farFuture = Timestamp.milliseconds(maxSeconds * 1000)
+        XCTAssert(try! farFuture - Timestamp.milliseconds(0) == Duration.forever)
+        XCTAssert(try! farFuture.duration() == Duration.forever)
+        XCTAssert(try! Timestamp.milliseconds(UInt64.max) - Timestamp.milliseconds(0) == Duration.forever)
+
+        // right below the boundary the exact difference is still returned
+        let maxDiffMs = UInt64.max / 1000
+        XCTAssert(try! Timestamp.milliseconds(maxDiffMs) - Timestamp.milliseconds(0) == Duration.microseconds(maxDiffMs * 1000))
+        XCTAssert(try! Timestamp.milliseconds(maxDiffMs + 1) - Timestamp.milliseconds(0) == Duration.forever)
     }
 }
