@@ -106,9 +106,26 @@ struct BankEditView: View {
         if !accountHolder.isEmpty && !accountLabel.isEmpty {
             if isIBAN ? !iban.isEmpty
                       : !xTaler.isEmpty {
-                let payto = isIBAN ? "payto://iban/\(iban)?receiver-name=\(accountHolder)"       // TODO: convert BBAN to IBAN
-                                   : "payto://xTaler/\(xTaler)?receiver-name=\(accountHolder)"
-                let paytoUri = payto.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                // Build the payto URI with URLComponents so each component is escaped as a
+                // component. The previous code percent-encoded the ALREADY-ASSEMBLED string
+                // with .urlQueryAllowed, which leaves "?", "&" and "=" untouched — an
+                // account holder called "a&foo=bar" injected extra query parameters.
+
+                // TODO: for x-taler-bank the target must be BANK-HOST/ACCOUNT. Accounts read
+                // from an existing payto now round-trip with their host, but there is still
+                // no separate input field for it, so a hand-typed account without a host
+                // produces an incomplete target. See bugs.txt [14.2].
+                var components = URLComponents()
+                components.scheme = "payto"
+                components.host = isIBAN ? "iban" : "x-taler-bank"
+                let target = isIBAN ? iban.filter { !$0.isWhitespace }.uppercased() : xTaler
+                components.path = "/" + target
+                components.queryItems = [URLQueryItem(name: "receiver-name", value: accountHolder)]
+                guard let paytoUri = components.string else {
+                    symLog.log("could not build a payto URI from the entered account")
+                    showAlert = true
+                    return false
+                }
                 symLog.log(paytoUri)
                 if let account = try? await model.addBankAccount(paytoUri,
                                                            label: accountLabel,

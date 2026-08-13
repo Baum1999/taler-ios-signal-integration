@@ -48,9 +48,13 @@ extension URL {
 
     var xTaler: String? {
         /// https://datatracker.ietf.org/doc/rfc8905/
-        /// payto://iban/DE75512108001245126199?amount=EUR:200.0&message=hello
+        /// payto://x-taler-bank/BANK-HOST/ACCOUNT?receiver-name=…
+        /// The bank host is part of the target, so return "BANK-HOST/ACCOUNT" —
+        /// returning only lastPathComponent silently dropped the bank and made
+        /// the account unaddressable when it was written back out.
         if scheme == "payto" && host == "x-taler-bank" {
-            return lastPathComponent
+            let target = path.hasPrefix("/") ? String(path.dropFirst()) : path
+            return target.isEmpty ? nil : target
         }
         return nil
     }
