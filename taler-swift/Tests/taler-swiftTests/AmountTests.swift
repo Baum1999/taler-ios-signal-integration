@@ -11,7 +11,10 @@ class AmountTests: XCTestCase {
         var amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
         XCTAssert("TESTKUDOS" == amt.currencyStr)
-        XCTAssert(23 == amt.value)
+        // `value` is a lossy Double convenience (23.42 here), never the integer part.
+        // Assert on the exact integer/fraction pair instead — money must not be compared
+        // through Double.
+        XCTAssert(23 == amt.integer)
         XCTAssert(UInt64(0.42 * 1e8) == amt.fraction)
         
         str = "EUR:500000000.00000001"
@@ -33,7 +36,13 @@ class AmountTests: XCTestCase {
         amt = try! Amount(fromString: str)
         XCTAssert(str == amt.description)
         XCTAssert("TESTKUDOS123" == amt.currencyStr)
-        XCTAssert(Double(maxValue) == amt.value)
+        // At 2^52 the spacing of Double is 1.0, so `value` cannot represent
+        // maxValue + 0.99999999 — it rounds up to maxValue + 1. That is exactly the
+        // precision loss the `maxValue` comment warns about, so assert on the exact
+        // fields and pin the lossiness rather than asserting a false identity.
+        XCTAssert(UInt64(maxValue) == amt.integer)
+        XCTAssert(99999999 == amt.fraction)
+        XCTAssert(Double(maxValue) != amt.value)
 
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS1234:\(maxValue).99999999"))
         XCTAssertThrowsError(try Amount(fromString: "TESTKUDOS123:\(maxValue + 1).99999999"))
