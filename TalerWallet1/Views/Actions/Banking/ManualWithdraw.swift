@@ -145,8 +145,14 @@ struct ManualWithdrawContent: View {
     @EnvironmentObject private var controller: Controller
     @EnvironmentObject private var model: WalletModel
     @AppStorage("minimalistic") var minimalistic: Bool = false
+#if DEBUG
+    @AppStorage("developerMode") var developerMode: Bool = true
+#else
+    @AppStorage("developerMode") var developerMode: Bool = false
+#endif
 
     @State private var detailsForAmount: WithdrawalDetailsForAmount? = nil
+    @State private var loadError: Error? = nil
 //    @State var ageMenuList: [Int] = []
 //    @State var selectedAge = 0
     @State private var tosAccepted = false
@@ -174,6 +180,7 @@ struct ManualWithdrawContent: View {
                 await reloadExchange(details.exchangeBaseUrl)
             }
             detailsForAmount = details
+            loadError = nil
 //          agePicker.setAges(ages: detailsForAmount?.ageRestrictionOptions)
         } catch WalletBackendError.walletCoreError(let walletBackendResponseError) {
             symLog.log(walletBackendResponseError?.hint)
@@ -183,9 +190,15 @@ struct ManualWithdrawContent: View {
                 // Since amountToTransfer changed and we don't need the old fee anymore, we just
                 // ignore it and do nothing.
             // especially DON'T set detailsForAmount to nil
+            if detailsForAmount == nil,
+               walletBackendResponseError?.code != 7036 {       // WALLET_CORE_REQUEST_CANCELLED
+                // nothing to show yet, so we would spin forever - show the error instead
+                loadError = WalletBackendError.walletCoreError(walletBackendResponseError)
+            }
         } catch {
             symLog.log(error.localizedDescription)
             detailsForAmount = nil
+            loadError = error
         }
     }
 
@@ -280,6 +293,11 @@ struct ManualWithdrawContent: View {
                 .task(id: amountToTransfer.currencyStr) {
                     await getWithdrawalDetailsForAmount(amountToTransfer, true)
                 }
+        } else if let loadError {
+            // "OK" clears the error, which brings back the LoadingView and thus retries
+            ErrorView(stack.push(), error: loadError, devMode: developerMode) {
+                self.loadError = nil
+            }
         } else {
             LoadingView(stack: stack.push(), scopeInfo: scope, message: nil)
                 .task { await viewDidLoad2() }
