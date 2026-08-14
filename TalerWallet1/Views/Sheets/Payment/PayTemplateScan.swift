@@ -41,6 +41,9 @@ struct PayTemplateScan: View {
     @State private var isPaivana = false
     @State private var summary: String = EMPTYSTRING       // templateParam
     @State private var scope: ScopeInfo? = nil
+    /// survives PaymentScan being popped and pushed again, so that we don't
+    ///  instantiate the template (= create another order) a second time
+    @State private var prepared: PreparedTemplate? = nil
 
 //    @State private var feeAmount: Amount? = nil
 //    @State private var feeStr: String = EMPTYSTRING
@@ -122,7 +125,8 @@ struct PayTemplateScan: View {
                                      amountToTransfer: $amountToTransfer,
                                               summary: $summary,
                                      amountIsEditable: amountIsEditable,
-                                    summaryIsEditable: summaryIsEditable)
+                                    summaryIsEditable: summaryIsEditable,
+                                             prepared: $prepared)
 
             // final destination with amountShortcut, when user tapped a shortcut
             let finalDestinationS = PaymentScan(stack: stack.push(),
@@ -131,7 +135,8 @@ struct PayTemplateScan: View {
                                      amountToTransfer: $amountShortcut,
                                               summary: $summary,
                                      amountIsEditable: amountIsEditable,
-                                    summaryIsEditable: summaryIsEditable)
+                                    summaryIsEditable: summaryIsEditable,
+                                             prepared: $prepared)
 
             // destination to subject input
             let inputDestination = SubjectInputV(stack: stack.push(),
@@ -196,7 +201,8 @@ struct PayTemplateScan: View {
                  amountToTransfer: $amountToTransfer,
                           summary: $summary,
                  amountIsEditable: amountIsEditable,
-                summaryIsEditable: summaryIsEditable)
+                summaryIsEditable: summaryIsEditable,
+                         prepared: $prepared)
             }
           } .navigationTitle(navTitle)
 //            .ignoresSafeArea(.keyboard, edges: .bottom)

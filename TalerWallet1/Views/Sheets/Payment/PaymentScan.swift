@@ -15,6 +15,12 @@ fileprivate func feeLabel(_ feeString: String) -> String {
     feeString.isEmpty ? EMPTYSTRING : String(localized: "+ \(feeString) fee")
 }
 
+/// The pay-template instantiation which already created an order at the merchant
+struct PreparedTemplate: Equatable {
+    let key: String                 // the parameters that order was created for
+    let transactionId: String
+}
+
 // MARK: -
 // Will be called either by the user scanning a <pay> QR code or tapping the provided link,
 // both from the shop's website - or even from a printed QR code.
@@ -31,6 +37,7 @@ struct PaymentScan: View, Sendable {
     @Binding var summary: String
     let amountIsEditable: Bool                      //
     let summaryIsEditable: Bool                      //
+    var prepared: Binding<PreparedTemplate?>? = nil // template only, lives in PayTemplateScan
 
     @EnvironmentObject private var model: WalletModel
     @EnvironmentObject private var controller: Controller
@@ -42,14 +49,30 @@ struct PaymentScan: View, Sendable {
     @State private var elapsed: Int = 0
     @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
 
+    /// the parameters an already instantiated template order belongs to
+    private var templateKey: String {
+        url.trimmedString + "\n"
+          + (amountIsEditable ? amountToTransfer.description : EMPTYSTRING) + "\n"
+          + (summaryIsEditable ? summary : EMPTYSTRING)
+    }
+
     @MainActor
     private func viewDidLoad() async {
 //        symLog.log(".task")
         if template {
+            /// Instantiating a template creates a fresh order at the merchant, and this view is
+            ///  pushed anew (with new @State) whenever the user navigates back and forward again
+            ///  - so only instantiate once per amount/subject the user entered.
+            let key = templateKey
+            if let already = prepared?.wrappedValue, already.key == key {
+                txId = already.transactionId
+                return
+            }
             if let templateResponse = try? await model.preparePayForTemplate(url.trimmedString,
                                                    amount: amountIsEditable ? amountToTransfer : nil,
                                                  summary: summaryIsEditable ? summary : nil) {
                 txId = templateResponse.transactionId
+                prepared?.wrappedValue = PreparedTemplate(key: key, transactionId: templateResponse.transactionId)
 //                preparePayResult = templateResponse
 //                let raw = templateResponse.amountRaw
 //                controller.updateAmount(raw, forSaved: url)
