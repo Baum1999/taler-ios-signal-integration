@@ -83,7 +83,7 @@ extension Amount {
         return (self.readableDescription, self.readableDescription)
     }
 
-    func inputDigits(_ currencyInfo: CurrencyInfo) -> UInt {
+    func fractionalDigits(_ currencyInfo: CurrencyInfo) -> UInt {
         let inputDigits = currencyInfo.specs.fractionalInputDigits
         if inputDigits < 0 { return 0 }
         if inputDigits > 8 { return 8}
@@ -91,16 +91,16 @@ extension Amount {
     }
 
     func addDigit(_ digit: UInt8, currencyInfo: CurrencyInfo) {
-        shiftLeft(add: digit, inputDigits(currencyInfo))
+        shiftLeft(add: digit, fractionalDigits(currencyInfo))
     }
 
     func removeDigit(_ currencyInfo: CurrencyInfo) {
         shiftRight()                        // divide by 10
-        mask(inputDigits(currencyInfo))     // replace all digits after #inputDigit with 0
+        mask(fractionalDigits(currencyInfo))     // replace all digits after #inputDigit with 0
     }
 
     func plainString(_ currencyInfo: CurrencyInfo) -> String {
-        return plainString(inputDigits: inputDigits(currencyInfo))
+        return plainString(inputDigits: fractionalDigits(currencyInfo))
     }
 }
 // MARK: -
