@@ -603,7 +603,7 @@ extension Controller {
 #endif
         var urlCommand = UrlCommand.unknown
         switch scheme.lowercased() {
-            case "taler", "ext+taler", "web+taler":
+            case "taler":
                 urlCommand = talerScheme(url)
 //            case "payto":
 //                messageForSheet = url.absoluteString
