@@ -279,7 +279,6 @@ class Controller: ObservableObject {
                 default: "unknown"
             }
             self.logger.log("Internet connection is \(status)")
-#if DEBUG   // TODO: checkInternetConnection hintNetworkAvailabilityT
             DispatchQueue.main.async {
                 if path.status == .unsatisfied {
                     self.isConnected = false
@@ -294,7 +293,6 @@ class Controller: ObservableObject {
                     }
                 }
             }
-#endif
         }
         self.logger.log("Start monitoring internet connection")
         let queue = DispatchQueue(label: "InternetMonitor")
