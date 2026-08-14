@@ -19,7 +19,9 @@ class APDU {
     private var readCapabilityContainerCheck = false
 
     init(_ talerUri: String) throws {
-        if talerUri.count < 8192 {
+        // NDEF lengths count bytes, not Characters, and the emulated file must stay within
+        // the maximum NDEF file size advertised in READ_CAPABILITY_CONTAINER_RESPONSE
+        if talerUri.utf8.count < 255 {    // TODO: < 8192
             self.talerUri = talerUri
         } else {
             throw APDUError.invalidStringValue
@@ -75,7 +77,8 @@ class APDU {
             0x04,           // T field of the NDEF File Control TLV
             0x06,           // L field of the NDEF File Control TLV
             0xE1, 0x04,     // File Identifier of NDEF file
-            0x00, 0xFE,     // Maximum NDEF file size of 65534 bytes    // 254 bytes
+            0x00, 0xFE,     // Maximum NDEF file size of 254 bytes  // TODO: 8191
+//            0x20, 0x09,     // Maximum NDEF file size: 8201 = 2 NLEN + 8 record header + 8191 URI bytes
             0x00,           // Read access without any security
             0xFF,           // Write access without any security
             0x90, 0x00,     // A_OKAY
@@ -122,6 +125,17 @@ class APDU {
                     // since we have no ID length, there is no Payload ID
         ])
     } // d101
+
+    private var NDEF_RECORD_HEADER_LONG: Data {
+        Data(fromUInt8Array: [
+            0xC1,   // 1100 + 0001 = MessageBegin, MessageEnd, no ShortRecord + Format "Well-Known" (but no ID Length)
+            0x01,   // TypeLength
+      //    0x00, 0x00, 0x00, 0x00,   // Payload Length 4 bytes since ShortRecord is false
+                    // no ID Length byte since the IDlength flag is false
+      //    0x55,   // Payload Type = “U” for URI, 1 byte as specified in the TypeLength field
+                    // since we have no ID length, there is no Payload ID
+        ])
+    } // c101
 
     private var A_OKAY_ARRAY: [UInt8] {
         [
@@ -212,11 +226,13 @@ class APDU {
             return A_OKAY
         } // 00a4000c02e104
 
-        // TODO: This only works for talerURIs < 256 bytes
-        // but they may be up to 8192 bytes long
-        // So we need to change to long header...
-        let uriCount = talerUri.count
-        let ndefLen = UInt16(uriCount + 5)     // NDEF_RECORD_HEADER_SHORT + len + "U" + 0
+        // The NDEF payload is the URI identifier code byte 0 followed by the URI itself.
+        // A short record can only express a payload length of one byte, so anything longer
+        // has to go into a long record, whose payload length field is four bytes wide.
+        let payloadLen = talerUri.utf8.count + 1
+        let shortRecord = payloadLen <= 0xFF
+        // record header + TypeLength + payload length + "U" + payload
+        let ndefLen = UInt16(payloadLen + (shortRecord ? 4 : 7))
         /// Fifth Command: Read the Length of the NDEF File     // 00b0 00 00 02
         if NDEF_READ_BINARY_NLEN == commandApdu {
             logger.info("NDEF_READ_BINARY_NLEN triggered. Our Response: length \(ndefLen) + A_OKAY")
@@ -242,10 +258,17 @@ class APDU {
                 let wantedLength = UInt(arrayApdu[4])
                 let offset = UInt(arrayApdu[3]) + (UInt(arrayApdu[2]) << 8)
 
-                var data = NDEF_RECORD_HEADER_SHORT                             // 2 bytes
-                let uriCount8 = UInt8((uriCount + 1) & 0xff)
-                let lenData = withUnsafeBytes(of: uriCount8) { Data($0) }
-                data.append(lenData)                                            // 1 byte
+                var data = shortRecord ? NDEF_RECORD_HEADER_SHORT               // 2 bytes
+                                       : NDEF_RECORD_HEADER_LONG                // 2 bytes
+                let lenData: Data
+                if shortRecord {
+                    let payloadLen8 = UInt8(payloadLen)
+                    lenData = withUnsafeBytes(of: payloadLen8) { Data($0) }     // 1 byte
+                } else {
+                    let payloadLen32 = UInt32(payloadLen).bigEndian             // MSB first
+                    lenData = withUnsafeBytes(of: payloadLen32) { Data($0) }    // 4 bytes
+                }
+                data.append(lenData)
                 data.append("U".data(using: .utf8)!)                            // 1 byte
                 let zero: UInt8 = 0
                 let zeroData = withUnsafeBytes(of: zero) { Data($0) }
