@@ -22,6 +22,7 @@ struct BalancesListView: View {
     @EnvironmentObject private var controller: Controller
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
+    @AppStorage("demoHints") var demoHints: Bool = true
     @AppStorage("preferredColorScheme") var preferredColorScheme: Int = 0
     @AppStorage("oimEuro") var oimEuro: Bool = false
 
@@ -44,7 +45,7 @@ struct BalancesListView: View {
     func balancesList() -> some View {
         let count = controller.balances.count
         let list = List {
-            if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty {
+            if !controller.haveProdBalance && !controller.defaultExchanges.isEmpty && demoHints {
                 ProdSectionView(stack: stack.push(),
                      showRealCashHint: $showRealCashHint,
                               isEmpty: false,
