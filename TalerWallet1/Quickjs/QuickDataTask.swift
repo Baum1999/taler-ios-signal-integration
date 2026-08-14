@@ -50,7 +50,9 @@ func request_create(userdata: Optional<UnsafeMutableRawPointer>,
             return quickjs.reqCreate(request, responseCb, responseCbCls)
         }
     }
-    return 0
+    let logger = Logger(subsystem: "net.taler.gnu", category: "Networking Failure")
+    logger.error("Failed to create URLRequest for >>\(String(describing: requestInfo?.pointee.url))<<")
+    return -1
 }
 
 func request_cancel(userdata: Optional<UnsafeMutableRawPointer>,
