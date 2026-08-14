@@ -582,7 +582,7 @@ class Controller: ObservableObject {
                 await loadBalances(CallStack(), model)
             } catch {       // rethrows
                 self.logger.error("\(error.localizedDescription)")
-                backendState = .error(error as! EquatableError)                       // ❗️Yikes app cannot continue
+                backendState = .error(error.toEquatableError())                       // ❗️Yikes app cannot continue
                 throw error
             }
         } else {
