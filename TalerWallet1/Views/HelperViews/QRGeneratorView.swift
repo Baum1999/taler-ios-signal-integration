@@ -28,6 +28,13 @@ struct QRGeneratorView: View {
     let logoSize: CGFloat
     @Binding var image: UIImage?
 
+    @State private var failed = false
+
+    // a QR code which cannot be generated must not look like an empty area to scan
+    private var failedText: Text {
+        Text("Cannot create QR code", comment: "shown instead of the QR code")
+    }
+
     var body: some View {
         ZStack {
             if let image {
@@ -42,18 +49,23 @@ struct QRGeneratorView: View {
                         .scaledToFit()
                         .frame(width: logoSize * 2, height: logoSize)
                 }
+            } else if failed {
+                failedText
+                    .talerFont(.title2)
+                    .frame(width: size, height: size)
             } else {
                 EmptyView()
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text("QR Code", comment: "a11y"))
+        .accessibilityLabel(failed ? failedText : Text("QR Code", comment: "a11y"))
         .onAppear {
 //          if let uiImage = getQRCode(text: text) {
-            if let data = getQRCodeData(text: text) {
-                if let uiImage = UIImage(data: data)  {
-                    image = uiImage
-                }
+            if let data = getQRCodeData(text: text),
+               let uiImage = UIImage(data: data)  {
+                image = uiImage
+            } else {
+                failed = true
             }
         }
     }
@@ -67,8 +79,10 @@ struct QRGeneratorView: View {
         guard let ciimage = filter.outputImage else { return nil }
         let transform = CGAffineTransform(scaleX: 10, y: 10)
         let scaledCIImage = ciimage.transformed(by: transform)
-        let uiimage = UIImage(ciImage: scaledCIImage)
-        return uiimage.pngData()!
+        // a UIImage(ciImage:) has no bitmap representation, so pngData() would return nil
+        guard let cgImage = CIContext().createCGImage(scaledCIImage, from: scaledCIImage.extent)
+        else { return nil }
+        return UIImage(cgImage: cgImage).pngData()
     }
 }
 
