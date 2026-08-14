@@ -108,6 +108,11 @@ struct SendAmountView: View {
                         switch walletError {
                             case .walletCoreError(let wError):
                                 if wError?.code == 7027 {
+                                    if let details = wError?.insufficientBalanceDetails {
+                                        symLog.log(details.causeHint?.localizedCause(amount.currencyStr))
+                                    }
+                                    // TODO: [10.2] AmountInputV ignores the insufficient flag,
+                                    // so neither this verdict nor its localized cause is shown
                                     return ComputeFeeResult.insufficient()
                                 }
                             default: break
@@ -126,7 +131,7 @@ struct SendAmountView: View {
         if let available = try? await model.getMaxPeerPushDebitAmount(scope, viewHandles: true) {
             amountAvailable = available
         } else {
-            amountAvailable = Amount.zero(currency: scope.currency)
+            amountAvailable = balance.available
         }
     }
 

@@ -55,6 +55,7 @@ struct AmountInputV: View {
     @State private var feeAmount: Amount? = nil
     @State private var feeStr = (EMPTYSTRING, EMPTYSTRING)
     @State private var numCoins: Int?
+    @State private var coreInsufficient: Bool = false    // wallet-core's own verdict
 
     struct Flags {
         let insufficient: Bool
@@ -63,6 +64,12 @@ struct AmountInputV: View {
 
     func checkAvailable(_ coinData: CoinData) -> Flags {
         let isZero = amountToTransfer.isZero
+        // wallet-core's verdict is authoritative and comes first: it accounts for fees,
+        // age restrictions, per-exchange limits and pending refreshes, none of which a
+        // local `amountToTransfer > amountAvailable` can see.
+        if coreInsufficient {
+            return Flags(insufficient: true, disabled: true)
+        }
         if !amountAvailable.isZero {
             do {
                 let insufficient: Bool
@@ -82,7 +89,11 @@ struct AmountInputV: View {
                 symLog.log("❗️Cannot compare amountAvailable.\(amountAvailable.currencyStr) to amountToTransfer.\(amountToTransfer.currencyStr))")
             }
         }
-        return Flags(insufficient: false, disabled: isZero)
+        // No usable local bound (an incoming amount, or a caller that never sets
+        // amountAvailable — see PayTemplateScan.swift:36). Deliberately NOT failing closed
+        // here: those callers still get the wallet-core verdict above, and failing closed
+        // would permanently disable a pay-template that has no availability to compare to.
+        return Flags(insufficient: false, disabled: isZero || coinData.invalid || coinData.tooMany)
     }
 
     var body: some View {
@@ -119,10 +130,12 @@ struct AmountInputV: View {
                 if let result: ComputeFeeResult = await computeFee(amountToTransfer) {
                     symLog.log("computeFee() finished")
                     feeStr = result.feeStr
-//                    insufficient = result.insufficient    // TODO: insufficient
+                    coreInsufficient = result.insufficient
                     feeAmount = result.feeAmount
                     numCoins = result.numCoins
                 } else {
+                    // No verdict this round - keep the previous one rather than silently
+                    // treating an unanswered question as "you can afford it".
                     symLog.log("computeFee() failed ❗️") //  \(error)")
                 }
             }
