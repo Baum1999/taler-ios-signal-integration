@@ -26,13 +26,6 @@ struct MerchantHeader: View {
         return terms.summary
     }
 
-    func logo(_ logoBase64: String) -> Image? {
-        if let image = Image(imageBase64: logoBase64) {
-            return image
-        }
-        return nil
-    }
-
     var body: some View {
         if let terms {
             Section {
@@ -43,7 +36,7 @@ struct MerchantHeader: View {
                     Spacer()
                     VStack(alignment: .center) {
                         if let imageBase64 = terms.merchant.logo {
-                            if let image = logo(imageBase64) {
+                            if let image = Image(imageBase64: imageBase64) {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
