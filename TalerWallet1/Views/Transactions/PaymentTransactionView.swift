@@ -13,6 +13,8 @@ import SymLog
 struct MerchantHeader: View {
     let terms: MerchantContractTerms?
 
+    @State private var image: Image? = nil
+
     func summary(_ terms: MerchantContractTerms) -> String {
         if let i18nDict = terms.summaryI18n {
             if !i18nDict.isEmpty {
@@ -35,8 +37,8 @@ struct MerchantHeader: View {
                 HStack {
                     Spacer()
                     VStack(alignment: .center) {
-                        if let imageBase64 = terms.merchant.logo {
-                            if let image = Image(imageBase64: imageBase64) {
+                        if terms.merchant.logo != nil {
+                            if let image {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -53,7 +55,12 @@ struct MerchantHeader: View {
                         let merchant = terms.merchant.name
                         Text(merchant)
                             .talerFont(.title3)
-                    }.foregroundStyle(Color(.primary))
+                    }   .foregroundStyle(Color(.primary))
+                        .task {
+                            if let imageBase64 = terms.merchant.logo {
+                                image = Image(imageBase64: imageBase64)
+                            }
+                        }
                     Spacer()
                 }
             }

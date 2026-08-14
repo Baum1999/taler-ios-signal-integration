@@ -40,6 +40,8 @@ struct TransactionIconBadge: View {
     let needsKYC: Bool
     let imageBase64: String?
 
+    @State private var image: Image? = nil
+
     init(type: TransactionType, foreColor: Color, done: Bool, incoming: Bool,
          shouldConfirm: Bool, needsKYC: Bool, imageBase64: String? = nil
     ) {
@@ -83,22 +85,31 @@ struct TransactionIconBadge: View {
     }
 
     var body: some View {
-        if let imageBase64, let image = Image(imageBase64: imageBase64) {
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxHeight: 40)
+        let badge = IconBadge(image: type.icon(done),
+                               done: true,
+                          foreColor: foreColor,
+                      shouldConfirm: shouldConfirm,
+                           needsKYC: needsKYC,
+                              phase: 0,
+                         firstImage: nil,
+                        secondImage: nil,
+                           wideIcon: TransactionType.refund.icon())
+                                  // "arrowshape.turn.up.backward" is wider than all others
+        if let imageBase64 {
+            if let image {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 40)
+            } else {
+                badge
+                    .opacity(0.3)
+                    .task {
+                        image = Image(imageBase64: imageBase64)
+                    }
+            }
         } else {
-            IconBadge(image: type.icon(done),
-                       done: true,
-                  foreColor: foreColor,
-              shouldConfirm: shouldConfirm,
-                   needsKYC: needsKYC,
-                      phase: 0,
-                 firstImage: nil,
-                secondImage: nil,
-                   wideIcon: TransactionType.refund.icon())
-                          // "arrowshape.turn.up.backward" is wider than all others
+            badge
         }
     }
 }
