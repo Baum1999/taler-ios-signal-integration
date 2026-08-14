@@ -24,12 +24,13 @@ extension Data {
     }
 
     static func clampedData(_ data: Data, offset: UInt, size: UInt) -> Data {
-        let endIndex = UInt(data.endIndex)
-        let start = UInt(data.startIndex) + offset
-        let start2 = Swift.min(start, endIndex-1)
-        let end = start2 + size
-        let end2 = Swift.min(end, endIndex)
-        return data[start2..<end2]
+        let count = UInt(data.count)
+        // an offset at or past the end must yield nothing - clamping it to the last byte
+        // would silently return unrelated data, and for empty data the clamp underflows
+        guard offset < count else { return Data() }
+        let start = data.startIndex + Int(offset)
+        let end = start + Int(Swift.min(size, count - offset))
+        return data[start..<end]
     }
 
     mutating func append(data: Data, offset: UInt, size: UInt) {
