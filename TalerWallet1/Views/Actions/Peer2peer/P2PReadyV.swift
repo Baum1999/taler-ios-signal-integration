@@ -31,6 +31,7 @@ struct P2PReadyV: View {
     @AppStorage("myListStyle") var myListStyle: MyListStyle = .automatic
 
     @State private var transactionId: String? = nil
+    @State private var initiationError: Error? = nil
     @State private var noTransaction: TalerTransaction? = nil
     @State private var talerTX = TalerTransaction(dummyCurrency: DEMOCURRENCY)
     @Namespace var namespace
@@ -54,18 +55,24 @@ struct P2PReadyV: View {
                                      summary: summary,
                             purse_expiration: purseExpiration,
                                      icon_id: iconID)
-        if outgoing {
-            // TODO: let user choose baseURL
-            if let response = try? await model.initiatePeerPushDebit(scope: scope, terms: terms) {
+        do {
+            if outgoing {
+                let response = try await model.initiatePeerPushDebit(scope: scope, terms: terms,
+                                                               viewHandles: true)
+                // will switch from WithdrawProgressView to TransactionSummaryList
+                transactionId = response.transactionId
+            } else {
+                // scope is the exchange the user picked in the ScopePicker, and the one the
+                // fee was computed for. nil (== wallet-core decides) only for global scope.
+                let response = try await model.initiatePeerPullCredit(scope.url, terms: terms,
+                                                                viewHandles: true)
                 // will switch from WithdrawProgressView to TransactionSummaryList
                 transactionId = response.transactionId
             }
-        } else {
-            // TODO: let user choose baseURL
-            if let response = try? await model.initiatePeerPullCredit(nil, terms: terms) {
-                // will switch from WithdrawProgressView to TransactionSummaryList
-                transactionId = response.transactionId
-            }
+        } catch {
+            symLog.log("❗️ \(error), \(error.localizedDescription)")
+            transactionStarted = false      // failed, so let the user try again
+            initiationError = error         // we show it ourselves (viewHandles: true)
         }
     }
 
@@ -90,6 +97,9 @@ struct P2PReadyV: View {
                                     showDone: .prominent,
                                          url: nil,
                                  withActions: false)
+            } else if let initiationError {
+                // don't spin forever - the user can go back and start over
+                ErrorView(stack.push(), error: initiationError, devMode: developerMode)
             } else {
 #if DEBUG
                 let message = amountToTransfer.currencyStr
