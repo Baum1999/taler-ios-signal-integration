@@ -71,6 +71,12 @@ class WalletCore: QuickjsMessageHandler {
         let payload: AnyCodable?
     }
 
+    /// the bare envelope, which still decodes when the full `ResponseOrNotification` doesn't
+    private struct ResponseHeader: Decodable {
+        let type: String
+        let id: UInt?
+    }
+
     struct Payload: Decodable {
         let type: String
         let id: String?
@@ -101,18 +107,43 @@ class WalletCore: QuickjsMessageHandler {
 }
 // MARK: -  completionHandler functions
 extension WalletCore {
+    /// `requestsMade` and `completions` are touched both from the request queue and from
+    /// wallet-core's message handler, thus every access must be guarded by the semaphore.
+    private func reserveRequestId() -> UInt {
+        semaphore.wait()
+        defer { semaphore.signal() }
+        let requestId = requestsMade
+        requestsMade += 1
+        return requestId
+    }
+
+    private func setCompletion(_ requestId: UInt, _ sendTime: Date,
+                               _ completion: @escaping (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void) {
+        semaphore.wait()
+        defer { semaphore.signal() }
+        completions[requestId] = (sendTime, completion)
+    }
+
+    /// Take the completion out of the list, so that it can never be called twice.
+    /// Whoever gets it must call it - on every path, including all error paths.
+    private func takeCompletion(_ requestId: UInt)
+                             -> (Date, (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void)? {
+        semaphore.wait()
+        defer { semaphore.signal() }
+        return completions.removeValue(forKey: requestId)
+    }
+
     private func handleError(_ decoded: ResponseOrNotification, _ message: String?) throws {
         guard let requestId = decoded.id else {
             logger.error("didn't find requestId in error response")
             // TODO: show error alert
             throw WalletBackendError.deserializationError
         }
-        guard let (timeSent, completion) = completions[requestId] else {
+        guard let (timeSent, completion) = takeCompletion(requestId) else {
             logger.error("requestId \(requestId, privacy: .public) not in list")
             // TODO: show error alert
             throw WalletBackendError.deserializationError
         }
-        completions[requestId] = nil
         if let walletError = decoded.error {            // wallet-core sent an error message
             do {
                 let jsonData = try JSONEncoder().encode(walletError)
@@ -136,14 +167,14 @@ extension WalletCore {
             symLog.log(decoded)                 // TODO: .error
             throw WalletBackendError.deserializationError
         }
-        guard let (timeSent, completion) = completions[requestId] else {
+        guard let (timeSent, completion) = takeCompletion(requestId) else {
             logger.error("requestId \(requestId, privacy: .public) not in list")
             throw WalletBackendError.deserializationError
         }
-        completions[requestId] = nil
-        guard let result = decoded.result else {
+        guard let result = decoded.result else {        // don't throw - we own the completion now
             logger.error("requestId \(requestId, privacy: .public) got no result")
-            throw WalletBackendError.deserializationError
+            completion(requestId, timeSent, message, nil, WalletCore.parseResponseError())
+            return
         }
         do {
             let jsonData = try JSONEncoder().encode(result)
@@ -421,7 +452,15 @@ extension WalletCore {
         }
     }
 
-    @MainActor func handleLog(message: String) {
+    /// wallet-core logs from its own thread, thus hop to the main actor before the console
+    func handleLog(message: String) {
+        guard isLogging else { return }         // don't flood the main queue when nobody looks
+        DispatchQueue.main.async { [self] in
+            handleLogM(message: message)
+        }
+    }
+
+    @MainActor private func handleLogM(message: String) {
         if #available (iOS 16.0, *) {
             if isLogging {
                 let consoleManager = LCManager.shared
@@ -447,29 +486,53 @@ extension WalletCore {
         consoleManager.print("-   -   -")
     }
 
+    /// A message we could not decode may still be the answer to a pending request.
+    /// Fail that request, otherwise it would wait for an answer which never comes.
+    private func failPendingRequest(_ messageData: Data, _ message: String) {
+        guard let header = try? JSONDecoder().decode(ResponseHeader.self, from: messageData),
+              header.type == "response" || header.type == "error",
+              let requestId = header.id,
+              let (timeSent, completion) = takeCompletion(requestId)
+        else { return }
+        logger.error("undecodable \(header.type, privacy: .public) for request \(requestId, privacy: .public)")
+        completion(requestId, timeSent, message, nil, WalletCore.parseFailureError())
+    }
+
+    /// wallet-core calls this from its own thread, thus hop to the main actor
+    func handleMessage(message: String) {
+        DispatchQueue.main.async { [self] in
+            handleMessageM(message: message)
+        }
+    }
+
     /// here not only responses, but also notifications from wallet-core will be received
-    @MainActor func handleMessage(message: String) {
+    @MainActor private func handleMessageM(message: String) {
         do {
             guard let messageData = message.data(using: .utf8) else {
                 throw WalletBackendError.deserializationError
             }
-            let decoded = try JSONDecoder().decode(ResponseOrNotification.self, from: messageData)
-            switch decoded.type {
-                case "error":
-                    symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
-                    try handleError(decoded, message)
-                case "response":
-//                    symLog.log(message)
-                    try handleResponse(decoded, message)
-                case "notification":
-//                    symLog.log(message)
-                    try handleNotification(decoded.payload, message)
-                case "tunnelHttp":          // TODO: Handle tunnelHttp
-                    symLog.log("Can't handle tunnelHttp: \(message)")    // TODO: .error
-                    throw WalletBackendError.deserializationError
-                default:
-                    symLog.log("Unknown response type: \(message)")    // TODO: .error
-                    throw WalletBackendError.deserializationError
+            do {
+                let decoded = try JSONDecoder().decode(ResponseOrNotification.self, from: messageData)
+                switch decoded.type {
+                    case "error":
+                        symLog.log("\"id\":\(decoded.id ?? 0)  \(message)")
+                        try handleError(decoded, message)
+                    case "response":
+//                        symLog.log(message)
+                        try handleResponse(decoded, message)
+                    case "notification":
+//                        symLog.log(message)
+                        try handleNotification(decoded.payload, message)
+                    case "tunnelHttp":          // TODO: Handle tunnelHttp
+                        symLog.log("Can't handle tunnelHttp: \(message)")    // TODO: .error
+                        throw WalletBackendError.deserializationError
+                    default:
+                        symLog.log("Unknown response type: \(message)")    // TODO: .error
+                        throw WalletBackendError.deserializationError
+                }
+            } catch {   // e.g. a TalerErrorDetail from a remote server which doesn't decode
+                failPendingRequest(messageData, message)    // never leave a request hanging
+                throw error
             }
         } catch DecodingError.dataCorrupted(let context) {
             logger.error("\(context.debugDescription)")
@@ -492,17 +555,13 @@ extension WalletCore {
     private func encodeAndSend(_ request: WalletBackendRequest, completionHandler: @escaping (UInt, Date, String?, Data?, TalerErrorDetail?) -> Void) {
         // Encode the request and send it to the backend.
         queue.async {
-            self.semaphore.wait()               // guard access to requestsMade
-            let requestId = self.requestsMade
+            let requestId = self.reserveRequestId()
             let sendTime = Date.now
             do {
                 let full = FullRequest(operation: request.operation, id: requestId, args: request.args)
 //          symLog.log(full)
                 let encoded = try JSONEncoder().encode(full)
                 guard let jsonString = String(data: encoded, encoding: .utf8) else { throw WalletBackendError.serializationError }
-                self.completions[requestId] = (sendTime, completionHandler)
-                self.requestsMade += 1
-                self.semaphore.signal()         // free requestsMade
                     let args = try JSONEncoder().encode(request.args)
                     if let jsonArgs = String(data: args, encoding: .utf8) {
                         if request.operation == "getTransactionsV2" {
@@ -515,10 +574,12 @@ extension WalletCore {
                     } else {    // should NEVER happen since the whole request was already successfully encoded and stringified
                         self.logger.log("🔴\"id\":\(requestId, privacy: .public) \(request.operation, privacy: .public) 🔴 Error: jsonArgs")
                     }
+                // register only after everything which can throw did succeed, but before
+                // sending - the answer may arrive before sendMessage() even returns
+                self.setCompletion(requestId, sendTime, completionHandler)
                 self.quickjs.sendMessage(message: jsonString)
 //              self.symLog.log(jsonString)
-            } catch {       // call completion
-                self.semaphore.signal()         // free requestsMade
+            } catch {       // call completion - nothing was registered, thus nobody else will
                 self.logger.error("\(error.localizedDescription)")
 //              self.symLog.log(error)
                 completionHandler(requestId, sendTime, nil, nil, WalletCore.serializeRequestError());
