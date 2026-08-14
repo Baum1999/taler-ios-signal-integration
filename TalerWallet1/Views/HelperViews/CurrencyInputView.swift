@@ -69,6 +69,9 @@ struct CurrencyInputView: View {
     
     @State private var hasBeenShown = false
     @State private var useShortcut = 0
+    // `body´ builds a new CurrencyField each time, but the text field is created only
+    // once - keep the handle to it here, where it survives the re-evaluations
+    @State private var fieldHandle = CurrencyFieldHandle()
 
     @MainActor
     func action(shortcut: Int, currencyField: CurrencyField) {
@@ -150,7 +153,7 @@ struct CurrencyInputView: View {
 //        let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
         let currencyInfo = currencyInfo()
-        let currencyField = CurrencyField(currencyInfo, amount: $amount)
+        let currencyField = CurrencyField(currencyInfo, amount: $amount, handle: fieldHandle)
         VStack (alignment: .center) {   // center shortcut buttons
             if let heading = heading() {
                 Text(heading.0)

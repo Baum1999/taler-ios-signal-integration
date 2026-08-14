@@ -47,12 +47,13 @@ struct CurrencyField: View {
         currencyFieldRepresentable.updateText(amount: amount)
     }
 
-    public init(_ currencyInfo: CurrencyInfo, amount: Binding<Amount>) {
+    public init(_ currencyInfo: CurrencyInfo, amount: Binding<Amount>, handle: CurrencyFieldHandle) {
         self._amount = amount
         self.currencyInfo = currencyInfo
         self.currencyFieldRepresentable =
                 CurrencyTextfieldRepresentable(currencyInfo: self.currencyInfo,
-                                                     amount: self.$amount)
+                                                     amount: self.$amount,
+                                                     handle: handle)
     }
 
     var body: some View {
@@ -84,6 +85,20 @@ struct CurrencyField: View {
 // MARK: -
 // Sub-class UITextField to remove selection and caret
 class NoCaretTextField: UITextField {
+    /// The text as it was last set from an `Amount´. `Coordinator.editingChanged´ diffs
+    /// the field's text against it to find the newly typed digit, so the two must never
+    /// be set independently - always use `setPlainText´ for both.
+    fileprivate var lastValidInput: String? = EMPTYSTRING
+
+    /// Set both the displayed text and the last valid input, caret at the end.
+    fileprivate func setPlainText(_ plain: String?) {
+        lastValidInput = plain
+//        print("Setting textfield to: \(plain)")
+        text = plain
+        let endPosition = endOfDocument
+        selectedTextRange = textRange(from: endPosition, to: endPosition)
+    }
+
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         false
     }
@@ -97,35 +112,39 @@ class NoCaretTextField: UITextField {
     }
 }
 // MARK: -
+/// SwiftUI re-creates `CurrencyField´ and its `UIViewRepresentable´ on every body pass,
+/// but calls `makeUIView´ only once. The view which shows the field keeps this box in
+/// `@State´, so it survives those passes and always refers to the text field which
+/// really is in the view hierarchy.
+final class CurrencyFieldHandle {
+    fileprivate weak var textField: NoCaretTextField? = nil
+}
+// MARK: -
 @MainActor
 struct CurrencyTextfieldRepresentable: UIViewRepresentable {
     let currencyInfo: CurrencyInfo
     @Binding var amount: Amount
-
-    private let textField = NoCaretTextField(frame: .zero)
+    let handle: CurrencyFieldHandle
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 
     @MainActor public func becomeFirstResponder() -> Bool {
-        textField.becomeFirstResponder()
+        guard let textField = handle.textField else { return false }
+        return textField.becomeFirstResponder()
     }
 
     @MainActor public func resignFirstResponder() {
-        textField.resignFirstResponder()
+        handle.textField?.resignFirstResponder()
         Self.endEditing()
     }
 
     func updateText(amount: Amount) {
-        let plain = amount.plainString(currencyInfo)
-//        print("Setting textfield to: \(plain)")
-        textField.text = plain
-        let endPosition = textField.endOfDocument
-        textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
+        handle.textField?.setPlainText(amount.plainString(currencyInfo))
     }
 
-    func toolBar() -> UIToolbar {
+    func toolBar(for textField: UITextField) -> UIToolbar {
         let image = UIImage(systemName: RETURN)   // 􀅇
         let button = UIBarButtonItem(image: image, style: .done, target: textField,
                                     action: #selector(UITextField.resignFirstResponder))
@@ -147,6 +166,9 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> NoCaretTextField {
+        // the view hierarchy owns the field, `handle´ only points to it
+        let textField = NoCaretTextField(frame: .zero)
+        handle.textField = textField
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         // Assign delegate
@@ -178,42 +200,45 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         )
 
         // Add a toolbar with a done button above the keyboard
-        textField.inputAccessoryView = toolBar()
+        textField.inputAccessoryView = toolBar(for: textField)
 
         // Set initial textfield text
-        context.coordinator.updateText(amount, textField: textField)
+        textField.setPlainText(amount.plainString(currencyInfo))
 
         return textField
     }
 
-    func updateUIView(_ uiView: NoCaretTextField, context: Context) {}
+    func updateUIView(_ uiView: NoCaretTextField, context: Context) {
+        // the coordinator captured an older copy of this struct - refresh it
+        context.coordinator.textfieldRepresentable = self
+        // reconcile the field with the `value´, e.g. after a shortcut button was tapped
+        let plain = amount.plainString(currencyInfo)
+        if uiView.lastValidInput != plain {
+            uiView.setPlainText(plain)
+        }
+    }
 
     class Coordinator: NSObject, UITextFieldDelegate {
         // Reference to currency input field
-        private var textfieldRepresentable: CurrencyTextfieldRepresentable
-
-        // Last valid text input string to be displayed
-        private var lastValidInput: String? = EMPTYSTRING
+        fileprivate var textfieldRepresentable: CurrencyTextfieldRepresentable
 
         init(_ representable: CurrencyTextfieldRepresentable) {
             self.textfieldRepresentable = representable
         }
 
-        func setValue(_ amount: Amount, textField: UITextField) {
+        func setValue(_ amount: Amount) {
             // Update hidden textfield text
-            updateText(amount, textField: textField)
+            updateText(amount)
             // Update input value
 //    print(input.amount.description, " := ", amount.description)
             textfieldRepresentable.amount = amount
         }
 
-        func updateText(_ amount: Amount, textField: UITextField) {
+        func updateText(_ amount: Amount) {
             // Update field text and last valid input text
-            lastValidInput = amount.plainString(textfieldRepresentable.currencyInfo)
-//    print("lastValidInput: `\(lastValidInput)´")
-            textField.text = lastValidInput
-            let endPosition = textField.endOfDocument
-            textField.selectedTextRange = textField.textRange(from: endPosition, to: endPosition)
+            let plain = amount.plainString(textfieldRepresentable.currencyInfo)
+//    print("lastValidInput: `\(plain)´")
+            textfieldRepresentable.handle.textField?.setPlainText(plain)
         }
 
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -227,7 +252,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
                     // Remove trailing digit: divide value by 10
                     let amount = textfieldRepresentable.amount.copy()
                     amount.removeDigit(textfieldRepresentable.currencyInfo)
-                    setValue(amount, textField: textField)
+                    setValue(amount)
                 }
             }
             return true
@@ -242,8 +267,9 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
         }
 
         @objc func editingChanged(textField: NoCaretTextField) {
-            // Get a mutable copy of last text
-            guard var oldText = lastValidInput else {
+            // Get a mutable copy of last text - from the field which sent this event,
+            // so that it can never be out of sync with the text we compare it against
+            guard var oldText = textField.lastValidInput else {
                 return
             }
 
@@ -261,7 +287,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
             guard let char, let digit = UInt8(String(char)), digit <= 9 else {
                 // New character could not be converted to Int
                 // Revert to last valid text
-                textField.text = lastValidInput
+                textField.text = textField.lastValidInput
                 return
             }
 
@@ -277,7 +303,7 @@ struct CurrencyTextfieldRepresentable: UIViewRepresentable {
 //            }
 
             // Update new value
-            setValue(amount, textField: textField)
+            setValue(amount)
         }
     }
 }
