@@ -66,6 +66,20 @@ struct MainView: View {
         controller.userAction += 1                      // make Action button jump
     }
 
+    /// A sheet is a modal presentation over the whole window, thus it would be shown *above*
+    /// the biometrics overlay. Route every sheet through the lock instead, so that nothing
+    /// can be presented while the wallet is locked - a sheet asked for while locked stays
+    /// pending and is only shown once the user has authenticated.
+    private func unlocked(_ isPresented: Binding<Bool>, _ locked: Bool) -> Binding<Bool> {
+        Binding(get: { !locked && isPresented.wrappedValue },
+                set: { isPresented.wrappedValue = $0 })
+    }
+
+    private func unlocked<Item>(_ item: Binding<Item?>, _ locked: Bool) -> Binding<Item?> {
+        Binding(get: { locked ? nil : item.wrappedValue },
+                set: { item.wrappedValue = $0 })
+    }
+
     func hintApplicationResumed() {
         Task.detached {
             if let result = try? await model.hintApplicationResumedT() {
@@ -145,6 +159,7 @@ struct MainView: View {
         let _ = Self._printChanges()
         let _ = symLog.vlog()       // just to get the # to compare it with .onAppear & onDisappear
 #endif
+        let locked = useAuthentication && !biometricService.isAuthenticated
         let mainContent = ZStack {
             WalletMain(logger: logger, stack: stack.push("Content"),
               selectedBalance: $selectedBalance,
@@ -169,7 +184,7 @@ struct MainView: View {
             }
         }
             .overlay {
-                if useAuthentication && !biometricService.isAuthenticated {
+                if locked {
                     Color.gray.opacity(0.75)
                         .animation(.easeInOut, value: biometricService.isAuthenticated)
                     if let errorMessage = biometricService.authenticationError {
@@ -230,7 +245,7 @@ struct MainView: View {
             mainGroup
                 .environmentObject(tabBarModel)
 //              .animation(.default, value: model.error2 == nil)
-                .sheet(item: $sheetType,
+                .sheet(item: unlocked($sheetType, locked),
                   onDismiss: sheetDismissed) { sheet in
                     switch sheet {
                         case .action:
@@ -247,7 +262,7 @@ struct MainView: View {
                                 .environmentObject(tabBarModel)
                     }
                 }
-                .sheet(isPresented: $showUrlSheet,
+                .sheet(isPresented: unlocked($showUrlSheet, locked),
                          onDismiss: sheetDismissed) {
                     let sheet = URLSheet(stack.push(),
                                selectedBalance: selectedBalance,
@@ -256,12 +271,12 @@ struct MainView: View {
                     Sheet(stack: stack.push(), sheetView: AnyView(sheet))
                         .environmentObject(tabBarModel)
                 }   // UrlSheet
-                .sheet(isPresented: $showScanner,
+                .sheet(isPresented: unlocked($showScanner, locked),
                          onDismiss: dismissSheet) {
                     qrSheet()
                         .environmentObject(tabBarModel)
                 }   // QR Scanner
-                .sheet(isPresented: $showActionSheet,
+                .sheet(isPresented: unlocked($showActionSheet, locked),
                          onDismiss: dismissActionSheet
                 ) {
                     actionSheet()
@@ -366,6 +381,11 @@ struct MainView: View {
                 if interval.seconds > 10 {      // enough time to paste copied data and return
                     // TODO: add another toggle with snail/hare for 60 sec / 10 sec
                     biometricService.isAuthenticated = false
+                    if useAuthentication {      // we lock now: a sheet which was open before
+                        sheetType = nil         // must not come back after authentication
+                        showUrlSheet = false    // (showScanner is already off, see Resign)
+                        showActionSheet = false
+                    }
                 }
                 if interval.seconds > 30 {
                     logger.log("More than 30 seconds in background - tell wallet-core")
