@@ -28,7 +28,6 @@ struct DepositAmountView: View {
     @AppStorage("minimalistic") var minimalistic: Bool = false
 
     @State var checkDepositResult: CheckDepositResponse? = nil
-    @State private var insufficient = false
     @State private var feeAmount: Amount? = nil
     @State private var feeStr: String = EMPTYSTRING
     @State private var exchange: Exchange? = nil                                // wg. noFees
@@ -101,6 +100,11 @@ struct DepositAmountView: View {
             let insufficientLabel = String(localized: "You don't have enough \(currencyInfo.specs.name).")
 //          let insufficientLabel2 = String(localized: "but you only have \(available) to deposit.")
 
+            // amountAvailable is wallet-core's getMaxDepositAmount() verdict for this scope.
+            // Fail closed when the two amounts cannot be compared - this happens while the
+            // scope (and thus the currency) is being switched.
+            let insufficient = !amountToTransfer.isZero
+                            && ((try? amountToTransfer > amountAvailable) ?? true)
             let disabled = insufficient || amountToTransfer.isZero
 
             Text("Available: \(availableStr.0)")
