@@ -86,6 +86,21 @@ class AmountTests: XCTestCase {
         XCTAssert(try Amount(fromString: "EUR:500000000.00000001") * 3 == Amount(fromString: "EUR:1500000000.00000003"))
         XCTAssertThrowsError(try Amount(fromString: "4000000000000000") * 2)
     }
+
+    func testMultiplicationOverflow() {
+        // 2^52 is the largest integer part the protocol allows, so it can be parsed and
+        // then multiplied. Neither the overflow of `integer * factor` nor a product that
+        // is merely out of range may escape as a trap or as an invalid Amount.
+        let maxValue = 4503599627370496                 // 2^52
+        XCTAssertThrowsError(try Amount(fromString: "EUR:\(maxValue)") * 2)
+        XCTAssertThrowsError(try Amount(fromString: "EUR:\(maxValue)") * 5000)
+        XCTAssertThrowsError(try Amount(fromString: "EUR:\(maxValue).99999999") * UInt32.max)
+        XCTAssertThrowsError(try Amount(fromString: "EUR:2251799813685249") * 2)
+
+        // the carry from the fraction still works, and the result is normalized
+        XCTAssert(try Amount(fromString: "EUR:0.00000001") * UInt32.max == Amount(fromString: "EUR:42.94967295"))
+        XCTAssert(try Amount(fromString: "EUR:2251799813685248") * 2 == Amount(fromString: "EUR:\(maxValue)"))
+    }
     
     func testDivision() {
         XCTAssert(try Amount(fromString: "EUR:2") / 1 == Amount(fromString: "EUR:2"))

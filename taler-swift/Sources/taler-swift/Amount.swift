@@ -487,13 +487,22 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     /// - Parameters:
     ///   - amount: The amount to multiply.
     ///   - factor: The scalar multiplying `amount`.
+    /// - Throws:
+    ///   - `AmountError.invalidAmount` if the product exceeds the maximum allowed value.
     /// - Returns: The product of `amount` and `factor`, normalized.
     public static func * (amount: Amount, factor: UInt32) throws -> Amount {
         let result = try amount.normalizedCopy()
-        result.integer = result.integer * UInt64(factor)
+        // report the overflow instead of trapping - normalize() below rejects any product
+        // above the maximum anyway, but only if we get that far
+        let product = result.integer.multipliedReportingOverflow(by: UInt64(factor))
+        guard !product.overflow else { throw AmountError.invalidAmount }
+        // fraction < fractionalBase() and factor <= UInt32.max, so this cannot overflow
         let fraction_tmp = UInt64(result.fraction) * UInt64(factor)
-        result.integer += fraction_tmp / UInt64(fractionalBase())
+        let sum = product.partialValue.addingReportingOverflow(fraction_tmp / UInt64(fractionalBase()))
+        guard !sum.overflow else { throw AmountError.invalidAmount }
+        result.integer = sum.partialValue
         result.fraction = UInt32(fraction_tmp % UInt64(fractionalBase()))
+        try result.normalize()
         return result
     }
     
