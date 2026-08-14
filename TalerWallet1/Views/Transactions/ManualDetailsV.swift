@@ -15,27 +15,29 @@ struct ManualDetailsV: View {
     let details: WithdrawalDetails
 
     var body: some View {
-        if let validDetails = details.exchangeCreditAccountDetails?.validDetails {
-            WireTransferView(stack: stack.push(),
-                             title: String(localized: "The payment service is waiting for your wire-transfer.", comment: ""),
-                             isKYC: false,
-                        reservePub: details.reservePub,
-                         amountRaw: common.amountRaw,
-                   amountEffective: common.amountEffective,     // only for withdrawal
-                         debitIBAN: nil,                        // only for deposit auth
-                      validDetails: validDetails)
+        if let accountDetails = details.exchangeCreditAccountDetails,
+           let validDetails = accountDetails.validDetails {
+            if let scope: ScopeInfo = common.scopes.first {
+                let obtainStr = common.amountEffective.formatted(scope , isNegative: false)
+                WireTransferView(stack: stack.push(),
+                                 title: String(localized: "The payment service is waiting for your wire-transfer.", comment: ""),
+                            reservePub: details.reservePub,
+                             obtainStr: obtainStr,              // only for withdrawal
+                               kycData: nil,                    // only for deposit auth
+                          validDetails: validDetails)
+            } else { ErrorView(stack.push(), title: "Payment Error", message: "No scope") }
         } else { ErrorView(stack.push(), title: "Payment Error", message: "No valid details") }
     } // body
 }
 // MARK: -
+// called by ManualDetailsV (amount to transfer is chosen by user),
+// and by KYCauth (user chose the amount to deposit - but first they must transfer kycAmount to the Exchange to prove having control over the account)
 struct WireTransferView: View {
     let stack: CallStack
     let title: String
-    let isKYC: Bool
     let reservePub: String
-    let amountRaw: Amount
-    let amountEffective: Amount?        // only for withdrawal
-    let debitIBAN: String?              // only for deposit auth
+    let obtainStr: (String, String)?        // only for withdrawal
+    let kycData: KycData?                   // only for deposit auth
     let validDetails: AccountDetailsArray
 
     @EnvironmentObject private var model: WalletModel
@@ -67,14 +69,20 @@ struct WireTransferView: View {
 
     var body: some View {
         let validCount = validDetails.count         // guaranteed to be > 0
-        let account = validDetails[validIndex]
+        // validDetails can shrink (e.g. when a conversion rate lookup starts failing)
+        // while validIndex still points to an account which is gone by now
+        let account = validDetails[min(validIndex, validCount - 1)]
         let json = account.toJSON()
-        if account.transferAmount != nil {
-            if let transferOptions = account.transferOptions, let firstOption = transferOptions.first {
+        // transferAmount is the amount the user must wire - for an account which needs
+        // currency conversion that is in the external currency, and thus different from amountRaw
+        if kycData != nil || account.transferAmount != nil {
+            if let transferOptions = account.transferOptions,
+               // an option of type "uri" has neither paytoUri nor qrCodes - use one which has
+               let firstOption = transferOptions.first(where: { $0.paytoUri != nil }) ?? transferOptions.first {
                 let specs = account.currencySpecification
-                let amountStr = amountRaw.formatted(specs: specs, isNegative: false)
-                let amountValue = amountRaw.valueStr
-                let obtainStr = amountEffective?.formatted(specs: specs, isNegative: false)     // or nil
+                let plannedAmount = kycData?.kycAmount ?? account.transferAmount!
+                let amountStr = plannedAmount.formatted(specs: specs, isNegative: false)
+                let amountValue = plannedAmount.valueStr
 //            let _ = print(amountStr, " | ", obtainStr)
                 if !minimalistic {
                     Text(title)
@@ -114,8 +122,8 @@ struct WireTransferView: View {
                                                       restrictions: account.creditRestrictions,
                                                        amountValue: amountValue,
                                                          amountStr: amountStr,
-                                                         obtainStr: obtainStr,  // only for withdrawal
-                                                         debitIBAN: debitIBAN   // only for deposit auth
+                                                         obtainStr: obtainStr,              // only for withdrawal
+                                                         debitIBAN: kycData?.debitIBAN      // only for deposit auth
                                             )
                         NavigationLink(destination: wireDetails) {
                             Text(minimalistic ? "Instructions"
@@ -126,7 +134,7 @@ struct WireTransferView: View {
                         Group {
                             if countA > 1 || countB > 1 {
                                 qrCodesRow(transferOptions)
-                            } else if countA > 0 {   // show the single QR directly
+                            } else if countB > 0 {   // show the single QR directly
                                 Text("If your banking software runs on another device, you can scan this QR code:")
                                     .listRowSeparator(.hidden)
                                 QRcodeCopyShare(option: firstOption)

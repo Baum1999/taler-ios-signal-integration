@@ -11,8 +11,8 @@ import taler_swift
 
 struct TransferRestrictionsV: View {
     let amountStr: (String, String)
-    let obtainStr: (String, String)?
-    let debitIBAN: String?
+    let obtainStr: (String, String)?        // only for withdrawal
+    let debitIBAN: String?                  // only for deposit auth
     let restrictions: [AccountRestriction]?
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -38,14 +38,14 @@ struct TransferRestrictionsV: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let obtainStr {
+            if let obtainStr {          // withdrawal
                 Text(minimalistic ? transferMini(amountStr.0)
                                   : transferMaxi(amountStr.0, obtainStr.0))
                     .accessibilityLabel(minimalistic ? transferMini(amountStr.1)
                                                      : transferMaxi(amountStr.1, obtainStr.1))
                     .talerFont(.body)
                     .multilineTextAlignment(.leading)
-            } else if let debitIBAN {
+            } else if let debitIBAN {   // deposit auth
                 Text(minimalistic ? authMini(amountStr.0, debitIBAN)
                                   : authMaxi(amountStr.0, debitIBAN))
                     .accessibilityLabel(minimalistic ? authMini(amountStr.1, debitIBAN)
@@ -280,6 +280,18 @@ struct ManualDetailsWireV: View {
                             : String(localized: "Finish the wire transfer of \(amountNBS) in your banking app or website, then this withdrawal will proceed automatically.") + "\n" + bePatient
     }
 
+    /// The subject of the wire transfer
+    private var cryptoString: String {
+        // chQRr only consists of digits - no prefix possible
+        if let chQRr = payto.chQRr, !chQRr.isEmpty {
+            return chQRr
+        }
+//        if let messageStr = payto.messageStr, !messageStr.isEmpty {
+//            return messageStr
+//        }
+        return debitIBAN != nil ? "KYC:" + reservePub : reservePub
+    }
+
 //    @ViewBuilder func cyclosCode() -> some View {
 //        HStack {
 //            VStack(alignment: .leading) {
@@ -309,7 +321,6 @@ struct ManualDetailsWireV: View {
     var body: some View {
       if let receiverStr = payto.receiver {
         List {
-            let cryptoString = debitIBAN == nil ? reservePub : "KYC:" + reservePub
             let warningIcon = Image(systemName: WARNING)
             let note = Text("**Note: Don't forget to copy and paste the code in Step 2.**")
             let manda = debitIBAN == nil ? String(localized: "This is mandatory, otherwise your money will not arrive in this wallet.")
