@@ -17,6 +17,14 @@ fileprivate func urlOrCurrency(_ balance: Balance) -> String {
     balance.scopeInfo.url?.trimURL ?? balance.scopeInfo.currency
 }
 
+/// The selected index is `@State´ resp. a `@Binding´, and thus can outlive the balances
+/// array it indexes into - e.g. when an exchange was deleted while this view is on the
+/// navigation stack. Never subscript `controller.balances´ unchecked.
+fileprivate func safeBalance(_ balances: [Balance], _ index: Int) -> Balance? {
+    balances.indices.contains(index) ? balances[index]
+                                     : balances.first
+}
+
 fileprivate func pickerRow(_ balance: Balance, _ currencyInfo: CurrencyInfo) -> (String, String) {
     let formatted = formattedAmount(balance, currencyInfo)
     let urlOrCurrency = urlOrCurrency(balance)
@@ -70,8 +78,7 @@ struct ScopePicker: View {
         let _ = Self._printChanges()
 #endif
         let count = controller.balances.count
-        if (count > 0) {
-            let balance = controller.balances[selected]
+        if let balance = safeBalance(controller.balances, selected) {
             let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
             let available = balance.available
             let availableA11y = available.formatted(currencyInfo, isNegative: false,
@@ -115,7 +122,14 @@ struct ScopePicker: View {
             .accessibilityHint(disabled ? EMPTYSTRING : chooseHint)
             .task() {
                 // FIXME: check balance for non-zero and disable-peer-payments
-                withAnimation { selected = value }
+                // never hand an out-of-range index to `action´ - the callers subscript
+                // `controller.balances´ with it
+                withAnimation { selected = min(max(value, 0), count - 1) }
+            }
+            .onChange(of: count) { newCount in
+                if selected >= newCount {       // balances shrank, e.g. exchange deleted
+                    selected = 0
+                }
             }
             .onChange(of: selected) { newValue in
                 action(newValue)
@@ -183,7 +197,8 @@ struct  ScopeDropDown: View {
             let chevron = Image(systemName: CHEVRON_UP)     // 􀆇
             let foreColor = disabled ? Color.secondary : Color.primary
             let backColor = disabled ? WalletColors().backgroundColor : WalletColors().gray4
-            let otherBalances = controller.balances.filter { $0 != controller.balances[selection] }
+            let selectedBalance = safeBalance(controller.balances, selection)
+            let otherBalances = controller.balances.filter { $0 != selectedBalance }
             let theList = LazyVStack(spacing: 0) {
                 ForEach(0..<otherBalances.count, id: \.self) { index in
                     let balance = otherBalances[index]
@@ -211,28 +226,29 @@ struct  ScopeDropDown: View {
             }
             VStack {
                 // selected item
-                let balance = controller.balances[selection]
-                let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
-                let noAmount = !showDropdown
-                Group {
-                    if disabled {
-                        dropDownRow(balance, currencyInfo, noAmount)
-                    } else {
-                        Button(action: buttonAction) {
-                            HStack(alignment: .firstTextBaseline) {
-                                dropDownRow(balance, currencyInfo, noAmount)
-                                    .accessibilityAddTraits(.isSelected)
-                                Spacer()
-                                chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
-                                    .accessibilityHidden(true)
+                if let balance = selectedBalance {
+                    let currencyInfo = controller.info(for: balance.scopeInfo, controller.currencyTicker)
+                    let noAmount = !showDropdown
+                    Group {
+                        if disabled {
+                            dropDownRow(balance, currencyInfo, noAmount)
+                        } else {
+                            Button(action: buttonAction) {
+                                HStack(alignment: .firstTextBaseline) {
+                                    dropDownRow(balance, currencyInfo, noAmount)
+                                        .accessibilityAddTraits(.isSelected)
+                                    Spacer()
+                                    chevron.rotationEffect(.degrees((showDropdown ?  -180 : 0)))
+                                        .accessibilityHidden(true)
+                                }
                             }
                         }
                     }
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, radius / 2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+//                      .border(.red)
                 }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, radius / 2)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-//                  .border(.red)
                 if (showDropdown) {
                     if #available(iOS 17.0, *) {
                         let count = controller.balances.count
