@@ -32,15 +32,20 @@ extension Image {
         }
     }
 
+    /// Decode an `ImageDataUrl` as the protocol defines it: a data URL with an explicit
+    /// mediatype (`image/png` or `image/jpeg`) and the `base64` parameter.
+    /// Anything else must be rejected without ever being resolved: the string comes from
+    /// the merchant, and `NSData(contentsOf:)` would *fetch* an `http(s):` URL - blocking
+    /// the main thread and telling the merchant when (and how often) the user looks at
+    /// the transaction - or read a local file for a `file:` URL.
     init?(imageBase64: String) {
-        if let url = NSURL(string: imageBase64) {
-            if let data = NSData(contentsOf: url as URL) {
-                if let uiImage = UIImage(data: data as Data) {
-                    self.init(uiImage: uiImage)
-                    return
-                }
-            }
-        }
-        return nil
+        let anchored: String.CompareOptions = [.caseInsensitive, .anchored]
+        guard let dataUrlPrefix = imageBase64.range(of: "data:image/png;base64,", options: anchored)
+                               ?? imageBase64.range(of: "data:image/jpeg;base64,", options: anchored),
+              let data = Data(base64Encoded: String(imageBase64[dataUrlPrefix.upperBound...])),
+              let uiImage = UIImage(data: data)
+        else { return nil }
+
+        self.init(uiImage: uiImage)
     }
 }
