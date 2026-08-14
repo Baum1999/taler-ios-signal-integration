@@ -367,7 +367,8 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
     public func shiftLeft(add digit: UInt8, _ inputDigits: UInt) {
         if inputDigits > 0 {
             // how many digits to shift right (e.g. inputD=2 ==> shift:=6)
-            let shift = Self.fractionalBaseDigits - inputDigits
+            let digits = min(inputDigits, Self.fractionalBaseDigits)
+            let shift = Self.fractionalBaseDigits - digits
             // mask to zero out fractions smaller than inputDigits
             let shiftMask = fractionalBase(shift)
 
@@ -406,7 +407,8 @@ public final class Amount: Codable, Hashable, @unchecked Sendable, CustomStringC
 
     /// Sets all fractional digits after inputDigits to 0
     public func mask(_ inputDigits: UInt) {
-        let mask = fractionalBase(Self.fractionalBaseDigits - inputDigits)
+        let digits = min(inputDigits, Self.fractionalBaseDigits)
+        let mask = fractionalBase(Self.fractionalBaseDigits - digits)
         let remainder = fraction % mask
         self.fraction -= remainder
     }
