@@ -119,13 +119,15 @@ public class Quickjs {      // acts as singleton, since only one instance ever e
     }
 
     func internalOnNotify(payload: String) {
-        if let handler = messageHandler {
+        guard let handler = messageHandler else { return }
+        DispatchQueue.main.async {
             handler.handleMessage(message: payload)
         }
     }
 
     public func internalOnLog(message: String) {
-        if let handler = messageHandler {
+        guard let handler = messageHandler else { return }
+        DispatchQueue.main.async {
             handler.handleLog(message: message)
         }
     }
