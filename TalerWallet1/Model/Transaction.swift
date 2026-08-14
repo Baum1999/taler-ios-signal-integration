@@ -146,12 +146,13 @@ struct PayTo {          // receiver-name=Taler+Operations+AG&receiver-postal-cod
         if let host = payURL?.host {
             self.host = host
         }
+        // the payment method is encoded in the path
+        iban = payURL?.iban
+        cyclos = payURL?.cyclos
+        xTaler = payURL?.xTaler ??
+//               payURL?.host() ??
+                 String(localized: "unknown payment method")
         if let queryParameters = payURL?.queryParameters {
-            iban = payURL?.iban
-            cyclos = payURL?.cyclos
-            xTaler = payURL?.xTaler ??
-//                   payURL?.host() ??
-                     String(localized: "unknown payment method")
             sender = param(key: "sender-name", from: queryParameters)
             receiver = param(key: "receiver-name", from: queryParameters)
             postalCode = param(key: "receiver-postal-code", from: queryParameters)
