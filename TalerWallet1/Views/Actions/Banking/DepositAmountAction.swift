@@ -45,8 +45,13 @@ struct DepositAmountAction: View {
         } else {
             balance = Balance.firstwithDeposit(balances)
         }
-        if let balance {
-            balanceIndex = balances.firstIndex(of: balance) ?? 0
+        // selectedBalance is a snapshot taken when the transaction list appeared, so its
+        // amounts may already be stale - match on the scope instead of the whole value,
+        // otherwise the picker would show balances[0] while we deposit from another scope.
+        if let balance,
+           let index = balances.firstIndex(where: { $0.scopeInfo == balance.scopeInfo }) {
+            balanceIndex = index
+            self.balance = balances[index]      // refresh the snapshot
         } else {
             balanceIndex = 0
             balance = balances.isEmpty ? nil : balances[0]
