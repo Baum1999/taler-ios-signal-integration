@@ -235,7 +235,12 @@ final class QuickDataTask: NSObject, @unchecked Sendable {
                          body_len: numericCast(data.count)
                 )
                 withUnsafeMutablePointer(to: &responseInfo) { responseInfoPtr in
-                    responseCb(responseCbCls, responseInfoPtr)
+                    // cHeaders owns the C strings that response_headers points to, and ARC
+                    // only keeps it alive up to its last use - which is reading .pointer
+                    // above, before the callback that dereferences it has run
+                    withExtendedLifetime(cHeaders) {
+                        responseCb(responseCbCls, responseInfoPtr)
+                    }
                 }
             }
         }
