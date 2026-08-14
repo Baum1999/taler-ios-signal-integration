@@ -28,6 +28,16 @@ enum InsufficientBalanceHint: String, Codable {
     /// Even though the balance looks sufficient for the instructed amount,
     /// the fees can be covered by neither the merchant nor the remaining wallet  balance
     case feesNotCovered = "fees-not-covered"
+    /// wallet-core keeps adding hints (feesNotCovered and exchangeMissingGlobalFees were
+    /// added after this enum was written). Throwing on the next one would take the whole
+    /// error message down with it - and an error that fails to decode never resumes the
+    /// Task waiting for that request.
+    case unknown
+
+    init(from decoder: Decoder) throws {
+        let raw = try decoder.singleValueContainer().decode(String.self)
+        self = InsufficientBalanceHint(rawValue: raw) ?? .unknown
+    }
 
     func localizedCause(_ currency: String) -> String {
         switch self {
@@ -52,6 +62,9 @@ enum InsufficientBalanceHint: String, Codable {
             case .feesNotCovered:
                 String(localized: "payment_balance_insufficient_hint_fees_not_covered",
                     defaultValue: "Not enough funds to pay the provider fees not covered by the merchant")
+            case .unknown:      // we don't know the reason, but we do know the balance is insufficient
+                String(localized: "payment_balance_insufficient_max",
+                    defaultValue: "Balance insufficient! You don't have enough \(currency).")
         }
     }
 }
@@ -91,7 +104,9 @@ struct PaymentInsufficientBalanceDetails: Codable, Hashable {
 // MARK: -
 struct TalerErrorInfo: Codable, Hashable {
     /// Numeric error code defined in the GANA gnu-taler-error-codes registry.
-    var code: Int
+    /// Optional: this is the response of some *other* server, which need not
+    /// be a Taler error object at all.
+    var code: Int?
     // all other fields are optional:
     var when: Timestamp?
     /// English description of the error code.
@@ -117,6 +132,36 @@ struct TalerErrorDetail: Codable, Hashable {
     var errorResponse: TalerErrorInfo?
 
     var insufficientBalanceDetails: PaymentInsufficientBalanceDetails?
+
+    enum CodingKeys: String, CodingKey {
+        case code, when, hint, detail
+        case requestUrl, requestMethod, httpStatusCode, stack
+        case errorResponse, insufficientBalanceDetails
+    }
+}
+extension TalerErrorDetail {
+    /// In wallet-core a TalerErrorDetail is an open dictionary: besides code, when and
+    /// hint it carries whatever the throwing code put there, and the shape of that
+    /// differs per error code - `detail`, for instance, is a string for some codes and a
+    /// nested error object for others.
+    /// Throwing here is not survivable: the error arrives inside the top-level message
+    /// envelope, so if it doesn't decode then WalletCore never finds the request id and
+    /// the continuation awaiting that request is never resumed - the sheet spins forever.
+    /// Therefore decode the optional extras defensively and drop what we cannot read.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        code = try container.decode(Int.self, forKey: .code)
+        when = try? container.decodeIfPresent(Timestamp.self, forKey: .when)
+        hint = try? container.decodeIfPresent(String.self, forKey: .hint)
+        detail = try? container.decodeIfPresent(String.self, forKey: .detail)
+        requestUrl = try? container.decodeIfPresent(String.self, forKey: .requestUrl)
+        requestMethod = try? container.decodeIfPresent(String.self, forKey: .requestMethod)
+        httpStatusCode = try? container.decodeIfPresent(Int.self, forKey: .httpStatusCode)
+        stack = try? container.decodeIfPresent(String.self, forKey: .stack)
+        errorResponse = try? container.decodeIfPresent(TalerErrorInfo.self, forKey: .errorResponse)
+        insufficientBalanceDetails = try? container.decodeIfPresent(PaymentInsufficientBalanceDetails.self,
+                                                            forKey: .insufficientBalanceDetails)
+    }
 }
 // MARK: -
 /// Communicate with wallet-core
