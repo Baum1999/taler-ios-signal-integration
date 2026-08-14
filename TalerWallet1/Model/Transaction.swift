@@ -489,7 +489,8 @@ struct TrackingState : Decodable {
 struct DepositTransactionDetails: Decodable {
     var depositGroupId: String
     var targetPaytoUri: String
-    var wireTransferProgress: Int
+    /// percentage of coins already wired - fractional, e.g. 33.33… for 1 of 3 coins
+    var wireTransferProgress: Double?
     var wireTransferDeadline: Timestamp
     var deposited: Bool
     var trackingState: [TrackingState]?
