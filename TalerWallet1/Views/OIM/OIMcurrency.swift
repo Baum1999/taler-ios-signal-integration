@@ -115,20 +115,14 @@ public struct OIMcurrency: Sendable {
 
         var value = intVal
         for (index, element) in bankNotes.enumerated() {
-            var count: UInt64 = 0
-            while value >= element {
-                value = value - element
-                count += 1
-            }
+            let count: UInt64 = element == 0 ? 0 : value / element
+            value = value - (count * element)
             notes.append(count)
         }
 
         for (index, element) in bankCoins.enumerated() {
-            var count: UInt64 = 0
-            while value >= element {
-                value = value - element
-                count += 1
-            }
+            let count: UInt64 = element == 0 ? 0 : value / element
+            value = value - (count * element)
             coins.append(count)
         }
         return (notes, coins)
