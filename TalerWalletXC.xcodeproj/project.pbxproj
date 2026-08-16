@@ -199,7 +199,6 @@
 		4E4A40DD2CD5737100CA6A90 /* Quickjs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Quickjs; sourceTree = "<group>"; };
 		4E4A40E42CD573D500CA6A90 /* Sounds */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Sounds; sourceTree = "<group>"; };
 		4E4A41252CD5769900CA6A90 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
-		4E77D0ED2D7C3A12009756A5 /* ViewModifier */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModifier; sourceTree = "<group>"; };
 		4E9C5A922E58ADB3002E2709 /* Frameworks */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4E5560C42FEA452200412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4E5560C32FEA44FC00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4E5560C52FEA452D00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Frameworks; sourceTree = "<group>"; };
 		4EB66D772E18238000BE0651 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4EB66D782E18238B00BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D792E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 4EB66D7A2E18239300BE0651 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
 		4ED789A23031BCC9009D7F39 /* TalerCommon */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TalerCommon; sourceTree = "<group>"; };
@@ -312,7 +311,6 @@
 				4E4A3FA12CD5717F00CA6A90 /* Settings */,
 				4E4A3FE82CD5720900CA6A90 /* Sheets */,
 				4E4A40262CD5725A00CA6A90 /* HelperViews */,
-				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -392,7 +390,6 @@
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
-				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
 				4E9C5A922E58ADB3002E2709 /* Frameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
 				4ED789A23031BCC9009D7F39 /* TalerCommon */,
@@ -440,7 +437,6 @@
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
-				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
 				4E9C5A922E58ADB3002E2709 /* Frameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
 				4ED789A23031BCC9009D7F39 /* TalerCommon */,
@@ -488,7 +484,6 @@
 				4E4A40DD2CD5737100CA6A90 /* Quickjs */,
 				4E4A40E42CD573D500CA6A90 /* Sounds */,
 				4E4A41252CD5769900CA6A90 /* Fonts */,
-				4E77D0ED2D7C3A12009756A5 /* ViewModifier */,
 				4E9C5A922E58ADB3002E2709 /* Frameworks */,
 				4EB66D772E18238000BE0651 /* Resources */,
 				4ED789A23031BCC9009D7F39 /* TalerCommon */,
