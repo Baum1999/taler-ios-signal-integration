@@ -250,6 +250,8 @@ struct BankAccountsInfo: Decodable, Hashable {
         
         if let cyclos = payto.cyclos {
             if cyclos.count > 1 {
+                // TODO: wallet-core should ensure that receivers are valid and don't have whitespace
+                // https://bugs.gnunet.org/view.php?id=11726
                 let receiver = payto.receiver?.replacingOccurrences(of: SPACE, with: "+") ?? DEMO
                 return String("payto://cyclos/\(cyclos)?receiver-name=\(receiver)")
             }

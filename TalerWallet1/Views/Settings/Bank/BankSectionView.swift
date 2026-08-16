@@ -88,7 +88,7 @@ struct BankSectionView: View {
                     DepositAmountAction(stack: stack.push(),
                               selectedBalance: selectedBalance,
                                amountLastUsed: $amountLastUsed,
-                                     paytoUri: account.payToWorkAround,  // TODO:  paytoUri,
+                                     paytoUri: account.payToWorkAround,  // TODO:  paytoUri, after https://bugs.gnunet.org/view.php?id=11726 is fixed
                                         label: account.label)
                     .navigationTitle(navTitle)
                 }
