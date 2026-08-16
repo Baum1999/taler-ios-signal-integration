@@ -32,7 +32,6 @@ struct ExchangeSectionView: View {
     @State private var didDelete: Bool = false
     @State private var disabled: Bool = false
     @State private var showAlert: Bool = false
-    @State private var purge: Bool = false
     @State private var global: Bool = false
 
     @MainActor
@@ -51,14 +50,15 @@ struct ExchangeSectionView: View {
         currencyInfo = controller.info(for: scopeInfo, controller.currencyTicker)
     }
 
+    /// purge must never be remembered - it deletes the exchange even if it still holds coins,
+    ///  so it may only ever come from the escalated alert (warningText2/3) which says so
     @MainActor
-    private func deleteExchange() {
+    private func deleteExchange(purge: Bool) {
         disabled = true     // don't try this more than once
         Task { // runs on MainActor
             if let exchange = exchanges.first {
                 let baseUrl = exchange.exchangeBaseUrl
                 if let _ = try? await model.deleteExchange(url: baseUrl, purge: purge, viewHandles: !purge) {
-                    purge = false
                     symLog.log("deleted \(baseUrl.trimURL)")
                     didDelete = true             // change button text
                     NotificationCenter.default.post(name: .ExchangeDeleted, object: nil, userInfo: nil)
@@ -66,7 +66,6 @@ struct ExchangeSectionView: View {
                     demoHints = true
                     deleteTask()
                 } else {
-                    purge = true
                     showAlert = true
                     disabled = false
                 }
@@ -164,7 +163,7 @@ struct ExchangeSectionView: View {
                            buttonIcon: "trash",
                                  role: .destructive,       // optional: use WalletColors().errorColor
                              disabled: $disabled,
-                               action: deleteExchange)
+                               action: { deleteExchange(purge: false) })
             .padding(.top)
             .alert(warningText2, isPresented: $showAlert, actions: {
                 Button("Cancel", role: .cancel) {
@@ -176,7 +175,7 @@ struct ExchangeSectionView: View {
                     NotificationCenter.default.post(name: .DepositAction, object: nil)  // will trigger NavigationLink
                 }
                 Button(buttonTitle) {
-                    deleteExchange()
+                    deleteExchange(purge: true)
                     showAlert = false
                 }
             }, message: {
@@ -191,7 +190,6 @@ struct ExchangeSectionView: View {
         .task(id: controller.currencyTicker) { await currencyTickerChanged(scopeInfo) }
         .onDisappear() {
             disabled = false
-            purge = false
         }
     }
 }
