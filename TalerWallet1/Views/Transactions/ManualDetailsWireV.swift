@@ -12,7 +12,7 @@ import taler_swift
 struct TransferRestrictionsV: View {
     let amountStr: (String, String)
     let obtainStr: (String, String)?        // only for withdrawal
-    let debitIBAN: String?                  // only for deposit auth
+    let debitIBAN: String?                  // != nil then transfer tinyAmount for deposit auth
     let restrictions: [AccountRestriction]?
 
     @AppStorage("minimalistic") var minimalistic: Bool = false
@@ -38,21 +38,21 @@ struct TransferRestrictionsV: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let obtainStr {          // withdrawal
+            if let debitIBAN {   // deposit auth
+                Text(minimalistic ? authMini(amountStr.0, debitIBAN)
+                                  : authMaxi(amountStr.0, debitIBAN))
+                    .accessibilityLabel(minimalistic ? authMini(amountStr.1, debitIBAN)
+                                                    : authMaxi(amountStr.1, debitIBAN))
+                    .talerFont(.body)
+                    .multilineTextAlignment(.leading)
+            } else if let obtainStr {          // withdrawal
                 Text(minimalistic ? transferMini(amountStr.0)
                                   : transferMaxi(amountStr.0, obtainStr.0))
                     .accessibilityLabel(minimalistic ? transferMini(amountStr.1)
                                                      : transferMaxi(amountStr.1, obtainStr.1))
                     .talerFont(.body)
                     .multilineTextAlignment(.leading)
-            } else if let debitIBAN {   // deposit auth
-                Text(minimalistic ? authMini(amountStr.0, debitIBAN)
-                                  : authMaxi(amountStr.0, debitIBAN))
-                    .accessibilityLabel(minimalistic ? authMini(amountStr.1, debitIBAN)
-                                                     : authMaxi(amountStr.1, debitIBAN))
-                    .talerFont(.body)
-                    .multilineTextAlignment(.leading)
-            }
+            } else { /* should NEVER happen */ }
             if let restrictions {
                 ForEach(restrictions) { restriction in
                     if let hintsI18n = restriction.human_hint_i18n {

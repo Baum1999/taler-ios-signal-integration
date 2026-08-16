@@ -19,8 +19,10 @@ struct ManualDetailsV: View {
            let validDetails = accountDetails.validDetails {
             if let scope: ScopeInfo = common.scopes.first {
                 let obtainStr = common.amountEffective.formatted(scope , isNegative: false)
+                let title = String(localized: "The payment service is waiting for your wire-transfer.", comment: "")
                 WireTransferView(stack: stack.push(),
-                                 title: String(localized: "The payment service is waiting for your wire-transfer.", comment: ""),
+                                 title: title,
+                             titleA11y: title,
                             reservePub: details.reservePub,
                              obtainStr: obtainStr,              // only for withdrawal
                                kycData: nil,                    // only for deposit auth
@@ -35,6 +37,7 @@ struct ManualDetailsV: View {
 struct WireTransferView: View {
     let stack: CallStack
     let title: String
+    let titleA11y: String
     let reservePub: String
     let obtainStr: (String, String)?        // only for withdrawal
     let kycData: KycData?                   // only for deposit auth
@@ -75,20 +78,20 @@ struct WireTransferView: View {
         let json = account.toJSON()
         // transferAmount is the amount the user must wire - for an account which needs
         // currency conversion that is in the external currency, and thus different from amountRaw
-        if kycData != nil || account.transferAmount != nil {
+        if let transferAmount = account.transferAmount {
             if let transferOptions = account.transferOptions,
                // an option of type "uri" has neither paytoUri nor qrCodes - use one which has
                let firstOption = transferOptions.first(where: { $0.paytoUri != nil }) ?? transferOptions.first {
                 let specs = account.currencySpecification
-                let plannedAmount = kycData?.kycAmount ?? account.transferAmount!
-                let amountStr = plannedAmount.formatted(specs: specs, isNegative: false)
-                let amountValue = plannedAmount.valueStr
+                let amountStr = transferAmount.formatted(specs: specs, isNegative: false)
+                let amountValue = transferAmount.valueStr
 //            let _ = print(amountStr, " | ", obtainStr)
                 if !minimalistic {
                     Text(title)
                         .bold()
                         .multilineTextAlignment(.leading)
                         .listRowSeparator(.hidden)
+                        .accessibilityLabel(titleA11y)
                 }
                 if validCount > 1 {
                     if validCount > 3 { // too many for SegmentControl

@@ -349,8 +349,8 @@ struct KycAuthTransferInfo: Decodable, Sendable {
     var accountPub: String                              /// Account public key that must be included in the subject
     var transferOptionsExt: AccountDetailsArray         /// Options for making the KYC auth transfer payment to the exchange
     var transferExpiry: Timestamp?                      /// Validity of the transferOptions if they might expire
-    var amount: Amount
-//    var creditPaytoUris: [String]         /// deprecated
+//    var amount: Amount                    // deprecated, use transferOptionsExt
+//    var creditPaytoUris: [String]         // deprecated
 }
 
 struct TransactionCommon: Decodable, Sendable {

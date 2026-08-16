@@ -10,30 +10,41 @@ import SymLog
 import taler_swift
 
 struct KycData {
-    let kycAmount: Amount
     let debitIBAN: String
+    let depositStr: (String, String)
 }
 // pretty much the same as ManualDetailsV
 struct KYCauth: View {
     let stack: CallStack
     let common: TransactionCommon
 
+    func title(_ depositStr: String) -> String {
+        String(localized: "You need to prove having control over the bank account for the deposit of \(depositStr).")
+    }
+
     var body: some View {
         let kycErr = "KYC Error"
         if let info = common.kycAuthTransferInfo {
             let debitPayTo = PayTo(info.debitPaytoUri)
             if let debitIban = debitPayTo.iban {
-                let kycData = KycData(kycAmount: info.amount, debitIBAN: debitIban)
                 let accountDetails = info.transferOptionsExt
                 if let validDetails = accountDetails.validDetails {
-                    WireTransferView(stack: stack.push(),
-                                     title: String(localized: "You need to prove having control over the bank account for the deposit.", comment: ""),
-                                reservePub: info.accountPub,
-                                 obtainStr: nil,
-                                   kycData: kycData,
-                              validDetails: validDetails)
+                    if let scope: ScopeInfo = common.scopes.first {
+                        let depositStr = common.amountRaw.formatted(scope, isNegative: false)
+                        let kycData = KycData(debitIBAN: debitIban, depositStr: depositStr)
+                        WireTransferView(stack: stack.push(),
+                                         title: title(depositStr.0),
+                                     titleA11y: title(depositStr.1),
+                                    reservePub: info.accountPub,
+                                     obtainStr: nil,
+                                       kycData: kycData,
+                                  validDetails: validDetails)
+                    } else { ErrorView(stack.push(), title: kycErr, message: "No scope") }
                 } else { ErrorView(stack.push(), title: kycErr, message: "No valid details") }
-            } else { ErrorView(stack.push(), title: kycErr, message: "No IBAN") }
+            } else {
+                // TODO: What if payto contains no IBAN, but URL?
+                ErrorView(stack.push(), title: kycErr, message: "No IBAN")
+            }
         } else { ErrorView(stack.push(), title: kycErr, message: "No KYC infos") }
     } // body
 }
