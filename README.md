@@ -21,26 +21,38 @@ and the wallet-core repo:
 ```
 https://git.taler.net/taler-typescript-core.git
 ```  
+Rename the latter to `wallet-core`.  
 
-Have all 3 local repos (wallet-core, quickjs-tart, and this one) adjacent at the same level (e.g. in a "GNU_Taler" folder)
-- `Taler16.xcworkspace` expects the QuickJS framework sub-project to be at  
-```
-../quickjs-tart/QuickJS-rt16.xcodeproj
-``` 
+Have all 3 local repos (wallet-core, quickjs-tart, and this taler-ios) adjacent at the same level (e.g. in a "GNU_Taler" folder).  
  
 Build wallet-core first:  
 ```
 cd ~/Developer/GNU_Taler/wallet-core
 ```  
+at the very first run, you need to  
+```  
+./bootstrap
+```  
+```  
+./configure
+```  
+then call  
 ```
 date; time make embedded; open packages/taler-wallet-embedded/dist  
 ```  
-then drag or move its product `taler-wallet-core-qjs.mjs`
-into your quickjs-tart folder right at the top level.
+you should see its product `taler-wallet-core-qjs.mjs`.
 
-Open `Taler16.xcworkspace`, and set scheme / target to `Taler_Wallet`.  
+Once you have that, switch over to quickjs-tart:  
+```
+cd ~/Developer/GNU_Taler/quickjs-tart
+```  
+and call  
+```
+date; time ./cross/package-ios.sh; open build-ios  
+```  
+This builds the framework `FTalerWalletcore.xcframework` (which includes wallet-core) in the build-ios folder.  
+Drag'nDrop that into the XCFrameworks folder in taler-ios. That's all for the preparations.
+
+Open `TalerWalletXC.xcodeproj`, and set scheme / target to `Taler_Wallet`.  
 Build & run...
-
-Don't open QuickJS-rt16.xcodeproj or TalerWallet16.xcodeproj and build anything
-there - all needed libraries and frameworks will be built automatically from `Taler16.xcworkspace`.
 

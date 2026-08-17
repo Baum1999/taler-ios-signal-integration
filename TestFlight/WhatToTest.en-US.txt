@@ -1,3 +1,8 @@
+Version 1.6.9 (wallet-core 1.6.26)
+
+- fix deposit for CH QR reference
+
+
 Version 1.6.8 (wallet-core 1.6.25)
 
 - fix "Withdraw real money"
