@@ -131,7 +131,7 @@ struct DepositAmountView: View {
                                               : (feeAmount?.isZero ?? true) ? WalletColors().secondary(colorScheme, colorSchemeContrast)
                                                                             : WalletColors().negative)
                 .padding(4)
-            let hint = String(localized: "enabled when amount is non-zero, but not higher than your available nt",
+            let hint = String(localized: "enabled when amount is non-zero, but not higher than your available amount",
                                 comment: "a11y")
             Button(buttonTitle(amountToTransfer)) { action() }
                 .buttonStyle(TalerButtonStyle(type: .prominent, disabled: disabled || depositStarted))
