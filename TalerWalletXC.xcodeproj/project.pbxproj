@@ -140,7 +140,7 @@
 		4E5560C32FEA44FC00412771 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				FTalerWalletcore.xcframework,
+				FTalerWalletcoreCrash.xcframework,
 			);
 			target = 4E563DE42DC3C52C008FA91D /* Taler_Nightly */;
 		};
