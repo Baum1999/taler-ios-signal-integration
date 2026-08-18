@@ -155,10 +155,8 @@ extension BalancesSectionView: View {
             await loadScanned(stack.push(".task - load scanned"))
         }
         if sectionCount == 1 {
-#if DEBUG || TALER_NIGHTLY
             // show Discounts & Passes before recents
             DiscountPassesSection(stack: stack.push())
-#endif
             // if there is only one currency, then show MAXRECENT recent transactions
             let recentCount = recentTransactions.count
             if recentCount > 0 {
