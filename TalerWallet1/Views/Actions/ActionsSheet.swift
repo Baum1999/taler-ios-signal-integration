@@ -11,7 +11,7 @@ import taler_swift
 
 struct ScannedURLs: View {
     let stack: CallStack
-    @Environment(\.openURL) private var openURL
+//    @Environment(\.openURL) private var openURL       NEVER EVER use this to pass a URL to myself - iOS might open another app
     @EnvironmentObject private var controller: Controller
 
     var body: some View {
@@ -26,7 +26,8 @@ struct ScannedURLs: View {
                     dismissTop(stack.push())
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                         // need to wait before opening the next sheet, otherwise SwiftUI doesn't update!
-                        openURL(scannedURL.url)
+                        // openURL(scannedURL.url)              don't do this - iOS might open another wallet app
+                        controller.talerURI = scannedURL.url    // instead pass it via .onChange(of: controller.talerURI) directly to MainView
                     }
                 }
                 Button(action: action) {
