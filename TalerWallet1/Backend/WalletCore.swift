@@ -547,7 +547,9 @@ extension WalletCore {
             logger.error("\(context.codingPath)")
         } catch let error {
             logger.error("\(error.localizedDescription)")
-        } catch { // TODO: ?
+            // Anything that is not a DecodingError means we could not classify the
+            // message at all (e.g. tunnelHttp, or an unknown "type"). A second
+            // `catch` after this one would be unreachable, so notify from here.
             delegate?.walletBackendReceivedUnknownMessage(self, message: message)
         }
     }
