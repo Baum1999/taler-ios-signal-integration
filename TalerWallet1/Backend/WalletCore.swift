@@ -620,15 +620,19 @@ extension WalletCore {
                         return
                     } catch DecodingError.dataCorrupted(let context) {
                         logger.error("\(context.debugDescription)")
+                        err = DecodingError.dataCorrupted(context)
                     } catch DecodingError.keyNotFound(let key, let context) {
                         logger.error("Key '\(key.stringValue)' not found:\(context.debugDescription)")
                         logger.error("\(context.codingPath)")
+                        err = DecodingError.keyNotFound(key, context)
                     } catch DecodingError.valueNotFound(let value, let context) {
                         logger.error("Value '\(value)' not found:\(context.debugDescription)")
                         logger.error("\(context.codingPath)")
+                        err = DecodingError.valueNotFound(value, context)
                     } catch DecodingError.typeMismatch(let type, let context) {
                         logger.error("Type '\(type)' mismatch:\(context.debugDescription)")
                         logger.error("\(context.codingPath)")
+                        err = DecodingError.typeMismatch(type, context)
                     } catch {       // rethrows
                         if let jsonString = String(data: json, encoding: .utf8) {
                             symLog.log(jsonString)       // TODO: .error
