@@ -58,6 +58,18 @@ struct ExchangeState: Codable, Hashable {
     var tosStatus: ExchangeTosStatus
 }
 
+/// Set on an Exchange when it changed its master key and the user has not
+/// confirmed the change yet. Withdrawals are refused while this is present
+/// (wallet-core throws WALLET_EXCHANGE_KEYS_NOT_ACCEPTED), until the app calls
+/// confirmExchangeKeyChange().
+struct ExchangeKeyChangeInfo: Codable, Hashable {
+    var currentMasterPub: String
+    var currentCurrency: String
+    var supersededMasterPub: String
+    var supersededCurrency: String
+    var sharesDenominations: Bool
+}
+
 struct ExchangeTransition: Codable {             // Notification
     var type: String        // exchange-state-transition
     var exchangeBaseUrl: String
@@ -109,6 +121,7 @@ struct Exchange: Codable, Hashable, Identifiable {
     var bankComplianceLanguage: BankDialect?
     var lastUpdateTimestamp: Timestamp?
     var lastUpdateErrorInfo: OperationErrorInfo?
+    var unconfirmedKeyChange: ExchangeKeyChangeInfo?    // if set, withdrawals are refused until confirmed
 
 //    walletKycStatus?: ExchangeWalletKycStatus;
 //    walletKycReservePub?: string;
@@ -232,6 +245,21 @@ fileprivate struct DeleteExchange: WalletBackendFormattedRequest {
     struct Response: Decodable {}   // no result - getting no error back means success
 }
 
+/// A request to confirm that a changed exchange key set is legitimate.
+/// Needed before a withdrawal can proceed once `unconfirmedKeyChange` is set.
+fileprivate struct ConfirmExchangeKeyChange: WalletBackendFormattedRequest {
+    var operation: String { "confirmExchangeKeyChange" }
+    func args() -> Args { Args(exchangeBaseUrl: exchangeBaseUrl, currentMasterPub: currentMasterPub) }
+
+    var exchangeBaseUrl: String
+    var currentMasterPub: String
+    struct Args: Encodable {
+        var exchangeBaseUrl: String
+        var currentMasterPub: String
+    }
+    struct Response: Decodable {}   // no result - getting no error back means success
+}
+
 /// A request to get info about a currency
 fileprivate struct GetCurrencySpecification: WalletBackendFormattedRequest {
     var operation: String { "getCurrencySpecification" }
@@ -339,6 +367,14 @@ extension WalletModel {
       async throws  {
         let request = UpdateExchange(exchangeBaseUrl: exchangeBaseUrl, force: force)
         logger.info("updating exchange: \(exchangeBaseUrl, privacy: .public)")
+        _ = try await sendRequest(request, viewHandles: viewHandles)
+    }
+
+    /// confirm a changed exchange master key so withdrawals are allowed again
+    nonisolated func confirmExchangeKeyChange(exchangeBaseUrl: String, currentMasterPub: String, viewHandles: Bool = false)
+      async throws {
+        let request = ConfirmExchangeKeyChange(exchangeBaseUrl: exchangeBaseUrl, currentMasterPub: currentMasterPub)
+        logger.info("confirming exchange key change: \(exchangeBaseUrl, privacy: .public)")
         _ = try await sendRequest(request, viewHandles: viewHandles)
     }
 

@@ -140,6 +140,7 @@ struct WithdrawalDetailsForAmount: Decodable {
     var withdrawalAccountsList: AccountDetailsArray?
     var ageRestrictionOptions: [Int]?   // Array of ages
     var scopeInfo: ScopeInfo
+    var unconfirmedKeyChange: ExchangeKeyChangeInfo?    // if set, accepting the withdrawal will fail until confirmed
 }
 /// A request to get an exchange's withdrawal details.
 fileprivate struct GetWithdrawalDetailsForAmount: WalletBackendFormattedRequest {
