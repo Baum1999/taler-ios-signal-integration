@@ -21,6 +21,11 @@ enum BalanceFlag: String, Codable {
 struct Balance: Identifiable, Decodable, Hashable, Sendable {
     var id: String {
         if let url = scopeInfo.url {
+            if let masterPub = scopeInfo.masterPub {
+                // exchange-legacy-keys: same url as the exchange's current scope,
+                // must stay distinct or the two rows collide in SwiftUI lists
+                return url + "#" + masterPub
+            }
             return url
         }
         return scopeInfo.currency   // only ISO 4217 currencies!
