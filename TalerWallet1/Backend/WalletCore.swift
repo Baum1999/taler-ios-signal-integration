@@ -608,8 +608,8 @@ extension WalletCore {
                 if let json = result, error == nil {
                     do {
                         if asJSON {
-                            if let message {
-                                continuation.resume(returning: (message as! T.Response, requestId))
+                            if let message, let response = message as? T.Response {
+                                continuation.resume(returning: (response, requestId))
                             } else {
                                 continuation.resume(throwing: TransactionDecodingError.invalidStringValue)
                             }
