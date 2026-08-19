@@ -135,8 +135,7 @@ extension WithdrawTOSView {
 
         var showButton: Bool {
             if tos.tosStatus == .missingTos {
-                // TODO: wallet-core should accept receiving money when there are no ToS
-                return developerMode        // no devMode ==> false (don't show button)
+                return false                // nothing to accept
             }
             if let acceptedEtag = tos.acceptedEtag {
                 if acceptedEtag == tos.currentEtag {
@@ -167,7 +166,14 @@ extension WithdrawTOSView {
                         }
                     }
                 }
-                if tos.contentType == MARKDOWN {
+                if tos.tosStatus == .missingTos {
+                    Section {
+                        Text("This payment service has not published any terms of service.")
+                            .talerFont(.body)
+                            .foregroundColor(Color(UIColor.label))
+                    }
+                    .accessibility(sortPriority: 1)     // read this last
+                } else if tos.contentType == MARKDOWN {
                     Section {
                         let content = MarkdownContent(tos.content)
                         Markdown(content)
