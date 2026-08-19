@@ -70,6 +70,7 @@ struct P2pReceiveURIView: View {
                 let scope = peerPushCreditResponse.scopeInfo
                 let balance = controller.balance(for: scope)
                 let tosAccepted = exchange?.tosStatus == .accepted
+                               || exchange?.tosStatus == .missingTos      // no ToS to accept
                 if !tosAccepted {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: peerPushCreditResponse.exchangeBaseUrl,

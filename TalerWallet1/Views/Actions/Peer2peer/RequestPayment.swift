@@ -311,7 +311,8 @@ struct RequestPaymentContent: View {
                     NavLink($buttonSelected) { inputDestination }
                     NavLink($shortcutSelected) { shortcutDestination }
                 }
-                let tosAccepted = (exchange?.tosStatus == .accepted) ?? false
+                let tosAccepted = exchange?.tosStatus == .accepted
+                               || exchange?.tosStatus == .missingTos      // no ToS to accept
                 if tosAccepted {
                     let a11yLabel = String(localized: "Amount to request:", comment: "a11y, no abbreviations")
                     let amountLabel = minimalistic ? String(localized: "Amount:")

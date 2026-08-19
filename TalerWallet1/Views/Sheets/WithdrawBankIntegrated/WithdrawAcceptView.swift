@@ -61,6 +61,7 @@ struct WithdrawAcceptView: View {
           if let exchange2 = exchange {     // there should always be an exchange...
             VStack {
                 let tosAccepted = exchange2.tosStatus == .accepted
+                               || exchange2.tosStatus == .missingTos      // no ToS to accept
                 if !tosAccepted {
                     ToSButtonView(stack: stack.push(),
                         exchangeBaseUrl: exchange2.exchangeBaseUrl,
